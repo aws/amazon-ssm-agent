@@ -4,40 +4,36 @@
 // requests to AmazonMWAA.
 //
 // This section contains the Amazon Managed Workflows for Apache Airflow (MWAA)
-// API reference documentation. For more information, see What Is Amazon MWAA?
+// API reference documentation. For more information, see What is Amazon MWAA?
 // (https://docs.aws.amazon.com/mwaa/latest/userguide/what-is-mwaa.html).
 //
 // Endpoints
 //
-//    * api.airflow.{region}.amazonaws.com - This endpoint is used for environment
-//    management. CreateEnvironment (https://docs.aws.amazon.com/mwaa/latest/API/API_CreateEnvironment.html)
-//    DeleteEnvironment (https://docs.aws.amazon.com/mwaa/latest/API/API_DeleteEnvironment.html)
-//    GetEnvironment (https://docs.aws.amazon.com/mwaa/latest/API/API_GetEnvironment.html)
-//    ListEnvironments (https://docs.aws.amazon.com/mwaa/latest/API/API_ListEnvironments.html)
-//    ListTagsForResource (https://docs.aws.amazon.com/mwaa/latest/API/API_ListTagsForResource.html)
-//    TagResource (https://docs.aws.amazon.com/mwaa/latest/API/API_TagResource.html)
-//    UntagResource (https://docs.aws.amazon.com/mwaa/latest/API/API_UntagResource.html)
-//    UpdateEnvironment (https://docs.aws.amazon.com/mwaa/latest/API/API_UpdateEnvironment.html)
+//   - api.airflow.{region}.amazonaws.com - This endpoint is used for environment
+//     management. CreateEnvironment (https://docs.aws.amazon.com/mwaa/latest/API/API_CreateEnvironment.html)
+//     DeleteEnvironment (https://docs.aws.amazon.com/mwaa/latest/API/API_DeleteEnvironment.html)
+//     GetEnvironment (https://docs.aws.amazon.com/mwaa/latest/API/API_GetEnvironment.html)
+//     ListEnvironments (https://docs.aws.amazon.com/mwaa/latest/API/API_ListEnvironments.html)
+//     ListTagsForResource (https://docs.aws.amazon.com/mwaa/latest/API/API_ListTagsForResource.html)
+//     TagResource (https://docs.aws.amazon.com/mwaa/latest/API/API_TagResource.html)
+//     UntagResource (https://docs.aws.amazon.com/mwaa/latest/API/API_UntagResource.html)
+//     UpdateEnvironment (https://docs.aws.amazon.com/mwaa/latest/API/API_UpdateEnvironment.html)
 //
-//    * env.airflow.{region}.amazonaws.com - This endpoint is used to operate
-//    the Airflow environment. CreateCliToken (https://docs.aws.amazon.com/mwaa/latest/API/API_CreateCliToken.html)
-//    CreateWebLoginToken (https://docs.aws.amazon.com/mwaa/latest/API/API_CreateWebLoginToken.html)
+//   - env.airflow.{region}.amazonaws.com - This endpoint is used to operate
+//     the Airflow environment. CreateCliToken (https://docs.aws.amazon.com/mwaa/latest/API/API_CreateCliToken.html)
+//     CreateWebLoginToken (https://docs.aws.amazon.com/mwaa/latest/API/API_CreateWebLoginToken.html)
 //
-//    * ops.airflow.{region}.amazonaws.com - This endpoint is used to push environment
-//    metrics that track environment health. PublishMetrics (https://docs.aws.amazon.com/mwaa/latest/API/API_PublishMetrics.html)
+// # Regions
 //
-// Regions
-//
-// For a list of regions that Amazon MWAA supports, see Region availability
-// (https://docs.aws.amazon.com/mwaa/latest/userguide/what-is-mwaa.html#regions-mwaa)
-// in the Amazon MWAA User Guide.
+// For a list of supported regions, see Amazon MWAA endpoints and quotas (https://docs.aws.amazon.com/general/latest/gr/mwaa.html)
+// in the Amazon Web Services General Reference.
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/mwaa-2020-07-01 for more information on this service.
 //
 // See mwaa package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/mwaa/
 //
-// Using the Client
+// # Using the Client
 //
 // To contact AmazonMWAA with the SDK use the New function to create
 // a new service client. With that client you can make API requests to the service.

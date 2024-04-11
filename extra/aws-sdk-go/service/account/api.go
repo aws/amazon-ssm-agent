@@ -28,14 +28,13 @@ const opDeleteAlternateContact = "DeleteAlternateContact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAlternateContactRequest method.
+//	req, resp := client.DeleteAlternateContactRequest(params)
 //
-//    // Example sending a request using the DeleteAlternateContactRequest method.
-//    req, resp := client.DeleteAlternateContactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/DeleteAlternateContact
 func (c *Account) DeleteAlternateContactRequest(input *DeleteAlternateContactInput) (req *request.Request, output *DeleteAlternateContactOutput) {
@@ -76,23 +75,24 @@ func (c *Account) DeleteAlternateContactRequest(input *DeleteAlternateContactInp
 // API operation DeleteAlternateContact for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The operation failed because it specified a resource that can't be found.
 //
-//   * ValidationException
-//   The operation failed because one of the input parameters was invalid.
+//   - ResourceNotFoundException
+//     The operation failed because it specified a resource that can't be found.
 //
-//   * AccessDeniedException
-//   The operation failed because the calling identity doesn't have the minimum
-//   required permissions.
+//   - ValidationException
+//     The operation failed because one of the input parameters was invalid.
 //
-//   * TooManyRequestsException
-//   The operation failed because it was called too frequently and exceeded a
-//   throttle limit.
+//   - AccessDeniedException
+//     The operation failed because the calling identity doesn't have the minimum
+//     required permissions.
 //
-//   * InternalServerException
-//   The operation failed because of an error internal to Amazon Web Services.
-//   Try your operation again later.
+//   - TooManyRequestsException
+//     The operation failed because it was called too frequently and exceeded a
+//     throttle limit.
+//
+//   - InternalServerException
+//     The operation failed because of an error internal to Amazon Web Services.
+//     Try your operation again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/DeleteAlternateContact
 func (c *Account) DeleteAlternateContact(input *DeleteAlternateContactInput) (*DeleteAlternateContactOutput, error) {
@@ -132,14 +132,13 @@ const opDisableRegion = "DisableRegion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisableRegionRequest method.
+//	req, resp := client.DisableRegionRequest(params)
 //
-//    // Example sending a request using the DisableRegionRequest method.
-//    req, resp := client.DisableRegionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/DisableRegion
 func (c *Account) DisableRegionRequest(input *DisableRegionInput) (req *request.Request, output *DisableRegionOutput) {
@@ -171,25 +170,26 @@ func (c *Account) DisableRegionRequest(input *DisableRegionInput) (req *request.
 // API operation DisableRegion for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation failed because one of the input parameters was invalid.
 //
-//   * ConflictException
-//   The request could not be processed because of a conflict in the current status
-//   of the resource. For example, this happens if you try to enable a Region
-//   that is currently being disabled (in a status of DISABLING).
+//   - ValidationException
+//     The operation failed because one of the input parameters was invalid.
 //
-//   * AccessDeniedException
-//   The operation failed because the calling identity doesn't have the minimum
-//   required permissions.
+//   - ConflictException
+//     The request could not be processed because of a conflict in the current status
+//     of the resource. For example, this happens if you try to enable a Region
+//     that is currently being disabled (in a status of DISABLING).
 //
-//   * TooManyRequestsException
-//   The operation failed because it was called too frequently and exceeded a
-//   throttle limit.
+//   - AccessDeniedException
+//     The operation failed because the calling identity doesn't have the minimum
+//     required permissions.
 //
-//   * InternalServerException
-//   The operation failed because of an error internal to Amazon Web Services.
-//   Try your operation again later.
+//   - TooManyRequestsException
+//     The operation failed because it was called too frequently and exceeded a
+//     throttle limit.
+//
+//   - InternalServerException
+//     The operation failed because of an error internal to Amazon Web Services.
+//     Try your operation again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/DisableRegion
 func (c *Account) DisableRegion(input *DisableRegionInput) (*DisableRegionOutput, error) {
@@ -229,14 +229,13 @@ const opEnableRegion = "EnableRegion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EnableRegionRequest method.
+//	req, resp := client.EnableRegionRequest(params)
 //
-//    // Example sending a request using the EnableRegionRequest method.
-//    req, resp := client.EnableRegionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/EnableRegion
 func (c *Account) EnableRegionRequest(input *EnableRegionInput) (req *request.Request, output *EnableRegionOutput) {
@@ -268,25 +267,26 @@ func (c *Account) EnableRegionRequest(input *EnableRegionInput) (req *request.Re
 // API operation EnableRegion for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation failed because one of the input parameters was invalid.
 //
-//   * ConflictException
-//   The request could not be processed because of a conflict in the current status
-//   of the resource. For example, this happens if you try to enable a Region
-//   that is currently being disabled (in a status of DISABLING).
+//   - ValidationException
+//     The operation failed because one of the input parameters was invalid.
 //
-//   * AccessDeniedException
-//   The operation failed because the calling identity doesn't have the minimum
-//   required permissions.
+//   - ConflictException
+//     The request could not be processed because of a conflict in the current status
+//     of the resource. For example, this happens if you try to enable a Region
+//     that is currently being disabled (in a status of DISABLING).
 //
-//   * TooManyRequestsException
-//   The operation failed because it was called too frequently and exceeded a
-//   throttle limit.
+//   - AccessDeniedException
+//     The operation failed because the calling identity doesn't have the minimum
+//     required permissions.
 //
-//   * InternalServerException
-//   The operation failed because of an error internal to Amazon Web Services.
-//   Try your operation again later.
+//   - TooManyRequestsException
+//     The operation failed because it was called too frequently and exceeded a
+//     throttle limit.
+//
+//   - InternalServerException
+//     The operation failed because of an error internal to Amazon Web Services.
+//     Try your operation again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/EnableRegion
 func (c *Account) EnableRegion(input *EnableRegionInput) (*EnableRegionOutput, error) {
@@ -326,14 +326,13 @@ const opGetAlternateContact = "GetAlternateContact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAlternateContactRequest method.
+//	req, resp := client.GetAlternateContactRequest(params)
 //
-//    // Example sending a request using the GetAlternateContactRequest method.
-//    req, resp := client.GetAlternateContactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/GetAlternateContact
 func (c *Account) GetAlternateContactRequest(input *GetAlternateContactInput) (req *request.Request, output *GetAlternateContactOutput) {
@@ -374,23 +373,24 @@ func (c *Account) GetAlternateContactRequest(input *GetAlternateContactInput) (r
 // API operation GetAlternateContact for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The operation failed because it specified a resource that can't be found.
 //
-//   * ValidationException
-//   The operation failed because one of the input parameters was invalid.
+//   - ResourceNotFoundException
+//     The operation failed because it specified a resource that can't be found.
 //
-//   * AccessDeniedException
-//   The operation failed because the calling identity doesn't have the minimum
-//   required permissions.
+//   - ValidationException
+//     The operation failed because one of the input parameters was invalid.
 //
-//   * TooManyRequestsException
-//   The operation failed because it was called too frequently and exceeded a
-//   throttle limit.
+//   - AccessDeniedException
+//     The operation failed because the calling identity doesn't have the minimum
+//     required permissions.
 //
-//   * InternalServerException
-//   The operation failed because of an error internal to Amazon Web Services.
-//   Try your operation again later.
+//   - TooManyRequestsException
+//     The operation failed because it was called too frequently and exceeded a
+//     throttle limit.
+//
+//   - InternalServerException
+//     The operation failed because of an error internal to Amazon Web Services.
+//     Try your operation again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/GetAlternateContact
 func (c *Account) GetAlternateContact(input *GetAlternateContactInput) (*GetAlternateContactOutput, error) {
@@ -430,14 +430,13 @@ const opGetContactInformation = "GetContactInformation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetContactInformationRequest method.
+//	req, resp := client.GetContactInformationRequest(params)
 //
-//    // Example sending a request using the GetContactInformationRequest method.
-//    req, resp := client.GetContactInformationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/GetContactInformation
 func (c *Account) GetContactInformationRequest(input *GetContactInformationInput) (req *request.Request, output *GetContactInformationOutput) {
@@ -471,23 +470,24 @@ func (c *Account) GetContactInformationRequest(input *GetContactInformationInput
 // API operation GetContactInformation for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The operation failed because it specified a resource that can't be found.
 //
-//   * ValidationException
-//   The operation failed because one of the input parameters was invalid.
+//   - ResourceNotFoundException
+//     The operation failed because it specified a resource that can't be found.
 //
-//   * AccessDeniedException
-//   The operation failed because the calling identity doesn't have the minimum
-//   required permissions.
+//   - ValidationException
+//     The operation failed because one of the input parameters was invalid.
 //
-//   * TooManyRequestsException
-//   The operation failed because it was called too frequently and exceeded a
-//   throttle limit.
+//   - AccessDeniedException
+//     The operation failed because the calling identity doesn't have the minimum
+//     required permissions.
 //
-//   * InternalServerException
-//   The operation failed because of an error internal to Amazon Web Services.
-//   Try your operation again later.
+//   - TooManyRequestsException
+//     The operation failed because it was called too frequently and exceeded a
+//     throttle limit.
+//
+//   - InternalServerException
+//     The operation failed because of an error internal to Amazon Web Services.
+//     Try your operation again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/GetContactInformation
 func (c *Account) GetContactInformation(input *GetContactInformationInput) (*GetContactInformationOutput, error) {
@@ -527,14 +527,13 @@ const opGetRegionOptStatus = "GetRegionOptStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRegionOptStatusRequest method.
+//	req, resp := client.GetRegionOptStatusRequest(params)
 //
-//    // Example sending a request using the GetRegionOptStatusRequest method.
-//    req, resp := client.GetRegionOptStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/GetRegionOptStatus
 func (c *Account) GetRegionOptStatusRequest(input *GetRegionOptStatusInput) (req *request.Request, output *GetRegionOptStatusOutput) {
@@ -565,20 +564,21 @@ func (c *Account) GetRegionOptStatusRequest(input *GetRegionOptStatusInput) (req
 // API operation GetRegionOptStatus for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation failed because one of the input parameters was invalid.
 //
-//   * AccessDeniedException
-//   The operation failed because the calling identity doesn't have the minimum
-//   required permissions.
+//   - ValidationException
+//     The operation failed because one of the input parameters was invalid.
 //
-//   * TooManyRequestsException
-//   The operation failed because it was called too frequently and exceeded a
-//   throttle limit.
+//   - AccessDeniedException
+//     The operation failed because the calling identity doesn't have the minimum
+//     required permissions.
 //
-//   * InternalServerException
-//   The operation failed because of an error internal to Amazon Web Services.
-//   Try your operation again later.
+//   - TooManyRequestsException
+//     The operation failed because it was called too frequently and exceeded a
+//     throttle limit.
+//
+//   - InternalServerException
+//     The operation failed because of an error internal to Amazon Web Services.
+//     Try your operation again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/GetRegionOptStatus
 func (c *Account) GetRegionOptStatus(input *GetRegionOptStatusInput) (*GetRegionOptStatusOutput, error) {
@@ -618,14 +618,13 @@ const opListRegions = "ListRegions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRegionsRequest method.
+//	req, resp := client.ListRegionsRequest(params)
 //
-//    // Example sending a request using the ListRegionsRequest method.
-//    req, resp := client.ListRegionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/ListRegions
 func (c *Account) ListRegionsRequest(input *ListRegionsInput) (req *request.Request, output *ListRegionsOutput) {
@@ -663,20 +662,21 @@ func (c *Account) ListRegionsRequest(input *ListRegionsInput) (req *request.Requ
 // API operation ListRegions for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation failed because one of the input parameters was invalid.
 //
-//   * AccessDeniedException
-//   The operation failed because the calling identity doesn't have the minimum
-//   required permissions.
+//   - ValidationException
+//     The operation failed because one of the input parameters was invalid.
 //
-//   * TooManyRequestsException
-//   The operation failed because it was called too frequently and exceeded a
-//   throttle limit.
+//   - AccessDeniedException
+//     The operation failed because the calling identity doesn't have the minimum
+//     required permissions.
 //
-//   * InternalServerException
-//   The operation failed because of an error internal to Amazon Web Services.
-//   Try your operation again later.
+//   - TooManyRequestsException
+//     The operation failed because it was called too frequently and exceeded a
+//     throttle limit.
+//
+//   - InternalServerException
+//     The operation failed because of an error internal to Amazon Web Services.
+//     Try your operation again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/ListRegions
 func (c *Account) ListRegions(input *ListRegionsInput) (*ListRegionsOutput, error) {
@@ -708,15 +708,14 @@ func (c *Account) ListRegionsWithContext(ctx aws.Context, input *ListRegionsInpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRegions operation.
-//    pageNum := 0
-//    err := client.ListRegionsPages(params,
-//        func(page *account.ListRegionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRegions operation.
+//	pageNum := 0
+//	err := client.ListRegionsPages(params,
+//	    func(page *account.ListRegionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Account) ListRegionsPages(input *ListRegionsInput, fn func(*ListRegionsOutput, bool) bool) error {
 	return c.ListRegionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -768,14 +767,13 @@ const opPutAlternateContact = "PutAlternateContact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutAlternateContactRequest method.
+//	req, resp := client.PutAlternateContactRequest(params)
 //
-//    // Example sending a request using the PutAlternateContactRequest method.
-//    req, resp := client.PutAlternateContactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/PutAlternateContact
 func (c *Account) PutAlternateContactRequest(input *PutAlternateContactInput) (req *request.Request, output *PutAlternateContactOutput) {
@@ -817,20 +815,21 @@ func (c *Account) PutAlternateContactRequest(input *PutAlternateContactInput) (r
 // API operation PutAlternateContact for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation failed because one of the input parameters was invalid.
 //
-//   * AccessDeniedException
-//   The operation failed because the calling identity doesn't have the minimum
-//   required permissions.
+//   - ValidationException
+//     The operation failed because one of the input parameters was invalid.
 //
-//   * TooManyRequestsException
-//   The operation failed because it was called too frequently and exceeded a
-//   throttle limit.
+//   - AccessDeniedException
+//     The operation failed because the calling identity doesn't have the minimum
+//     required permissions.
 //
-//   * InternalServerException
-//   The operation failed because of an error internal to Amazon Web Services.
-//   Try your operation again later.
+//   - TooManyRequestsException
+//     The operation failed because it was called too frequently and exceeded a
+//     throttle limit.
+//
+//   - InternalServerException
+//     The operation failed because of an error internal to Amazon Web Services.
+//     Try your operation again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/PutAlternateContact
 func (c *Account) PutAlternateContact(input *PutAlternateContactInput) (*PutAlternateContactOutput, error) {
@@ -870,14 +869,13 @@ const opPutContactInformation = "PutContactInformation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutContactInformationRequest method.
+//	req, resp := client.PutContactInformationRequest(params)
 //
-//    // Example sending a request using the PutContactInformationRequest method.
-//    req, resp := client.PutContactInformationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/PutContactInformation
 func (c *Account) PutContactInformationRequest(input *PutContactInformationInput) (req *request.Request, output *PutContactInformationOutput) {
@@ -912,20 +910,21 @@ func (c *Account) PutContactInformationRequest(input *PutContactInformationInput
 // API operation PutContactInformation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation failed because one of the input parameters was invalid.
 //
-//   * AccessDeniedException
-//   The operation failed because the calling identity doesn't have the minimum
-//   required permissions.
+//   - ValidationException
+//     The operation failed because one of the input parameters was invalid.
 //
-//   * TooManyRequestsException
-//   The operation failed because it was called too frequently and exceeded a
-//   throttle limit.
+//   - AccessDeniedException
+//     The operation failed because the calling identity doesn't have the minimum
+//     required permissions.
 //
-//   * InternalServerException
-//   The operation failed because of an error internal to Amazon Web Services.
-//   Try your operation again later.
+//   - TooManyRequestsException
+//     The operation failed because it was called too frequently and exceeded a
+//     throttle limit.
+//
+//   - InternalServerException
+//     The operation failed because of an error internal to Amazon Web Services.
+//     Try your operation again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/account-2021-02-01/PutContactInformation
 func (c *Account) PutContactInformation(input *PutContactInformationInput) (*PutContactInformationOutput, error) {

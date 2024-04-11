@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWS Resilience Hub.
-//    func myFunc(svc resiliencehubiface.ResilienceHubAPI) bool {
-//        // Make svc.AddDraftAppVersionResourceMappings request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWS Resilience Hub.
+//	func myFunc(svc resiliencehubiface.ResilienceHubAPI) bool {
+//	    // Make svc.AddDraftAppVersionResourceMappings request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := resiliencehub.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := resiliencehub.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockResilienceHubClient struct {
-//        resiliencehubiface.ResilienceHubAPI
-//    }
-//    func (m *mockResilienceHubClient) AddDraftAppVersionResourceMappings(input *resiliencehub.AddDraftAppVersionResourceMappingsInput) (*resiliencehub.AddDraftAppVersionResourceMappingsOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockResilienceHubClient struct {
+//	    resiliencehubiface.ResilienceHubAPI
+//	}
+//	func (m *mockResilienceHubClient) AddDraftAppVersionResourceMappings(input *resiliencehub.AddDraftAppVersionResourceMappingsInput) (*resiliencehub.AddDraftAppVersionResourceMappingsOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockResilienceHubClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockResilienceHubClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -63,6 +63,10 @@ type ResilienceHubAPI interface {
 	AddDraftAppVersionResourceMappings(*resiliencehub.AddDraftAppVersionResourceMappingsInput) (*resiliencehub.AddDraftAppVersionResourceMappingsOutput, error)
 	AddDraftAppVersionResourceMappingsWithContext(aws.Context, *resiliencehub.AddDraftAppVersionResourceMappingsInput, ...request.Option) (*resiliencehub.AddDraftAppVersionResourceMappingsOutput, error)
 	AddDraftAppVersionResourceMappingsRequest(*resiliencehub.AddDraftAppVersionResourceMappingsInput) (*request.Request, *resiliencehub.AddDraftAppVersionResourceMappingsOutput)
+
+	BatchUpdateRecommendationStatus(*resiliencehub.BatchUpdateRecommendationStatusInput) (*resiliencehub.BatchUpdateRecommendationStatusOutput, error)
+	BatchUpdateRecommendationStatusWithContext(aws.Context, *resiliencehub.BatchUpdateRecommendationStatusInput, ...request.Option) (*resiliencehub.BatchUpdateRecommendationStatusOutput, error)
+	BatchUpdateRecommendationStatusRequest(*resiliencehub.BatchUpdateRecommendationStatusInput) (*request.Request, *resiliencehub.BatchUpdateRecommendationStatusOutput)
 
 	CreateApp(*resiliencehub.CreateAppInput) (*resiliencehub.CreateAppOutput, error)
 	CreateAppWithContext(aws.Context, *resiliencehub.CreateAppInput, ...request.Option) (*resiliencehub.CreateAppOutput, error)
@@ -158,6 +162,13 @@ type ResilienceHubAPI interface {
 
 	ListAlarmRecommendationsPages(*resiliencehub.ListAlarmRecommendationsInput, func(*resiliencehub.ListAlarmRecommendationsOutput, bool) bool) error
 	ListAlarmRecommendationsPagesWithContext(aws.Context, *resiliencehub.ListAlarmRecommendationsInput, func(*resiliencehub.ListAlarmRecommendationsOutput, bool) bool, ...request.Option) error
+
+	ListAppAssessmentComplianceDrifts(*resiliencehub.ListAppAssessmentComplianceDriftsInput) (*resiliencehub.ListAppAssessmentComplianceDriftsOutput, error)
+	ListAppAssessmentComplianceDriftsWithContext(aws.Context, *resiliencehub.ListAppAssessmentComplianceDriftsInput, ...request.Option) (*resiliencehub.ListAppAssessmentComplianceDriftsOutput, error)
+	ListAppAssessmentComplianceDriftsRequest(*resiliencehub.ListAppAssessmentComplianceDriftsInput) (*request.Request, *resiliencehub.ListAppAssessmentComplianceDriftsOutput)
+
+	ListAppAssessmentComplianceDriftsPages(*resiliencehub.ListAppAssessmentComplianceDriftsInput, func(*resiliencehub.ListAppAssessmentComplianceDriftsOutput, bool) bool) error
+	ListAppAssessmentComplianceDriftsPagesWithContext(aws.Context, *resiliencehub.ListAppAssessmentComplianceDriftsInput, func(*resiliencehub.ListAppAssessmentComplianceDriftsOutput, bool) bool, ...request.Option) error
 
 	ListAppAssessments(*resiliencehub.ListAppAssessmentsInput) (*resiliencehub.ListAppAssessmentsOutput, error)
 	ListAppAssessmentsWithContext(aws.Context, *resiliencehub.ListAppAssessmentsInput, ...request.Option) (*resiliencehub.ListAppAssessmentsOutput, error)

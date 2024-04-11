@@ -28,14 +28,13 @@ const opAssociateFirewallRuleGroup = "AssociateFirewallRuleGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateFirewallRuleGroupRequest method.
+//	req, resp := client.AssociateFirewallRuleGroupRequest(params)
 //
-//    // Example sending a request using the AssociateFirewallRuleGroupRequest method.
-//    req, resp := client.AssociateFirewallRuleGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/AssociateFirewallRuleGroup
 func (c *Route53Resolver) AssociateFirewallRuleGroupRequest(input *AssociateFirewallRuleGroupInput) (req *request.Request, output *AssociateFirewallRuleGroupOutput) {
@@ -67,30 +66,31 @@ func (c *Route53Resolver) AssociateFirewallRuleGroupRequest(input *AssociateFire
 // API operation AssociateFirewallRuleGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * ConflictException
-//   The requested state transition isn't valid. For example, you can't delete
-//   a firewall domain list if it is in the process of being deleted, or you can't
-//   import domains into a domain list that is in the process of being deleted.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ConflictException
+//     The requested state transition isn't valid. For example, you can't delete
+//     a firewall domain list if it is in the process of being deleted, or you can't
+//     import domains into a domain list that is in the process of being deleted.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/AssociateFirewallRuleGroup
 func (c *Route53Resolver) AssociateFirewallRuleGroup(input *AssociateFirewallRuleGroupInput) (*AssociateFirewallRuleGroupOutput, error) {
@@ -130,14 +130,13 @@ const opAssociateResolverEndpointIpAddress = "AssociateResolverEndpointIpAddress
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateResolverEndpointIpAddressRequest method.
+//	req, resp := client.AssociateResolverEndpointIpAddressRequest(params)
 //
-//    // Example sending a request using the AssociateResolverEndpointIpAddressRequest method.
-//    req, resp := client.AssociateResolverEndpointIpAddressRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/AssociateResolverEndpointIpAddress
 func (c *Route53Resolver) AssociateResolverEndpointIpAddressRequest(input *AssociateResolverEndpointIpAddressInput) (req *request.Request, output *AssociateResolverEndpointIpAddressOutput) {
@@ -173,26 +172,27 @@ func (c *Route53Resolver) AssociateResolverEndpointIpAddressRequest(input *Assoc
 // API operation AssociateResolverEndpointIpAddress for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ResourceExistsException
-//   The resource that you tried to create already exists.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - ResourceExistsException
+//     The resource that you tried to create already exists.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/AssociateResolverEndpointIpAddress
 func (c *Route53Resolver) AssociateResolverEndpointIpAddress(input *AssociateResolverEndpointIpAddressInput) (*AssociateResolverEndpointIpAddressOutput, error) {
@@ -232,14 +232,13 @@ const opAssociateResolverQueryLogConfig = "AssociateResolverQueryLogConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateResolverQueryLogConfigRequest method.
+//	req, resp := client.AssociateResolverQueryLogConfigRequest(params)
 //
-//    // Example sending a request using the AssociateResolverQueryLogConfigRequest method.
-//    req, resp := client.AssociateResolverQueryLogConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/AssociateResolverQueryLogConfig
 func (c *Route53Resolver) AssociateResolverQueryLogConfigRequest(input *AssociateResolverQueryLogConfigInput) (req *request.Request, output *AssociateResolverQueryLogConfigOutput) {
@@ -280,30 +279,31 @@ func (c *Route53Resolver) AssociateResolverQueryLogConfigRequest(input *Associat
 // API operation AssociateResolverQueryLogConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * ResourceExistsException
-//   The resource that you tried to create already exists.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - ResourceExistsException
+//     The resource that you tried to create already exists.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/AssociateResolverQueryLogConfig
 func (c *Route53Resolver) AssociateResolverQueryLogConfig(input *AssociateResolverQueryLogConfigInput) (*AssociateResolverQueryLogConfigOutput, error) {
@@ -343,14 +343,13 @@ const opAssociateResolverRule = "AssociateResolverRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateResolverRuleRequest method.
+//	req, resp := client.AssociateResolverRuleRequest(params)
 //
-//    // Example sending a request using the AssociateResolverRuleRequest method.
-//    req, resp := client.AssociateResolverRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/AssociateResolverRule
 func (c *Route53Resolver) AssociateResolverRuleRequest(input *AssociateResolverRuleInput) (req *request.Request, output *AssociateResolverRuleOutput) {
@@ -385,29 +384,30 @@ func (c *Route53Resolver) AssociateResolverRuleRequest(input *AssociateResolverR
 // API operation AssociateResolverRule for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * ResourceUnavailableException
-//   The specified resource isn't available.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ResourceExistsException
-//   The resource that you tried to create already exists.
+//   - ResourceUnavailableException
+//     The specified resource isn't available.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - ResourceExistsException
+//     The resource that you tried to create already exists.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/AssociateResolverRule
 func (c *Route53Resolver) AssociateResolverRule(input *AssociateResolverRuleInput) (*AssociateResolverRuleOutput, error) {
@@ -447,14 +447,13 @@ const opCreateFirewallDomainList = "CreateFirewallDomainList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFirewallDomainListRequest method.
+//	req, resp := client.CreateFirewallDomainListRequest(params)
 //
-//    // Example sending a request using the CreateFirewallDomainListRequest method.
-//    req, resp := client.CreateFirewallDomainListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateFirewallDomainList
 func (c *Route53Resolver) CreateFirewallDomainListRequest(input *CreateFirewallDomainListInput) (req *request.Request, output *CreateFirewallDomainListOutput) {
@@ -487,22 +486,23 @@ func (c *Route53Resolver) CreateFirewallDomainListRequest(input *CreateFirewallD
 // API operation CreateFirewallDomainList for usage and error information.
 //
 // Returned Error Types:
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateFirewallDomainList
 func (c *Route53Resolver) CreateFirewallDomainList(input *CreateFirewallDomainListInput) (*CreateFirewallDomainListOutput, error) {
@@ -542,14 +542,13 @@ const opCreateFirewallRule = "CreateFirewallRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFirewallRuleRequest method.
+//	req, resp := client.CreateFirewallRuleRequest(params)
 //
-//    // Example sending a request using the CreateFirewallRuleRequest method.
-//    req, resp := client.CreateFirewallRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateFirewallRule
 func (c *Route53Resolver) CreateFirewallRuleRequest(input *CreateFirewallRuleInput) (req *request.Request, output *CreateFirewallRuleOutput) {
@@ -581,25 +580,26 @@ func (c *Route53Resolver) CreateFirewallRuleRequest(input *CreateFirewallRuleInp
 // API operation CreateFirewallRule for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateFirewallRule
 func (c *Route53Resolver) CreateFirewallRule(input *CreateFirewallRuleInput) (*CreateFirewallRuleOutput, error) {
@@ -639,14 +639,13 @@ const opCreateFirewallRuleGroup = "CreateFirewallRuleGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFirewallRuleGroupRequest method.
+//	req, resp := client.CreateFirewallRuleGroupRequest(params)
 //
-//    // Example sending a request using the CreateFirewallRuleGroupRequest method.
-//    req, resp := client.CreateFirewallRuleGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateFirewallRuleGroup
 func (c *Route53Resolver) CreateFirewallRuleGroupRequest(input *CreateFirewallRuleGroupInput) (req *request.Request, output *CreateFirewallRuleGroupOutput) {
@@ -678,22 +677,23 @@ func (c *Route53Resolver) CreateFirewallRuleGroupRequest(input *CreateFirewallRu
 // API operation CreateFirewallRuleGroup for usage and error information.
 //
 // Returned Error Types:
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateFirewallRuleGroup
 func (c *Route53Resolver) CreateFirewallRuleGroup(input *CreateFirewallRuleGroupInput) (*CreateFirewallRuleGroupOutput, error) {
@@ -717,6 +717,102 @@ func (c *Route53Resolver) CreateFirewallRuleGroupWithContext(ctx aws.Context, in
 	return out, req.Send()
 }
 
+const opCreateOutpostResolver = "CreateOutpostResolver"
+
+// CreateOutpostResolverRequest generates a "aws/request.Request" representing the
+// client's request for the CreateOutpostResolver operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateOutpostResolver for more information on using the CreateOutpostResolver
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateOutpostResolverRequest method.
+//	req, resp := client.CreateOutpostResolverRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateOutpostResolver
+func (c *Route53Resolver) CreateOutpostResolverRequest(input *CreateOutpostResolverInput) (req *request.Request, output *CreateOutpostResolverOutput) {
+	op := &request.Operation{
+		Name:       opCreateOutpostResolver,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateOutpostResolverInput{}
+	}
+
+	output = &CreateOutpostResolverOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateOutpostResolver API operation for Amazon Route 53 Resolver.
+//
+// Creates a Route 53 Resolver on an Outpost.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Route 53 Resolver's
+// API operation CreateOutpostResolver for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
+//
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
+//
+//   - ServiceQuotaExceededException
+//     Fulfilling the request would cause one or more quotas to be exceeded.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateOutpostResolver
+func (c *Route53Resolver) CreateOutpostResolver(input *CreateOutpostResolverInput) (*CreateOutpostResolverOutput, error) {
+	req, out := c.CreateOutpostResolverRequest(input)
+	return out, req.Send()
+}
+
+// CreateOutpostResolverWithContext is the same as CreateOutpostResolver with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateOutpostResolver for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Route53Resolver) CreateOutpostResolverWithContext(ctx aws.Context, input *CreateOutpostResolverInput, opts ...request.Option) (*CreateOutpostResolverOutput, error) {
+	req, out := c.CreateOutpostResolverRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateResolverEndpoint = "CreateResolverEndpoint"
 
 // CreateResolverEndpointRequest generates a "aws/request.Request" representing the
@@ -733,14 +829,13 @@ const opCreateResolverEndpoint = "CreateResolverEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateResolverEndpointRequest method.
+//	req, resp := client.CreateResolverEndpointRequest(params)
 //
-//    // Example sending a request using the CreateResolverEndpointRequest method.
-//    req, resp := client.CreateResolverEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateResolverEndpoint
 func (c *Route53Resolver) CreateResolverEndpointRequest(input *CreateResolverEndpointInput) (req *request.Request, output *CreateResolverEndpointOutput) {
@@ -764,11 +859,11 @@ func (c *Route53Resolver) CreateResolverEndpointRequest(input *CreateResolverEnd
 // Creates a Resolver endpoint. There are two types of Resolver endpoints, inbound
 // and outbound:
 //
-//    * An inbound Resolver endpoint forwards DNS queries to the DNS service
-//    for a VPC from your network.
+//   - An inbound Resolver endpoint forwards DNS queries to the DNS service
+//     for a VPC from your network.
 //
-//    * An outbound Resolver endpoint forwards DNS queries from the DNS service
-//    for a VPC to your network.
+//   - An outbound Resolver endpoint forwards DNS queries from the DNS service
+//     for a VPC to your network.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -778,26 +873,31 @@ func (c *Route53Resolver) CreateResolverEndpointRequest(input *CreateResolverEnd
 // API operation CreateResolverEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * ResourceExistsException
-//   The resource that you tried to create already exists.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - ResourceExistsException
+//     The resource that you tried to create already exists.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
+//
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateResolverEndpoint
 func (c *Route53Resolver) CreateResolverEndpoint(input *CreateResolverEndpointInput) (*CreateResolverEndpointOutput, error) {
@@ -837,14 +937,13 @@ const opCreateResolverQueryLogConfig = "CreateResolverQueryLogConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateResolverQueryLogConfigRequest method.
+//	req, resp := client.CreateResolverQueryLogConfigRequest(params)
 //
-//    // Example sending a request using the CreateResolverQueryLogConfigRequest method.
-//    req, resp := client.CreateResolverQueryLogConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateResolverQueryLogConfig
 func (c *Route53Resolver) CreateResolverQueryLogConfigRequest(input *CreateResolverQueryLogConfigInput) (req *request.Request, output *CreateResolverQueryLogConfigOutput) {
@@ -887,30 +986,31 @@ func (c *Route53Resolver) CreateResolverQueryLogConfigRequest(input *CreateResol
 // API operation CreateResolverQueryLogConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * ResourceExistsException
-//   The resource that you tried to create already exists.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - ResourceExistsException
+//     The resource that you tried to create already exists.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateResolverQueryLogConfig
 func (c *Route53Resolver) CreateResolverQueryLogConfig(input *CreateResolverQueryLogConfigInput) (*CreateResolverQueryLogConfigOutput, error) {
@@ -950,14 +1050,13 @@ const opCreateResolverRule = "CreateResolverRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateResolverRuleRequest method.
+//	req, resp := client.CreateResolverRuleRequest(params)
 //
-//    // Example sending a request using the CreateResolverRuleRequest method.
-//    req, resp := client.CreateResolverRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateResolverRule
 func (c *Route53Resolver) CreateResolverRuleRequest(input *CreateResolverRuleInput) (req *request.Request, output *CreateResolverRuleOutput) {
@@ -990,29 +1089,34 @@ func (c *Route53Resolver) CreateResolverRuleRequest(input *CreateResolverRuleInp
 // API operation CreateResolverRule for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * ResourceExistsException
-//   The resource that you tried to create already exists.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * ResourceUnavailableException
-//   The specified resource isn't available.
+//   - ResourceExistsException
+//     The resource that you tried to create already exists.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - ResourceUnavailableException
+//     The specified resource isn't available.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/CreateResolverRule
 func (c *Route53Resolver) CreateResolverRule(input *CreateResolverRuleInput) (*CreateResolverRuleOutput, error) {
@@ -1052,14 +1156,13 @@ const opDeleteFirewallDomainList = "DeleteFirewallDomainList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFirewallDomainListRequest method.
+//	req, resp := client.DeleteFirewallDomainListRequest(params)
 //
-//    // Example sending a request using the DeleteFirewallDomainListRequest method.
-//    req, resp := client.DeleteFirewallDomainListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteFirewallDomainList
 func (c *Route53Resolver) DeleteFirewallDomainListRequest(input *DeleteFirewallDomainListInput) (req *request.Request, output *DeleteFirewallDomainListOutput) {
@@ -1090,23 +1193,24 @@ func (c *Route53Resolver) DeleteFirewallDomainListRequest(input *DeleteFirewallD
 // API operation DeleteFirewallDomainList for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * ConflictException
-//   The requested state transition isn't valid. For example, you can't delete
-//   a firewall domain list if it is in the process of being deleted, or you can't
-//   import domains into a domain list that is in the process of being deleted.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ConflictException
+//     The requested state transition isn't valid. For example, you can't delete
+//     a firewall domain list if it is in the process of being deleted, or you can't
+//     import domains into a domain list that is in the process of being deleted.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteFirewallDomainList
 func (c *Route53Resolver) DeleteFirewallDomainList(input *DeleteFirewallDomainListInput) (*DeleteFirewallDomainListOutput, error) {
@@ -1146,14 +1250,13 @@ const opDeleteFirewallRule = "DeleteFirewallRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFirewallRuleRequest method.
+//	req, resp := client.DeleteFirewallRuleRequest(params)
 //
-//    // Example sending a request using the DeleteFirewallRuleRequest method.
-//    req, resp := client.DeleteFirewallRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteFirewallRule
 func (c *Route53Resolver) DeleteFirewallRuleRequest(input *DeleteFirewallRuleInput) (req *request.Request, output *DeleteFirewallRuleOutput) {
@@ -1184,18 +1287,19 @@ func (c *Route53Resolver) DeleteFirewallRuleRequest(input *DeleteFirewallRuleInp
 // API operation DeleteFirewallRule for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteFirewallRule
 func (c *Route53Resolver) DeleteFirewallRule(input *DeleteFirewallRuleInput) (*DeleteFirewallRuleOutput, error) {
@@ -1235,14 +1339,13 @@ const opDeleteFirewallRuleGroup = "DeleteFirewallRuleGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFirewallRuleGroupRequest method.
+//	req, resp := client.DeleteFirewallRuleGroupRequest(params)
 //
-//    // Example sending a request using the DeleteFirewallRuleGroupRequest method.
-//    req, resp := client.DeleteFirewallRuleGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteFirewallRuleGroup
 func (c *Route53Resolver) DeleteFirewallRuleGroupRequest(input *DeleteFirewallRuleGroupInput) (req *request.Request, output *DeleteFirewallRuleGroupOutput) {
@@ -1273,27 +1376,28 @@ func (c *Route53Resolver) DeleteFirewallRuleGroupRequest(input *DeleteFirewallRu
 // API operation DeleteFirewallRuleGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * ConflictException
-//   The requested state transition isn't valid. For example, you can't delete
-//   a firewall domain list if it is in the process of being deleted, or you can't
-//   import domains into a domain list that is in the process of being deleted.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - ConflictException
+//     The requested state transition isn't valid. For example, you can't delete
+//     a firewall domain list if it is in the process of being deleted, or you can't
+//     import domains into a domain list that is in the process of being deleted.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteFirewallRuleGroup
 func (c *Route53Resolver) DeleteFirewallRuleGroup(input *DeleteFirewallRuleGroupInput) (*DeleteFirewallRuleGroupOutput, error) {
@@ -1317,6 +1421,104 @@ func (c *Route53Resolver) DeleteFirewallRuleGroupWithContext(ctx aws.Context, in
 	return out, req.Send()
 }
 
+const opDeleteOutpostResolver = "DeleteOutpostResolver"
+
+// DeleteOutpostResolverRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteOutpostResolver operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteOutpostResolver for more information on using the DeleteOutpostResolver
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteOutpostResolverRequest method.
+//	req, resp := client.DeleteOutpostResolverRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteOutpostResolver
+func (c *Route53Resolver) DeleteOutpostResolverRequest(input *DeleteOutpostResolverInput) (req *request.Request, output *DeleteOutpostResolverOutput) {
+	op := &request.Operation{
+		Name:       opDeleteOutpostResolver,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteOutpostResolverInput{}
+	}
+
+	output = &DeleteOutpostResolverOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteOutpostResolver API operation for Amazon Route 53 Resolver.
+//
+// Deletes a Resolver on the Outpost.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Route 53 Resolver's
+// API operation DeleteOutpostResolver for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
+//
+//   - ConflictException
+//     The requested state transition isn't valid. For example, you can't delete
+//     a firewall domain list if it is in the process of being deleted, or you can't
+//     import domains into a domain list that is in the process of being deleted.
+//
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteOutpostResolver
+func (c *Route53Resolver) DeleteOutpostResolver(input *DeleteOutpostResolverInput) (*DeleteOutpostResolverOutput, error) {
+	req, out := c.DeleteOutpostResolverRequest(input)
+	return out, req.Send()
+}
+
+// DeleteOutpostResolverWithContext is the same as DeleteOutpostResolver with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteOutpostResolver for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Route53Resolver) DeleteOutpostResolverWithContext(ctx aws.Context, input *DeleteOutpostResolverInput, opts ...request.Option) (*DeleteOutpostResolverOutput, error) {
+	req, out := c.DeleteOutpostResolverRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteResolverEndpoint = "DeleteResolverEndpoint"
 
 // DeleteResolverEndpointRequest generates a "aws/request.Request" representing the
@@ -1333,14 +1535,13 @@ const opDeleteResolverEndpoint = "DeleteResolverEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResolverEndpointRequest method.
+//	req, resp := client.DeleteResolverEndpointRequest(params)
 //
-//    // Example sending a request using the DeleteResolverEndpointRequest method.
-//    req, resp := client.DeleteResolverEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteResolverEndpoint
 func (c *Route53Resolver) DeleteResolverEndpointRequest(input *DeleteResolverEndpointInput) (req *request.Request, output *DeleteResolverEndpointOutput) {
@@ -1364,10 +1565,10 @@ func (c *Route53Resolver) DeleteResolverEndpointRequest(input *DeleteResolverEnd
 // Deletes a Resolver endpoint. The effect of deleting a Resolver endpoint depends
 // on whether it's an inbound or an outbound Resolver endpoint:
 //
-//    * Inbound: DNS queries from your network are no longer routed to the DNS
-//    service for the specified VPC.
+//   - Inbound: DNS queries from your network are no longer routed to the DNS
+//     service for the specified VPC.
 //
-//    * Outbound: DNS queries from a VPC are no longer routed to your network.
+//   - Outbound: DNS queries from a VPC are no longer routed to your network.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1377,20 +1578,21 @@ func (c *Route53Resolver) DeleteResolverEndpointRequest(input *DeleteResolverEnd
 // API operation DeleteResolverEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteResolverEndpoint
 func (c *Route53Resolver) DeleteResolverEndpoint(input *DeleteResolverEndpointInput) (*DeleteResolverEndpointOutput, error) {
@@ -1430,14 +1632,13 @@ const opDeleteResolverQueryLogConfig = "DeleteResolverQueryLogConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResolverQueryLogConfigRequest method.
+//	req, resp := client.DeleteResolverQueryLogConfigRequest(params)
 //
-//    // Example sending a request using the DeleteResolverQueryLogConfigRequest method.
-//    req, resp := client.DeleteResolverQueryLogConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteResolverQueryLogConfig
 func (c *Route53Resolver) DeleteResolverQueryLogConfigRequest(input *DeleteResolverQueryLogConfigInput) (req *request.Request, output *DeleteResolverQueryLogConfigOutput) {
@@ -1482,24 +1683,25 @@ func (c *Route53Resolver) DeleteResolverQueryLogConfigRequest(input *DeleteResol
 // API operation DeleteResolverQueryLogConfig for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteResolverQueryLogConfig
 func (c *Route53Resolver) DeleteResolverQueryLogConfig(input *DeleteResolverQueryLogConfigInput) (*DeleteResolverQueryLogConfigOutput, error) {
@@ -1539,14 +1741,13 @@ const opDeleteResolverRule = "DeleteResolverRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResolverRuleRequest method.
+//	req, resp := client.DeleteResolverRuleRequest(params)
 //
-//    // Example sending a request using the DeleteResolverRuleRequest method.
-//    req, resp := client.DeleteResolverRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteResolverRule
 func (c *Route53Resolver) DeleteResolverRuleRequest(input *DeleteResolverRuleInput) (req *request.Request, output *DeleteResolverRuleOutput) {
@@ -1579,20 +1780,21 @@ func (c *Route53Resolver) DeleteResolverRuleRequest(input *DeleteResolverRuleInp
 // API operation DeleteResolverRule for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ResourceInUseException
-//   The resource that you tried to update or delete is currently in use.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - ResourceInUseException
+//     The resource that you tried to update or delete is currently in use.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DeleteResolverRule
 func (c *Route53Resolver) DeleteResolverRule(input *DeleteResolverRuleInput) (*DeleteResolverRuleOutput, error) {
@@ -1632,14 +1834,13 @@ const opDisassociateFirewallRuleGroup = "DisassociateFirewallRuleGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateFirewallRuleGroupRequest method.
+//	req, resp := client.DisassociateFirewallRuleGroupRequest(params)
 //
-//    // Example sending a request using the DisassociateFirewallRuleGroupRequest method.
-//    req, resp := client.DisassociateFirewallRuleGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DisassociateFirewallRuleGroup
 func (c *Route53Resolver) DisassociateFirewallRuleGroupRequest(input *DisassociateFirewallRuleGroupInput) (req *request.Request, output *DisassociateFirewallRuleGroupOutput) {
@@ -1671,27 +1872,28 @@ func (c *Route53Resolver) DisassociateFirewallRuleGroupRequest(input *Disassocia
 // API operation DisassociateFirewallRuleGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * ConflictException
-//   The requested state transition isn't valid. For example, you can't delete
-//   a firewall domain list if it is in the process of being deleted, or you can't
-//   import domains into a domain list that is in the process of being deleted.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - ConflictException
+//     The requested state transition isn't valid. For example, you can't delete
+//     a firewall domain list if it is in the process of being deleted, or you can't
+//     import domains into a domain list that is in the process of being deleted.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DisassociateFirewallRuleGroup
 func (c *Route53Resolver) DisassociateFirewallRuleGroup(input *DisassociateFirewallRuleGroupInput) (*DisassociateFirewallRuleGroupOutput, error) {
@@ -1731,14 +1933,13 @@ const opDisassociateResolverEndpointIpAddress = "DisassociateResolverEndpointIpA
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateResolverEndpointIpAddressRequest method.
+//	req, resp := client.DisassociateResolverEndpointIpAddressRequest(params)
 //
-//    // Example sending a request using the DisassociateResolverEndpointIpAddressRequest method.
-//    req, resp := client.DisassociateResolverEndpointIpAddressRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DisassociateResolverEndpointIpAddress
 func (c *Route53Resolver) DisassociateResolverEndpointIpAddressRequest(input *DisassociateResolverEndpointIpAddressInput) (req *request.Request, output *DisassociateResolverEndpointIpAddressOutput) {
@@ -1774,23 +1975,24 @@ func (c *Route53Resolver) DisassociateResolverEndpointIpAddressRequest(input *Di
 // API operation DisassociateResolverEndpointIpAddress for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ResourceExistsException
-//   The resource that you tried to create already exists.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - ResourceExistsException
+//     The resource that you tried to create already exists.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DisassociateResolverEndpointIpAddress
 func (c *Route53Resolver) DisassociateResolverEndpointIpAddress(input *DisassociateResolverEndpointIpAddressInput) (*DisassociateResolverEndpointIpAddressOutput, error) {
@@ -1830,14 +2032,13 @@ const opDisassociateResolverQueryLogConfig = "DisassociateResolverQueryLogConfig
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateResolverQueryLogConfigRequest method.
+//	req, resp := client.DisassociateResolverQueryLogConfigRequest(params)
 //
-//    // Example sending a request using the DisassociateResolverQueryLogConfigRequest method.
-//    req, resp := client.DisassociateResolverQueryLogConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DisassociateResolverQueryLogConfig
 func (c *Route53Resolver) DisassociateResolverQueryLogConfigRequest(input *DisassociateResolverQueryLogConfigInput) (req *request.Request, output *DisassociateResolverQueryLogConfigOutput) {
@@ -1865,10 +2066,10 @@ func (c *Route53Resolver) DisassociateResolverQueryLogConfigRequest(input *Disas
 // to share a query logging configuration with other accounts, VPCs can be disassociated
 // from the configuration in the following ways:
 //
-//    * The accounts that you shared the configuration with can disassociate
-//    VPCs from the configuration.
+//   - The accounts that you shared the configuration with can disassociate
+//     VPCs from the configuration.
 //
-//    * You can stop sharing the configuration.
+//   - You can stop sharing the configuration.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1878,24 +2079,25 @@ func (c *Route53Resolver) DisassociateResolverQueryLogConfigRequest(input *Disas
 // API operation DisassociateResolverQueryLogConfig for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DisassociateResolverQueryLogConfig
 func (c *Route53Resolver) DisassociateResolverQueryLogConfig(input *DisassociateResolverQueryLogConfigInput) (*DisassociateResolverQueryLogConfigOutput, error) {
@@ -1935,14 +2137,13 @@ const opDisassociateResolverRule = "DisassociateResolverRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateResolverRuleRequest method.
+//	req, resp := client.DisassociateResolverRuleRequest(params)
 //
-//    // Example sending a request using the DisassociateResolverRuleRequest method.
-//    req, resp := client.DisassociateResolverRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DisassociateResolverRule
 func (c *Route53Resolver) DisassociateResolverRuleRequest(input *DisassociateResolverRuleInput) (req *request.Request, output *DisassociateResolverRuleOutput) {
@@ -1977,17 +2178,18 @@ func (c *Route53Resolver) DisassociateResolverRuleRequest(input *DisassociateRes
 // API operation DisassociateResolverRule for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/DisassociateResolverRule
 func (c *Route53Resolver) DisassociateResolverRule(input *DisassociateResolverRuleInput) (*DisassociateResolverRuleOutput, error) {
@@ -2027,14 +2229,13 @@ const opGetFirewallConfig = "GetFirewallConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFirewallConfigRequest method.
+//	req, resp := client.GetFirewallConfigRequest(params)
 //
-//    // Example sending a request using the GetFirewallConfigRequest method.
-//    req, resp := client.GetFirewallConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetFirewallConfig
 func (c *Route53Resolver) GetFirewallConfigRequest(input *GetFirewallConfigInput) (req *request.Request, output *GetFirewallConfigOutput) {
@@ -2066,22 +2267,23 @@ func (c *Route53Resolver) GetFirewallConfigRequest(input *GetFirewallConfigInput
 // API operation GetFirewallConfig for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetFirewallConfig
 func (c *Route53Resolver) GetFirewallConfig(input *GetFirewallConfigInput) (*GetFirewallConfigOutput, error) {
@@ -2121,14 +2323,13 @@ const opGetFirewallDomainList = "GetFirewallDomainList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFirewallDomainListRequest method.
+//	req, resp := client.GetFirewallDomainListRequest(params)
 //
-//    // Example sending a request using the GetFirewallDomainListRequest method.
-//    req, resp := client.GetFirewallDomainListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetFirewallDomainList
 func (c *Route53Resolver) GetFirewallDomainListRequest(input *GetFirewallDomainListInput) (req *request.Request, output *GetFirewallDomainListOutput) {
@@ -2159,18 +2360,19 @@ func (c *Route53Resolver) GetFirewallDomainListRequest(input *GetFirewallDomainL
 // API operation GetFirewallDomainList for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetFirewallDomainList
 func (c *Route53Resolver) GetFirewallDomainList(input *GetFirewallDomainListInput) (*GetFirewallDomainListOutput, error) {
@@ -2210,14 +2412,13 @@ const opGetFirewallRuleGroup = "GetFirewallRuleGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFirewallRuleGroupRequest method.
+//	req, resp := client.GetFirewallRuleGroupRequest(params)
 //
-//    // Example sending a request using the GetFirewallRuleGroupRequest method.
-//    req, resp := client.GetFirewallRuleGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetFirewallRuleGroup
 func (c *Route53Resolver) GetFirewallRuleGroupRequest(input *GetFirewallRuleGroupInput) (req *request.Request, output *GetFirewallRuleGroupOutput) {
@@ -2248,18 +2449,19 @@ func (c *Route53Resolver) GetFirewallRuleGroupRequest(input *GetFirewallRuleGrou
 // API operation GetFirewallRuleGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetFirewallRuleGroup
 func (c *Route53Resolver) GetFirewallRuleGroup(input *GetFirewallRuleGroupInput) (*GetFirewallRuleGroupOutput, error) {
@@ -2299,14 +2501,13 @@ const opGetFirewallRuleGroupAssociation = "GetFirewallRuleGroupAssociation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFirewallRuleGroupAssociationRequest method.
+//	req, resp := client.GetFirewallRuleGroupAssociationRequest(params)
 //
-//    // Example sending a request using the GetFirewallRuleGroupAssociationRequest method.
-//    req, resp := client.GetFirewallRuleGroupAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetFirewallRuleGroupAssociation
 func (c *Route53Resolver) GetFirewallRuleGroupAssociationRequest(input *GetFirewallRuleGroupAssociationInput) (req *request.Request, output *GetFirewallRuleGroupAssociationOutput) {
@@ -2340,18 +2541,19 @@ func (c *Route53Resolver) GetFirewallRuleGroupAssociationRequest(input *GetFirew
 // API operation GetFirewallRuleGroupAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetFirewallRuleGroupAssociation
 func (c *Route53Resolver) GetFirewallRuleGroupAssociation(input *GetFirewallRuleGroupAssociationInput) (*GetFirewallRuleGroupAssociationOutput, error) {
@@ -2391,14 +2593,13 @@ const opGetFirewallRuleGroupPolicy = "GetFirewallRuleGroupPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFirewallRuleGroupPolicyRequest method.
+//	req, resp := client.GetFirewallRuleGroupPolicyRequest(params)
 //
-//    // Example sending a request using the GetFirewallRuleGroupPolicyRequest method.
-//    req, resp := client.GetFirewallRuleGroupPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetFirewallRuleGroupPolicy
 func (c *Route53Resolver) GetFirewallRuleGroupPolicyRequest(input *GetFirewallRuleGroupPolicyInput) (req *request.Request, output *GetFirewallRuleGroupPolicyOutput) {
@@ -2431,22 +2632,23 @@ func (c *Route53Resolver) GetFirewallRuleGroupPolicyRequest(input *GetFirewallRu
 // API operation GetFirewallRuleGroupPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetFirewallRuleGroupPolicy
 func (c *Route53Resolver) GetFirewallRuleGroupPolicy(input *GetFirewallRuleGroupPolicyInput) (*GetFirewallRuleGroupPolicyOutput, error) {
@@ -2470,6 +2672,100 @@ func (c *Route53Resolver) GetFirewallRuleGroupPolicyWithContext(ctx aws.Context,
 	return out, req.Send()
 }
 
+const opGetOutpostResolver = "GetOutpostResolver"
+
+// GetOutpostResolverRequest generates a "aws/request.Request" representing the
+// client's request for the GetOutpostResolver operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetOutpostResolver for more information on using the GetOutpostResolver
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetOutpostResolverRequest method.
+//	req, resp := client.GetOutpostResolverRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetOutpostResolver
+func (c *Route53Resolver) GetOutpostResolverRequest(input *GetOutpostResolverInput) (req *request.Request, output *GetOutpostResolverOutput) {
+	op := &request.Operation{
+		Name:       opGetOutpostResolver,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetOutpostResolverInput{}
+	}
+
+	output = &GetOutpostResolverOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetOutpostResolver API operation for Amazon Route 53 Resolver.
+//
+// Gets information about a specified Resolver on the Outpost, such as its instance
+// count and type, name, and the current status of the Resolver.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Route 53 Resolver's
+// API operation GetOutpostResolver for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
+//
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetOutpostResolver
+func (c *Route53Resolver) GetOutpostResolver(input *GetOutpostResolverInput) (*GetOutpostResolverOutput, error) {
+	req, out := c.GetOutpostResolverRequest(input)
+	return out, req.Send()
+}
+
+// GetOutpostResolverWithContext is the same as GetOutpostResolver with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetOutpostResolver for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Route53Resolver) GetOutpostResolverWithContext(ctx aws.Context, input *GetOutpostResolverInput, opts ...request.Option) (*GetOutpostResolverOutput, error) {
+	req, out := c.GetOutpostResolverRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetResolverConfig = "GetResolverConfig"
 
 // GetResolverConfigRequest generates a "aws/request.Request" representing the
@@ -2486,14 +2782,13 @@ const opGetResolverConfig = "GetResolverConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResolverConfigRequest method.
+//	req, resp := client.GetResolverConfigRequest(params)
 //
-//    // Example sending a request using the GetResolverConfigRequest method.
-//    req, resp := client.GetResolverConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverConfig
 func (c *Route53Resolver) GetResolverConfigRequest(input *GetResolverConfigInput) (req *request.Request, output *GetResolverConfigOutput) {
@@ -2525,25 +2820,26 @@ func (c *Route53Resolver) GetResolverConfigRequest(input *GetResolverConfigInput
 // API operation GetResolverConfig for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
+//
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverConfig
 func (c *Route53Resolver) GetResolverConfig(input *GetResolverConfigInput) (*GetResolverConfigOutput, error) {
@@ -2583,14 +2879,13 @@ const opGetResolverDnssecConfig = "GetResolverDnssecConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResolverDnssecConfigRequest method.
+//	req, resp := client.GetResolverDnssecConfigRequest(params)
 //
-//    // Example sending a request using the GetResolverDnssecConfigRequest method.
-//    req, resp := client.GetResolverDnssecConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverDnssecConfig
 func (c *Route53Resolver) GetResolverDnssecConfigRequest(input *GetResolverDnssecConfigInput) (req *request.Request, output *GetResolverDnssecConfigOutput) {
@@ -2621,24 +2916,25 @@ func (c *Route53Resolver) GetResolverDnssecConfigRequest(input *GetResolverDnsse
 // API operation GetResolverDnssecConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverDnssecConfig
 func (c *Route53Resolver) GetResolverDnssecConfig(input *GetResolverDnssecConfigInput) (*GetResolverDnssecConfigOutput, error) {
@@ -2678,14 +2974,13 @@ const opGetResolverEndpoint = "GetResolverEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResolverEndpointRequest method.
+//	req, resp := client.GetResolverEndpointRequest(params)
 //
-//    // Example sending a request using the GetResolverEndpointRequest method.
-//    req, resp := client.GetResolverEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverEndpoint
 func (c *Route53Resolver) GetResolverEndpointRequest(input *GetResolverEndpointInput) (req *request.Request, output *GetResolverEndpointOutput) {
@@ -2718,17 +3013,18 @@ func (c *Route53Resolver) GetResolverEndpointRequest(input *GetResolverEndpointI
 // API operation GetResolverEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverEndpoint
 func (c *Route53Resolver) GetResolverEndpoint(input *GetResolverEndpointInput) (*GetResolverEndpointOutput, error) {
@@ -2768,14 +3064,13 @@ const opGetResolverQueryLogConfig = "GetResolverQueryLogConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResolverQueryLogConfigRequest method.
+//	req, resp := client.GetResolverQueryLogConfigRequest(params)
 //
-//    // Example sending a request using the GetResolverQueryLogConfigRequest method.
-//    req, resp := client.GetResolverQueryLogConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverQueryLogConfig
 func (c *Route53Resolver) GetResolverQueryLogConfigRequest(input *GetResolverQueryLogConfigInput) (req *request.Request, output *GetResolverQueryLogConfigOutput) {
@@ -2808,24 +3103,25 @@ func (c *Route53Resolver) GetResolverQueryLogConfigRequest(input *GetResolverQue
 // API operation GetResolverQueryLogConfig for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverQueryLogConfig
 func (c *Route53Resolver) GetResolverQueryLogConfig(input *GetResolverQueryLogConfigInput) (*GetResolverQueryLogConfigOutput, error) {
@@ -2865,14 +3161,13 @@ const opGetResolverQueryLogConfigAssociation = "GetResolverQueryLogConfigAssocia
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResolverQueryLogConfigAssociationRequest method.
+//	req, resp := client.GetResolverQueryLogConfigAssociationRequest(params)
 //
-//    // Example sending a request using the GetResolverQueryLogConfigAssociationRequest method.
-//    req, resp := client.GetResolverQueryLogConfigAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverQueryLogConfigAssociation
 func (c *Route53Resolver) GetResolverQueryLogConfigAssociationRequest(input *GetResolverQueryLogConfigAssociationInput) (req *request.Request, output *GetResolverQueryLogConfigAssociationOutput) {
@@ -2905,24 +3200,25 @@ func (c *Route53Resolver) GetResolverQueryLogConfigAssociationRequest(input *Get
 // API operation GetResolverQueryLogConfigAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverQueryLogConfigAssociation
 func (c *Route53Resolver) GetResolverQueryLogConfigAssociation(input *GetResolverQueryLogConfigAssociationInput) (*GetResolverQueryLogConfigAssociationOutput, error) {
@@ -2962,14 +3258,13 @@ const opGetResolverQueryLogConfigPolicy = "GetResolverQueryLogConfigPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResolverQueryLogConfigPolicyRequest method.
+//	req, resp := client.GetResolverQueryLogConfigPolicyRequest(params)
 //
-//    // Example sending a request using the GetResolverQueryLogConfigPolicyRequest method.
-//    req, resp := client.GetResolverQueryLogConfigPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverQueryLogConfigPolicy
 func (c *Route53Resolver) GetResolverQueryLogConfigPolicyRequest(input *GetResolverQueryLogConfigPolicyInput) (req *request.Request, output *GetResolverQueryLogConfigPolicyOutput) {
@@ -3002,21 +3297,22 @@ func (c *Route53Resolver) GetResolverQueryLogConfigPolicyRequest(input *GetResol
 // API operation GetResolverQueryLogConfigPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * UnknownResourceException
-//   The specified resource doesn't exist.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - UnknownResourceException
+//     The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverQueryLogConfigPolicy
 func (c *Route53Resolver) GetResolverQueryLogConfigPolicy(input *GetResolverQueryLogConfigPolicyInput) (*GetResolverQueryLogConfigPolicyOutput, error) {
@@ -3056,14 +3352,13 @@ const opGetResolverRule = "GetResolverRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResolverRuleRequest method.
+//	req, resp := client.GetResolverRuleRequest(params)
 //
-//    // Example sending a request using the GetResolverRuleRequest method.
-//    req, resp := client.GetResolverRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverRule
 func (c *Route53Resolver) GetResolverRuleRequest(input *GetResolverRuleInput) (req *request.Request, output *GetResolverRuleOutput) {
@@ -3096,17 +3391,18 @@ func (c *Route53Resolver) GetResolverRuleRequest(input *GetResolverRuleInput) (r
 // API operation GetResolverRule for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverRule
 func (c *Route53Resolver) GetResolverRule(input *GetResolverRuleInput) (*GetResolverRuleOutput, error) {
@@ -3146,14 +3442,13 @@ const opGetResolverRuleAssociation = "GetResolverRuleAssociation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResolverRuleAssociationRequest method.
+//	req, resp := client.GetResolverRuleAssociationRequest(params)
 //
-//    // Example sending a request using the GetResolverRuleAssociationRequest method.
-//    req, resp := client.GetResolverRuleAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverRuleAssociation
 func (c *Route53Resolver) GetResolverRuleAssociationRequest(input *GetResolverRuleAssociationInput) (req *request.Request, output *GetResolverRuleAssociationOutput) {
@@ -3186,17 +3481,18 @@ func (c *Route53Resolver) GetResolverRuleAssociationRequest(input *GetResolverRu
 // API operation GetResolverRuleAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverRuleAssociation
 func (c *Route53Resolver) GetResolverRuleAssociation(input *GetResolverRuleAssociationInput) (*GetResolverRuleAssociationOutput, error) {
@@ -3236,14 +3532,13 @@ const opGetResolverRulePolicy = "GetResolverRulePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResolverRulePolicyRequest method.
+//	req, resp := client.GetResolverRulePolicyRequest(params)
 //
-//    // Example sending a request using the GetResolverRulePolicyRequest method.
-//    req, resp := client.GetResolverRulePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverRulePolicy
 func (c *Route53Resolver) GetResolverRulePolicyRequest(input *GetResolverRulePolicyInput) (req *request.Request, output *GetResolverRulePolicyOutput) {
@@ -3277,18 +3572,19 @@ func (c *Route53Resolver) GetResolverRulePolicyRequest(input *GetResolverRulePol
 // API operation GetResolverRulePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
 //
-//   * UnknownResourceException
-//   The specified resource doesn't exist.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - UnknownResourceException
+//     The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/GetResolverRulePolicy
 func (c *Route53Resolver) GetResolverRulePolicy(input *GetResolverRulePolicyInput) (*GetResolverRulePolicyOutput, error) {
@@ -3328,14 +3624,13 @@ const opImportFirewallDomains = "ImportFirewallDomains"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ImportFirewallDomainsRequest method.
+//	req, resp := client.ImportFirewallDomainsRequest(params)
 //
-//    // Example sending a request using the ImportFirewallDomainsRequest method.
-//    req, resp := client.ImportFirewallDomainsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ImportFirewallDomains
 func (c *Route53Resolver) ImportFirewallDomainsRequest(input *ImportFirewallDomainsInput) (req *request.Request, output *ImportFirewallDomainsOutput) {
@@ -3362,12 +3657,12 @@ func (c *Route53Resolver) ImportFirewallDomainsRequest(input *ImportFirewallDoma
 // Each domain specification in your domain list must satisfy the following
 // requirements:
 //
-//    * It can optionally start with * (asterisk).
+//   - It can optionally start with * (asterisk).
 //
-//    * With the exception of the optional starting asterisk, it must only contain
-//    the following characters: A-Z, a-z, 0-9, - (hyphen).
+//   - With the exception of the optional starting asterisk, it must only contain
+//     the following characters: A-Z, a-z, 0-9, - (hyphen).
 //
-//    * It must be from 1-255 characters in length.
+//   - It must be from 1-255 characters in length.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3377,30 +3672,31 @@ func (c *Route53Resolver) ImportFirewallDomainsRequest(input *ImportFirewallDoma
 // API operation ImportFirewallDomains for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * ConflictException
-//   The requested state transition isn't valid. For example, you can't delete
-//   a firewall domain list if it is in the process of being deleted, or you can't
-//   import domains into a domain list that is in the process of being deleted.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - ConflictException
+//     The requested state transition isn't valid. For example, you can't delete
+//     a firewall domain list if it is in the process of being deleted, or you can't
+//     import domains into a domain list that is in the process of being deleted.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ImportFirewallDomains
 func (c *Route53Resolver) ImportFirewallDomains(input *ImportFirewallDomainsInput) (*ImportFirewallDomainsOutput, error) {
@@ -3440,14 +3736,13 @@ const opListFirewallConfigs = "ListFirewallConfigs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFirewallConfigsRequest method.
+//	req, resp := client.ListFirewallConfigsRequest(params)
 //
-//    // Example sending a request using the ListFirewallConfigsRequest method.
-//    req, resp := client.ListFirewallConfigsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallConfigs
 func (c *Route53Resolver) ListFirewallConfigsRequest(input *ListFirewallConfigsInput) (req *request.Request, output *ListFirewallConfigsOutput) {
@@ -3488,19 +3783,20 @@ func (c *Route53Resolver) ListFirewallConfigsRequest(input *ListFirewallConfigsI
 // API operation ListFirewallConfigs for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallConfigs
 func (c *Route53Resolver) ListFirewallConfigs(input *ListFirewallConfigsInput) (*ListFirewallConfigsOutput, error) {
@@ -3532,15 +3828,14 @@ func (c *Route53Resolver) ListFirewallConfigsWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFirewallConfigs operation.
-//    pageNum := 0
-//    err := client.ListFirewallConfigsPages(params,
-//        func(page *route53resolver.ListFirewallConfigsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFirewallConfigs operation.
+//	pageNum := 0
+//	err := client.ListFirewallConfigsPages(params,
+//	    func(page *route53resolver.ListFirewallConfigsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListFirewallConfigsPages(input *ListFirewallConfigsInput, fn func(*ListFirewallConfigsOutput, bool) bool) error {
 	return c.ListFirewallConfigsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3592,14 +3887,13 @@ const opListFirewallDomainLists = "ListFirewallDomainLists"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFirewallDomainListsRequest method.
+//	req, resp := client.ListFirewallDomainListsRequest(params)
 //
-//    // Example sending a request using the ListFirewallDomainListsRequest method.
-//    req, resp := client.ListFirewallDomainListsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallDomainLists
 func (c *Route53Resolver) ListFirewallDomainListsRequest(input *ListFirewallDomainListsInput) (req *request.Request, output *ListFirewallDomainListsOutput) {
@@ -3641,19 +3935,20 @@ func (c *Route53Resolver) ListFirewallDomainListsRequest(input *ListFirewallDoma
 // API operation ListFirewallDomainLists for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallDomainLists
 func (c *Route53Resolver) ListFirewallDomainLists(input *ListFirewallDomainListsInput) (*ListFirewallDomainListsOutput, error) {
@@ -3685,15 +3980,14 @@ func (c *Route53Resolver) ListFirewallDomainListsWithContext(ctx aws.Context, in
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFirewallDomainLists operation.
-//    pageNum := 0
-//    err := client.ListFirewallDomainListsPages(params,
-//        func(page *route53resolver.ListFirewallDomainListsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFirewallDomainLists operation.
+//	pageNum := 0
+//	err := client.ListFirewallDomainListsPages(params,
+//	    func(page *route53resolver.ListFirewallDomainListsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListFirewallDomainListsPages(input *ListFirewallDomainListsInput, fn func(*ListFirewallDomainListsOutput, bool) bool) error {
 	return c.ListFirewallDomainListsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3745,14 +4039,13 @@ const opListFirewallDomains = "ListFirewallDomains"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFirewallDomainsRequest method.
+//	req, resp := client.ListFirewallDomainsRequest(params)
 //
-//    // Example sending a request using the ListFirewallDomainsRequest method.
-//    req, resp := client.ListFirewallDomainsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallDomains
 func (c *Route53Resolver) ListFirewallDomainsRequest(input *ListFirewallDomainsInput) (req *request.Request, output *ListFirewallDomainsOutput) {
@@ -3793,22 +4086,23 @@ func (c *Route53Resolver) ListFirewallDomainsRequest(input *ListFirewallDomainsI
 // API operation ListFirewallDomains for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallDomains
 func (c *Route53Resolver) ListFirewallDomains(input *ListFirewallDomainsInput) (*ListFirewallDomainsOutput, error) {
@@ -3840,15 +4134,14 @@ func (c *Route53Resolver) ListFirewallDomainsWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFirewallDomains operation.
-//    pageNum := 0
-//    err := client.ListFirewallDomainsPages(params,
-//        func(page *route53resolver.ListFirewallDomainsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFirewallDomains operation.
+//	pageNum := 0
+//	err := client.ListFirewallDomainsPages(params,
+//	    func(page *route53resolver.ListFirewallDomainsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListFirewallDomainsPages(input *ListFirewallDomainsInput, fn func(*ListFirewallDomainsOutput, bool) bool) error {
 	return c.ListFirewallDomainsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3900,14 +4193,13 @@ const opListFirewallRuleGroupAssociations = "ListFirewallRuleGroupAssociations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFirewallRuleGroupAssociationsRequest method.
+//	req, resp := client.ListFirewallRuleGroupAssociationsRequest(params)
 //
-//    // Example sending a request using the ListFirewallRuleGroupAssociationsRequest method.
-//    req, resp := client.ListFirewallRuleGroupAssociationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallRuleGroupAssociations
 func (c *Route53Resolver) ListFirewallRuleGroupAssociationsRequest(input *ListFirewallRuleGroupAssociationsInput) (req *request.Request, output *ListFirewallRuleGroupAssociationsOutput) {
@@ -3948,19 +4240,20 @@ func (c *Route53Resolver) ListFirewallRuleGroupAssociationsRequest(input *ListFi
 // API operation ListFirewallRuleGroupAssociations for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallRuleGroupAssociations
 func (c *Route53Resolver) ListFirewallRuleGroupAssociations(input *ListFirewallRuleGroupAssociationsInput) (*ListFirewallRuleGroupAssociationsOutput, error) {
@@ -3992,15 +4285,14 @@ func (c *Route53Resolver) ListFirewallRuleGroupAssociationsWithContext(ctx aws.C
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFirewallRuleGroupAssociations operation.
-//    pageNum := 0
-//    err := client.ListFirewallRuleGroupAssociationsPages(params,
-//        func(page *route53resolver.ListFirewallRuleGroupAssociationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFirewallRuleGroupAssociations operation.
+//	pageNum := 0
+//	err := client.ListFirewallRuleGroupAssociationsPages(params,
+//	    func(page *route53resolver.ListFirewallRuleGroupAssociationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListFirewallRuleGroupAssociationsPages(input *ListFirewallRuleGroupAssociationsInput, fn func(*ListFirewallRuleGroupAssociationsOutput, bool) bool) error {
 	return c.ListFirewallRuleGroupAssociationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4052,14 +4344,13 @@ const opListFirewallRuleGroups = "ListFirewallRuleGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFirewallRuleGroupsRequest method.
+//	req, resp := client.ListFirewallRuleGroupsRequest(params)
 //
-//    // Example sending a request using the ListFirewallRuleGroupsRequest method.
-//    req, resp := client.ListFirewallRuleGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallRuleGroups
 func (c *Route53Resolver) ListFirewallRuleGroupsRequest(input *ListFirewallRuleGroupsInput) (req *request.Request, output *ListFirewallRuleGroupsOutput) {
@@ -4100,19 +4391,20 @@ func (c *Route53Resolver) ListFirewallRuleGroupsRequest(input *ListFirewallRuleG
 // API operation ListFirewallRuleGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallRuleGroups
 func (c *Route53Resolver) ListFirewallRuleGroups(input *ListFirewallRuleGroupsInput) (*ListFirewallRuleGroupsOutput, error) {
@@ -4144,15 +4436,14 @@ func (c *Route53Resolver) ListFirewallRuleGroupsWithContext(ctx aws.Context, inp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFirewallRuleGroups operation.
-//    pageNum := 0
-//    err := client.ListFirewallRuleGroupsPages(params,
-//        func(page *route53resolver.ListFirewallRuleGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFirewallRuleGroups operation.
+//	pageNum := 0
+//	err := client.ListFirewallRuleGroupsPages(params,
+//	    func(page *route53resolver.ListFirewallRuleGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListFirewallRuleGroupsPages(input *ListFirewallRuleGroupsInput, fn func(*ListFirewallRuleGroupsOutput, bool) bool) error {
 	return c.ListFirewallRuleGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4204,14 +4495,13 @@ const opListFirewallRules = "ListFirewallRules"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFirewallRulesRequest method.
+//	req, resp := client.ListFirewallRulesRequest(params)
 //
-//    // Example sending a request using the ListFirewallRulesRequest method.
-//    req, resp := client.ListFirewallRulesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallRules
 func (c *Route53Resolver) ListFirewallRulesRequest(input *ListFirewallRulesInput) (req *request.Request, output *ListFirewallRulesOutput) {
@@ -4253,22 +4543,23 @@ func (c *Route53Resolver) ListFirewallRulesRequest(input *ListFirewallRulesInput
 // API operation ListFirewallRules for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListFirewallRules
 func (c *Route53Resolver) ListFirewallRules(input *ListFirewallRulesInput) (*ListFirewallRulesOutput, error) {
@@ -4300,15 +4591,14 @@ func (c *Route53Resolver) ListFirewallRulesWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFirewallRules operation.
-//    pageNum := 0
-//    err := client.ListFirewallRulesPages(params,
-//        func(page *route53resolver.ListFirewallRulesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFirewallRules operation.
+//	pageNum := 0
+//	err := client.ListFirewallRulesPages(params,
+//	    func(page *route53resolver.ListFirewallRulesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListFirewallRulesPages(input *ListFirewallRulesInput, fn func(*ListFirewallRulesOutput, bool) bool) error {
 	return c.ListFirewallRulesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4344,6 +4634,157 @@ func (c *Route53Resolver) ListFirewallRulesPagesWithContext(ctx aws.Context, inp
 	return p.Err()
 }
 
+const opListOutpostResolvers = "ListOutpostResolvers"
+
+// ListOutpostResolversRequest generates a "aws/request.Request" representing the
+// client's request for the ListOutpostResolvers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListOutpostResolvers for more information on using the ListOutpostResolvers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListOutpostResolversRequest method.
+//	req, resp := client.ListOutpostResolversRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListOutpostResolvers
+func (c *Route53Resolver) ListOutpostResolversRequest(input *ListOutpostResolversInput) (req *request.Request, output *ListOutpostResolversOutput) {
+	op := &request.Operation{
+		Name:       opListOutpostResolvers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListOutpostResolversInput{}
+	}
+
+	output = &ListOutpostResolversOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListOutpostResolvers API operation for Amazon Route 53 Resolver.
+//
+// Lists all the Resolvers on Outposts that were created using the current Amazon
+// Web Services account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Route 53 Resolver's
+// API operation ListOutpostResolvers for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
+//
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListOutpostResolvers
+func (c *Route53Resolver) ListOutpostResolvers(input *ListOutpostResolversInput) (*ListOutpostResolversOutput, error) {
+	req, out := c.ListOutpostResolversRequest(input)
+	return out, req.Send()
+}
+
+// ListOutpostResolversWithContext is the same as ListOutpostResolvers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListOutpostResolvers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Route53Resolver) ListOutpostResolversWithContext(ctx aws.Context, input *ListOutpostResolversInput, opts ...request.Option) (*ListOutpostResolversOutput, error) {
+	req, out := c.ListOutpostResolversRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListOutpostResolversPages iterates over the pages of a ListOutpostResolvers operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListOutpostResolvers method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListOutpostResolvers operation.
+//	pageNum := 0
+//	err := client.ListOutpostResolversPages(params,
+//	    func(page *route53resolver.ListOutpostResolversOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Route53Resolver) ListOutpostResolversPages(input *ListOutpostResolversInput, fn func(*ListOutpostResolversOutput, bool) bool) error {
+	return c.ListOutpostResolversPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListOutpostResolversPagesWithContext same as ListOutpostResolversPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Route53Resolver) ListOutpostResolversPagesWithContext(ctx aws.Context, input *ListOutpostResolversInput, fn func(*ListOutpostResolversOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListOutpostResolversInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListOutpostResolversRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListOutpostResolversOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListResolverConfigs = "ListResolverConfigs"
 
 // ListResolverConfigsRequest generates a "aws/request.Request" representing the
@@ -4360,14 +4801,13 @@ const opListResolverConfigs = "ListResolverConfigs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResolverConfigsRequest method.
+//	req, resp := client.ListResolverConfigsRequest(params)
 //
-//    // Example sending a request using the ListResolverConfigsRequest method.
-//    req, resp := client.ListResolverConfigsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverConfigs
 func (c *Route53Resolver) ListResolverConfigsRequest(input *ListResolverConfigsInput) (req *request.Request, output *ListResolverConfigsOutput) {
@@ -4405,28 +4845,29 @@ func (c *Route53Resolver) ListResolverConfigsRequest(input *ListResolverConfigsI
 // API operation ListResolverConfigs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidNextTokenException
+//     The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
+//
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverConfigs
 func (c *Route53Resolver) ListResolverConfigs(input *ListResolverConfigsInput) (*ListResolverConfigsOutput, error) {
@@ -4458,15 +4899,14 @@ func (c *Route53Resolver) ListResolverConfigsWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResolverConfigs operation.
-//    pageNum := 0
-//    err := client.ListResolverConfigsPages(params,
-//        func(page *route53resolver.ListResolverConfigsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResolverConfigs operation.
+//	pageNum := 0
+//	err := client.ListResolverConfigsPages(params,
+//	    func(page *route53resolver.ListResolverConfigsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListResolverConfigsPages(input *ListResolverConfigsInput, fn func(*ListResolverConfigsOutput, bool) bool) error {
 	return c.ListResolverConfigsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4518,14 +4958,13 @@ const opListResolverDnssecConfigs = "ListResolverDnssecConfigs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResolverDnssecConfigsRequest method.
+//	req, resp := client.ListResolverDnssecConfigsRequest(params)
 //
-//    // Example sending a request using the ListResolverDnssecConfigsRequest method.
-//    req, resp := client.ListResolverDnssecConfigsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverDnssecConfigs
 func (c *Route53Resolver) ListResolverDnssecConfigsRequest(input *ListResolverDnssecConfigsInput) (req *request.Request, output *ListResolverDnssecConfigsOutput) {
@@ -4563,24 +5002,25 @@ func (c *Route53Resolver) ListResolverDnssecConfigsRequest(input *ListResolverDn
 // API operation ListResolverDnssecConfigs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidNextTokenException
+//     The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverDnssecConfigs
 func (c *Route53Resolver) ListResolverDnssecConfigs(input *ListResolverDnssecConfigsInput) (*ListResolverDnssecConfigsOutput, error) {
@@ -4612,15 +5052,14 @@ func (c *Route53Resolver) ListResolverDnssecConfigsWithContext(ctx aws.Context, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResolverDnssecConfigs operation.
-//    pageNum := 0
-//    err := client.ListResolverDnssecConfigsPages(params,
-//        func(page *route53resolver.ListResolverDnssecConfigsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResolverDnssecConfigs operation.
+//	pageNum := 0
+//	err := client.ListResolverDnssecConfigsPages(params,
+//	    func(page *route53resolver.ListResolverDnssecConfigsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListResolverDnssecConfigsPages(input *ListResolverDnssecConfigsInput, fn func(*ListResolverDnssecConfigsOutput, bool) bool) error {
 	return c.ListResolverDnssecConfigsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4672,14 +5111,13 @@ const opListResolverEndpointIpAddresses = "ListResolverEndpointIpAddresses"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResolverEndpointIpAddressesRequest method.
+//	req, resp := client.ListResolverEndpointIpAddressesRequest(params)
 //
-//    // Example sending a request using the ListResolverEndpointIpAddressesRequest method.
-//    req, resp := client.ListResolverEndpointIpAddressesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverEndpointIpAddresses
 func (c *Route53Resolver) ListResolverEndpointIpAddressesRequest(input *ListResolverEndpointIpAddressesInput) (req *request.Request, output *ListResolverEndpointIpAddressesOutput) {
@@ -4716,20 +5154,21 @@ func (c *Route53Resolver) ListResolverEndpointIpAddressesRequest(input *ListReso
 // API operation ListResolverEndpointIpAddresses for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InvalidNextTokenException
-//   The value that you specified for NextToken in a List request isn't valid.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InvalidNextTokenException
+//     The value that you specified for NextToken in a List request isn't valid.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverEndpointIpAddresses
 func (c *Route53Resolver) ListResolverEndpointIpAddresses(input *ListResolverEndpointIpAddressesInput) (*ListResolverEndpointIpAddressesOutput, error) {
@@ -4761,15 +5200,14 @@ func (c *Route53Resolver) ListResolverEndpointIpAddressesWithContext(ctx aws.Con
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResolverEndpointIpAddresses operation.
-//    pageNum := 0
-//    err := client.ListResolverEndpointIpAddressesPages(params,
-//        func(page *route53resolver.ListResolverEndpointIpAddressesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResolverEndpointIpAddresses operation.
+//	pageNum := 0
+//	err := client.ListResolverEndpointIpAddressesPages(params,
+//	    func(page *route53resolver.ListResolverEndpointIpAddressesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListResolverEndpointIpAddressesPages(input *ListResolverEndpointIpAddressesInput, fn func(*ListResolverEndpointIpAddressesOutput, bool) bool) error {
 	return c.ListResolverEndpointIpAddressesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4821,14 +5259,13 @@ const opListResolverEndpoints = "ListResolverEndpoints"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResolverEndpointsRequest method.
+//	req, resp := client.ListResolverEndpointsRequest(params)
 //
-//    // Example sending a request using the ListResolverEndpointsRequest method.
-//    req, resp := client.ListResolverEndpointsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverEndpoints
 func (c *Route53Resolver) ListResolverEndpointsRequest(input *ListResolverEndpointsInput) (req *request.Request, output *ListResolverEndpointsOutput) {
@@ -4866,20 +5303,21 @@ func (c *Route53Resolver) ListResolverEndpointsRequest(input *ListResolverEndpoi
 // API operation ListResolverEndpoints for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidNextTokenException
+//     The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverEndpoints
 func (c *Route53Resolver) ListResolverEndpoints(input *ListResolverEndpointsInput) (*ListResolverEndpointsOutput, error) {
@@ -4911,15 +5349,14 @@ func (c *Route53Resolver) ListResolverEndpointsWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResolverEndpoints operation.
-//    pageNum := 0
-//    err := client.ListResolverEndpointsPages(params,
-//        func(page *route53resolver.ListResolverEndpointsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResolverEndpoints operation.
+//	pageNum := 0
+//	err := client.ListResolverEndpointsPages(params,
+//	    func(page *route53resolver.ListResolverEndpointsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListResolverEndpointsPages(input *ListResolverEndpointsInput, fn func(*ListResolverEndpointsOutput, bool) bool) error {
 	return c.ListResolverEndpointsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4971,14 +5408,13 @@ const opListResolverQueryLogConfigAssociations = "ListResolverQueryLogConfigAsso
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResolverQueryLogConfigAssociationsRequest method.
+//	req, resp := client.ListResolverQueryLogConfigAssociationsRequest(params)
 //
-//    // Example sending a request using the ListResolverQueryLogConfigAssociationsRequest method.
-//    req, resp := client.ListResolverQueryLogConfigAssociationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverQueryLogConfigAssociations
 func (c *Route53Resolver) ListResolverQueryLogConfigAssociationsRequest(input *ListResolverQueryLogConfigAssociationsInput) (req *request.Request, output *ListResolverQueryLogConfigAssociationsOutput) {
@@ -5016,24 +5452,25 @@ func (c *Route53Resolver) ListResolverQueryLogConfigAssociationsRequest(input *L
 // API operation ListResolverQueryLogConfigAssociations for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverQueryLogConfigAssociations
 func (c *Route53Resolver) ListResolverQueryLogConfigAssociations(input *ListResolverQueryLogConfigAssociationsInput) (*ListResolverQueryLogConfigAssociationsOutput, error) {
@@ -5065,15 +5502,14 @@ func (c *Route53Resolver) ListResolverQueryLogConfigAssociationsWithContext(ctx 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResolverQueryLogConfigAssociations operation.
-//    pageNum := 0
-//    err := client.ListResolverQueryLogConfigAssociationsPages(params,
-//        func(page *route53resolver.ListResolverQueryLogConfigAssociationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResolverQueryLogConfigAssociations operation.
+//	pageNum := 0
+//	err := client.ListResolverQueryLogConfigAssociationsPages(params,
+//	    func(page *route53resolver.ListResolverQueryLogConfigAssociationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListResolverQueryLogConfigAssociationsPages(input *ListResolverQueryLogConfigAssociationsInput, fn func(*ListResolverQueryLogConfigAssociationsOutput, bool) bool) error {
 	return c.ListResolverQueryLogConfigAssociationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5125,14 +5561,13 @@ const opListResolverQueryLogConfigs = "ListResolverQueryLogConfigs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResolverQueryLogConfigsRequest method.
+//	req, resp := client.ListResolverQueryLogConfigsRequest(params)
 //
-//    // Example sending a request using the ListResolverQueryLogConfigsRequest method.
-//    req, resp := client.ListResolverQueryLogConfigsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverQueryLogConfigs
 func (c *Route53Resolver) ListResolverQueryLogConfigsRequest(input *ListResolverQueryLogConfigsInput) (req *request.Request, output *ListResolverQueryLogConfigsOutput) {
@@ -5171,24 +5606,25 @@ func (c *Route53Resolver) ListResolverQueryLogConfigsRequest(input *ListResolver
 // API operation ListResolverQueryLogConfigs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidNextTokenException
+//     The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverQueryLogConfigs
 func (c *Route53Resolver) ListResolverQueryLogConfigs(input *ListResolverQueryLogConfigsInput) (*ListResolverQueryLogConfigsOutput, error) {
@@ -5220,15 +5656,14 @@ func (c *Route53Resolver) ListResolverQueryLogConfigsWithContext(ctx aws.Context
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResolverQueryLogConfigs operation.
-//    pageNum := 0
-//    err := client.ListResolverQueryLogConfigsPages(params,
-//        func(page *route53resolver.ListResolverQueryLogConfigsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResolverQueryLogConfigs operation.
+//	pageNum := 0
+//	err := client.ListResolverQueryLogConfigsPages(params,
+//	    func(page *route53resolver.ListResolverQueryLogConfigsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListResolverQueryLogConfigsPages(input *ListResolverQueryLogConfigsInput, fn func(*ListResolverQueryLogConfigsOutput, bool) bool) error {
 	return c.ListResolverQueryLogConfigsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5280,14 +5715,13 @@ const opListResolverRuleAssociations = "ListResolverRuleAssociations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResolverRuleAssociationsRequest method.
+//	req, resp := client.ListResolverRuleAssociationsRequest(params)
 //
-//    // Example sending a request using the ListResolverRuleAssociationsRequest method.
-//    req, resp := client.ListResolverRuleAssociationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverRuleAssociations
 func (c *Route53Resolver) ListResolverRuleAssociationsRequest(input *ListResolverRuleAssociationsInput) (req *request.Request, output *ListResolverRuleAssociationsOutput) {
@@ -5325,20 +5759,21 @@ func (c *Route53Resolver) ListResolverRuleAssociationsRequest(input *ListResolve
 // API operation ListResolverRuleAssociations for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidNextTokenException
+//     The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverRuleAssociations
 func (c *Route53Resolver) ListResolverRuleAssociations(input *ListResolverRuleAssociationsInput) (*ListResolverRuleAssociationsOutput, error) {
@@ -5370,15 +5805,14 @@ func (c *Route53Resolver) ListResolverRuleAssociationsWithContext(ctx aws.Contex
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResolverRuleAssociations operation.
-//    pageNum := 0
-//    err := client.ListResolverRuleAssociationsPages(params,
-//        func(page *route53resolver.ListResolverRuleAssociationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResolverRuleAssociations operation.
+//	pageNum := 0
+//	err := client.ListResolverRuleAssociationsPages(params,
+//	    func(page *route53resolver.ListResolverRuleAssociationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListResolverRuleAssociationsPages(input *ListResolverRuleAssociationsInput, fn func(*ListResolverRuleAssociationsOutput, bool) bool) error {
 	return c.ListResolverRuleAssociationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5430,14 +5864,13 @@ const opListResolverRules = "ListResolverRules"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResolverRulesRequest method.
+//	req, resp := client.ListResolverRulesRequest(params)
 //
-//    // Example sending a request using the ListResolverRulesRequest method.
-//    req, resp := client.ListResolverRulesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverRules
 func (c *Route53Resolver) ListResolverRulesRequest(input *ListResolverRulesInput) (req *request.Request, output *ListResolverRulesOutput) {
@@ -5475,20 +5908,21 @@ func (c *Route53Resolver) ListResolverRulesRequest(input *ListResolverRulesInput
 // API operation ListResolverRules for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidNextTokenException
+//     The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListResolverRules
 func (c *Route53Resolver) ListResolverRules(input *ListResolverRulesInput) (*ListResolverRulesOutput, error) {
@@ -5520,15 +5954,14 @@ func (c *Route53Resolver) ListResolverRulesWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResolverRules operation.
-//    pageNum := 0
-//    err := client.ListResolverRulesPages(params,
-//        func(page *route53resolver.ListResolverRulesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResolverRules operation.
+//	pageNum := 0
+//	err := client.ListResolverRulesPages(params,
+//	    func(page *route53resolver.ListResolverRulesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListResolverRulesPages(input *ListResolverRulesInput, fn func(*ListResolverRulesOutput, bool) bool) error {
 	return c.ListResolverRulesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5580,14 +6013,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListTagsForResource
 func (c *Route53Resolver) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -5624,23 +6056,24 @@ func (c *Route53Resolver) ListTagsForResourceRequest(input *ListTagsForResourceI
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InvalidNextTokenException
-//   The value that you specified for NextToken in a List request isn't valid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidNextTokenException
+//     The value that you specified for NextToken in a List request isn't valid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/ListTagsForResource
 func (c *Route53Resolver) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -5672,15 +6105,14 @@ func (c *Route53Resolver) ListTagsForResourceWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTagsForResource operation.
-//    pageNum := 0
-//    err := client.ListTagsForResourcePages(params,
-//        func(page *route53resolver.ListTagsForResourceOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTagsForResource operation.
+//	pageNum := 0
+//	err := client.ListTagsForResourcePages(params,
+//	    func(page *route53resolver.ListTagsForResourceOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Resolver) ListTagsForResourcePages(input *ListTagsForResourceInput, fn func(*ListTagsForResourceOutput, bool) bool) error {
 	return c.ListTagsForResourcePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5732,14 +6164,13 @@ const opPutFirewallRuleGroupPolicy = "PutFirewallRuleGroupPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutFirewallRuleGroupPolicyRequest method.
+//	req, resp := client.PutFirewallRuleGroupPolicyRequest(params)
 //
-//    // Example sending a request using the PutFirewallRuleGroupPolicyRequest method.
-//    req, resp := client.PutFirewallRuleGroupPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/PutFirewallRuleGroupPolicy
 func (c *Route53Resolver) PutFirewallRuleGroupPolicyRequest(input *PutFirewallRuleGroupPolicyInput) (req *request.Request, output *PutFirewallRuleGroupPolicyOutput) {
@@ -5772,22 +6203,23 @@ func (c *Route53Resolver) PutFirewallRuleGroupPolicyRequest(input *PutFirewallRu
 // API operation PutFirewallRuleGroupPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/PutFirewallRuleGroupPolicy
 func (c *Route53Resolver) PutFirewallRuleGroupPolicy(input *PutFirewallRuleGroupPolicyInput) (*PutFirewallRuleGroupPolicyOutput, error) {
@@ -5827,14 +6259,13 @@ const opPutResolverQueryLogConfigPolicy = "PutResolverQueryLogConfigPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutResolverQueryLogConfigPolicyRequest method.
+//	req, resp := client.PutResolverQueryLogConfigPolicyRequest(params)
 //
-//    // Example sending a request using the PutResolverQueryLogConfigPolicyRequest method.
-//    req, resp := client.PutResolverQueryLogConfigPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/PutResolverQueryLogConfigPolicy
 func (c *Route53Resolver) PutResolverQueryLogConfigPolicyRequest(input *PutResolverQueryLogConfigPolicyInput) (req *request.Request, output *PutResolverQueryLogConfigPolicyOutput) {
@@ -5868,24 +6299,25 @@ func (c *Route53Resolver) PutResolverQueryLogConfigPolicyRequest(input *PutResol
 // API operation PutResolverQueryLogConfigPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidPolicyDocument
-//   The specified Resolver rule policy is invalid.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidPolicyDocument
+//     The specified Resolver rule policy is invalid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * UnknownResourceException
-//   The specified resource doesn't exist.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - UnknownResourceException
+//     The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/PutResolverQueryLogConfigPolicy
 func (c *Route53Resolver) PutResolverQueryLogConfigPolicy(input *PutResolverQueryLogConfigPolicyInput) (*PutResolverQueryLogConfigPolicyOutput, error) {
@@ -5925,14 +6357,13 @@ const opPutResolverRulePolicy = "PutResolverRulePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutResolverRulePolicyRequest method.
+//	req, resp := client.PutResolverRulePolicyRequest(params)
 //
-//    // Example sending a request using the PutResolverRulePolicyRequest method.
-//    req, resp := client.PutResolverRulePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/PutResolverRulePolicy
 func (c *Route53Resolver) PutResolverRulePolicyRequest(input *PutResolverRulePolicyInput) (req *request.Request, output *PutResolverRulePolicyOutput) {
@@ -5965,21 +6396,22 @@ func (c *Route53Resolver) PutResolverRulePolicyRequest(input *PutResolverRulePol
 // API operation PutResolverRulePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidPolicyDocument
-//   The specified Resolver rule policy is invalid.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidPolicyDocument
+//     The specified Resolver rule policy is invalid.
 //
-//   * UnknownResourceException
-//   The specified resource doesn't exist.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - UnknownResourceException
+//     The specified resource doesn't exist.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/PutResolverRulePolicy
 func (c *Route53Resolver) PutResolverRulePolicy(input *PutResolverRulePolicyInput) (*PutResolverRulePolicyOutput, error) {
@@ -6019,14 +6451,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/TagResource
 func (c *Route53Resolver) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -6058,26 +6489,27 @@ func (c *Route53Resolver) TagResourceRequest(input *TagResourceInput) (req *requ
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InvalidTagException
-//   The specified tag is invalid.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidTagException
+//     The specified tag is invalid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/TagResource
 func (c *Route53Resolver) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -6117,14 +6549,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UntagResource
 func (c *Route53Resolver) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -6156,20 +6587,21 @@ func (c *Route53Resolver) UntagResourceRequest(input *UntagResourceInput) (req *
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UntagResource
 func (c *Route53Resolver) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -6209,14 +6641,13 @@ const opUpdateFirewallConfig = "UpdateFirewallConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFirewallConfigRequest method.
+//	req, resp := client.UpdateFirewallConfigRequest(params)
 //
-//    // Example sending a request using the UpdateFirewallConfigRequest method.
-//    req, resp := client.UpdateFirewallConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateFirewallConfig
 func (c *Route53Resolver) UpdateFirewallConfigRequest(input *UpdateFirewallConfigInput) (req *request.Request, output *UpdateFirewallConfigOutput) {
@@ -6248,22 +6679,23 @@ func (c *Route53Resolver) UpdateFirewallConfigRequest(input *UpdateFirewallConfi
 // API operation UpdateFirewallConfig for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateFirewallConfig
 func (c *Route53Resolver) UpdateFirewallConfig(input *UpdateFirewallConfigInput) (*UpdateFirewallConfigOutput, error) {
@@ -6303,14 +6735,13 @@ const opUpdateFirewallDomains = "UpdateFirewallDomains"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFirewallDomainsRequest method.
+//	req, resp := client.UpdateFirewallDomainsRequest(params)
 //
-//    // Example sending a request using the UpdateFirewallDomainsRequest method.
-//    req, resp := client.UpdateFirewallDomainsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateFirewallDomains
 func (c *Route53Resolver) UpdateFirewallDomainsRequest(input *UpdateFirewallDomainsInput) (req *request.Request, output *UpdateFirewallDomainsOutput) {
@@ -6341,30 +6772,31 @@ func (c *Route53Resolver) UpdateFirewallDomainsRequest(input *UpdateFirewallDoma
 // API operation UpdateFirewallDomains for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * ConflictException
-//   The requested state transition isn't valid. For example, you can't delete
-//   a firewall domain list if it is in the process of being deleted, or you can't
-//   import domains into a domain list that is in the process of being deleted.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - ConflictException
+//     The requested state transition isn't valid. For example, you can't delete
+//     a firewall domain list if it is in the process of being deleted, or you can't
+//     import domains into a domain list that is in the process of being deleted.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateFirewallDomains
 func (c *Route53Resolver) UpdateFirewallDomains(input *UpdateFirewallDomainsInput) (*UpdateFirewallDomainsOutput, error) {
@@ -6404,14 +6836,13 @@ const opUpdateFirewallRule = "UpdateFirewallRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFirewallRuleRequest method.
+//	req, resp := client.UpdateFirewallRuleRequest(params)
 //
-//    // Example sending a request using the UpdateFirewallRuleRequest method.
-//    req, resp := client.UpdateFirewallRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateFirewallRule
 func (c *Route53Resolver) UpdateFirewallRuleRequest(input *UpdateFirewallRuleInput) (req *request.Request, output *UpdateFirewallRuleOutput) {
@@ -6442,27 +6873,28 @@ func (c *Route53Resolver) UpdateFirewallRuleRequest(input *UpdateFirewallRuleInp
 // API operation UpdateFirewallRule for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * ConflictException
-//   The requested state transition isn't valid. For example, you can't delete
-//   a firewall domain list if it is in the process of being deleted, or you can't
-//   import domains into a domain list that is in the process of being deleted.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ConflictException
+//     The requested state transition isn't valid. For example, you can't delete
+//     a firewall domain list if it is in the process of being deleted, or you can't
+//     import domains into a domain list that is in the process of being deleted.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateFirewallRule
 func (c *Route53Resolver) UpdateFirewallRule(input *UpdateFirewallRuleInput) (*UpdateFirewallRuleOutput, error) {
@@ -6502,14 +6934,13 @@ const opUpdateFirewallRuleGroupAssociation = "UpdateFirewallRuleGroupAssociation
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFirewallRuleGroupAssociationRequest method.
+//	req, resp := client.UpdateFirewallRuleGroupAssociationRequest(params)
 //
-//    // Example sending a request using the UpdateFirewallRuleGroupAssociationRequest method.
-//    req, resp := client.UpdateFirewallRuleGroupAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateFirewallRuleGroupAssociation
 func (c *Route53Resolver) UpdateFirewallRuleGroupAssociationRequest(input *UpdateFirewallRuleGroupAssociationInput) (req *request.Request, output *UpdateFirewallRuleGroupAssociationOutput) {
@@ -6541,27 +6972,28 @@ func (c *Route53Resolver) UpdateFirewallRuleGroupAssociationRequest(input *Updat
 // API operation UpdateFirewallRuleGroupAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * ConflictException
-//   The requested state transition isn't valid. For example, you can't delete
-//   a firewall domain list if it is in the process of being deleted, or you can't
-//   import domains into a domain list that is in the process of being deleted.
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ConflictException
+//     The requested state transition isn't valid. For example, you can't delete
+//     a firewall domain list if it is in the process of being deleted, or you can't
+//     import domains into a domain list that is in the process of being deleted.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateFirewallRuleGroupAssociation
 func (c *Route53Resolver) UpdateFirewallRuleGroupAssociation(input *UpdateFirewallRuleGroupAssociationInput) (*UpdateFirewallRuleGroupAssociationOutput, error) {
@@ -6585,6 +7017,108 @@ func (c *Route53Resolver) UpdateFirewallRuleGroupAssociationWithContext(ctx aws.
 	return out, req.Send()
 }
 
+const opUpdateOutpostResolver = "UpdateOutpostResolver"
+
+// UpdateOutpostResolverRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateOutpostResolver operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateOutpostResolver for more information on using the UpdateOutpostResolver
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateOutpostResolverRequest method.
+//	req, resp := client.UpdateOutpostResolverRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateOutpostResolver
+func (c *Route53Resolver) UpdateOutpostResolverRequest(input *UpdateOutpostResolverInput) (req *request.Request, output *UpdateOutpostResolverOutput) {
+	op := &request.Operation{
+		Name:       opUpdateOutpostResolver,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateOutpostResolverInput{}
+	}
+
+	output = &UpdateOutpostResolverOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateOutpostResolver API operation for Amazon Route 53 Resolver.
+//
+// You can use UpdateOutpostResolver to update the instance count, type, or
+// name of a Resolver on an Outpost.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Route 53 Resolver's
+// API operation UpdateOutpostResolver for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
+//
+//   - ConflictException
+//     The requested state transition isn't valid. For example, you can't delete
+//     a firewall domain list if it is in the process of being deleted, or you can't
+//     import domains into a domain list that is in the process of being deleted.
+//
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
+//
+//   - ServiceQuotaExceededException
+//     Fulfilling the request would cause one or more quotas to be exceeded.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateOutpostResolver
+func (c *Route53Resolver) UpdateOutpostResolver(input *UpdateOutpostResolverInput) (*UpdateOutpostResolverOutput, error) {
+	req, out := c.UpdateOutpostResolverRequest(input)
+	return out, req.Send()
+}
+
+// UpdateOutpostResolverWithContext is the same as UpdateOutpostResolver with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateOutpostResolver for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Route53Resolver) UpdateOutpostResolverWithContext(ctx aws.Context, input *UpdateOutpostResolverInput, opts ...request.Option) (*UpdateOutpostResolverOutput, error) {
+	req, out := c.UpdateOutpostResolverRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateResolverConfig = "UpdateResolverConfig"
 
 // UpdateResolverConfigRequest generates a "aws/request.Request" representing the
@@ -6601,14 +7135,13 @@ const opUpdateResolverConfig = "UpdateResolverConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateResolverConfigRequest method.
+//	req, resp := client.UpdateResolverConfigRequest(params)
 //
-//    // Example sending a request using the UpdateResolverConfigRequest method.
-//    req, resp := client.UpdateResolverConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateResolverConfig
 func (c *Route53Resolver) UpdateResolverConfigRequest(input *UpdateResolverConfigInput) (req *request.Request, output *UpdateResolverConfigOutput) {
@@ -6640,34 +7173,35 @@ func (c *Route53Resolver) UpdateResolverConfigRequest(input *UpdateResolverConfi
 // API operation UpdateResolverConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is invalid.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ResourceUnavailableException
-//   The specified resource isn't available.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - ResourceUnavailableException
+//     The specified resource isn't available.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
-//   * ValidationException
-//   You have provided an invalid command. Supported values are ADD, REMOVE, or
-//   REPLACE a domain.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
+//
+//   - ValidationException
+//     You have provided an invalid command. If you ran the UpdateFirewallDomains
+//     request. supported values are ADD, REMOVE, or REPLACE a domain.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateResolverConfig
 func (c *Route53Resolver) UpdateResolverConfig(input *UpdateResolverConfigInput) (*UpdateResolverConfigOutput, error) {
@@ -6707,14 +7241,13 @@ const opUpdateResolverDnssecConfig = "UpdateResolverDnssecConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateResolverDnssecConfigRequest method.
+//	req, resp := client.UpdateResolverDnssecConfigRequest(params)
 //
-//    // Example sending a request using the UpdateResolverDnssecConfigRequest method.
-//    req, resp := client.UpdateResolverDnssecConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateResolverDnssecConfig
 func (c *Route53Resolver) UpdateResolverDnssecConfigRequest(input *UpdateResolverDnssecConfigInput) (req *request.Request, output *UpdateResolverDnssecConfigOutput) {
@@ -6746,24 +7279,25 @@ func (c *Route53Resolver) UpdateResolverDnssecConfigRequest(input *UpdateResolve
 // API operation UpdateResolverDnssecConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
 //
-//   * AccessDeniedException
-//   The current account doesn't have the IAM permissions required to perform
-//   the specified Resolver operation.
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateResolverDnssecConfig
 func (c *Route53Resolver) UpdateResolverDnssecConfig(input *UpdateResolverDnssecConfigInput) (*UpdateResolverDnssecConfigOutput, error) {
@@ -6803,14 +7337,13 @@ const opUpdateResolverEndpoint = "UpdateResolverEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateResolverEndpointRequest method.
+//	req, resp := client.UpdateResolverEndpointRequest(params)
 //
-//    // Example sending a request using the UpdateResolverEndpointRequest method.
-//    req, resp := client.UpdateResolverEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateResolverEndpoint
 func (c *Route53Resolver) UpdateResolverEndpointRequest(input *UpdateResolverEndpointInput) (req *request.Request, output *UpdateResolverEndpointOutput) {
@@ -6831,7 +7364,7 @@ func (c *Route53Resolver) UpdateResolverEndpointRequest(input *UpdateResolverEnd
 
 // UpdateResolverEndpoint API operation for Amazon Route 53 Resolver.
 //
-// Updates the name, or enpoint type for an inbound or an outbound Resolver
+// Updates the name, or endpoint type for an inbound or an outbound Resolver
 // endpoint. You can only update between IPV4 and DUALSTACK, IPV6 endpoint type
 // can't be updated to other type.
 //
@@ -6843,20 +7376,25 @@ func (c *Route53Resolver) UpdateResolverEndpointRequest(input *UpdateResolverEnd
 // API operation UpdateResolverEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * InvalidRequestException
-//   The request is invalid.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
+//
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateResolverEndpoint
 func (c *Route53Resolver) UpdateResolverEndpoint(input *UpdateResolverEndpointInput) (*UpdateResolverEndpointOutput, error) {
@@ -6896,14 +7434,13 @@ const opUpdateResolverRule = "UpdateResolverRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateResolverRuleRequest method.
+//	req, resp := client.UpdateResolverRuleRequest(params)
 //
-//    // Example sending a request using the UpdateResolverRuleRequest method.
-//    req, resp := client.UpdateResolverRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateResolverRule
 func (c *Route53Resolver) UpdateResolverRuleRequest(input *UpdateResolverRuleInput) (req *request.Request, output *UpdateResolverRuleOutput) {
@@ -6936,26 +7473,31 @@ func (c *Route53Resolver) UpdateResolverRuleRequest(input *UpdateResolverRuleInp
 // API operation UpdateResolverRule for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is invalid.
 //
-//   * InvalidParameterException
-//   One or more parameters in this request are not valid.
+//   - InvalidRequestException
+//     The request is invalid.
 //
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - InvalidParameterException
+//     One or more parameters in this request are not valid.
 //
-//   * ResourceUnavailableException
-//   The specified resource isn't available.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * LimitExceededException
-//   The request caused one or more limits to be exceeded.
+//   - ResourceUnavailableException
+//     The specified resource isn't available.
 //
-//   * InternalServiceErrorException
-//   We encountered an unknown error. Try again in a few minutes.
+//   - LimitExceededException
+//     The request caused one or more limits to be exceeded.
 //
-//   * ThrottlingException
-//   The request was throttled. Try again in a few minutes.
+//   - InternalServiceErrorException
+//     We encountered an unknown error. Try again in a few minutes.
+//
+//   - ThrottlingException
+//     The request was throttled. Try again in a few minutes.
+//
+//   - AccessDeniedException
+//     The current account doesn't have the IAM permissions required to perform
+//     the specified Resolver operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53resolver-2018-04-01/UpdateResolverRule
 func (c *Route53Resolver) UpdateResolverRule(input *UpdateResolverRuleInput) (*UpdateResolverRuleOutput, error) {
@@ -7909,6 +8451,35 @@ type CreateFirewallRuleInput struct {
 	//
 	// Priority is a required field
 	Priority *int64 `type:"integer" required:"true"`
+
+	// The DNS query type you want the rule to evaluate. Allowed values are;
+	//
+	//    * A: Returns an IPv4 address.
+	//
+	//    * AAAA: Returns an Ipv6 address.
+	//
+	//    * CAA: Restricts CAs that can create SSL/TLS certifications for the domain.
+	//
+	//    * CNAME: Returns another domain name.
+	//
+	//    * DS: Record that identifies the DNSSEC signing key of a delegated zone.
+	//
+	//    * MX: Specifies mail servers.
+	//
+	//    * NAPTR: Regular-expression-based rewriting of domain names.
+	//
+	//    * NS: Authoritative name servers.
+	//
+	//    * PTR: Maps an IP address to a domain name.
+	//
+	//    * SOA: Start of authority record for the zone.
+	//
+	//    * SPF: Lists the servers authorized to send emails from a domain.
+	//
+	//    * SRV: Application specific values that identify servers.
+	//
+	//    * TXT: Verifies email senders and application-specific values.
+	Qtype *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -7958,6 +8529,9 @@ func (s *CreateFirewallRuleInput) Validate() error {
 	}
 	if s.Priority == nil {
 		invalidParams.Add(request.NewErrParamRequired("Priority"))
+	}
+	if s.Qtype != nil && len(*s.Qtype) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Qtype", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8026,6 +8600,12 @@ func (s *CreateFirewallRuleInput) SetPriority(v int64) *CreateFirewallRuleInput 
 	return s
 }
 
+// SetQtype sets the Qtype field's value.
+func (s *CreateFirewallRuleInput) SetQtype(v string) *CreateFirewallRuleInput {
+	s.Qtype = &v
+	return s
+}
+
 type CreateFirewallRuleOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -8057,6 +8637,173 @@ func (s *CreateFirewallRuleOutput) SetFirewallRule(v *FirewallRule) *CreateFirew
 	return s
 }
 
+type CreateOutpostResolverInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique string that identifies the request and that allows failed requests
+	// to be retried without the risk of running the operation twice.
+	//
+	// CreatorRequestId can be any unique string, for example, a date/time stamp.
+	//
+	// CreatorRequestId is a required field
+	CreatorRequestId *string `min:"1" type:"string" required:"true"`
+
+	// Number of Amazon EC2 instances for the Resolver on Outpost. The default and
+	// minimal value is 4.
+	InstanceCount *int64 `type:"integer"`
+
+	// A friendly name that lets you easily find a configuration in the Resolver
+	// dashboard in the Route 53 console.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the Outpost. If you specify this, you must
+	// also specify a value for the PreferredInstanceType.
+	//
+	// OutpostArn is a required field
+	OutpostArn *string `min:"1" type:"string" required:"true"`
+
+	// The Amazon EC2 instance type. If you specify this, you must also specify
+	// a value for the OutpostArn.
+	//
+	// PreferredInstanceType is a required field
+	PreferredInstanceType *string `min:"1" type:"string" required:"true"`
+
+	// A string that helps identify the Route 53 Resolvers on Outpost.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateOutpostResolverInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateOutpostResolverInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateOutpostResolverInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateOutpostResolverInput"}
+	if s.CreatorRequestId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CreatorRequestId"))
+	}
+	if s.CreatorRequestId != nil && len(*s.CreatorRequestId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CreatorRequestId", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.OutpostArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutpostArn"))
+	}
+	if s.OutpostArn != nil && len(*s.OutpostArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OutpostArn", 1))
+	}
+	if s.PreferredInstanceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("PreferredInstanceType"))
+	}
+	if s.PreferredInstanceType != nil && len(*s.PreferredInstanceType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PreferredInstanceType", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCreatorRequestId sets the CreatorRequestId field's value.
+func (s *CreateOutpostResolverInput) SetCreatorRequestId(v string) *CreateOutpostResolverInput {
+	s.CreatorRequestId = &v
+	return s
+}
+
+// SetInstanceCount sets the InstanceCount field's value.
+func (s *CreateOutpostResolverInput) SetInstanceCount(v int64) *CreateOutpostResolverInput {
+	s.InstanceCount = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateOutpostResolverInput) SetName(v string) *CreateOutpostResolverInput {
+	s.Name = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *CreateOutpostResolverInput) SetOutpostArn(v string) *CreateOutpostResolverInput {
+	s.OutpostArn = &v
+	return s
+}
+
+// SetPreferredInstanceType sets the PreferredInstanceType field's value.
+func (s *CreateOutpostResolverInput) SetPreferredInstanceType(v string) *CreateOutpostResolverInput {
+	s.PreferredInstanceType = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateOutpostResolverInput) SetTags(v []*Tag) *CreateOutpostResolverInput {
+	s.Tags = v
+	return s
+}
+
+type CreateOutpostResolverOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the CreateOutpostResolver request, including the status
+	// of the request.
+	OutpostResolver *OutpostResolver `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateOutpostResolverOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateOutpostResolverOutput) GoString() string {
+	return s.String()
+}
+
+// SetOutpostResolver sets the OutpostResolver field's value.
+func (s *CreateOutpostResolverOutput) SetOutpostResolver(v *OutpostResolver) *CreateOutpostResolverOutput {
+	s.OutpostResolver = v
+	return s
+}
+
 type CreateResolverEndpointInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8082,14 +8829,53 @@ type CreateResolverEndpointInput struct {
 	// (for outbound endpoints) or that you forward DNS queries to (for inbound
 	// endpoints). The subnet ID uniquely identifies a VPC.
 	//
+	// Even though the minimum is 1, Route 53 requires that you create at least
+	// two.
+	//
 	// IpAddresses is a required field
-	IpAddresses []*IpAddressRequest `min:"1" type:"list" required:"true"`
+	IpAddresses []*IpAddressRequest `min:"2" type:"list" required:"true"`
 
 	// A friendly name that lets you easily find a configuration in the Resolver
 	// dashboard in the Route 53 console.
 	Name *string `type:"string"`
 
-	// For the endpoint type you can choose either IPv4, IPv6. or dual-stack. A
+	// The Amazon Resource Name (ARN) of the Outpost. If you specify this, you must
+	// also specify a value for the PreferredInstanceType.
+	OutpostArn *string `min:"1" type:"string"`
+
+	// The instance type. If you specify this, you must also specify a value for
+	// the OutpostArn.
+	PreferredInstanceType *string `min:"1" type:"string"`
+
+	// The protocols you want to use for the endpoint. DoH-FIPS is applicable for
+	// inbound endpoints only.
+	//
+	// For an inbound endpoint you can apply the protocols as follows:
+	//
+	//    * Do53 and DoH in combination.
+	//
+	//    * Do53 and DoH-FIPS in combination.
+	//
+	//    * Do53 alone.
+	//
+	//    * DoH alone.
+	//
+	//    * DoH-FIPS alone.
+	//
+	//    * None, which is treated as Do53.
+	//
+	// For an outbound endpoint you can apply the protocols as follows:
+	//
+	//    * Do53 and DoH in combination.
+	//
+	//    * Do53 alone.
+	//
+	//    * DoH alone.
+	//
+	//    * None, which is treated as Do53.
+	Protocols []*string `min:"1" type:"list" enum:"Protocol"`
+
+	// For the endpoint type you can choose either IPv4, IPv6, or dual-stack. A
 	// dual-stack endpoint means that it will resolve via both IPv4 and IPv6. This
 	// endpoint type is applied to all IP addresses.
 	ResolverEndpointType *string `type:"string" enum:"ResolverEndpointType"`
@@ -8141,8 +8927,17 @@ func (s *CreateResolverEndpointInput) Validate() error {
 	if s.IpAddresses == nil {
 		invalidParams.Add(request.NewErrParamRequired("IpAddresses"))
 	}
-	if s.IpAddresses != nil && len(s.IpAddresses) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("IpAddresses", 1))
+	if s.IpAddresses != nil && len(s.IpAddresses) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("IpAddresses", 2))
+	}
+	if s.OutpostArn != nil && len(*s.OutpostArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OutpostArn", 1))
+	}
+	if s.PreferredInstanceType != nil && len(*s.PreferredInstanceType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PreferredInstanceType", 1))
+	}
+	if s.Protocols != nil && len(s.Protocols) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Protocols", 1))
 	}
 	if s.SecurityGroupIds == nil {
 		invalidParams.Add(request.NewErrParamRequired("SecurityGroupIds"))
@@ -8195,6 +8990,24 @@ func (s *CreateResolverEndpointInput) SetIpAddresses(v []*IpAddressRequest) *Cre
 // SetName sets the Name field's value.
 func (s *CreateResolverEndpointInput) SetName(v string) *CreateResolverEndpointInput {
 	s.Name = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *CreateResolverEndpointInput) SetOutpostArn(v string) *CreateResolverEndpointInput {
+	s.OutpostArn = &v
+	return s
+}
+
+// SetPreferredInstanceType sets the PreferredInstanceType field's value.
+func (s *CreateResolverEndpointInput) SetPreferredInstanceType(v string) *CreateResolverEndpointInput {
+	s.PreferredInstanceType = &v
+	return s
+}
+
+// SetProtocols sets the Protocols field's value.
+func (s *CreateResolverEndpointInput) SetProtocols(v []*string) *CreateResolverEndpointInput {
+	s.Protocols = v
 	return s
 }
 
@@ -8403,9 +9216,7 @@ type CreateResolverRuleInput struct {
 	// specify in TargetIps. If a query matches multiple Resolver rules (example.com
 	// and www.example.com), outbound DNS queries are routed using the Resolver
 	// rule that contains the most specific domain name (www.example.com).
-	//
-	// DomainName is a required field
-	DomainName *string `min:"1" type:"string" required:"true"`
+	DomainName *string `min:"1" type:"string"`
 
 	// A friendly name that lets you easily find a rule in the Resolver dashboard
 	// in the Route 53 console.
@@ -8437,7 +9248,8 @@ type CreateResolverRuleInput struct {
 	Tags []*Tag `type:"list"`
 
 	// The IPs that you want Resolver to forward DNS queries to. You can specify
-	// only IPv4 addresses. Separate IP addresses with a space.
+	// either Ipv4 or Ipv6 addresses but not both in the same rule. Separate IP
+	// addresses with a space.
 	//
 	// TargetIps is available only when the value of Rule type is FORWARD.
 	TargetIps []*TargetAddress `min:"1" type:"list"`
@@ -8469,9 +9281,6 @@ func (s *CreateResolverRuleInput) Validate() error {
 	}
 	if s.CreatorRequestId != nil && len(*s.CreatorRequestId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("CreatorRequestId", 1))
-	}
-	if s.DomainName == nil {
-		invalidParams.Add(request.NewErrParamRequired("DomainName"))
 	}
 	if s.DomainName != nil && len(*s.DomainName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DomainName", 1))
@@ -8759,6 +9568,36 @@ type DeleteFirewallRuleInput struct {
 	//
 	// FirewallRuleGroupId is a required field
 	FirewallRuleGroupId *string `min:"1" type:"string" required:"true"`
+
+	// The DNS query type that the rule you are deleting evaluates. Allowed values
+	// are;
+	//
+	//    * A: Returns an IPv4 address.
+	//
+	//    * AAAA: Returns an Ipv6 address.
+	//
+	//    * CAA: Restricts CAs that can create SSL/TLS certifications for the domain.
+	//
+	//    * CNAME: Returns another domain name.
+	//
+	//    * DS: Record that identifies the DNSSEC signing key of a delegated zone.
+	//
+	//    * MX: Specifies mail servers.
+	//
+	//    * NAPTR: Regular-expression-based rewriting of domain names.
+	//
+	//    * NS: Authoritative name servers.
+	//
+	//    * PTR: Maps an IP address to a domain name.
+	//
+	//    * SOA: Start of authority record for the zone.
+	//
+	//    * SPF: Lists the servers authorized to send emails from a domain.
+	//
+	//    * SRV: Application specific values that identify servers.
+	//
+	//    * TXT: Verifies email senders and application-specific values.
+	Qtype *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -8794,6 +9633,9 @@ func (s *DeleteFirewallRuleInput) Validate() error {
 	if s.FirewallRuleGroupId != nil && len(*s.FirewallRuleGroupId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("FirewallRuleGroupId", 1))
 	}
+	if s.Qtype != nil && len(*s.Qtype) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Qtype", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -8810,6 +9652,12 @@ func (s *DeleteFirewallRuleInput) SetFirewallDomainListId(v string) *DeleteFirew
 // SetFirewallRuleGroupId sets the FirewallRuleGroupId field's value.
 func (s *DeleteFirewallRuleInput) SetFirewallRuleGroupId(v string) *DeleteFirewallRuleInput {
 	s.FirewallRuleGroupId = &v
+	return s
+}
+
+// SetQtype sets the Qtype field's value.
+func (s *DeleteFirewallRuleInput) SetQtype(v string) *DeleteFirewallRuleInput {
+	s.Qtype = &v
 	return s
 }
 
@@ -8841,6 +9689,87 @@ func (s DeleteFirewallRuleOutput) GoString() string {
 // SetFirewallRule sets the FirewallRule field's value.
 func (s *DeleteFirewallRuleOutput) SetFirewallRule(v *FirewallRule) *DeleteFirewallRuleOutput {
 	s.FirewallRule = v
+	return s
+}
+
+type DeleteOutpostResolverInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique string that identifies the Resolver on the Outpost.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteOutpostResolverInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteOutpostResolverInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteOutpostResolverInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteOutpostResolverInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DeleteOutpostResolverInput) SetId(v string) *DeleteOutpostResolverInput {
+	s.Id = &v
+	return s
+}
+
+type DeleteOutpostResolverOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the DeleteOutpostResolver request, including the status
+	// of the request.
+	OutpostResolver *OutpostResolver `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteOutpostResolverOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteOutpostResolverOutput) GoString() string {
+	return s.String()
+}
+
+// SetOutpostResolver sets the OutpostResolver field's value.
+func (s *DeleteOutpostResolverOutput) SetOutpostResolver(v *OutpostResolver) *DeleteOutpostResolverOutput {
+	s.OutpostResolver = v
 	return s
 }
 
@@ -10017,6 +10946,35 @@ type FirewallRule struct {
 	// the rule group. DNS Firewall processes the rules in a rule group by order
 	// of priority, starting from the lowest setting.
 	Priority *int64 `type:"integer"`
+
+	// The DNS query type you want the rule to evaluate. Allowed values are;
+	//
+	//    * A: Returns an IPv4 address.
+	//
+	//    * AAAA: Returns an Ipv6 address.
+	//
+	//    * CAA: Restricts CAs that can create SSL/TLS certifications for the domain.
+	//
+	//    * CNAME: Returns another domain name.
+	//
+	//    * DS: Record that identifies the DNSSEC signing key of a delegated zone.
+	//
+	//    * MX: Specifies mail servers.
+	//
+	//    * NAPTR: Regular-expression-based rewriting of domain names.
+	//
+	//    * NS: Authoritative name servers.
+	//
+	//    * PTR: Maps an IP address to a domain name.
+	//
+	//    * SOA: Start of authority record for the zone.
+	//
+	//    * SPF: Lists the servers authorized to send emails from a domain.
+	//
+	//    * SRV: Application specific values that identify servers.
+	//
+	//    * TXT: Verifies email senders and application-specific values.
+	Qtype *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -10106,6 +11064,12 @@ func (s *FirewallRule) SetName(v string) *FirewallRule {
 // SetPriority sets the Priority field's value.
 func (s *FirewallRule) SetPriority(v int64) *FirewallRule {
 	s.Priority = &v
+	return s
+}
+
+// SetQtype sets the Qtype field's value.
+func (s *FirewallRule) SetQtype(v string) *FirewallRule {
+	s.Qtype = &v
 	return s
 }
 
@@ -10878,6 +11842,87 @@ func (s GetFirewallRuleGroupPolicyOutput) GoString() string {
 // SetFirewallRuleGroupPolicy sets the FirewallRuleGroupPolicy field's value.
 func (s *GetFirewallRuleGroupPolicyOutput) SetFirewallRuleGroupPolicy(v string) *GetFirewallRuleGroupPolicyOutput {
 	s.FirewallRuleGroupPolicy = &v
+	return s
+}
+
+type GetOutpostResolverInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the Resolver on the Outpost.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetOutpostResolverInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetOutpostResolverInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetOutpostResolverInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetOutpostResolverInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *GetOutpostResolverInput) SetId(v string) *GetOutpostResolverInput {
+	s.Id = &v
+	return s
+}
+
+type GetOutpostResolverOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the GetOutpostResolver request, including the status of
+	// the request.
+	OutpostResolver *OutpostResolver `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetOutpostResolverOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetOutpostResolverOutput) GoString() string {
+	return s.String()
+}
+
+// SetOutpostResolver sets the OutpostResolver field's value.
+func (s *GetOutpostResolverOutput) SetOutpostResolver(v *OutpostResolver) *GetOutpostResolverOutput {
+	s.OutpostResolver = v
 	return s
 }
 
@@ -13238,6 +14283,116 @@ func (s *ListFirewallRulesOutput) SetNextToken(v string) *ListFirewallRulesOutpu
 	return s
 }
 
+type ListOutpostResolversInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of Resolvers on the Outpost that you want to return in
+	// the response to a ListOutpostResolver request. If you don't specify a value
+	// for MaxResults, the request returns up to 100 Resolvers.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// For the first ListOutpostResolver request, omit this value.
+	NextToken *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the Outpost.
+	OutpostArn *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListOutpostResolversInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListOutpostResolversInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListOutpostResolversInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListOutpostResolversInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.OutpostArn != nil && len(*s.OutpostArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OutpostArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListOutpostResolversInput) SetMaxResults(v int64) *ListOutpostResolversInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListOutpostResolversInput) SetNextToken(v string) *ListOutpostResolversInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *ListOutpostResolversInput) SetOutpostArn(v string) *ListOutpostResolversInput {
+	s.OutpostArn = &v
+	return s
+}
+
+type ListOutpostResolversOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If more than MaxResults Resolvers match the specified criteria, you can submit
+	// another ListOutpostResolver request to get the next group of results. In
+	// the next request, specify the value of NextToken from the previous response.
+	NextToken *string `type:"string"`
+
+	// The Resolvers on Outposts that were created by using the current Amazon Web
+	// Services account, and that match the specified filters, if any.
+	OutpostResolvers []*OutpostResolver `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListOutpostResolversOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListOutpostResolversOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListOutpostResolversOutput) SetNextToken(v string) *ListOutpostResolversOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOutpostResolvers sets the OutpostResolvers field's value.
+func (s *ListOutpostResolversOutput) SetOutpostResolvers(v []*OutpostResolver) *ListOutpostResolversOutput {
+	s.OutpostResolvers = v
+	return s
+}
+
 type ListResolverConfigsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13444,7 +14599,8 @@ type ListResolverDnssecConfigsOutput struct {
 
 	// An array that contains one ResolverDnssecConfig (https://docs.aws.amazon.com/Route53/latest/APIReference/API_ResolverDnssecConfig.html)
 	// element for each configuration for DNSSEC validation that is associated with
-	// the current Amazon Web Services account.
+	// the current Amazon Web Services account. It doesn't contain disabled DNSSEC
+	// configurations for the resource.
 	ResolverDnssecConfigs []*ResolverDnssecConfig `type:"list"`
 }
 
@@ -14565,6 +15721,132 @@ func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput
 	return s
 }
 
+// A complex type that contains settings for an existing Resolver on an Outpost.
+type OutpostResolver struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN (Amazon Resource Name) for the Resolver on an Outpost.
+	Arn *string `min:"1" type:"string"`
+
+	// The date and time that the Outpost Resolver was created, in Unix time format
+	// and Coordinated Universal Time (UTC).
+	CreationTime *string `min:"20" type:"string"`
+
+	// A unique string that identifies the request that created the Resolver endpoint.
+	// The CreatorRequestId allows failed requests to be retried without the risk
+	// of running the operation twice.
+	CreatorRequestId *string `min:"1" type:"string"`
+
+	// The ID of the Resolver on Outpost.
+	Id *string `min:"1" type:"string"`
+
+	// Amazon EC2 instance count for the Resolver on the Outpost.
+	InstanceCount *int64 `type:"integer"`
+
+	// The date and time that the Outpost Resolver was modified, in Unix time format
+	// and Coordinated Universal Time (UTC).
+	ModificationTime *string `min:"20" type:"string"`
+
+	// Name of the Resolver.
+	Name *string `min:"1" type:"string"`
+
+	// The ARN (Amazon Resource Name) for the Outpost.
+	OutpostArn *string `min:"1" type:"string"`
+
+	// The Amazon EC2 instance type.
+	PreferredInstanceType *string `min:"1" type:"string"`
+
+	// Status of the Resolver.
+	Status *string `type:"string" enum:"OutpostResolverStatus"`
+
+	// A detailed description of the Resolver.
+	StatusMessage *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OutpostResolver) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OutpostResolver) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *OutpostResolver) SetArn(v string) *OutpostResolver {
+	s.Arn = &v
+	return s
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *OutpostResolver) SetCreationTime(v string) *OutpostResolver {
+	s.CreationTime = &v
+	return s
+}
+
+// SetCreatorRequestId sets the CreatorRequestId field's value.
+func (s *OutpostResolver) SetCreatorRequestId(v string) *OutpostResolver {
+	s.CreatorRequestId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *OutpostResolver) SetId(v string) *OutpostResolver {
+	s.Id = &v
+	return s
+}
+
+// SetInstanceCount sets the InstanceCount field's value.
+func (s *OutpostResolver) SetInstanceCount(v int64) *OutpostResolver {
+	s.InstanceCount = &v
+	return s
+}
+
+// SetModificationTime sets the ModificationTime field's value.
+func (s *OutpostResolver) SetModificationTime(v string) *OutpostResolver {
+	s.ModificationTime = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *OutpostResolver) SetName(v string) *OutpostResolver {
+	s.Name = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *OutpostResolver) SetOutpostArn(v string) *OutpostResolver {
+	s.OutpostArn = &v
+	return s
+}
+
+// SetPreferredInstanceType sets the PreferredInstanceType field's value.
+func (s *OutpostResolver) SetPreferredInstanceType(v string) *OutpostResolver {
+	s.PreferredInstanceType = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *OutpostResolver) SetStatus(v string) *OutpostResolver {
+	s.Status = &v
+	return s
+}
+
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *OutpostResolver) SetStatusMessage(v string) *OutpostResolver {
+	s.StatusMessage = &v
+	return s
+}
+
 type PutFirewallRuleGroupPolicyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -14676,8 +15958,6 @@ type PutResolverQueryLogConfigPolicyInput struct {
 	//    * route53resolver:AssociateResolverQueryLogConfig
 	//
 	//    * route53resolver:DisassociateResolverQueryLogConfig
-	//
-	//    * route53resolver:ListResolverQueryLogConfigAssociations
 	//
 	//    * route53resolver:ListResolverQueryLogConfigs
 	//
@@ -15074,6 +16354,40 @@ type ResolverEndpoint struct {
 	// request.
 	Name *string `type:"string"`
 
+	// The ARN (Amazon Resource Name) for the Outpost.
+	OutpostArn *string `min:"1" type:"string"`
+
+	// The Amazon EC2 instance type.
+	PreferredInstanceType *string `min:"1" type:"string"`
+
+	// Protocols used for the endpoint. DoH-FIPS is applicable for inbound endpoints
+	// only.
+	//
+	// For an inbound endpoint you can apply the protocols as follows:
+	//
+	//    * Do53 and DoH in combination.
+	//
+	//    * Do53 and DoH-FIPS in combination.
+	//
+	//    * Do53 alone.
+	//
+	//    * DoH alone.
+	//
+	//    * DoH-FIPS alone.
+	//
+	//    * None, which is treated as Do53.
+	//
+	// For an outbound endpoint you can apply the protocols as follows:
+	//
+	//    * Do53 and DoH in combination.
+	//
+	//    * Do53 alone.
+	//
+	//    * DoH alone.
+	//
+	//    * None, which is treated as Do53.
+	Protocols []*string `min:"1" type:"list" enum:"Protocol"`
+
 	// The Resolver endpoint IP address type.
 	ResolverEndpointType *string `type:"string" enum:"ResolverEndpointType"`
 
@@ -15191,6 +16505,24 @@ func (s *ResolverEndpoint) SetModificationTime(v string) *ResolverEndpoint {
 // SetName sets the Name field's value.
 func (s *ResolverEndpoint) SetName(v string) *ResolverEndpoint {
 	s.Name = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *ResolverEndpoint) SetOutpostArn(v string) *ResolverEndpoint {
+	s.OutpostArn = &v
+	return s
+}
+
+// SetPreferredInstanceType sets the PreferredInstanceType field's value.
+func (s *ResolverEndpoint) SetPreferredInstanceType(v string) *ResolverEndpoint {
+	s.PreferredInstanceType = &v
+	return s
+}
+
+// SetProtocols sets the Protocols field's value.
+func (s *ResolverEndpoint) SetProtocols(v []*string) *ResolverEndpoint {
+	s.Protocols = v
 	return s
 }
 
@@ -15546,7 +16878,7 @@ type ResolverRule struct {
 
 	// An array that contains the IP addresses and ports that an outbound endpoint
 	// forwards DNS queries to. Typically, these are the IP addresses of DNS resolvers
-	// on your network. Specify IPv4 addresses. IPv6 is not supported.
+	// on your network.
 	TargetIps []*TargetAddress `min:"1" type:"list"`
 }
 
@@ -16091,6 +17423,70 @@ func (s *ResourceUnavailableException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Fulfilling the request would cause one or more quotas to be exceeded.
+type ServiceQuotaExceededException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceQuotaExceededException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceQuotaExceededException) GoString() string {
+	return s.String()
+}
+
+func newErrorServiceQuotaExceededException(v protocol.ResponseMetadata) error {
+	return &ServiceQuotaExceededException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ServiceQuotaExceededException) Code() string {
+	return "ServiceQuotaExceededException"
+}
+
+// Message returns the exception's message.
+func (s *ServiceQuotaExceededException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ServiceQuotaExceededException) OrigErr() error {
+	return nil
+}
+
+func (s *ServiceQuotaExceededException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ServiceQuotaExceededException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ServiceQuotaExceededException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // One tag that you want to add to the specified resource. A tag consists of
 // a Key (a name for the tag) and a Value.
 type Tag struct {
@@ -16280,6 +17676,34 @@ type TargetAddress struct {
 
 	// The port at Ip that you want to forward DNS queries to.
 	Port *int64 `type:"integer"`
+
+	// The protocols for the Resolver endpoints. DoH-FIPS is applicable for inbound
+	// endpoints only.
+	//
+	// For an inbound endpoint you can apply the protocols as follows:
+	//
+	//    * Do53 and DoH in combination.
+	//
+	//    * Do53 and DoH-FIPS in combination.
+	//
+	//    * Do53 alone.
+	//
+	//    * DoH alone.
+	//
+	//    * DoH-FIPS alone.
+	//
+	//    * None, which is treated as Do53.
+	//
+	// For an outbound endpoint you can apply the protocols as follows:
+	//
+	//    * Do53 and DoH in combination.
+	//
+	//    * Do53 alone.
+	//
+	//    * DoH alone.
+	//
+	//    * None, which is treated as Do53.
+	Protocol *string `type:"string" enum:"Protocol"`
 }
 
 // String returns the string representation.
@@ -16331,6 +17755,12 @@ func (s *TargetAddress) SetIpv6(v string) *TargetAddress {
 // SetPort sets the Port field's value.
 func (s *TargetAddress) SetPort(v int64) *TargetAddress {
 	s.Port = &v
+	return s
+}
+
+// SetProtocol sets the Protocol field's value.
+func (s *TargetAddress) SetProtocol(v string) *TargetAddress {
+	s.Protocol = &v
 	return s
 }
 
@@ -17001,6 +18431,35 @@ type UpdateFirewallRuleInput struct {
 	// use 100, 200, and so on. You can change the priority setting for the rules
 	// in a rule group at any time.
 	Priority *int64 `type:"integer"`
+
+	// The DNS query type you want the rule to evaluate. Allowed values are;
+	//
+	//    * A: Returns an IPv4 address.
+	//
+	//    * AAAA: Returns an Ipv6 address.
+	//
+	//    * CAA: Restricts CAs that can create SSL/TLS certifications for the domain.
+	//
+	//    * CNAME: Returns another domain name.
+	//
+	//    * DS: Record that identifies the DNSSEC signing key of a delegated zone.
+	//
+	//    * MX: Specifies mail servers.
+	//
+	//    * NAPTR: Regular-expression-based rewriting of domain names.
+	//
+	//    * NS: Authoritative name servers.
+	//
+	//    * PTR: Maps an IP address to a domain name.
+	//
+	//    * SOA: Start of authority record for the zone.
+	//
+	//    * SPF: Lists the servers authorized to send emails from a domain.
+	//
+	//    * SRV: Application specific values that identify servers.
+	//
+	//    * TXT: Verifies email senders and application-specific values.
+	Qtype *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -17038,6 +18497,9 @@ func (s *UpdateFirewallRuleInput) Validate() error {
 	}
 	if s.FirewallRuleGroupId != nil && len(*s.FirewallRuleGroupId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("FirewallRuleGroupId", 1))
+	}
+	if s.Qtype != nil && len(*s.Qtype) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Qtype", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -17097,6 +18559,12 @@ func (s *UpdateFirewallRuleInput) SetName(v string) *UpdateFirewallRuleInput {
 // SetPriority sets the Priority field's value.
 func (s *UpdateFirewallRuleInput) SetPriority(v int64) *UpdateFirewallRuleInput {
 	s.Priority = &v
+	return s
+}
+
+// SetQtype sets the Qtype field's value.
+func (s *UpdateFirewallRuleInput) SetQtype(v string) *UpdateFirewallRuleInput {
+	s.Qtype = &v
 	return s
 }
 
@@ -17196,6 +18664,119 @@ func (s *UpdateIpAddress) SetIpId(v string) *UpdateIpAddress {
 // SetIpv6 sets the Ipv6 field's value.
 func (s *UpdateIpAddress) SetIpv6(v string) *UpdateIpAddress {
 	s.Ipv6 = &v
+	return s
+}
+
+type UpdateOutpostResolverInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique string that identifies Resolver on an Outpost.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The Amazon EC2 instance count for a Resolver on the Outpost.
+	InstanceCount *int64 `type:"integer"`
+
+	// Name of the Resolver on the Outpost.
+	Name *string `min:"1" type:"string"`
+
+	// Amazon EC2 instance type.
+	PreferredInstanceType *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateOutpostResolverInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateOutpostResolverInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateOutpostResolverInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateOutpostResolverInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.PreferredInstanceType != nil && len(*s.PreferredInstanceType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PreferredInstanceType", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateOutpostResolverInput) SetId(v string) *UpdateOutpostResolverInput {
+	s.Id = &v
+	return s
+}
+
+// SetInstanceCount sets the InstanceCount field's value.
+func (s *UpdateOutpostResolverInput) SetInstanceCount(v int64) *UpdateOutpostResolverInput {
+	s.InstanceCount = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateOutpostResolverInput) SetName(v string) *UpdateOutpostResolverInput {
+	s.Name = &v
+	return s
+}
+
+// SetPreferredInstanceType sets the PreferredInstanceType field's value.
+func (s *UpdateOutpostResolverInput) SetPreferredInstanceType(v string) *UpdateOutpostResolverInput {
+	s.PreferredInstanceType = &v
+	return s
+}
+
+type UpdateOutpostResolverOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The response to an UpdateOutpostResolver request.
+	OutpostResolver *OutpostResolver `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateOutpostResolverOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateOutpostResolverOutput) GoString() string {
+	return s.String()
+}
+
+// SetOutpostResolver sets the OutpostResolver field's value.
+func (s *UpdateOutpostResolverOutput) SetOutpostResolver(v *OutpostResolver) *UpdateOutpostResolverOutput {
+	s.OutpostResolver = v
 	return s
 }
 
@@ -17409,6 +18990,41 @@ type UpdateResolverEndpointInput struct {
 	// The name of the Resolver endpoint that you want to update.
 	Name *string `type:"string"`
 
+	// The protocols you want to use for the endpoint. DoH-FIPS is applicable for
+	// inbound endpoints only.
+	//
+	// For an inbound endpoint you can apply the protocols as follows:
+	//
+	//    * Do53 and DoH in combination.
+	//
+	//    * Do53 and DoH-FIPS in combination.
+	//
+	//    * Do53 alone.
+	//
+	//    * DoH alone.
+	//
+	//    * DoH-FIPS alone.
+	//
+	//    * None, which is treated as Do53.
+	//
+	// For an outbound endpoint you can apply the protocols as follows:
+	//
+	//    * Do53 and DoH in combination.
+	//
+	//    * Do53 alone.
+	//
+	//    * DoH alone.
+	//
+	//    * None, which is treated as Do53.
+	//
+	// You can't change the protocol of an inbound endpoint directly from only Do53
+	// to only DoH, or DoH-FIPS. This is to prevent a sudden disruption to incoming
+	// traffic that relies on Do53. To change the protocol from Do53 to DoH, or
+	// DoH-FIPS, you must first enable both Do53 and DoH, or Do53 and DoH-FIPS,
+	// to make sure that all incoming traffic has transferred to using the DoH protocol,
+	// or DoH-FIPS, and then remove the Do53.
+	Protocols []*string `min:"1" type:"list" enum:"Protocol"`
+
 	// The ID of the Resolver endpoint that you want to update.
 	//
 	// ResolverEndpointId is a required field
@@ -17416,9 +19032,13 @@ type UpdateResolverEndpointInput struct {
 
 	// Specifies the endpoint type for what type of IP address the endpoint uses
 	// to forward DNS queries.
+	//
+	// Updating to IPV6 type isn't currently supported.
 	ResolverEndpointType *string `type:"string" enum:"ResolverEndpointType"`
 
-	// Updates the Resolver endpoint type to IpV4, Ipv6, or dual-stack.
+	// Specifies the IPv6 address when you update the Resolver endpoint from IPv4
+	// to dual-stack. If you don't specify an IPv6 address, one will be automatically
+	// chosen from your subnet.
 	UpdateIpAddresses []*UpdateIpAddress `type:"list"`
 }
 
@@ -17443,6 +19063,9 @@ func (s UpdateResolverEndpointInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateResolverEndpointInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateResolverEndpointInput"}
+	if s.Protocols != nil && len(s.Protocols) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Protocols", 1))
+	}
 	if s.ResolverEndpointId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResolverEndpointId"))
 	}
@@ -17469,6 +19092,12 @@ func (s *UpdateResolverEndpointInput) Validate() error {
 // SetName sets the Name field's value.
 func (s *UpdateResolverEndpointInput) SetName(v string) *UpdateResolverEndpointInput {
 	s.Name = &v
+	return s
+}
+
+// SetProtocols sets the Protocols field's value.
+func (s *UpdateResolverEndpointInput) SetProtocols(v []*string) *UpdateResolverEndpointInput {
+	s.Protocols = v
 	return s
 }
 
@@ -17620,8 +19249,8 @@ func (s *UpdateResolverRuleOutput) SetResolverRule(v *ResolverRule) *UpdateResol
 	return s
 }
 
-// You have provided an invalid command. Supported values are ADD, REMOVE, or
-// REPLACE a domain.
+// You have provided an invalid command. If you ran the UpdateFirewallDomains
+// request. supported values are ADD, REMOVE, or REPLACE a domain.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -17910,6 +19539,9 @@ const (
 
 	// IpAddressStatusUpdating is a IpAddressStatus enum value
 	IpAddressStatusUpdating = "UPDATING"
+
+	// IpAddressStatusUpdateFailed is a IpAddressStatus enum value
+	IpAddressStatusUpdateFailed = "UPDATE_FAILED"
 )
 
 // IpAddressStatus_Values returns all elements of the IpAddressStatus enum
@@ -17926,6 +19558,7 @@ func IpAddressStatus_Values() []string {
 		IpAddressStatusDeleting,
 		IpAddressStatusDeleteFailedFasExpired,
 		IpAddressStatusUpdating,
+		IpAddressStatusUpdateFailed,
 	}
 }
 
@@ -17942,6 +19575,62 @@ func MutationProtectionStatus_Values() []string {
 	return []string{
 		MutationProtectionStatusEnabled,
 		MutationProtectionStatusDisabled,
+	}
+}
+
+const (
+	// OutpostResolverStatusCreating is a OutpostResolverStatus enum value
+	OutpostResolverStatusCreating = "CREATING"
+
+	// OutpostResolverStatusOperational is a OutpostResolverStatus enum value
+	OutpostResolverStatusOperational = "OPERATIONAL"
+
+	// OutpostResolverStatusUpdating is a OutpostResolverStatus enum value
+	OutpostResolverStatusUpdating = "UPDATING"
+
+	// OutpostResolverStatusDeleting is a OutpostResolverStatus enum value
+	OutpostResolverStatusDeleting = "DELETING"
+
+	// OutpostResolverStatusActionNeeded is a OutpostResolverStatus enum value
+	OutpostResolverStatusActionNeeded = "ACTION_NEEDED"
+
+	// OutpostResolverStatusFailedCreation is a OutpostResolverStatus enum value
+	OutpostResolverStatusFailedCreation = "FAILED_CREATION"
+
+	// OutpostResolverStatusFailedDeletion is a OutpostResolverStatus enum value
+	OutpostResolverStatusFailedDeletion = "FAILED_DELETION"
+)
+
+// OutpostResolverStatus_Values returns all elements of the OutpostResolverStatus enum
+func OutpostResolverStatus_Values() []string {
+	return []string{
+		OutpostResolverStatusCreating,
+		OutpostResolverStatusOperational,
+		OutpostResolverStatusUpdating,
+		OutpostResolverStatusDeleting,
+		OutpostResolverStatusActionNeeded,
+		OutpostResolverStatusFailedCreation,
+		OutpostResolverStatusFailedDeletion,
+	}
+}
+
+const (
+	// ProtocolDoH is a Protocol enum value
+	ProtocolDoH = "DoH"
+
+	// ProtocolDo53 is a Protocol enum value
+	ProtocolDo53 = "Do53"
+
+	// ProtocolDoHFips is a Protocol enum value
+	ProtocolDoHFips = "DoH-FIPS"
+)
+
+// Protocol_Values returns all elements of the Protocol enum
+func Protocol_Values() []string {
+	return []string{
+		ProtocolDoH,
+		ProtocolDo53,
+		ProtocolDoHFips,
 	}
 }
 

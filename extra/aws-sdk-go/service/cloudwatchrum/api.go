@@ -29,14 +29,13 @@ const opBatchCreateRumMetricDefinitions = "BatchCreateRumMetricDefinitions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchCreateRumMetricDefinitionsRequest method.
+//	req, resp := client.BatchCreateRumMetricDefinitionsRequest(params)
 //
-//    // Example sending a request using the BatchCreateRumMetricDefinitionsRequest method.
-//    req, resp := client.BatchCreateRumMetricDefinitionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/BatchCreateRumMetricDefinitions
 func (c *CloudWatchRUM) BatchCreateRumMetricDefinitionsRequest(input *BatchCreateRumMetricDefinitionsInput) (req *request.Request, output *BatchCreateRumMetricDefinitionsOutput) {
@@ -65,25 +64,25 @@ func (c *CloudWatchRUM) BatchCreateRumMetricDefinitionsRequest(input *BatchCreat
 // metrics are listed in CloudWatch metrics that you can collect with CloudWatch
 // RUM (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-metrics.html).
 //
-// In addition to these default metrics, you can choose to send extended metrics
-// or custom metrics or both.
+// In addition to these default metrics, you can choose to send extended metrics,
+// custom metrics, or both.
 //
-//    * Extended metrics enable you to send metrics with additional dimensions
-//    not included in the default metrics. You can also send extended metrics
-//    to Evidently as well as CloudWatch. The valid dimension names for the
-//    additional dimensions for extended metrics are BrowserName, CountryCode,
-//    DeviceType, FileType, OSName, and PageId. For more information, see Extended
-//    metrics that you can send to CloudWatch and CloudWatch Evidently (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-vended-metrics.html).
+//   - Extended metrics let you send metrics with additional dimensions that
+//     aren't included in the default metrics. You can also send extended metrics
+//     to both Evidently and CloudWatch. The valid dimension names for the additional
+//     dimensions for extended metrics are BrowserName, CountryCode, DeviceType,
+//     FileType, OSName, and PageId. For more information, see Extended metrics
+//     that you can send to CloudWatch and CloudWatch Evidently (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-vended-metrics.html).
 //
-//    * Custom metrics are metrics that you define. You can send custom metrics
-//    to CloudWatch or to CloudWatch Evidently or to both. With custom metrics,
-//    you can use any metric name and namespace, and to derive the metrics you
-//    can use any custom events, built-in events, custom attributes, or default
-//    attributes. You can't send custom metrics to the AWS/RUM namespace. You
-//    must send custom metrics to a custom namespace that you define. The namespace
-//    that you use can't start with AWS/. CloudWatch RUM prepends RUM/CustomMetrics/
-//    to the custom namespace that you define, so the final namespace for your
-//    metrics in CloudWatch is RUM/CustomMetrics/your-custom-namespace .
+//   - Custom metrics are metrics that you define. You can send custom metrics
+//     to CloudWatch. CloudWatch Evidently, or both. With custom metrics, you
+//     can use any metric name and namespace. To derive the metrics, you can
+//     use any custom events, built-in events, custom attributes, or default
+//     attributes. You can't send custom metrics to the AWS/RUM namespace. You
+//     must send custom metrics to a custom namespace that you define. The namespace
+//     that you use can't start with AWS/. CloudWatch RUM prepends RUM/CustomMetrics/
+//     to the custom namespace that you define, so the final namespace for your
+//     metrics in CloudWatch is RUM/CustomMetrics/your-custom-namespace .
 //
 // The maximum number of metric definitions that you can specify in one BatchCreateRumMetricDefinitions
 // operation is 200.
@@ -111,26 +110,27 @@ func (c *CloudWatchRUM) BatchCreateRumMetricDefinitionsRequest(input *BatchCreat
 // API operation BatchCreateRumMetricDefinitions for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   This operation attempted to create a resource that already exists.
 //
-//   * ServiceQuotaExceededException
-//   This request exceeds a service quota.
+//   - ConflictException
+//     This operation attempted to create a resource that already exists.
 //
-//   * ResourceNotFoundException
-//   Resource not found.
+//   - ServiceQuotaExceededException
+//     This request exceeds a service quota.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/BatchCreateRumMetricDefinitions
 func (c *CloudWatchRUM) BatchCreateRumMetricDefinitions(input *BatchCreateRumMetricDefinitionsInput) (*BatchCreateRumMetricDefinitionsOutput, error) {
@@ -170,14 +170,13 @@ const opBatchDeleteRumMetricDefinitions = "BatchDeleteRumMetricDefinitions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchDeleteRumMetricDefinitionsRequest method.
+//	req, resp := client.BatchDeleteRumMetricDefinitionsRequest(params)
 //
-//    // Example sending a request using the BatchDeleteRumMetricDefinitionsRequest method.
-//    req, resp := client.BatchDeleteRumMetricDefinitionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/BatchDeleteRumMetricDefinitions
 func (c *CloudWatchRUM) BatchDeleteRumMetricDefinitionsRequest(input *BatchDeleteRumMetricDefinitionsInput) (req *request.Request, output *BatchDeleteRumMetricDefinitionsOutput) {
@@ -215,23 +214,24 @@ func (c *CloudWatchRUM) BatchDeleteRumMetricDefinitionsRequest(input *BatchDelet
 // API operation BatchDeleteRumMetricDefinitions for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   This operation attempted to create a resource that already exists.
 //
-//   * ResourceNotFoundException
-//   Resource not found.
+//   - ConflictException
+//     This operation attempted to create a resource that already exists.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/BatchDeleteRumMetricDefinitions
 func (c *CloudWatchRUM) BatchDeleteRumMetricDefinitions(input *BatchDeleteRumMetricDefinitionsInput) (*BatchDeleteRumMetricDefinitionsOutput, error) {
@@ -271,14 +271,13 @@ const opBatchGetRumMetricDefinitions = "BatchGetRumMetricDefinitions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetRumMetricDefinitionsRequest method.
+//	req, resp := client.BatchGetRumMetricDefinitionsRequest(params)
 //
-//    // Example sending a request using the BatchGetRumMetricDefinitionsRequest method.
-//    req, resp := client.BatchGetRumMetricDefinitionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/BatchGetRumMetricDefinitions
 func (c *CloudWatchRUM) BatchGetRumMetricDefinitionsRequest(input *BatchGetRumMetricDefinitionsInput) (req *request.Request, output *BatchGetRumMetricDefinitionsOutput) {
@@ -316,17 +315,18 @@ func (c *CloudWatchRUM) BatchGetRumMetricDefinitionsRequest(input *BatchGetRumMe
 // API operation BatchGetRumMetricDefinitions for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Resource not found.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/BatchGetRumMetricDefinitions
 func (c *CloudWatchRUM) BatchGetRumMetricDefinitions(input *BatchGetRumMetricDefinitionsInput) (*BatchGetRumMetricDefinitionsOutput, error) {
@@ -358,15 +358,14 @@ func (c *CloudWatchRUM) BatchGetRumMetricDefinitionsWithContext(ctx aws.Context,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a BatchGetRumMetricDefinitions operation.
-//    pageNum := 0
-//    err := client.BatchGetRumMetricDefinitionsPages(params,
-//        func(page *cloudwatchrum.BatchGetRumMetricDefinitionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a BatchGetRumMetricDefinitions operation.
+//	pageNum := 0
+//	err := client.BatchGetRumMetricDefinitionsPages(params,
+//	    func(page *cloudwatchrum.BatchGetRumMetricDefinitionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudWatchRUM) BatchGetRumMetricDefinitionsPages(input *BatchGetRumMetricDefinitionsInput, fn func(*BatchGetRumMetricDefinitionsOutput, bool) bool) error {
 	return c.BatchGetRumMetricDefinitionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -418,14 +417,13 @@ const opCreateAppMonitor = "CreateAppMonitor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAppMonitorRequest method.
+//	req, resp := client.CreateAppMonitorRequest(params)
 //
-//    // Example sending a request using the CreateAppMonitorRequest method.
-//    req, resp := client.CreateAppMonitorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/CreateAppMonitor
 func (c *CloudWatchRUM) CreateAppMonitorRequest(input *CreateAppMonitorInput) (req *request.Request, output *CreateAppMonitorOutput) {
@@ -468,26 +466,27 @@ func (c *CloudWatchRUM) CreateAppMonitorRequest(input *CreateAppMonitorInput) (r
 // API operation CreateAppMonitor for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   This operation attempted to create a resource that already exists.
 //
-//   * ServiceQuotaExceededException
-//   This request exceeds a service quota.
+//   - ConflictException
+//     This operation attempted to create a resource that already exists.
 //
-//   * ResourceNotFoundException
-//   Resource not found.
+//   - ServiceQuotaExceededException
+//     This request exceeds a service quota.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/CreateAppMonitor
 func (c *CloudWatchRUM) CreateAppMonitor(input *CreateAppMonitorInput) (*CreateAppMonitorOutput, error) {
@@ -527,14 +526,13 @@ const opDeleteAppMonitor = "DeleteAppMonitor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAppMonitorRequest method.
+//	req, resp := client.DeleteAppMonitorRequest(params)
 //
-//    // Example sending a request using the DeleteAppMonitorRequest method.
-//    req, resp := client.DeleteAppMonitorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/DeleteAppMonitor
 func (c *CloudWatchRUM) DeleteAppMonitorRequest(input *DeleteAppMonitorInput) (req *request.Request, output *DeleteAppMonitorOutput) {
@@ -567,23 +565,24 @@ func (c *CloudWatchRUM) DeleteAppMonitorRequest(input *DeleteAppMonitorInput) (r
 // API operation DeleteAppMonitor for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   This operation attempted to create a resource that already exists.
 //
-//   * ResourceNotFoundException
-//   Resource not found.
+//   - ConflictException
+//     This operation attempted to create a resource that already exists.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/DeleteAppMonitor
 func (c *CloudWatchRUM) DeleteAppMonitor(input *DeleteAppMonitorInput) (*DeleteAppMonitorOutput, error) {
@@ -623,14 +622,13 @@ const opDeleteRumMetricsDestination = "DeleteRumMetricsDestination"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRumMetricsDestinationRequest method.
+//	req, resp := client.DeleteRumMetricsDestinationRequest(params)
 //
-//    // Example sending a request using the DeleteRumMetricsDestinationRequest method.
-//    req, resp := client.DeleteRumMetricsDestinationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/DeleteRumMetricsDestination
 func (c *CloudWatchRUM) DeleteRumMetricsDestinationRequest(input *DeleteRumMetricsDestinationInput) (req *request.Request, output *DeleteRumMetricsDestinationOutput) {
@@ -663,23 +661,24 @@ func (c *CloudWatchRUM) DeleteRumMetricsDestinationRequest(input *DeleteRumMetri
 // API operation DeleteRumMetricsDestination for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   This operation attempted to create a resource that already exists.
 //
-//   * ResourceNotFoundException
-//   Resource not found.
+//   - ConflictException
+//     This operation attempted to create a resource that already exists.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/DeleteRumMetricsDestination
 func (c *CloudWatchRUM) DeleteRumMetricsDestination(input *DeleteRumMetricsDestinationInput) (*DeleteRumMetricsDestinationOutput, error) {
@@ -719,14 +718,13 @@ const opGetAppMonitor = "GetAppMonitor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAppMonitorRequest method.
+//	req, resp := client.GetAppMonitorRequest(params)
 //
-//    // Example sending a request using the GetAppMonitorRequest method.
-//    req, resp := client.GetAppMonitorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/GetAppMonitor
 func (c *CloudWatchRUM) GetAppMonitorRequest(input *GetAppMonitorInput) (req *request.Request, output *GetAppMonitorOutput) {
@@ -757,20 +755,21 @@ func (c *CloudWatchRUM) GetAppMonitorRequest(input *GetAppMonitorInput) (req *re
 // API operation GetAppMonitor for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Resource not found.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/GetAppMonitor
 func (c *CloudWatchRUM) GetAppMonitor(input *GetAppMonitorInput) (*GetAppMonitorOutput, error) {
@@ -810,14 +809,13 @@ const opGetAppMonitorData = "GetAppMonitorData"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAppMonitorDataRequest method.
+//	req, resp := client.GetAppMonitorDataRequest(params)
 //
-//    // Example sending a request using the GetAppMonitorDataRequest method.
-//    req, resp := client.GetAppMonitorDataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/GetAppMonitorData
 func (c *CloudWatchRUM) GetAppMonitorDataRequest(input *GetAppMonitorDataInput) (req *request.Request, output *GetAppMonitorDataOutput) {
@@ -855,20 +853,21 @@ func (c *CloudWatchRUM) GetAppMonitorDataRequest(input *GetAppMonitorDataInput) 
 // API operation GetAppMonitorData for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Resource not found.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/GetAppMonitorData
 func (c *CloudWatchRUM) GetAppMonitorData(input *GetAppMonitorDataInput) (*GetAppMonitorDataOutput, error) {
@@ -900,15 +899,14 @@ func (c *CloudWatchRUM) GetAppMonitorDataWithContext(ctx aws.Context, input *Get
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetAppMonitorData operation.
-//    pageNum := 0
-//    err := client.GetAppMonitorDataPages(params,
-//        func(page *cloudwatchrum.GetAppMonitorDataOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetAppMonitorData operation.
+//	pageNum := 0
+//	err := client.GetAppMonitorDataPages(params,
+//	    func(page *cloudwatchrum.GetAppMonitorDataOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudWatchRUM) GetAppMonitorDataPages(input *GetAppMonitorDataInput, fn func(*GetAppMonitorDataOutput, bool) bool) error {
 	return c.GetAppMonitorDataPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -960,14 +958,13 @@ const opListAppMonitors = "ListAppMonitors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAppMonitorsRequest method.
+//	req, resp := client.ListAppMonitorsRequest(params)
 //
-//    // Example sending a request using the ListAppMonitorsRequest method.
-//    req, resp := client.ListAppMonitorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/ListAppMonitors
 func (c *CloudWatchRUM) ListAppMonitorsRequest(input *ListAppMonitorsInput) (req *request.Request, output *ListAppMonitorsOutput) {
@@ -1004,17 +1001,18 @@ func (c *CloudWatchRUM) ListAppMonitorsRequest(input *ListAppMonitorsInput) (req
 // API operation ListAppMonitors for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Internal service exception.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/ListAppMonitors
 func (c *CloudWatchRUM) ListAppMonitors(input *ListAppMonitorsInput) (*ListAppMonitorsOutput, error) {
@@ -1046,15 +1044,14 @@ func (c *CloudWatchRUM) ListAppMonitorsWithContext(ctx aws.Context, input *ListA
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAppMonitors operation.
-//    pageNum := 0
-//    err := client.ListAppMonitorsPages(params,
-//        func(page *cloudwatchrum.ListAppMonitorsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAppMonitors operation.
+//	pageNum := 0
+//	err := client.ListAppMonitorsPages(params,
+//	    func(page *cloudwatchrum.ListAppMonitorsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudWatchRUM) ListAppMonitorsPages(input *ListAppMonitorsInput, fn func(*ListAppMonitorsOutput, bool) bool) error {
 	return c.ListAppMonitorsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1106,14 +1103,13 @@ const opListRumMetricsDestinations = "ListRumMetricsDestinations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRumMetricsDestinationsRequest method.
+//	req, resp := client.ListRumMetricsDestinationsRequest(params)
 //
-//    // Example sending a request using the ListRumMetricsDestinationsRequest method.
-//    req, resp := client.ListRumMetricsDestinationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/ListRumMetricsDestinations
 func (c *CloudWatchRUM) ListRumMetricsDestinationsRequest(input *ListRumMetricsDestinationsInput) (req *request.Request, output *ListRumMetricsDestinationsOutput) {
@@ -1153,17 +1149,18 @@ func (c *CloudWatchRUM) ListRumMetricsDestinationsRequest(input *ListRumMetricsD
 // API operation ListRumMetricsDestinations for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Resource not found.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/ListRumMetricsDestinations
 func (c *CloudWatchRUM) ListRumMetricsDestinations(input *ListRumMetricsDestinationsInput) (*ListRumMetricsDestinationsOutput, error) {
@@ -1195,15 +1192,14 @@ func (c *CloudWatchRUM) ListRumMetricsDestinationsWithContext(ctx aws.Context, i
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRumMetricsDestinations operation.
-//    pageNum := 0
-//    err := client.ListRumMetricsDestinationsPages(params,
-//        func(page *cloudwatchrum.ListRumMetricsDestinationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRumMetricsDestinations operation.
+//	pageNum := 0
+//	err := client.ListRumMetricsDestinationsPages(params,
+//	    func(page *cloudwatchrum.ListRumMetricsDestinationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudWatchRUM) ListRumMetricsDestinationsPages(input *ListRumMetricsDestinationsInput, fn func(*ListRumMetricsDestinationsOutput, bool) bool) error {
 	return c.ListRumMetricsDestinationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1255,14 +1251,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/ListTagsForResource
 func (c *CloudWatchRUM) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1293,14 +1288,15 @@ func (c *CloudWatchRUM) ListTagsForResourceRequest(input *ListTagsForResourceInp
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Resource not found.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
+//
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/ListTagsForResource
 func (c *CloudWatchRUM) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1340,14 +1336,13 @@ const opPutRumEvents = "PutRumEvents"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutRumEventsRequest method.
+//	req, resp := client.PutRumEventsRequest(params)
 //
-//    // Example sending a request using the PutRumEventsRequest method.
-//    req, resp := client.PutRumEventsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/PutRumEvents
 func (c *CloudWatchRUM) PutRumEventsRequest(input *PutRumEventsInput) (req *request.Request, output *PutRumEventsOutput) {
@@ -1385,20 +1380,21 @@ func (c *CloudWatchRUM) PutRumEventsRequest(input *PutRumEventsInput) (req *requ
 // API operation PutRumEvents for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Resource not found.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/PutRumEvents
 func (c *CloudWatchRUM) PutRumEvents(input *PutRumEventsInput) (*PutRumEventsOutput, error) {
@@ -1438,14 +1434,13 @@ const opPutRumMetricsDestination = "PutRumMetricsDestination"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutRumMetricsDestinationRequest method.
+//	req, resp := client.PutRumMetricsDestinationRequest(params)
 //
-//    // Example sending a request using the PutRumMetricsDestinationRequest method.
-//    req, resp := client.PutRumMetricsDestinationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/PutRumMetricsDestination
 func (c *CloudWatchRUM) PutRumMetricsDestinationRequest(input *PutRumMetricsDestinationInput) (req *request.Request, output *PutRumMetricsDestinationOutput) {
@@ -1482,23 +1477,24 @@ func (c *CloudWatchRUM) PutRumMetricsDestinationRequest(input *PutRumMetricsDest
 // API operation PutRumMetricsDestination for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   This operation attempted to create a resource that already exists.
 //
-//   * ResourceNotFoundException
-//   Resource not found.
+//   - ConflictException
+//     This operation attempted to create a resource that already exists.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/PutRumMetricsDestination
 func (c *CloudWatchRUM) PutRumMetricsDestination(input *PutRumMetricsDestinationInput) (*PutRumMetricsDestinationOutput, error) {
@@ -1538,14 +1534,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/TagResource
 func (c *CloudWatchRUM) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1595,14 +1590,15 @@ func (c *CloudWatchRUM) TagResourceRequest(input *TagResourceInput) (req *reques
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Resource not found.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
+//
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/TagResource
 func (c *CloudWatchRUM) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1642,14 +1638,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/UntagResource
 func (c *CloudWatchRUM) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -1681,14 +1676,15 @@ func (c *CloudWatchRUM) UntagResourceRequest(input *UntagResourceInput) (req *re
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Resource not found.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
+//
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/UntagResource
 func (c *CloudWatchRUM) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -1728,14 +1724,13 @@ const opUpdateAppMonitor = "UpdateAppMonitor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAppMonitorRequest method.
+//	req, resp := client.UpdateAppMonitorRequest(params)
 //
-//    // Example sending a request using the UpdateAppMonitorRequest method.
-//    req, resp := client.UpdateAppMonitorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/UpdateAppMonitor
 func (c *CloudWatchRUM) UpdateAppMonitorRequest(input *UpdateAppMonitorInput) (req *request.Request, output *UpdateAppMonitorOutput) {
@@ -1780,23 +1775,24 @@ func (c *CloudWatchRUM) UpdateAppMonitorRequest(input *UpdateAppMonitorInput) (r
 // API operation UpdateAppMonitor for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   This operation attempted to create a resource that already exists.
 //
-//   * ResourceNotFoundException
-//   Resource not found.
+//   - ConflictException
+//     This operation attempted to create a resource that already exists.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/UpdateAppMonitor
 func (c *CloudWatchRUM) UpdateAppMonitor(input *UpdateAppMonitorInput) (*UpdateAppMonitorOutput, error) {
@@ -1836,14 +1832,13 @@ const opUpdateRumMetricDefinition = "UpdateRumMetricDefinition"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRumMetricDefinitionRequest method.
+//	req, resp := client.UpdateRumMetricDefinitionRequest(params)
 //
-//    // Example sending a request using the UpdateRumMetricDefinitionRequest method.
-//    req, resp := client.UpdateRumMetricDefinitionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/UpdateRumMetricDefinition
 func (c *CloudWatchRUM) UpdateRumMetricDefinitionRequest(input *UpdateRumMetricDefinitionInput) (req *request.Request, output *UpdateRumMetricDefinitionOutput) {
@@ -1877,26 +1872,27 @@ func (c *CloudWatchRUM) UpdateRumMetricDefinitionRequest(input *UpdateRumMetricD
 // API operation UpdateRumMetricDefinition for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   This operation attempted to create a resource that already exists.
 //
-//   * ServiceQuotaExceededException
-//   This request exceeds a service quota.
+//   - ConflictException
+//     This operation attempted to create a resource that already exists.
 //
-//   * ResourceNotFoundException
-//   Resource not found.
+//   - ServiceQuotaExceededException
+//     This request exceeds a service quota.
 //
-//   * InternalServerException
-//   Internal service exception.
+//   - ResourceNotFoundException
+//     Resource not found.
 //
-//   * ValidationException
-//   One of the arguments for the request is not valid.
+//   - InternalServerException
+//     Internal service exception.
 //
-//   * ThrottlingException
-//   The request was throttled because of quota limits.
+//   - ValidationException
+//     One of the arguments for the request is not valid.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permissions to perform this action.
+//   - ThrottlingException
+//     The request was throttled because of quota limits.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rum-2018-05-10/UpdateRumMetricDefinition
 func (c *CloudWatchRUM) UpdateRumMetricDefinition(input *UpdateRumMetricDefinitionInput) (*UpdateRumMetricDefinitionOutput, error) {
@@ -2133,6 +2129,20 @@ type AppMonitorConfiguration struct {
 
 	// The ARN of the guest IAM role that is attached to the Amazon Cognito identity
 	// pool that is used to authorize the sending of data to RUM.
+	//
+	// It is possible that an app monitor does not have a value for GuestRoleArn.
+	// For example, this can happen when you use the console to create an app monitor
+	// and you allow CloudWatch RUM to create a new identity pool for Authorization.
+	// In this case, GuestRoleArn is not present in the GetAppMonitor (https://docs.aws.amazon.com/cloudwatchrum/latest/APIReference/API_GetAppMonitor.html)
+	// response because it is not stored by the service.
+	//
+	// If this issue affects you, you can take one of the following steps:
+	//
+	//    * Use the Cloud Development Kit (CDK) to create an identity pool and the
+	//    associated IAM role, and use that for your app monitor.
+	//
+	//    * Make a separate GetIdentityPoolRoles (https://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetIdentityPoolRoles.html)
+	//    call to Amazon Cognito to retrieve the GuestRoleArn.
 	GuestRoleArn *string `type:"string"`
 
 	// The ID of the Amazon Cognito identity pool that is used to authorize the
@@ -2441,9 +2451,9 @@ type BatchCreateRumMetricDefinitionsInput struct {
 	AppMonitorName *string `location:"uri" locationName:"AppMonitorName" min:"1" type:"string" required:"true"`
 
 	// The destination to send the metrics to. Valid values are CloudWatch and Evidently.
-	// If you specify Evidently, you must also specify the ARN of the CloudWatchEvidently
-	// experiment that will receive the metrics and an IAM role that has permission
-	// to write to the experiment.
+	// If you specify Evidently, you must also specify the Amazon Resource Name
+	// (ARN) of the CloudWatchEvidently experiment that will receive the metrics
+	// and an IAM role that has permission to write to the experiment.
 	//
 	// Destination is a required field
 	Destination *string `type:"string" required:"true" enum:"MetricDestination"`
@@ -2996,7 +3006,7 @@ type CreateAppMonitorInput struct {
 	// structure in your request, and it must include the ID of the Amazon Cognito
 	// identity pool to use for authorization. If you don't include AppMonitorConfiguration,
 	// you must set up your own authorization method. For more information, see
-	// Authorize your application to send data to Amazon Web Services (https://docs.aws.amazon.com/monitoring/CloudWatch-RUM-get-started-authorization.html).
+	// Authorize your application to send data to Amazon Web Services (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-get-started-authorization.html).
 	//
 	// If you omit this argument, the sample rate used for RUM is set to 10% of
 	// the user sessions.
@@ -4132,101 +4142,108 @@ func (s *MetricDefinition) SetValueKey(v string) *MetricDefinition {
 
 // Use this structure to define one extended metric or custom metric that RUM
 // will send to CloudWatch or CloudWatch Evidently. For more information, see
-// Additional metrics that you can send to CloudWatch and CloudWatch Evidently
-// (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-vended-metrics.html).
+// Custom metrics and extended metrics that you can send to CloudWatch and CloudWatch
+// Evidently (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-custom-and-extended-metrics.html).
 //
 // This structure is validated differently for extended metrics and custom metrics.
 // For extended metrics that are sent to the AWS/RUM namespace, the following
 // validations apply:
 //
-//    * The Namespace parameter must be omitted or set to AWS/RUM.
+//   - The Namespace parameter must be omitted or set to AWS/RUM.
 //
-//    * Only certain combinations of values for Name, ValueKey, and EventPattern
-//    are valid. In addition to what is displayed in the list below, the EventPattern
-//    can also include information used by the DimensionKeys field. If Name
-//    is PerformanceNavigationDuration, then ValueKeymust be event_details.duration
-//    and the EventPattern must include {"event_type":["com.amazon.rum.performance_navigation_event"]}
-//    If Name is PerformanceResourceDuration, then ValueKeymust be event_details.duration
-//    and the EventPattern must include {"event_type":["com.amazon.rum.performance_resource_event"]}
-//    If Name is NavigationSatisfiedTransaction, then ValueKeymust be null and
-//    the EventPattern must include { "event_type": ["com.amazon.rum.performance_navigation_event"],
-//    "event_details": { "duration": [{ "numeric": [">",2000] }] } } If Name
-//    is NavigationToleratedTransaction, then ValueKeymust be null and the EventPattern
-//    must include { "event_type": ["com.amazon.rum.performance_navigation_event"],
-//    "event_details": { "duration": [{ "numeric": [">=",2000,"<"8000] }] }
-//    } If Name is NavigationFrustratedTransaction, then ValueKeymust be null
-//    and the EventPattern must include { "event_type": ["com.amazon.rum.performance_navigation_event"],
-//    "event_details": { "duration": [{ "numeric": [">=",8000] }] } } If Name
-//    is WebVitalsCumulativeLayoutShift, then ValueKeymust be event_details.value
-//    and the EventPattern must include {"event_type":["com.amazon.rum.cumulative_layout_shift_event"]}
-//    If Name is WebVitalsFirstInputDelay, then ValueKeymust be event_details.value
-//    and the EventPattern must include {"event_type":["com.amazon.rum.first_input_delay_event"]}
-//    If Name is WebVitalsLargestContentfulPaint, then ValueKeymust be event_details.value
-//    and the EventPattern must include {"event_type":["com.amazon.rum.largest_contentful_paint_event"]}
-//    If Name is JsErrorCount, then ValueKeymust be null and the EventPattern
-//    must include {"event_type":["com.amazon.rum.js_error_event"]} If Name
-//    is HttpErrorCount, then ValueKeymust be null and the EventPattern must
-//    include {"event_type":["com.amazon.rum.http_event"]} If Name is SessionCount,
-//    then ValueKeymust be null and the EventPattern must include {"event_type":["com.amazon.rum.session_start_event"]}
+//   - Only certain combinations of values for Name, ValueKey, and EventPattern
+//     are valid. In addition to what is displayed in the following list, the
+//     EventPattern can also include information used by the DimensionKeys field.
+//     If Name is PerformanceNavigationDuration, then ValueKeymust be event_details.duration
+//     and the EventPattern must include {"event_type":["com.amazon.rum.performance_navigation_event"]}
+//     If Name is PerformanceResourceDuration, then ValueKeymust be event_details.duration
+//     and the EventPattern must include {"event_type":["com.amazon.rum.performance_resource_event"]}
+//     If Name is NavigationSatisfiedTransaction, then ValueKeymust be null and
+//     the EventPattern must include { "event_type": ["com.amazon.rum.performance_navigation_event"],
+//     "event_details": { "duration": [{ "numeric": [">",2000] }] } } If Name
+//     is NavigationToleratedTransaction, then ValueKeymust be null and the EventPattern
+//     must include { "event_type": ["com.amazon.rum.performance_navigation_event"],
+//     "event_details": { "duration": [{ "numeric": [">=",2000,"<"8000] }] }
+//     } If Name is NavigationFrustratedTransaction, then ValueKeymust be null
+//     and the EventPattern must include { "event_type": ["com.amazon.rum.performance_navigation_event"],
+//     "event_details": { "duration": [{ "numeric": [">=",8000] }] } } If Name
+//     is WebVitalsCumulativeLayoutShift, then ValueKeymust be event_details.value
+//     and the EventPattern must include {"event_type":["com.amazon.rum.cumulative_layout_shift_event"]}
+//     If Name is WebVitalsFirstInputDelay, then ValueKeymust be event_details.value
+//     and the EventPattern must include {"event_type":["com.amazon.rum.first_input_delay_event"]}
+//     If Name is WebVitalsLargestContentfulPaint, then ValueKeymust be event_details.value
+//     and the EventPattern must include {"event_type":["com.amazon.rum.largest_contentful_paint_event"]}
+//     If Name is JsErrorCount, then ValueKeymust be null and the EventPattern
+//     must include {"event_type":["com.amazon.rum.js_error_event"]} If Name
+//     is HttpErrorCount, then ValueKeymust be null and the EventPattern must
+//     include {"event_type":["com.amazon.rum.http_event"]} If Name is SessionCount,
+//     then ValueKeymust be null and the EventPattern must include {"event_type":["com.amazon.rum.session_start_event"]}
+//     If Name is PageViewCount, then ValueKeymust be null and the EventPattern
+//     must include {"event_type":["com.amazon.rum.page_view_event"]} If Name
+//     is Http4xxCount, then ValueKeymust be null and the EventPattern must include
+//     {"event_type": ["com.amazon.rum.http_event"],"event_details":{"response":{"status":[{"numeric":[">=",400,"<",500]}]}}}
+//     } If Name is Http5xxCount, then ValueKeymust be null and the EventPattern
+//     must include {"event_type": ["com.amazon.rum.http_event"],"event_details":{"response":{"status":[{"numeric":[">=",500,"<=",599]}]}}}
+//     }
 //
 // For custom metrics, the following validation rules apply:
 //
-//    * The namespace can't be omitted and can't be AWS/RUM. You can use the
-//    AWS/RUM namespace only for extended metrics.
+//   - The namespace can't be omitted and can't be AWS/RUM. You can use the
+//     AWS/RUM namespace only for extended metrics.
 //
-//    * All dimensions listed in the DimensionKeys field must be present in
-//    the value of EventPattern.
+//   - All dimensions listed in the DimensionKeys field must be present in
+//     the value of EventPattern.
 //
-//    * The values that you specify for ValueKey, EventPattern, and DimensionKeys
-//    must be fields in RUM events, so all first-level keys in these fields
-//    must be one of the keys in the list later in this section.
+//   - The values that you specify for ValueKey, EventPattern, and DimensionKeys
+//     must be fields in RUM events, so all first-level keys in these fields
+//     must be one of the keys in the list later in this section.
 //
-//    * If you set a value for EventPattern, it must be a JSON object.
+//   - If you set a value for EventPattern, it must be a JSON object.
 //
-//    * For every non-empty event_details, there must be a non-empty event_type.
+//   - For every non-empty event_details, there must be a non-empty event_type.
 //
-//    * If EventPattern contains an event_details field, it must also contain
-//    an event_type. For every built-in event_type that you use, you must use
-//    a value for event_details that corresponds to that event_type. For information
-//    about event details that correspond to event types, see RUM event details
-//    (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-datacollected.html#CloudWatch-RUM-datacollected-eventDetails).
+//   - If EventPattern contains an event_details field, it must also contain
+//     an event_type. For every built-in event_type that you use, you must use
+//     a value for event_details that corresponds to that event_type. For information
+//     about event details that correspond to event types, see RUM event details
+//     (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-datacollected.html#CloudWatch-RUM-datacollected-eventDetails).
 //
-//    * In EventPattern, any JSON array must contain only one value.
+//   - In EventPattern, any JSON array must contain only one value.
 //
 // Valid key values for first-level keys in the ValueKey, EventPattern, and
 // DimensionKeys fields:
 //
-//    * account_id
+//   - account_id
 //
-//    * application_Id
+//   - application_Id
 //
-//    * application_version
+//   - application_version
 //
-//    * application_name
+//   - application_name
 //
-//    * batch_id
+//   - batch_id
 //
-//    * event_details
+//   - event_details
 //
-//    * event_id
+//   - event_id
 //
-//    * event_interaction
+//   - event_interaction
 //
-//    * event_timestamp
+//   - event_timestamp
 //
-//    * event_type
+//   - event_type
 //
-//    * event_version
+//   - event_version
 //
-//    * log_stream
+//   - log_stream
 //
-//    * metadata
+//   - metadata
 //
-//    * sessionId
+//   - sessionId
 //
-//    * user_details
+//   - user_details
 //
-//    * userId
+//   - userId
 type MetricDefinitionRequest struct {
 	_ struct{} `type:"structure"`
 
@@ -4272,7 +4289,7 @@ type MetricDefinitionRequest struct {
 	//    { "browserName": [ "Chrome", "Safari" ], "countryCode": [ "US" ] }, "event_details":
 	//    { "duration": [{ "numeric": [ ">=", 2000, "<", 8000 ] }] } }'
 	//
-	// If the metrics destination' is CloudWatch and the event also matches a value
+	// If the metrics destination is CloudWatch and the event also matches a value
 	// in DimensionKeys, then the metric is published with the specified dimensions.
 	EventPattern *string `type:"string"`
 
@@ -4319,11 +4336,11 @@ type MetricDefinitionRequest struct {
 	// The field within the event object that the metric value is sourced from.
 	//
 	// If you omit this field, a hardcoded value of 1 is pushed as the metric value.
-	// This is useful if you just want to count the number of events that the filter
+	// This is useful if you want to count the number of events that the filter
 	// catches.
 	//
 	// If this metric is sent to CloudWatch Evidently, this field will be passed
-	// to Evidently raw and Evidently will handle data extraction from the event.
+	// to Evidently raw. Evidently will handle data extraction from the event.
 	ValueKey *string `min:"1" type:"string"`
 }
 
@@ -4628,11 +4645,17 @@ type PutRumMetricsDestinationInput struct {
 	DestinationArn *string `type:"string"`
 
 	// This parameter is required if Destination is Evidently. If Destination is
-	// CloudWatch, do not use this parameter.
+	// CloudWatch, don't use this parameter.
 	//
 	// This parameter specifies the ARN of an IAM role that RUM will assume to write
 	// to the Evidently experiment that you are sending metrics to. This role must
 	// have permission to write to that experiment.
+	//
+	// If you specify this parameter, you must be signed on to a role that has PassRole
+	// (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html)
+	// permissions attached to it, to allow the role to be passed. The CloudWatchAmazonCloudWatchRUMFullAccess
+	// (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/auth-and-access-control-cw.html#managed-policies-cloudwatch-RUM)
+	// policy doesn't include PassRole permissions.
 	IamRoleArn *string `type:"string"`
 }
 
@@ -5323,7 +5346,7 @@ type UpdateAppMonitorInput struct {
 	// structure in your request, and it must include the ID of the Amazon Cognito
 	// identity pool to use for authorization. If you don't include AppMonitorConfiguration,
 	// you must set up your own authorization method. For more information, see
-	// Authorize your application to send data to Amazon Web Services (https://docs.aws.amazon.com/monitoring/CloudWatch-RUM-get-started-authorization.html).
+	// Authorize your application to send data to Amazon Web Services (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-get-started-authorization.html).
 	AppMonitorConfiguration *AppMonitorConfiguration `type:"structure"`
 
 	// Specifies whether this app monitor allows the web client to define and send

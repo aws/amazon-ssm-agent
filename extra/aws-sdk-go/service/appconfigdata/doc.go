@@ -13,11 +13,11 @@
 //
 // When calling StartConfigurationSession, your code sends the following information:
 //
-//    * Identifiers (ID or name) of an AppConfig application, environment, and
-//    configuration profile that the session tracks.
+//   - Identifiers (ID or name) of an AppConfig application, environment, and
+//     configuration profile that the session tracks.
 //
-//    * (Optional) The minimum amount of time the session's client must wait
-//    between calls to GetLatestConfiguration.
+//   - (Optional) The minimum amount of time the session's client must wait
+//     between calls to GetLatestConfiguration.
 //
 // In response, AppConfig provides an InitialConfigurationToken to be given
 // to the session's client and used the first time it calls GetLatestConfiguration
@@ -30,16 +30,16 @@
 // When calling GetLatestConfiguration, your client code sends the most recent
 // ConfigurationToken value it has and receives in response:
 //
-//    * NextPollConfigurationToken: the ConfigurationToken value to use on the
-//    next call to GetLatestConfiguration.
+//   - NextPollConfigurationToken: the ConfigurationToken value to use on the
+//     next call to GetLatestConfiguration.
 //
-//    * NextPollIntervalInSeconds: the duration the client should wait before
-//    making its next call to GetLatestConfiguration. This duration may vary
-//    over the course of the session, so it should be used instead of the value
-//    sent on the StartConfigurationSession call.
+//   - NextPollIntervalInSeconds: the duration the client should wait before
+//     making its next call to GetLatestConfiguration. This duration may vary
+//     over the course of the session, so it should be used instead of the value
+//     sent on the StartConfigurationSession call.
 //
-//    * The configuration: the latest data intended for the session. This may
-//    be empty if the client already has the latest version of the configuration.
+//   - The configuration: the latest data intended for the session. This may
+//     be empty if the client already has the latest version of the configuration.
 //
 // The InitialConfigurationToken and NextPollConfigurationToken should only
 // be used once. To support long poll use cases, the tokens are valid for up
@@ -56,7 +56,7 @@
 // See appconfigdata package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/appconfigdata/
 //
-// Using the Client
+// # Using the Client
 //
 // To contact AWS AppConfig Data with the SDK use the New function to create
 // a new service client. With that client you can make API requests to the service.

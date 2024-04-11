@@ -29,14 +29,13 @@ const opCancelJob = "CancelJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelJobRequest method.
+//	req, resp := client.CancelJobRequest(params)
 //
-//    // Example sending a request using the CancelJobRequest method.
-//    req, resp := client.CancelJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/CancelJob
 func (c *Braket) CancelJobRequest(input *CancelJobInput) (req *request.Request, output *CancelJobOutput) {
@@ -67,24 +66,25 @@ func (c *Braket) CancelJobRequest(input *CancelJobInput) (req *request.Request, 
 // API operation CancelJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * ConflictException
-//   An error occurred due to a conflict.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The throttling rate limit is met.
+//   - ConflictException
+//     An error occurred due to a conflict.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The throttling rate limit is met.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/CancelJob
 func (c *Braket) CancelJob(input *CancelJobInput) (*CancelJobOutput, error) {
@@ -124,14 +124,13 @@ const opCancelQuantumTask = "CancelQuantumTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelQuantumTaskRequest method.
+//	req, resp := client.CancelQuantumTaskRequest(params)
 //
-//    // Example sending a request using the CancelQuantumTaskRequest method.
-//    req, resp := client.CancelQuantumTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/CancelQuantumTask
 func (c *Braket) CancelQuantumTaskRequest(input *CancelQuantumTaskInput) (req *request.Request, output *CancelQuantumTaskOutput) {
@@ -162,24 +161,25 @@ func (c *Braket) CancelQuantumTaskRequest(input *CancelQuantumTaskInput) (req *r
 // API operation CancelQuantumTask for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * ConflictException
-//   An error occurred due to a conflict.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The throttling rate limit is met.
+//   - ConflictException
+//     An error occurred due to a conflict.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The throttling rate limit is met.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/CancelQuantumTask
 func (c *Braket) CancelQuantumTask(input *CancelQuantumTaskInput) (*CancelQuantumTaskOutput, error) {
@@ -219,14 +219,13 @@ const opCreateJob = "CreateJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateJobRequest method.
+//	req, resp := client.CreateJobRequest(params)
 //
-//    // Example sending a request using the CreateJobRequest method.
-//    req, resp := client.CreateJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/CreateJob
 func (c *Braket) CreateJobRequest(input *CreateJobInput) (req *request.Request, output *CreateJobOutput) {
@@ -257,27 +256,31 @@ func (c *Braket) CreateJobRequest(input *CreateJobInput) (req *request.Request, 
 // API operation CreateJob for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   An error occurred due to a conflict.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     An error occurred due to a conflict.
 //
-//   * ThrottlingException
-//   The throttling rate limit is met.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * DeviceRetiredException
-//   The specified device has been retired.
+//   - ThrottlingException
+//     The throttling rate limit is met.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - DeviceOfflineException
+//     The specified device is currently offline.
 //
-//   * ServiceQuotaExceededException
-//   The request failed because a service quota is exceeded.
+//   - DeviceRetiredException
+//     The specified device has been retired.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ServiceQuotaExceededException
+//     The request failed because a service quota is exceeded.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/CreateJob
 func (c *Braket) CreateJob(input *CreateJobInput) (*CreateJobOutput, error) {
@@ -317,14 +320,13 @@ const opCreateQuantumTask = "CreateQuantumTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateQuantumTaskRequest method.
+//	req, resp := client.CreateQuantumTaskRequest(params)
 //
-//    // Example sending a request using the CreateQuantumTaskRequest method.
-//    req, resp := client.CreateQuantumTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/CreateQuantumTask
 func (c *Braket) CreateQuantumTaskRequest(input *CreateQuantumTaskInput) (req *request.Request, output *CreateQuantumTaskOutput) {
@@ -355,27 +357,28 @@ func (c *Braket) CreateQuantumTaskRequest(input *CreateQuantumTaskInput) (req *r
 // API operation CreateQuantumTask for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The throttling rate limit is met.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * DeviceOfflineException
-//   The specified device is currently offline.
+//   - ThrottlingException
+//     The throttling rate limit is met.
 //
-//   * DeviceRetiredException
-//   The specified device has been retired.
+//   - DeviceOfflineException
+//     The specified device is currently offline.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - DeviceRetiredException
+//     The specified device has been retired.
 //
-//   * ServiceQuotaExceededException
-//   The request failed because a service quota is exceeded.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ServiceQuotaExceededException
+//     The request failed because a service quota is exceeded.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/CreateQuantumTask
 func (c *Braket) CreateQuantumTask(input *CreateQuantumTaskInput) (*CreateQuantumTaskOutput, error) {
@@ -415,14 +418,13 @@ const opGetDevice = "GetDevice"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDeviceRequest method.
+//	req, resp := client.GetDeviceRequest(params)
 //
-//    // Example sending a request using the GetDeviceRequest method.
-//    req, resp := client.GetDeviceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/GetDevice
 func (c *Braket) GetDeviceRequest(input *GetDeviceInput) (req *request.Request, output *GetDeviceOutput) {
@@ -462,21 +464,22 @@ func (c *Braket) GetDeviceRequest(input *GetDeviceInput) (req *request.Request, 
 // API operation GetDevice for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * ThrottlingException
-//   The throttling rate limit is met.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The throttling rate limit is met.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/GetDevice
 func (c *Braket) GetDevice(input *GetDeviceInput) (*GetDeviceOutput, error) {
@@ -516,14 +519,13 @@ const opGetJob = "GetJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetJobRequest method.
+//	req, resp := client.GetJobRequest(params)
 //
-//    // Example sending a request using the GetJobRequest method.
-//    req, resp := client.GetJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/GetJob
 func (c *Braket) GetJobRequest(input *GetJobInput) (req *request.Request, output *GetJobOutput) {
@@ -554,21 +556,22 @@ func (c *Braket) GetJobRequest(input *GetJobInput) (req *request.Request, output
 // API operation GetJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * ThrottlingException
-//   The throttling rate limit is met.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The throttling rate limit is met.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/GetJob
 func (c *Braket) GetJob(input *GetJobInput) (*GetJobOutput, error) {
@@ -608,14 +611,13 @@ const opGetQuantumTask = "GetQuantumTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetQuantumTaskRequest method.
+//	req, resp := client.GetQuantumTaskRequest(params)
 //
-//    // Example sending a request using the GetQuantumTaskRequest method.
-//    req, resp := client.GetQuantumTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/GetQuantumTask
 func (c *Braket) GetQuantumTaskRequest(input *GetQuantumTaskInput) (req *request.Request, output *GetQuantumTaskOutput) {
@@ -646,21 +648,22 @@ func (c *Braket) GetQuantumTaskRequest(input *GetQuantumTaskInput) (req *request
 // API operation GetQuantumTask for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * ThrottlingException
-//   The throttling rate limit is met.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The throttling rate limit is met.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/GetQuantumTask
 func (c *Braket) GetQuantumTask(input *GetQuantumTaskInput) (*GetQuantumTaskOutput, error) {
@@ -700,14 +703,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/ListTagsForResource
 func (c *Braket) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -738,15 +740,16 @@ func (c *Braket) ListTagsForResourceRequest(input *ListTagsForResourceInput) (re
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/ListTagsForResource
 func (c *Braket) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -786,14 +789,13 @@ const opSearchDevices = "SearchDevices"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchDevicesRequest method.
+//	req, resp := client.SearchDevicesRequest(params)
 //
-//    // Example sending a request using the SearchDevicesRequest method.
-//    req, resp := client.SearchDevicesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/SearchDevices
 func (c *Braket) SearchDevicesRequest(input *SearchDevicesInput) (req *request.Request, output *SearchDevicesOutput) {
@@ -830,18 +832,19 @@ func (c *Braket) SearchDevicesRequest(input *SearchDevicesInput) (req *request.R
 // API operation SearchDevices for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The throttling rate limit is met.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The throttling rate limit is met.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/SearchDevices
 func (c *Braket) SearchDevices(input *SearchDevicesInput) (*SearchDevicesOutput, error) {
@@ -873,15 +876,14 @@ func (c *Braket) SearchDevicesWithContext(ctx aws.Context, input *SearchDevicesI
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchDevices operation.
-//    pageNum := 0
-//    err := client.SearchDevicesPages(params,
-//        func(page *braket.SearchDevicesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchDevices operation.
+//	pageNum := 0
+//	err := client.SearchDevicesPages(params,
+//	    func(page *braket.SearchDevicesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Braket) SearchDevicesPages(input *SearchDevicesInput, fn func(*SearchDevicesOutput, bool) bool) error {
 	return c.SearchDevicesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -933,14 +935,13 @@ const opSearchJobs = "SearchJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchJobsRequest method.
+//	req, resp := client.SearchJobsRequest(params)
 //
-//    // Example sending a request using the SearchJobsRequest method.
-//    req, resp := client.SearchJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/SearchJobs
 func (c *Braket) SearchJobsRequest(input *SearchJobsInput) (req *request.Request, output *SearchJobsOutput) {
@@ -977,18 +978,19 @@ func (c *Braket) SearchJobsRequest(input *SearchJobsInput) (req *request.Request
 // API operation SearchJobs for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The throttling rate limit is met.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The throttling rate limit is met.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/SearchJobs
 func (c *Braket) SearchJobs(input *SearchJobsInput) (*SearchJobsOutput, error) {
@@ -1020,15 +1022,14 @@ func (c *Braket) SearchJobsWithContext(ctx aws.Context, input *SearchJobsInput, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchJobs operation.
-//    pageNum := 0
-//    err := client.SearchJobsPages(params,
-//        func(page *braket.SearchJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchJobs operation.
+//	pageNum := 0
+//	err := client.SearchJobsPages(params,
+//	    func(page *braket.SearchJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Braket) SearchJobsPages(input *SearchJobsInput, fn func(*SearchJobsOutput, bool) bool) error {
 	return c.SearchJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1080,14 +1081,13 @@ const opSearchQuantumTasks = "SearchQuantumTasks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchQuantumTasksRequest method.
+//	req, resp := client.SearchQuantumTasksRequest(params)
 //
-//    // Example sending a request using the SearchQuantumTasksRequest method.
-//    req, resp := client.SearchQuantumTasksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/SearchQuantumTasks
 func (c *Braket) SearchQuantumTasksRequest(input *SearchQuantumTasksInput) (req *request.Request, output *SearchQuantumTasksOutput) {
@@ -1124,18 +1124,19 @@ func (c *Braket) SearchQuantumTasksRequest(input *SearchQuantumTasksInput) (req 
 // API operation SearchQuantumTasks for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The throttling rate limit is met.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The throttling rate limit is met.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/SearchQuantumTasks
 func (c *Braket) SearchQuantumTasks(input *SearchQuantumTasksInput) (*SearchQuantumTasksOutput, error) {
@@ -1167,15 +1168,14 @@ func (c *Braket) SearchQuantumTasksWithContext(ctx aws.Context, input *SearchQua
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchQuantumTasks operation.
-//    pageNum := 0
-//    err := client.SearchQuantumTasksPages(params,
-//        func(page *braket.SearchQuantumTasksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchQuantumTasks operation.
+//	pageNum := 0
+//	err := client.SearchQuantumTasksPages(params,
+//	    func(page *braket.SearchQuantumTasksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Braket) SearchQuantumTasksPages(input *SearchQuantumTasksInput, fn func(*SearchQuantumTasksOutput, bool) bool) error {
 	return c.SearchQuantumTasksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1227,14 +1227,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/TagResource
 func (c *Braket) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1266,15 +1265,16 @@ func (c *Braket) TagResourceRequest(input *TagResourceInput) (req *request.Reque
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/TagResource
 func (c *Braket) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1314,14 +1314,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/UntagResource
 func (c *Braket) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -1353,15 +1352,16 @@ func (c *Braket) UntagResourceRequest(input *UntagResourceInput) (req *request.R
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InternalServiceException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServiceException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/braket-2019-09-01/UntagResource
 func (c *Braket) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -1511,6 +1511,67 @@ func (s *AlgorithmSpecification) SetScriptModeConfig(v *ScriptModeConfig) *Algor
 	return s
 }
 
+// The Amazon Braket resource and the association type.
+type Association struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Braket resource arn.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The association type for the specified Amazon Braket resource arn.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"AssociationType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Association) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Association) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Association) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Association"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *Association) SetArn(v string) *Association {
+	s.Arn = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *Association) SetType(v string) *Association {
+	s.Type = &v
+	return s
+}
+
 type CancelJobInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -1613,7 +1674,7 @@ type CancelQuantumTaskInput struct {
 	// The ARN of the task to cancel.
 	//
 	// QuantumTaskArn is a required field
-	QuantumTaskArn *string `location:"uri" locationName:"quantumTaskArn" min:"1" type:"string" required:"true"`
+	QuantumTaskArn *string `location:"uri" locationName:"quantumTaskArn" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -1676,7 +1737,7 @@ type CancelQuantumTaskOutput struct {
 	// The ARN of the task.
 	//
 	// QuantumTaskArn is a required field
-	QuantumTaskArn *string `locationName:"quantumTaskArn" min:"1" type:"string" required:"true"`
+	QuantumTaskArn *string `locationName:"quantumTaskArn" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -1833,6 +1894,9 @@ type CreateJobInput struct {
 	// AlgorithmSpecification is a required field
 	AlgorithmSpecification *AlgorithmSpecification `locationName:"algorithmSpecification" type:"structure" required:"true"`
 
+	// The list of Amazon Braket resources associated with the hybrid job.
+	Associations []*Association `locationName:"associations" type:"list"`
+
 	// Information about the output locations for job checkpoint data.
 	CheckpointConfig *JobCheckpointConfig `locationName:"checkpointConfig" type:"structure"`
 
@@ -1938,6 +2002,16 @@ func (s *CreateJobInput) Validate() error {
 			invalidParams.AddNested("AlgorithmSpecification", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.Associations != nil {
+		for i, v := range s.Associations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Associations", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.CheckpointConfig != nil {
 		if err := s.CheckpointConfig.Validate(); err != nil {
 			invalidParams.AddNested("CheckpointConfig", err.(request.ErrInvalidParams))
@@ -1983,6 +2057,12 @@ func (s *CreateJobInput) Validate() error {
 // SetAlgorithmSpecification sets the AlgorithmSpecification field's value.
 func (s *CreateJobInput) SetAlgorithmSpecification(v *AlgorithmSpecification) *CreateJobInput {
 	s.AlgorithmSpecification = v
+	return s
+}
+
+// SetAssociations sets the Associations field's value.
+func (s *CreateJobInput) SetAssociations(v []*Association) *CreateJobInput {
+	s.Associations = v
 	return s
 }
 
@@ -2093,6 +2173,9 @@ type CreateQuantumTaskInput struct {
 	// Action is a required field
 	Action aws.JSONValue `locationName:"action" type:"jsonvalue" required:"true"`
 
+	// The list of Amazon Braket resources associated with the quantum task.
+	Associations []*Association `locationName:"associations" type:"list"`
+
 	// The client token associated with the request.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
@@ -2177,6 +2260,16 @@ func (s *CreateQuantumTaskInput) Validate() error {
 	if s.Shots == nil {
 		invalidParams.Add(request.NewErrParamRequired("Shots"))
 	}
+	if s.Associations != nil {
+		for i, v := range s.Associations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Associations", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -2187,6 +2280,12 @@ func (s *CreateQuantumTaskInput) Validate() error {
 // SetAction sets the Action field's value.
 func (s *CreateQuantumTaskInput) SetAction(v aws.JSONValue) *CreateQuantumTaskInput {
 	s.Action = v
+	return s
+}
+
+// SetAssociations sets the Associations field's value.
+func (s *CreateQuantumTaskInput) SetAssociations(v []*Association) *CreateQuantumTaskInput {
+	s.Associations = v
 	return s
 }
 
@@ -2244,7 +2343,7 @@ type CreateQuantumTaskOutput struct {
 	// The ARN of the task created by the request.
 	//
 	// QuantumTaskArn is a required field
-	QuantumTaskArn *string `locationName:"quantumTaskArn" min:"1" type:"string" required:"true"`
+	QuantumTaskArn *string `locationName:"quantumTaskArn" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -2438,6 +2537,61 @@ func (s *DeviceOfflineException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *DeviceOfflineException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Information about tasks and jobs queued on a device.
+type DeviceQueueInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the queue.
+	//
+	// Queue is a required field
+	Queue *string `locationName:"queue" type:"string" required:"true" enum:"QueueName"`
+
+	// Optional. Specifies the priority of the queue. Tasks in a priority queue
+	// are processed before the tasks in a normal queue.
+	QueuePriority *string `locationName:"queuePriority" type:"string" enum:"QueuePriority"`
+
+	// The number of jobs or tasks in the queue for a given device.
+	//
+	// QueueSize is a required field
+	QueueSize *string `locationName:"queueSize" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeviceQueueInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeviceQueueInfo) GoString() string {
+	return s.String()
+}
+
+// SetQueue sets the Queue field's value.
+func (s *DeviceQueueInfo) SetQueue(v string) *DeviceQueueInfo {
+	s.Queue = &v
+	return s
+}
+
+// SetQueuePriority sets the QueuePriority field's value.
+func (s *DeviceQueueInfo) SetQueuePriority(v string) *DeviceQueueInfo {
+	s.QueuePriority = &v
+	return s
+}
+
+// SetQueueSize sets the QueueSize field's value.
+func (s *DeviceQueueInfo) SetQueueSize(v string) *DeviceQueueInfo {
+	s.QueueSize = &v
+	return s
 }
 
 // The specified device has been retired.
@@ -2649,6 +2803,9 @@ type GetDeviceOutput struct {
 	// DeviceName is a required field
 	DeviceName *string `locationName:"deviceName" type:"string" required:"true"`
 
+	// List of information about tasks and jobs queued on a device.
+	DeviceQueueInfo []*DeviceQueueInfo `locationName:"deviceQueueInfo" type:"list"`
+
 	// The status of the device.
 	//
 	// DeviceStatus is a required field
@@ -2701,6 +2858,12 @@ func (s *GetDeviceOutput) SetDeviceName(v string) *GetDeviceOutput {
 	return s
 }
 
+// SetDeviceQueueInfo sets the DeviceQueueInfo field's value.
+func (s *GetDeviceOutput) SetDeviceQueueInfo(v []*DeviceQueueInfo) *GetDeviceOutput {
+	s.DeviceQueueInfo = v
+	return s
+}
+
 // SetDeviceStatus sets the DeviceStatus field's value.
 func (s *GetDeviceOutput) SetDeviceStatus(v string) *GetDeviceOutput {
 	s.DeviceStatus = &v
@@ -2721,6 +2884,9 @@ func (s *GetDeviceOutput) SetProviderName(v string) *GetDeviceOutput {
 
 type GetJobInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A list of attributes to return information for.
+	AdditionalAttributeNames []*string `location:"querystring" locationName:"additionalAttributeNames" type:"list" enum:"HybridJobAdditionalAttributeName"`
 
 	// The ARN of the job to retrieve.
 	//
@@ -2762,6 +2928,12 @@ func (s *GetJobInput) Validate() error {
 	return nil
 }
 
+// SetAdditionalAttributeNames sets the AdditionalAttributeNames field's value.
+func (s *GetJobInput) SetAdditionalAttributeNames(v []*string) *GetJobInput {
+	s.AdditionalAttributeNames = v
+	return s
+}
+
 // SetJobArn sets the JobArn field's value.
 func (s *GetJobInput) SetJobArn(v string) *GetJobInput {
 	s.JobArn = &v
@@ -2777,6 +2949,9 @@ type GetJobOutput struct {
 	//
 	// AlgorithmSpecification is a required field
 	AlgorithmSpecification *AlgorithmSpecification `locationName:"algorithmSpecification" type:"structure" required:"true"`
+
+	// The list of Amazon Braket resources associated with the hybrid job.
+	Associations []*Association `locationName:"associations" type:"list"`
 
 	// The billable time the Amazon Braket job used to complete.
 	BillableDuration *int64 `locationName:"billableDuration" type:"integer"`
@@ -2834,6 +3009,10 @@ type GetJobOutput struct {
 	// OutputDataConfig is a required field
 	OutputDataConfig *JobOutputDataConfig `locationName:"outputDataConfig" type:"structure" required:"true"`
 
+	// Queue information for the requested job. Only returned if QueueInfo is specified
+	// in the additionalAttributeNames" field in the GetJob API request.
+	QueueInfo *HybridJobQueueInfo `locationName:"queueInfo" type:"structure"`
+
 	// The Amazon Resource Name (ARN) of an IAM role that Amazon Braket can assume
 	// to perform tasks on behalf of a user. It can access user resources, run an
 	// Amazon Braket job container on behalf of user, and output resources to the
@@ -2879,6 +3058,12 @@ func (s GetJobOutput) GoString() string {
 // SetAlgorithmSpecification sets the AlgorithmSpecification field's value.
 func (s *GetJobOutput) SetAlgorithmSpecification(v *AlgorithmSpecification) *GetJobOutput {
 	s.AlgorithmSpecification = v
+	return s
+}
+
+// SetAssociations sets the Associations field's value.
+func (s *GetJobOutput) SetAssociations(v []*Association) *GetJobOutput {
+	s.Associations = v
 	return s
 }
 
@@ -2960,6 +3145,12 @@ func (s *GetJobOutput) SetOutputDataConfig(v *JobOutputDataConfig) *GetJobOutput
 	return s
 }
 
+// SetQueueInfo sets the QueueInfo field's value.
+func (s *GetJobOutput) SetQueueInfo(v *HybridJobQueueInfo) *GetJobOutput {
+	s.QueueInfo = v
+	return s
+}
+
 // SetRoleArn sets the RoleArn field's value.
 func (s *GetJobOutput) SetRoleArn(v string) *GetJobOutput {
 	s.RoleArn = &v
@@ -2993,10 +3184,13 @@ func (s *GetJobOutput) SetTags(v map[string]*string) *GetJobOutput {
 type GetQuantumTaskInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// the ARN of the task to retrieve.
+	// A list of attributes to return information for.
+	AdditionalAttributeNames []*string `location:"querystring" locationName:"additionalAttributeNames" type:"list" enum:"QuantumTaskAdditionalAttributeName"`
+
+	// The ARN of the task to retrieve.
 	//
 	// QuantumTaskArn is a required field
-	QuantumTaskArn *string `location:"uri" locationName:"quantumTaskArn" min:"1" type:"string" required:"true"`
+	QuantumTaskArn *string `location:"uri" locationName:"quantumTaskArn" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -3033,6 +3227,12 @@ func (s *GetQuantumTaskInput) Validate() error {
 	return nil
 }
 
+// SetAdditionalAttributeNames sets the AdditionalAttributeNames field's value.
+func (s *GetQuantumTaskInput) SetAdditionalAttributeNames(v []*string) *GetQuantumTaskInput {
+	s.AdditionalAttributeNames = v
+	return s
+}
+
 // SetQuantumTaskArn sets the QuantumTaskArn field's value.
 func (s *GetQuantumTaskInput) SetQuantumTaskArn(v string) *GetQuantumTaskInput {
 	s.QuantumTaskArn = &v
@@ -3041,6 +3241,9 @@ func (s *GetQuantumTaskInput) SetQuantumTaskArn(v string) *GetQuantumTaskInput {
 
 type GetQuantumTaskOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The list of Amazon Braket resources associated with the quantum task.
+	Associations []*Association `locationName:"associations" type:"list"`
 
 	// The time at which the task was created.
 	//
@@ -3079,7 +3282,12 @@ type GetQuantumTaskOutput struct {
 	// The ARN of the task.
 	//
 	// QuantumTaskArn is a required field
-	QuantumTaskArn *string `locationName:"quantumTaskArn" min:"1" type:"string" required:"true"`
+	QuantumTaskArn *string `locationName:"quantumTaskArn" type:"string" required:"true"`
+
+	// Queue information for the requested quantum task. Only returned if QueueInfo
+	// is specified in the additionalAttributeNames" field in the GetQuantumTask
+	// API request.
+	QueueInfo *QuantumTaskQueueInfo `locationName:"queueInfo" type:"structure"`
 
 	// The number of shots used in the task.
 	//
@@ -3111,6 +3319,12 @@ func (s GetQuantumTaskOutput) String() string {
 // value will be replaced with "sensitive".
 func (s GetQuantumTaskOutput) GoString() string {
 	return s.String()
+}
+
+// SetAssociations sets the Associations field's value.
+func (s *GetQuantumTaskOutput) SetAssociations(v []*Association) *GetQuantumTaskOutput {
+	s.Associations = v
+	return s
 }
 
 // SetCreatedAt sets the CreatedAt field's value.
@@ -3167,6 +3381,12 @@ func (s *GetQuantumTaskOutput) SetQuantumTaskArn(v string) *GetQuantumTaskOutput
 	return s
 }
 
+// SetQueueInfo sets the QueueInfo field's value.
+func (s *GetQuantumTaskOutput) SetQueueInfo(v *QuantumTaskQueueInfo) *GetQuantumTaskOutput {
+	s.QueueInfo = v
+	return s
+}
+
 // SetShots sets the Shots field's value.
 func (s *GetQuantumTaskOutput) SetShots(v int64) *GetQuantumTaskOutput {
 	s.Shots = &v
@@ -3182,6 +3402,62 @@ func (s *GetQuantumTaskOutput) SetStatus(v string) *GetQuantumTaskOutput {
 // SetTags sets the Tags field's value.
 func (s *GetQuantumTaskOutput) SetTags(v map[string]*string) *GetQuantumTaskOutput {
 	s.Tags = v
+	return s
+}
+
+// Information about the queue for a specified job.
+type HybridJobQueueInfo struct {
+	_ struct{} `type:"structure"`
+
+	// Optional. Provides more information about the queue position. For example,
+	// if the job is complete and no longer in the queue, the message field contains
+	// that information.
+	Message *string `locationName:"message" type:"string"`
+
+	// Current position of the job in the jobs queue.
+	//
+	// Position is a required field
+	Position *string `locationName:"position" type:"string" required:"true"`
+
+	// The name of the queue.
+	//
+	// Queue is a required field
+	Queue *string `locationName:"queue" type:"string" required:"true" enum:"QueueName"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HybridJobQueueInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HybridJobQueueInfo) GoString() string {
+	return s.String()
+}
+
+// SetMessage sets the Message field's value.
+func (s *HybridJobQueueInfo) SetMessage(v string) *HybridJobQueueInfo {
+	s.Message = &v
+	return s
+}
+
+// SetPosition sets the Position field's value.
+func (s *HybridJobQueueInfo) SetPosition(v string) *HybridJobQueueInfo {
+	s.Position = &v
+	return s
+}
+
+// SetQueue sets the Queue field's value.
+func (s *HybridJobQueueInfo) SetQueue(v string) *HybridJobQueueInfo {
+	s.Queue = &v
 	return s
 }
 
@@ -3484,7 +3760,7 @@ type JobEventDetails struct {
 	// job.
 	Message *string `locationName:"message" type:"string"`
 
-	// TThe type of event that occurred related to the Amazon Braket job.
+	// The type of event that occurred related to the Amazon Braket job.
 	TimeOfEvent *time.Time `locationName:"timeOfEvent" type:"timestamp" timestampFormat:"iso8601"`
 }
 
@@ -3818,6 +4094,72 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 	return s
 }
 
+// Information about the queue for the specified quantum task.
+type QuantumTaskQueueInfo struct {
+	_ struct{} `type:"structure"`
+
+	// Optional. Provides more information about the queue position. For example,
+	// if the task is complete and no longer in the queue, the message field contains
+	// that information.
+	Message *string `locationName:"message" type:"string"`
+
+	// Current position of the task in the quantum tasks queue.
+	//
+	// Position is a required field
+	Position *string `locationName:"position" type:"string" required:"true"`
+
+	// The name of the queue.
+	//
+	// Queue is a required field
+	Queue *string `locationName:"queue" type:"string" required:"true" enum:"QueueName"`
+
+	// Optional. Specifies the priority of the queue. Quantum tasks in a priority
+	// queue are processed before the tasks in a normal queue.
+	QueuePriority *string `locationName:"queuePriority" type:"string" enum:"QueuePriority"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QuantumTaskQueueInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QuantumTaskQueueInfo) GoString() string {
+	return s.String()
+}
+
+// SetMessage sets the Message field's value.
+func (s *QuantumTaskQueueInfo) SetMessage(v string) *QuantumTaskQueueInfo {
+	s.Message = &v
+	return s
+}
+
+// SetPosition sets the Position field's value.
+func (s *QuantumTaskQueueInfo) SetPosition(v string) *QuantumTaskQueueInfo {
+	s.Position = &v
+	return s
+}
+
+// SetQueue sets the Queue field's value.
+func (s *QuantumTaskQueueInfo) SetQueue(v string) *QuantumTaskQueueInfo {
+	s.Queue = &v
+	return s
+}
+
+// SetQueuePriority sets the QueuePriority field's value.
+func (s *QuantumTaskQueueInfo) SetQueuePriority(v string) *QuantumTaskQueueInfo {
+	s.QueuePriority = &v
+	return s
+}
+
 // Includes information about a quantum task.
 type QuantumTaskSummary struct {
 	_ struct{} `type:"structure"`
@@ -3848,7 +4190,7 @@ type QuantumTaskSummary struct {
 	// The ARN of the task.
 	//
 	// QuantumTaskArn is a required field
-	QuantumTaskArn *string `locationName:"quantumTaskArn" min:"1" type:"string" required:"true"`
+	QuantumTaskArn *string `locationName:"quantumTaskArn" type:"string" required:"true"`
 
 	// The shots used for the task.
 	//
@@ -5086,6 +5428,18 @@ func (s *ValidationException) RequestID() string {
 }
 
 const (
+	// AssociationTypeReservationTimeWindowArn is a AssociationType enum value
+	AssociationTypeReservationTimeWindowArn = "RESERVATION_TIME_WINDOW_ARN"
+)
+
+// AssociationType_Values returns all elements of the AssociationType enum
+func AssociationType_Values() []string {
+	return []string{
+		AssociationTypeReservationTimeWindowArn,
+	}
+}
+
+const (
 	// CancellationStatusCancelling is a CancellationStatus enum value
 	CancellationStatusCancelling = "CANCELLING"
 
@@ -5150,6 +5504,18 @@ func DeviceType_Values() []string {
 	return []string{
 		DeviceTypeQpu,
 		DeviceTypeSimulator,
+	}
+}
+
+const (
+	// HybridJobAdditionalAttributeNameQueueInfo is a HybridJobAdditionalAttributeName enum value
+	HybridJobAdditionalAttributeNameQueueInfo = "QueueInfo"
+)
+
+// HybridJobAdditionalAttributeName_Values returns all elements of the HybridJobAdditionalAttributeName enum
+func HybridJobAdditionalAttributeName_Values() []string {
+	return []string{
+		HybridJobAdditionalAttributeNameQueueInfo,
 	}
 }
 
@@ -5402,6 +5768,18 @@ func JobPrimaryStatus_Values() []string {
 }
 
 const (
+	// QuantumTaskAdditionalAttributeNameQueueInfo is a QuantumTaskAdditionalAttributeName enum value
+	QuantumTaskAdditionalAttributeNameQueueInfo = "QueueInfo"
+)
+
+// QuantumTaskAdditionalAttributeName_Values returns all elements of the QuantumTaskAdditionalAttributeName enum
+func QuantumTaskAdditionalAttributeName_Values() []string {
+	return []string{
+		QuantumTaskAdditionalAttributeNameQueueInfo,
+	}
+}
+
+const (
 	// QuantumTaskStatusCreated is a QuantumTaskStatus enum value
 	QuantumTaskStatusCreated = "CREATED"
 
@@ -5434,6 +5812,38 @@ func QuantumTaskStatus_Values() []string {
 		QuantumTaskStatusFailed,
 		QuantumTaskStatusCancelling,
 		QuantumTaskStatusCancelled,
+	}
+}
+
+const (
+	// QueueNameQuantumTasksQueue is a QueueName enum value
+	QueueNameQuantumTasksQueue = "QUANTUM_TASKS_QUEUE"
+
+	// QueueNameJobsQueue is a QueueName enum value
+	QueueNameJobsQueue = "JOBS_QUEUE"
+)
+
+// QueueName_Values returns all elements of the QueueName enum
+func QueueName_Values() []string {
+	return []string{
+		QueueNameQuantumTasksQueue,
+		QueueNameJobsQueue,
+	}
+}
+
+const (
+	// QueuePriorityNormal is a QueuePriority enum value
+	QueuePriorityNormal = "Normal"
+
+	// QueuePriorityPriority is a QueuePriority enum value
+	QueuePriorityPriority = "Priority"
+)
+
+// QueuePriority_Values returns all elements of the QueuePriority enum
+func QueuePriority_Values() []string {
+	return []string{
+		QueuePriorityNormal,
+		QueuePriorityPriority,
 	}
 }
 

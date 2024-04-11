@@ -28,6 +28,16 @@ const (
 	// been reached.
 	ErrCodeActivityWorkerLimitExceeded = "ActivityWorkerLimitExceeded"
 
+	// ErrCodeConflictException for service response error code
+	// "ConflictException".
+	//
+	// Updating or deleting a resource can cause an inconsistent state. This error
+	// occurs when there're concurrent requests for DeleteStateMachineVersion, PublishStateMachineVersion,
+	// or UpdateStateMachine with the publish parameter set to true.
+	//
+	// HTTP Status Code: 409
+	ErrCodeConflictException = "ConflictException"
+
 	// ErrCodeExecutionAlreadyExists for service response error code
 	// "ExecutionAlreadyExists".
 	//
@@ -48,6 +58,13 @@ const (
 	// The maximum number of running executions has been reached. Running executions
 	// must end or be stopped before a new execution can be started.
 	ErrCodeExecutionLimitExceeded = "ExecutionLimitExceeded"
+
+	// ErrCodeExecutionNotRedrivable for service response error code
+	// "ExecutionNotRedrivable".
+	//
+	// The execution Amazon Resource Name (ARN) that you specified for executionArn
+	// cannot be redriven.
+	ErrCodeExecutionNotRedrivable = "ExecutionNotRedrivable"
 
 	// ErrCodeInvalidArn for service response error code
 	// "InvalidArn".
@@ -106,9 +123,16 @@ const (
 	// ErrCodeResourceNotFound for service response error code
 	// "ResourceNotFound".
 	//
-	// Could not find the referenced resource. Only state machine and activity ARNs
-	// are supported.
+	// Could not find the referenced resource.
 	ErrCodeResourceNotFound = "ResourceNotFound"
+
+	// ErrCodeServiceQuotaExceededException for service response error code
+	// "ServiceQuotaExceededException".
+	//
+	// The request would cause a service quota to be exceeded.
+	//
+	// HTTP Status Code: 402
+	ErrCodeServiceQuotaExceededException = "ServiceQuotaExceededException"
 
 	// ErrCodeStateMachineAlreadyExists for service response error code
 	// "StateMachineAlreadyExists".
@@ -142,10 +166,15 @@ const (
 
 	// ErrCodeTaskDoesNotExist for service response error code
 	// "TaskDoesNotExist".
+	//
+	// The activity does not exist.
 	ErrCodeTaskDoesNotExist = "TaskDoesNotExist"
 
 	// ErrCodeTaskTimedOut for service response error code
 	// "TaskTimedOut".
+	//
+	// The task token has either expired or the task associated with the token has
+	// already been closed.
 	ErrCodeTaskTimedOut = "TaskTimedOut"
 
 	// ErrCodeTooManyTags for service response error code
@@ -165,29 +194,32 @@ const (
 )
 
 var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
-	"ActivityDoesNotExist":         newErrorActivityDoesNotExist,
-	"ActivityLimitExceeded":        newErrorActivityLimitExceeded,
-	"ActivityWorkerLimitExceeded":  newErrorActivityWorkerLimitExceeded,
-	"ExecutionAlreadyExists":       newErrorExecutionAlreadyExists,
-	"ExecutionDoesNotExist":        newErrorExecutionDoesNotExist,
-	"ExecutionLimitExceeded":       newErrorExecutionLimitExceeded,
-	"InvalidArn":                   newErrorInvalidArn,
-	"InvalidDefinition":            newErrorInvalidDefinition,
-	"InvalidExecutionInput":        newErrorInvalidExecutionInput,
-	"InvalidLoggingConfiguration":  newErrorInvalidLoggingConfiguration,
-	"InvalidName":                  newErrorInvalidName,
-	"InvalidOutput":                newErrorInvalidOutput,
-	"InvalidToken":                 newErrorInvalidToken,
-	"InvalidTracingConfiguration":  newErrorInvalidTracingConfiguration,
-	"MissingRequiredParameter":     newErrorMissingRequiredParameter,
-	"ResourceNotFound":             newErrorResourceNotFound,
-	"StateMachineAlreadyExists":    newErrorStateMachineAlreadyExists,
-	"StateMachineDeleting":         newErrorStateMachineDeleting,
-	"StateMachineDoesNotExist":     newErrorStateMachineDoesNotExist,
-	"StateMachineLimitExceeded":    newErrorStateMachineLimitExceeded,
-	"StateMachineTypeNotSupported": newErrorStateMachineTypeNotSupported,
-	"TaskDoesNotExist":             newErrorTaskDoesNotExist,
-	"TaskTimedOut":                 newErrorTaskTimedOut,
-	"TooManyTags":                  newErrorTooManyTags,
-	"ValidationException":          newErrorValidationException,
+	"ActivityDoesNotExist":          newErrorActivityDoesNotExist,
+	"ActivityLimitExceeded":         newErrorActivityLimitExceeded,
+	"ActivityWorkerLimitExceeded":   newErrorActivityWorkerLimitExceeded,
+	"ConflictException":             newErrorConflictException,
+	"ExecutionAlreadyExists":        newErrorExecutionAlreadyExists,
+	"ExecutionDoesNotExist":         newErrorExecutionDoesNotExist,
+	"ExecutionLimitExceeded":        newErrorExecutionLimitExceeded,
+	"ExecutionNotRedrivable":        newErrorExecutionNotRedrivable,
+	"InvalidArn":                    newErrorInvalidArn,
+	"InvalidDefinition":             newErrorInvalidDefinition,
+	"InvalidExecutionInput":         newErrorInvalidExecutionInput,
+	"InvalidLoggingConfiguration":   newErrorInvalidLoggingConfiguration,
+	"InvalidName":                   newErrorInvalidName,
+	"InvalidOutput":                 newErrorInvalidOutput,
+	"InvalidToken":                  newErrorInvalidToken,
+	"InvalidTracingConfiguration":   newErrorInvalidTracingConfiguration,
+	"MissingRequiredParameter":      newErrorMissingRequiredParameter,
+	"ResourceNotFound":              newErrorResourceNotFound,
+	"ServiceQuotaExceededException": newErrorServiceQuotaExceededException,
+	"StateMachineAlreadyExists":     newErrorStateMachineAlreadyExists,
+	"StateMachineDeleting":          newErrorStateMachineDeleting,
+	"StateMachineDoesNotExist":      newErrorStateMachineDoesNotExist,
+	"StateMachineLimitExceeded":     newErrorStateMachineLimitExceeded,
+	"StateMachineTypeNotSupported":  newErrorStateMachineTypeNotSupported,
+	"TaskDoesNotExist":              newErrorTaskDoesNotExist,
+	"TaskTimedOut":                  newErrorTaskTimedOut,
+	"TooManyTags":                   newErrorTooManyTags,
+	"ValidationException":           newErrorValidationException,
 }

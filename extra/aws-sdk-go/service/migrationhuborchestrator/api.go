@@ -13,6 +13,98 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
+const opCreateTemplate = "CreateTemplate"
+
+// CreateTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the CreateTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateTemplate for more information on using the CreateTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateTemplateRequest method.
+//	req, resp := client.CreateTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/CreateTemplate
+func (c *MigrationHubOrchestrator) CreateTemplateRequest(input *CreateTemplateInput) (req *request.Request, output *CreateTemplateOutput) {
+	op := &request.Operation{
+		Name:       opCreateTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/template",
+	}
+
+	if input == nil {
+		input = &CreateTemplateInput{}
+	}
+
+	output = &CreateTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateTemplate API operation for AWS Migration Hub Orchestrator.
+//
+// Creates a migration workflow template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Migration Hub Orchestrator's
+// API operation CreateTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ConflictException
+//     This exception is thrown when an attempt to update or delete a resource would
+//     cause an inconsistent state.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/CreateTemplate
+func (c *MigrationHubOrchestrator) CreateTemplate(input *CreateTemplateInput) (*CreateTemplateOutput, error) {
+	req, out := c.CreateTemplateRequest(input)
+	return out, req.Send()
+}
+
+// CreateTemplateWithContext is the same as CreateTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MigrationHubOrchestrator) CreateTemplateWithContext(ctx aws.Context, input *CreateTemplateInput, opts ...request.Option) (*CreateTemplateOutput, error) {
+	req, out := c.CreateTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateWorkflow = "CreateWorkflow"
 
 // CreateWorkflowRequest generates a "aws/request.Request" representing the
@@ -29,14 +121,13 @@ const opCreateWorkflow = "CreateWorkflow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWorkflowRequest method.
+//	req, resp := client.CreateWorkflowRequest(params)
 //
-//    // Example sending a request using the CreateWorkflowRequest method.
-//    req, resp := client.CreateWorkflowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/CreateWorkflow
 func (c *MigrationHubOrchestrator) CreateWorkflowRequest(input *CreateWorkflowInput) (req *request.Request, output *CreateWorkflowOutput) {
@@ -67,17 +158,18 @@ func (c *MigrationHubOrchestrator) CreateWorkflowRequest(input *CreateWorkflowIn
 // API operation CreateWorkflow for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/CreateWorkflow
 func (c *MigrationHubOrchestrator) CreateWorkflow(input *CreateWorkflowInput) (*CreateWorkflowOutput, error) {
@@ -117,14 +209,13 @@ const opCreateWorkflowStep = "CreateWorkflowStep"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWorkflowStepRequest method.
+//	req, resp := client.CreateWorkflowStepRequest(params)
 //
-//    // Example sending a request using the CreateWorkflowStepRequest method.
-//    req, resp := client.CreateWorkflowStepRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/CreateWorkflowStep
 func (c *MigrationHubOrchestrator) CreateWorkflowStepRequest(input *CreateWorkflowStepInput) (req *request.Request, output *CreateWorkflowStepOutput) {
@@ -155,17 +246,18 @@ func (c *MigrationHubOrchestrator) CreateWorkflowStepRequest(input *CreateWorkfl
 // API operation CreateWorkflowStep for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/CreateWorkflowStep
 func (c *MigrationHubOrchestrator) CreateWorkflowStep(input *CreateWorkflowStepInput) (*CreateWorkflowStepOutput, error) {
@@ -205,14 +297,13 @@ const opCreateWorkflowStepGroup = "CreateWorkflowStepGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWorkflowStepGroupRequest method.
+//	req, resp := client.CreateWorkflowStepGroupRequest(params)
 //
-//    // Example sending a request using the CreateWorkflowStepGroupRequest method.
-//    req, resp := client.CreateWorkflowStepGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/CreateWorkflowStepGroup
 func (c *MigrationHubOrchestrator) CreateWorkflowStepGroupRequest(input *CreateWorkflowStepGroupInput) (req *request.Request, output *CreateWorkflowStepGroupOutput) {
@@ -243,17 +334,18 @@ func (c *MigrationHubOrchestrator) CreateWorkflowStepGroupRequest(input *CreateW
 // API operation CreateWorkflowStepGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/CreateWorkflowStepGroup
 func (c *MigrationHubOrchestrator) CreateWorkflowStepGroup(input *CreateWorkflowStepGroupInput) (*CreateWorkflowStepGroupOutput, error) {
@@ -277,6 +369,98 @@ func (c *MigrationHubOrchestrator) CreateWorkflowStepGroupWithContext(ctx aws.Co
 	return out, req.Send()
 }
 
+const opDeleteTemplate = "DeleteTemplate"
+
+// DeleteTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteTemplate for more information on using the DeleteTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteTemplateRequest method.
+//	req, resp := client.DeleteTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/DeleteTemplate
+func (c *MigrationHubOrchestrator) DeleteTemplateRequest(input *DeleteTemplateInput) (req *request.Request, output *DeleteTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDeleteTemplate,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/template/{id}",
+	}
+
+	if input == nil {
+		input = &DeleteTemplateInput{}
+	}
+
+	output = &DeleteTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteTemplate API operation for AWS Migration Hub Orchestrator.
+//
+// Deletes a migration workflow template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Migration Hub Orchestrator's
+// API operation DeleteTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/DeleteTemplate
+func (c *MigrationHubOrchestrator) DeleteTemplate(input *DeleteTemplateInput) (*DeleteTemplateOutput, error) {
+	req, out := c.DeleteTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DeleteTemplateWithContext is the same as DeleteTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MigrationHubOrchestrator) DeleteTemplateWithContext(ctx aws.Context, input *DeleteTemplateInput, opts ...request.Option) (*DeleteTemplateOutput, error) {
+	req, out := c.DeleteTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteWorkflow = "DeleteWorkflow"
 
 // DeleteWorkflowRequest generates a "aws/request.Request" representing the
@@ -293,14 +477,13 @@ const opDeleteWorkflow = "DeleteWorkflow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWorkflowRequest method.
+//	req, resp := client.DeleteWorkflowRequest(params)
 //
-//    // Example sending a request using the DeleteWorkflowRequest method.
-//    req, resp := client.DeleteWorkflowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/DeleteWorkflow
 func (c *MigrationHubOrchestrator) DeleteWorkflowRequest(input *DeleteWorkflowInput) (req *request.Request, output *DeleteWorkflowOutput) {
@@ -332,20 +515,21 @@ func (c *MigrationHubOrchestrator) DeleteWorkflowRequest(input *DeleteWorkflowIn
 // API operation DeleteWorkflow for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/DeleteWorkflow
 func (c *MigrationHubOrchestrator) DeleteWorkflow(input *DeleteWorkflowInput) (*DeleteWorkflowOutput, error) {
@@ -385,14 +569,13 @@ const opDeleteWorkflowStep = "DeleteWorkflowStep"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWorkflowStepRequest method.
+//	req, resp := client.DeleteWorkflowStepRequest(params)
 //
-//    // Example sending a request using the DeleteWorkflowStepRequest method.
-//    req, resp := client.DeleteWorkflowStepRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/DeleteWorkflowStep
 func (c *MigrationHubOrchestrator) DeleteWorkflowStepRequest(input *DeleteWorkflowStepInput) (req *request.Request, output *DeleteWorkflowStepOutput) {
@@ -425,20 +608,21 @@ func (c *MigrationHubOrchestrator) DeleteWorkflowStepRequest(input *DeleteWorkfl
 // API operation DeleteWorkflowStep for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/DeleteWorkflowStep
 func (c *MigrationHubOrchestrator) DeleteWorkflowStep(input *DeleteWorkflowStepInput) (*DeleteWorkflowStepOutput, error) {
@@ -478,14 +662,13 @@ const opDeleteWorkflowStepGroup = "DeleteWorkflowStepGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWorkflowStepGroupRequest method.
+//	req, resp := client.DeleteWorkflowStepGroupRequest(params)
 //
-//    // Example sending a request using the DeleteWorkflowStepGroupRequest method.
-//    req, resp := client.DeleteWorkflowStepGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/DeleteWorkflowStepGroup
 func (c *MigrationHubOrchestrator) DeleteWorkflowStepGroupRequest(input *DeleteWorkflowStepGroupInput) (req *request.Request, output *DeleteWorkflowStepGroupOutput) {
@@ -517,20 +700,21 @@ func (c *MigrationHubOrchestrator) DeleteWorkflowStepGroupRequest(input *DeleteW
 // API operation DeleteWorkflowStepGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/DeleteWorkflowStepGroup
 func (c *MigrationHubOrchestrator) DeleteWorkflowStepGroup(input *DeleteWorkflowStepGroupInput) (*DeleteWorkflowStepGroupOutput, error) {
@@ -570,14 +754,13 @@ const opGetTemplate = "GetTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTemplateRequest method.
+//	req, resp := client.GetTemplateRequest(params)
 //
-//    // Example sending a request using the GetTemplateRequest method.
-//    req, resp := client.GetTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetTemplate
 func (c *MigrationHubOrchestrator) GetTemplateRequest(input *GetTemplateInput) (req *request.Request, output *GetTemplateOutput) {
@@ -608,17 +791,18 @@ func (c *MigrationHubOrchestrator) GetTemplateRequest(input *GetTemplateInput) (
 // API operation GetTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetTemplate
 func (c *MigrationHubOrchestrator) GetTemplate(input *GetTemplateInput) (*GetTemplateOutput, error) {
@@ -658,14 +842,13 @@ const opGetTemplateStep = "GetTemplateStep"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTemplateStepRequest method.
+//	req, resp := client.GetTemplateStepRequest(params)
 //
-//    // Example sending a request using the GetTemplateStepRequest method.
-//    req, resp := client.GetTemplateStepRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetTemplateStep
 func (c *MigrationHubOrchestrator) GetTemplateStepRequest(input *GetTemplateStepInput) (req *request.Request, output *GetTemplateStepOutput) {
@@ -696,20 +879,21 @@ func (c *MigrationHubOrchestrator) GetTemplateStepRequest(input *GetTemplateStep
 // API operation GetTemplateStep for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetTemplateStep
 func (c *MigrationHubOrchestrator) GetTemplateStep(input *GetTemplateStepInput) (*GetTemplateStepOutput, error) {
@@ -749,14 +933,13 @@ const opGetTemplateStepGroup = "GetTemplateStepGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTemplateStepGroupRequest method.
+//	req, resp := client.GetTemplateStepGroupRequest(params)
 //
-//    // Example sending a request using the GetTemplateStepGroupRequest method.
-//    req, resp := client.GetTemplateStepGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetTemplateStepGroup
 func (c *MigrationHubOrchestrator) GetTemplateStepGroupRequest(input *GetTemplateStepGroupInput) (req *request.Request, output *GetTemplateStepGroupOutput) {
@@ -787,20 +970,21 @@ func (c *MigrationHubOrchestrator) GetTemplateStepGroupRequest(input *GetTemplat
 // API operation GetTemplateStepGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetTemplateStepGroup
 func (c *MigrationHubOrchestrator) GetTemplateStepGroup(input *GetTemplateStepGroupInput) (*GetTemplateStepGroupOutput, error) {
@@ -840,14 +1024,13 @@ const opGetWorkflow = "GetWorkflow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetWorkflowRequest method.
+//	req, resp := client.GetWorkflowRequest(params)
 //
-//    // Example sending a request using the GetWorkflowRequest method.
-//    req, resp := client.GetWorkflowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetWorkflow
 func (c *MigrationHubOrchestrator) GetWorkflowRequest(input *GetWorkflowInput) (req *request.Request, output *GetWorkflowOutput) {
@@ -878,20 +1061,21 @@ func (c *MigrationHubOrchestrator) GetWorkflowRequest(input *GetWorkflowInput) (
 // API operation GetWorkflow for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetWorkflow
 func (c *MigrationHubOrchestrator) GetWorkflow(input *GetWorkflowInput) (*GetWorkflowOutput, error) {
@@ -931,14 +1115,13 @@ const opGetWorkflowStep = "GetWorkflowStep"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetWorkflowStepRequest method.
+//	req, resp := client.GetWorkflowStepRequest(params)
 //
-//    // Example sending a request using the GetWorkflowStepRequest method.
-//    req, resp := client.GetWorkflowStepRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetWorkflowStep
 func (c *MigrationHubOrchestrator) GetWorkflowStepRequest(input *GetWorkflowStepInput) (req *request.Request, output *GetWorkflowStepOutput) {
@@ -969,17 +1152,18 @@ func (c *MigrationHubOrchestrator) GetWorkflowStepRequest(input *GetWorkflowStep
 // API operation GetWorkflowStep for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetWorkflowStep
 func (c *MigrationHubOrchestrator) GetWorkflowStep(input *GetWorkflowStepInput) (*GetWorkflowStepOutput, error) {
@@ -1019,14 +1203,13 @@ const opGetWorkflowStepGroup = "GetWorkflowStepGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetWorkflowStepGroupRequest method.
+//	req, resp := client.GetWorkflowStepGroupRequest(params)
 //
-//    // Example sending a request using the GetWorkflowStepGroupRequest method.
-//    req, resp := client.GetWorkflowStepGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetWorkflowStepGroup
 func (c *MigrationHubOrchestrator) GetWorkflowStepGroupRequest(input *GetWorkflowStepGroupInput) (req *request.Request, output *GetWorkflowStepGroupOutput) {
@@ -1057,20 +1240,21 @@ func (c *MigrationHubOrchestrator) GetWorkflowStepGroupRequest(input *GetWorkflo
 // API operation GetWorkflowStepGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/GetWorkflowStepGroup
 func (c *MigrationHubOrchestrator) GetWorkflowStepGroup(input *GetWorkflowStepGroupInput) (*GetWorkflowStepGroupOutput, error) {
@@ -1110,14 +1294,13 @@ const opListPlugins = "ListPlugins"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPluginsRequest method.
+//	req, resp := client.ListPluginsRequest(params)
 //
-//    // Example sending a request using the ListPluginsRequest method.
-//    req, resp := client.ListPluginsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListPlugins
 func (c *MigrationHubOrchestrator) ListPluginsRequest(input *ListPluginsInput) (req *request.Request, output *ListPluginsOutput) {
@@ -1154,14 +1337,15 @@ func (c *MigrationHubOrchestrator) ListPluginsRequest(input *ListPluginsInput) (
 // API operation ListPlugins for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListPlugins
 func (c *MigrationHubOrchestrator) ListPlugins(input *ListPluginsInput) (*ListPluginsOutput, error) {
@@ -1193,15 +1377,14 @@ func (c *MigrationHubOrchestrator) ListPluginsWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPlugins operation.
-//    pageNum := 0
-//    err := client.ListPluginsPages(params,
-//        func(page *migrationhuborchestrator.ListPluginsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPlugins operation.
+//	pageNum := 0
+//	err := client.ListPluginsPages(params,
+//	    func(page *migrationhuborchestrator.ListPluginsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubOrchestrator) ListPluginsPages(input *ListPluginsInput, fn func(*ListPluginsOutput, bool) bool) error {
 	return c.ListPluginsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1253,14 +1436,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListTagsForResource
 func (c *MigrationHubOrchestrator) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1291,11 +1473,12 @@ func (c *MigrationHubOrchestrator) ListTagsForResourceRequest(input *ListTagsFor
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListTagsForResource
 func (c *MigrationHubOrchestrator) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1335,14 +1518,13 @@ const opListTemplateStepGroups = "ListTemplateStepGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTemplateStepGroupsRequest method.
+//	req, resp := client.ListTemplateStepGroupsRequest(params)
 //
-//    // Example sending a request using the ListTemplateStepGroupsRequest method.
-//    req, resp := client.ListTemplateStepGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListTemplateStepGroups
 func (c *MigrationHubOrchestrator) ListTemplateStepGroupsRequest(input *ListTemplateStepGroupsInput) (req *request.Request, output *ListTemplateStepGroupsOutput) {
@@ -1379,17 +1561,18 @@ func (c *MigrationHubOrchestrator) ListTemplateStepGroupsRequest(input *ListTemp
 // API operation ListTemplateStepGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListTemplateStepGroups
 func (c *MigrationHubOrchestrator) ListTemplateStepGroups(input *ListTemplateStepGroupsInput) (*ListTemplateStepGroupsOutput, error) {
@@ -1421,15 +1604,14 @@ func (c *MigrationHubOrchestrator) ListTemplateStepGroupsWithContext(ctx aws.Con
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTemplateStepGroups operation.
-//    pageNum := 0
-//    err := client.ListTemplateStepGroupsPages(params,
-//        func(page *migrationhuborchestrator.ListTemplateStepGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTemplateStepGroups operation.
+//	pageNum := 0
+//	err := client.ListTemplateStepGroupsPages(params,
+//	    func(page *migrationhuborchestrator.ListTemplateStepGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubOrchestrator) ListTemplateStepGroupsPages(input *ListTemplateStepGroupsInput, fn func(*ListTemplateStepGroupsOutput, bool) bool) error {
 	return c.ListTemplateStepGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1481,14 +1663,13 @@ const opListTemplateSteps = "ListTemplateSteps"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTemplateStepsRequest method.
+//	req, resp := client.ListTemplateStepsRequest(params)
 //
-//    // Example sending a request using the ListTemplateStepsRequest method.
-//    req, resp := client.ListTemplateStepsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListTemplateSteps
 func (c *MigrationHubOrchestrator) ListTemplateStepsRequest(input *ListTemplateStepsInput) (req *request.Request, output *ListTemplateStepsOutput) {
@@ -1525,20 +1706,21 @@ func (c *MigrationHubOrchestrator) ListTemplateStepsRequest(input *ListTemplateS
 // API operation ListTemplateSteps for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListTemplateSteps
 func (c *MigrationHubOrchestrator) ListTemplateSteps(input *ListTemplateStepsInput) (*ListTemplateStepsOutput, error) {
@@ -1570,15 +1752,14 @@ func (c *MigrationHubOrchestrator) ListTemplateStepsWithContext(ctx aws.Context,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTemplateSteps operation.
-//    pageNum := 0
-//    err := client.ListTemplateStepsPages(params,
-//        func(page *migrationhuborchestrator.ListTemplateStepsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTemplateSteps operation.
+//	pageNum := 0
+//	err := client.ListTemplateStepsPages(params,
+//	    func(page *migrationhuborchestrator.ListTemplateStepsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubOrchestrator) ListTemplateStepsPages(input *ListTemplateStepsInput, fn func(*ListTemplateStepsOutput, bool) bool) error {
 	return c.ListTemplateStepsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1630,14 +1811,13 @@ const opListTemplates = "ListTemplates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTemplatesRequest method.
+//	req, resp := client.ListTemplatesRequest(params)
 //
-//    // Example sending a request using the ListTemplatesRequest method.
-//    req, resp := client.ListTemplatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListTemplates
 func (c *MigrationHubOrchestrator) ListTemplatesRequest(input *ListTemplatesInput) (req *request.Request, output *ListTemplatesOutput) {
@@ -1675,14 +1855,15 @@ func (c *MigrationHubOrchestrator) ListTemplatesRequest(input *ListTemplatesInpu
 // API operation ListTemplates for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListTemplates
 func (c *MigrationHubOrchestrator) ListTemplates(input *ListTemplatesInput) (*ListTemplatesOutput, error) {
@@ -1714,15 +1895,14 @@ func (c *MigrationHubOrchestrator) ListTemplatesWithContext(ctx aws.Context, inp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTemplates operation.
-//    pageNum := 0
-//    err := client.ListTemplatesPages(params,
-//        func(page *migrationhuborchestrator.ListTemplatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTemplates operation.
+//	pageNum := 0
+//	err := client.ListTemplatesPages(params,
+//	    func(page *migrationhuborchestrator.ListTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubOrchestrator) ListTemplatesPages(input *ListTemplatesInput, fn func(*ListTemplatesOutput, bool) bool) error {
 	return c.ListTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1774,14 +1954,13 @@ const opListWorkflowStepGroups = "ListWorkflowStepGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWorkflowStepGroupsRequest method.
+//	req, resp := client.ListWorkflowStepGroupsRequest(params)
 //
-//    // Example sending a request using the ListWorkflowStepGroupsRequest method.
-//    req, resp := client.ListWorkflowStepGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListWorkflowStepGroups
 func (c *MigrationHubOrchestrator) ListWorkflowStepGroupsRequest(input *ListWorkflowStepGroupsInput) (req *request.Request, output *ListWorkflowStepGroupsOutput) {
@@ -1818,20 +1997,21 @@ func (c *MigrationHubOrchestrator) ListWorkflowStepGroupsRequest(input *ListWork
 // API operation ListWorkflowStepGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListWorkflowStepGroups
 func (c *MigrationHubOrchestrator) ListWorkflowStepGroups(input *ListWorkflowStepGroupsInput) (*ListWorkflowStepGroupsOutput, error) {
@@ -1863,15 +2043,14 @@ func (c *MigrationHubOrchestrator) ListWorkflowStepGroupsWithContext(ctx aws.Con
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWorkflowStepGroups operation.
-//    pageNum := 0
-//    err := client.ListWorkflowStepGroupsPages(params,
-//        func(page *migrationhuborchestrator.ListWorkflowStepGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWorkflowStepGroups operation.
+//	pageNum := 0
+//	err := client.ListWorkflowStepGroupsPages(params,
+//	    func(page *migrationhuborchestrator.ListWorkflowStepGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubOrchestrator) ListWorkflowStepGroupsPages(input *ListWorkflowStepGroupsInput, fn func(*ListWorkflowStepGroupsOutput, bool) bool) error {
 	return c.ListWorkflowStepGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1923,14 +2102,13 @@ const opListWorkflowSteps = "ListWorkflowSteps"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWorkflowStepsRequest method.
+//	req, resp := client.ListWorkflowStepsRequest(params)
 //
-//    // Example sending a request using the ListWorkflowStepsRequest method.
-//    req, resp := client.ListWorkflowStepsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListWorkflowSteps
 func (c *MigrationHubOrchestrator) ListWorkflowStepsRequest(input *ListWorkflowStepsInput) (req *request.Request, output *ListWorkflowStepsOutput) {
@@ -1967,17 +2145,18 @@ func (c *MigrationHubOrchestrator) ListWorkflowStepsRequest(input *ListWorkflowS
 // API operation ListWorkflowSteps for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListWorkflowSteps
 func (c *MigrationHubOrchestrator) ListWorkflowSteps(input *ListWorkflowStepsInput) (*ListWorkflowStepsOutput, error) {
@@ -2009,15 +2188,14 @@ func (c *MigrationHubOrchestrator) ListWorkflowStepsWithContext(ctx aws.Context,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWorkflowSteps operation.
-//    pageNum := 0
-//    err := client.ListWorkflowStepsPages(params,
-//        func(page *migrationhuborchestrator.ListWorkflowStepsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWorkflowSteps operation.
+//	pageNum := 0
+//	err := client.ListWorkflowStepsPages(params,
+//	    func(page *migrationhuborchestrator.ListWorkflowStepsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubOrchestrator) ListWorkflowStepsPages(input *ListWorkflowStepsInput, fn func(*ListWorkflowStepsOutput, bool) bool) error {
 	return c.ListWorkflowStepsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2069,14 +2247,13 @@ const opListWorkflows = "ListWorkflows"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWorkflowsRequest method.
+//	req, resp := client.ListWorkflowsRequest(params)
 //
-//    // Example sending a request using the ListWorkflowsRequest method.
-//    req, resp := client.ListWorkflowsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListWorkflows
 func (c *MigrationHubOrchestrator) ListWorkflowsRequest(input *ListWorkflowsInput) (req *request.Request, output *ListWorkflowsOutput) {
@@ -2113,20 +2290,21 @@ func (c *MigrationHubOrchestrator) ListWorkflowsRequest(input *ListWorkflowsInpu
 // API operation ListWorkflows for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/ListWorkflows
 func (c *MigrationHubOrchestrator) ListWorkflows(input *ListWorkflowsInput) (*ListWorkflowsOutput, error) {
@@ -2158,15 +2336,14 @@ func (c *MigrationHubOrchestrator) ListWorkflowsWithContext(ctx aws.Context, inp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWorkflows operation.
-//    pageNum := 0
-//    err := client.ListWorkflowsPages(params,
-//        func(page *migrationhuborchestrator.ListWorkflowsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWorkflows operation.
+//	pageNum := 0
+//	err := client.ListWorkflowsPages(params,
+//	    func(page *migrationhuborchestrator.ListWorkflowsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubOrchestrator) ListWorkflowsPages(input *ListWorkflowsInput, fn func(*ListWorkflowsOutput, bool) bool) error {
 	return c.ListWorkflowsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2218,14 +2395,13 @@ const opRetryWorkflowStep = "RetryWorkflowStep"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RetryWorkflowStepRequest method.
+//	req, resp := client.RetryWorkflowStepRequest(params)
 //
-//    // Example sending a request using the RetryWorkflowStepRequest method.
-//    req, resp := client.RetryWorkflowStepRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/RetryWorkflowStep
 func (c *MigrationHubOrchestrator) RetryWorkflowStepRequest(input *RetryWorkflowStepInput) (req *request.Request, output *RetryWorkflowStepOutput) {
@@ -2256,17 +2432,18 @@ func (c *MigrationHubOrchestrator) RetryWorkflowStepRequest(input *RetryWorkflow
 // API operation RetryWorkflowStep for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/RetryWorkflowStep
 func (c *MigrationHubOrchestrator) RetryWorkflowStep(input *RetryWorkflowStepInput) (*RetryWorkflowStepOutput, error) {
@@ -2306,14 +2483,13 @@ const opStartWorkflow = "StartWorkflow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartWorkflowRequest method.
+//	req, resp := client.StartWorkflowRequest(params)
 //
-//    // Example sending a request using the StartWorkflowRequest method.
-//    req, resp := client.StartWorkflowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/StartWorkflow
 func (c *MigrationHubOrchestrator) StartWorkflowRequest(input *StartWorkflowInput) (req *request.Request, output *StartWorkflowOutput) {
@@ -2344,20 +2520,21 @@ func (c *MigrationHubOrchestrator) StartWorkflowRequest(input *StartWorkflowInpu
 // API operation StartWorkflow for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/StartWorkflow
 func (c *MigrationHubOrchestrator) StartWorkflow(input *StartWorkflowInput) (*StartWorkflowOutput, error) {
@@ -2397,14 +2574,13 @@ const opStopWorkflow = "StopWorkflow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopWorkflowRequest method.
+//	req, resp := client.StopWorkflowRequest(params)
 //
-//    // Example sending a request using the StopWorkflowRequest method.
-//    req, resp := client.StopWorkflowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/StopWorkflow
 func (c *MigrationHubOrchestrator) StopWorkflowRequest(input *StopWorkflowInput) (req *request.Request, output *StopWorkflowOutput) {
@@ -2435,20 +2611,21 @@ func (c *MigrationHubOrchestrator) StopWorkflowRequest(input *StopWorkflowInput)
 // API operation StopWorkflow for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/StopWorkflow
 func (c *MigrationHubOrchestrator) StopWorkflow(input *StopWorkflowInput) (*StopWorkflowOutput, error) {
@@ -2488,14 +2665,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/TagResource
 func (c *MigrationHubOrchestrator) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2527,11 +2703,12 @@ func (c *MigrationHubOrchestrator) TagResourceRequest(input *TagResourceInput) (
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/TagResource
 func (c *MigrationHubOrchestrator) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2571,14 +2748,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/UntagResource
 func (c *MigrationHubOrchestrator) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2610,11 +2786,12 @@ func (c *MigrationHubOrchestrator) UntagResourceRequest(input *UntagResourceInpu
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/UntagResource
 func (c *MigrationHubOrchestrator) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2638,6 +2815,97 @@ func (c *MigrationHubOrchestrator) UntagResourceWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
+const opUpdateTemplate = "UpdateTemplate"
+
+// UpdateTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateTemplate for more information on using the UpdateTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateTemplateRequest method.
+//	req, resp := client.UpdateTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/UpdateTemplate
+func (c *MigrationHubOrchestrator) UpdateTemplateRequest(input *UpdateTemplateInput) (req *request.Request, output *UpdateTemplateOutput) {
+	op := &request.Operation{
+		Name:       opUpdateTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/template/{id}",
+	}
+
+	if input == nil {
+		input = &UpdateTemplateInput{}
+	}
+
+	output = &UpdateTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateTemplate API operation for AWS Migration Hub Orchestrator.
+//
+// Updates a migration workflow template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Migration Hub Orchestrator's
+// API operation UpdateTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/UpdateTemplate
+func (c *MigrationHubOrchestrator) UpdateTemplate(input *UpdateTemplateInput) (*UpdateTemplateOutput, error) {
+	req, out := c.UpdateTemplateRequest(input)
+	return out, req.Send()
+}
+
+// UpdateTemplateWithContext is the same as UpdateTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MigrationHubOrchestrator) UpdateTemplateWithContext(ctx aws.Context, input *UpdateTemplateInput, opts ...request.Option) (*UpdateTemplateOutput, error) {
+	req, out := c.UpdateTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateWorkflow = "UpdateWorkflow"
 
 // UpdateWorkflowRequest generates a "aws/request.Request" representing the
@@ -2654,14 +2922,13 @@ const opUpdateWorkflow = "UpdateWorkflow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateWorkflowRequest method.
+//	req, resp := client.UpdateWorkflowRequest(params)
 //
-//    // Example sending a request using the UpdateWorkflowRequest method.
-//    req, resp := client.UpdateWorkflowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/UpdateWorkflow
 func (c *MigrationHubOrchestrator) UpdateWorkflowRequest(input *UpdateWorkflowInput) (req *request.Request, output *UpdateWorkflowOutput) {
@@ -2692,20 +2959,21 @@ func (c *MigrationHubOrchestrator) UpdateWorkflowRequest(input *UpdateWorkflowIn
 // API operation UpdateWorkflow for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/UpdateWorkflow
 func (c *MigrationHubOrchestrator) UpdateWorkflow(input *UpdateWorkflowInput) (*UpdateWorkflowOutput, error) {
@@ -2745,14 +3013,13 @@ const opUpdateWorkflowStep = "UpdateWorkflowStep"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateWorkflowStepRequest method.
+//	req, resp := client.UpdateWorkflowStepRequest(params)
 //
-//    // Example sending a request using the UpdateWorkflowStepRequest method.
-//    req, resp := client.UpdateWorkflowStepRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/UpdateWorkflowStep
 func (c *MigrationHubOrchestrator) UpdateWorkflowStepRequest(input *UpdateWorkflowStepInput) (req *request.Request, output *UpdateWorkflowStepOutput) {
@@ -2783,17 +3050,18 @@ func (c *MigrationHubOrchestrator) UpdateWorkflowStepRequest(input *UpdateWorkfl
 // API operation UpdateWorkflowStep for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/UpdateWorkflowStep
 func (c *MigrationHubOrchestrator) UpdateWorkflowStep(input *UpdateWorkflowStepInput) (*UpdateWorkflowStepOutput, error) {
@@ -2833,14 +3101,13 @@ const opUpdateWorkflowStepGroup = "UpdateWorkflowStepGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateWorkflowStepGroupRequest method.
+//	req, resp := client.UpdateWorkflowStepGroupRequest(params)
 //
-//    // Example sending a request using the UpdateWorkflowStepGroupRequest method.
-//    req, resp := client.UpdateWorkflowStepGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/UpdateWorkflowStepGroup
 func (c *MigrationHubOrchestrator) UpdateWorkflowStepGroupRequest(input *UpdateWorkflowStepGroupInput) (req *request.Request, output *UpdateWorkflowStepGroupOutput) {
@@ -2871,20 +3138,21 @@ func (c *MigrationHubOrchestrator) UpdateWorkflowStepGroupRequest(input *UpdateW
 // API operation UpdateWorkflowStepGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - InternalServerException
+//     An internal error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource is not available.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28/UpdateWorkflowStepGroup
 func (c *MigrationHubOrchestrator) UpdateWorkflowStepGroup(input *UpdateWorkflowStepGroupInput) (*UpdateWorkflowStepGroupOutput, error) {
@@ -2972,14 +3240,229 @@ func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// This exception is thrown when an attempt to update or delete a resource would
+// cause an inconsistent state.
+type ConflictException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictException) GoString() string {
+	return s.String()
+}
+
+func newErrorConflictException(v protocol.ResponseMetadata) error {
+	return &ConflictException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ConflictException) Code() string {
+	return "ConflictException"
+}
+
+// Message returns the exception's message.
+func (s *ConflictException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ConflictException) OrigErr() error {
+	return nil
+}
+
+func (s *ConflictException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ConflictException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ConflictException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type CreateTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request. For more information, see Idempotency (https://smithy.io/2.0/spec/behavior-traits.html#idempotencytoken-trait)
+	// in the Smithy documentation.
+	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The tags to add to the migration workflow template.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// A description of the migration workflow template.
+	TemplateDescription *string `locationName:"templateDescription" type:"string"`
+
+	// The name of the migration workflow template.
+	//
+	// TemplateName is a required field
+	TemplateName *string `locationName:"templateName" min:"1" type:"string" required:"true"`
+
+	// The source of the migration workflow template.
+	//
+	// TemplateSource is a required field
+	TemplateSource *TemplateSource `locationName:"templateSource" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateTemplateInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+	if s.TemplateSource == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateSource"))
+	}
+	if s.TemplateSource != nil {
+		if err := s.TemplateSource.Validate(); err != nil {
+			invalidParams.AddNested("TemplateSource", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateTemplateInput) SetClientToken(v string) *CreateTemplateInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateTemplateInput) SetTags(v map[string]*string) *CreateTemplateInput {
+	s.Tags = v
+	return s
+}
+
+// SetTemplateDescription sets the TemplateDescription field's value.
+func (s *CreateTemplateInput) SetTemplateDescription(v string) *CreateTemplateInput {
+	s.TemplateDescription = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *CreateTemplateInput) SetTemplateName(v string) *CreateTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+// SetTemplateSource sets the TemplateSource field's value.
+func (s *CreateTemplateInput) SetTemplateSource(v *TemplateSource) *CreateTemplateInput {
+	s.TemplateSource = v
+	return s
+}
+
+type CreateTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The tags added to the migration workflow template.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The Amazon Resource Name (ARN) of the migration workflow template. The format
+	// for an Migration Hub Orchestrator template ARN is arn:aws:migrationhub-orchestrator:region:account:template/template-abcd1234.
+	// For more information about ARNs, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html)
+	// in the AWS General Reference.
+	TemplateArn *string `locationName:"templateArn" type:"string"`
+
+	// The ID of the migration workflow template.
+	TemplateId *string `locationName:"templateId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateTemplateOutput) SetTags(v map[string]*string) *CreateTemplateOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *CreateTemplateOutput) SetTemplateArn(v string) *CreateTemplateOutput {
+	s.TemplateArn = &v
+	return s
+}
+
+// SetTemplateId sets the TemplateId field's value.
+func (s *CreateTemplateOutput) SetTemplateId(v string) *CreateTemplateOutput {
+	s.TemplateId = &v
+	return s
+}
+
 type CreateWorkflowInput struct {
 	_ struct{} `type:"structure"`
 
 	// The configuration ID of the application configured in Application Discovery
 	// Service.
-	//
-	// ApplicationConfigurationId is a required field
-	ApplicationConfigurationId *string `locationName:"applicationConfigurationId" min:"1" type:"string" required:"true"`
+	ApplicationConfigurationId *string `locationName:"applicationConfigurationId" type:"string"`
 
 	// The description of the migration workflow.
 	Description *string `locationName:"description" type:"string"`
@@ -3031,12 +3514,6 @@ func (s CreateWorkflowInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateWorkflowInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateWorkflowInput"}
-	if s.ApplicationConfigurationId == nil {
-		invalidParams.Add(request.NewErrParamRequired("ApplicationConfigurationId"))
-	}
-	if s.ApplicationConfigurationId != nil && len(*s.ApplicationConfigurationId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("ApplicationConfigurationId", 1))
-	}
 	if s.InputParameters == nil {
 		invalidParams.Add(request.NewErrParamRequired("InputParameters"))
 	}
@@ -3634,6 +4111,77 @@ func (s *CreateWorkflowStepOutput) SetWorkflowId(v string) *CreateWorkflowStepOu
 	return s
 }
 
+type DeleteTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID of the request to delete a migration workflow template.
+	//
+	// Id is a required field
+	Id *string `location:"uri" locationName:"id" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteTemplateInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DeleteTemplateInput) SetId(v string) *DeleteTemplateInput {
+	s.Id = &v
+	return s
+}
+
+type DeleteTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTemplateOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteWorkflowInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -3992,8 +4540,39 @@ type GetTemplateOutput struct {
 	// The name of the template.
 	Name *string `locationName:"name" type:"string"`
 
+	// The owner of the migration workflow template.
+	Owner *string `locationName:"owner" type:"string"`
+
 	// The status of the template.
 	Status *string `locationName:"status" type:"string" enum:"TemplateStatus"`
+
+	// The status message of retrieving migration workflow templates.
+	StatusMessage *string `locationName:"statusMessage" type:"string"`
+
+	// The tags added to the migration workflow template.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// >The Amazon Resource Name (ARN) of the migration workflow template. The format
+	// for an Migration Hub Orchestrator template ARN is arn:aws:migrationhub-orchestrator:region:account:template/template-abcd1234.
+	// For more information about ARNs, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html)
+	// in the AWS General Reference.
+	TemplateArn *string `locationName:"templateArn" type:"string"`
+
+	// The class of the migration workflow template. The available template classes
+	// are:
+	//
+	//    * A2C
+	//
+	//    * MGN
+	//
+	//    * SAP_MULTI
+	//
+	//    * SQL_EC2
+	//
+	//    * SQL_RDS
+	//
+	//    * VMIE
+	TemplateClass *string `locationName:"templateClass" type:"string"`
 
 	// List of AWS services utilized in a migration workflow.
 	Tools []*Tool `locationName:"tools" type:"list"`
@@ -4047,9 +4626,39 @@ func (s *GetTemplateOutput) SetName(v string) *GetTemplateOutput {
 	return s
 }
 
+// SetOwner sets the Owner field's value.
+func (s *GetTemplateOutput) SetOwner(v string) *GetTemplateOutput {
+	s.Owner = &v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *GetTemplateOutput) SetStatus(v string) *GetTemplateOutput {
 	s.Status = &v
+	return s
+}
+
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *GetTemplateOutput) SetStatusMessage(v string) *GetTemplateOutput {
+	s.StatusMessage = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetTemplateOutput) SetTags(v map[string]*string) *GetTemplateOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *GetTemplateOutput) SetTemplateArn(v string) *GetTemplateOutput {
+	s.TemplateArn = &v
+	return s
+}
+
+// SetTemplateClass sets the TemplateClass field's value.
+func (s *GetTemplateOutput) SetTemplateClass(v string) *GetTemplateOutput {
+	s.TemplateClass = &v
 	return s
 }
 
@@ -4902,7 +5511,7 @@ type GetWorkflowStepInput struct {
 	// Id is a required field
 	Id *string `location:"uri" locationName:"id" min:"1" type:"string" required:"true"`
 
-	// desThe ID of the step group.
+	// The ID of the step group.
 	//
 	// StepGroupId is a required field
 	StepGroupId *string `location:"querystring" locationName:"stepGroupId" min:"1" type:"string" required:"true"`
@@ -7142,6 +7751,51 @@ func (s *TemplateInput_) SetRequired(v bool) *TemplateInput_ {
 	return s
 }
 
+// The migration workflow template used as the source for the new template.
+type TemplateSource struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the workflow from the source migration workflow template.
+	WorkflowId *string `locationName:"workflowId" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TemplateSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TemplateSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TemplateSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TemplateSource"}
+	if s.WorkflowId != nil && len(*s.WorkflowId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkflowId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetWorkflowId sets the WorkflowId field's value.
+func (s *TemplateSource) SetWorkflowId(v string) *TemplateSource {
+	s.WorkflowId = &v
+	return s
+}
+
 // The summary of the step group in the template.
 type TemplateStepGroupSummary struct {
 	_ struct{} `type:"structure"`
@@ -7554,6 +8208,141 @@ func (s UntagResourceOutput) String() string {
 // value will be replaced with "sensitive".
 func (s UntagResourceOutput) GoString() string {
 	return s.String()
+}
+
+type UpdateTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The ID of the request to update a migration workflow template.
+	//
+	// Id is a required field
+	Id *string `location:"uri" locationName:"id" min:"1" type:"string" required:"true"`
+
+	// The description of the migration workflow template to update.
+	TemplateDescription *string `locationName:"templateDescription" type:"string"`
+
+	// The name of the migration workflow template to update.
+	TemplateName *string `locationName:"templateName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateTemplateInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *UpdateTemplateInput) SetClientToken(v string) *UpdateTemplateInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateTemplateInput) SetId(v string) *UpdateTemplateInput {
+	s.Id = &v
+	return s
+}
+
+// SetTemplateDescription sets the TemplateDescription field's value.
+func (s *UpdateTemplateInput) SetTemplateDescription(v string) *UpdateTemplateInput {
+	s.TemplateDescription = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *UpdateTemplateInput) SetTemplateName(v string) *UpdateTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+type UpdateTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The tags added to the migration workflow template.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The ARN of the migration workflow template being updated. The format for
+	// an Migration Hub Orchestrator template ARN is arn:aws:migrationhub-orchestrator:region:account:template/template-abcd1234.
+	// For more information about ARNs, see Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html)
+	// in the AWS General Reference.
+	TemplateArn *string `locationName:"templateArn" type:"string"`
+
+	// The ID of the migration workflow template being updated.
+	TemplateId *string `locationName:"templateId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateTemplateOutput) SetTags(v map[string]*string) *UpdateTemplateOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *UpdateTemplateOutput) SetTemplateArn(v string) *UpdateTemplateOutput {
+	s.TemplateArn = &v
+	return s
+}
+
+// SetTemplateId sets the TemplateId field's value.
+func (s *UpdateTemplateOutput) SetTemplateId(v string) *UpdateTemplateOutput {
+	s.TemplateId = &v
+	return s
 }
 
 type UpdateWorkflowInput struct {
@@ -8885,6 +9674,9 @@ const (
 	// StepStatusAwaitingDependencies is a StepStatus enum value
 	StepStatusAwaitingDependencies = "AWAITING_DEPENDENCIES"
 
+	// StepStatusSkipped is a StepStatus enum value
+	StepStatusSkipped = "SKIPPED"
+
 	// StepStatusReady is a StepStatus enum value
 	StepStatusReady = "READY"
 
@@ -8908,6 +9700,7 @@ const (
 func StepStatus_Values() []string {
 	return []string{
 		StepStatusAwaitingDependencies,
+		StepStatusSkipped,
 		StepStatusReady,
 		StepStatusInProgress,
 		StepStatusCompleted,
@@ -8940,11 +9733,27 @@ func TargetType_Values() []string {
 const (
 	// TemplateStatusCreated is a TemplateStatus enum value
 	TemplateStatusCreated = "CREATED"
+
+	// TemplateStatusReady is a TemplateStatus enum value
+	TemplateStatusReady = "READY"
+
+	// TemplateStatusPendingCreation is a TemplateStatus enum value
+	TemplateStatusPendingCreation = "PENDING_CREATION"
+
+	// TemplateStatusCreating is a TemplateStatus enum value
+	TemplateStatusCreating = "CREATING"
+
+	// TemplateStatusCreationFailed is a TemplateStatus enum value
+	TemplateStatusCreationFailed = "CREATION_FAILED"
 )
 
 // TemplateStatus_Values returns all elements of the TemplateStatus enum
 func TemplateStatus_Values() []string {
 	return []string{
 		TemplateStatusCreated,
+		TemplateStatusReady,
+		TemplateStatusPendingCreation,
+		TemplateStatusCreating,
+		TemplateStatusCreationFailed,
 	}
 }

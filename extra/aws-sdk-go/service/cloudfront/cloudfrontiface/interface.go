@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon CloudFront.
-//    func myFunc(svc cloudfrontiface.CloudFrontAPI) bool {
-//        // Make svc.AssociateAlias request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon CloudFront.
+//	func myFunc(svc cloudfrontiface.CloudFrontAPI) bool {
+//	    // Make svc.AssociateAlias request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := cloudfront.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := cloudfront.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockCloudFrontClient struct {
-//        cloudfrontiface.CloudFrontAPI
-//    }
-//    func (m *mockCloudFrontClient) AssociateAlias(input *cloudfront.AssociateAliasInput) (*cloudfront.AssociateAliasOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockCloudFrontClient struct {
+//	    cloudfrontiface.CloudFrontAPI
+//	}
+//	func (m *mockCloudFrontClient) AssociateAlias(input *cloudfront.AssociateAliasInput) (*cloudfront.AssociateAliasOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockCloudFrontClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockCloudFrontClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -107,6 +107,10 @@ type CloudFrontAPI interface {
 	CreateKeyGroup(*cloudfront.CreateKeyGroupInput) (*cloudfront.CreateKeyGroupOutput, error)
 	CreateKeyGroupWithContext(aws.Context, *cloudfront.CreateKeyGroupInput, ...request.Option) (*cloudfront.CreateKeyGroupOutput, error)
 	CreateKeyGroupRequest(*cloudfront.CreateKeyGroupInput) (*request.Request, *cloudfront.CreateKeyGroupOutput)
+
+	CreateKeyValueStore(*cloudfront.CreateKeyValueStoreInput) (*cloudfront.CreateKeyValueStoreOutput, error)
+	CreateKeyValueStoreWithContext(aws.Context, *cloudfront.CreateKeyValueStoreInput, ...request.Option) (*cloudfront.CreateKeyValueStoreOutput, error)
+	CreateKeyValueStoreRequest(*cloudfront.CreateKeyValueStoreInput) (*request.Request, *cloudfront.CreateKeyValueStoreOutput)
 
 	CreateMonitoringSubscription(*cloudfront.CreateMonitoringSubscriptionInput) (*cloudfront.CreateMonitoringSubscriptionOutput, error)
 	CreateMonitoringSubscriptionWithContext(aws.Context, *cloudfront.CreateMonitoringSubscriptionInput, ...request.Option) (*cloudfront.CreateMonitoringSubscriptionOutput, error)
@@ -172,6 +176,10 @@ type CloudFrontAPI interface {
 	DeleteKeyGroupWithContext(aws.Context, *cloudfront.DeleteKeyGroupInput, ...request.Option) (*cloudfront.DeleteKeyGroupOutput, error)
 	DeleteKeyGroupRequest(*cloudfront.DeleteKeyGroupInput) (*request.Request, *cloudfront.DeleteKeyGroupOutput)
 
+	DeleteKeyValueStore(*cloudfront.DeleteKeyValueStoreInput) (*cloudfront.DeleteKeyValueStoreOutput, error)
+	DeleteKeyValueStoreWithContext(aws.Context, *cloudfront.DeleteKeyValueStoreInput, ...request.Option) (*cloudfront.DeleteKeyValueStoreOutput, error)
+	DeleteKeyValueStoreRequest(*cloudfront.DeleteKeyValueStoreInput) (*request.Request, *cloudfront.DeleteKeyValueStoreOutput)
+
 	DeleteMonitoringSubscription(*cloudfront.DeleteMonitoringSubscriptionInput) (*cloudfront.DeleteMonitoringSubscriptionOutput, error)
 	DeleteMonitoringSubscriptionWithContext(aws.Context, *cloudfront.DeleteMonitoringSubscriptionInput, ...request.Option) (*cloudfront.DeleteMonitoringSubscriptionOutput, error)
 	DeleteMonitoringSubscriptionRequest(*cloudfront.DeleteMonitoringSubscriptionInput) (*request.Request, *cloudfront.DeleteMonitoringSubscriptionOutput)
@@ -203,6 +211,10 @@ type CloudFrontAPI interface {
 	DescribeFunction(*cloudfront.DescribeFunctionInput) (*cloudfront.DescribeFunctionOutput, error)
 	DescribeFunctionWithContext(aws.Context, *cloudfront.DescribeFunctionInput, ...request.Option) (*cloudfront.DescribeFunctionOutput, error)
 	DescribeFunctionRequest(*cloudfront.DescribeFunctionInput) (*request.Request, *cloudfront.DescribeFunctionOutput)
+
+	DescribeKeyValueStore(*cloudfront.DescribeKeyValueStoreInput) (*cloudfront.DescribeKeyValueStoreOutput, error)
+	DescribeKeyValueStoreWithContext(aws.Context, *cloudfront.DescribeKeyValueStoreInput, ...request.Option) (*cloudfront.DescribeKeyValueStoreOutput, error)
+	DescribeKeyValueStoreRequest(*cloudfront.DescribeKeyValueStoreInput) (*request.Request, *cloudfront.DescribeKeyValueStoreOutput)
 
 	GetCachePolicy(*cloudfront.GetCachePolicyInput) (*cloudfront.GetCachePolicyOutput, error)
 	GetCachePolicyWithContext(aws.Context, *cloudfront.GetCachePolicyInput, ...request.Option) (*cloudfront.GetCachePolicyOutput, error)
@@ -389,6 +401,13 @@ type CloudFrontAPI interface {
 	ListKeyGroupsWithContext(aws.Context, *cloudfront.ListKeyGroupsInput, ...request.Option) (*cloudfront.ListKeyGroupsOutput, error)
 	ListKeyGroupsRequest(*cloudfront.ListKeyGroupsInput) (*request.Request, *cloudfront.ListKeyGroupsOutput)
 
+	ListKeyValueStores(*cloudfront.ListKeyValueStoresInput) (*cloudfront.ListKeyValueStoresOutput, error)
+	ListKeyValueStoresWithContext(aws.Context, *cloudfront.ListKeyValueStoresInput, ...request.Option) (*cloudfront.ListKeyValueStoresOutput, error)
+	ListKeyValueStoresRequest(*cloudfront.ListKeyValueStoresInput) (*request.Request, *cloudfront.ListKeyValueStoresOutput)
+
+	ListKeyValueStoresPages(*cloudfront.ListKeyValueStoresInput, func(*cloudfront.ListKeyValueStoresOutput, bool) bool) error
+	ListKeyValueStoresPagesWithContext(aws.Context, *cloudfront.ListKeyValueStoresInput, func(*cloudfront.ListKeyValueStoresOutput, bool) bool, ...request.Option) error
+
 	ListOriginAccessControls(*cloudfront.ListOriginAccessControlsInput) (*cloudfront.ListOriginAccessControlsOutput, error)
 	ListOriginAccessControlsWithContext(aws.Context, *cloudfront.ListOriginAccessControlsInput, ...request.Option) (*cloudfront.ListOriginAccessControlsOutput, error)
 	ListOriginAccessControlsRequest(*cloudfront.ListOriginAccessControlsInput) (*request.Request, *cloudfront.ListOriginAccessControlsOutput)
@@ -471,6 +490,10 @@ type CloudFrontAPI interface {
 	UpdateKeyGroup(*cloudfront.UpdateKeyGroupInput) (*cloudfront.UpdateKeyGroupOutput, error)
 	UpdateKeyGroupWithContext(aws.Context, *cloudfront.UpdateKeyGroupInput, ...request.Option) (*cloudfront.UpdateKeyGroupOutput, error)
 	UpdateKeyGroupRequest(*cloudfront.UpdateKeyGroupInput) (*request.Request, *cloudfront.UpdateKeyGroupOutput)
+
+	UpdateKeyValueStore(*cloudfront.UpdateKeyValueStoreInput) (*cloudfront.UpdateKeyValueStoreOutput, error)
+	UpdateKeyValueStoreWithContext(aws.Context, *cloudfront.UpdateKeyValueStoreInput, ...request.Option) (*cloudfront.UpdateKeyValueStoreOutput, error)
+	UpdateKeyValueStoreRequest(*cloudfront.UpdateKeyValueStoreInput) (*request.Request, *cloudfront.UpdateKeyValueStoreOutput)
 
 	UpdateOriginAccessControl(*cloudfront.UpdateOriginAccessControlInput) (*cloudfront.UpdateOriginAccessControlOutput, error)
 	UpdateOriginAccessControlWithContext(aws.Context, *cloudfront.UpdateOriginAccessControlInput, ...request.Option) (*cloudfront.UpdateOriginAccessControlOutput, error)

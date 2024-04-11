@@ -29,14 +29,13 @@ const opCreateSavingsPlan = "CreateSavingsPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSavingsPlanRequest method.
+//	req, resp := client.CreateSavingsPlanRequest(params)
 //
-//    // Example sending a request using the CreateSavingsPlanRequest method.
-//    req, resp := client.CreateSavingsPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/CreateSavingsPlan
 func (c *SavingsPlans) CreateSavingsPlanRequest(input *CreateSavingsPlanInput) (req *request.Request, output *CreateSavingsPlanOutput) {
@@ -67,17 +66,18 @@ func (c *SavingsPlans) CreateSavingsPlanRequest(input *CreateSavingsPlanInput) (
 // API operation CreateSavingsPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * ValidationException
-//   One of the input parameters is not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalServerException
-//   An unexpected error occurred.
+//   - ValidationException
+//     One of the input parameters is not valid.
 //
-//   * ServiceQuotaExceededException
-//   A service quota has been exceeded.
+//   - InternalServerException
+//     An unexpected error occurred.
+//
+//   - ServiceQuotaExceededException
+//     A service quota has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/CreateSavingsPlan
 func (c *SavingsPlans) CreateSavingsPlan(input *CreateSavingsPlanInput) (*CreateSavingsPlanOutput, error) {
@@ -117,14 +117,13 @@ const opDeleteQueuedSavingsPlan = "DeleteQueuedSavingsPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteQueuedSavingsPlanRequest method.
+//	req, resp := client.DeleteQueuedSavingsPlanRequest(params)
 //
-//    // Example sending a request using the DeleteQueuedSavingsPlanRequest method.
-//    req, resp := client.DeleteQueuedSavingsPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/DeleteQueuedSavingsPlan
 func (c *SavingsPlans) DeleteQueuedSavingsPlanRequest(input *DeleteQueuedSavingsPlanInput) (req *request.Request, output *DeleteQueuedSavingsPlanOutput) {
@@ -156,17 +155,18 @@ func (c *SavingsPlans) DeleteQueuedSavingsPlanRequest(input *DeleteQueuedSavings
 // API operation DeleteQueuedSavingsPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   One of the input parameters is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     One of the input parameters is not valid.
 //
-//   * InternalServerException
-//   An unexpected error occurred.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * ServiceQuotaExceededException
-//   A service quota has been exceeded.
+//   - InternalServerException
+//     An unexpected error occurred.
+//
+//   - ServiceQuotaExceededException
+//     A service quota has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/DeleteQueuedSavingsPlan
 func (c *SavingsPlans) DeleteQueuedSavingsPlan(input *DeleteQueuedSavingsPlanInput) (*DeleteQueuedSavingsPlanOutput, error) {
@@ -206,14 +206,13 @@ const opDescribeSavingsPlanRates = "DescribeSavingsPlanRates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeSavingsPlanRatesRequest method.
+//	req, resp := client.DescribeSavingsPlanRatesRequest(params)
 //
-//    // Example sending a request using the DescribeSavingsPlanRatesRequest method.
-//    req, resp := client.DescribeSavingsPlanRatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/DescribeSavingsPlanRates
 func (c *SavingsPlans) DescribeSavingsPlanRatesRequest(input *DescribeSavingsPlanRatesInput) (req *request.Request, output *DescribeSavingsPlanRatesOutput) {
@@ -234,7 +233,7 @@ func (c *SavingsPlans) DescribeSavingsPlanRatesRequest(input *DescribeSavingsPla
 
 // DescribeSavingsPlanRates API operation for AWS Savings Plans.
 //
-// Describes the specified Savings Plans rates.
+// Describes the rates for the specified Savings Plan.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -244,11 +243,12 @@ func (c *SavingsPlans) DescribeSavingsPlanRatesRequest(input *DescribeSavingsPla
 // API operation DescribeSavingsPlanRates for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * ValidationException
-//   One of the input parameters is not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - ValidationException
+//     One of the input parameters is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/DescribeSavingsPlanRates
 func (c *SavingsPlans) DescribeSavingsPlanRates(input *DescribeSavingsPlanRatesInput) (*DescribeSavingsPlanRatesOutput, error) {
@@ -288,14 +288,13 @@ const opDescribeSavingsPlans = "DescribeSavingsPlans"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeSavingsPlansRequest method.
+//	req, resp := client.DescribeSavingsPlansRequest(params)
 //
-//    // Example sending a request using the DescribeSavingsPlansRequest method.
-//    req, resp := client.DescribeSavingsPlansRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/DescribeSavingsPlans
 func (c *SavingsPlans) DescribeSavingsPlansRequest(input *DescribeSavingsPlansInput) (req *request.Request, output *DescribeSavingsPlansOutput) {
@@ -326,11 +325,12 @@ func (c *SavingsPlans) DescribeSavingsPlansRequest(input *DescribeSavingsPlansIn
 // API operation DescribeSavingsPlans for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred.
 //
-//   * ValidationException
-//   One of the input parameters is not valid.
+//   - InternalServerException
+//     An unexpected error occurred.
+//
+//   - ValidationException
+//     One of the input parameters is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/DescribeSavingsPlans
 func (c *SavingsPlans) DescribeSavingsPlans(input *DescribeSavingsPlansInput) (*DescribeSavingsPlansOutput, error) {
@@ -370,14 +370,13 @@ const opDescribeSavingsPlansOfferingRates = "DescribeSavingsPlansOfferingRates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeSavingsPlansOfferingRatesRequest method.
+//	req, resp := client.DescribeSavingsPlansOfferingRatesRequest(params)
 //
-//    // Example sending a request using the DescribeSavingsPlansOfferingRatesRequest method.
-//    req, resp := client.DescribeSavingsPlansOfferingRatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/DescribeSavingsPlansOfferingRates
 func (c *SavingsPlans) DescribeSavingsPlansOfferingRatesRequest(input *DescribeSavingsPlansOfferingRatesInput) (req *request.Request, output *DescribeSavingsPlansOfferingRatesOutput) {
@@ -398,7 +397,7 @@ func (c *SavingsPlans) DescribeSavingsPlansOfferingRatesRequest(input *DescribeS
 
 // DescribeSavingsPlansOfferingRates API operation for AWS Savings Plans.
 //
-// Describes the specified Savings Plans offering rates.
+// Describes the offering rates for the specified Savings Plans.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -408,11 +407,12 @@ func (c *SavingsPlans) DescribeSavingsPlansOfferingRatesRequest(input *DescribeS
 // API operation DescribeSavingsPlansOfferingRates for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   One of the input parameters is not valid.
 //
-//   * InternalServerException
-//   An unexpected error occurred.
+//   - ValidationException
+//     One of the input parameters is not valid.
+//
+//   - InternalServerException
+//     An unexpected error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/DescribeSavingsPlansOfferingRates
 func (c *SavingsPlans) DescribeSavingsPlansOfferingRates(input *DescribeSavingsPlansOfferingRatesInput) (*DescribeSavingsPlansOfferingRatesOutput, error) {
@@ -452,14 +452,13 @@ const opDescribeSavingsPlansOfferings = "DescribeSavingsPlansOfferings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeSavingsPlansOfferingsRequest method.
+//	req, resp := client.DescribeSavingsPlansOfferingsRequest(params)
 //
-//    // Example sending a request using the DescribeSavingsPlansOfferingsRequest method.
-//    req, resp := client.DescribeSavingsPlansOfferingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/DescribeSavingsPlansOfferings
 func (c *SavingsPlans) DescribeSavingsPlansOfferingsRequest(input *DescribeSavingsPlansOfferingsInput) (req *request.Request, output *DescribeSavingsPlansOfferingsOutput) {
@@ -480,7 +479,7 @@ func (c *SavingsPlans) DescribeSavingsPlansOfferingsRequest(input *DescribeSavin
 
 // DescribeSavingsPlansOfferings API operation for AWS Savings Plans.
 //
-// Describes the specified Savings Plans offerings.
+// Describes the offerings for the specified Savings Plans.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -490,11 +489,12 @@ func (c *SavingsPlans) DescribeSavingsPlansOfferingsRequest(input *DescribeSavin
 // API operation DescribeSavingsPlansOfferings for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   One of the input parameters is not valid.
 //
-//   * InternalServerException
-//   An unexpected error occurred.
+//   - ValidationException
+//     One of the input parameters is not valid.
+//
+//   - InternalServerException
+//     An unexpected error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/DescribeSavingsPlansOfferings
 func (c *SavingsPlans) DescribeSavingsPlansOfferings(input *DescribeSavingsPlansOfferingsInput) (*DescribeSavingsPlansOfferingsOutput, error) {
@@ -534,14 +534,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/ListTagsForResource
 func (c *SavingsPlans) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -572,14 +571,15 @@ func (c *SavingsPlans) ListTagsForResourceRequest(input *ListTagsForResourceInpu
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * ValidationException
-//   One of the input parameters is not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalServerException
-//   An unexpected error occurred.
+//   - ValidationException
+//     One of the input parameters is not valid.
+//
+//   - InternalServerException
+//     An unexpected error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/ListTagsForResource
 func (c *SavingsPlans) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -603,6 +603,94 @@ func (c *SavingsPlans) ListTagsForResourceWithContext(ctx aws.Context, input *Li
 	return out, req.Send()
 }
 
+const opReturnSavingsPlan = "ReturnSavingsPlan"
+
+// ReturnSavingsPlanRequest generates a "aws/request.Request" representing the
+// client's request for the ReturnSavingsPlan operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ReturnSavingsPlan for more information on using the ReturnSavingsPlan
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ReturnSavingsPlanRequest method.
+//	req, resp := client.ReturnSavingsPlanRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/ReturnSavingsPlan
+func (c *SavingsPlans) ReturnSavingsPlanRequest(input *ReturnSavingsPlanInput) (req *request.Request, output *ReturnSavingsPlanOutput) {
+	op := &request.Operation{
+		Name:       opReturnSavingsPlan,
+		HTTPMethod: "POST",
+		HTTPPath:   "/ReturnSavingsPlan",
+	}
+
+	if input == nil {
+		input = &ReturnSavingsPlanInput{}
+	}
+
+	output = &ReturnSavingsPlanOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ReturnSavingsPlan API operation for AWS Savings Plans.
+//
+// Returns the specified Savings Plan.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Savings Plans's
+// API operation ReturnSavingsPlan for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     One of the input parameters is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalServerException
+//     An unexpected error occurred.
+//
+//   - ServiceQuotaExceededException
+//     A service quota has been exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/ReturnSavingsPlan
+func (c *SavingsPlans) ReturnSavingsPlan(input *ReturnSavingsPlanInput) (*ReturnSavingsPlanOutput, error) {
+	req, out := c.ReturnSavingsPlanRequest(input)
+	return out, req.Send()
+}
+
+// ReturnSavingsPlanWithContext is the same as ReturnSavingsPlan with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ReturnSavingsPlan for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SavingsPlans) ReturnSavingsPlanWithContext(ctx aws.Context, input *ReturnSavingsPlanInput, opts ...request.Option) (*ReturnSavingsPlanOutput, error) {
+	req, out := c.ReturnSavingsPlanRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opTagResource = "TagResource"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
@@ -619,14 +707,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/TagResource
 func (c *SavingsPlans) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -658,17 +745,18 @@ func (c *SavingsPlans) TagResourceRequest(input *TagResourceInput) (req *request
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * ServiceQuotaExceededException
-//   A service quota has been exceeded.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * ValidationException
-//   One of the input parameters is not valid.
+//   - ServiceQuotaExceededException
+//     A service quota has been exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred.
+//   - ValidationException
+//     One of the input parameters is not valid.
+//
+//   - InternalServerException
+//     An unexpected error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/TagResource
 func (c *SavingsPlans) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -708,14 +796,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/UntagResource
 func (c *SavingsPlans) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -747,14 +834,15 @@ func (c *SavingsPlans) UntagResourceRequest(input *UntagResourceInput) (req *req
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * ValidationException
-//   One of the input parameters is not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalServerException
-//   An unexpected error occurred.
+//   - ValidationException
+//     One of the input parameters is not valid.
+//
+//   - InternalServerException
+//     An unexpected error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/savingsplans-2019-06-28/UntagResource
 func (c *SavingsPlans) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -781,17 +869,18 @@ func (c *SavingsPlans) UntagResourceWithContext(ctx aws.Context, input *UntagRes
 type CreateSavingsPlanInput struct {
 	_ struct{} `type:"structure"`
 
-	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
 	// of the request.
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
-	// The hourly commitment, in USD. This is a value between 0.001 and 1 million.
-	// You cannot specify more than five digits after the decimal point.
+	// The hourly commitment, in the same currency of the savingsPlanOfferingId.
+	// This is a value between 0.001 and 1 million. You cannot specify more than
+	// five digits after the decimal point.
 	//
 	// Commitment is a required field
 	Commitment *string `locationName:"commitment" type:"string" required:"true"`
 
-	// The time at which to purchase the Savings Plan, in UTC format (YYYY-MM-DDTHH:MM:SSZ).
+	// The purchase time of the Savings Plan in UTC format (YYYY-MM-DDTHH:MM:SSZ).
 	PurchaseTime *time.Time `locationName:"purchaseTime" type:"timestamp"`
 
 	// The ID of the offering.
@@ -803,7 +892,7 @@ type CreateSavingsPlanInput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
 	// The up-front payment amount. This is a whole number between 50 and 99 percent
-	// of the total value of the Savings Plan. This parameter is supported only
+	// of the total value of the Savings Plan. This parameter is only supported
 	// if the payment option is Partial Upfront.
 	UpfrontPaymentAmount *string `locationName:"upfrontPaymentAmount" type:"string"`
 }
@@ -1064,7 +1153,7 @@ type DescribeSavingsPlanRatesOutput struct {
 	// The ID of the Savings Plan.
 	SavingsPlanId *string `locationName:"savingsPlanId" type:"string"`
 
-	// Information about the Savings Plans rates.
+	// Information about the Savings Plan rates.
 	SearchResults []*SavingsPlanRate `locationName:"searchResults" type:"list"`
 }
 
@@ -1123,7 +1212,7 @@ type DescribeSavingsPlansInput struct {
 	// The IDs of the Savings Plans.
 	SavingsPlanIds []*string `locationName:"savingsPlanIds" type:"list"`
 
-	// The states.
+	// The current states of the Savings Plans.
 	States []*string `locationName:"states" type:"list" enum:"SavingsPlanState"`
 }
 
@@ -1207,10 +1296,11 @@ type DescribeSavingsPlansOfferingRatesInput struct {
 	// The token for the next page of results.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// The specific AWS operation for the line item in the billing report.
+	// The specific Amazon Web Services operation for the line item in the billing
+	// report.
 	Operations []*string `locationName:"operations" type:"list"`
 
-	// The AWS products.
+	// The Amazon Web Services products.
 	Products []*string `locationName:"products" type:"list" enum:"SavingsPlanProductType"`
 
 	// The IDs of the offerings.
@@ -1357,7 +1447,7 @@ type DescribeSavingsPlansOfferingsInput struct {
 	// The descriptions.
 	Descriptions []*string `locationName:"descriptions" type:"list"`
 
-	// The durations, in seconds.
+	// The duration, in seconds.
 	Durations []*int64 `locationName:"durations" type:"list"`
 
 	// The filters.
@@ -1373,13 +1463,14 @@ type DescribeSavingsPlansOfferingsInput struct {
 	// The IDs of the offerings.
 	OfferingIds []*string `locationName:"offeringIds" type:"list"`
 
-	// The specific AWS operation for the line item in the billing report.
+	// The specific Amazon Web Services operation for the line item in the billing
+	// report.
 	Operations []*string `locationName:"operations" type:"list"`
 
 	// The payment options.
 	PaymentOptions []*string `locationName:"paymentOptions" type:"list" enum:"SavingsPlanPaymentOption"`
 
-	// The plan type.
+	// The plan types.
 	PlanTypes []*string `locationName:"planTypes" type:"list" enum:"SavingsPlanType"`
 
 	// The product type.
@@ -1852,11 +1943,98 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type ReturnSavingsPlanInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
+
+	// The ID of the Savings Plan.
+	//
+	// SavingsPlanId is a required field
+	SavingsPlanId *string `locationName:"savingsPlanId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReturnSavingsPlanInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReturnSavingsPlanInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ReturnSavingsPlanInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ReturnSavingsPlanInput"}
+	if s.SavingsPlanId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SavingsPlanId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *ReturnSavingsPlanInput) SetClientToken(v string) *ReturnSavingsPlanInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetSavingsPlanId sets the SavingsPlanId field's value.
+func (s *ReturnSavingsPlanInput) SetSavingsPlanId(v string) *ReturnSavingsPlanInput {
+	s.SavingsPlanId = &v
+	return s
+}
+
+type ReturnSavingsPlanOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the Savings Plan.
+	SavingsPlanId *string `locationName:"savingsPlanId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReturnSavingsPlanOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReturnSavingsPlanOutput) GoString() string {
+	return s.String()
+}
+
+// SetSavingsPlanId sets the SavingsPlanId field's value.
+func (s *ReturnSavingsPlanOutput) SetSavingsPlanId(v string) *ReturnSavingsPlanOutput {
+	s.SavingsPlanId = &v
+	return s
+}
+
 // Information about a Savings Plan.
 type SavingsPlan struct {
 	_ struct{} `type:"structure"`
 
-	// The hourly commitment, in USD.
+	// The hourly commitment amount in the specified currency.
 	Commitment *string `locationName:"commitment" type:"string"`
 
 	// The currency.
@@ -1883,8 +2061,13 @@ type SavingsPlan struct {
 	// The recurring payment amount.
 	RecurringPaymentAmount *string `locationName:"recurringPaymentAmount" type:"string"`
 
-	// The AWS Region.
+	// The Amazon Web Services Region.
 	Region *string `locationName:"region" type:"string"`
+
+	// The time until when a return for the Savings Plan can be requested. If the
+	// Savings Plan is not returnable, the field reflects the Savings Plan start
+	// time.
+	ReturnableUntil *string `locationName:"returnableUntil" type:"string"`
 
 	// The Amazon Resource Name (ARN) of the Savings Plan.
 	SavingsPlanArn *string `locationName:"savingsPlanArn" type:"string"`
@@ -1898,7 +2081,7 @@ type SavingsPlan struct {
 	// The start time.
 	Start *string `locationName:"start" type:"string"`
 
-	// The state.
+	// The current state.
 	State *string `locationName:"state" type:"string" enum:"SavingsPlanState"`
 
 	// One or more tags.
@@ -1989,6 +2172,12 @@ func (s *SavingsPlan) SetRegion(v string) *SavingsPlan {
 	return s
 }
 
+// SetReturnableUntil sets the ReturnableUntil field's value.
+func (s *SavingsPlan) SetReturnableUntil(v string) *SavingsPlan {
+	s.ReturnableUntil = &v
+	return s
+}
+
 // SetSavingsPlanArn sets the SavingsPlanArn field's value.
 func (s *SavingsPlan) SetSavingsPlanArn(v string) *SavingsPlan {
 	s.SavingsPlanArn = &v
@@ -2037,7 +2226,7 @@ func (s *SavingsPlan) SetUpfrontPaymentAmount(v string) *SavingsPlan {
 	return s
 }
 
-// Information about a filter.
+// Information about a Savings Plan filter.
 type SavingsPlanFilter struct {
 	_ struct{} `type:"structure"`
 
@@ -2094,7 +2283,8 @@ type SavingsPlanOffering struct {
 	// The ID of the offering.
 	OfferingId *string `locationName:"offeringId" type:"string"`
 
-	// The specific AWS operation for the line item in the billing report.
+	// The specific Amazon Web Services operation for the line item in the billing
+	// report.
 	Operation *string `locationName:"operation" type:"string"`
 
 	// The payment option.
@@ -2200,7 +2390,7 @@ func (s *SavingsPlanOffering) SetUsageType(v string) *SavingsPlanOffering {
 	return s
 }
 
-// Information about a filter.
+// Information about a Savings Plan offering filter.
 type SavingsPlanOfferingFilterElement struct {
 	_ struct{} `type:"structure"`
 
@@ -2241,7 +2431,7 @@ func (s *SavingsPlanOfferingFilterElement) SetValues(v []*string) *SavingsPlanOf
 	return s
 }
 
-// Information about a property.
+// Information about a Savings Plan offering property.
 type SavingsPlanOfferingProperty struct {
 	_ struct{} `type:"structure"`
 
@@ -2286,7 +2476,8 @@ func (s *SavingsPlanOfferingProperty) SetValue(v string) *SavingsPlanOfferingPro
 type SavingsPlanOfferingRate struct {
 	_ struct{} `type:"structure"`
 
-	// The specific AWS operation for the line item in the billing report.
+	// The specific Amazon Web Services operation for the line item in the billing
+	// report.
 	Operation *string `locationName:"operation" type:"string"`
 
 	// The product type.
@@ -2377,7 +2568,7 @@ func (s *SavingsPlanOfferingRate) SetUsageType(v string) *SavingsPlanOfferingRat
 	return s
 }
 
-// Information about a filter.
+// Information about a Savings Plan offering rate filter.
 type SavingsPlanOfferingRateFilterElement struct {
 	_ struct{} `type:"structure"`
 
@@ -2418,7 +2609,7 @@ func (s *SavingsPlanOfferingRateFilterElement) SetValues(v []*string) *SavingsPl
 	return s
 }
 
-// Information about a property.
+// Information about a Savings Plan offering rate property.
 type SavingsPlanOfferingRateProperty struct {
 	_ struct{} `type:"structure"`
 
@@ -2466,7 +2657,8 @@ type SavingsPlanRate struct {
 	// The currency.
 	Currency *string `locationName:"currency" type:"string" enum:"CurrencyCode"`
 
-	// The specific AWS operation for the line item in the billing report.
+	// The specific Amazon Web Services operation for the line item in the billing
+	// report.
 	Operation *string `locationName:"operation" type:"string"`
 
 	// The product type.
@@ -2554,7 +2746,7 @@ func (s *SavingsPlanRate) SetUsageType(v string) *SavingsPlanRate {
 	return s
 }
 
-// Information about a filter.
+// Information about a Savings Plan rate filter.
 type SavingsPlanRateFilter struct {
 	_ struct{} `type:"structure"`
 
@@ -2595,7 +2787,7 @@ func (s *SavingsPlanRateFilter) SetValues(v []*string) *SavingsPlanRateFilter {
 	return s
 }
 
-// Information about a property.
+// Information about a Savings Plan rate property.
 type SavingsPlanRateProperty struct {
 	_ struct{} `type:"structure"`
 
@@ -3187,6 +3379,12 @@ const (
 
 	// SavingsPlanStateQueuedDeleted is a SavingsPlanState enum value
 	SavingsPlanStateQueuedDeleted = "queued-deleted"
+
+	// SavingsPlanStatePendingReturn is a SavingsPlanState enum value
+	SavingsPlanStatePendingReturn = "pending-return"
+
+	// SavingsPlanStateReturned is a SavingsPlanState enum value
+	SavingsPlanStateReturned = "returned"
 )
 
 // SavingsPlanState_Values returns all elements of the SavingsPlanState enum
@@ -3198,6 +3396,8 @@ func SavingsPlanState_Values() []string {
 		SavingsPlanStateRetired,
 		SavingsPlanStateQueued,
 		SavingsPlanStateQueuedDeleted,
+		SavingsPlanStatePendingReturn,
+		SavingsPlanStateReturned,
 	}
 }
 

@@ -29,14 +29,13 @@ const opBatchPutPropertyValues = "BatchPutPropertyValues"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchPutPropertyValuesRequest method.
+//	req, resp := client.BatchPutPropertyValuesRequest(params)
 //
-//    // Example sending a request using the BatchPutPropertyValuesRequest method.
-//    req, resp := client.BatchPutPropertyValuesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/BatchPutPropertyValues
 func (c *IoTTwinMaker) BatchPutPropertyValuesRequest(input *BatchPutPropertyValuesInput) (req *request.Request, output *BatchPutPropertyValuesOutput) {
@@ -69,17 +68,18 @@ func (c *IoTTwinMaker) BatchPutPropertyValuesRequest(input *BatchPutPropertyValu
 // API operation BatchPutPropertyValues for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/BatchPutPropertyValues
 func (c *IoTTwinMaker) BatchPutPropertyValues(input *BatchPutPropertyValuesInput) (*BatchPutPropertyValuesOutput, error) {
@@ -103,6 +103,102 @@ func (c *IoTTwinMaker) BatchPutPropertyValuesWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opCancelMetadataTransferJob = "CancelMetadataTransferJob"
+
+// CancelMetadataTransferJobRequest generates a "aws/request.Request" representing the
+// client's request for the CancelMetadataTransferJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelMetadataTransferJob for more information on using the CancelMetadataTransferJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CancelMetadataTransferJobRequest method.
+//	req, resp := client.CancelMetadataTransferJobRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CancelMetadataTransferJob
+func (c *IoTTwinMaker) CancelMetadataTransferJobRequest(input *CancelMetadataTransferJobInput) (req *request.Request, output *CancelMetadataTransferJobOutput) {
+	op := &request.Operation{
+		Name:       opCancelMetadataTransferJob,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/metadata-transfer-jobs/{metadataTransferJobId}/cancel",
+	}
+
+	if input == nil {
+		input = &CancelMetadataTransferJobInput{}
+	}
+
+	output = &CancelMetadataTransferJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// CancelMetadataTransferJob API operation for AWS IoT TwinMaker.
+//
+// Cancels the metadata transfer job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT TwinMaker's
+// API operation CancelMetadataTransferJob for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error has occurred.
+//
+//   - AccessDeniedException
+//     Access is denied.
+//
+//   - ResourceNotFoundException
+//     The resource wasn't found.
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
+//
+//   - ConflictException
+//     A conflict occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CancelMetadataTransferJob
+func (c *IoTTwinMaker) CancelMetadataTransferJob(input *CancelMetadataTransferJobInput) (*CancelMetadataTransferJobOutput, error) {
+	req, out := c.CancelMetadataTransferJobRequest(input)
+	return out, req.Send()
+}
+
+// CancelMetadataTransferJobWithContext is the same as CancelMetadataTransferJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelMetadataTransferJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTTwinMaker) CancelMetadataTransferJobWithContext(ctx aws.Context, input *CancelMetadataTransferJobInput, opts ...request.Option) (*CancelMetadataTransferJobOutput, error) {
+	req, out := c.CancelMetadataTransferJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateComponentType = "CreateComponentType"
 
 // CreateComponentTypeRequest generates a "aws/request.Request" representing the
@@ -119,14 +215,13 @@ const opCreateComponentType = "CreateComponentType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateComponentTypeRequest method.
+//	req, resp := client.CreateComponentTypeRequest(params)
 //
-//    // Example sending a request using the CreateComponentTypeRequest method.
-//    req, resp := client.CreateComponentTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateComponentType
 func (c *IoTTwinMaker) CreateComponentTypeRequest(input *CreateComponentTypeInput) (req *request.Request, output *CreateComponentTypeOutput) {
@@ -159,23 +254,24 @@ func (c *IoTTwinMaker) CreateComponentTypeRequest(input *CreateComponentTypeInpu
 // API operation CreateComponentType for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ConflictException
-//   A conflict occurred.
+//   - ValidationException
+//     Failed
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ConflictException
+//     A conflict occurred.
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateComponentType
 func (c *IoTTwinMaker) CreateComponentType(input *CreateComponentTypeInput) (*CreateComponentTypeOutput, error) {
@@ -215,14 +311,13 @@ const opCreateEntity = "CreateEntity"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateEntityRequest method.
+//	req, resp := client.CreateEntityRequest(params)
 //
-//    // Example sending a request using the CreateEntityRequest method.
-//    req, resp := client.CreateEntityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateEntity
 func (c *IoTTwinMaker) CreateEntityRequest(input *CreateEntityInput) (req *request.Request, output *CreateEntityOutput) {
@@ -255,23 +350,24 @@ func (c *IoTTwinMaker) CreateEntityRequest(input *CreateEntityInput) (req *reque
 // API operation CreateEntity for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ConflictException
-//   A conflict occurred.
+//   - ValidationException
+//     Failed
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ConflictException
+//     A conflict occurred.
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateEntity
 func (c *IoTTwinMaker) CreateEntity(input *CreateEntityInput) (*CreateEntityOutput, error) {
@@ -295,6 +391,105 @@ func (c *IoTTwinMaker) CreateEntityWithContext(ctx aws.Context, input *CreateEnt
 	return out, req.Send()
 }
 
+const opCreateMetadataTransferJob = "CreateMetadataTransferJob"
+
+// CreateMetadataTransferJobRequest generates a "aws/request.Request" representing the
+// client's request for the CreateMetadataTransferJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateMetadataTransferJob for more information on using the CreateMetadataTransferJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateMetadataTransferJobRequest method.
+//	req, resp := client.CreateMetadataTransferJobRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateMetadataTransferJob
+func (c *IoTTwinMaker) CreateMetadataTransferJobRequest(input *CreateMetadataTransferJobInput) (req *request.Request, output *CreateMetadataTransferJobOutput) {
+	op := &request.Operation{
+		Name:       opCreateMetadataTransferJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/metadata-transfer-jobs",
+	}
+
+	if input == nil {
+		input = &CreateMetadataTransferJobInput{}
+	}
+
+	output = &CreateMetadataTransferJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// CreateMetadataTransferJob API operation for AWS IoT TwinMaker.
+//
+// Creates a new metadata transfer job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT TwinMaker's
+// API operation CreateMetadataTransferJob for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error has occurred.
+//
+//   - AccessDeniedException
+//     Access is denied.
+//
+//   - ResourceNotFoundException
+//     The resource wasn't found.
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
+//
+//   - ConflictException
+//     A conflict occurred.
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateMetadataTransferJob
+func (c *IoTTwinMaker) CreateMetadataTransferJob(input *CreateMetadataTransferJobInput) (*CreateMetadataTransferJobOutput, error) {
+	req, out := c.CreateMetadataTransferJobRequest(input)
+	return out, req.Send()
+}
+
+// CreateMetadataTransferJobWithContext is the same as CreateMetadataTransferJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateMetadataTransferJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTTwinMaker) CreateMetadataTransferJobWithContext(ctx aws.Context, input *CreateMetadataTransferJobInput, opts ...request.Option) (*CreateMetadataTransferJobOutput, error) {
+	req, out := c.CreateMetadataTransferJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateScene = "CreateScene"
 
 // CreateSceneRequest generates a "aws/request.Request" representing the
@@ -311,14 +506,13 @@ const opCreateScene = "CreateScene"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSceneRequest method.
+//	req, resp := client.CreateSceneRequest(params)
 //
-//    // Example sending a request using the CreateSceneRequest method.
-//    req, resp := client.CreateSceneRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateScene
 func (c *IoTTwinMaker) CreateSceneRequest(input *CreateSceneInput) (req *request.Request, output *CreateSceneOutput) {
@@ -351,23 +545,24 @@ func (c *IoTTwinMaker) CreateSceneRequest(input *CreateSceneInput) (req *request
 // API operation CreateScene for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ConflictException
-//   A conflict occurred.
+//   - ValidationException
+//     Failed
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ConflictException
+//     A conflict occurred.
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateScene
 func (c *IoTTwinMaker) CreateScene(input *CreateSceneInput) (*CreateSceneOutput, error) {
@@ -407,14 +602,13 @@ const opCreateSyncJob = "CreateSyncJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSyncJobRequest method.
+//	req, resp := client.CreateSyncJobRequest(params)
 //
-//    // Example sending a request using the CreateSyncJobRequest method.
-//    req, resp := client.CreateSyncJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateSyncJob
 func (c *IoTTwinMaker) CreateSyncJobRequest(input *CreateSyncJobInput) (req *request.Request, output *CreateSyncJobOutput) {
@@ -447,23 +641,24 @@ func (c *IoTTwinMaker) CreateSyncJobRequest(input *CreateSyncJobInput) (req *req
 // API operation CreateSyncJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ConflictException
-//   A conflict occurred.
+//   - ValidationException
+//     Failed
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ConflictException
+//     A conflict occurred.
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateSyncJob
 func (c *IoTTwinMaker) CreateSyncJob(input *CreateSyncJobInput) (*CreateSyncJobOutput, error) {
@@ -503,14 +698,13 @@ const opCreateWorkspace = "CreateWorkspace"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWorkspaceRequest method.
+//	req, resp := client.CreateWorkspaceRequest(params)
 //
-//    // Example sending a request using the CreateWorkspaceRequest method.
-//    req, resp := client.CreateWorkspaceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateWorkspace
 func (c *IoTTwinMaker) CreateWorkspaceRequest(input *CreateWorkspaceInput) (req *request.Request, output *CreateWorkspaceOutput) {
@@ -543,23 +737,24 @@ func (c *IoTTwinMaker) CreateWorkspaceRequest(input *CreateWorkspaceInput) (req 
 // API operation CreateWorkspace for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ConflictException
-//   A conflict occurred.
+//   - ValidationException
+//     Failed
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ConflictException
+//     A conflict occurred.
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/CreateWorkspace
 func (c *IoTTwinMaker) CreateWorkspace(input *CreateWorkspaceInput) (*CreateWorkspaceOutput, error) {
@@ -599,14 +794,13 @@ const opDeleteComponentType = "DeleteComponentType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteComponentTypeRequest method.
+//	req, resp := client.DeleteComponentTypeRequest(params)
 //
-//    // Example sending a request using the DeleteComponentTypeRequest method.
-//    req, resp := client.DeleteComponentTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/DeleteComponentType
 func (c *IoTTwinMaker) DeleteComponentTypeRequest(input *DeleteComponentTypeInput) (req *request.Request, output *DeleteComponentTypeOutput) {
@@ -639,20 +833,21 @@ func (c *IoTTwinMaker) DeleteComponentTypeRequest(input *DeleteComponentTypeInpu
 // API operation DeleteComponentType for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/DeleteComponentType
 func (c *IoTTwinMaker) DeleteComponentType(input *DeleteComponentTypeInput) (*DeleteComponentTypeOutput, error) {
@@ -692,14 +887,13 @@ const opDeleteEntity = "DeleteEntity"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteEntityRequest method.
+//	req, resp := client.DeleteEntityRequest(params)
 //
-//    // Example sending a request using the DeleteEntityRequest method.
-//    req, resp := client.DeleteEntityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/DeleteEntity
 func (c *IoTTwinMaker) DeleteEntityRequest(input *DeleteEntityInput) (req *request.Request, output *DeleteEntityOutput) {
@@ -732,20 +926,21 @@ func (c *IoTTwinMaker) DeleteEntityRequest(input *DeleteEntityInput) (req *reque
 // API operation DeleteEntity for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/DeleteEntity
 func (c *IoTTwinMaker) DeleteEntity(input *DeleteEntityInput) (*DeleteEntityOutput, error) {
@@ -785,14 +980,13 @@ const opDeleteScene = "DeleteScene"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSceneRequest method.
+//	req, resp := client.DeleteSceneRequest(params)
 //
-//    // Example sending a request using the DeleteSceneRequest method.
-//    req, resp := client.DeleteSceneRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/DeleteScene
 func (c *IoTTwinMaker) DeleteSceneRequest(input *DeleteSceneInput) (req *request.Request, output *DeleteSceneOutput) {
@@ -826,20 +1020,21 @@ func (c *IoTTwinMaker) DeleteSceneRequest(input *DeleteSceneInput) (req *request
 // API operation DeleteScene for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/DeleteScene
 func (c *IoTTwinMaker) DeleteScene(input *DeleteSceneInput) (*DeleteSceneOutput, error) {
@@ -879,14 +1074,13 @@ const opDeleteSyncJob = "DeleteSyncJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSyncJobRequest method.
+//	req, resp := client.DeleteSyncJobRequest(params)
 //
-//    // Example sending a request using the DeleteSyncJobRequest method.
-//    req, resp := client.DeleteSyncJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/DeleteSyncJob
 func (c *IoTTwinMaker) DeleteSyncJobRequest(input *DeleteSyncJobInput) (req *request.Request, output *DeleteSyncJobOutput) {
@@ -919,23 +1113,24 @@ func (c *IoTTwinMaker) DeleteSyncJobRequest(input *DeleteSyncJobInput) (req *req
 // API operation DeleteSyncJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/DeleteSyncJob
 func (c *IoTTwinMaker) DeleteSyncJob(input *DeleteSyncJobInput) (*DeleteSyncJobOutput, error) {
@@ -975,14 +1170,13 @@ const opDeleteWorkspace = "DeleteWorkspace"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWorkspaceRequest method.
+//	req, resp := client.DeleteWorkspaceRequest(params)
 //
-//    // Example sending a request using the DeleteWorkspaceRequest method.
-//    req, resp := client.DeleteWorkspaceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/DeleteWorkspace
 func (c *IoTTwinMaker) DeleteWorkspaceRequest(input *DeleteWorkspaceInput) (req *request.Request, output *DeleteWorkspaceOutput) {
@@ -998,7 +1192,6 @@ func (c *IoTTwinMaker) DeleteWorkspaceRequest(input *DeleteWorkspaceInput) (req 
 
 	output = &DeleteWorkspaceOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
 	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
 	return
@@ -1016,20 +1209,21 @@ func (c *IoTTwinMaker) DeleteWorkspaceRequest(input *DeleteWorkspaceInput) (req 
 // API operation DeleteWorkspace for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/DeleteWorkspace
 func (c *IoTTwinMaker) DeleteWorkspace(input *DeleteWorkspaceInput) (*DeleteWorkspaceOutput, error) {
@@ -1069,14 +1263,13 @@ const opExecuteQuery = "ExecuteQuery"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ExecuteQueryRequest method.
+//	req, resp := client.ExecuteQueryRequest(params)
 //
-//    // Example sending a request using the ExecuteQueryRequest method.
-//    req, resp := client.ExecuteQueryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ExecuteQuery
 func (c *IoTTwinMaker) ExecuteQueryRequest(input *ExecuteQueryInput) (req *request.Request, output *ExecuteQueryOutput) {
@@ -1108,6 +1301,10 @@ func (c *IoTTwinMaker) ExecuteQueryRequest(input *ExecuteQueryInput) (req *reque
 // Run queries to access information from your knowledge graph of entities within
 // individual workspaces.
 //
+// The ExecuteQuery action only works with Amazon Web Services Java SDK2 (https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/home.html).
+// ExecuteQuery will not work with any Amazon Web Services Java SDK version
+// < 2.x.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1116,23 +1313,24 @@ func (c *IoTTwinMaker) ExecuteQueryRequest(input *ExecuteQueryInput) (req *reque
 // API operation ExecuteQuery for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * QueryTimeoutException
-//   The query timeout exception.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - QueryTimeoutException
+//     The query timeout exception.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ExecuteQuery
 func (c *IoTTwinMaker) ExecuteQuery(input *ExecuteQueryInput) (*ExecuteQueryOutput, error) {
@@ -1164,15 +1362,14 @@ func (c *IoTTwinMaker) ExecuteQueryWithContext(ctx aws.Context, input *ExecuteQu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ExecuteQuery operation.
-//    pageNum := 0
-//    err := client.ExecuteQueryPages(params,
-//        func(page *iottwinmaker.ExecuteQueryOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ExecuteQuery operation.
+//	pageNum := 0
+//	err := client.ExecuteQueryPages(params,
+//	    func(page *iottwinmaker.ExecuteQueryOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTTwinMaker) ExecuteQueryPages(input *ExecuteQueryInput, fn func(*ExecuteQueryOutput, bool) bool) error {
 	return c.ExecuteQueryPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1224,14 +1421,13 @@ const opGetComponentType = "GetComponentType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetComponentTypeRequest method.
+//	req, resp := client.GetComponentTypeRequest(params)
 //
-//    // Example sending a request using the GetComponentTypeRequest method.
-//    req, resp := client.GetComponentTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetComponentType
 func (c *IoTTwinMaker) GetComponentTypeRequest(input *GetComponentTypeInput) (req *request.Request, output *GetComponentTypeOutput) {
@@ -1264,20 +1460,21 @@ func (c *IoTTwinMaker) GetComponentTypeRequest(input *GetComponentTypeInput) (re
 // API operation GetComponentType for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetComponentType
 func (c *IoTTwinMaker) GetComponentType(input *GetComponentTypeInput) (*GetComponentTypeOutput, error) {
@@ -1317,14 +1514,13 @@ const opGetEntity = "GetEntity"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetEntityRequest method.
+//	req, resp := client.GetEntityRequest(params)
 //
-//    // Example sending a request using the GetEntityRequest method.
-//    req, resp := client.GetEntityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetEntity
 func (c *IoTTwinMaker) GetEntityRequest(input *GetEntityInput) (req *request.Request, output *GetEntityOutput) {
@@ -1357,20 +1553,21 @@ func (c *IoTTwinMaker) GetEntityRequest(input *GetEntityInput) (req *request.Req
 // API operation GetEntity for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetEntity
 func (c *IoTTwinMaker) GetEntity(input *GetEntityInput) (*GetEntityOutput, error) {
@@ -1394,6 +1591,99 @@ func (c *IoTTwinMaker) GetEntityWithContext(ctx aws.Context, input *GetEntityInp
 	return out, req.Send()
 }
 
+const opGetMetadataTransferJob = "GetMetadataTransferJob"
+
+// GetMetadataTransferJobRequest generates a "aws/request.Request" representing the
+// client's request for the GetMetadataTransferJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetMetadataTransferJob for more information on using the GetMetadataTransferJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetMetadataTransferJobRequest method.
+//	req, resp := client.GetMetadataTransferJobRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetMetadataTransferJob
+func (c *IoTTwinMaker) GetMetadataTransferJobRequest(input *GetMetadataTransferJobInput) (req *request.Request, output *GetMetadataTransferJobOutput) {
+	op := &request.Operation{
+		Name:       opGetMetadataTransferJob,
+		HTTPMethod: "GET",
+		HTTPPath:   "/metadata-transfer-jobs/{metadataTransferJobId}",
+	}
+
+	if input == nil {
+		input = &GetMetadataTransferJobInput{}
+	}
+
+	output = &GetMetadataTransferJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// GetMetadataTransferJob API operation for AWS IoT TwinMaker.
+//
+// Gets a nmetadata transfer job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT TwinMaker's
+// API operation GetMetadataTransferJob for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error has occurred.
+//
+//   - AccessDeniedException
+//     Access is denied.
+//
+//   - ResourceNotFoundException
+//     The resource wasn't found.
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetMetadataTransferJob
+func (c *IoTTwinMaker) GetMetadataTransferJob(input *GetMetadataTransferJobInput) (*GetMetadataTransferJobOutput, error) {
+	req, out := c.GetMetadataTransferJobRequest(input)
+	return out, req.Send()
+}
+
+// GetMetadataTransferJobWithContext is the same as GetMetadataTransferJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetMetadataTransferJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTTwinMaker) GetMetadataTransferJobWithContext(ctx aws.Context, input *GetMetadataTransferJobInput, opts ...request.Option) (*GetMetadataTransferJobOutput, error) {
+	req, out := c.GetMetadataTransferJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetPricingPlan = "GetPricingPlan"
 
 // GetPricingPlanRequest generates a "aws/request.Request" representing the
@@ -1410,14 +1700,13 @@ const opGetPricingPlan = "GetPricingPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPricingPlanRequest method.
+//	req, resp := client.GetPricingPlanRequest(params)
 //
-//    // Example sending a request using the GetPricingPlanRequest method.
-//    req, resp := client.GetPricingPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetPricingPlan
 func (c *IoTTwinMaker) GetPricingPlanRequest(input *GetPricingPlanInput) (req *request.Request, output *GetPricingPlanOutput) {
@@ -1450,17 +1739,18 @@ func (c *IoTTwinMaker) GetPricingPlanRequest(input *GetPricingPlanInput) (req *r
 // API operation GetPricingPlan for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetPricingPlan
 func (c *IoTTwinMaker) GetPricingPlan(input *GetPricingPlanInput) (*GetPricingPlanOutput, error) {
@@ -1500,14 +1790,13 @@ const opGetPropertyValue = "GetPropertyValue"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPropertyValueRequest method.
+//	req, resp := client.GetPropertyValueRequest(params)
 //
-//    // Example sending a request using the GetPropertyValueRequest method.
-//    req, resp := client.GetPropertyValueRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetPropertyValue
 func (c *IoTTwinMaker) GetPropertyValueRequest(input *GetPropertyValueInput) (req *request.Request, output *GetPropertyValueOutput) {
@@ -1549,26 +1838,27 @@ func (c *IoTTwinMaker) GetPropertyValueRequest(input *GetPropertyValueInput) (re
 // API operation GetPropertyValue for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * ConnectorFailureException
-//   The connector failed.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - ConnectorFailureException
+//     The connector failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ConnectorTimeoutException
-//   The connector timed out.
+//   - ValidationException
+//     Failed
+//
+//   - ConnectorTimeoutException
+//     The connector timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetPropertyValue
 func (c *IoTTwinMaker) GetPropertyValue(input *GetPropertyValueInput) (*GetPropertyValueOutput, error) {
@@ -1600,15 +1890,14 @@ func (c *IoTTwinMaker) GetPropertyValueWithContext(ctx aws.Context, input *GetPr
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetPropertyValue operation.
-//    pageNum := 0
-//    err := client.GetPropertyValuePages(params,
-//        func(page *iottwinmaker.GetPropertyValueOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetPropertyValue operation.
+//	pageNum := 0
+//	err := client.GetPropertyValuePages(params,
+//	    func(page *iottwinmaker.GetPropertyValueOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTTwinMaker) GetPropertyValuePages(input *GetPropertyValueInput, fn func(*GetPropertyValueOutput, bool) bool) error {
 	return c.GetPropertyValuePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1660,14 +1949,13 @@ const opGetPropertyValueHistory = "GetPropertyValueHistory"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPropertyValueHistoryRequest method.
+//	req, resp := client.GetPropertyValueHistoryRequest(params)
 //
-//    // Example sending a request using the GetPropertyValueHistoryRequest method.
-//    req, resp := client.GetPropertyValueHistoryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetPropertyValueHistory
 func (c *IoTTwinMaker) GetPropertyValueHistoryRequest(input *GetPropertyValueHistoryInput) (req *request.Request, output *GetPropertyValueHistoryOutput) {
@@ -1711,26 +1999,27 @@ func (c *IoTTwinMaker) GetPropertyValueHistoryRequest(input *GetPropertyValueHis
 // API operation GetPropertyValueHistory for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * ConnectorFailureException
-//   The connector failed.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - ConnectorFailureException
+//     The connector failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ConnectorTimeoutException
-//   The connector timed out.
+//   - ValidationException
+//     Failed
+//
+//   - ConnectorTimeoutException
+//     The connector timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetPropertyValueHistory
 func (c *IoTTwinMaker) GetPropertyValueHistory(input *GetPropertyValueHistoryInput) (*GetPropertyValueHistoryOutput, error) {
@@ -1762,15 +2051,14 @@ func (c *IoTTwinMaker) GetPropertyValueHistoryWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetPropertyValueHistory operation.
-//    pageNum := 0
-//    err := client.GetPropertyValueHistoryPages(params,
-//        func(page *iottwinmaker.GetPropertyValueHistoryOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetPropertyValueHistory operation.
+//	pageNum := 0
+//	err := client.GetPropertyValueHistoryPages(params,
+//	    func(page *iottwinmaker.GetPropertyValueHistoryOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTTwinMaker) GetPropertyValueHistoryPages(input *GetPropertyValueHistoryInput, fn func(*GetPropertyValueHistoryOutput, bool) bool) error {
 	return c.GetPropertyValueHistoryPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1822,14 +2110,13 @@ const opGetScene = "GetScene"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSceneRequest method.
+//	req, resp := client.GetSceneRequest(params)
 //
-//    // Example sending a request using the GetSceneRequest method.
-//    req, resp := client.GetSceneRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetScene
 func (c *IoTTwinMaker) GetSceneRequest(input *GetSceneInput) (req *request.Request, output *GetSceneOutput) {
@@ -1862,20 +2149,21 @@ func (c *IoTTwinMaker) GetSceneRequest(input *GetSceneInput) (req *request.Reque
 // API operation GetScene for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetScene
 func (c *IoTTwinMaker) GetScene(input *GetSceneInput) (*GetSceneOutput, error) {
@@ -1915,14 +2203,13 @@ const opGetSyncJob = "GetSyncJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSyncJobRequest method.
+//	req, resp := client.GetSyncJobRequest(params)
 //
-//    // Example sending a request using the GetSyncJobRequest method.
-//    req, resp := client.GetSyncJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetSyncJob
 func (c *IoTTwinMaker) GetSyncJobRequest(input *GetSyncJobInput) (req *request.Request, output *GetSyncJobOutput) {
@@ -1955,23 +2242,24 @@ func (c *IoTTwinMaker) GetSyncJobRequest(input *GetSyncJobInput) (req *request.R
 // API operation GetSyncJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetSyncJob
 func (c *IoTTwinMaker) GetSyncJob(input *GetSyncJobInput) (*GetSyncJobOutput, error) {
@@ -2011,14 +2299,13 @@ const opGetWorkspace = "GetWorkspace"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetWorkspaceRequest method.
+//	req, resp := client.GetWorkspaceRequest(params)
 //
-//    // Example sending a request using the GetWorkspaceRequest method.
-//    req, resp := client.GetWorkspaceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetWorkspace
 func (c *IoTTwinMaker) GetWorkspaceRequest(input *GetWorkspaceInput) (req *request.Request, output *GetWorkspaceOutput) {
@@ -2051,20 +2338,21 @@ func (c *IoTTwinMaker) GetWorkspaceRequest(input *GetWorkspaceInput) (req *reque
 // API operation GetWorkspace for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/GetWorkspace
 func (c *IoTTwinMaker) GetWorkspace(input *GetWorkspaceInput) (*GetWorkspaceOutput, error) {
@@ -2104,14 +2392,13 @@ const opListComponentTypes = "ListComponentTypes"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListComponentTypesRequest method.
+//	req, resp := client.ListComponentTypesRequest(params)
 //
-//    // Example sending a request using the ListComponentTypesRequest method.
-//    req, resp := client.ListComponentTypesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListComponentTypes
 func (c *IoTTwinMaker) ListComponentTypesRequest(input *ListComponentTypesInput) (req *request.Request, output *ListComponentTypesOutput) {
@@ -2150,17 +2437,18 @@ func (c *IoTTwinMaker) ListComponentTypesRequest(input *ListComponentTypesInput)
 // API operation ListComponentTypes for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListComponentTypes
 func (c *IoTTwinMaker) ListComponentTypes(input *ListComponentTypesInput) (*ListComponentTypesOutput, error) {
@@ -2192,15 +2480,14 @@ func (c *IoTTwinMaker) ListComponentTypesWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListComponentTypes operation.
-//    pageNum := 0
-//    err := client.ListComponentTypesPages(params,
-//        func(page *iottwinmaker.ListComponentTypesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListComponentTypes operation.
+//	pageNum := 0
+//	err := client.ListComponentTypesPages(params,
+//	    func(page *iottwinmaker.ListComponentTypesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTTwinMaker) ListComponentTypesPages(input *ListComponentTypesInput, fn func(*ListComponentTypesOutput, bool) bool) error {
 	return c.ListComponentTypesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2236,6 +2523,156 @@ func (c *IoTTwinMaker) ListComponentTypesPagesWithContext(ctx aws.Context, input
 	return p.Err()
 }
 
+const opListComponents = "ListComponents"
+
+// ListComponentsRequest generates a "aws/request.Request" representing the
+// client's request for the ListComponents operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListComponents for more information on using the ListComponents
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListComponentsRequest method.
+//	req, resp := client.ListComponentsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListComponents
+func (c *IoTTwinMaker) ListComponentsRequest(input *ListComponentsInput) (req *request.Request, output *ListComponentsOutput) {
+	op := &request.Operation{
+		Name:       opListComponents,
+		HTTPMethod: "POST",
+		HTTPPath:   "/workspaces/{workspaceId}/entities/{entityId}/components-list",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListComponentsInput{}
+	}
+
+	output = &ListComponentsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// ListComponents API operation for AWS IoT TwinMaker.
+//
+// This API lists the components of an entity.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT TwinMaker's
+// API operation ListComponents for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error has occurred.
+//
+//   - AccessDeniedException
+//     Access is denied.
+//
+//   - ResourceNotFoundException
+//     The resource wasn't found.
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListComponents
+func (c *IoTTwinMaker) ListComponents(input *ListComponentsInput) (*ListComponentsOutput, error) {
+	req, out := c.ListComponentsRequest(input)
+	return out, req.Send()
+}
+
+// ListComponentsWithContext is the same as ListComponents with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListComponents for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTTwinMaker) ListComponentsWithContext(ctx aws.Context, input *ListComponentsInput, opts ...request.Option) (*ListComponentsOutput, error) {
+	req, out := c.ListComponentsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListComponentsPages iterates over the pages of a ListComponents operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListComponents method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListComponents operation.
+//	pageNum := 0
+//	err := client.ListComponentsPages(params,
+//	    func(page *iottwinmaker.ListComponentsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *IoTTwinMaker) ListComponentsPages(input *ListComponentsInput, fn func(*ListComponentsOutput, bool) bool) error {
+	return c.ListComponentsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListComponentsPagesWithContext same as ListComponentsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTTwinMaker) ListComponentsPagesWithContext(ctx aws.Context, input *ListComponentsInput, fn func(*ListComponentsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListComponentsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListComponentsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListComponentsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListEntities = "ListEntities"
 
 // ListEntitiesRequest generates a "aws/request.Request" representing the
@@ -2252,14 +2689,13 @@ const opListEntities = "ListEntities"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListEntitiesRequest method.
+//	req, resp := client.ListEntitiesRequest(params)
 //
-//    // Example sending a request using the ListEntitiesRequest method.
-//    req, resp := client.ListEntitiesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListEntities
 func (c *IoTTwinMaker) ListEntitiesRequest(input *ListEntitiesInput) (req *request.Request, output *ListEntitiesOutput) {
@@ -2298,17 +2734,18 @@ func (c *IoTTwinMaker) ListEntitiesRequest(input *ListEntitiesInput) (req *reque
 // API operation ListEntities for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListEntities
 func (c *IoTTwinMaker) ListEntities(input *ListEntitiesInput) (*ListEntitiesOutput, error) {
@@ -2340,15 +2777,14 @@ func (c *IoTTwinMaker) ListEntitiesWithContext(ctx aws.Context, input *ListEntit
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListEntities operation.
-//    pageNum := 0
-//    err := client.ListEntitiesPages(params,
-//        func(page *iottwinmaker.ListEntitiesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListEntities operation.
+//	pageNum := 0
+//	err := client.ListEntitiesPages(params,
+//	    func(page *iottwinmaker.ListEntitiesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTTwinMaker) ListEntitiesPages(input *ListEntitiesInput, fn func(*ListEntitiesOutput, bool) bool) error {
 	return c.ListEntitiesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2384,6 +2820,303 @@ func (c *IoTTwinMaker) ListEntitiesPagesWithContext(ctx aws.Context, input *List
 	return p.Err()
 }
 
+const opListMetadataTransferJobs = "ListMetadataTransferJobs"
+
+// ListMetadataTransferJobsRequest generates a "aws/request.Request" representing the
+// client's request for the ListMetadataTransferJobs operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListMetadataTransferJobs for more information on using the ListMetadataTransferJobs
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListMetadataTransferJobsRequest method.
+//	req, resp := client.ListMetadataTransferJobsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListMetadataTransferJobs
+func (c *IoTTwinMaker) ListMetadataTransferJobsRequest(input *ListMetadataTransferJobsInput) (req *request.Request, output *ListMetadataTransferJobsOutput) {
+	op := &request.Operation{
+		Name:       opListMetadataTransferJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/metadata-transfer-jobs-list",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListMetadataTransferJobsInput{}
+	}
+
+	output = &ListMetadataTransferJobsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// ListMetadataTransferJobs API operation for AWS IoT TwinMaker.
+//
+// Lists the metadata transfer jobs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT TwinMaker's
+// API operation ListMetadataTransferJobs for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error has occurred.
+//
+//   - AccessDeniedException
+//     Access is denied.
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListMetadataTransferJobs
+func (c *IoTTwinMaker) ListMetadataTransferJobs(input *ListMetadataTransferJobsInput) (*ListMetadataTransferJobsOutput, error) {
+	req, out := c.ListMetadataTransferJobsRequest(input)
+	return out, req.Send()
+}
+
+// ListMetadataTransferJobsWithContext is the same as ListMetadataTransferJobs with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListMetadataTransferJobs for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTTwinMaker) ListMetadataTransferJobsWithContext(ctx aws.Context, input *ListMetadataTransferJobsInput, opts ...request.Option) (*ListMetadataTransferJobsOutput, error) {
+	req, out := c.ListMetadataTransferJobsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListMetadataTransferJobsPages iterates over the pages of a ListMetadataTransferJobs operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListMetadataTransferJobs method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListMetadataTransferJobs operation.
+//	pageNum := 0
+//	err := client.ListMetadataTransferJobsPages(params,
+//	    func(page *iottwinmaker.ListMetadataTransferJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *IoTTwinMaker) ListMetadataTransferJobsPages(input *ListMetadataTransferJobsInput, fn func(*ListMetadataTransferJobsOutput, bool) bool) error {
+	return c.ListMetadataTransferJobsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListMetadataTransferJobsPagesWithContext same as ListMetadataTransferJobsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTTwinMaker) ListMetadataTransferJobsPagesWithContext(ctx aws.Context, input *ListMetadataTransferJobsInput, fn func(*ListMetadataTransferJobsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListMetadataTransferJobsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListMetadataTransferJobsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListMetadataTransferJobsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListProperties = "ListProperties"
+
+// ListPropertiesRequest generates a "aws/request.Request" representing the
+// client's request for the ListProperties operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListProperties for more information on using the ListProperties
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListPropertiesRequest method.
+//	req, resp := client.ListPropertiesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListProperties
+func (c *IoTTwinMaker) ListPropertiesRequest(input *ListPropertiesInput) (req *request.Request, output *ListPropertiesOutput) {
+	op := &request.Operation{
+		Name:       opListProperties,
+		HTTPMethod: "POST",
+		HTTPPath:   "/workspaces/{workspaceId}/properties-list",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListPropertiesInput{}
+	}
+
+	output = &ListPropertiesOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("api.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// ListProperties API operation for AWS IoT TwinMaker.
+//
+// This API lists the properties of a component.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT TwinMaker's
+// API operation ListProperties for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error has occurred.
+//
+//   - AccessDeniedException
+//     Access is denied.
+//
+//   - ResourceNotFoundException
+//     The resource wasn't found.
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListProperties
+func (c *IoTTwinMaker) ListProperties(input *ListPropertiesInput) (*ListPropertiesOutput, error) {
+	req, out := c.ListPropertiesRequest(input)
+	return out, req.Send()
+}
+
+// ListPropertiesWithContext is the same as ListProperties with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListProperties for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTTwinMaker) ListPropertiesWithContext(ctx aws.Context, input *ListPropertiesInput, opts ...request.Option) (*ListPropertiesOutput, error) {
+	req, out := c.ListPropertiesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListPropertiesPages iterates over the pages of a ListProperties operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListProperties method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListProperties operation.
+//	pageNum := 0
+//	err := client.ListPropertiesPages(params,
+//	    func(page *iottwinmaker.ListPropertiesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *IoTTwinMaker) ListPropertiesPages(input *ListPropertiesInput, fn func(*ListPropertiesOutput, bool) bool) error {
+	return c.ListPropertiesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPropertiesPagesWithContext same as ListPropertiesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTTwinMaker) ListPropertiesPagesWithContext(ctx aws.Context, input *ListPropertiesInput, fn func(*ListPropertiesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPropertiesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPropertiesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPropertiesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListScenes = "ListScenes"
 
 // ListScenesRequest generates a "aws/request.Request" representing the
@@ -2400,14 +3133,13 @@ const opListScenes = "ListScenes"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListScenesRequest method.
+//	req, resp := client.ListScenesRequest(params)
 //
-//    // Example sending a request using the ListScenesRequest method.
-//    req, resp := client.ListScenesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListScenes
 func (c *IoTTwinMaker) ListScenesRequest(input *ListScenesInput) (req *request.Request, output *ListScenesOutput) {
@@ -2446,17 +3178,18 @@ func (c *IoTTwinMaker) ListScenesRequest(input *ListScenesInput) (req *request.R
 // API operation ListScenes for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListScenes
 func (c *IoTTwinMaker) ListScenes(input *ListScenesInput) (*ListScenesOutput, error) {
@@ -2488,15 +3221,14 @@ func (c *IoTTwinMaker) ListScenesWithContext(ctx aws.Context, input *ListScenesI
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListScenes operation.
-//    pageNum := 0
-//    err := client.ListScenesPages(params,
-//        func(page *iottwinmaker.ListScenesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListScenes operation.
+//	pageNum := 0
+//	err := client.ListScenesPages(params,
+//	    func(page *iottwinmaker.ListScenesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTTwinMaker) ListScenesPages(input *ListScenesInput, fn func(*ListScenesOutput, bool) bool) error {
 	return c.ListScenesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2548,14 +3280,13 @@ const opListSyncJobs = "ListSyncJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSyncJobsRequest method.
+//	req, resp := client.ListSyncJobsRequest(params)
 //
-//    // Example sending a request using the ListSyncJobsRequest method.
-//    req, resp := client.ListSyncJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListSyncJobs
 func (c *IoTTwinMaker) ListSyncJobsRequest(input *ListSyncJobsInput) (req *request.Request, output *ListSyncJobsOutput) {
@@ -2594,20 +3325,21 @@ func (c *IoTTwinMaker) ListSyncJobsRequest(input *ListSyncJobsInput) (req *reque
 // API operation ListSyncJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListSyncJobs
 func (c *IoTTwinMaker) ListSyncJobs(input *ListSyncJobsInput) (*ListSyncJobsOutput, error) {
@@ -2639,15 +3371,14 @@ func (c *IoTTwinMaker) ListSyncJobsWithContext(ctx aws.Context, input *ListSyncJ
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSyncJobs operation.
-//    pageNum := 0
-//    err := client.ListSyncJobsPages(params,
-//        func(page *iottwinmaker.ListSyncJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSyncJobs operation.
+//	pageNum := 0
+//	err := client.ListSyncJobsPages(params,
+//	    func(page *iottwinmaker.ListSyncJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTTwinMaker) ListSyncJobsPages(input *ListSyncJobsInput, fn func(*ListSyncJobsOutput, bool) bool) error {
 	return c.ListSyncJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2699,14 +3430,13 @@ const opListSyncResources = "ListSyncResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSyncResourcesRequest method.
+//	req, resp := client.ListSyncResourcesRequest(params)
 //
-//    // Example sending a request using the ListSyncResourcesRequest method.
-//    req, resp := client.ListSyncResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListSyncResources
 func (c *IoTTwinMaker) ListSyncResourcesRequest(input *ListSyncResourcesInput) (req *request.Request, output *ListSyncResourcesOutput) {
@@ -2745,20 +3475,21 @@ func (c *IoTTwinMaker) ListSyncResourcesRequest(input *ListSyncResourcesInput) (
 // API operation ListSyncResources for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListSyncResources
 func (c *IoTTwinMaker) ListSyncResources(input *ListSyncResourcesInput) (*ListSyncResourcesOutput, error) {
@@ -2790,15 +3521,14 @@ func (c *IoTTwinMaker) ListSyncResourcesWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSyncResources operation.
-//    pageNum := 0
-//    err := client.ListSyncResourcesPages(params,
-//        func(page *iottwinmaker.ListSyncResourcesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSyncResources operation.
+//	pageNum := 0
+//	err := client.ListSyncResourcesPages(params,
+//	    func(page *iottwinmaker.ListSyncResourcesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTTwinMaker) ListSyncResourcesPages(input *ListSyncResourcesInput, fn func(*ListSyncResourcesOutput, bool) bool) error {
 	return c.ListSyncResourcesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2850,14 +3580,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListTagsForResource
 func (c *IoTTwinMaker) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2890,11 +3619,12 @@ func (c *IoTTwinMaker) ListTagsForResourceRequest(input *ListTagsForResourceInpu
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   Access is denied.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
+//
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListTagsForResource
 func (c *IoTTwinMaker) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2934,14 +3664,13 @@ const opListWorkspaces = "ListWorkspaces"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWorkspacesRequest method.
+//	req, resp := client.ListWorkspacesRequest(params)
 //
-//    // Example sending a request using the ListWorkspacesRequest method.
-//    req, resp := client.ListWorkspacesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListWorkspaces
 func (c *IoTTwinMaker) ListWorkspacesRequest(input *ListWorkspacesInput) (req *request.Request, output *ListWorkspacesOutput) {
@@ -2980,17 +3709,18 @@ func (c *IoTTwinMaker) ListWorkspacesRequest(input *ListWorkspacesInput) (req *r
 // API operation ListWorkspaces for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/ListWorkspaces
 func (c *IoTTwinMaker) ListWorkspaces(input *ListWorkspacesInput) (*ListWorkspacesOutput, error) {
@@ -3022,15 +3752,14 @@ func (c *IoTTwinMaker) ListWorkspacesWithContext(ctx aws.Context, input *ListWor
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWorkspaces operation.
-//    pageNum := 0
-//    err := client.ListWorkspacesPages(params,
-//        func(page *iottwinmaker.ListWorkspacesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWorkspaces operation.
+//	pageNum := 0
+//	err := client.ListWorkspacesPages(params,
+//	    func(page *iottwinmaker.ListWorkspacesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTTwinMaker) ListWorkspacesPages(input *ListWorkspacesInput, fn func(*ListWorkspacesOutput, bool) bool) error {
 	return c.ListWorkspacesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3082,14 +3811,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/TagResource
 func (c *IoTTwinMaker) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -3123,14 +3851,15 @@ func (c *IoTTwinMaker) TagResourceRequest(input *TagResourceInput) (req *request
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * TooManyTagsException
-//   The number of tags exceeds the limit.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - TooManyTagsException
+//     The number of tags exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
+//
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/TagResource
 func (c *IoTTwinMaker) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -3170,14 +3899,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UntagResource
 func (c *IoTTwinMaker) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -3211,11 +3939,12 @@ func (c *IoTTwinMaker) UntagResourceRequest(input *UntagResourceInput) (req *req
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   Access is denied.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
+//
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UntagResource
 func (c *IoTTwinMaker) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -3255,14 +3984,13 @@ const opUpdateComponentType = "UpdateComponentType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateComponentTypeRequest method.
+//	req, resp := client.UpdateComponentTypeRequest(params)
 //
-//    // Example sending a request using the UpdateComponentTypeRequest method.
-//    req, resp := client.UpdateComponentTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UpdateComponentType
 func (c *IoTTwinMaker) UpdateComponentTypeRequest(input *UpdateComponentTypeInput) (req *request.Request, output *UpdateComponentTypeOutput) {
@@ -3295,23 +4023,24 @@ func (c *IoTTwinMaker) UpdateComponentTypeRequest(input *UpdateComponentTypeInpu
 // API operation UpdateComponentType for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UpdateComponentType
 func (c *IoTTwinMaker) UpdateComponentType(input *UpdateComponentTypeInput) (*UpdateComponentTypeOutput, error) {
@@ -3351,14 +4080,13 @@ const opUpdateEntity = "UpdateEntity"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateEntityRequest method.
+//	req, resp := client.UpdateEntityRequest(params)
 //
-//    // Example sending a request using the UpdateEntityRequest method.
-//    req, resp := client.UpdateEntityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UpdateEntity
 func (c *IoTTwinMaker) UpdateEntityRequest(input *UpdateEntityInput) (req *request.Request, output *UpdateEntityOutput) {
@@ -3391,26 +4119,27 @@ func (c *IoTTwinMaker) UpdateEntityRequest(input *UpdateEntityInput) (req *reque
 // API operation UpdateEntity for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ConflictException
-//   A conflict occurred.
+//   - ValidationException
+//     Failed
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ConflictException
+//     A conflict occurred.
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UpdateEntity
 func (c *IoTTwinMaker) UpdateEntity(input *UpdateEntityInput) (*UpdateEntityOutput, error) {
@@ -3450,14 +4179,13 @@ const opUpdatePricingPlan = "UpdatePricingPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdatePricingPlanRequest method.
+//	req, resp := client.UpdatePricingPlanRequest(params)
 //
-//    // Example sending a request using the UpdatePricingPlanRequest method.
-//    req, resp := client.UpdatePricingPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UpdatePricingPlan
 func (c *IoTTwinMaker) UpdatePricingPlanRequest(input *UpdatePricingPlanInput) (req *request.Request, output *UpdatePricingPlanOutput) {
@@ -3490,17 +4218,18 @@ func (c *IoTTwinMaker) UpdatePricingPlanRequest(input *UpdatePricingPlanInput) (
 // API operation UpdatePricingPlan for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UpdatePricingPlan
 func (c *IoTTwinMaker) UpdatePricingPlan(input *UpdatePricingPlanInput) (*UpdatePricingPlanOutput, error) {
@@ -3540,14 +4269,13 @@ const opUpdateScene = "UpdateScene"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSceneRequest method.
+//	req, resp := client.UpdateSceneRequest(params)
 //
-//    // Example sending a request using the UpdateSceneRequest method.
-//    req, resp := client.UpdateSceneRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UpdateScene
 func (c *IoTTwinMaker) UpdateSceneRequest(input *UpdateSceneInput) (req *request.Request, output *UpdateSceneOutput) {
@@ -3580,20 +4308,21 @@ func (c *IoTTwinMaker) UpdateSceneRequest(input *UpdateSceneInput) (req *request
 // API operation UpdateScene for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ValidationException
+//     Failed
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UpdateScene
 func (c *IoTTwinMaker) UpdateScene(input *UpdateSceneInput) (*UpdateSceneOutput, error) {
@@ -3633,14 +4362,13 @@ const opUpdateWorkspace = "UpdateWorkspace"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateWorkspaceRequest method.
+//	req, resp := client.UpdateWorkspaceRequest(params)
 //
-//    // Example sending a request using the UpdateWorkspaceRequest method.
-//    req, resp := client.UpdateWorkspaceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UpdateWorkspace
 func (c *IoTTwinMaker) UpdateWorkspaceRequest(input *UpdateWorkspaceInput) (req *request.Request, output *UpdateWorkspaceOutput) {
@@ -3673,23 +4401,24 @@ func (c *IoTTwinMaker) UpdateWorkspaceRequest(input *UpdateWorkspaceInput) (req 
 // API operation UpdateWorkspace for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error has occurred.
 //
-//   * AccessDeniedException
-//   Access is denied.
+//   - InternalServerException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - AccessDeniedException
+//     Access is denied.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   Failed
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceQuotaExceededException
-//   The service quota was exceeded.
+//   - ValidationException
+//     Failed
+//
+//   - ServiceQuotaExceededException
+//     The service quota was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iottwinmaker-2021-11-29/UpdateWorkspace
 func (c *IoTTwinMaker) UpdateWorkspace(input *UpdateWorkspaceInput) (*UpdateWorkspaceOutput, error) {
@@ -4023,6 +4752,130 @@ func (s *BundleInformation) SetPricingTier(v string) *BundleInformation {
 	return s
 }
 
+type CancelMetadataTransferJobInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The metadata transfer job Id.
+	//
+	// MetadataTransferJobId is a required field
+	MetadataTransferJobId *string `location:"uri" locationName:"metadataTransferJobId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelMetadataTransferJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelMetadataTransferJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelMetadataTransferJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelMetadataTransferJobInput"}
+	if s.MetadataTransferJobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("MetadataTransferJobId"))
+	}
+	if s.MetadataTransferJobId != nil && len(*s.MetadataTransferJobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MetadataTransferJobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMetadataTransferJobId sets the MetadataTransferJobId field's value.
+func (s *CancelMetadataTransferJobInput) SetMetadataTransferJobId(v string) *CancelMetadataTransferJobInput {
+	s.MetadataTransferJobId = &v
+	return s
+}
+
+type CancelMetadataTransferJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata transfer job ARN.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"20" type:"string" required:"true"`
+
+	// The metadata transfer job Id.
+	//
+	// MetadataTransferJobId is a required field
+	MetadataTransferJobId *string `locationName:"metadataTransferJobId" min:"1" type:"string" required:"true"`
+
+	// The metadata transfer job's progress.
+	Progress *MetadataTransferJobProgress `locationName:"progress" type:"structure"`
+
+	// The metadata transfer job's status.
+	//
+	// Status is a required field
+	Status *MetadataTransferJobStatus `locationName:"status" type:"structure" required:"true"`
+
+	// Used to update the DateTime property.
+	//
+	// UpdateDateTime is a required field
+	UpdateDateTime *time.Time `locationName:"updateDateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelMetadataTransferJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelMetadataTransferJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CancelMetadataTransferJobOutput) SetArn(v string) *CancelMetadataTransferJobOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetMetadataTransferJobId sets the MetadataTransferJobId field's value.
+func (s *CancelMetadataTransferJobOutput) SetMetadataTransferJobId(v string) *CancelMetadataTransferJobOutput {
+	s.MetadataTransferJobId = &v
+	return s
+}
+
+// SetProgress sets the Progress field's value.
+func (s *CancelMetadataTransferJobOutput) SetProgress(v *MetadataTransferJobProgress) *CancelMetadataTransferJobOutput {
+	s.Progress = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CancelMetadataTransferJobOutput) SetStatus(v *MetadataTransferJobStatus) *CancelMetadataTransferJobOutput {
+	s.Status = v
+	return s
+}
+
+// SetUpdateDateTime sets the UpdateDateTime field's value.
+func (s *CancelMetadataTransferJobOutput) SetUpdateDateTime(v time.Time) *CancelMetadataTransferJobOutput {
+	s.UpdateDateTime = &v
+	return s
+}
+
 // A description of the column in the query results.
 type ColumnDescription struct {
 	_ struct{} `type:"structure"`
@@ -4259,11 +5112,21 @@ func (s *ComponentRequest) SetPropertyGroups(v map[string]*ComponentPropertyGrou
 type ComponentResponse struct {
 	_ struct{} `type:"structure"`
 
+	// This flag notes whether all compositeComponents are returned in the API response.
+	AreAllCompositeComponentsReturned *bool `locationName:"areAllCompositeComponentsReturned" type:"boolean"`
+
+	// This flag notes whether all properties of the component are returned in the
+	// API response. The maximum number of properties returned is 800.
+	AreAllPropertiesReturned *bool `locationName:"areAllPropertiesReturned" type:"boolean"`
+
 	// The name of the component.
 	ComponentName *string `locationName:"componentName" min:"1" type:"string"`
 
 	// The ID of the component type.
 	ComponentTypeId *string `locationName:"componentTypeId" min:"1" type:"string"`
+
+	// This lists objects that contain information about the compositeComponents.
+	CompositeComponents map[string]*ComponentSummary `locationName:"compositeComponents" type:"map"`
 
 	// The name of the property definition set in the request.
 	DefinedIn *string `locationName:"definedIn" min:"1" type:"string"`
@@ -4303,6 +5166,18 @@ func (s ComponentResponse) GoString() string {
 	return s.String()
 }
 
+// SetAreAllCompositeComponentsReturned sets the AreAllCompositeComponentsReturned field's value.
+func (s *ComponentResponse) SetAreAllCompositeComponentsReturned(v bool) *ComponentResponse {
+	s.AreAllCompositeComponentsReturned = &v
+	return s
+}
+
+// SetAreAllPropertiesReturned sets the AreAllPropertiesReturned field's value.
+func (s *ComponentResponse) SetAreAllPropertiesReturned(v bool) *ComponentResponse {
+	s.AreAllPropertiesReturned = &v
+	return s
+}
+
 // SetComponentName sets the ComponentName field's value.
 func (s *ComponentResponse) SetComponentName(v string) *ComponentResponse {
 	s.ComponentName = &v
@@ -4312,6 +5187,12 @@ func (s *ComponentResponse) SetComponentName(v string) *ComponentResponse {
 // SetComponentTypeId sets the ComponentTypeId field's value.
 func (s *ComponentResponse) SetComponentTypeId(v string) *ComponentResponse {
 	s.ComponentTypeId = &v
+	return s
+}
+
+// SetCompositeComponents sets the CompositeComponents field's value.
+func (s *ComponentResponse) SetCompositeComponents(v map[string]*ComponentSummary) *ComponentResponse {
+	s.CompositeComponents = v
 	return s
 }
 
@@ -4347,6 +5228,108 @@ func (s *ComponentResponse) SetStatus(v *Status) *ComponentResponse {
 
 // SetSyncSource sets the SyncSource field's value.
 func (s *ComponentResponse) SetSyncSource(v string) *ComponentResponse {
+	s.SyncSource = &v
+	return s
+}
+
+// An object that returns information about a component summary.
+type ComponentSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the component.
+	//
+	// ComponentName is a required field
+	ComponentName *string `locationName:"componentName" min:"1" type:"string" required:"true"`
+
+	// This string specifies the path to the composite component, starting from
+	// the top-level component.
+	ComponentPath *string `locationName:"componentPath" min:"1" type:"string"`
+
+	// The ID of the component type.
+	//
+	// ComponentTypeId is a required field
+	ComponentTypeId *string `locationName:"componentTypeId" min:"1" type:"string" required:"true"`
+
+	// The name of the property definition set in the request.
+	DefinedIn *string `locationName:"definedIn" min:"1" type:"string"`
+
+	// The description of the component request.
+	Description *string `locationName:"description" type:"string"`
+
+	// The property groups.
+	PropertyGroups map[string]*ComponentPropertyGroupResponse `locationName:"propertyGroups" type:"map"`
+
+	// The status of the component type.
+	//
+	// Status is a required field
+	Status *Status `locationName:"status" type:"structure" required:"true"`
+
+	// The syncSource of the sync job, if this entity was created by a sync job.
+	SyncSource *string `locationName:"syncSource" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ComponentSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ComponentSummary) GoString() string {
+	return s.String()
+}
+
+// SetComponentName sets the ComponentName field's value.
+func (s *ComponentSummary) SetComponentName(v string) *ComponentSummary {
+	s.ComponentName = &v
+	return s
+}
+
+// SetComponentPath sets the ComponentPath field's value.
+func (s *ComponentSummary) SetComponentPath(v string) *ComponentSummary {
+	s.ComponentPath = &v
+	return s
+}
+
+// SetComponentTypeId sets the ComponentTypeId field's value.
+func (s *ComponentSummary) SetComponentTypeId(v string) *ComponentSummary {
+	s.ComponentTypeId = &v
+	return s
+}
+
+// SetDefinedIn sets the DefinedIn field's value.
+func (s *ComponentSummary) SetDefinedIn(v string) *ComponentSummary {
+	s.DefinedIn = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ComponentSummary) SetDescription(v string) *ComponentSummary {
+	s.Description = &v
+	return s
+}
+
+// SetPropertyGroups sets the PropertyGroups field's value.
+func (s *ComponentSummary) SetPropertyGroups(v map[string]*ComponentPropertyGroupResponse) *ComponentSummary {
+	s.PropertyGroups = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ComponentSummary) SetStatus(v *Status) *ComponentSummary {
+	s.Status = v
+	return s
+}
+
+// SetSyncSource sets the SyncSource field's value.
+func (s *ComponentSummary) SetSyncSource(v string) *ComponentSummary {
 	s.SyncSource = &v
 	return s
 }
@@ -4533,6 +5516,246 @@ func (s *ComponentUpdateRequest) SetPropertyUpdates(v map[string]*PropertyReques
 
 // SetUpdateType sets the UpdateType field's value.
 func (s *ComponentUpdateRequest) SetUpdateType(v string) *ComponentUpdateRequest {
+	s.UpdateType = &v
+	return s
+}
+
+// An object that sets information about the composite component update request.
+type CompositeComponentRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the component type.
+	Description *string `locationName:"description" type:"string"`
+
+	// This is an object that maps strings to the properties to set in the component
+	// type. Each string in the mapping must be unique to this object.
+	Properties map[string]*PropertyRequest `locationName:"properties" type:"map"`
+
+	// The property groups.
+	PropertyGroups map[string]*ComponentPropertyGroupRequest `locationName:"propertyGroups" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeComponentRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeComponentRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CompositeComponentRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CompositeComponentRequest"}
+	if s.Properties != nil {
+		for i, v := range s.Properties {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Properties", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CompositeComponentRequest) SetDescription(v string) *CompositeComponentRequest {
+	s.Description = &v
+	return s
+}
+
+// SetProperties sets the Properties field's value.
+func (s *CompositeComponentRequest) SetProperties(v map[string]*PropertyRequest) *CompositeComponentRequest {
+	s.Properties = v
+	return s
+}
+
+// SetPropertyGroups sets the PropertyGroups field's value.
+func (s *CompositeComponentRequest) SetPropertyGroups(v map[string]*ComponentPropertyGroupRequest) *CompositeComponentRequest {
+	s.PropertyGroups = v
+	return s
+}
+
+// An object that sets information about the composite component types of a
+// component type.
+type CompositeComponentTypeRequest struct {
+	_ struct{} `type:"structure"`
+
+	// This is the componentTypeId that the compositeComponentType refers to.
+	ComponentTypeId *string `locationName:"componentTypeId" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeComponentTypeRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeComponentTypeRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CompositeComponentTypeRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CompositeComponentTypeRequest"}
+	if s.ComponentTypeId != nil && len(*s.ComponentTypeId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComponentTypeId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetComponentTypeId sets the ComponentTypeId field's value.
+func (s *CompositeComponentTypeRequest) SetComponentTypeId(v string) *CompositeComponentTypeRequest {
+	s.ComponentTypeId = &v
+	return s
+}
+
+// An object that returns information about the composite component types of
+// a component type.
+type CompositeComponentTypeResponse struct {
+	_ struct{} `type:"structure"`
+
+	// This is the componentTypeId that this compositeComponentType refers to.
+	ComponentTypeId *string `locationName:"componentTypeId" min:"1" type:"string"`
+
+	// This boolean indicates whether this compositeComponentType is inherited from
+	// its parent.
+	IsInherited *bool `locationName:"isInherited" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeComponentTypeResponse) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeComponentTypeResponse) GoString() string {
+	return s.String()
+}
+
+// SetComponentTypeId sets the ComponentTypeId field's value.
+func (s *CompositeComponentTypeResponse) SetComponentTypeId(v string) *CompositeComponentTypeResponse {
+	s.ComponentTypeId = &v
+	return s
+}
+
+// SetIsInherited sets the IsInherited field's value.
+func (s *CompositeComponentTypeResponse) SetIsInherited(v bool) *CompositeComponentTypeResponse {
+	s.IsInherited = &v
+	return s
+}
+
+// An object that sets information about the composite component update request.
+type CompositeComponentUpdateRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the component type.
+	Description *string `locationName:"description" type:"string"`
+
+	// The property group updates.
+	PropertyGroupUpdates map[string]*ComponentPropertyGroupRequest `locationName:"propertyGroupUpdates" type:"map"`
+
+	// An object that maps strings to the properties to set in the component type
+	// update. Each string in the mapping must be unique to this object.
+	PropertyUpdates map[string]*PropertyRequest `locationName:"propertyUpdates" type:"map"`
+
+	// The update type of the component update request.
+	UpdateType *string `locationName:"updateType" type:"string" enum:"ComponentUpdateType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeComponentUpdateRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompositeComponentUpdateRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CompositeComponentUpdateRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CompositeComponentUpdateRequest"}
+	if s.PropertyUpdates != nil {
+		for i, v := range s.PropertyUpdates {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "PropertyUpdates", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CompositeComponentUpdateRequest) SetDescription(v string) *CompositeComponentUpdateRequest {
+	s.Description = &v
+	return s
+}
+
+// SetPropertyGroupUpdates sets the PropertyGroupUpdates field's value.
+func (s *CompositeComponentUpdateRequest) SetPropertyGroupUpdates(v map[string]*ComponentPropertyGroupRequest) *CompositeComponentUpdateRequest {
+	s.PropertyGroupUpdates = v
+	return s
+}
+
+// SetPropertyUpdates sets the PropertyUpdates field's value.
+func (s *CompositeComponentUpdateRequest) SetPropertyUpdates(v map[string]*PropertyRequest) *CompositeComponentUpdateRequest {
+	s.PropertyUpdates = v
+	return s
+}
+
+// SetUpdateType sets the UpdateType field's value.
+func (s *CompositeComponentUpdateRequest) SetUpdateType(v string) *CompositeComponentUpdateRequest {
 	s.UpdateType = &v
 	return s
 }
@@ -4740,6 +5963,10 @@ type CreateComponentTypeInput struct {
 	// A friendly name for the component type.
 	ComponentTypeName *string `locationName:"componentTypeName" type:"string"`
 
+	// This is an object that maps strings to compositeComponentTypes of the componentType.
+	// CompositeComponentType is referenced by componentTypeId.
+	CompositeComponentTypes map[string]*CompositeComponentTypeRequest `locationName:"compositeComponentTypes" type:"map"`
+
 	// The description of the component type.
 	Description *string `locationName:"description" type:"string"`
 
@@ -4802,6 +6029,16 @@ func (s *CreateComponentTypeInput) Validate() error {
 	if s.WorkspaceId != nil && len(*s.WorkspaceId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("WorkspaceId", 1))
 	}
+	if s.CompositeComponentTypes != nil {
+		for i, v := range s.CompositeComponentTypes {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CompositeComponentTypes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.Functions != nil {
 		for i, v := range s.Functions {
 			if v == nil {
@@ -4838,6 +6075,12 @@ func (s *CreateComponentTypeInput) SetComponentTypeId(v string) *CreateComponent
 // SetComponentTypeName sets the ComponentTypeName field's value.
 func (s *CreateComponentTypeInput) SetComponentTypeName(v string) *CreateComponentTypeInput {
 	s.ComponentTypeName = &v
+	return s
+}
+
+// SetCompositeComponentTypes sets the CompositeComponentTypes field's value.
+func (s *CreateComponentTypeInput) SetCompositeComponentTypes(v map[string]*CompositeComponentTypeRequest) *CreateComponentTypeInput {
+	s.CompositeComponentTypes = v
 	return s
 }
 
@@ -4951,6 +6194,10 @@ type CreateEntityInput struct {
 	// in the mapping must be unique to this object.
 	Components map[string]*ComponentRequest `locationName:"components" type:"map"`
 
+	// This is an object that maps strings to compositeComponent updates in the
+	// request. Each key of the map represents the componentPath of the compositeComponent.
+	CompositeComponents map[string]*CompositeComponentRequest `locationName:"compositeComponents" type:"map"`
+
 	// The description of the entity.
 	Description *string `locationName:"description" type:"string"`
 
@@ -5023,6 +6270,16 @@ func (s *CreateEntityInput) Validate() error {
 			}
 		}
 	}
+	if s.CompositeComponents != nil {
+		for i, v := range s.CompositeComponents {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CompositeComponents", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5033,6 +6290,12 @@ func (s *CreateEntityInput) Validate() error {
 // SetComponents sets the Components field's value.
 func (s *CreateEntityInput) SetComponents(v map[string]*ComponentRequest) *CreateEntityInput {
 	s.Components = v
+	return s
+}
+
+// SetCompositeComponents sets the CompositeComponents field's value.
+func (s *CreateEntityInput) SetCompositeComponents(v map[string]*CompositeComponentRequest) *CreateEntityInput {
+	s.CompositeComponents = v
 	return s
 }
 
@@ -5135,6 +6398,171 @@ func (s *CreateEntityOutput) SetEntityId(v string) *CreateEntityOutput {
 // SetState sets the State field's value.
 func (s *CreateEntityOutput) SetState(v string) *CreateEntityOutput {
 	s.State = &v
+	return s
+}
+
+type CreateMetadataTransferJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata transfer job description.
+	Description *string `locationName:"description" type:"string"`
+
+	// The metadata transfer job destination.
+	//
+	// Destination is a required field
+	Destination *DestinationConfiguration `locationName:"destination" type:"structure" required:"true"`
+
+	// The metadata transfer job Id.
+	MetadataTransferJobId *string `locationName:"metadataTransferJobId" min:"1" type:"string"`
+
+	// The metadata transfer job sources.
+	//
+	// Sources is a required field
+	Sources []*SourceConfiguration `locationName:"sources" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateMetadataTransferJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateMetadataTransferJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateMetadataTransferJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateMetadataTransferJobInput"}
+	if s.Destination == nil {
+		invalidParams.Add(request.NewErrParamRequired("Destination"))
+	}
+	if s.MetadataTransferJobId != nil && len(*s.MetadataTransferJobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MetadataTransferJobId", 1))
+	}
+	if s.Sources == nil {
+		invalidParams.Add(request.NewErrParamRequired("Sources"))
+	}
+	if s.Sources != nil && len(s.Sources) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Sources", 1))
+	}
+	if s.Destination != nil {
+		if err := s.Destination.Validate(); err != nil {
+			invalidParams.AddNested("Destination", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Sources != nil {
+		for i, v := range s.Sources {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Sources", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateMetadataTransferJobInput) SetDescription(v string) *CreateMetadataTransferJobInput {
+	s.Description = &v
+	return s
+}
+
+// SetDestination sets the Destination field's value.
+func (s *CreateMetadataTransferJobInput) SetDestination(v *DestinationConfiguration) *CreateMetadataTransferJobInput {
+	s.Destination = v
+	return s
+}
+
+// SetMetadataTransferJobId sets the MetadataTransferJobId field's value.
+func (s *CreateMetadataTransferJobInput) SetMetadataTransferJobId(v string) *CreateMetadataTransferJobInput {
+	s.MetadataTransferJobId = &v
+	return s
+}
+
+// SetSources sets the Sources field's value.
+func (s *CreateMetadataTransferJobInput) SetSources(v []*SourceConfiguration) *CreateMetadataTransferJobInput {
+	s.Sources = v
+	return s
+}
+
+type CreateMetadataTransferJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata transfer job ARN.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"20" type:"string" required:"true"`
+
+	// The The metadata transfer job creation DateTime property.
+	//
+	// CreationDateTime is a required field
+	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp" required:"true"`
+
+	// The metadata transfer job Id.
+	//
+	// MetadataTransferJobId is a required field
+	MetadataTransferJobId *string `locationName:"metadataTransferJobId" min:"1" type:"string" required:"true"`
+
+	// The metadata transfer job response status.
+	//
+	// Status is a required field
+	Status *MetadataTransferJobStatus `locationName:"status" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateMetadataTransferJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateMetadataTransferJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateMetadataTransferJobOutput) SetArn(v string) *CreateMetadataTransferJobOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreationDateTime sets the CreationDateTime field's value.
+func (s *CreateMetadataTransferJobOutput) SetCreationDateTime(v time.Time) *CreateMetadataTransferJobOutput {
+	s.CreationDateTime = &v
+	return s
+}
+
+// SetMetadataTransferJobId sets the MetadataTransferJobId field's value.
+func (s *CreateMetadataTransferJobOutput) SetMetadataTransferJobId(v string) *CreateMetadataTransferJobOutput {
+	s.MetadataTransferJobId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateMetadataTransferJobOutput) SetStatus(v *MetadataTransferJobStatus) *CreateMetadataTransferJobOutput {
+	s.Status = v
 	return s
 }
 
@@ -5455,15 +6883,11 @@ type CreateWorkspaceInput struct {
 	Description *string `locationName:"description" type:"string"`
 
 	// The ARN of the execution role associated with the workspace.
-	//
-	// Role is a required field
-	Role *string `locationName:"role" min:"20" type:"string" required:"true"`
+	Role *string `locationName:"role" min:"20" type:"string"`
 
 	// The ARN of the S3 bucket where resources associated with the workspace are
 	// stored.
-	//
-	// S3Location is a required field
-	S3Location *string `locationName:"s3Location" type:"string" required:"true"`
+	S3Location *string `locationName:"s3Location" type:"string"`
 
 	// Metadata that you can use to manage the workspace
 	Tags map[string]*string `locationName:"tags" type:"map"`
@@ -5495,14 +6919,8 @@ func (s CreateWorkspaceInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateWorkspaceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateWorkspaceInput"}
-	if s.Role == nil {
-		invalidParams.Add(request.NewErrParamRequired("Role"))
-	}
 	if s.Role != nil && len(*s.Role) < 20 {
 		invalidParams.Add(request.NewErrParamMinLen("Role", 20))
-	}
-	if s.S3Location == nil {
-		invalidParams.Add(request.NewErrParamRequired("S3Location"))
 	}
 	if s.WorkspaceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkspaceId"))
@@ -6346,6 +7764,9 @@ func (s *DeleteWorkspaceInput) SetWorkspaceId(v string) *DeleteWorkspaceInput {
 
 type DeleteWorkspaceOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The string that specifies the delete result for the workspace.
+	Message *string `locationName:"message" type:"string"`
 }
 
 // String returns the string representation.
@@ -6366,12 +7787,97 @@ func (s DeleteWorkspaceOutput) GoString() string {
 	return s.String()
 }
 
+// SetMessage sets the Message field's value.
+func (s *DeleteWorkspaceOutput) SetMessage(v string) *DeleteWorkspaceOutput {
+	s.Message = &v
+	return s
+}
+
+// The [link to action] metadata transfer job destination configuration.
+type DestinationConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata transfer job Amazon Web Services IoT TwinMaker configuration.
+	IotTwinMakerConfiguration *IotTwinMakerDestinationConfiguration `locationName:"iotTwinMakerConfiguration" type:"structure"`
+
+	// The metadata transfer job S3 configuration. [need to add S3 entity]
+	S3Configuration *S3DestinationConfiguration `locationName:"s3Configuration" type:"structure"`
+
+	// The destination type.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"DestinationType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DestinationConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DestinationConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DestinationConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DestinationConfiguration"}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.IotTwinMakerConfiguration != nil {
+		if err := s.IotTwinMakerConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("IotTwinMakerConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3Configuration != nil {
+		if err := s.S3Configuration.Validate(); err != nil {
+			invalidParams.AddNested("S3Configuration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIotTwinMakerConfiguration sets the IotTwinMakerConfiguration field's value.
+func (s *DestinationConfiguration) SetIotTwinMakerConfiguration(v *IotTwinMakerDestinationConfiguration) *DestinationConfiguration {
+	s.IotTwinMakerConfiguration = v
+	return s
+}
+
+// SetS3Configuration sets the S3Configuration field's value.
+func (s *DestinationConfiguration) SetS3Configuration(v *S3DestinationConfiguration) *DestinationConfiguration {
+	s.S3Configuration = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *DestinationConfiguration) SetType(v string) *DestinationConfiguration {
+	s.Type = &v
+	return s
+}
+
 // An object that uniquely identifies an entity property.
 type EntityPropertyReference struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the component.
 	ComponentName *string `locationName:"componentName" min:"1" type:"string"`
+
+	// This string specifies the path to the composite component, starting from
+	// the top-level component.
+	ComponentPath *string `locationName:"componentPath" min:"1" type:"string"`
 
 	// The ID of the entity.
 	EntityId *string `locationName:"entityId" min:"1" type:"string"`
@@ -6410,6 +7916,9 @@ func (s *EntityPropertyReference) Validate() error {
 	if s.ComponentName != nil && len(*s.ComponentName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ComponentName", 1))
 	}
+	if s.ComponentPath != nil && len(*s.ComponentPath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComponentPath", 1))
+	}
 	if s.EntityId != nil && len(*s.EntityId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
 	}
@@ -6429,6 +7938,12 @@ func (s *EntityPropertyReference) Validate() error {
 // SetComponentName sets the ComponentName field's value.
 func (s *EntityPropertyReference) SetComponentName(v string) *EntityPropertyReference {
 	s.ComponentName = &v
+	return s
+}
+
+// SetComponentPath sets the ComponentPath field's value.
+func (s *EntityPropertyReference) SetComponentPath(v string) *EntityPropertyReference {
+	s.ComponentPath = &v
 	return s
 }
 
@@ -6477,7 +7992,8 @@ type EntitySummary struct {
 	// EntityName is a required field
 	EntityName *string `locationName:"entityName" min:"1" type:"string" required:"true"`
 
-	// A Boolean value that specifies whether the entity has child entities or not.
+	// An eventual Boolean value that specifies whether the entity has child entities
+	// or not.
 	HasChildEntities *bool `locationName:"hasChildEntities" type:"boolean"`
 
 	// The ID of the parent entity.
@@ -6610,9 +8126,7 @@ func (s *ErrorDetails) SetMessage(v string) *ErrorDetails {
 type ExecuteQueryInput struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum number of results to return at one time. The default is 25.
-	//
-	// Valid Range: Minimum value of 1. Maximum value of 250.
+	// The maximum number of results to return at one time. The default is 50.
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// The string that specifies the next page of results.
@@ -6742,6 +8256,256 @@ func (s *ExecuteQueryOutput) SetNextToken(v string) *ExecuteQueryOutput {
 // SetRows sets the Rows field's value.
 func (s *ExecuteQueryOutput) SetRows(v []*Row) *ExecuteQueryOutput {
 	s.Rows = v
+	return s
+}
+
+// Filter by asset. [TwinMaker asset]
+type FilterByAsset struct {
+	_ struct{} `type:"structure"`
+
+	// The external-Id property of an asset.
+	AssetExternalId *string `locationName:"assetExternalId" min:"2" type:"string"`
+
+	// Filter by asset Id.
+	AssetId *string `locationName:"assetId" min:"36" type:"string"`
+
+	// Boolean to include the asset model.
+	IncludeAssetModel *bool `locationName:"includeAssetModel" type:"boolean"`
+
+	// Includes sub-assets.[need description hekp for this]
+	IncludeOffspring *bool `locationName:"includeOffspring" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterByAsset) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterByAsset) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FilterByAsset) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FilterByAsset"}
+	if s.AssetExternalId != nil && len(*s.AssetExternalId) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("AssetExternalId", 2))
+	}
+	if s.AssetId != nil && len(*s.AssetId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AssetId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssetExternalId sets the AssetExternalId field's value.
+func (s *FilterByAsset) SetAssetExternalId(v string) *FilterByAsset {
+	s.AssetExternalId = &v
+	return s
+}
+
+// SetAssetId sets the AssetId field's value.
+func (s *FilterByAsset) SetAssetId(v string) *FilterByAsset {
+	s.AssetId = &v
+	return s
+}
+
+// SetIncludeAssetModel sets the IncludeAssetModel field's value.
+func (s *FilterByAsset) SetIncludeAssetModel(v bool) *FilterByAsset {
+	s.IncludeAssetModel = &v
+	return s
+}
+
+// SetIncludeOffspring sets the IncludeOffspring field's value.
+func (s *FilterByAsset) SetIncludeOffspring(v bool) *FilterByAsset {
+	s.IncludeOffspring = &v
+	return s
+}
+
+// Filter by asset model.
+type FilterByAssetModel struct {
+	_ struct{} `type:"structure"`
+
+	// The external-Id property of an asset model.
+	AssetModelExternalId *string `locationName:"assetModelExternalId" min:"2" type:"string"`
+
+	// The asset model Id.
+	AssetModelId *string `locationName:"assetModelId" min:"36" type:"string"`
+
+	// Bolean to include assets.
+	IncludeAssets *bool `locationName:"includeAssets" type:"boolean"`
+
+	// Include asset offspring. [need desc.]
+	IncludeOffspring *bool `locationName:"includeOffspring" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterByAssetModel) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterByAssetModel) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FilterByAssetModel) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FilterByAssetModel"}
+	if s.AssetModelExternalId != nil && len(*s.AssetModelExternalId) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("AssetModelExternalId", 2))
+	}
+	if s.AssetModelId != nil && len(*s.AssetModelId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AssetModelId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssetModelExternalId sets the AssetModelExternalId field's value.
+func (s *FilterByAssetModel) SetAssetModelExternalId(v string) *FilterByAssetModel {
+	s.AssetModelExternalId = &v
+	return s
+}
+
+// SetAssetModelId sets the AssetModelId field's value.
+func (s *FilterByAssetModel) SetAssetModelId(v string) *FilterByAssetModel {
+	s.AssetModelId = &v
+	return s
+}
+
+// SetIncludeAssets sets the IncludeAssets field's value.
+func (s *FilterByAssetModel) SetIncludeAssets(v bool) *FilterByAssetModel {
+	s.IncludeAssets = &v
+	return s
+}
+
+// SetIncludeOffspring sets the IncludeOffspring field's value.
+func (s *FilterByAssetModel) SetIncludeOffspring(v bool) *FilterByAssetModel {
+	s.IncludeOffspring = &v
+	return s
+}
+
+// Filter by component type.
+type FilterByComponentType struct {
+	_ struct{} `type:"structure"`
+
+	// The component type Id.
+	//
+	// ComponentTypeId is a required field
+	ComponentTypeId *string `locationName:"componentTypeId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterByComponentType) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterByComponentType) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FilterByComponentType) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FilterByComponentType"}
+	if s.ComponentTypeId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ComponentTypeId"))
+	}
+	if s.ComponentTypeId != nil && len(*s.ComponentTypeId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComponentTypeId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetComponentTypeId sets the ComponentTypeId field's value.
+func (s *FilterByComponentType) SetComponentTypeId(v string) *FilterByComponentType {
+	s.ComponentTypeId = &v
+	return s
+}
+
+// Vilter by entity.
+type FilterByEntity struct {
+	_ struct{} `type:"structure"`
+
+	// The entity Id.
+	//
+	// EntityId is a required field
+	EntityId *string `locationName:"entityId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterByEntity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterByEntity) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FilterByEntity) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FilterByEntity"}
+	if s.EntityId == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityId"))
+	}
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *FilterByEntity) SetEntityId(v string) *FilterByEntity {
+	s.EntityId = &v
 	return s
 }
 
@@ -6951,6 +8715,10 @@ type GetComponentTypeOutput struct {
 	// The component type name.
 	ComponentTypeName *string `locationName:"componentTypeName" type:"string"`
 
+	// This is an object that maps strings to compositeComponentTypes of the componentType.
+	// CompositeComponentType is referenced by componentTypeId.
+	CompositeComponentTypes map[string]*CompositeComponentTypeResponse `locationName:"compositeComponentTypes" type:"map"`
+
 	// The date and time when the component type was created.
 	//
 	// CreationDateTime is a required field
@@ -7036,6 +8804,12 @@ func (s *GetComponentTypeOutput) SetComponentTypeId(v string) *GetComponentTypeO
 // SetComponentTypeName sets the ComponentTypeName field's value.
 func (s *GetComponentTypeOutput) SetComponentTypeName(v string) *GetComponentTypeOutput {
 	s.ComponentTypeName = &v
+	return s
+}
+
+// SetCompositeComponentTypes sets the CompositeComponentTypes field's value.
+func (s *GetComponentTypeOutput) SetCompositeComponentTypes(v map[string]*CompositeComponentTypeResponse) *GetComponentTypeOutput {
+	s.CompositeComponentTypes = v
 	return s
 }
 
@@ -7186,6 +8960,10 @@ func (s *GetEntityInput) SetWorkspaceId(v string) *GetEntityInput {
 type GetEntityOutput struct {
 	_ struct{} `type:"structure"`
 
+	// This flag notes whether all components are returned in the API response.
+	// The maximum number of components returned is 30.
+	AreAllComponentsReturned *bool `locationName:"areAllComponentsReturned" type:"boolean"`
+
 	// The ARN of the entity.
 	//
 	// Arn is a required field
@@ -7260,6 +9038,12 @@ func (s GetEntityOutput) GoString() string {
 	return s.String()
 }
 
+// SetAreAllComponentsReturned sets the AreAllComponentsReturned field's value.
+func (s *GetEntityOutput) SetAreAllComponentsReturned(v bool) *GetEntityOutput {
+	s.AreAllComponentsReturned = &v
+	return s
+}
+
 // SetArn sets the Arn field's value.
 func (s *GetEntityOutput) SetArn(v string) *GetEntityOutput {
 	s.Arn = &v
@@ -7332,6 +9116,192 @@ func (s *GetEntityOutput) SetWorkspaceId(v string) *GetEntityOutput {
 	return s
 }
 
+type GetMetadataTransferJobInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The metadata transfer job Id.
+	//
+	// MetadataTransferJobId is a required field
+	MetadataTransferJobId *string `location:"uri" locationName:"metadataTransferJobId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMetadataTransferJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMetadataTransferJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetMetadataTransferJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetMetadataTransferJobInput"}
+	if s.MetadataTransferJobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("MetadataTransferJobId"))
+	}
+	if s.MetadataTransferJobId != nil && len(*s.MetadataTransferJobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MetadataTransferJobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMetadataTransferJobId sets the MetadataTransferJobId field's value.
+func (s *GetMetadataTransferJobInput) SetMetadataTransferJobId(v string) *GetMetadataTransferJobInput {
+	s.MetadataTransferJobId = &v
+	return s
+}
+
+type GetMetadataTransferJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata transfer job ARN.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"20" type:"string" required:"true"`
+
+	// The metadata transfer job's creation DateTime property.
+	//
+	// CreationDateTime is a required field
+	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp" required:"true"`
+
+	// The metadata transfer job description.
+	Description *string `locationName:"description" type:"string"`
+
+	// The metadata transfer job's destination.
+	//
+	// Destination is a required field
+	Destination *DestinationConfiguration `locationName:"destination" type:"structure" required:"true"`
+
+	// The metadata transfer job Id.
+	//
+	// MetadataTransferJobId is a required field
+	MetadataTransferJobId *string `locationName:"metadataTransferJobId" min:"1" type:"string" required:"true"`
+
+	// The metadata transfer job's role.
+	//
+	// MetadataTransferJobRole is a required field
+	MetadataTransferJobRole *string `locationName:"metadataTransferJobRole" min:"20" type:"string" required:"true"`
+
+	// The metadata transfer job's progress.
+	Progress *MetadataTransferJobProgress `locationName:"progress" type:"structure"`
+
+	// The metadata transfer job's report URL.
+	ReportUrl *string `locationName:"reportUrl" min:"1" type:"string"`
+
+	// The metadata transfer job's sources.
+	//
+	// Sources is a required field
+	Sources []*SourceConfiguration `locationName:"sources" min:"1" type:"list" required:"true"`
+
+	// The metadata transfer job's status.
+	//
+	// Status is a required field
+	Status *MetadataTransferJobStatus `locationName:"status" type:"structure" required:"true"`
+
+	// The metadata transfer job's update DateTime property.
+	//
+	// UpdateDateTime is a required field
+	UpdateDateTime *time.Time `locationName:"updateDateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMetadataTransferJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMetadataTransferJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetMetadataTransferJobOutput) SetArn(v string) *GetMetadataTransferJobOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreationDateTime sets the CreationDateTime field's value.
+func (s *GetMetadataTransferJobOutput) SetCreationDateTime(v time.Time) *GetMetadataTransferJobOutput {
+	s.CreationDateTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *GetMetadataTransferJobOutput) SetDescription(v string) *GetMetadataTransferJobOutput {
+	s.Description = &v
+	return s
+}
+
+// SetDestination sets the Destination field's value.
+func (s *GetMetadataTransferJobOutput) SetDestination(v *DestinationConfiguration) *GetMetadataTransferJobOutput {
+	s.Destination = v
+	return s
+}
+
+// SetMetadataTransferJobId sets the MetadataTransferJobId field's value.
+func (s *GetMetadataTransferJobOutput) SetMetadataTransferJobId(v string) *GetMetadataTransferJobOutput {
+	s.MetadataTransferJobId = &v
+	return s
+}
+
+// SetMetadataTransferJobRole sets the MetadataTransferJobRole field's value.
+func (s *GetMetadataTransferJobOutput) SetMetadataTransferJobRole(v string) *GetMetadataTransferJobOutput {
+	s.MetadataTransferJobRole = &v
+	return s
+}
+
+// SetProgress sets the Progress field's value.
+func (s *GetMetadataTransferJobOutput) SetProgress(v *MetadataTransferJobProgress) *GetMetadataTransferJobOutput {
+	s.Progress = v
+	return s
+}
+
+// SetReportUrl sets the ReportUrl field's value.
+func (s *GetMetadataTransferJobOutput) SetReportUrl(v string) *GetMetadataTransferJobOutput {
+	s.ReportUrl = &v
+	return s
+}
+
+// SetSources sets the Sources field's value.
+func (s *GetMetadataTransferJobOutput) SetSources(v []*SourceConfiguration) *GetMetadataTransferJobOutput {
+	s.Sources = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetMetadataTransferJobOutput) SetStatus(v *MetadataTransferJobStatus) *GetMetadataTransferJobOutput {
+	s.Status = v
+	return s
+}
+
+// SetUpdateDateTime sets the UpdateDateTime field's value.
+func (s *GetMetadataTransferJobOutput) SetUpdateDateTime(v time.Time) *GetMetadataTransferJobOutput {
+	s.UpdateDateTime = &v
+	return s
+}
+
 type GetPricingPlanInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 }
@@ -7401,6 +9371,10 @@ type GetPropertyValueHistoryInput struct {
 
 	// The name of the component.
 	ComponentName *string `locationName:"componentName" min:"1" type:"string"`
+
+	// This string specifies the path to the composite component, starting from
+	// the top-level component.
+	ComponentPath *string `locationName:"componentPath" min:"1" type:"string"`
 
 	// The ID of the component type.
 	ComponentTypeId *string `locationName:"componentTypeId" min:"1" type:"string"`
@@ -7483,6 +9457,9 @@ func (s *GetPropertyValueHistoryInput) Validate() error {
 	if s.ComponentName != nil && len(*s.ComponentName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ComponentName", 1))
 	}
+	if s.ComponentPath != nil && len(*s.ComponentPath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComponentPath", 1))
+	}
 	if s.ComponentTypeId != nil && len(*s.ComponentTypeId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ComponentTypeId", 1))
 	}
@@ -7530,6 +9507,12 @@ func (s *GetPropertyValueHistoryInput) Validate() error {
 // SetComponentName sets the ComponentName field's value.
 func (s *GetPropertyValueHistoryInput) SetComponentName(v string) *GetPropertyValueHistoryInput {
 	s.ComponentName = &v
+	return s
+}
+
+// SetComponentPath sets the ComponentPath field's value.
+func (s *GetPropertyValueHistoryInput) SetComponentPath(v string) *GetPropertyValueHistoryInput {
+	s.ComponentPath = &v
 	return s
 }
 
@@ -7660,6 +9643,10 @@ type GetPropertyValueInput struct {
 	// The name of the component whose property values the operation returns.
 	ComponentName *string `locationName:"componentName" min:"1" type:"string"`
 
+	// This string specifies the path to the composite component, starting from
+	// the top-level component.
+	ComponentPath *string `locationName:"componentPath" min:"1" type:"string"`
+
 	// The ID of the component type whose property values the operation returns.
 	ComponentTypeId *string `locationName:"componentTypeId" min:"1" type:"string"`
 
@@ -7715,6 +9702,9 @@ func (s *GetPropertyValueInput) Validate() error {
 	if s.ComponentName != nil && len(*s.ComponentName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ComponentName", 1))
 	}
+	if s.ComponentPath != nil && len(*s.ComponentPath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComponentPath", 1))
+	}
 	if s.ComponentTypeId != nil && len(*s.ComponentTypeId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ComponentTypeId", 1))
 	}
@@ -7751,6 +9741,12 @@ func (s *GetPropertyValueInput) Validate() error {
 // SetComponentName sets the ComponentName field's value.
 func (s *GetPropertyValueInput) SetComponentName(v string) *GetPropertyValueInput {
 	s.ComponentName = &v
+	return s
+}
+
+// SetComponentPath sets the ComponentPath field's value.
+func (s *GetPropertyValueInput) SetComponentPath(v string) *GetPropertyValueInput {
+	s.ComponentPath = &v
 	return s
 }
 
@@ -8280,16 +10276,15 @@ type GetWorkspaceOutput struct {
 	// The description of the workspace.
 	Description *string `locationName:"description" type:"string"`
 
+	// A list of services that are linked to the workspace.
+	LinkedServices []*string `locationName:"linkedServices" type:"list"`
+
 	// The ARN of the execution role associated with the workspace.
-	//
-	// Role is a required field
-	Role *string `locationName:"role" min:"20" type:"string" required:"true"`
+	Role *string `locationName:"role" min:"20" type:"string"`
 
 	// The ARN of the S3 bucket where resources associated with the workspace are
 	// stored.
-	//
-	// S3Location is a required field
-	S3Location *string `locationName:"s3Location" type:"string" required:"true"`
+	S3Location *string `locationName:"s3Location" type:"string"`
 
 	// The date and time when the workspace was last updated.
 	//
@@ -8335,6 +10330,12 @@ func (s *GetWorkspaceOutput) SetCreationDateTime(v time.Time) *GetWorkspaceOutpu
 // SetDescription sets the Description field's value.
 func (s *GetWorkspaceOutput) SetDescription(v string) *GetWorkspaceOutput {
 	s.Description = &v
+	return s
+}
+
+// SetLinkedServices sets the LinkedServices field's value.
+func (s *GetWorkspaceOutput) SetLinkedServices(v []*string) *GetWorkspaceOutput {
+	s.LinkedServices = v
 	return s
 }
 
@@ -8464,6 +10465,299 @@ func (s *InterpolationParameters) SetInterpolationType(v string) *InterpolationP
 // SetIntervalInSeconds sets the IntervalInSeconds field's value.
 func (s *InterpolationParameters) SetIntervalInSeconds(v int64) *InterpolationParameters {
 	s.IntervalInSeconds = &v
+	return s
+}
+
+// The metadata transfer job AWS IoT SiteWise source configuration.
+type IotSiteWiseSourceConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The AWS IoT SiteWise soucre configuration filters.
+	Filters []*IotSiteWiseSourceConfigurationFilter `locationName:"filters" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IotSiteWiseSourceConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IotSiteWiseSourceConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IotSiteWiseSourceConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IotSiteWiseSourceConfiguration"}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *IotSiteWiseSourceConfiguration) SetFilters(v []*IotSiteWiseSourceConfigurationFilter) *IotSiteWiseSourceConfiguration {
+	s.Filters = v
+	return s
+}
+
+// The AWS IoT SiteWise soucre configuration filter.[need held with desc here]
+type IotSiteWiseSourceConfigurationFilter struct {
+	_ struct{} `type:"structure"`
+
+	// Filter by asset.
+	FilterByAsset *FilterByAsset `locationName:"filterByAsset" type:"structure"`
+
+	// Filter by asset model.
+	FilterByAssetModel *FilterByAssetModel `locationName:"filterByAssetModel" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IotSiteWiseSourceConfigurationFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IotSiteWiseSourceConfigurationFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IotSiteWiseSourceConfigurationFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IotSiteWiseSourceConfigurationFilter"}
+	if s.FilterByAsset != nil {
+		if err := s.FilterByAsset.Validate(); err != nil {
+			invalidParams.AddNested("FilterByAsset", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FilterByAssetModel != nil {
+		if err := s.FilterByAssetModel.Validate(); err != nil {
+			invalidParams.AddNested("FilterByAssetModel", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilterByAsset sets the FilterByAsset field's value.
+func (s *IotSiteWiseSourceConfigurationFilter) SetFilterByAsset(v *FilterByAsset) *IotSiteWiseSourceConfigurationFilter {
+	s.FilterByAsset = v
+	return s
+}
+
+// SetFilterByAssetModel sets the FilterByAssetModel field's value.
+func (s *IotSiteWiseSourceConfigurationFilter) SetFilterByAssetModel(v *FilterByAssetModel) *IotSiteWiseSourceConfigurationFilter {
+	s.FilterByAssetModel = v
+	return s
+}
+
+// The metadata transfer job AWS IoT TwinMaker destination configuration.
+type IotTwinMakerDestinationConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The IoT TwinMaker workspace.
+	//
+	// Workspace is a required field
+	Workspace *string `locationName:"workspace" min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IotTwinMakerDestinationConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IotTwinMakerDestinationConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IotTwinMakerDestinationConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IotTwinMakerDestinationConfiguration"}
+	if s.Workspace == nil {
+		invalidParams.Add(request.NewErrParamRequired("Workspace"))
+	}
+	if s.Workspace != nil && len(*s.Workspace) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("Workspace", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetWorkspace sets the Workspace field's value.
+func (s *IotTwinMakerDestinationConfiguration) SetWorkspace(v string) *IotTwinMakerDestinationConfiguration {
+	s.Workspace = &v
+	return s
+}
+
+// The metadata transfer job AWS IoT TwinMaker source configuration.
+type IotTwinMakerSourceConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata transfer job AWS IoT TwinMaker source configuration filters.
+	Filters []*IotTwinMakerSourceConfigurationFilter `locationName:"filters" type:"list"`
+
+	// The IoT TwinMaker workspace.
+	//
+	// Workspace is a required field
+	Workspace *string `locationName:"workspace" min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IotTwinMakerSourceConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IotTwinMakerSourceConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IotTwinMakerSourceConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IotTwinMakerSourceConfiguration"}
+	if s.Workspace == nil {
+		invalidParams.Add(request.NewErrParamRequired("Workspace"))
+	}
+	if s.Workspace != nil && len(*s.Workspace) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("Workspace", 20))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *IotTwinMakerSourceConfiguration) SetFilters(v []*IotTwinMakerSourceConfigurationFilter) *IotTwinMakerSourceConfiguration {
+	s.Filters = v
+	return s
+}
+
+// SetWorkspace sets the Workspace field's value.
+func (s *IotTwinMakerSourceConfiguration) SetWorkspace(v string) *IotTwinMakerSourceConfiguration {
+	s.Workspace = &v
+	return s
+}
+
+// The metadata transfer job AWS IoT TwinMaker source configuration filter.
+type IotTwinMakerSourceConfigurationFilter struct {
+	_ struct{} `type:"structure"`
+
+	// Filter by component type.
+	FilterByComponentType *FilterByComponentType `locationName:"filterByComponentType" type:"structure"`
+
+	// Filter by entity.
+	FilterByEntity *FilterByEntity `locationName:"filterByEntity" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IotTwinMakerSourceConfigurationFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IotTwinMakerSourceConfigurationFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IotTwinMakerSourceConfigurationFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IotTwinMakerSourceConfigurationFilter"}
+	if s.FilterByComponentType != nil {
+		if err := s.FilterByComponentType.Validate(); err != nil {
+			invalidParams.AddNested("FilterByComponentType", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FilterByEntity != nil {
+		if err := s.FilterByEntity.Validate(); err != nil {
+			invalidParams.AddNested("FilterByEntity", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilterByComponentType sets the FilterByComponentType field's value.
+func (s *IotTwinMakerSourceConfigurationFilter) SetFilterByComponentType(v *FilterByComponentType) *IotTwinMakerSourceConfigurationFilter {
+	s.FilterByComponentType = v
+	return s
+}
+
+// SetFilterByEntity sets the FilterByEntity field's value.
+func (s *IotTwinMakerSourceConfigurationFilter) SetFilterByEntity(v *FilterByEntity) *IotTwinMakerSourceConfigurationFilter {
+	s.FilterByEntity = v
 	return s
 }
 
@@ -8736,6 +11030,146 @@ func (s *ListComponentTypesOutput) SetWorkspaceId(v string) *ListComponentTypesO
 	return s
 }
 
+type ListComponentsInput struct {
+	_ struct{} `type:"structure"`
+
+	// This string specifies the path to the composite component, starting from
+	// the top-level component.
+	ComponentPath *string `locationName:"componentPath" min:"1" type:"string"`
+
+	// The ID for the entity whose metadata (component/properties) is returned by
+	// the operation.
+	//
+	// EntityId is a required field
+	EntityId *string `location:"uri" locationName:"entityId" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results returned at one time. The default is 25.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// The string that specifies the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The workspace ID.
+	//
+	// WorkspaceId is a required field
+	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListComponentsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListComponentsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListComponentsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListComponentsInput"}
+	if s.ComponentPath != nil && len(*s.ComponentPath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComponentPath", 1))
+	}
+	if s.EntityId == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityId"))
+	}
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
+	}
+	if s.WorkspaceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkspaceId"))
+	}
+	if s.WorkspaceId != nil && len(*s.WorkspaceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkspaceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetComponentPath sets the ComponentPath field's value.
+func (s *ListComponentsInput) SetComponentPath(v string) *ListComponentsInput {
+	s.ComponentPath = &v
+	return s
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *ListComponentsInput) SetEntityId(v string) *ListComponentsInput {
+	s.EntityId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListComponentsInput) SetMaxResults(v int64) *ListComponentsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListComponentsInput) SetNextToken(v string) *ListComponentsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetWorkspaceId sets the WorkspaceId field's value.
+func (s *ListComponentsInput) SetWorkspaceId(v string) *ListComponentsInput {
+	s.WorkspaceId = &v
+	return s
+}
+
+type ListComponentsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of objects that contain information about the components.
+	//
+	// ComponentSummaries is a required field
+	ComponentSummaries []*ComponentSummary `locationName:"componentSummaries" type:"list" required:"true"`
+
+	// The string that specifies the next page of component results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListComponentsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListComponentsOutput) GoString() string {
+	return s.String()
+}
+
+// SetComponentSummaries sets the ComponentSummaries field's value.
+func (s *ListComponentsOutput) SetComponentSummaries(v []*ComponentSummary) *ListComponentsOutput {
+	s.ComponentSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListComponentsOutput) SetNextToken(v string) *ListComponentsOutput {
+	s.NextToken = &v
+	return s
+}
+
 // An object that filters items in a list of entities.
 type ListEntitiesFilter struct {
 	_ struct{} `type:"structure"`
@@ -8933,6 +11367,351 @@ func (s *ListEntitiesOutput) SetEntitySummaries(v []*EntitySummary) *ListEntitie
 // SetNextToken sets the NextToken field's value.
 func (s *ListEntitiesOutput) SetNextToken(v string) *ListEntitiesOutput {
 	s.NextToken = &v
+	return s
+}
+
+// The ListMetadataTransferJobs filter.
+type ListMetadataTransferJobsFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The filter state.
+	State *string `locationName:"state" type:"string" enum:"MetadataTransferJobState"`
+
+	// The workspace Id.
+	WorkspaceId *string `locationName:"workspaceId" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMetadataTransferJobsFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMetadataTransferJobsFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListMetadataTransferJobsFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListMetadataTransferJobsFilter"}
+	if s.WorkspaceId != nil && len(*s.WorkspaceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkspaceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetState sets the State field's value.
+func (s *ListMetadataTransferJobsFilter) SetState(v string) *ListMetadataTransferJobsFilter {
+	s.State = &v
+	return s
+}
+
+// SetWorkspaceId sets the WorkspaceId field's value.
+func (s *ListMetadataTransferJobsFilter) SetWorkspaceId(v string) *ListMetadataTransferJobsFilter {
+	s.WorkspaceId = &v
+	return s
+}
+
+type ListMetadataTransferJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata transfer job's destination type.
+	//
+	// DestinationType is a required field
+	DestinationType *string `locationName:"destinationType" type:"string" required:"true" enum:"DestinationType"`
+
+	// An object that filters metadata transfer jobs.
+	Filters []*ListMetadataTransferJobsFilter `locationName:"filters" type:"list"`
+
+	// The maximum number of results to return at one time.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// The string that specifies the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The metadata transfer job's source type.
+	//
+	// SourceType is a required field
+	SourceType *string `locationName:"sourceType" type:"string" required:"true" enum:"SourceType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMetadataTransferJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMetadataTransferJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListMetadataTransferJobsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListMetadataTransferJobsInput"}
+	if s.DestinationType == nil {
+		invalidParams.Add(request.NewErrParamRequired("DestinationType"))
+	}
+	if s.SourceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceType"))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDestinationType sets the DestinationType field's value.
+func (s *ListMetadataTransferJobsInput) SetDestinationType(v string) *ListMetadataTransferJobsInput {
+	s.DestinationType = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListMetadataTransferJobsInput) SetFilters(v []*ListMetadataTransferJobsFilter) *ListMetadataTransferJobsInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListMetadataTransferJobsInput) SetMaxResults(v int64) *ListMetadataTransferJobsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListMetadataTransferJobsInput) SetNextToken(v string) *ListMetadataTransferJobsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSourceType sets the SourceType field's value.
+func (s *ListMetadataTransferJobsInput) SetSourceType(v string) *ListMetadataTransferJobsInput {
+	s.SourceType = &v
+	return s
+}
+
+type ListMetadataTransferJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata transfer job summaries.
+	//
+	// MetadataTransferJobSummaries is a required field
+	MetadataTransferJobSummaries []*MetadataTransferJobSummary `locationName:"metadataTransferJobSummaries" type:"list" required:"true"`
+
+	// The string that specifies the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMetadataTransferJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMetadataTransferJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SetMetadataTransferJobSummaries sets the MetadataTransferJobSummaries field's value.
+func (s *ListMetadataTransferJobsOutput) SetMetadataTransferJobSummaries(v []*MetadataTransferJobSummary) *ListMetadataTransferJobsOutput {
+	s.MetadataTransferJobSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListMetadataTransferJobsOutput) SetNextToken(v string) *ListMetadataTransferJobsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListPropertiesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the component whose properties are returned by the operation.
+	ComponentName *string `locationName:"componentName" min:"1" type:"string"`
+
+	// This string specifies the path to the composite component, starting from
+	// the top-level component.
+	ComponentPath *string `locationName:"componentPath" min:"1" type:"string"`
+
+	// The ID for the entity whose metadata (component/properties) is returned by
+	// the operation.
+	//
+	// EntityId is a required field
+	EntityId *string `locationName:"entityId" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results returned at one time. The default is 25.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// The string that specifies the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The workspace ID.
+	//
+	// WorkspaceId is a required field
+	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPropertiesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPropertiesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPropertiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPropertiesInput"}
+	if s.ComponentName != nil && len(*s.ComponentName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComponentName", 1))
+	}
+	if s.ComponentPath != nil && len(*s.ComponentPath) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComponentPath", 1))
+	}
+	if s.EntityId == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityId"))
+	}
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
+	}
+	if s.WorkspaceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkspaceId"))
+	}
+	if s.WorkspaceId != nil && len(*s.WorkspaceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkspaceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetComponentName sets the ComponentName field's value.
+func (s *ListPropertiesInput) SetComponentName(v string) *ListPropertiesInput {
+	s.ComponentName = &v
+	return s
+}
+
+// SetComponentPath sets the ComponentPath field's value.
+func (s *ListPropertiesInput) SetComponentPath(v string) *ListPropertiesInput {
+	s.ComponentPath = &v
+	return s
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *ListPropertiesInput) SetEntityId(v string) *ListPropertiesInput {
+	s.EntityId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListPropertiesInput) SetMaxResults(v int64) *ListPropertiesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPropertiesInput) SetNextToken(v string) *ListPropertiesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetWorkspaceId sets the WorkspaceId field's value.
+func (s *ListPropertiesInput) SetWorkspaceId(v string) *ListPropertiesInput {
+	s.WorkspaceId = &v
+	return s
+}
+
+type ListPropertiesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The string that specifies the next page of property results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// A list of objects that contain information about the properties.
+	//
+	// PropertySummaries is a required field
+	PropertySummaries []*PropertySummary `locationName:"propertySummaries" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPropertiesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPropertiesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPropertiesOutput) SetNextToken(v string) *ListPropertiesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPropertySummaries sets the PropertySummaries field's value.
+func (s *ListPropertiesOutput) SetPropertySummaries(v []*PropertySummary) *ListPropertiesOutput {
+	s.PropertySummaries = v
 	return s
 }
 
@@ -9495,6 +12274,202 @@ func (s *ListWorkspacesOutput) SetNextToken(v string) *ListWorkspacesOutput {
 // SetWorkspaceSummaries sets the WorkspaceSummaries field's value.
 func (s *ListWorkspacesOutput) SetWorkspaceSummaries(v []*WorkspaceSummary) *ListWorkspacesOutput {
 	s.WorkspaceSummaries = v
+	return s
+}
+
+// The metadata transfer job's progress.
+type MetadataTransferJobProgress struct {
+	_ struct{} `type:"structure"`
+
+	// The failed count.
+	FailedCount *int64 `locationName:"failedCount" type:"integer"`
+
+	// The skipped count.
+	SkippedCount *int64 `locationName:"skippedCount" type:"integer"`
+
+	// The succeeded count.
+	SucceededCount *int64 `locationName:"succeededCount" type:"integer"`
+
+	// The total count. [of what]
+	TotalCount *int64 `locationName:"totalCount" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MetadataTransferJobProgress) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MetadataTransferJobProgress) GoString() string {
+	return s.String()
+}
+
+// SetFailedCount sets the FailedCount field's value.
+func (s *MetadataTransferJobProgress) SetFailedCount(v int64) *MetadataTransferJobProgress {
+	s.FailedCount = &v
+	return s
+}
+
+// SetSkippedCount sets the SkippedCount field's value.
+func (s *MetadataTransferJobProgress) SetSkippedCount(v int64) *MetadataTransferJobProgress {
+	s.SkippedCount = &v
+	return s
+}
+
+// SetSucceededCount sets the SucceededCount field's value.
+func (s *MetadataTransferJobProgress) SetSucceededCount(v int64) *MetadataTransferJobProgress {
+	s.SucceededCount = &v
+	return s
+}
+
+// SetTotalCount sets the TotalCount field's value.
+func (s *MetadataTransferJobProgress) SetTotalCount(v int64) *MetadataTransferJobProgress {
+	s.TotalCount = &v
+	return s
+}
+
+// The metadata transfer job status.
+type MetadataTransferJobStatus struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata transfer job error.
+	Error *ErrorDetails `locationName:"error" type:"structure"`
+
+	// The queued position.
+	QueuedPosition *int64 `locationName:"queuedPosition" type:"integer"`
+
+	// The metadata transfer job state.
+	State *string `locationName:"state" type:"string" enum:"MetadataTransferJobState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MetadataTransferJobStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MetadataTransferJobStatus) GoString() string {
+	return s.String()
+}
+
+// SetError sets the Error field's value.
+func (s *MetadataTransferJobStatus) SetError(v *ErrorDetails) *MetadataTransferJobStatus {
+	s.Error = v
+	return s
+}
+
+// SetQueuedPosition sets the QueuedPosition field's value.
+func (s *MetadataTransferJobStatus) SetQueuedPosition(v int64) *MetadataTransferJobStatus {
+	s.QueuedPosition = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *MetadataTransferJobStatus) SetState(v string) *MetadataTransferJobStatus {
+	s.State = &v
+	return s
+}
+
+// The metadata transfer job summary.
+type MetadataTransferJobSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata transfer job summary ARN.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"20" type:"string" required:"true"`
+
+	// The metadata transfer job summary creation DateTime object.
+	//
+	// CreationDateTime is a required field
+	CreationDateTime *time.Time `locationName:"creationDateTime" type:"timestamp" required:"true"`
+
+	// The metadata transfer job summary Id.
+	//
+	// MetadataTransferJobId is a required field
+	MetadataTransferJobId *string `locationName:"metadataTransferJobId" min:"1" type:"string" required:"true"`
+
+	// The metadata transfer job summary progess.
+	Progress *MetadataTransferJobProgress `locationName:"progress" type:"structure"`
+
+	// The metadata transfer job summary status.
+	//
+	// Status is a required field
+	Status *MetadataTransferJobStatus `locationName:"status" type:"structure" required:"true"`
+
+	// The metadata transfer job summary update DateTime object
+	//
+	// UpdateDateTime is a required field
+	UpdateDateTime *time.Time `locationName:"updateDateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MetadataTransferJobSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MetadataTransferJobSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *MetadataTransferJobSummary) SetArn(v string) *MetadataTransferJobSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCreationDateTime sets the CreationDateTime field's value.
+func (s *MetadataTransferJobSummary) SetCreationDateTime(v time.Time) *MetadataTransferJobSummary {
+	s.CreationDateTime = &v
+	return s
+}
+
+// SetMetadataTransferJobId sets the MetadataTransferJobId field's value.
+func (s *MetadataTransferJobSummary) SetMetadataTransferJobId(v string) *MetadataTransferJobSummary {
+	s.MetadataTransferJobId = &v
+	return s
+}
+
+// SetProgress sets the Progress field's value.
+func (s *MetadataTransferJobSummary) SetProgress(v *MetadataTransferJobProgress) *MetadataTransferJobSummary {
+	s.Progress = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *MetadataTransferJobSummary) SetStatus(v *MetadataTransferJobStatus) *MetadataTransferJobSummary {
+	s.Status = v
+	return s
+}
+
+// SetUpdateDateTime sets the UpdateDateTime field's value.
+func (s *MetadataTransferJobSummary) SetUpdateDateTime(v time.Time) *MetadataTransferJobSummary {
+	s.UpdateDateTime = &v
 	return s
 }
 
@@ -10248,6 +13223,11 @@ func (s *PropertyRequest) SetValue(v *DataValue) *PropertyRequest {
 type PropertyResponse struct {
 	_ struct{} `type:"structure"`
 
+	// This flag notes whether all values of a list or map type property are returned
+	// in the API response. The maximum number of values per property returned is
+	// 50.
+	AreAllPropertyValuesReturned *bool `locationName:"areAllPropertyValuesReturned" type:"boolean"`
+
 	// An object that specifies information about a property.
 	Definition *PropertyDefinitionResponse `locationName:"definition" type:"structure"`
 
@@ -10273,6 +13253,12 @@ func (s PropertyResponse) GoString() string {
 	return s.String()
 }
 
+// SetAreAllPropertyValuesReturned sets the AreAllPropertyValuesReturned field's value.
+func (s *PropertyResponse) SetAreAllPropertyValuesReturned(v bool) *PropertyResponse {
+	s.AreAllPropertyValuesReturned = &v
+	return s
+}
+
 // SetDefinition sets the Definition field's value.
 func (s *PropertyResponse) SetDefinition(v *PropertyDefinitionResponse) *PropertyResponse {
 	s.Definition = v
@@ -10281,6 +13267,69 @@ func (s *PropertyResponse) SetDefinition(v *PropertyDefinitionResponse) *Propert
 
 // SetValue sets the Value field's value.
 func (s *PropertyResponse) SetValue(v *DataValue) *PropertyResponse {
+	s.Value = v
+	return s
+}
+
+// This is an object that contains the information of a property.
+type PropertySummary struct {
+	_ struct{} `type:"structure"`
+
+	// This flag notes whether all values of a list or map type property are returned
+	// in the API response. The maximum number of values per property returned is
+	// 50.
+	AreAllPropertyValuesReturned *bool `locationName:"areAllPropertyValuesReturned" type:"boolean"`
+
+	// This is the schema for the property.
+	Definition *PropertyDefinitionResponse `locationName:"definition" type:"structure"`
+
+	// This is the name of the property.
+	//
+	// PropertyName is a required field
+	PropertyName *string `locationName:"propertyName" min:"1" type:"string" required:"true"`
+
+	// This is the value for the property.
+	Value *DataValue `locationName:"value" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PropertySummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PropertySummary) GoString() string {
+	return s.String()
+}
+
+// SetAreAllPropertyValuesReturned sets the AreAllPropertyValuesReturned field's value.
+func (s *PropertySummary) SetAreAllPropertyValuesReturned(v bool) *PropertySummary {
+	s.AreAllPropertyValuesReturned = &v
+	return s
+}
+
+// SetDefinition sets the Definition field's value.
+func (s *PropertySummary) SetDefinition(v *PropertyDefinitionResponse) *PropertySummary {
+	s.Definition = v
+	return s
+}
+
+// SetPropertyName sets the PropertyName field's value.
+func (s *PropertySummary) SetPropertyName(v string) *PropertySummary {
+	s.PropertyName = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *PropertySummary) SetValue(v *DataValue) *PropertySummary {
 	s.Value = v
 	return s
 }
@@ -10768,6 +13817,100 @@ func (s Row) GoString() string {
 	return s.String()
 }
 
+// The S3 destination configuration.
+type S3DestinationConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The S3 destination configuration location.
+	//
+	// Location is a required field
+	Location *string `locationName:"location" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3DestinationConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3DestinationConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3DestinationConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3DestinationConfiguration"}
+	if s.Location == nil {
+		invalidParams.Add(request.NewErrParamRequired("Location"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLocation sets the Location field's value.
+func (s *S3DestinationConfiguration) SetLocation(v string) *S3DestinationConfiguration {
+	s.Location = &v
+	return s
+}
+
+// The S3 destination source configuration.
+type S3SourceConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The S3 destination source configuration location.
+	//
+	// Location is a required field
+	Location *string `locationName:"location" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3SourceConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3SourceConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3SourceConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3SourceConfiguration"}
+	if s.Location == nil {
+		invalidParams.Add(request.NewErrParamRequired("Location"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLocation sets the Location field's value.
+func (s *S3SourceConfiguration) SetLocation(v string) *S3SourceConfiguration {
+	s.Location = &v
+	return s
+}
+
 // The scene error.
 type SceneError struct {
 	_ struct{} `type:"structure"`
@@ -10958,6 +14101,95 @@ func (s *ServiceQuotaExceededException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ServiceQuotaExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// The source configuration.
+type SourceConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The source configuration IoT SiteWise configuration.
+	IotSiteWiseConfiguration *IotSiteWiseSourceConfiguration `locationName:"iotSiteWiseConfiguration" type:"structure"`
+
+	// The source configuration IoT TwinMaker configuration.
+	IotTwinMakerConfiguration *IotTwinMakerSourceConfiguration `locationName:"iotTwinMakerConfiguration" type:"structure"`
+
+	// The source configuration S3 configuration.
+	S3Configuration *S3SourceConfiguration `locationName:"s3Configuration" type:"structure"`
+
+	// The source configuration type.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"SourceType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SourceConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SourceConfiguration"}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.IotSiteWiseConfiguration != nil {
+		if err := s.IotSiteWiseConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("IotSiteWiseConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.IotTwinMakerConfiguration != nil {
+		if err := s.IotTwinMakerConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("IotTwinMakerConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.S3Configuration != nil {
+		if err := s.S3Configuration.Validate(); err != nil {
+			invalidParams.AddNested("S3Configuration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIotSiteWiseConfiguration sets the IotSiteWiseConfiguration field's value.
+func (s *SourceConfiguration) SetIotSiteWiseConfiguration(v *IotSiteWiseSourceConfiguration) *SourceConfiguration {
+	s.IotSiteWiseConfiguration = v
+	return s
+}
+
+// SetIotTwinMakerConfiguration sets the IotTwinMakerConfiguration field's value.
+func (s *SourceConfiguration) SetIotTwinMakerConfiguration(v *IotTwinMakerSourceConfiguration) *SourceConfiguration {
+	s.IotTwinMakerConfiguration = v
+	return s
+}
+
+// SetS3Configuration sets the S3Configuration field's value.
+func (s *SourceConfiguration) SetS3Configuration(v *S3SourceConfiguration) *SourceConfiguration {
+	s.S3Configuration = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *SourceConfiguration) SetType(v string) *SourceConfiguration {
+	s.Type = &v
+	return s
 }
 
 // An object that represents the status of an entity, component, component type,
@@ -11695,6 +14927,10 @@ type UpdateComponentTypeInput struct {
 	// The component type name.
 	ComponentTypeName *string `locationName:"componentTypeName" type:"string"`
 
+	// This is an object that maps strings to compositeComponentTypes of the componentType.
+	// CompositeComponentType is referenced by componentTypeId.
+	CompositeComponentTypes map[string]*CompositeComponentTypeRequest `locationName:"compositeComponentTypes" type:"map"`
+
 	// The description of the component type.
 	Description *string `locationName:"description" type:"string"`
 
@@ -11755,6 +14991,16 @@ func (s *UpdateComponentTypeInput) Validate() error {
 	if s.WorkspaceId != nil && len(*s.WorkspaceId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("WorkspaceId", 1))
 	}
+	if s.CompositeComponentTypes != nil {
+		for i, v := range s.CompositeComponentTypes {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CompositeComponentTypes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.Functions != nil {
 		for i, v := range s.Functions {
 			if v == nil {
@@ -11791,6 +15037,12 @@ func (s *UpdateComponentTypeInput) SetComponentTypeId(v string) *UpdateComponent
 // SetComponentTypeName sets the ComponentTypeName field's value.
 func (s *UpdateComponentTypeInput) SetComponentTypeName(v string) *UpdateComponentTypeInput {
 	s.ComponentTypeName = &v
+	return s
+}
+
+// SetCompositeComponentTypes sets the CompositeComponentTypes field's value.
+func (s *UpdateComponentTypeInput) SetCompositeComponentTypes(v map[string]*CompositeComponentTypeRequest) *UpdateComponentTypeInput {
+	s.CompositeComponentTypes = v
 	return s
 }
 
@@ -11909,6 +15161,10 @@ type UpdateEntityInput struct {
 	// string in the mapping must be unique to this object.
 	ComponentUpdates map[string]*ComponentUpdateRequest `locationName:"componentUpdates" type:"map"`
 
+	// This is an object that maps strings to compositeComponent updates in the
+	// request. Each key of the map represents the componentPath of the compositeComponent.
+	CompositeComponentUpdates map[string]*CompositeComponentUpdateRequest `locationName:"compositeComponentUpdates" type:"map"`
+
 	// The description of the entity.
 	Description *string `locationName:"description" type:"string"`
 
@@ -11975,6 +15231,16 @@ func (s *UpdateEntityInput) Validate() error {
 			}
 		}
 	}
+	if s.CompositeComponentUpdates != nil {
+		for i, v := range s.CompositeComponentUpdates {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CompositeComponentUpdates", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.ParentEntityUpdate != nil {
 		if err := s.ParentEntityUpdate.Validate(); err != nil {
 			invalidParams.AddNested("ParentEntityUpdate", err.(request.ErrInvalidParams))
@@ -11990,6 +15256,12 @@ func (s *UpdateEntityInput) Validate() error {
 // SetComponentUpdates sets the ComponentUpdates field's value.
 func (s *UpdateEntityInput) SetComponentUpdates(v map[string]*ComponentUpdateRequest) *UpdateEntityInput {
 	s.ComponentUpdates = v
+	return s
+}
+
+// SetCompositeComponentUpdates sets the CompositeComponentUpdates field's value.
+func (s *UpdateEntityInput) SetCompositeComponentUpdates(v map[string]*CompositeComponentUpdateRequest) *UpdateEntityInput {
+	s.CompositeComponentUpdates = v
 	return s
 }
 
@@ -12311,6 +15583,10 @@ type UpdateWorkspaceInput struct {
 	// The ARN of the execution role associated with the workspace.
 	Role *string `locationName:"role" min:"20" type:"string"`
 
+	// The ARN of the S3 bucket where resources associated with the workspace are
+	// stored.
+	S3Location *string `locationName:"s3Location" type:"string"`
+
 	// The ID of the workspace.
 	//
 	// WorkspaceId is a required field
@@ -12363,6 +15639,12 @@ func (s *UpdateWorkspaceInput) SetDescription(v string) *UpdateWorkspaceInput {
 // SetRole sets the Role field's value.
 func (s *UpdateWorkspaceInput) SetRole(v string) *UpdateWorkspaceInput {
 	s.Role = &v
+	return s
+}
+
+// SetS3Location sets the S3Location field's value.
+func (s *UpdateWorkspaceInput) SetS3Location(v string) *UpdateWorkspaceInput {
+	s.S3Location = &v
 	return s
 }
 
@@ -12486,6 +15768,9 @@ type WorkspaceSummary struct {
 	// The description of the workspace.
 	Description *string `locationName:"description" type:"string"`
 
+	// A list of services that are linked to the workspace.
+	LinkedServices []*string `locationName:"linkedServices" type:"list"`
+
 	// The date and time when the workspace was last updated.
 	//
 	// UpdateDateTime is a required field
@@ -12530,6 +15815,12 @@ func (s *WorkspaceSummary) SetCreationDateTime(v time.Time) *WorkspaceSummary {
 // SetDescription sets the Description field's value.
 func (s *WorkspaceSummary) SetDescription(v string) *WorkspaceSummary {
 	s.Description = &v
+	return s
+}
+
+// SetLinkedServices sets the LinkedServices field's value.
+func (s *WorkspaceSummary) SetLinkedServices(v []*string) *WorkspaceSummary {
+	s.LinkedServices = v
 	return s
 }
 
@@ -12586,6 +15877,26 @@ func ComponentUpdateType_Values() []string {
 }
 
 const (
+	// DestinationTypeS3 is a DestinationType enum value
+	DestinationTypeS3 = "s3"
+
+	// DestinationTypeIotsitewise is a DestinationType enum value
+	DestinationTypeIotsitewise = "iotsitewise"
+
+	// DestinationTypeIottwinmaker is a DestinationType enum value
+	DestinationTypeIottwinmaker = "iottwinmaker"
+)
+
+// DestinationType_Values returns all elements of the DestinationType enum
+func DestinationType_Values() []string {
+	return []string{
+		DestinationTypeS3,
+		DestinationTypeIotsitewise,
+		DestinationTypeIottwinmaker,
+	}
+}
+
+const (
 	// ErrorCodeValidationError is a ErrorCode enum value
 	ErrorCodeValidationError = "VALIDATION_ERROR"
 
@@ -12600,6 +15911,15 @@ const (
 
 	// ErrorCodeSyncProcessingError is a ErrorCode enum value
 	ErrorCodeSyncProcessingError = "SYNC_PROCESSING_ERROR"
+
+	// ErrorCodeSyncDeletingError is a ErrorCode enum value
+	ErrorCodeSyncDeletingError = "SYNC_DELETING_ERROR"
+
+	// ErrorCodeProcessingError is a ErrorCode enum value
+	ErrorCodeProcessingError = "PROCESSING_ERROR"
+
+	// ErrorCodeCompositeComponentFailure is a ErrorCode enum value
+	ErrorCodeCompositeComponentFailure = "COMPOSITE_COMPONENT_FAILURE"
 )
 
 // ErrorCode_Values returns all elements of the ErrorCode enum
@@ -12610,6 +15930,9 @@ func ErrorCode_Values() []string {
 		ErrorCodeSyncInitializingError,
 		ErrorCodeSyncCreatingError,
 		ErrorCodeSyncProcessingError,
+		ErrorCodeSyncDeletingError,
+		ErrorCodeProcessingError,
+		ErrorCodeCompositeComponentFailure,
 	}
 }
 
@@ -12634,6 +15957,42 @@ const (
 func InterpolationType_Values() []string {
 	return []string{
 		InterpolationTypeLinear,
+	}
+}
+
+const (
+	// MetadataTransferJobStateValidating is a MetadataTransferJobState enum value
+	MetadataTransferJobStateValidating = "VALIDATING"
+
+	// MetadataTransferJobStatePending is a MetadataTransferJobState enum value
+	MetadataTransferJobStatePending = "PENDING"
+
+	// MetadataTransferJobStateRunning is a MetadataTransferJobState enum value
+	MetadataTransferJobStateRunning = "RUNNING"
+
+	// MetadataTransferJobStateCancelling is a MetadataTransferJobState enum value
+	MetadataTransferJobStateCancelling = "CANCELLING"
+
+	// MetadataTransferJobStateError is a MetadataTransferJobState enum value
+	MetadataTransferJobStateError = "ERROR"
+
+	// MetadataTransferJobStateCompleted is a MetadataTransferJobState enum value
+	MetadataTransferJobStateCompleted = "COMPLETED"
+
+	// MetadataTransferJobStateCancelled is a MetadataTransferJobState enum value
+	MetadataTransferJobStateCancelled = "CANCELLED"
+)
+
+// MetadataTransferJobState_Values returns all elements of the MetadataTransferJobState enum
+func MetadataTransferJobState_Values() []string {
+	return []string{
+		MetadataTransferJobStateValidating,
+		MetadataTransferJobStatePending,
+		MetadataTransferJobStateRunning,
+		MetadataTransferJobStateCancelling,
+		MetadataTransferJobStateError,
+		MetadataTransferJobStateCompleted,
+		MetadataTransferJobStateCancelled,
 	}
 }
 
@@ -12794,6 +16153,26 @@ func Scope_Values() []string {
 	return []string{
 		ScopeEntity,
 		ScopeWorkspace,
+	}
+}
+
+const (
+	// SourceTypeS3 is a SourceType enum value
+	SourceTypeS3 = "s3"
+
+	// SourceTypeIotsitewise is a SourceType enum value
+	SourceTypeIotsitewise = "iotsitewise"
+
+	// SourceTypeIottwinmaker is a SourceType enum value
+	SourceTypeIottwinmaker = "iottwinmaker"
+)
+
+// SourceType_Values returns all elements of the SourceType enum
+func SourceType_Values() []string {
+	return []string{
+		SourceTypeS3,
+		SourceTypeIotsitewise,
+		SourceTypeIottwinmaker,
 	}
 }
 

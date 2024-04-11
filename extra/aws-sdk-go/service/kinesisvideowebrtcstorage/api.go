@@ -28,14 +28,13 @@ const opJoinStorageSession = "JoinStorageSession"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the JoinStorageSessionRequest method.
+//	req, resp := client.JoinStorageSessionRequest(params)
 //
-//    // Example sending a request using the JoinStorageSessionRequest method.
-//    req, resp := client.JoinStorageSessionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-video-webrtc-storage-2018-05-10/JoinStorageSession
 func (c *KinesisVideoWebRTCStorage) JoinStorageSessionRequest(input *JoinStorageSessionInput) (req *request.Request, output *JoinStorageSessionOutput) {
@@ -87,18 +86,19 @@ func (c *KinesisVideoWebRTCStorage) JoinStorageSessionRequest(input *JoinStorage
 // API operation JoinStorageSession for usage and error information.
 //
 // Returned Error Types:
-//   * ClientLimitExceededException
-//   Kinesis Video Streams has throttled the request because you have exceeded
-//   the limit of allowed client calls. Try making the call later.
 //
-//   * InvalidArgumentException
-//   The value for this input parameter is invalid.
+//   - ClientLimitExceededException
+//     Kinesis Video Streams has throttled the request because you have exceeded
+//     the limit of allowed client calls. Try making the call later.
 //
-//   * AccessDeniedException
-//   You do not have required permissions to perform this operation.
+//   - InvalidArgumentException
+//     The value for this input parameter is invalid.
 //
-//   * ResourceNotFoundException
-//   The specified resource is not found.
+//   - AccessDeniedException
+//     You do not have required permissions to perform this operation.
+//
+//   - ResourceNotFoundException
+//     The specified resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-video-webrtc-storage-2018-05-10/JoinStorageSession
 func (c *KinesisVideoWebRTCStorage) JoinStorageSession(input *JoinStorageSessionInput) (*JoinStorageSessionOutput, error) {

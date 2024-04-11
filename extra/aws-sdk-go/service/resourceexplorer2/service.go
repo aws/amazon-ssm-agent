@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a ResourceExplorer2 client from just a session.
-//     svc := resourceexplorer2.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a ResourceExplorer2 client with additional configuration
-//     svc := resourceexplorer2.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a ResourceExplorer2 client from just a session.
+//	svc := resourceexplorer2.New(mySession)
+//
+//	// Create a ResourceExplorer2 client with additional configuration
+//	svc := resourceexplorer2.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *ResourceExplorer2 {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

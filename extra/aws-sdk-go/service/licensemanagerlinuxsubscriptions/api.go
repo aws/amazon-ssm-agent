@@ -27,14 +27,13 @@ const opGetServiceSettings = "GetServiceSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetServiceSettingsRequest method.
+//	req, resp := client.GetServiceSettingsRequest(params)
 //
-//    // Example sending a request using the GetServiceSettingsRequest method.
-//    req, resp := client.GetServiceSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-linux-subscriptions-2018-05-10/GetServiceSettings
 func (c *LicenseManagerLinuxSubscriptions) GetServiceSettingsRequest(input *GetServiceSettingsInput) (req *request.Request, output *GetServiceSettingsOutput) {
@@ -65,14 +64,15 @@ func (c *LicenseManagerLinuxSubscriptions) GetServiceSettingsRequest(input *GetS
 // API operation GetServiceSettings for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An exception occurred with the service.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An exception occurred with the service.
 //
-//   * ValidationException
-//   The provided input is not valid. Try your request again.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The provided input is not valid. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-linux-subscriptions-2018-05-10/GetServiceSettings
 func (c *LicenseManagerLinuxSubscriptions) GetServiceSettings(input *GetServiceSettingsInput) (*GetServiceSettingsOutput, error) {
@@ -112,14 +112,13 @@ const opListLinuxSubscriptionInstances = "ListLinuxSubscriptionInstances"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLinuxSubscriptionInstancesRequest method.
+//	req, resp := client.ListLinuxSubscriptionInstancesRequest(params)
 //
-//    // Example sending a request using the ListLinuxSubscriptionInstancesRequest method.
-//    req, resp := client.ListLinuxSubscriptionInstancesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-linux-subscriptions-2018-05-10/ListLinuxSubscriptionInstances
 func (c *LicenseManagerLinuxSubscriptions) ListLinuxSubscriptionInstancesRequest(input *ListLinuxSubscriptionInstancesInput) (req *request.Request, output *ListLinuxSubscriptionInstancesOutput) {
@@ -157,14 +156,15 @@ func (c *LicenseManagerLinuxSubscriptions) ListLinuxSubscriptionInstancesRequest
 // API operation ListLinuxSubscriptionInstances for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An exception occurred with the service.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An exception occurred with the service.
 //
-//   * ValidationException
-//   The provided input is not valid. Try your request again.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The provided input is not valid. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-linux-subscriptions-2018-05-10/ListLinuxSubscriptionInstances
 func (c *LicenseManagerLinuxSubscriptions) ListLinuxSubscriptionInstances(input *ListLinuxSubscriptionInstancesInput) (*ListLinuxSubscriptionInstancesOutput, error) {
@@ -196,15 +196,14 @@ func (c *LicenseManagerLinuxSubscriptions) ListLinuxSubscriptionInstancesWithCon
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLinuxSubscriptionInstances operation.
-//    pageNum := 0
-//    err := client.ListLinuxSubscriptionInstancesPages(params,
-//        func(page *licensemanagerlinuxsubscriptions.ListLinuxSubscriptionInstancesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLinuxSubscriptionInstances operation.
+//	pageNum := 0
+//	err := client.ListLinuxSubscriptionInstancesPages(params,
+//	    func(page *licensemanagerlinuxsubscriptions.ListLinuxSubscriptionInstancesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *LicenseManagerLinuxSubscriptions) ListLinuxSubscriptionInstancesPages(input *ListLinuxSubscriptionInstancesInput, fn func(*ListLinuxSubscriptionInstancesOutput, bool) bool) error {
 	return c.ListLinuxSubscriptionInstancesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -256,14 +255,13 @@ const opListLinuxSubscriptions = "ListLinuxSubscriptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLinuxSubscriptionsRequest method.
+//	req, resp := client.ListLinuxSubscriptionsRequest(params)
 //
-//    // Example sending a request using the ListLinuxSubscriptionsRequest method.
-//    req, resp := client.ListLinuxSubscriptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-linux-subscriptions-2018-05-10/ListLinuxSubscriptions
 func (c *LicenseManagerLinuxSubscriptions) ListLinuxSubscriptionsRequest(input *ListLinuxSubscriptionsInput) (req *request.Request, output *ListLinuxSubscriptionsOutput) {
@@ -302,14 +300,15 @@ func (c *LicenseManagerLinuxSubscriptions) ListLinuxSubscriptionsRequest(input *
 // API operation ListLinuxSubscriptions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An exception occurred with the service.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An exception occurred with the service.
 //
-//   * ValidationException
-//   The provided input is not valid. Try your request again.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The provided input is not valid. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-linux-subscriptions-2018-05-10/ListLinuxSubscriptions
 func (c *LicenseManagerLinuxSubscriptions) ListLinuxSubscriptions(input *ListLinuxSubscriptionsInput) (*ListLinuxSubscriptionsOutput, error) {
@@ -341,15 +340,14 @@ func (c *LicenseManagerLinuxSubscriptions) ListLinuxSubscriptionsWithContext(ctx
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLinuxSubscriptions operation.
-//    pageNum := 0
-//    err := client.ListLinuxSubscriptionsPages(params,
-//        func(page *licensemanagerlinuxsubscriptions.ListLinuxSubscriptionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLinuxSubscriptions operation.
+//	pageNum := 0
+//	err := client.ListLinuxSubscriptionsPages(params,
+//	    func(page *licensemanagerlinuxsubscriptions.ListLinuxSubscriptionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *LicenseManagerLinuxSubscriptions) ListLinuxSubscriptionsPages(input *ListLinuxSubscriptionsInput, fn func(*ListLinuxSubscriptionsOutput, bool) bool) error {
 	return c.ListLinuxSubscriptionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -401,14 +399,13 @@ const opUpdateServiceSettings = "UpdateServiceSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateServiceSettingsRequest method.
+//	req, resp := client.UpdateServiceSettingsRequest(params)
 //
-//    // Example sending a request using the UpdateServiceSettingsRequest method.
-//    req, resp := client.UpdateServiceSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-linux-subscriptions-2018-05-10/UpdateServiceSettings
 func (c *LicenseManagerLinuxSubscriptions) UpdateServiceSettingsRequest(input *UpdateServiceSettingsInput) (req *request.Request, output *UpdateServiceSettingsOutput) {
@@ -439,14 +436,15 @@ func (c *LicenseManagerLinuxSubscriptions) UpdateServiceSettingsRequest(input *U
 // API operation UpdateServiceSettings for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An exception occurred with the service.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An exception occurred with the service.
 //
-//   * ValidationException
-//   The provided input is not valid. Try your request again.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The provided input is not valid. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/license-manager-linux-subscriptions-2018-05-10/UpdateServiceSettings
 func (c *LicenseManagerLinuxSubscriptions) UpdateServiceSettings(input *UpdateServiceSettingsInput) (*UpdateServiceSettingsOutput, error) {

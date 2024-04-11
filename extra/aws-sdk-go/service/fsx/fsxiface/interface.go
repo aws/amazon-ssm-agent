@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon FSx.
-//    func myFunc(svc fsxiface.FSxAPI) bool {
-//        // Make svc.AssociateFileSystemAliases request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon FSx.
+//	func myFunc(svc fsxiface.FSxAPI) bool {
+//	    // Make svc.AssociateFileSystemAliases request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := fsx.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := fsx.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockFSxClient struct {
-//        fsxiface.FSxAPI
-//    }
-//    func (m *mockFSxClient) AssociateFileSystemAliases(input *fsx.AssociateFileSystemAliasesInput) (*fsx.AssociateFileSystemAliasesOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockFSxClient struct {
+//	    fsxiface.FSxAPI
+//	}
+//	func (m *mockFSxClient) AssociateFileSystemAliases(input *fsx.AssociateFileSystemAliasesInput) (*fsx.AssociateFileSystemAliasesOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockFSxClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockFSxClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -71,6 +71,10 @@ type FSxAPI interface {
 	CopyBackup(*fsx.CopyBackupInput) (*fsx.CopyBackupOutput, error)
 	CopyBackupWithContext(aws.Context, *fsx.CopyBackupInput, ...request.Option) (*fsx.CopyBackupOutput, error)
 	CopyBackupRequest(*fsx.CopyBackupInput) (*request.Request, *fsx.CopyBackupOutput)
+
+	CopySnapshotAndUpdateVolume(*fsx.CopySnapshotAndUpdateVolumeInput) (*fsx.CopySnapshotAndUpdateVolumeOutput, error)
+	CopySnapshotAndUpdateVolumeWithContext(aws.Context, *fsx.CopySnapshotAndUpdateVolumeInput, ...request.Option) (*fsx.CopySnapshotAndUpdateVolumeOutput, error)
+	CopySnapshotAndUpdateVolumeRequest(*fsx.CopySnapshotAndUpdateVolumeInput) (*request.Request, *fsx.CopySnapshotAndUpdateVolumeOutput)
 
 	CreateBackup(*fsx.CreateBackupInput) (*fsx.CreateBackupOutput, error)
 	CreateBackupWithContext(aws.Context, *fsx.CreateBackupInput, ...request.Option) (*fsx.CreateBackupOutput, error)
@@ -182,6 +186,10 @@ type FSxAPI interface {
 	DescribeFileSystemsPages(*fsx.DescribeFileSystemsInput, func(*fsx.DescribeFileSystemsOutput, bool) bool) error
 	DescribeFileSystemsPagesWithContext(aws.Context, *fsx.DescribeFileSystemsInput, func(*fsx.DescribeFileSystemsOutput, bool) bool, ...request.Option) error
 
+	DescribeSharedVpcConfiguration(*fsx.DescribeSharedVpcConfigurationInput) (*fsx.DescribeSharedVpcConfigurationOutput, error)
+	DescribeSharedVpcConfigurationWithContext(aws.Context, *fsx.DescribeSharedVpcConfigurationInput, ...request.Option) (*fsx.DescribeSharedVpcConfigurationOutput, error)
+	DescribeSharedVpcConfigurationRequest(*fsx.DescribeSharedVpcConfigurationInput) (*request.Request, *fsx.DescribeSharedVpcConfigurationOutput)
+
 	DescribeSnapshots(*fsx.DescribeSnapshotsInput) (*fsx.DescribeSnapshotsOutput, error)
 	DescribeSnapshotsWithContext(aws.Context, *fsx.DescribeSnapshotsInput, ...request.Option) (*fsx.DescribeSnapshotsOutput, error)
 	DescribeSnapshotsRequest(*fsx.DescribeSnapshotsInput) (*request.Request, *fsx.DescribeSnapshotsOutput)
@@ -222,6 +230,10 @@ type FSxAPI interface {
 	RestoreVolumeFromSnapshotWithContext(aws.Context, *fsx.RestoreVolumeFromSnapshotInput, ...request.Option) (*fsx.RestoreVolumeFromSnapshotOutput, error)
 	RestoreVolumeFromSnapshotRequest(*fsx.RestoreVolumeFromSnapshotInput) (*request.Request, *fsx.RestoreVolumeFromSnapshotOutput)
 
+	StartMisconfiguredStateRecovery(*fsx.StartMisconfiguredStateRecoveryInput) (*fsx.StartMisconfiguredStateRecoveryOutput, error)
+	StartMisconfiguredStateRecoveryWithContext(aws.Context, *fsx.StartMisconfiguredStateRecoveryInput, ...request.Option) (*fsx.StartMisconfiguredStateRecoveryOutput, error)
+	StartMisconfiguredStateRecoveryRequest(*fsx.StartMisconfiguredStateRecoveryInput) (*request.Request, *fsx.StartMisconfiguredStateRecoveryOutput)
+
 	TagResource(*fsx.TagResourceInput) (*fsx.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *fsx.TagResourceInput, ...request.Option) (*fsx.TagResourceOutput, error)
 	TagResourceRequest(*fsx.TagResourceInput) (*request.Request, *fsx.TagResourceOutput)
@@ -241,6 +253,10 @@ type FSxAPI interface {
 	UpdateFileSystem(*fsx.UpdateFileSystemInput) (*fsx.UpdateFileSystemOutput, error)
 	UpdateFileSystemWithContext(aws.Context, *fsx.UpdateFileSystemInput, ...request.Option) (*fsx.UpdateFileSystemOutput, error)
 	UpdateFileSystemRequest(*fsx.UpdateFileSystemInput) (*request.Request, *fsx.UpdateFileSystemOutput)
+
+	UpdateSharedVpcConfiguration(*fsx.UpdateSharedVpcConfigurationInput) (*fsx.UpdateSharedVpcConfigurationOutput, error)
+	UpdateSharedVpcConfigurationWithContext(aws.Context, *fsx.UpdateSharedVpcConfigurationInput, ...request.Option) (*fsx.UpdateSharedVpcConfigurationOutput, error)
+	UpdateSharedVpcConfigurationRequest(*fsx.UpdateSharedVpcConfigurationInput) (*request.Request, *fsx.UpdateSharedVpcConfigurationOutput)
 
 	UpdateSnapshot(*fsx.UpdateSnapshotInput) (*fsx.UpdateSnapshotOutput, error)
 	UpdateSnapshotWithContext(aws.Context, *fsx.UpdateSnapshotInput, ...request.Option) (*fsx.UpdateSnapshotOutput, error)

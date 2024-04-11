@@ -28,14 +28,13 @@ const opAcknowledgeMessage = "AcknowledgeMessage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AcknowledgeMessageRequest method.
+//	req, resp := client.AcknowledgeMessageRequest(params)
 //
-//    // Example sending a request using the AcknowledgeMessageRequest method.
-//    req, resp := client.AcknowledgeMessageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/AcknowledgeMessage
 func (c *Ssmmds) AcknowledgeMessageRequest(input *AcknowledgeMessageInput) (req *request.Request, output *AcknowledgeMessageOutput) {
@@ -65,13 +64,14 @@ func (c *Ssmmds) AcknowledgeMessageRequest(input *AcknowledgeMessageInput) (req 
 // API operation AcknowledgeMessage for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidMessageIdException
 //
-//   * UnsupportedMessageOperationException
+//   - InvalidMessageIdException
 //
-//   * AuthorizationFailureException
+//   - UnsupportedMessageOperationException
 //
-//   * InternalServerException
+//   - AuthorizationFailureException
+//
+//   - InternalServerException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/AcknowledgeMessage
 func (c *Ssmmds) AcknowledgeMessage(input *AcknowledgeMessageInput) (*AcknowledgeMessageOutput, error) {
@@ -111,14 +111,13 @@ const opDeleteMessage = "DeleteMessage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMessageRequest method.
+//	req, resp := client.DeleteMessageRequest(params)
 //
-//    // Example sending a request using the DeleteMessageRequest method.
-//    req, resp := client.DeleteMessageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/DeleteMessage
 func (c *Ssmmds) DeleteMessageRequest(input *DeleteMessageInput) (req *request.Request, output *DeleteMessageOutput) {
@@ -148,13 +147,14 @@ func (c *Ssmmds) DeleteMessageRequest(input *DeleteMessageInput) (req *request.R
 // API operation DeleteMessage for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidMessageIdException
 //
-//   * UnsupportedMessageOperationException
+//   - InvalidMessageIdException
 //
-//   * AuthorizationFailureException
+//   - UnsupportedMessageOperationException
 //
-//   * InternalServerException
+//   - AuthorizationFailureException
+//
+//   - InternalServerException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/DeleteMessage
 func (c *Ssmmds) DeleteMessage(input *DeleteMessageInput) (*DeleteMessageOutput, error) {
@@ -194,14 +194,13 @@ const opFailMessage = "FailMessage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the FailMessageRequest method.
+//	req, resp := client.FailMessageRequest(params)
 //
-//    // Example sending a request using the FailMessageRequest method.
-//    req, resp := client.FailMessageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/FailMessage
 func (c *Ssmmds) FailMessageRequest(input *FailMessageInput) (req *request.Request, output *FailMessageOutput) {
@@ -231,13 +230,14 @@ func (c *Ssmmds) FailMessageRequest(input *FailMessageInput) (req *request.Reque
 // API operation FailMessage for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidMessageIdException
 //
-//   * UnsupportedMessageOperationException
+//   - InvalidMessageIdException
 //
-//   * AuthorizationFailureException
+//   - UnsupportedMessageOperationException
 //
-//   * InternalServerException
+//   - AuthorizationFailureException
+//
+//   - InternalServerException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/FailMessage
 func (c *Ssmmds) FailMessage(input *FailMessageInput) (*FailMessageOutput, error) {
@@ -277,14 +277,13 @@ const opGetEndpoint = "GetEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetEndpointRequest method.
+//	req, resp := client.GetEndpointRequest(params)
 //
-//    // Example sending a request using the GetEndpointRequest method.
-//    req, resp := client.GetEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetEndpoint
 func (c *Ssmmds) GetEndpointRequest(input *GetEndpointInput) (req *request.Request, output *GetEndpointOutput) {
@@ -313,11 +312,12 @@ func (c *Ssmmds) GetEndpointRequest(input *GetEndpointInput) (req *request.Reque
 // API operation GetEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * TooManyRequestsException
 //
-//   * AuthorizationFailureException
+//   - TooManyRequestsException
 //
-//   * InternalServerException
+//   - AuthorizationFailureException
+//
+//   - InternalServerException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetEndpoint
 func (c *Ssmmds) GetEndpoint(input *GetEndpointInput) (*GetEndpointOutput, error) {
@@ -357,14 +357,13 @@ const opGetMessages = "GetMessages"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMessagesRequest method.
+//	req, resp := client.GetMessagesRequest(params)
 //
-//    // Example sending a request using the GetMessagesRequest method.
-//    req, resp := client.GetMessagesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetMessages
 func (c *Ssmmds) GetMessagesRequest(input *GetMessagesInput) (req *request.Request, output *GetMessagesOutput) {
@@ -393,15 +392,16 @@ func (c *Ssmmds) GetMessagesRequest(input *GetMessagesInput) (req *request.Reque
 // API operation GetMessages for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidDestinationException
 //
-//   * RequestTimeoutException
+//   - InvalidDestinationException
 //
-//   * InternalServerException
+//   - RequestTimeoutException
 //
-//   * TooManyRequestsException
+//   - InternalServerException
 //
-//   * AuthorizationFailureException
+//   - TooManyRequestsException
+//
+//   - AuthorizationFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetMessages
 func (c *Ssmmds) GetMessages(input *GetMessagesInput) (*GetMessagesOutput, error) {
@@ -441,14 +441,13 @@ const opSendReply = "SendReply"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SendReplyRequest method.
+//	req, resp := client.SendReplyRequest(params)
 //
-//    // Example sending a request using the SendReplyRequest method.
-//    req, resp := client.SendReplyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/SendReply
 func (c *Ssmmds) SendReplyRequest(input *SendReplyInput) (req *request.Request, output *SendReplyOutput) {
@@ -477,15 +476,16 @@ func (c *Ssmmds) SendReplyRequest(input *SendReplyInput) (req *request.Request, 
 // API operation SendReply for usage and error information.
 //
 // Returned Error Types:
-//   * UnsupportedMessageOperationException
 //
-//   * InvalidMessageIdException
+//   - UnsupportedMessageOperationException
 //
-//   * TooManyRequestsException
+//   - InvalidMessageIdException
 //
-//   * AuthorizationFailureException
+//   - TooManyRequestsException
 //
-//   * InternalServerException
+//   - AuthorizationFailureException
+//
+//   - InternalServerException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/SendReply
 func (c *Ssmmds) SendReply(input *SendReplyInput) (*SendReplyOutput, error) {

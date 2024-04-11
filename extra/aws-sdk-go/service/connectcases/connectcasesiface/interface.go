@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon Connect Cases.
-//    func myFunc(svc connectcasesiface.ConnectCasesAPI) bool {
-//        // Make svc.BatchGetField request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon Connect Cases.
+//	func myFunc(svc connectcasesiface.ConnectCasesAPI) bool {
+//	    // Make svc.BatchGetField request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := connectcases.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := connectcases.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockConnectCasesClient struct {
-//        connectcasesiface.ConnectCasesAPI
-//    }
-//    func (m *mockConnectCasesClient) BatchGetField(input *connectcases.BatchGetFieldInput) (*connectcases.BatchGetFieldOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockConnectCasesClient struct {
+//	    connectcasesiface.ConnectCasesAPI
+//	}
+//	func (m *mockConnectCasesClient) BatchGetField(input *connectcases.BatchGetFieldInput) (*connectcases.BatchGetFieldOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockConnectCasesClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockConnectCasesClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -102,6 +102,13 @@ type ConnectCasesAPI interface {
 
 	GetCasePages(*connectcases.GetCaseInput, func(*connectcases.GetCaseOutput, bool) bool) error
 	GetCasePagesWithContext(aws.Context, *connectcases.GetCaseInput, func(*connectcases.GetCaseOutput, bool) bool, ...request.Option) error
+
+	GetCaseAuditEvents(*connectcases.GetCaseAuditEventsInput) (*connectcases.GetCaseAuditEventsOutput, error)
+	GetCaseAuditEventsWithContext(aws.Context, *connectcases.GetCaseAuditEventsInput, ...request.Option) (*connectcases.GetCaseAuditEventsOutput, error)
+	GetCaseAuditEventsRequest(*connectcases.GetCaseAuditEventsInput) (*request.Request, *connectcases.GetCaseAuditEventsOutput)
+
+	GetCaseAuditEventsPages(*connectcases.GetCaseAuditEventsInput, func(*connectcases.GetCaseAuditEventsOutput, bool) bool) error
+	GetCaseAuditEventsPagesWithContext(aws.Context, *connectcases.GetCaseAuditEventsInput, func(*connectcases.GetCaseAuditEventsOutput, bool) bool, ...request.Option) error
 
 	GetCaseEventConfiguration(*connectcases.GetCaseEventConfigurationInput) (*connectcases.GetCaseEventConfigurationOutput, error)
 	GetCaseEventConfigurationWithContext(aws.Context, *connectcases.GetCaseEventConfigurationInput, ...request.Option) (*connectcases.GetCaseEventConfigurationOutput, error)

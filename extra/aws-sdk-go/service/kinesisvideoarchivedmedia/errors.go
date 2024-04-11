@@ -46,8 +46,8 @@ const (
 	// ErrCodeNoDataRetentionException for service response error code
 	// "NoDataRetentionException".
 	//
-	// A streaming session was requested for a stream that does not retain data
-	// (that is, has a DataRetentionInHours of 0).
+	// GetImages was requested for a stream that does not retain data (that is,
+	// has a DataRetentionInHours of 0).
 	ErrCodeNoDataRetentionException = "NoDataRetentionException"
 
 	// ErrCodeNotAuthorizedException for service response error code
@@ -60,8 +60,8 @@ const (
 	// ErrCodeResourceNotFoundException for service response error code
 	// "ResourceNotFoundException".
 	//
-	// GetMedia throws this error when Kinesis Video Streams can't find the stream
-	// that you specified.
+	// GetImages will throw this error when Kinesis Video Streams can't find the
+	// stream that you specified.
 	//
 	// GetHLSStreamingSessionURL and GetDASHStreamingSessionURL throw this error
 	// if a session with a PlaybackMode of ON_DEMAND or LIVE_REPLAYis requested

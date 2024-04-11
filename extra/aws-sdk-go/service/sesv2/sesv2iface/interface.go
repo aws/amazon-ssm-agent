@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon Simple Email Service.
-//    func myFunc(svc sesv2iface.SESV2API) bool {
-//        // Make svc.BatchGetMetricData request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon Simple Email Service.
+//	func myFunc(svc sesv2iface.SESV2API) bool {
+//	    // Make svc.BatchGetMetricData request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := sesv2.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := sesv2.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockSESV2Client struct {
-//        sesv2iface.SESV2API
-//    }
-//    func (m *mockSESV2Client) BatchGetMetricData(input *sesv2.BatchGetMetricDataInput) (*sesv2.BatchGetMetricDataOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockSESV2Client struct {
+//	    sesv2iface.SESV2API
+//	}
+//	func (m *mockSESV2Client) BatchGetMetricData(input *sesv2.BatchGetMetricDataInput) (*sesv2.BatchGetMetricDataOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockSESV2Client{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockSESV2Client{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -63,6 +63,10 @@ type SESV2API interface {
 	BatchGetMetricData(*sesv2.BatchGetMetricDataInput) (*sesv2.BatchGetMetricDataOutput, error)
 	BatchGetMetricDataWithContext(aws.Context, *sesv2.BatchGetMetricDataInput, ...request.Option) (*sesv2.BatchGetMetricDataOutput, error)
 	BatchGetMetricDataRequest(*sesv2.BatchGetMetricDataInput) (*request.Request, *sesv2.BatchGetMetricDataOutput)
+
+	CancelExportJob(*sesv2.CancelExportJobInput) (*sesv2.CancelExportJobOutput, error)
+	CancelExportJobWithContext(aws.Context, *sesv2.CancelExportJobInput, ...request.Option) (*sesv2.CancelExportJobOutput, error)
+	CancelExportJobRequest(*sesv2.CancelExportJobInput) (*request.Request, *sesv2.CancelExportJobOutput)
 
 	CreateConfigurationSet(*sesv2.CreateConfigurationSetInput) (*sesv2.CreateConfigurationSetOutput, error)
 	CreateConfigurationSetWithContext(aws.Context, *sesv2.CreateConfigurationSetInput, ...request.Option) (*sesv2.CreateConfigurationSetOutput, error)
@@ -103,6 +107,10 @@ type SESV2API interface {
 	CreateEmailTemplate(*sesv2.CreateEmailTemplateInput) (*sesv2.CreateEmailTemplateOutput, error)
 	CreateEmailTemplateWithContext(aws.Context, *sesv2.CreateEmailTemplateInput, ...request.Option) (*sesv2.CreateEmailTemplateOutput, error)
 	CreateEmailTemplateRequest(*sesv2.CreateEmailTemplateInput) (*request.Request, *sesv2.CreateEmailTemplateOutput)
+
+	CreateExportJob(*sesv2.CreateExportJobInput) (*sesv2.CreateExportJobOutput, error)
+	CreateExportJobWithContext(aws.Context, *sesv2.CreateExportJobInput, ...request.Option) (*sesv2.CreateExportJobOutput, error)
+	CreateExportJobRequest(*sesv2.CreateExportJobInput) (*request.Request, *sesv2.CreateExportJobOutput)
 
 	CreateImportJob(*sesv2.CreateImportJobInput) (*sesv2.CreateImportJobOutput, error)
 	CreateImportJobWithContext(aws.Context, *sesv2.CreateImportJobInput, ...request.Option) (*sesv2.CreateImportJobOutput, error)
@@ -219,9 +227,17 @@ type SESV2API interface {
 	GetEmailTemplateWithContext(aws.Context, *sesv2.GetEmailTemplateInput, ...request.Option) (*sesv2.GetEmailTemplateOutput, error)
 	GetEmailTemplateRequest(*sesv2.GetEmailTemplateInput) (*request.Request, *sesv2.GetEmailTemplateOutput)
 
+	GetExportJob(*sesv2.GetExportJobInput) (*sesv2.GetExportJobOutput, error)
+	GetExportJobWithContext(aws.Context, *sesv2.GetExportJobInput, ...request.Option) (*sesv2.GetExportJobOutput, error)
+	GetExportJobRequest(*sesv2.GetExportJobInput) (*request.Request, *sesv2.GetExportJobOutput)
+
 	GetImportJob(*sesv2.GetImportJobInput) (*sesv2.GetImportJobOutput, error)
 	GetImportJobWithContext(aws.Context, *sesv2.GetImportJobInput, ...request.Option) (*sesv2.GetImportJobOutput, error)
 	GetImportJobRequest(*sesv2.GetImportJobInput) (*request.Request, *sesv2.GetImportJobOutput)
+
+	GetMessageInsights(*sesv2.GetMessageInsightsInput) (*sesv2.GetMessageInsightsOutput, error)
+	GetMessageInsightsWithContext(aws.Context, *sesv2.GetMessageInsightsInput, ...request.Option) (*sesv2.GetMessageInsightsOutput, error)
+	GetMessageInsightsRequest(*sesv2.GetMessageInsightsInput) (*request.Request, *sesv2.GetMessageInsightsOutput)
 
 	GetSuppressedDestination(*sesv2.GetSuppressedDestinationInput) (*sesv2.GetSuppressedDestinationOutput, error)
 	GetSuppressedDestinationWithContext(aws.Context, *sesv2.GetSuppressedDestinationInput, ...request.Option) (*sesv2.GetSuppressedDestinationOutput, error)
@@ -289,6 +305,13 @@ type SESV2API interface {
 
 	ListEmailTemplatesPages(*sesv2.ListEmailTemplatesInput, func(*sesv2.ListEmailTemplatesOutput, bool) bool) error
 	ListEmailTemplatesPagesWithContext(aws.Context, *sesv2.ListEmailTemplatesInput, func(*sesv2.ListEmailTemplatesOutput, bool) bool, ...request.Option) error
+
+	ListExportJobs(*sesv2.ListExportJobsInput) (*sesv2.ListExportJobsOutput, error)
+	ListExportJobsWithContext(aws.Context, *sesv2.ListExportJobsInput, ...request.Option) (*sesv2.ListExportJobsOutput, error)
+	ListExportJobsRequest(*sesv2.ListExportJobsInput) (*request.Request, *sesv2.ListExportJobsOutput)
+
+	ListExportJobsPages(*sesv2.ListExportJobsInput, func(*sesv2.ListExportJobsOutput, bool) bool) error
+	ListExportJobsPagesWithContext(aws.Context, *sesv2.ListExportJobsInput, func(*sesv2.ListExportJobsOutput, bool) bool, ...request.Option) error
 
 	ListImportJobs(*sesv2.ListImportJobsInput) (*sesv2.ListImportJobsOutput, error)
 	ListImportJobsWithContext(aws.Context, *sesv2.ListImportJobsInput, ...request.Option) (*sesv2.ListImportJobsOutput, error)
@@ -362,6 +385,10 @@ type SESV2API interface {
 	PutDedicatedIpInPool(*sesv2.PutDedicatedIpInPoolInput) (*sesv2.PutDedicatedIpInPoolOutput, error)
 	PutDedicatedIpInPoolWithContext(aws.Context, *sesv2.PutDedicatedIpInPoolInput, ...request.Option) (*sesv2.PutDedicatedIpInPoolOutput, error)
 	PutDedicatedIpInPoolRequest(*sesv2.PutDedicatedIpInPoolInput) (*request.Request, *sesv2.PutDedicatedIpInPoolOutput)
+
+	PutDedicatedIpPoolScalingAttributes(*sesv2.PutDedicatedIpPoolScalingAttributesInput) (*sesv2.PutDedicatedIpPoolScalingAttributesOutput, error)
+	PutDedicatedIpPoolScalingAttributesWithContext(aws.Context, *sesv2.PutDedicatedIpPoolScalingAttributesInput, ...request.Option) (*sesv2.PutDedicatedIpPoolScalingAttributesOutput, error)
+	PutDedicatedIpPoolScalingAttributesRequest(*sesv2.PutDedicatedIpPoolScalingAttributesInput) (*request.Request, *sesv2.PutDedicatedIpPoolScalingAttributesOutput)
 
 	PutDedicatedIpWarmupAttributes(*sesv2.PutDedicatedIpWarmupAttributesInput) (*sesv2.PutDedicatedIpWarmupAttributesOutput, error)
 	PutDedicatedIpWarmupAttributesWithContext(aws.Context, *sesv2.PutDedicatedIpWarmupAttributesInput, ...request.Option) (*sesv2.PutDedicatedIpWarmupAttributesOutput, error)

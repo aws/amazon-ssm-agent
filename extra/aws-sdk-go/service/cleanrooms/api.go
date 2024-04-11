@@ -13,6 +13,98 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
+const opBatchGetCollaborationAnalysisTemplate = "BatchGetCollaborationAnalysisTemplate"
+
+// BatchGetCollaborationAnalysisTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the BatchGetCollaborationAnalysisTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchGetCollaborationAnalysisTemplate for more information on using the BatchGetCollaborationAnalysisTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the BatchGetCollaborationAnalysisTemplateRequest method.
+//	req, resp := client.BatchGetCollaborationAnalysisTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/BatchGetCollaborationAnalysisTemplate
+func (c *CleanRooms) BatchGetCollaborationAnalysisTemplateRequest(input *BatchGetCollaborationAnalysisTemplateInput) (req *request.Request, output *BatchGetCollaborationAnalysisTemplateOutput) {
+	op := &request.Operation{
+		Name:       opBatchGetCollaborationAnalysisTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/collaborations/{collaborationIdentifier}/batch-analysistemplates",
+	}
+
+	if input == nil {
+		input = &BatchGetCollaborationAnalysisTemplateInput{}
+	}
+
+	output = &BatchGetCollaborationAnalysisTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchGetCollaborationAnalysisTemplate API operation for AWS Clean Rooms Service.
+//
+// Retrieves multiple analysis templates within a collaboration by their Amazon
+// Resource Names (ARNs).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation BatchGetCollaborationAnalysisTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/BatchGetCollaborationAnalysisTemplate
+func (c *CleanRooms) BatchGetCollaborationAnalysisTemplate(input *BatchGetCollaborationAnalysisTemplateInput) (*BatchGetCollaborationAnalysisTemplateOutput, error) {
+	req, out := c.BatchGetCollaborationAnalysisTemplateRequest(input)
+	return out, req.Send()
+}
+
+// BatchGetCollaborationAnalysisTemplateWithContext is the same as BatchGetCollaborationAnalysisTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchGetCollaborationAnalysisTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) BatchGetCollaborationAnalysisTemplateWithContext(ctx aws.Context, input *BatchGetCollaborationAnalysisTemplateInput, opts ...request.Option) (*BatchGetCollaborationAnalysisTemplateOutput, error) {
+	req, out := c.BatchGetCollaborationAnalysisTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opBatchGetSchema = "BatchGetSchema"
 
 // BatchGetSchemaRequest generates a "aws/request.Request" representing the
@@ -29,14 +121,13 @@ const opBatchGetSchema = "BatchGetSchema"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetSchemaRequest method.
+//	req, resp := client.BatchGetSchemaRequest(params)
 //
-//    // Example sending a request using the BatchGetSchemaRequest method.
-//    req, resp := client.BatchGetSchemaRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/BatchGetSchema
 func (c *CleanRooms) BatchGetSchemaRequest(input *BatchGetSchemaInput) (req *request.Request, output *BatchGetSchemaOutput) {
@@ -67,20 +158,21 @@ func (c *CleanRooms) BatchGetSchemaRequest(input *BatchGetSchemaInput) (req *req
 // API operation BatchGetSchema for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/BatchGetSchema
 func (c *CleanRooms) BatchGetSchema(input *BatchGetSchemaInput) (*BatchGetSchemaOutput, error) {
@@ -104,6 +196,194 @@ func (c *CleanRooms) BatchGetSchemaWithContext(ctx aws.Context, input *BatchGetS
 	return out, req.Send()
 }
 
+const opBatchGetSchemaAnalysisRule = "BatchGetSchemaAnalysisRule"
+
+// BatchGetSchemaAnalysisRuleRequest generates a "aws/request.Request" representing the
+// client's request for the BatchGetSchemaAnalysisRule operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchGetSchemaAnalysisRule for more information on using the BatchGetSchemaAnalysisRule
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the BatchGetSchemaAnalysisRuleRequest method.
+//	req, resp := client.BatchGetSchemaAnalysisRuleRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/BatchGetSchemaAnalysisRule
+func (c *CleanRooms) BatchGetSchemaAnalysisRuleRequest(input *BatchGetSchemaAnalysisRuleInput) (req *request.Request, output *BatchGetSchemaAnalysisRuleOutput) {
+	op := &request.Operation{
+		Name:       opBatchGetSchemaAnalysisRule,
+		HTTPMethod: "POST",
+		HTTPPath:   "/collaborations/{collaborationIdentifier}/batch-schema-analysis-rule",
+	}
+
+	if input == nil {
+		input = &BatchGetSchemaAnalysisRuleInput{}
+	}
+
+	output = &BatchGetSchemaAnalysisRuleOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchGetSchemaAnalysisRule API operation for AWS Clean Rooms Service.
+//
+// Retrieves multiple analysis rule schemas.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation BatchGetSchemaAnalysisRule for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/BatchGetSchemaAnalysisRule
+func (c *CleanRooms) BatchGetSchemaAnalysisRule(input *BatchGetSchemaAnalysisRuleInput) (*BatchGetSchemaAnalysisRuleOutput, error) {
+	req, out := c.BatchGetSchemaAnalysisRuleRequest(input)
+	return out, req.Send()
+}
+
+// BatchGetSchemaAnalysisRuleWithContext is the same as BatchGetSchemaAnalysisRule with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchGetSchemaAnalysisRule for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) BatchGetSchemaAnalysisRuleWithContext(ctx aws.Context, input *BatchGetSchemaAnalysisRuleInput, opts ...request.Option) (*BatchGetSchemaAnalysisRuleOutput, error) {
+	req, out := c.BatchGetSchemaAnalysisRuleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateAnalysisTemplate = "CreateAnalysisTemplate"
+
+// CreateAnalysisTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the CreateAnalysisTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateAnalysisTemplate for more information on using the CreateAnalysisTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateAnalysisTemplateRequest method.
+//	req, resp := client.CreateAnalysisTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateAnalysisTemplate
+func (c *CleanRooms) CreateAnalysisTemplateRequest(input *CreateAnalysisTemplateInput) (req *request.Request, output *CreateAnalysisTemplateOutput) {
+	op := &request.Operation{
+		Name:       opCreateAnalysisTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/memberships/{membershipIdentifier}/analysistemplates",
+	}
+
+	if input == nil {
+		input = &CreateAnalysisTemplateInput{}
+	}
+
+	output = &CreateAnalysisTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateAnalysisTemplate API operation for AWS Clean Rooms Service.
+//
+// Creates a new analysis template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation CreateAnalysisTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
+//
+//   - ServiceQuotaExceededException
+//     Request denied because service quota has been exceeded.
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateAnalysisTemplate
+func (c *CleanRooms) CreateAnalysisTemplate(input *CreateAnalysisTemplateInput) (*CreateAnalysisTemplateOutput, error) {
+	req, out := c.CreateAnalysisTemplateRequest(input)
+	return out, req.Send()
+}
+
+// CreateAnalysisTemplateWithContext is the same as CreateAnalysisTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateAnalysisTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) CreateAnalysisTemplateWithContext(ctx aws.Context, input *CreateAnalysisTemplateInput, opts ...request.Option) (*CreateAnalysisTemplateOutput, error) {
+	req, out := c.CreateAnalysisTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateCollaboration = "CreateCollaboration"
 
 // CreateCollaborationRequest generates a "aws/request.Request" representing the
@@ -120,14 +400,13 @@ const opCreateCollaboration = "CreateCollaboration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateCollaborationRequest method.
+//	req, resp := client.CreateCollaborationRequest(params)
 //
-//    // Example sending a request using the CreateCollaborationRequest method.
-//    req, resp := client.CreateCollaborationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateCollaboration
 func (c *CleanRooms) CreateCollaborationRequest(input *CreateCollaborationInput) (req *request.Request, output *CreateCollaborationOutput) {
@@ -158,20 +437,21 @@ func (c *CleanRooms) CreateCollaborationRequest(input *CreateCollaborationInput)
 // API operation CreateCollaboration for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceQuotaExceededException
-//   Request denied because service quota has been exceeded.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ServiceQuotaExceededException
+//     Request denied because service quota has been exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateCollaboration
 func (c *CleanRooms) CreateCollaboration(input *CreateCollaborationInput) (*CreateCollaborationOutput, error) {
@@ -195,6 +475,103 @@ func (c *CleanRooms) CreateCollaborationWithContext(ctx aws.Context, input *Crea
 	return out, req.Send()
 }
 
+const opCreateConfiguredAudienceModelAssociation = "CreateConfiguredAudienceModelAssociation"
+
+// CreateConfiguredAudienceModelAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the CreateConfiguredAudienceModelAssociation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateConfiguredAudienceModelAssociation for more information on using the CreateConfiguredAudienceModelAssociation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateConfiguredAudienceModelAssociationRequest method.
+//	req, resp := client.CreateConfiguredAudienceModelAssociationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateConfiguredAudienceModelAssociation
+func (c *CleanRooms) CreateConfiguredAudienceModelAssociationRequest(input *CreateConfiguredAudienceModelAssociationInput) (req *request.Request, output *CreateConfiguredAudienceModelAssociationOutput) {
+	op := &request.Operation{
+		Name:       opCreateConfiguredAudienceModelAssociation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/memberships/{membershipIdentifier}/configuredaudiencemodelassociations",
+	}
+
+	if input == nil {
+		input = &CreateConfiguredAudienceModelAssociationInput{}
+	}
+
+	output = &CreateConfiguredAudienceModelAssociationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateConfiguredAudienceModelAssociation API operation for AWS Clean Rooms Service.
+//
+// Provides the details necessary to create a configured audience model association.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation CreateConfiguredAudienceModelAssociation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
+//
+//   - ServiceQuotaExceededException
+//     Request denied because service quota has been exceeded.
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateConfiguredAudienceModelAssociation
+func (c *CleanRooms) CreateConfiguredAudienceModelAssociation(input *CreateConfiguredAudienceModelAssociationInput) (*CreateConfiguredAudienceModelAssociationOutput, error) {
+	req, out := c.CreateConfiguredAudienceModelAssociationRequest(input)
+	return out, req.Send()
+}
+
+// CreateConfiguredAudienceModelAssociationWithContext is the same as CreateConfiguredAudienceModelAssociation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateConfiguredAudienceModelAssociation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) CreateConfiguredAudienceModelAssociationWithContext(ctx aws.Context, input *CreateConfiguredAudienceModelAssociationInput, opts ...request.Option) (*CreateConfiguredAudienceModelAssociationOutput, error) {
+	req, out := c.CreateConfiguredAudienceModelAssociationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateConfiguredTable = "CreateConfiguredTable"
 
 // CreateConfiguredTableRequest generates a "aws/request.Request" representing the
@@ -211,14 +588,13 @@ const opCreateConfiguredTable = "CreateConfiguredTable"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateConfiguredTableRequest method.
+//	req, resp := client.CreateConfiguredTableRequest(params)
 //
-//    // Example sending a request using the CreateConfiguredTableRequest method.
-//    req, resp := client.CreateConfiguredTableRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateConfiguredTable
 func (c *CleanRooms) CreateConfiguredTableRequest(input *CreateConfiguredTableInput) (req *request.Request, output *CreateConfiguredTableOutput) {
@@ -249,26 +625,27 @@ func (c *CleanRooms) CreateConfiguredTableRequest(input *CreateConfiguredTableIn
 // API operation CreateConfiguredTable for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ServiceQuotaExceededException
-//   Request denied because service quota has been exceeded.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ServiceQuotaExceededException
+//     Request denied because service quota has been exceeded.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateConfiguredTable
 func (c *CleanRooms) CreateConfiguredTable(input *CreateConfiguredTableInput) (*CreateConfiguredTableOutput, error) {
@@ -308,14 +685,13 @@ const opCreateConfiguredTableAnalysisRule = "CreateConfiguredTableAnalysisRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateConfiguredTableAnalysisRuleRequest method.
+//	req, resp := client.CreateConfiguredTableAnalysisRuleRequest(params)
 //
-//    // Example sending a request using the CreateConfiguredTableAnalysisRuleRequest method.
-//    req, resp := client.CreateConfiguredTableAnalysisRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateConfiguredTableAnalysisRule
 func (c *CleanRooms) CreateConfiguredTableAnalysisRuleRequest(input *CreateConfiguredTableAnalysisRuleInput) (req *request.Request, output *CreateConfiguredTableAnalysisRuleOutput) {
@@ -347,23 +723,24 @@ func (c *CleanRooms) CreateConfiguredTableAnalysisRuleRequest(input *CreateConfi
 // API operation CreateConfiguredTableAnalysisRule for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateConfiguredTableAnalysisRule
 func (c *CleanRooms) CreateConfiguredTableAnalysisRule(input *CreateConfiguredTableAnalysisRuleInput) (*CreateConfiguredTableAnalysisRuleOutput, error) {
@@ -403,14 +780,13 @@ const opCreateConfiguredTableAssociation = "CreateConfiguredTableAssociation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateConfiguredTableAssociationRequest method.
+//	req, resp := client.CreateConfiguredTableAssociationRequest(params)
 //
-//    // Example sending a request using the CreateConfiguredTableAssociationRequest method.
-//    req, resp := client.CreateConfiguredTableAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateConfiguredTableAssociation
 func (c *CleanRooms) CreateConfiguredTableAssociationRequest(input *CreateConfiguredTableAssociationInput) (req *request.Request, output *CreateConfiguredTableAssociationOutput) {
@@ -442,26 +818,27 @@ func (c *CleanRooms) CreateConfiguredTableAssociationRequest(input *CreateConfig
 // API operation CreateConfiguredTableAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ServiceQuotaExceededException
-//   Request denied because service quota has been exceeded.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ServiceQuotaExceededException
+//     Request denied because service quota has been exceeded.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateConfiguredTableAssociation
 func (c *CleanRooms) CreateConfiguredTableAssociation(input *CreateConfiguredTableAssociationInput) (*CreateConfiguredTableAssociationOutput, error) {
@@ -501,14 +878,13 @@ const opCreateMembership = "CreateMembership"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateMembershipRequest method.
+//	req, resp := client.CreateMembershipRequest(params)
 //
-//    // Example sending a request using the CreateMembershipRequest method.
-//    req, resp := client.CreateMembershipRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateMembership
 func (c *CleanRooms) CreateMembershipRequest(input *CreateMembershipInput) (req *request.Request, output *CreateMembershipOutput) {
@@ -540,26 +916,27 @@ func (c *CleanRooms) CreateMembershipRequest(input *CreateMembershipInput) (req 
 // API operation CreateMembership for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ServiceQuotaExceededException
-//   Request denied because service quota has been exceeded.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ServiceQuotaExceededException
+//     Request denied because service quota has been exceeded.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreateMembership
 func (c *CleanRooms) CreateMembership(input *CreateMembershipInput) (*CreateMembershipOutput, error) {
@@ -583,6 +960,195 @@ func (c *CleanRooms) CreateMembershipWithContext(ctx aws.Context, input *CreateM
 	return out, req.Send()
 }
 
+const opCreatePrivacyBudgetTemplate = "CreatePrivacyBudgetTemplate"
+
+// CreatePrivacyBudgetTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the CreatePrivacyBudgetTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreatePrivacyBudgetTemplate for more information on using the CreatePrivacyBudgetTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreatePrivacyBudgetTemplateRequest method.
+//	req, resp := client.CreatePrivacyBudgetTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreatePrivacyBudgetTemplate
+func (c *CleanRooms) CreatePrivacyBudgetTemplateRequest(input *CreatePrivacyBudgetTemplateInput) (req *request.Request, output *CreatePrivacyBudgetTemplateOutput) {
+	op := &request.Operation{
+		Name:       opCreatePrivacyBudgetTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/memberships/{membershipIdentifier}/privacybudgettemplates",
+	}
+
+	if input == nil {
+		input = &CreatePrivacyBudgetTemplateInput{}
+	}
+
+	output = &CreatePrivacyBudgetTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreatePrivacyBudgetTemplate API operation for AWS Clean Rooms Service.
+//
+// Creates a privacy budget template for a specified membership. Each membership
+// can have only one privacy budget template, but it can be deleted and recreated.
+// If you need to change the privacy budget template for a membership, use the
+// UpdatePrivacyBudgetTemplate operation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation CreatePrivacyBudgetTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/CreatePrivacyBudgetTemplate
+func (c *CleanRooms) CreatePrivacyBudgetTemplate(input *CreatePrivacyBudgetTemplateInput) (*CreatePrivacyBudgetTemplateOutput, error) {
+	req, out := c.CreatePrivacyBudgetTemplateRequest(input)
+	return out, req.Send()
+}
+
+// CreatePrivacyBudgetTemplateWithContext is the same as CreatePrivacyBudgetTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreatePrivacyBudgetTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) CreatePrivacyBudgetTemplateWithContext(ctx aws.Context, input *CreatePrivacyBudgetTemplateInput, opts ...request.Option) (*CreatePrivacyBudgetTemplateOutput, error) {
+	req, out := c.CreatePrivacyBudgetTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteAnalysisTemplate = "DeleteAnalysisTemplate"
+
+// DeleteAnalysisTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteAnalysisTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteAnalysisTemplate for more information on using the DeleteAnalysisTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteAnalysisTemplateRequest method.
+//	req, resp := client.DeleteAnalysisTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteAnalysisTemplate
+func (c *CleanRooms) DeleteAnalysisTemplateRequest(input *DeleteAnalysisTemplateInput) (req *request.Request, output *DeleteAnalysisTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDeleteAnalysisTemplate,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/memberships/{membershipIdentifier}/analysistemplates/{analysisTemplateIdentifier}",
+	}
+
+	if input == nil {
+		input = &DeleteAnalysisTemplateInput{}
+	}
+
+	output = &DeleteAnalysisTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteAnalysisTemplate API operation for AWS Clean Rooms Service.
+//
+// Deletes an analysis template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation DeleteAnalysisTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteAnalysisTemplate
+func (c *CleanRooms) DeleteAnalysisTemplate(input *DeleteAnalysisTemplateInput) (*DeleteAnalysisTemplateOutput, error) {
+	req, out := c.DeleteAnalysisTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DeleteAnalysisTemplateWithContext is the same as DeleteAnalysisTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteAnalysisTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) DeleteAnalysisTemplateWithContext(ctx aws.Context, input *DeleteAnalysisTemplateInput, opts ...request.Option) (*DeleteAnalysisTemplateOutput, error) {
+	req, out := c.DeleteAnalysisTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteCollaboration = "DeleteCollaboration"
 
 // DeleteCollaborationRequest generates a "aws/request.Request" representing the
@@ -599,14 +1165,13 @@ const opDeleteCollaboration = "DeleteCollaboration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCollaborationRequest method.
+//	req, resp := client.DeleteCollaborationRequest(params)
 //
-//    // Example sending a request using the DeleteCollaborationRequest method.
-//    req, resp := client.DeleteCollaborationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteCollaboration
 func (c *CleanRooms) DeleteCollaborationRequest(input *DeleteCollaborationInput) (req *request.Request, output *DeleteCollaborationOutput) {
@@ -638,17 +1203,18 @@ func (c *CleanRooms) DeleteCollaborationRequest(input *DeleteCollaborationInput)
 // API operation DeleteCollaboration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error during processing of request.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteCollaboration
 func (c *CleanRooms) DeleteCollaboration(input *DeleteCollaborationInput) (*DeleteCollaborationOutput, error) {
@@ -672,6 +1238,99 @@ func (c *CleanRooms) DeleteCollaborationWithContext(ctx aws.Context, input *Dele
 	return out, req.Send()
 }
 
+const opDeleteConfiguredAudienceModelAssociation = "DeleteConfiguredAudienceModelAssociation"
+
+// DeleteConfiguredAudienceModelAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteConfiguredAudienceModelAssociation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteConfiguredAudienceModelAssociation for more information on using the DeleteConfiguredAudienceModelAssociation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteConfiguredAudienceModelAssociationRequest method.
+//	req, resp := client.DeleteConfiguredAudienceModelAssociationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteConfiguredAudienceModelAssociation
+func (c *CleanRooms) DeleteConfiguredAudienceModelAssociationRequest(input *DeleteConfiguredAudienceModelAssociationInput) (req *request.Request, output *DeleteConfiguredAudienceModelAssociationOutput) {
+	op := &request.Operation{
+		Name:       opDeleteConfiguredAudienceModelAssociation,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/memberships/{membershipIdentifier}/configuredaudiencemodelassociations/{configuredAudienceModelAssociationIdentifier}",
+	}
+
+	if input == nil {
+		input = &DeleteConfiguredAudienceModelAssociationInput{}
+	}
+
+	output = &DeleteConfiguredAudienceModelAssociationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteConfiguredAudienceModelAssociation API operation for AWS Clean Rooms Service.
+//
+// Provides the information necessary to delete a configured audience model
+// association.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation DeleteConfiguredAudienceModelAssociation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteConfiguredAudienceModelAssociation
+func (c *CleanRooms) DeleteConfiguredAudienceModelAssociation(input *DeleteConfiguredAudienceModelAssociationInput) (*DeleteConfiguredAudienceModelAssociationOutput, error) {
+	req, out := c.DeleteConfiguredAudienceModelAssociationRequest(input)
+	return out, req.Send()
+}
+
+// DeleteConfiguredAudienceModelAssociationWithContext is the same as DeleteConfiguredAudienceModelAssociation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteConfiguredAudienceModelAssociation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) DeleteConfiguredAudienceModelAssociationWithContext(ctx aws.Context, input *DeleteConfiguredAudienceModelAssociationInput, opts ...request.Option) (*DeleteConfiguredAudienceModelAssociationOutput, error) {
+	req, out := c.DeleteConfiguredAudienceModelAssociationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteConfiguredTable = "DeleteConfiguredTable"
 
 // DeleteConfiguredTableRequest generates a "aws/request.Request" representing the
@@ -688,14 +1347,13 @@ const opDeleteConfiguredTable = "DeleteConfiguredTable"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteConfiguredTableRequest method.
+//	req, resp := client.DeleteConfiguredTableRequest(params)
 //
-//    // Example sending a request using the DeleteConfiguredTableRequest method.
-//    req, resp := client.DeleteConfiguredTableRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteConfiguredTable
 func (c *CleanRooms) DeleteConfiguredTableRequest(input *DeleteConfiguredTableInput) (req *request.Request, output *DeleteConfiguredTableOutput) {
@@ -727,23 +1385,24 @@ func (c *CleanRooms) DeleteConfiguredTableRequest(input *DeleteConfiguredTableIn
 // API operation DeleteConfiguredTable for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteConfiguredTable
 func (c *CleanRooms) DeleteConfiguredTable(input *DeleteConfiguredTableInput) (*DeleteConfiguredTableOutput, error) {
@@ -783,14 +1442,13 @@ const opDeleteConfiguredTableAnalysisRule = "DeleteConfiguredTableAnalysisRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteConfiguredTableAnalysisRuleRequest method.
+//	req, resp := client.DeleteConfiguredTableAnalysisRuleRequest(params)
 //
-//    // Example sending a request using the DeleteConfiguredTableAnalysisRuleRequest method.
-//    req, resp := client.DeleteConfiguredTableAnalysisRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteConfiguredTableAnalysisRule
 func (c *CleanRooms) DeleteConfiguredTableAnalysisRuleRequest(input *DeleteConfiguredTableAnalysisRuleInput) (req *request.Request, output *DeleteConfiguredTableAnalysisRuleOutput) {
@@ -822,23 +1480,24 @@ func (c *CleanRooms) DeleteConfiguredTableAnalysisRuleRequest(input *DeleteConfi
 // API operation DeleteConfiguredTableAnalysisRule for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteConfiguredTableAnalysisRule
 func (c *CleanRooms) DeleteConfiguredTableAnalysisRule(input *DeleteConfiguredTableAnalysisRuleInput) (*DeleteConfiguredTableAnalysisRuleOutput, error) {
@@ -878,14 +1537,13 @@ const opDeleteConfiguredTableAssociation = "DeleteConfiguredTableAssociation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteConfiguredTableAssociationRequest method.
+//	req, resp := client.DeleteConfiguredTableAssociationRequest(params)
 //
-//    // Example sending a request using the DeleteConfiguredTableAssociationRequest method.
-//    req, resp := client.DeleteConfiguredTableAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteConfiguredTableAssociation
 func (c *CleanRooms) DeleteConfiguredTableAssociationRequest(input *DeleteConfiguredTableAssociationInput) (req *request.Request, output *DeleteConfiguredTableAssociationOutput) {
@@ -917,23 +1575,24 @@ func (c *CleanRooms) DeleteConfiguredTableAssociationRequest(input *DeleteConfig
 // API operation DeleteConfiguredTableAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteConfiguredTableAssociation
 func (c *CleanRooms) DeleteConfiguredTableAssociation(input *DeleteConfiguredTableAssociationInput) (*DeleteConfiguredTableAssociationOutput, error) {
@@ -973,14 +1632,13 @@ const opDeleteMember = "DeleteMember"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMemberRequest method.
+//	req, resp := client.DeleteMemberRequest(params)
 //
-//    // Example sending a request using the DeleteMemberRequest method.
-//    req, resp := client.DeleteMemberRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteMember
 func (c *CleanRooms) DeleteMemberRequest(input *DeleteMemberInput) (req *request.Request, output *DeleteMemberOutput) {
@@ -1014,23 +1672,24 @@ func (c *CleanRooms) DeleteMemberRequest(input *DeleteMemberInput) (req *request
 // API operation DeleteMember for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteMember
 func (c *CleanRooms) DeleteMember(input *DeleteMemberInput) (*DeleteMemberOutput, error) {
@@ -1070,14 +1729,13 @@ const opDeleteMembership = "DeleteMembership"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMembershipRequest method.
+//	req, resp := client.DeleteMembershipRequest(params)
 //
-//    // Example sending a request using the DeleteMembershipRequest method.
-//    req, resp := client.DeleteMembershipRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteMembership
 func (c *CleanRooms) DeleteMembershipRequest(input *DeleteMembershipInput) (req *request.Request, output *DeleteMembershipOutput) {
@@ -1110,23 +1768,24 @@ func (c *CleanRooms) DeleteMembershipRequest(input *DeleteMembershipInput) (req 
 // API operation DeleteMembership for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeleteMembership
 func (c *CleanRooms) DeleteMembership(input *DeleteMembershipInput) (*DeleteMembershipOutput, error) {
@@ -1150,6 +1809,189 @@ func (c *CleanRooms) DeleteMembershipWithContext(ctx aws.Context, input *DeleteM
 	return out, req.Send()
 }
 
+const opDeletePrivacyBudgetTemplate = "DeletePrivacyBudgetTemplate"
+
+// DeletePrivacyBudgetTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DeletePrivacyBudgetTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeletePrivacyBudgetTemplate for more information on using the DeletePrivacyBudgetTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeletePrivacyBudgetTemplateRequest method.
+//	req, resp := client.DeletePrivacyBudgetTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeletePrivacyBudgetTemplate
+func (c *CleanRooms) DeletePrivacyBudgetTemplateRequest(input *DeletePrivacyBudgetTemplateInput) (req *request.Request, output *DeletePrivacyBudgetTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDeletePrivacyBudgetTemplate,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/memberships/{membershipIdentifier}/privacybudgettemplates/{privacyBudgetTemplateIdentifier}",
+	}
+
+	if input == nil {
+		input = &DeletePrivacyBudgetTemplateInput{}
+	}
+
+	output = &DeletePrivacyBudgetTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeletePrivacyBudgetTemplate API operation for AWS Clean Rooms Service.
+//
+// Deletes a privacy budget template for a specified membership.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation DeletePrivacyBudgetTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/DeletePrivacyBudgetTemplate
+func (c *CleanRooms) DeletePrivacyBudgetTemplate(input *DeletePrivacyBudgetTemplateInput) (*DeletePrivacyBudgetTemplateOutput, error) {
+	req, out := c.DeletePrivacyBudgetTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DeletePrivacyBudgetTemplateWithContext is the same as DeletePrivacyBudgetTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeletePrivacyBudgetTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) DeletePrivacyBudgetTemplateWithContext(ctx aws.Context, input *DeletePrivacyBudgetTemplateInput, opts ...request.Option) (*DeletePrivacyBudgetTemplateOutput, error) {
+	req, out := c.DeletePrivacyBudgetTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetAnalysisTemplate = "GetAnalysisTemplate"
+
+// GetAnalysisTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GetAnalysisTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetAnalysisTemplate for more information on using the GetAnalysisTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetAnalysisTemplateRequest method.
+//	req, resp := client.GetAnalysisTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetAnalysisTemplate
+func (c *CleanRooms) GetAnalysisTemplateRequest(input *GetAnalysisTemplateInput) (req *request.Request, output *GetAnalysisTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGetAnalysisTemplate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/memberships/{membershipIdentifier}/analysistemplates/{analysisTemplateIdentifier}",
+	}
+
+	if input == nil {
+		input = &GetAnalysisTemplateInput{}
+	}
+
+	output = &GetAnalysisTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetAnalysisTemplate API operation for AWS Clean Rooms Service.
+//
+// Retrieves an analysis template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation GetAnalysisTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetAnalysisTemplate
+func (c *CleanRooms) GetAnalysisTemplate(input *GetAnalysisTemplateInput) (*GetAnalysisTemplateOutput, error) {
+	req, out := c.GetAnalysisTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GetAnalysisTemplateWithContext is the same as GetAnalysisTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetAnalysisTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) GetAnalysisTemplateWithContext(ctx aws.Context, input *GetAnalysisTemplateInput, opts ...request.Option) (*GetAnalysisTemplateOutput, error) {
+	req, out := c.GetAnalysisTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetCollaboration = "GetCollaboration"
 
 // GetCollaborationRequest generates a "aws/request.Request" representing the
@@ -1166,14 +2008,13 @@ const opGetCollaboration = "GetCollaboration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetCollaborationRequest method.
+//	req, resp := client.GetCollaborationRequest(params)
 //
-//    // Example sending a request using the GetCollaborationRequest method.
-//    req, resp := client.GetCollaborationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetCollaboration
 func (c *CleanRooms) GetCollaborationRequest(input *GetCollaborationInput) (req *request.Request, output *GetCollaborationOutput) {
@@ -1204,17 +2045,18 @@ func (c *CleanRooms) GetCollaborationRequest(input *GetCollaborationInput) (req 
 // API operation GetCollaboration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error during processing of request.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetCollaboration
 func (c *CleanRooms) GetCollaboration(input *GetCollaborationInput) (*GetCollaborationOutput, error) {
@@ -1238,6 +2080,370 @@ func (c *CleanRooms) GetCollaborationWithContext(ctx aws.Context, input *GetColl
 	return out, req.Send()
 }
 
+const opGetCollaborationAnalysisTemplate = "GetCollaborationAnalysisTemplate"
+
+// GetCollaborationAnalysisTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GetCollaborationAnalysisTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCollaborationAnalysisTemplate for more information on using the GetCollaborationAnalysisTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetCollaborationAnalysisTemplateRequest method.
+//	req, resp := client.GetCollaborationAnalysisTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetCollaborationAnalysisTemplate
+func (c *CleanRooms) GetCollaborationAnalysisTemplateRequest(input *GetCollaborationAnalysisTemplateInput) (req *request.Request, output *GetCollaborationAnalysisTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGetCollaborationAnalysisTemplate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/collaborations/{collaborationIdentifier}/analysistemplates/{analysisTemplateArn}",
+	}
+
+	if input == nil {
+		input = &GetCollaborationAnalysisTemplateInput{}
+	}
+
+	output = &GetCollaborationAnalysisTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCollaborationAnalysisTemplate API operation for AWS Clean Rooms Service.
+//
+// Retrieves an analysis template within a collaboration.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation GetCollaborationAnalysisTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetCollaborationAnalysisTemplate
+func (c *CleanRooms) GetCollaborationAnalysisTemplate(input *GetCollaborationAnalysisTemplateInput) (*GetCollaborationAnalysisTemplateOutput, error) {
+	req, out := c.GetCollaborationAnalysisTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GetCollaborationAnalysisTemplateWithContext is the same as GetCollaborationAnalysisTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCollaborationAnalysisTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) GetCollaborationAnalysisTemplateWithContext(ctx aws.Context, input *GetCollaborationAnalysisTemplateInput, opts ...request.Option) (*GetCollaborationAnalysisTemplateOutput, error) {
+	req, out := c.GetCollaborationAnalysisTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetCollaborationConfiguredAudienceModelAssociation = "GetCollaborationConfiguredAudienceModelAssociation"
+
+// GetCollaborationConfiguredAudienceModelAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the GetCollaborationConfiguredAudienceModelAssociation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCollaborationConfiguredAudienceModelAssociation for more information on using the GetCollaborationConfiguredAudienceModelAssociation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetCollaborationConfiguredAudienceModelAssociationRequest method.
+//	req, resp := client.GetCollaborationConfiguredAudienceModelAssociationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetCollaborationConfiguredAudienceModelAssociation
+func (c *CleanRooms) GetCollaborationConfiguredAudienceModelAssociationRequest(input *GetCollaborationConfiguredAudienceModelAssociationInput) (req *request.Request, output *GetCollaborationConfiguredAudienceModelAssociationOutput) {
+	op := &request.Operation{
+		Name:       opGetCollaborationConfiguredAudienceModelAssociation,
+		HTTPMethod: "GET",
+		HTTPPath:   "/collaborations/{collaborationIdentifier}/configuredaudiencemodelassociations/{configuredAudienceModelAssociationIdentifier}",
+	}
+
+	if input == nil {
+		input = &GetCollaborationConfiguredAudienceModelAssociationInput{}
+	}
+
+	output = &GetCollaborationConfiguredAudienceModelAssociationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCollaborationConfiguredAudienceModelAssociation API operation for AWS Clean Rooms Service.
+//
+// Retrieves a configured audience model association within a collaboration.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation GetCollaborationConfiguredAudienceModelAssociation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetCollaborationConfiguredAudienceModelAssociation
+func (c *CleanRooms) GetCollaborationConfiguredAudienceModelAssociation(input *GetCollaborationConfiguredAudienceModelAssociationInput) (*GetCollaborationConfiguredAudienceModelAssociationOutput, error) {
+	req, out := c.GetCollaborationConfiguredAudienceModelAssociationRequest(input)
+	return out, req.Send()
+}
+
+// GetCollaborationConfiguredAudienceModelAssociationWithContext is the same as GetCollaborationConfiguredAudienceModelAssociation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCollaborationConfiguredAudienceModelAssociation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) GetCollaborationConfiguredAudienceModelAssociationWithContext(ctx aws.Context, input *GetCollaborationConfiguredAudienceModelAssociationInput, opts ...request.Option) (*GetCollaborationConfiguredAudienceModelAssociationOutput, error) {
+	req, out := c.GetCollaborationConfiguredAudienceModelAssociationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetCollaborationPrivacyBudgetTemplate = "GetCollaborationPrivacyBudgetTemplate"
+
+// GetCollaborationPrivacyBudgetTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GetCollaborationPrivacyBudgetTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCollaborationPrivacyBudgetTemplate for more information on using the GetCollaborationPrivacyBudgetTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetCollaborationPrivacyBudgetTemplateRequest method.
+//	req, resp := client.GetCollaborationPrivacyBudgetTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetCollaborationPrivacyBudgetTemplate
+func (c *CleanRooms) GetCollaborationPrivacyBudgetTemplateRequest(input *GetCollaborationPrivacyBudgetTemplateInput) (req *request.Request, output *GetCollaborationPrivacyBudgetTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGetCollaborationPrivacyBudgetTemplate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/collaborations/{collaborationIdentifier}/privacybudgettemplates/{privacyBudgetTemplateIdentifier}",
+	}
+
+	if input == nil {
+		input = &GetCollaborationPrivacyBudgetTemplateInput{}
+	}
+
+	output = &GetCollaborationPrivacyBudgetTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCollaborationPrivacyBudgetTemplate API operation for AWS Clean Rooms Service.
+//
+// Returns details about a specified privacy budget template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation GetCollaborationPrivacyBudgetTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetCollaborationPrivacyBudgetTemplate
+func (c *CleanRooms) GetCollaborationPrivacyBudgetTemplate(input *GetCollaborationPrivacyBudgetTemplateInput) (*GetCollaborationPrivacyBudgetTemplateOutput, error) {
+	req, out := c.GetCollaborationPrivacyBudgetTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GetCollaborationPrivacyBudgetTemplateWithContext is the same as GetCollaborationPrivacyBudgetTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCollaborationPrivacyBudgetTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) GetCollaborationPrivacyBudgetTemplateWithContext(ctx aws.Context, input *GetCollaborationPrivacyBudgetTemplateInput, opts ...request.Option) (*GetCollaborationPrivacyBudgetTemplateOutput, error) {
+	req, out := c.GetCollaborationPrivacyBudgetTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetConfiguredAudienceModelAssociation = "GetConfiguredAudienceModelAssociation"
+
+// GetConfiguredAudienceModelAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the GetConfiguredAudienceModelAssociation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetConfiguredAudienceModelAssociation for more information on using the GetConfiguredAudienceModelAssociation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetConfiguredAudienceModelAssociationRequest method.
+//	req, resp := client.GetConfiguredAudienceModelAssociationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetConfiguredAudienceModelAssociation
+func (c *CleanRooms) GetConfiguredAudienceModelAssociationRequest(input *GetConfiguredAudienceModelAssociationInput) (req *request.Request, output *GetConfiguredAudienceModelAssociationOutput) {
+	op := &request.Operation{
+		Name:       opGetConfiguredAudienceModelAssociation,
+		HTTPMethod: "GET",
+		HTTPPath:   "/memberships/{membershipIdentifier}/configuredaudiencemodelassociations/{configuredAudienceModelAssociationIdentifier}",
+	}
+
+	if input == nil {
+		input = &GetConfiguredAudienceModelAssociationInput{}
+	}
+
+	output = &GetConfiguredAudienceModelAssociationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetConfiguredAudienceModelAssociation API operation for AWS Clean Rooms Service.
+//
+// Returns information about a configured audience model association.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation GetConfiguredAudienceModelAssociation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetConfiguredAudienceModelAssociation
+func (c *CleanRooms) GetConfiguredAudienceModelAssociation(input *GetConfiguredAudienceModelAssociationInput) (*GetConfiguredAudienceModelAssociationOutput, error) {
+	req, out := c.GetConfiguredAudienceModelAssociationRequest(input)
+	return out, req.Send()
+}
+
+// GetConfiguredAudienceModelAssociationWithContext is the same as GetConfiguredAudienceModelAssociation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetConfiguredAudienceModelAssociation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) GetConfiguredAudienceModelAssociationWithContext(ctx aws.Context, input *GetConfiguredAudienceModelAssociationInput, opts ...request.Option) (*GetConfiguredAudienceModelAssociationOutput, error) {
+	req, out := c.GetConfiguredAudienceModelAssociationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetConfiguredTable = "GetConfiguredTable"
 
 // GetConfiguredTableRequest generates a "aws/request.Request" representing the
@@ -1254,14 +2460,13 @@ const opGetConfiguredTable = "GetConfiguredTable"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetConfiguredTableRequest method.
+//	req, resp := client.GetConfiguredTableRequest(params)
 //
-//    // Example sending a request using the GetConfiguredTableRequest method.
-//    req, resp := client.GetConfiguredTableRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetConfiguredTable
 func (c *CleanRooms) GetConfiguredTableRequest(input *GetConfiguredTableInput) (req *request.Request, output *GetConfiguredTableOutput) {
@@ -1292,20 +2497,21 @@ func (c *CleanRooms) GetConfiguredTableRequest(input *GetConfiguredTableInput) (
 // API operation GetConfiguredTable for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetConfiguredTable
 func (c *CleanRooms) GetConfiguredTable(input *GetConfiguredTableInput) (*GetConfiguredTableOutput, error) {
@@ -1345,14 +2551,13 @@ const opGetConfiguredTableAnalysisRule = "GetConfiguredTableAnalysisRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetConfiguredTableAnalysisRuleRequest method.
+//	req, resp := client.GetConfiguredTableAnalysisRuleRequest(params)
 //
-//    // Example sending a request using the GetConfiguredTableAnalysisRuleRequest method.
-//    req, resp := client.GetConfiguredTableAnalysisRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetConfiguredTableAnalysisRule
 func (c *CleanRooms) GetConfiguredTableAnalysisRuleRequest(input *GetConfiguredTableAnalysisRuleInput) (req *request.Request, output *GetConfiguredTableAnalysisRuleOutput) {
@@ -1383,20 +2588,21 @@ func (c *CleanRooms) GetConfiguredTableAnalysisRuleRequest(input *GetConfiguredT
 // API operation GetConfiguredTableAnalysisRule for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetConfiguredTableAnalysisRule
 func (c *CleanRooms) GetConfiguredTableAnalysisRule(input *GetConfiguredTableAnalysisRuleInput) (*GetConfiguredTableAnalysisRuleOutput, error) {
@@ -1436,14 +2642,13 @@ const opGetConfiguredTableAssociation = "GetConfiguredTableAssociation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetConfiguredTableAssociationRequest method.
+//	req, resp := client.GetConfiguredTableAssociationRequest(params)
 //
-//    // Example sending a request using the GetConfiguredTableAssociationRequest method.
-//    req, resp := client.GetConfiguredTableAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetConfiguredTableAssociation
 func (c *CleanRooms) GetConfiguredTableAssociationRequest(input *GetConfiguredTableAssociationInput) (req *request.Request, output *GetConfiguredTableAssociationOutput) {
@@ -1474,20 +2679,21 @@ func (c *CleanRooms) GetConfiguredTableAssociationRequest(input *GetConfiguredTa
 // API operation GetConfiguredTableAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetConfiguredTableAssociation
 func (c *CleanRooms) GetConfiguredTableAssociation(input *GetConfiguredTableAssociationInput) (*GetConfiguredTableAssociationOutput, error) {
@@ -1527,14 +2733,13 @@ const opGetMembership = "GetMembership"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMembershipRequest method.
+//	req, resp := client.GetMembershipRequest(params)
 //
-//    // Example sending a request using the GetMembershipRequest method.
-//    req, resp := client.GetMembershipRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetMembership
 func (c *CleanRooms) GetMembershipRequest(input *GetMembershipInput) (req *request.Request, output *GetMembershipOutput) {
@@ -1565,20 +2770,21 @@ func (c *CleanRooms) GetMembershipRequest(input *GetMembershipInput) (req *reque
 // API operation GetMembership for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetMembership
 func (c *CleanRooms) GetMembership(input *GetMembershipInput) (*GetMembershipOutput, error) {
@@ -1602,6 +2808,97 @@ func (c *CleanRooms) GetMembershipWithContext(ctx aws.Context, input *GetMembers
 	return out, req.Send()
 }
 
+const opGetPrivacyBudgetTemplate = "GetPrivacyBudgetTemplate"
+
+// GetPrivacyBudgetTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GetPrivacyBudgetTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetPrivacyBudgetTemplate for more information on using the GetPrivacyBudgetTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetPrivacyBudgetTemplateRequest method.
+//	req, resp := client.GetPrivacyBudgetTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetPrivacyBudgetTemplate
+func (c *CleanRooms) GetPrivacyBudgetTemplateRequest(input *GetPrivacyBudgetTemplateInput) (req *request.Request, output *GetPrivacyBudgetTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGetPrivacyBudgetTemplate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/memberships/{membershipIdentifier}/privacybudgettemplates/{privacyBudgetTemplateIdentifier}",
+	}
+
+	if input == nil {
+		input = &GetPrivacyBudgetTemplateInput{}
+	}
+
+	output = &GetPrivacyBudgetTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetPrivacyBudgetTemplate API operation for AWS Clean Rooms Service.
+//
+// Returns details for a specified privacy budget template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation GetPrivacyBudgetTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetPrivacyBudgetTemplate
+func (c *CleanRooms) GetPrivacyBudgetTemplate(input *GetPrivacyBudgetTemplateInput) (*GetPrivacyBudgetTemplateOutput, error) {
+	req, out := c.GetPrivacyBudgetTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GetPrivacyBudgetTemplateWithContext is the same as GetPrivacyBudgetTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetPrivacyBudgetTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) GetPrivacyBudgetTemplateWithContext(ctx aws.Context, input *GetPrivacyBudgetTemplateInput, opts ...request.Option) (*GetPrivacyBudgetTemplateOutput, error) {
+	req, out := c.GetPrivacyBudgetTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetProtectedQuery = "GetProtectedQuery"
 
 // GetProtectedQueryRequest generates a "aws/request.Request" representing the
@@ -1618,14 +2915,13 @@ const opGetProtectedQuery = "GetProtectedQuery"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetProtectedQueryRequest method.
+//	req, resp := client.GetProtectedQueryRequest(params)
 //
-//    // Example sending a request using the GetProtectedQueryRequest method.
-//    req, resp := client.GetProtectedQueryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetProtectedQuery
 func (c *CleanRooms) GetProtectedQueryRequest(input *GetProtectedQueryInput) (req *request.Request, output *GetProtectedQueryOutput) {
@@ -1656,20 +2952,21 @@ func (c *CleanRooms) GetProtectedQueryRequest(input *GetProtectedQueryInput) (re
 // API operation GetProtectedQuery for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetProtectedQuery
 func (c *CleanRooms) GetProtectedQuery(input *GetProtectedQueryInput) (*GetProtectedQueryOutput, error) {
@@ -1709,14 +3006,13 @@ const opGetSchema = "GetSchema"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSchemaRequest method.
+//	req, resp := client.GetSchemaRequest(params)
 //
-//    // Example sending a request using the GetSchemaRequest method.
-//    req, resp := client.GetSchemaRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetSchema
 func (c *CleanRooms) GetSchemaRequest(input *GetSchemaInput) (req *request.Request, output *GetSchemaOutput) {
@@ -1747,20 +3043,21 @@ func (c *CleanRooms) GetSchemaRequest(input *GetSchemaInput) (req *request.Reque
 // API operation GetSchema for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetSchema
 func (c *CleanRooms) GetSchema(input *GetSchemaInput) (*GetSchemaOutput, error) {
@@ -1800,14 +3097,13 @@ const opGetSchemaAnalysisRule = "GetSchemaAnalysisRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSchemaAnalysisRuleRequest method.
+//	req, resp := client.GetSchemaAnalysisRuleRequest(params)
 //
-//    // Example sending a request using the GetSchemaAnalysisRuleRequest method.
-//    req, resp := client.GetSchemaAnalysisRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetSchemaAnalysisRule
 func (c *CleanRooms) GetSchemaAnalysisRuleRequest(input *GetSchemaAnalysisRuleInput) (req *request.Request, output *GetSchemaAnalysisRuleOutput) {
@@ -1838,20 +3134,21 @@ func (c *CleanRooms) GetSchemaAnalysisRuleRequest(input *GetSchemaAnalysisRuleIn
 // API operation GetSchemaAnalysisRule for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/GetSchemaAnalysisRule
 func (c *CleanRooms) GetSchemaAnalysisRule(input *GetSchemaAnalysisRuleInput) (*GetSchemaAnalysisRuleOutput, error) {
@@ -1875,6 +3172,749 @@ func (c *CleanRooms) GetSchemaAnalysisRuleWithContext(ctx aws.Context, input *Ge
 	return out, req.Send()
 }
 
+const opListAnalysisTemplates = "ListAnalysisTemplates"
+
+// ListAnalysisTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListAnalysisTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAnalysisTemplates for more information on using the ListAnalysisTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListAnalysisTemplatesRequest method.
+//	req, resp := client.ListAnalysisTemplatesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListAnalysisTemplates
+func (c *CleanRooms) ListAnalysisTemplatesRequest(input *ListAnalysisTemplatesInput) (req *request.Request, output *ListAnalysisTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opListAnalysisTemplates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/memberships/{membershipIdentifier}/analysistemplates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAnalysisTemplatesInput{}
+	}
+
+	output = &ListAnalysisTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListAnalysisTemplates API operation for AWS Clean Rooms Service.
+//
+// Lists analysis templates that the caller owns.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation ListAnalysisTemplates for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListAnalysisTemplates
+func (c *CleanRooms) ListAnalysisTemplates(input *ListAnalysisTemplatesInput) (*ListAnalysisTemplatesOutput, error) {
+	req, out := c.ListAnalysisTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// ListAnalysisTemplatesWithContext is the same as ListAnalysisTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAnalysisTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListAnalysisTemplatesWithContext(ctx aws.Context, input *ListAnalysisTemplatesInput, opts ...request.Option) (*ListAnalysisTemplatesOutput, error) {
+	req, out := c.ListAnalysisTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAnalysisTemplatesPages iterates over the pages of a ListAnalysisTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAnalysisTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListAnalysisTemplates operation.
+//	pageNum := 0
+//	err := client.ListAnalysisTemplatesPages(params,
+//	    func(page *cleanrooms.ListAnalysisTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CleanRooms) ListAnalysisTemplatesPages(input *ListAnalysisTemplatesInput, fn func(*ListAnalysisTemplatesOutput, bool) bool) error {
+	return c.ListAnalysisTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAnalysisTemplatesPagesWithContext same as ListAnalysisTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListAnalysisTemplatesPagesWithContext(ctx aws.Context, input *ListAnalysisTemplatesInput, fn func(*ListAnalysisTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAnalysisTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAnalysisTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAnalysisTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListCollaborationAnalysisTemplates = "ListCollaborationAnalysisTemplates"
+
+// ListCollaborationAnalysisTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListCollaborationAnalysisTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCollaborationAnalysisTemplates for more information on using the ListCollaborationAnalysisTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListCollaborationAnalysisTemplatesRequest method.
+//	req, resp := client.ListCollaborationAnalysisTemplatesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListCollaborationAnalysisTemplates
+func (c *CleanRooms) ListCollaborationAnalysisTemplatesRequest(input *ListCollaborationAnalysisTemplatesInput) (req *request.Request, output *ListCollaborationAnalysisTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opListCollaborationAnalysisTemplates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/collaborations/{collaborationIdentifier}/analysistemplates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCollaborationAnalysisTemplatesInput{}
+	}
+
+	output = &ListCollaborationAnalysisTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCollaborationAnalysisTemplates API operation for AWS Clean Rooms Service.
+//
+// Lists analysis templates within a collaboration.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation ListCollaborationAnalysisTemplates for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListCollaborationAnalysisTemplates
+func (c *CleanRooms) ListCollaborationAnalysisTemplates(input *ListCollaborationAnalysisTemplatesInput) (*ListCollaborationAnalysisTemplatesOutput, error) {
+	req, out := c.ListCollaborationAnalysisTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// ListCollaborationAnalysisTemplatesWithContext is the same as ListCollaborationAnalysisTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCollaborationAnalysisTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListCollaborationAnalysisTemplatesWithContext(ctx aws.Context, input *ListCollaborationAnalysisTemplatesInput, opts ...request.Option) (*ListCollaborationAnalysisTemplatesOutput, error) {
+	req, out := c.ListCollaborationAnalysisTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCollaborationAnalysisTemplatesPages iterates over the pages of a ListCollaborationAnalysisTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCollaborationAnalysisTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListCollaborationAnalysisTemplates operation.
+//	pageNum := 0
+//	err := client.ListCollaborationAnalysisTemplatesPages(params,
+//	    func(page *cleanrooms.ListCollaborationAnalysisTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CleanRooms) ListCollaborationAnalysisTemplatesPages(input *ListCollaborationAnalysisTemplatesInput, fn func(*ListCollaborationAnalysisTemplatesOutput, bool) bool) error {
+	return c.ListCollaborationAnalysisTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCollaborationAnalysisTemplatesPagesWithContext same as ListCollaborationAnalysisTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListCollaborationAnalysisTemplatesPagesWithContext(ctx aws.Context, input *ListCollaborationAnalysisTemplatesInput, fn func(*ListCollaborationAnalysisTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCollaborationAnalysisTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCollaborationAnalysisTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCollaborationAnalysisTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListCollaborationConfiguredAudienceModelAssociations = "ListCollaborationConfiguredAudienceModelAssociations"
+
+// ListCollaborationConfiguredAudienceModelAssociationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListCollaborationConfiguredAudienceModelAssociations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCollaborationConfiguredAudienceModelAssociations for more information on using the ListCollaborationConfiguredAudienceModelAssociations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListCollaborationConfiguredAudienceModelAssociationsRequest method.
+//	req, resp := client.ListCollaborationConfiguredAudienceModelAssociationsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListCollaborationConfiguredAudienceModelAssociations
+func (c *CleanRooms) ListCollaborationConfiguredAudienceModelAssociationsRequest(input *ListCollaborationConfiguredAudienceModelAssociationsInput) (req *request.Request, output *ListCollaborationConfiguredAudienceModelAssociationsOutput) {
+	op := &request.Operation{
+		Name:       opListCollaborationConfiguredAudienceModelAssociations,
+		HTTPMethod: "GET",
+		HTTPPath:   "/collaborations/{collaborationIdentifier}/configuredaudiencemodelassociations",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCollaborationConfiguredAudienceModelAssociationsInput{}
+	}
+
+	output = &ListCollaborationConfiguredAudienceModelAssociationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCollaborationConfiguredAudienceModelAssociations API operation for AWS Clean Rooms Service.
+//
+// Lists configured audience model associations within a collaboration.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation ListCollaborationConfiguredAudienceModelAssociations for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListCollaborationConfiguredAudienceModelAssociations
+func (c *CleanRooms) ListCollaborationConfiguredAudienceModelAssociations(input *ListCollaborationConfiguredAudienceModelAssociationsInput) (*ListCollaborationConfiguredAudienceModelAssociationsOutput, error) {
+	req, out := c.ListCollaborationConfiguredAudienceModelAssociationsRequest(input)
+	return out, req.Send()
+}
+
+// ListCollaborationConfiguredAudienceModelAssociationsWithContext is the same as ListCollaborationConfiguredAudienceModelAssociations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCollaborationConfiguredAudienceModelAssociations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListCollaborationConfiguredAudienceModelAssociationsWithContext(ctx aws.Context, input *ListCollaborationConfiguredAudienceModelAssociationsInput, opts ...request.Option) (*ListCollaborationConfiguredAudienceModelAssociationsOutput, error) {
+	req, out := c.ListCollaborationConfiguredAudienceModelAssociationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCollaborationConfiguredAudienceModelAssociationsPages iterates over the pages of a ListCollaborationConfiguredAudienceModelAssociations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCollaborationConfiguredAudienceModelAssociations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListCollaborationConfiguredAudienceModelAssociations operation.
+//	pageNum := 0
+//	err := client.ListCollaborationConfiguredAudienceModelAssociationsPages(params,
+//	    func(page *cleanrooms.ListCollaborationConfiguredAudienceModelAssociationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CleanRooms) ListCollaborationConfiguredAudienceModelAssociationsPages(input *ListCollaborationConfiguredAudienceModelAssociationsInput, fn func(*ListCollaborationConfiguredAudienceModelAssociationsOutput, bool) bool) error {
+	return c.ListCollaborationConfiguredAudienceModelAssociationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCollaborationConfiguredAudienceModelAssociationsPagesWithContext same as ListCollaborationConfiguredAudienceModelAssociationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListCollaborationConfiguredAudienceModelAssociationsPagesWithContext(ctx aws.Context, input *ListCollaborationConfiguredAudienceModelAssociationsInput, fn func(*ListCollaborationConfiguredAudienceModelAssociationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCollaborationConfiguredAudienceModelAssociationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCollaborationConfiguredAudienceModelAssociationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCollaborationConfiguredAudienceModelAssociationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListCollaborationPrivacyBudgetTemplates = "ListCollaborationPrivacyBudgetTemplates"
+
+// ListCollaborationPrivacyBudgetTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListCollaborationPrivacyBudgetTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCollaborationPrivacyBudgetTemplates for more information on using the ListCollaborationPrivacyBudgetTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListCollaborationPrivacyBudgetTemplatesRequest method.
+//	req, resp := client.ListCollaborationPrivacyBudgetTemplatesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListCollaborationPrivacyBudgetTemplates
+func (c *CleanRooms) ListCollaborationPrivacyBudgetTemplatesRequest(input *ListCollaborationPrivacyBudgetTemplatesInput) (req *request.Request, output *ListCollaborationPrivacyBudgetTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opListCollaborationPrivacyBudgetTemplates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/collaborations/{collaborationIdentifier}/privacybudgettemplates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCollaborationPrivacyBudgetTemplatesInput{}
+	}
+
+	output = &ListCollaborationPrivacyBudgetTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCollaborationPrivacyBudgetTemplates API operation for AWS Clean Rooms Service.
+//
+// Returns an array that summarizes each privacy budget template in a specified
+// collaboration.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation ListCollaborationPrivacyBudgetTemplates for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListCollaborationPrivacyBudgetTemplates
+func (c *CleanRooms) ListCollaborationPrivacyBudgetTemplates(input *ListCollaborationPrivacyBudgetTemplatesInput) (*ListCollaborationPrivacyBudgetTemplatesOutput, error) {
+	req, out := c.ListCollaborationPrivacyBudgetTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// ListCollaborationPrivacyBudgetTemplatesWithContext is the same as ListCollaborationPrivacyBudgetTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCollaborationPrivacyBudgetTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListCollaborationPrivacyBudgetTemplatesWithContext(ctx aws.Context, input *ListCollaborationPrivacyBudgetTemplatesInput, opts ...request.Option) (*ListCollaborationPrivacyBudgetTemplatesOutput, error) {
+	req, out := c.ListCollaborationPrivacyBudgetTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCollaborationPrivacyBudgetTemplatesPages iterates over the pages of a ListCollaborationPrivacyBudgetTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCollaborationPrivacyBudgetTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListCollaborationPrivacyBudgetTemplates operation.
+//	pageNum := 0
+//	err := client.ListCollaborationPrivacyBudgetTemplatesPages(params,
+//	    func(page *cleanrooms.ListCollaborationPrivacyBudgetTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CleanRooms) ListCollaborationPrivacyBudgetTemplatesPages(input *ListCollaborationPrivacyBudgetTemplatesInput, fn func(*ListCollaborationPrivacyBudgetTemplatesOutput, bool) bool) error {
+	return c.ListCollaborationPrivacyBudgetTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCollaborationPrivacyBudgetTemplatesPagesWithContext same as ListCollaborationPrivacyBudgetTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListCollaborationPrivacyBudgetTemplatesPagesWithContext(ctx aws.Context, input *ListCollaborationPrivacyBudgetTemplatesInput, fn func(*ListCollaborationPrivacyBudgetTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCollaborationPrivacyBudgetTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCollaborationPrivacyBudgetTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCollaborationPrivacyBudgetTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListCollaborationPrivacyBudgets = "ListCollaborationPrivacyBudgets"
+
+// ListCollaborationPrivacyBudgetsRequest generates a "aws/request.Request" representing the
+// client's request for the ListCollaborationPrivacyBudgets operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCollaborationPrivacyBudgets for more information on using the ListCollaborationPrivacyBudgets
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListCollaborationPrivacyBudgetsRequest method.
+//	req, resp := client.ListCollaborationPrivacyBudgetsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListCollaborationPrivacyBudgets
+func (c *CleanRooms) ListCollaborationPrivacyBudgetsRequest(input *ListCollaborationPrivacyBudgetsInput) (req *request.Request, output *ListCollaborationPrivacyBudgetsOutput) {
+	op := &request.Operation{
+		Name:       opListCollaborationPrivacyBudgets,
+		HTTPMethod: "GET",
+		HTTPPath:   "/collaborations/{collaborationIdentifier}/privacybudgets",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCollaborationPrivacyBudgetsInput{}
+	}
+
+	output = &ListCollaborationPrivacyBudgetsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCollaborationPrivacyBudgets API operation for AWS Clean Rooms Service.
+//
+// Returns an array that summarizes each privacy budget in a specified collaboration.
+// The summary includes the collaboration ARN, creation time, creating account,
+// and privacy budget details.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation ListCollaborationPrivacyBudgets for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListCollaborationPrivacyBudgets
+func (c *CleanRooms) ListCollaborationPrivacyBudgets(input *ListCollaborationPrivacyBudgetsInput) (*ListCollaborationPrivacyBudgetsOutput, error) {
+	req, out := c.ListCollaborationPrivacyBudgetsRequest(input)
+	return out, req.Send()
+}
+
+// ListCollaborationPrivacyBudgetsWithContext is the same as ListCollaborationPrivacyBudgets with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCollaborationPrivacyBudgets for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListCollaborationPrivacyBudgetsWithContext(ctx aws.Context, input *ListCollaborationPrivacyBudgetsInput, opts ...request.Option) (*ListCollaborationPrivacyBudgetsOutput, error) {
+	req, out := c.ListCollaborationPrivacyBudgetsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCollaborationPrivacyBudgetsPages iterates over the pages of a ListCollaborationPrivacyBudgets operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCollaborationPrivacyBudgets method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListCollaborationPrivacyBudgets operation.
+//	pageNum := 0
+//	err := client.ListCollaborationPrivacyBudgetsPages(params,
+//	    func(page *cleanrooms.ListCollaborationPrivacyBudgetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CleanRooms) ListCollaborationPrivacyBudgetsPages(input *ListCollaborationPrivacyBudgetsInput, fn func(*ListCollaborationPrivacyBudgetsOutput, bool) bool) error {
+	return c.ListCollaborationPrivacyBudgetsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCollaborationPrivacyBudgetsPagesWithContext same as ListCollaborationPrivacyBudgetsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListCollaborationPrivacyBudgetsPagesWithContext(ctx aws.Context, input *ListCollaborationPrivacyBudgetsInput, fn func(*ListCollaborationPrivacyBudgetsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCollaborationPrivacyBudgetsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCollaborationPrivacyBudgetsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCollaborationPrivacyBudgetsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListCollaborations = "ListCollaborations"
 
 // ListCollaborationsRequest generates a "aws/request.Request" representing the
@@ -1891,14 +3931,13 @@ const opListCollaborations = "ListCollaborations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCollaborationsRequest method.
+//	req, resp := client.ListCollaborationsRequest(params)
 //
-//    // Example sending a request using the ListCollaborationsRequest method.
-//    req, resp := client.ListCollaborationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListCollaborations
 func (c *CleanRooms) ListCollaborationsRequest(input *ListCollaborationsInput) (req *request.Request, output *ListCollaborationsOutput) {
@@ -1935,17 +3974,18 @@ func (c *CleanRooms) ListCollaborationsRequest(input *ListCollaborationsInput) (
 // API operation ListCollaborations for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error during processing of request.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListCollaborations
 func (c *CleanRooms) ListCollaborations(input *ListCollaborationsInput) (*ListCollaborationsOutput, error) {
@@ -1977,15 +4017,14 @@ func (c *CleanRooms) ListCollaborationsWithContext(ctx aws.Context, input *ListC
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCollaborations operation.
-//    pageNum := 0
-//    err := client.ListCollaborationsPages(params,
-//        func(page *cleanrooms.ListCollaborationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCollaborations operation.
+//	pageNum := 0
+//	err := client.ListCollaborationsPages(params,
+//	    func(page *cleanrooms.ListCollaborationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CleanRooms) ListCollaborationsPages(input *ListCollaborationsInput, fn func(*ListCollaborationsOutput, bool) bool) error {
 	return c.ListCollaborationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2021,6 +4060,154 @@ func (c *CleanRooms) ListCollaborationsPagesWithContext(ctx aws.Context, input *
 	return p.Err()
 }
 
+const opListConfiguredAudienceModelAssociations = "ListConfiguredAudienceModelAssociations"
+
+// ListConfiguredAudienceModelAssociationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListConfiguredAudienceModelAssociations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListConfiguredAudienceModelAssociations for more information on using the ListConfiguredAudienceModelAssociations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListConfiguredAudienceModelAssociationsRequest method.
+//	req, resp := client.ListConfiguredAudienceModelAssociationsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListConfiguredAudienceModelAssociations
+func (c *CleanRooms) ListConfiguredAudienceModelAssociationsRequest(input *ListConfiguredAudienceModelAssociationsInput) (req *request.Request, output *ListConfiguredAudienceModelAssociationsOutput) {
+	op := &request.Operation{
+		Name:       opListConfiguredAudienceModelAssociations,
+		HTTPMethod: "GET",
+		HTTPPath:   "/memberships/{membershipIdentifier}/configuredaudiencemodelassociations",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListConfiguredAudienceModelAssociationsInput{}
+	}
+
+	output = &ListConfiguredAudienceModelAssociationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListConfiguredAudienceModelAssociations API operation for AWS Clean Rooms Service.
+//
+// Lists information about requested configured audience model associations.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation ListConfiguredAudienceModelAssociations for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListConfiguredAudienceModelAssociations
+func (c *CleanRooms) ListConfiguredAudienceModelAssociations(input *ListConfiguredAudienceModelAssociationsInput) (*ListConfiguredAudienceModelAssociationsOutput, error) {
+	req, out := c.ListConfiguredAudienceModelAssociationsRequest(input)
+	return out, req.Send()
+}
+
+// ListConfiguredAudienceModelAssociationsWithContext is the same as ListConfiguredAudienceModelAssociations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListConfiguredAudienceModelAssociations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListConfiguredAudienceModelAssociationsWithContext(ctx aws.Context, input *ListConfiguredAudienceModelAssociationsInput, opts ...request.Option) (*ListConfiguredAudienceModelAssociationsOutput, error) {
+	req, out := c.ListConfiguredAudienceModelAssociationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListConfiguredAudienceModelAssociationsPages iterates over the pages of a ListConfiguredAudienceModelAssociations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListConfiguredAudienceModelAssociations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListConfiguredAudienceModelAssociations operation.
+//	pageNum := 0
+//	err := client.ListConfiguredAudienceModelAssociationsPages(params,
+//	    func(page *cleanrooms.ListConfiguredAudienceModelAssociationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CleanRooms) ListConfiguredAudienceModelAssociationsPages(input *ListConfiguredAudienceModelAssociationsInput, fn func(*ListConfiguredAudienceModelAssociationsOutput, bool) bool) error {
+	return c.ListConfiguredAudienceModelAssociationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListConfiguredAudienceModelAssociationsPagesWithContext same as ListConfiguredAudienceModelAssociationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListConfiguredAudienceModelAssociationsPagesWithContext(ctx aws.Context, input *ListConfiguredAudienceModelAssociationsInput, fn func(*ListConfiguredAudienceModelAssociationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListConfiguredAudienceModelAssociationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListConfiguredAudienceModelAssociationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListConfiguredAudienceModelAssociationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListConfiguredTableAssociations = "ListConfiguredTableAssociations"
 
 // ListConfiguredTableAssociationsRequest generates a "aws/request.Request" representing the
@@ -2037,14 +4224,13 @@ const opListConfiguredTableAssociations = "ListConfiguredTableAssociations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListConfiguredTableAssociationsRequest method.
+//	req, resp := client.ListConfiguredTableAssociationsRequest(params)
 //
-//    // Example sending a request using the ListConfiguredTableAssociationsRequest method.
-//    req, resp := client.ListConfiguredTableAssociationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListConfiguredTableAssociations
 func (c *CleanRooms) ListConfiguredTableAssociationsRequest(input *ListConfiguredTableAssociationsInput) (req *request.Request, output *ListConfiguredTableAssociationsOutput) {
@@ -2081,20 +4267,21 @@ func (c *CleanRooms) ListConfiguredTableAssociationsRequest(input *ListConfigure
 // API operation ListConfiguredTableAssociations for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListConfiguredTableAssociations
 func (c *CleanRooms) ListConfiguredTableAssociations(input *ListConfiguredTableAssociationsInput) (*ListConfiguredTableAssociationsOutput, error) {
@@ -2126,15 +4313,14 @@ func (c *CleanRooms) ListConfiguredTableAssociationsWithContext(ctx aws.Context,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListConfiguredTableAssociations operation.
-//    pageNum := 0
-//    err := client.ListConfiguredTableAssociationsPages(params,
-//        func(page *cleanrooms.ListConfiguredTableAssociationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListConfiguredTableAssociations operation.
+//	pageNum := 0
+//	err := client.ListConfiguredTableAssociationsPages(params,
+//	    func(page *cleanrooms.ListConfiguredTableAssociationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CleanRooms) ListConfiguredTableAssociationsPages(input *ListConfiguredTableAssociationsInput, fn func(*ListConfiguredTableAssociationsOutput, bool) bool) error {
 	return c.ListConfiguredTableAssociationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2186,14 +4372,13 @@ const opListConfiguredTables = "ListConfiguredTables"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListConfiguredTablesRequest method.
+//	req, resp := client.ListConfiguredTablesRequest(params)
 //
-//    // Example sending a request using the ListConfiguredTablesRequest method.
-//    req, resp := client.ListConfiguredTablesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListConfiguredTables
 func (c *CleanRooms) ListConfiguredTablesRequest(input *ListConfiguredTablesInput) (req *request.Request, output *ListConfiguredTablesOutput) {
@@ -2230,17 +4415,18 @@ func (c *CleanRooms) ListConfiguredTablesRequest(input *ListConfiguredTablesInpu
 // API operation ListConfiguredTables for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error during processing of request.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListConfiguredTables
 func (c *CleanRooms) ListConfiguredTables(input *ListConfiguredTablesInput) (*ListConfiguredTablesOutput, error) {
@@ -2272,15 +4458,14 @@ func (c *CleanRooms) ListConfiguredTablesWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListConfiguredTables operation.
-//    pageNum := 0
-//    err := client.ListConfiguredTablesPages(params,
-//        func(page *cleanrooms.ListConfiguredTablesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListConfiguredTables operation.
+//	pageNum := 0
+//	err := client.ListConfiguredTablesPages(params,
+//	    func(page *cleanrooms.ListConfiguredTablesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CleanRooms) ListConfiguredTablesPages(input *ListConfiguredTablesInput, fn func(*ListConfiguredTablesOutput, bool) bool) error {
 	return c.ListConfiguredTablesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2332,14 +4517,13 @@ const opListMembers = "ListMembers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMembersRequest method.
+//	req, resp := client.ListMembersRequest(params)
 //
-//    // Example sending a request using the ListMembersRequest method.
-//    req, resp := client.ListMembersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListMembers
 func (c *CleanRooms) ListMembersRequest(input *ListMembersInput) (req *request.Request, output *ListMembersOutput) {
@@ -2376,20 +4560,21 @@ func (c *CleanRooms) ListMembersRequest(input *ListMembersInput) (req *request.R
 // API operation ListMembers for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListMembers
 func (c *CleanRooms) ListMembers(input *ListMembersInput) (*ListMembersOutput, error) {
@@ -2421,15 +4606,14 @@ func (c *CleanRooms) ListMembersWithContext(ctx aws.Context, input *ListMembersI
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMembers operation.
-//    pageNum := 0
-//    err := client.ListMembersPages(params,
-//        func(page *cleanrooms.ListMembersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMembers operation.
+//	pageNum := 0
+//	err := client.ListMembersPages(params,
+//	    func(page *cleanrooms.ListMembersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CleanRooms) ListMembersPages(input *ListMembersInput, fn func(*ListMembersOutput, bool) bool) error {
 	return c.ListMembersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2481,14 +4665,13 @@ const opListMemberships = "ListMemberships"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMembershipsRequest method.
+//	req, resp := client.ListMembershipsRequest(params)
 //
-//    // Example sending a request using the ListMembershipsRequest method.
-//    req, resp := client.ListMembershipsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListMemberships
 func (c *CleanRooms) ListMembershipsRequest(input *ListMembershipsInput) (req *request.Request, output *ListMembershipsOutput) {
@@ -2525,17 +4708,18 @@ func (c *CleanRooms) ListMembershipsRequest(input *ListMembershipsInput) (req *r
 // API operation ListMemberships for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error during processing of request.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListMemberships
 func (c *CleanRooms) ListMemberships(input *ListMembershipsInput) (*ListMembershipsOutput, error) {
@@ -2567,15 +4751,14 @@ func (c *CleanRooms) ListMembershipsWithContext(ctx aws.Context, input *ListMemb
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMemberships operation.
-//    pageNum := 0
-//    err := client.ListMembershipsPages(params,
-//        func(page *cleanrooms.ListMembershipsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMemberships operation.
+//	pageNum := 0
+//	err := client.ListMembershipsPages(params,
+//	    func(page *cleanrooms.ListMembershipsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CleanRooms) ListMembershipsPages(input *ListMembershipsInput, fn func(*ListMembershipsOutput, bool) bool) error {
 	return c.ListMembershipsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2611,6 +4794,303 @@ func (c *CleanRooms) ListMembershipsPagesWithContext(ctx aws.Context, input *Lis
 	return p.Err()
 }
 
+const opListPrivacyBudgetTemplates = "ListPrivacyBudgetTemplates"
+
+// ListPrivacyBudgetTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListPrivacyBudgetTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListPrivacyBudgetTemplates for more information on using the ListPrivacyBudgetTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListPrivacyBudgetTemplatesRequest method.
+//	req, resp := client.ListPrivacyBudgetTemplatesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListPrivacyBudgetTemplates
+func (c *CleanRooms) ListPrivacyBudgetTemplatesRequest(input *ListPrivacyBudgetTemplatesInput) (req *request.Request, output *ListPrivacyBudgetTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opListPrivacyBudgetTemplates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/memberships/{membershipIdentifier}/privacybudgettemplates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListPrivacyBudgetTemplatesInput{}
+	}
+
+	output = &ListPrivacyBudgetTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListPrivacyBudgetTemplates API operation for AWS Clean Rooms Service.
+//
+// Returns detailed information about the privacy budget templates in a specified
+// membership.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation ListPrivacyBudgetTemplates for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListPrivacyBudgetTemplates
+func (c *CleanRooms) ListPrivacyBudgetTemplates(input *ListPrivacyBudgetTemplatesInput) (*ListPrivacyBudgetTemplatesOutput, error) {
+	req, out := c.ListPrivacyBudgetTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// ListPrivacyBudgetTemplatesWithContext is the same as ListPrivacyBudgetTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListPrivacyBudgetTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListPrivacyBudgetTemplatesWithContext(ctx aws.Context, input *ListPrivacyBudgetTemplatesInput, opts ...request.Option) (*ListPrivacyBudgetTemplatesOutput, error) {
+	req, out := c.ListPrivacyBudgetTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListPrivacyBudgetTemplatesPages iterates over the pages of a ListPrivacyBudgetTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPrivacyBudgetTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListPrivacyBudgetTemplates operation.
+//	pageNum := 0
+//	err := client.ListPrivacyBudgetTemplatesPages(params,
+//	    func(page *cleanrooms.ListPrivacyBudgetTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CleanRooms) ListPrivacyBudgetTemplatesPages(input *ListPrivacyBudgetTemplatesInput, fn func(*ListPrivacyBudgetTemplatesOutput, bool) bool) error {
+	return c.ListPrivacyBudgetTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPrivacyBudgetTemplatesPagesWithContext same as ListPrivacyBudgetTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListPrivacyBudgetTemplatesPagesWithContext(ctx aws.Context, input *ListPrivacyBudgetTemplatesInput, fn func(*ListPrivacyBudgetTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPrivacyBudgetTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPrivacyBudgetTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPrivacyBudgetTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListPrivacyBudgets = "ListPrivacyBudgets"
+
+// ListPrivacyBudgetsRequest generates a "aws/request.Request" representing the
+// client's request for the ListPrivacyBudgets operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListPrivacyBudgets for more information on using the ListPrivacyBudgets
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListPrivacyBudgetsRequest method.
+//	req, resp := client.ListPrivacyBudgetsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListPrivacyBudgets
+func (c *CleanRooms) ListPrivacyBudgetsRequest(input *ListPrivacyBudgetsInput) (req *request.Request, output *ListPrivacyBudgetsOutput) {
+	op := &request.Operation{
+		Name:       opListPrivacyBudgets,
+		HTTPMethod: "GET",
+		HTTPPath:   "/memberships/{membershipIdentifier}/privacybudgets",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListPrivacyBudgetsInput{}
+	}
+
+	output = &ListPrivacyBudgetsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListPrivacyBudgets API operation for AWS Clean Rooms Service.
+//
+// Returns detailed information about the privacy budgets in a specified membership.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation ListPrivacyBudgets for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListPrivacyBudgets
+func (c *CleanRooms) ListPrivacyBudgets(input *ListPrivacyBudgetsInput) (*ListPrivacyBudgetsOutput, error) {
+	req, out := c.ListPrivacyBudgetsRequest(input)
+	return out, req.Send()
+}
+
+// ListPrivacyBudgetsWithContext is the same as ListPrivacyBudgets with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListPrivacyBudgets for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListPrivacyBudgetsWithContext(ctx aws.Context, input *ListPrivacyBudgetsInput, opts ...request.Option) (*ListPrivacyBudgetsOutput, error) {
+	req, out := c.ListPrivacyBudgetsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListPrivacyBudgetsPages iterates over the pages of a ListPrivacyBudgets operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPrivacyBudgets method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListPrivacyBudgets operation.
+//	pageNum := 0
+//	err := client.ListPrivacyBudgetsPages(params,
+//	    func(page *cleanrooms.ListPrivacyBudgetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CleanRooms) ListPrivacyBudgetsPages(input *ListPrivacyBudgetsInput, fn func(*ListPrivacyBudgetsOutput, bool) bool) error {
+	return c.ListPrivacyBudgetsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPrivacyBudgetsPagesWithContext same as ListPrivacyBudgetsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) ListPrivacyBudgetsPagesWithContext(ctx aws.Context, input *ListPrivacyBudgetsInput, fn func(*ListPrivacyBudgetsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPrivacyBudgetsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPrivacyBudgetsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPrivacyBudgetsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListProtectedQueries = "ListProtectedQueries"
 
 // ListProtectedQueriesRequest generates a "aws/request.Request" representing the
@@ -2627,14 +5107,13 @@ const opListProtectedQueries = "ListProtectedQueries"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProtectedQueriesRequest method.
+//	req, resp := client.ListProtectedQueriesRequest(params)
 //
-//    // Example sending a request using the ListProtectedQueriesRequest method.
-//    req, resp := client.ListProtectedQueriesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListProtectedQueries
 func (c *CleanRooms) ListProtectedQueriesRequest(input *ListProtectedQueriesInput) (req *request.Request, output *ListProtectedQueriesOutput) {
@@ -2671,20 +5150,21 @@ func (c *CleanRooms) ListProtectedQueriesRequest(input *ListProtectedQueriesInpu
 // API operation ListProtectedQueries for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListProtectedQueries
 func (c *CleanRooms) ListProtectedQueries(input *ListProtectedQueriesInput) (*ListProtectedQueriesOutput, error) {
@@ -2716,15 +5196,14 @@ func (c *CleanRooms) ListProtectedQueriesWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListProtectedQueries operation.
-//    pageNum := 0
-//    err := client.ListProtectedQueriesPages(params,
-//        func(page *cleanrooms.ListProtectedQueriesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListProtectedQueries operation.
+//	pageNum := 0
+//	err := client.ListProtectedQueriesPages(params,
+//	    func(page *cleanrooms.ListProtectedQueriesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CleanRooms) ListProtectedQueriesPages(input *ListProtectedQueriesInput, fn func(*ListProtectedQueriesOutput, bool) bool) error {
 	return c.ListProtectedQueriesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2776,14 +5255,13 @@ const opListSchemas = "ListSchemas"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSchemasRequest method.
+//	req, resp := client.ListSchemasRequest(params)
 //
-//    // Example sending a request using the ListSchemasRequest method.
-//    req, resp := client.ListSchemasRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListSchemas
 func (c *CleanRooms) ListSchemasRequest(input *ListSchemasInput) (req *request.Request, output *ListSchemasOutput) {
@@ -2820,20 +5298,21 @@ func (c *CleanRooms) ListSchemasRequest(input *ListSchemasInput) (req *request.R
 // API operation ListSchemas for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListSchemas
 func (c *CleanRooms) ListSchemas(input *ListSchemasInput) (*ListSchemasOutput, error) {
@@ -2865,15 +5344,14 @@ func (c *CleanRooms) ListSchemasWithContext(ctx aws.Context, input *ListSchemasI
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSchemas operation.
-//    pageNum := 0
-//    err := client.ListSchemasPages(params,
-//        func(page *cleanrooms.ListSchemasOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSchemas operation.
+//	pageNum := 0
+//	err := client.ListSchemasPages(params,
+//	    func(page *cleanrooms.ListSchemasOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CleanRooms) ListSchemasPages(input *ListSchemasInput, fn func(*ListSchemasOutput, bool) bool) error {
 	return c.ListSchemasPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2925,14 +5403,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListTagsForResource
 func (c *CleanRooms) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2963,11 +5440,12 @@ func (c *CleanRooms) ListTagsForResourceRequest(input *ListTagsForResourceInput)
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/ListTagsForResource
 func (c *CleanRooms) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2991,6 +5469,98 @@ func (c *CleanRooms) ListTagsForResourceWithContext(ctx aws.Context, input *List
 	return out, req.Send()
 }
 
+const opPreviewPrivacyImpact = "PreviewPrivacyImpact"
+
+// PreviewPrivacyImpactRequest generates a "aws/request.Request" representing the
+// client's request for the PreviewPrivacyImpact operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PreviewPrivacyImpact for more information on using the PreviewPrivacyImpact
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the PreviewPrivacyImpactRequest method.
+//	req, resp := client.PreviewPrivacyImpactRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/PreviewPrivacyImpact
+func (c *CleanRooms) PreviewPrivacyImpactRequest(input *PreviewPrivacyImpactInput) (req *request.Request, output *PreviewPrivacyImpactOutput) {
+	op := &request.Operation{
+		Name:       opPreviewPrivacyImpact,
+		HTTPMethod: "POST",
+		HTTPPath:   "/memberships/{membershipIdentifier}/previewprivacyimpact",
+	}
+
+	if input == nil {
+		input = &PreviewPrivacyImpactInput{}
+	}
+
+	output = &PreviewPrivacyImpactOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PreviewPrivacyImpact API operation for AWS Clean Rooms Service.
+//
+// An estimate of the number of aggregation functions that the member who can
+// query can run given epsilon and noise parameters.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation PreviewPrivacyImpact for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/PreviewPrivacyImpact
+func (c *CleanRooms) PreviewPrivacyImpact(input *PreviewPrivacyImpactInput) (*PreviewPrivacyImpactOutput, error) {
+	req, out := c.PreviewPrivacyImpactRequest(input)
+	return out, req.Send()
+}
+
+// PreviewPrivacyImpactWithContext is the same as PreviewPrivacyImpact with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PreviewPrivacyImpact for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) PreviewPrivacyImpactWithContext(ctx aws.Context, input *PreviewPrivacyImpactInput, opts ...request.Option) (*PreviewPrivacyImpactOutput, error) {
+	req, out := c.PreviewPrivacyImpactRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartProtectedQuery = "StartProtectedQuery"
 
 // StartProtectedQueryRequest generates a "aws/request.Request" representing the
@@ -3007,14 +5577,13 @@ const opStartProtectedQuery = "StartProtectedQuery"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartProtectedQueryRequest method.
+//	req, resp := client.StartProtectedQueryRequest(params)
 //
-//    // Example sending a request using the StartProtectedQueryRequest method.
-//    req, resp := client.StartProtectedQueryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/StartProtectedQuery
 func (c *CleanRooms) StartProtectedQueryRequest(input *StartProtectedQueryInput) (req *request.Request, output *StartProtectedQueryOutput) {
@@ -3035,7 +5604,7 @@ func (c *CleanRooms) StartProtectedQueryRequest(input *StartProtectedQueryInput)
 
 // StartProtectedQuery API operation for AWS Clean Rooms Service.
 //
-// Creates a protected query that is started by AWS Clean Rooms.
+// Creates a protected query that is started by Clean Rooms.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3045,23 +5614,24 @@ func (c *CleanRooms) StartProtectedQueryRequest(input *StartProtectedQueryInput)
 // API operation StartProtectedQuery for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceQuotaExceededException
-//   Request denied because service quota has been exceeded.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ServiceQuotaExceededException
+//     Request denied because service quota has been exceeded.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/StartProtectedQuery
 func (c *CleanRooms) StartProtectedQuery(input *StartProtectedQueryInput) (*StartProtectedQueryOutput, error) {
@@ -3101,14 +5671,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/TagResource
 func (c *CleanRooms) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -3140,11 +5709,12 @@ func (c *CleanRooms) TagResourceRequest(input *TagResourceInput) (req *request.R
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/TagResource
 func (c *CleanRooms) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -3184,14 +5754,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UntagResource
 func (c *CleanRooms) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -3223,11 +5792,12 @@ func (c *CleanRooms) UntagResourceRequest(input *UntagResourceInput) (req *reque
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UntagResource
 func (c *CleanRooms) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -3251,6 +5821,97 @@ func (c *CleanRooms) UntagResourceWithContext(ctx aws.Context, input *UntagResou
 	return out, req.Send()
 }
 
+const opUpdateAnalysisTemplate = "UpdateAnalysisTemplate"
+
+// UpdateAnalysisTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateAnalysisTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateAnalysisTemplate for more information on using the UpdateAnalysisTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateAnalysisTemplateRequest method.
+//	req, resp := client.UpdateAnalysisTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateAnalysisTemplate
+func (c *CleanRooms) UpdateAnalysisTemplateRequest(input *UpdateAnalysisTemplateInput) (req *request.Request, output *UpdateAnalysisTemplateOutput) {
+	op := &request.Operation{
+		Name:       opUpdateAnalysisTemplate,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/memberships/{membershipIdentifier}/analysistemplates/{analysisTemplateIdentifier}",
+	}
+
+	if input == nil {
+		input = &UpdateAnalysisTemplateInput{}
+	}
+
+	output = &UpdateAnalysisTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateAnalysisTemplate API operation for AWS Clean Rooms Service.
+//
+// Updates the analysis template metadata.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation UpdateAnalysisTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateAnalysisTemplate
+func (c *CleanRooms) UpdateAnalysisTemplate(input *UpdateAnalysisTemplateInput) (*UpdateAnalysisTemplateOutput, error) {
+	req, out := c.UpdateAnalysisTemplateRequest(input)
+	return out, req.Send()
+}
+
+// UpdateAnalysisTemplateWithContext is the same as UpdateAnalysisTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateAnalysisTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) UpdateAnalysisTemplateWithContext(ctx aws.Context, input *UpdateAnalysisTemplateInput, opts ...request.Option) (*UpdateAnalysisTemplateOutput, error) {
+	req, out := c.UpdateAnalysisTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateCollaboration = "UpdateCollaboration"
 
 // UpdateCollaborationRequest generates a "aws/request.Request" representing the
@@ -3267,14 +5928,13 @@ const opUpdateCollaboration = "UpdateCollaboration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateCollaborationRequest method.
+//	req, resp := client.UpdateCollaborationRequest(params)
 //
-//    // Example sending a request using the UpdateCollaborationRequest method.
-//    req, resp := client.UpdateCollaborationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateCollaboration
 func (c *CleanRooms) UpdateCollaborationRequest(input *UpdateCollaborationInput) (req *request.Request, output *UpdateCollaborationOutput) {
@@ -3306,17 +5966,18 @@ func (c *CleanRooms) UpdateCollaborationRequest(input *UpdateCollaborationInput)
 // API operation UpdateCollaboration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error during processing of request.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateCollaboration
 func (c *CleanRooms) UpdateCollaboration(input *UpdateCollaborationInput) (*UpdateCollaborationOutput, error) {
@@ -3340,6 +6001,97 @@ func (c *CleanRooms) UpdateCollaborationWithContext(ctx aws.Context, input *Upda
 	return out, req.Send()
 }
 
+const opUpdateConfiguredAudienceModelAssociation = "UpdateConfiguredAudienceModelAssociation"
+
+// UpdateConfiguredAudienceModelAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateConfiguredAudienceModelAssociation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateConfiguredAudienceModelAssociation for more information on using the UpdateConfiguredAudienceModelAssociation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateConfiguredAudienceModelAssociationRequest method.
+//	req, resp := client.UpdateConfiguredAudienceModelAssociationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateConfiguredAudienceModelAssociation
+func (c *CleanRooms) UpdateConfiguredAudienceModelAssociationRequest(input *UpdateConfiguredAudienceModelAssociationInput) (req *request.Request, output *UpdateConfiguredAudienceModelAssociationOutput) {
+	op := &request.Operation{
+		Name:       opUpdateConfiguredAudienceModelAssociation,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/memberships/{membershipIdentifier}/configuredaudiencemodelassociations/{configuredAudienceModelAssociationIdentifier}",
+	}
+
+	if input == nil {
+		input = &UpdateConfiguredAudienceModelAssociationInput{}
+	}
+
+	output = &UpdateConfiguredAudienceModelAssociationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateConfiguredAudienceModelAssociation API operation for AWS Clean Rooms Service.
+//
+// Provides the details necessary to update a configured audience model association.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation UpdateConfiguredAudienceModelAssociation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateConfiguredAudienceModelAssociation
+func (c *CleanRooms) UpdateConfiguredAudienceModelAssociation(input *UpdateConfiguredAudienceModelAssociationInput) (*UpdateConfiguredAudienceModelAssociationOutput, error) {
+	req, out := c.UpdateConfiguredAudienceModelAssociationRequest(input)
+	return out, req.Send()
+}
+
+// UpdateConfiguredAudienceModelAssociationWithContext is the same as UpdateConfiguredAudienceModelAssociation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateConfiguredAudienceModelAssociation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) UpdateConfiguredAudienceModelAssociationWithContext(ctx aws.Context, input *UpdateConfiguredAudienceModelAssociationInput, opts ...request.Option) (*UpdateConfiguredAudienceModelAssociationOutput, error) {
+	req, out := c.UpdateConfiguredAudienceModelAssociationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateConfiguredTable = "UpdateConfiguredTable"
 
 // UpdateConfiguredTableRequest generates a "aws/request.Request" representing the
@@ -3356,14 +6108,13 @@ const opUpdateConfiguredTable = "UpdateConfiguredTable"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateConfiguredTableRequest method.
+//	req, resp := client.UpdateConfiguredTableRequest(params)
 //
-//    // Example sending a request using the UpdateConfiguredTableRequest method.
-//    req, resp := client.UpdateConfiguredTableRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateConfiguredTable
 func (c *CleanRooms) UpdateConfiguredTableRequest(input *UpdateConfiguredTableInput) (req *request.Request, output *UpdateConfiguredTableOutput) {
@@ -3394,23 +6145,24 @@ func (c *CleanRooms) UpdateConfiguredTableRequest(input *UpdateConfiguredTableIn
 // API operation UpdateConfiguredTable for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateConfiguredTable
 func (c *CleanRooms) UpdateConfiguredTable(input *UpdateConfiguredTableInput) (*UpdateConfiguredTableOutput, error) {
@@ -3450,14 +6202,13 @@ const opUpdateConfiguredTableAnalysisRule = "UpdateConfiguredTableAnalysisRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateConfiguredTableAnalysisRuleRequest method.
+//	req, resp := client.UpdateConfiguredTableAnalysisRuleRequest(params)
 //
-//    // Example sending a request using the UpdateConfiguredTableAnalysisRuleRequest method.
-//    req, resp := client.UpdateConfiguredTableAnalysisRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateConfiguredTableAnalysisRule
 func (c *CleanRooms) UpdateConfiguredTableAnalysisRuleRequest(input *UpdateConfiguredTableAnalysisRuleInput) (req *request.Request, output *UpdateConfiguredTableAnalysisRuleOutput) {
@@ -3488,23 +6239,24 @@ func (c *CleanRooms) UpdateConfiguredTableAnalysisRuleRequest(input *UpdateConfi
 // API operation UpdateConfiguredTableAnalysisRule for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateConfiguredTableAnalysisRule
 func (c *CleanRooms) UpdateConfiguredTableAnalysisRule(input *UpdateConfiguredTableAnalysisRuleInput) (*UpdateConfiguredTableAnalysisRuleOutput, error) {
@@ -3544,14 +6296,13 @@ const opUpdateConfiguredTableAssociation = "UpdateConfiguredTableAssociation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateConfiguredTableAssociationRequest method.
+//	req, resp := client.UpdateConfiguredTableAssociationRequest(params)
 //
-//    // Example sending a request using the UpdateConfiguredTableAssociationRequest method.
-//    req, resp := client.UpdateConfiguredTableAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateConfiguredTableAssociation
 func (c *CleanRooms) UpdateConfiguredTableAssociationRequest(input *UpdateConfiguredTableAssociationInput) (req *request.Request, output *UpdateConfiguredTableAssociationOutput) {
@@ -3582,23 +6333,24 @@ func (c *CleanRooms) UpdateConfiguredTableAssociationRequest(input *UpdateConfig
 // API operation UpdateConfiguredTableAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateConfiguredTableAssociation
 func (c *CleanRooms) UpdateConfiguredTableAssociation(input *UpdateConfiguredTableAssociationInput) (*UpdateConfiguredTableAssociationOutput, error) {
@@ -3638,14 +6390,13 @@ const opUpdateMembership = "UpdateMembership"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateMembershipRequest method.
+//	req, resp := client.UpdateMembershipRequest(params)
 //
-//    // Example sending a request using the UpdateMembershipRequest method.
-//    req, resp := client.UpdateMembershipRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateMembership
 func (c *CleanRooms) UpdateMembershipRequest(input *UpdateMembershipInput) (req *request.Request, output *UpdateMembershipOutput) {
@@ -3676,23 +6427,24 @@ func (c *CleanRooms) UpdateMembershipRequest(input *UpdateMembershipInput) (req 
 // API operation UpdateMembership for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateMembership
 func (c *CleanRooms) UpdateMembership(input *UpdateMembershipInput) (*UpdateMembershipOutput, error) {
@@ -3716,6 +6468,100 @@ func (c *CleanRooms) UpdateMembershipWithContext(ctx aws.Context, input *UpdateM
 	return out, req.Send()
 }
 
+const opUpdatePrivacyBudgetTemplate = "UpdatePrivacyBudgetTemplate"
+
+// UpdatePrivacyBudgetTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the UpdatePrivacyBudgetTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdatePrivacyBudgetTemplate for more information on using the UpdatePrivacyBudgetTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdatePrivacyBudgetTemplateRequest method.
+//	req, resp := client.UpdatePrivacyBudgetTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdatePrivacyBudgetTemplate
+func (c *CleanRooms) UpdatePrivacyBudgetTemplateRequest(input *UpdatePrivacyBudgetTemplateInput) (req *request.Request, output *UpdatePrivacyBudgetTemplateOutput) {
+	op := &request.Operation{
+		Name:       opUpdatePrivacyBudgetTemplate,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/memberships/{membershipIdentifier}/privacybudgettemplates/{privacyBudgetTemplateIdentifier}",
+	}
+
+	if input == nil {
+		input = &UpdatePrivacyBudgetTemplateInput{}
+	}
+
+	output = &UpdatePrivacyBudgetTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdatePrivacyBudgetTemplate API operation for AWS Clean Rooms Service.
+//
+// Updates the privacy budget template for the specified membership.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Clean Rooms Service's
+// API operation UpdatePrivacyBudgetTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
+//
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
+//
+//   - InternalServerException
+//     Unexpected error during processing of request.
+//
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdatePrivacyBudgetTemplate
+func (c *CleanRooms) UpdatePrivacyBudgetTemplate(input *UpdatePrivacyBudgetTemplateInput) (*UpdatePrivacyBudgetTemplateOutput, error) {
+	req, out := c.UpdatePrivacyBudgetTemplateRequest(input)
+	return out, req.Send()
+}
+
+// UpdatePrivacyBudgetTemplateWithContext is the same as UpdatePrivacyBudgetTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdatePrivacyBudgetTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CleanRooms) UpdatePrivacyBudgetTemplateWithContext(ctx aws.Context, input *UpdatePrivacyBudgetTemplateInput, opts ...request.Option) (*UpdatePrivacyBudgetTemplateOutput, error) {
+	req, out := c.UpdatePrivacyBudgetTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateProtectedQuery = "UpdateProtectedQuery"
 
 // UpdateProtectedQueryRequest generates a "aws/request.Request" representing the
@@ -3732,14 +6578,13 @@ const opUpdateProtectedQuery = "UpdateProtectedQuery"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProtectedQueryRequest method.
+//	req, resp := client.UpdateProtectedQueryRequest(params)
 //
-//    // Example sending a request using the UpdateProtectedQueryRequest method.
-//    req, resp := client.UpdateProtectedQueryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateProtectedQuery
 func (c *CleanRooms) UpdateProtectedQueryRequest(input *UpdateProtectedQueryInput) (req *request.Request, output *UpdateProtectedQueryOutput) {
@@ -3770,23 +6615,24 @@ func (c *CleanRooms) UpdateProtectedQueryRequest(input *UpdateProtectedQueryInpu
 // API operation UpdateProtectedQuery for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - ResourceNotFoundException
+//     Request references a resource which does not exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the specified constraints.
+//   - InternalServerException
+//     Unexpected error during processing of request.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the specified constraints.
 //
-//   * AccessDeniedException
-//   Caller does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     Caller does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cleanrooms-2022-02-17/UpdateProtectedQuery
 func (c *CleanRooms) UpdateProtectedQuery(input *UpdateProtectedQueryInput) (*UpdateProtectedQueryOutput, error) {
@@ -4027,6 +6873,82 @@ func (s *AggregationConstraint) SetType(v string) *AggregationConstraint {
 	return s
 }
 
+// Optional. The member who can query can provide this placeholder for a literal
+// data value in an analysis template.
+type AnalysisParameter struct {
+	_ struct{} `type:"structure" sensitive:"true"`
+
+	// Optional. The default value that is applied in the analysis template. The
+	// member who can query can override this value in the query editor.
+	DefaultValue *string `locationName:"defaultValue" type:"string"`
+
+	// The name of the parameter. The name must use only alphanumeric, underscore
+	// (_), or hyphen (-) characters but cannot start or end with a hyphen.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The type of parameter.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"ParameterType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisParameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisParameter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AnalysisParameter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AnalysisParameter"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDefaultValue sets the DefaultValue field's value.
+func (s *AnalysisParameter) SetDefaultValue(v string) *AnalysisParameter {
+	s.DefaultValue = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AnalysisParameter) SetName(v string) *AnalysisParameter {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AnalysisParameter) SetType(v string) *AnalysisParameter {
+	s.Type = &v
+	return s
+}
+
 // A specification about how data from the configured table can be used in a
 // query.
 type AnalysisRule struct {
@@ -4052,7 +6974,7 @@ type AnalysisRule struct {
 	// Policy is a required field
 	Policy *AnalysisRulePolicy `locationName:"policy" type:"structure" required:"true"`
 
-	// The type of analysis rule. Valid values are `AGGREGATION` and `LIST`.
+	// The type of analysis rule.
 	//
 	// Type is a required field
 	Type *string `locationName:"type" type:"string" required:"true" enum:"AnalysisRuleType"`
@@ -4117,7 +7039,8 @@ func (s *AnalysisRule) SetUpdateTime(v time.Time) *AnalysisRule {
 	return s
 }
 
-// Enables query structure and specified queries that product aggregate statistics.
+// A type of analysis rule that enables query structure and specified queries
+// that produce aggregate statistics.
 type AnalysisRuleAggregation struct {
 	_ struct{} `type:"structure"`
 
@@ -4125,6 +7048,10 @@ type AnalysisRuleAggregation struct {
 	//
 	// AggregateColumns is a required field
 	AggregateColumns []*AggregateColumn `locationName:"aggregateColumns" min:"1" type:"list" required:"true"`
+
+	// Which logical operators (if any) are to be used in an INNER JOIN match condition.
+	// Default is AND.
+	AllowedJoinOperators []*string `locationName:"allowedJoinOperators" type:"list" enum:"JoinOperator"`
 
 	// The columns that query runners are allowed to select, group by, or filter
 	// by.
@@ -4139,7 +7066,7 @@ type AnalysisRuleAggregation struct {
 	JoinColumns []*string `locationName:"joinColumns" type:"list" required:"true"`
 
 	// Control that requires member who runs query to do a join with their configured
-	// table and/or other configured table in query
+	// table and/or other configured table in query.
 	JoinRequired *string `locationName:"joinRequired" type:"string" enum:"JoinRequiredOption"`
 
 	// Columns that must meet a specific threshold value (after an aggregation function
@@ -4230,6 +7157,12 @@ func (s *AnalysisRuleAggregation) SetAggregateColumns(v []*AggregateColumn) *Ana
 	return s
 }
 
+// SetAllowedJoinOperators sets the AllowedJoinOperators field's value.
+func (s *AnalysisRuleAggregation) SetAllowedJoinOperators(v []*string) *AnalysisRuleAggregation {
+	s.AllowedJoinOperators = v
+	return s
+}
+
 // SetDimensionColumns sets the DimensionColumns field's value.
 func (s *AnalysisRuleAggregation) SetDimensionColumns(v []*string) *AnalysisRuleAggregation {
 	s.DimensionColumns = v
@@ -4260,12 +7193,89 @@ func (s *AnalysisRuleAggregation) SetScalarFunctions(v []*string) *AnalysisRuleA
 	return s
 }
 
+// A type of analysis rule that enables the table owner to approve custom SQL
+// queries on their configured tables. It supports differential privacy.
+type AnalysisRuleCustom struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the analysis templates that are allowed by the custom analysis
+	// rule.
+	//
+	// AllowedAnalyses is a required field
+	AllowedAnalyses []*string `locationName:"allowedAnalyses" type:"list" required:"true"`
+
+	// The IDs of the Amazon Web Services accounts that are allowed to query by
+	// the custom analysis rule. Required when allowedAnalyses is ANY_QUERY.
+	AllowedAnalysisProviders []*string `locationName:"allowedAnalysisProviders" type:"list"`
+
+	// The differential privacy configuration.
+	DifferentialPrivacy *DifferentialPrivacyConfiguration `locationName:"differentialPrivacy" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisRuleCustom) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisRuleCustom) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AnalysisRuleCustom) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AnalysisRuleCustom"}
+	if s.AllowedAnalyses == nil {
+		invalidParams.Add(request.NewErrParamRequired("AllowedAnalyses"))
+	}
+	if s.DifferentialPrivacy != nil {
+		if err := s.DifferentialPrivacy.Validate(); err != nil {
+			invalidParams.AddNested("DifferentialPrivacy", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllowedAnalyses sets the AllowedAnalyses field's value.
+func (s *AnalysisRuleCustom) SetAllowedAnalyses(v []*string) *AnalysisRuleCustom {
+	s.AllowedAnalyses = v
+	return s
+}
+
+// SetAllowedAnalysisProviders sets the AllowedAnalysisProviders field's value.
+func (s *AnalysisRuleCustom) SetAllowedAnalysisProviders(v []*string) *AnalysisRuleCustom {
+	s.AllowedAnalysisProviders = v
+	return s
+}
+
+// SetDifferentialPrivacy sets the DifferentialPrivacy field's value.
+func (s *AnalysisRuleCustom) SetDifferentialPrivacy(v *DifferentialPrivacyConfiguration) *AnalysisRuleCustom {
+	s.DifferentialPrivacy = v
+	return s
+}
+
 // A type of analysis rule that enables row-level analysis.
 type AnalysisRuleList struct {
 	_ struct{} `type:"structure"`
 
+	// The logical operators (if any) that are to be used in an INNER JOIN match
+	// condition. Default is AND.
+	AllowedJoinOperators []*string `locationName:"allowedJoinOperators" type:"list" enum:"JoinOperator"`
+
 	// Columns that can be used to join a configured table with the table of the
-	// member who can query and another members' configured tables.
+	// member who can query and other members' configured tables.
 	//
 	// JoinColumns is a required field
 	JoinColumns []*string `locationName:"joinColumns" min:"1" type:"list" required:"true"`
@@ -4313,6 +7323,12 @@ func (s *AnalysisRuleList) Validate() error {
 	return nil
 }
 
+// SetAllowedJoinOperators sets the AllowedJoinOperators field's value.
+func (s *AnalysisRuleList) SetAllowedJoinOperators(v []*string) *AnalysisRuleList {
+	s.AllowedJoinOperators = v
+	return s
+}
+
 // SetJoinColumns sets the JoinColumns field's value.
 func (s *AnalysisRuleList) SetJoinColumns(v []*string) *AnalysisRuleList {
 	s.JoinColumns = v
@@ -4325,11 +7341,11 @@ func (s *AnalysisRuleList) SetListColumns(v []*string) *AnalysisRuleList {
 	return s
 }
 
-// Controls on the query specifications that can be run on configured table..
+// Controls on the query specifications that can be run on configured table.
 type AnalysisRulePolicy struct {
 	_ struct{} `type:"structure"`
 
-	// Controls on the query specifications that can be run on configured table..
+	// Controls on the query specifications that can be run on configured table.
 	V1 *AnalysisRulePolicyV1 `locationName:"v1" type:"structure"`
 }
 
@@ -4357,13 +7373,16 @@ func (s *AnalysisRulePolicy) SetV1(v *AnalysisRulePolicyV1) *AnalysisRulePolicy 
 	return s
 }
 
-// Controls on the query specifications that can be run on configured table..
+// Controls on the query specifications that can be run on configured table.
 type AnalysisRulePolicyV1 struct {
 	_ struct{} `type:"structure"`
 
 	// Analysis rule type that enables only aggregation queries on a configured
 	// table.
 	Aggregation *AnalysisRuleAggregation `locationName:"aggregation" type:"structure"`
+
+	// Analysis rule type that enables custom SQL queries on a configured table.
+	Custom *AnalysisRuleCustom `locationName:"custom" type:"structure"`
 
 	// Analysis rule type that enables only list queries on a configured table.
 	List *AnalysisRuleList `locationName:"list" type:"structure"`
@@ -4393,9 +7412,854 @@ func (s *AnalysisRulePolicyV1) SetAggregation(v *AnalysisRuleAggregation) *Analy
 	return s
 }
 
+// SetCustom sets the Custom field's value.
+func (s *AnalysisRulePolicyV1) SetCustom(v *AnalysisRuleCustom) *AnalysisRulePolicyV1 {
+	s.Custom = v
+	return s
+}
+
 // SetList sets the List field's value.
 func (s *AnalysisRulePolicyV1) SetList(v *AnalysisRuleList) *AnalysisRulePolicyV1 {
 	s.List = v
+	return s
+}
+
+// A relation within an analysis.
+type AnalysisSchema struct {
+	_ struct{} `type:"structure"`
+
+	// The tables referenced in the analysis schema.
+	ReferencedTables []*string `locationName:"referencedTables" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisSchema) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisSchema) GoString() string {
+	return s.String()
+}
+
+// SetReferencedTables sets the ReferencedTables field's value.
+func (s *AnalysisSchema) SetReferencedTables(v []*string) *AnalysisSchema {
+	s.ReferencedTables = v
+	return s
+}
+
+// The structure that defines the body of the analysis template.
+type AnalysisSource struct {
+	_ struct{} `type:"structure" sensitive:"true"`
+
+	// The query text.
+	Text *string `locationName:"text" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisSource) GoString() string {
+	return s.String()
+}
+
+// SetText sets the Text field's value.
+func (s *AnalysisSource) SetText(v string) *AnalysisSource {
+	s.Text = &v
+	return s
+}
+
+// The analysis template.
+type AnalysisTemplate struct {
+	_ struct{} `type:"structure"`
+
+	// The parameters of the analysis template.
+	AnalysisParameters []*AnalysisParameter `locationName:"analysisParameters" type:"list"`
+
+	// The Amazon Resource Name (ARN) of the analysis template.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The unique ARN for the analysis template’s associated collaboration.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// The unique ID for the associated collaboration of the analysis template.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The time that the analysis template was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The description of the analysis template.
+	Description *string `locationName:"description" type:"string"`
+
+	// The format of the analysis template.
+	//
+	// Format is a required field
+	Format *string `locationName:"format" type:"string" required:"true" enum:"AnalysisFormat"`
+
+	// The identifier for the analysis template.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the member who created the analysis template.
+	//
+	// MembershipArn is a required field
+	MembershipArn *string `locationName:"membershipArn" type:"string" required:"true"`
+
+	// The identifier of a member who created the analysis template.
+	//
+	// MembershipId is a required field
+	MembershipId *string `locationName:"membershipId" min:"36" type:"string" required:"true"`
+
+	// The name of the analysis template.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The entire schema object.
+	//
+	// Schema is a required field
+	Schema *AnalysisSchema `locationName:"schema" type:"structure" required:"true"`
+
+	// The source of the analysis template.
+	//
+	// Source is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AnalysisTemplate's
+	// String and GoString methods.
+	//
+	// Source is a required field
+	Source *AnalysisSource `locationName:"source" type:"structure" required:"true" sensitive:"true"`
+
+	// The time that the analysis template was last updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+
+	// Information about the validations performed on the analysis template.
+	Validations []*AnalysisTemplateValidationStatusDetail `locationName:"validations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisTemplate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisTemplate) GoString() string {
+	return s.String()
+}
+
+// SetAnalysisParameters sets the AnalysisParameters field's value.
+func (s *AnalysisTemplate) SetAnalysisParameters(v []*AnalysisParameter) *AnalysisTemplate {
+	s.AnalysisParameters = v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *AnalysisTemplate) SetArn(v string) *AnalysisTemplate {
+	s.Arn = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *AnalysisTemplate) SetCollaborationArn(v string) *AnalysisTemplate {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *AnalysisTemplate) SetCollaborationId(v string) *AnalysisTemplate {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *AnalysisTemplate) SetCreateTime(v time.Time) *AnalysisTemplate {
+	s.CreateTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *AnalysisTemplate) SetDescription(v string) *AnalysisTemplate {
+	s.Description = &v
+	return s
+}
+
+// SetFormat sets the Format field's value.
+func (s *AnalysisTemplate) SetFormat(v string) *AnalysisTemplate {
+	s.Format = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *AnalysisTemplate) SetId(v string) *AnalysisTemplate {
+	s.Id = &v
+	return s
+}
+
+// SetMembershipArn sets the MembershipArn field's value.
+func (s *AnalysisTemplate) SetMembershipArn(v string) *AnalysisTemplate {
+	s.MembershipArn = &v
+	return s
+}
+
+// SetMembershipId sets the MembershipId field's value.
+func (s *AnalysisTemplate) SetMembershipId(v string) *AnalysisTemplate {
+	s.MembershipId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AnalysisTemplate) SetName(v string) *AnalysisTemplate {
+	s.Name = &v
+	return s
+}
+
+// SetSchema sets the Schema field's value.
+func (s *AnalysisTemplate) SetSchema(v *AnalysisSchema) *AnalysisTemplate {
+	s.Schema = v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *AnalysisTemplate) SetSource(v *AnalysisSource) *AnalysisTemplate {
+	s.Source = v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *AnalysisTemplate) SetUpdateTime(v time.Time) *AnalysisTemplate {
+	s.UpdateTime = &v
+	return s
+}
+
+// SetValidations sets the Validations field's value.
+func (s *AnalysisTemplate) SetValidations(v []*AnalysisTemplateValidationStatusDetail) *AnalysisTemplate {
+	s.Validations = v
+	return s
+}
+
+// The metadata of the analysis template.
+type AnalysisTemplateSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the analysis template.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The unique ARN for the analysis template summary’s associated collaboration.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// A unique identifier for the collaboration that the analysis template summary
+	// belongs to. Currently accepts collaboration ID.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The time that the analysis template summary was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The description of the analysis template.
+	Description *string `locationName:"description" type:"string"`
+
+	// The identifier of the analysis template.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the member who created the analysis template.
+	//
+	// MembershipArn is a required field
+	MembershipArn *string `locationName:"membershipArn" type:"string" required:"true"`
+
+	// The identifier for a membership resource.
+	//
+	// MembershipId is a required field
+	MembershipId *string `locationName:"membershipId" min:"36" type:"string" required:"true"`
+
+	// The name of the analysis template.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The time that the analysis template summary was last updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisTemplateSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisTemplateSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *AnalysisTemplateSummary) SetArn(v string) *AnalysisTemplateSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *AnalysisTemplateSummary) SetCollaborationArn(v string) *AnalysisTemplateSummary {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *AnalysisTemplateSummary) SetCollaborationId(v string) *AnalysisTemplateSummary {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *AnalysisTemplateSummary) SetCreateTime(v time.Time) *AnalysisTemplateSummary {
+	s.CreateTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *AnalysisTemplateSummary) SetDescription(v string) *AnalysisTemplateSummary {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *AnalysisTemplateSummary) SetId(v string) *AnalysisTemplateSummary {
+	s.Id = &v
+	return s
+}
+
+// SetMembershipArn sets the MembershipArn field's value.
+func (s *AnalysisTemplateSummary) SetMembershipArn(v string) *AnalysisTemplateSummary {
+	s.MembershipArn = &v
+	return s
+}
+
+// SetMembershipId sets the MembershipId field's value.
+func (s *AnalysisTemplateSummary) SetMembershipId(v string) *AnalysisTemplateSummary {
+	s.MembershipId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AnalysisTemplateSummary) SetName(v string) *AnalysisTemplateSummary {
+	s.Name = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *AnalysisTemplateSummary) SetUpdateTime(v time.Time) *AnalysisTemplateSummary {
+	s.UpdateTime = &v
+	return s
+}
+
+// The status details of the analysis template validation. Clean Rooms Differential
+// Privacy uses a general-purpose query structure to support complex SQL queries
+// and validates whether an analysis template fits that general-purpose query
+// structure. Validation is performed when analysis templates are created and
+// fetched. Because analysis templates are immutable by design, we recommend
+// that you create analysis templates after you associate the configured tables
+// with their analysis rule to your collaboration.
+//
+// For more information, see https://docs.aws.amazon.com/clean-rooms/latest/userguide/analysis-rules-custom.html#custom-diff-privacy
+// (https://docs.aws.amazon.com/clean-rooms/latest/userguide/analysis-rules-custom.html#custom-diff-privacy).
+type AnalysisTemplateValidationStatusDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The reasons for the validation results.
+	Reasons []*AnalysisTemplateValidationStatusReason `locationName:"reasons" type:"list"`
+
+	// The status of the validation.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"AnalysisTemplateValidationStatus"`
+
+	// The type of validation that was performed.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"AnalysisTemplateValidationType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisTemplateValidationStatusDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisTemplateValidationStatusDetail) GoString() string {
+	return s.String()
+}
+
+// SetReasons sets the Reasons field's value.
+func (s *AnalysisTemplateValidationStatusDetail) SetReasons(v []*AnalysisTemplateValidationStatusReason) *AnalysisTemplateValidationStatusDetail {
+	s.Reasons = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AnalysisTemplateValidationStatusDetail) SetStatus(v string) *AnalysisTemplateValidationStatusDetail {
+	s.Status = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AnalysisTemplateValidationStatusDetail) SetType(v string) *AnalysisTemplateValidationStatusDetail {
+	s.Type = &v
+	return s
+}
+
+// The reasons for the validation results.
+type AnalysisTemplateValidationStatusReason struct {
+	_ struct{} `type:"structure"`
+
+	// The validation message.
+	//
+	// Message is a required field
+	Message *string `locationName:"message" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisTemplateValidationStatusReason) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalysisTemplateValidationStatusReason) GoString() string {
+	return s.String()
+}
+
+// SetMessage sets the Message field's value.
+func (s *AnalysisTemplateValidationStatusReason) SetMessage(v string) *AnalysisTemplateValidationStatusReason {
+	s.Message = &v
+	return s
+}
+
+// Details of errors thrown by the call to retrieve multiple analysis templates
+// within a collaboration by their identifiers.
+type BatchGetCollaborationAnalysisTemplateError struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the analysis template.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// An error code for the error.
+	//
+	// Code is a required field
+	Code *string `locationName:"code" type:"string" required:"true"`
+
+	// A description of why the call failed.
+	//
+	// Message is a required field
+	Message *string `locationName:"message" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetCollaborationAnalysisTemplateError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetCollaborationAnalysisTemplateError) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *BatchGetCollaborationAnalysisTemplateError) SetArn(v string) *BatchGetCollaborationAnalysisTemplateError {
+	s.Arn = &v
+	return s
+}
+
+// SetCode sets the Code field's value.
+func (s *BatchGetCollaborationAnalysisTemplateError) SetCode(v string) *BatchGetCollaborationAnalysisTemplateError {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *BatchGetCollaborationAnalysisTemplateError) SetMessage(v string) *BatchGetCollaborationAnalysisTemplateError {
+	s.Message = &v
+	return s
+}
+
+type BatchGetCollaborationAnalysisTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) associated with the analysis template within
+	// a collaboration.
+	//
+	// AnalysisTemplateArns is a required field
+	AnalysisTemplateArns []*string `locationName:"analysisTemplateArns" min:"1" type:"list" required:"true"`
+
+	// A unique identifier for the collaboration that the analysis templates belong
+	// to. Currently accepts collaboration ID.
+	//
+	// CollaborationIdentifier is a required field
+	CollaborationIdentifier *string `location:"uri" locationName:"collaborationIdentifier" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetCollaborationAnalysisTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetCollaborationAnalysisTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchGetCollaborationAnalysisTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchGetCollaborationAnalysisTemplateInput"}
+	if s.AnalysisTemplateArns == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnalysisTemplateArns"))
+	}
+	if s.AnalysisTemplateArns != nil && len(s.AnalysisTemplateArns) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AnalysisTemplateArns", 1))
+	}
+	if s.CollaborationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollaborationIdentifier"))
+	}
+	if s.CollaborationIdentifier != nil && len(*s.CollaborationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("CollaborationIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnalysisTemplateArns sets the AnalysisTemplateArns field's value.
+func (s *BatchGetCollaborationAnalysisTemplateInput) SetAnalysisTemplateArns(v []*string) *BatchGetCollaborationAnalysisTemplateInput {
+	s.AnalysisTemplateArns = v
+	return s
+}
+
+// SetCollaborationIdentifier sets the CollaborationIdentifier field's value.
+func (s *BatchGetCollaborationAnalysisTemplateInput) SetCollaborationIdentifier(v string) *BatchGetCollaborationAnalysisTemplateInput {
+	s.CollaborationIdentifier = &v
+	return s
+}
+
+type BatchGetCollaborationAnalysisTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The retrieved list of analysis templates within a collaboration.
+	//
+	// CollaborationAnalysisTemplates is a required field
+	CollaborationAnalysisTemplates []*CollaborationAnalysisTemplate `locationName:"collaborationAnalysisTemplates" type:"list" required:"true"`
+
+	// Error reasons for collaboration analysis templates that could not be retrieved.
+	// One error is returned for every collaboration analysis template that could
+	// not be retrieved.
+	//
+	// Errors is a required field
+	Errors []*BatchGetCollaborationAnalysisTemplateError `locationName:"errors" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetCollaborationAnalysisTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetCollaborationAnalysisTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetCollaborationAnalysisTemplates sets the CollaborationAnalysisTemplates field's value.
+func (s *BatchGetCollaborationAnalysisTemplateOutput) SetCollaborationAnalysisTemplates(v []*CollaborationAnalysisTemplate) *BatchGetCollaborationAnalysisTemplateOutput {
+	s.CollaborationAnalysisTemplates = v
+	return s
+}
+
+// SetErrors sets the Errors field's value.
+func (s *BatchGetCollaborationAnalysisTemplateOutput) SetErrors(v []*BatchGetCollaborationAnalysisTemplateError) *BatchGetCollaborationAnalysisTemplateOutput {
+	s.Errors = v
+	return s
+}
+
+// An error that describes why a schema could not be fetched.
+type BatchGetSchemaAnalysisRuleError struct {
+	_ struct{} `type:"structure"`
+
+	// An error code for the error.
+	//
+	// Code is a required field
+	Code *string `locationName:"code" type:"string" required:"true"`
+
+	// A description of why the call failed.
+	//
+	// Message is a required field
+	Message *string `locationName:"message" type:"string" required:"true"`
+
+	// An error name for the error.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The analysis rule type.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"AnalysisRuleType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetSchemaAnalysisRuleError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetSchemaAnalysisRuleError) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *BatchGetSchemaAnalysisRuleError) SetCode(v string) *BatchGetSchemaAnalysisRuleError {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *BatchGetSchemaAnalysisRuleError) SetMessage(v string) *BatchGetSchemaAnalysisRuleError {
+	s.Message = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *BatchGetSchemaAnalysisRuleError) SetName(v string) *BatchGetSchemaAnalysisRuleError {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *BatchGetSchemaAnalysisRuleError) SetType(v string) *BatchGetSchemaAnalysisRuleError {
+	s.Type = &v
+	return s
+}
+
+type BatchGetSchemaAnalysisRuleInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the collaboration that contains the schema analysis
+	// rule.
+	//
+	// CollaborationIdentifier is a required field
+	CollaborationIdentifier *string `location:"uri" locationName:"collaborationIdentifier" min:"36" type:"string" required:"true"`
+
+	// The information that's necessary to retrieve a schema analysis rule.
+	//
+	// SchemaAnalysisRuleRequests is a required field
+	SchemaAnalysisRuleRequests []*SchemaAnalysisRuleRequest `locationName:"schemaAnalysisRuleRequests" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetSchemaAnalysisRuleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetSchemaAnalysisRuleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchGetSchemaAnalysisRuleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchGetSchemaAnalysisRuleInput"}
+	if s.CollaborationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollaborationIdentifier"))
+	}
+	if s.CollaborationIdentifier != nil && len(*s.CollaborationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("CollaborationIdentifier", 36))
+	}
+	if s.SchemaAnalysisRuleRequests == nil {
+		invalidParams.Add(request.NewErrParamRequired("SchemaAnalysisRuleRequests"))
+	}
+	if s.SchemaAnalysisRuleRequests != nil && len(s.SchemaAnalysisRuleRequests) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SchemaAnalysisRuleRequests", 1))
+	}
+	if s.SchemaAnalysisRuleRequests != nil {
+		for i, v := range s.SchemaAnalysisRuleRequests {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SchemaAnalysisRuleRequests", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCollaborationIdentifier sets the CollaborationIdentifier field's value.
+func (s *BatchGetSchemaAnalysisRuleInput) SetCollaborationIdentifier(v string) *BatchGetSchemaAnalysisRuleInput {
+	s.CollaborationIdentifier = &v
+	return s
+}
+
+// SetSchemaAnalysisRuleRequests sets the SchemaAnalysisRuleRequests field's value.
+func (s *BatchGetSchemaAnalysisRuleInput) SetSchemaAnalysisRuleRequests(v []*SchemaAnalysisRuleRequest) *BatchGetSchemaAnalysisRuleInput {
+	s.SchemaAnalysisRuleRequests = v
+	return s
+}
+
+type BatchGetSchemaAnalysisRuleOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The retrieved list of analysis rules.
+	//
+	// AnalysisRules is a required field
+	AnalysisRules []*AnalysisRule `locationName:"analysisRules" type:"list" required:"true"`
+
+	// Error reasons for schemas that could not be retrieved. One error is returned
+	// for every schema that could not be retrieved.
+	//
+	// Errors is a required field
+	Errors []*BatchGetSchemaAnalysisRuleError `locationName:"errors" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetSchemaAnalysisRuleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetSchemaAnalysisRuleOutput) GoString() string {
+	return s.String()
+}
+
+// SetAnalysisRules sets the AnalysisRules field's value.
+func (s *BatchGetSchemaAnalysisRuleOutput) SetAnalysisRules(v []*AnalysisRule) *BatchGetSchemaAnalysisRuleOutput {
+	s.AnalysisRules = v
+	return s
+}
+
+// SetErrors sets the Errors field's value.
+func (s *BatchGetSchemaAnalysisRuleOutput) SetErrors(v []*BatchGetSchemaAnalysisRuleError) *BatchGetSchemaAnalysisRuleOutput {
+	s.Errors = v
 	return s
 }
 
@@ -4464,7 +8328,7 @@ type BatchGetSchemaInput struct {
 	// CollaborationIdentifier is a required field
 	CollaborationIdentifier *string `location:"uri" locationName:"collaborationIdentifier" min:"36" type:"string" required:"true"`
 
-	// The names for the schema objects to retrieve.>
+	// The names for the schema objects to retrieve.
 	//
 	// Names is a required field
 	Names []*string `locationName:"names" min:"1" type:"list" required:"true"`
@@ -4583,7 +8447,7 @@ type Collaboration struct {
 	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
 
 	// The identifier used to reference members of the collaboration. Currently
-	// only supports AWS account ID.
+	// only supports Amazon Web Services account ID.
 	//
 	// CreatorAccountId is a required field
 	CreatorAccountId *string `locationName:"creatorAccountId" min:"12" type:"string" required:"true"`
@@ -4729,6 +8593,961 @@ func (s *Collaboration) SetUpdateTime(v time.Time) *Collaboration {
 	return s
 }
 
+// The analysis template within a collaboration.
+type CollaborationAnalysisTemplate struct {
+	_ struct{} `type:"structure"`
+
+	// The analysis parameters that have been specified in the analysis template.
+	AnalysisParameters []*AnalysisParameter `locationName:"analysisParameters" type:"list"`
+
+	// The Amazon Resource Name (ARN) of the analysis template.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The unique ARN for the analysis template’s associated collaboration.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// A unique identifier for the collaboration that the analysis templates belong
+	// to. Currently accepts collaboration ID.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The time that the analysis template within a collaboration was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The identifier used to reference members of the collaboration. Currently
+	// only supports Amazon Web Services account ID.
+	//
+	// CreatorAccountId is a required field
+	CreatorAccountId *string `locationName:"creatorAccountId" min:"12" type:"string" required:"true"`
+
+	// The description of the analysis template.
+	Description *string `locationName:"description" type:"string"`
+
+	// The format of the analysis template in the collaboration.
+	//
+	// Format is a required field
+	Format *string `locationName:"format" type:"string" required:"true" enum:"AnalysisFormat"`
+
+	// The identifier of the analysis template.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The name of the analysis template.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The entire schema object.
+	//
+	// Schema is a required field
+	Schema *AnalysisSchema `locationName:"schema" type:"structure" required:"true"`
+
+	// The source of the analysis template within a collaboration.
+	//
+	// Source is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CollaborationAnalysisTemplate's
+	// String and GoString methods.
+	//
+	// Source is a required field
+	Source *AnalysisSource `locationName:"source" type:"structure" required:"true" sensitive:"true"`
+
+	// The time that the analysis template in the collaboration was last updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+
+	// The validations that were performed.
+	Validations []*AnalysisTemplateValidationStatusDetail `locationName:"validations" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationAnalysisTemplate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationAnalysisTemplate) GoString() string {
+	return s.String()
+}
+
+// SetAnalysisParameters sets the AnalysisParameters field's value.
+func (s *CollaborationAnalysisTemplate) SetAnalysisParameters(v []*AnalysisParameter) *CollaborationAnalysisTemplate {
+	s.AnalysisParameters = v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *CollaborationAnalysisTemplate) SetArn(v string) *CollaborationAnalysisTemplate {
+	s.Arn = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *CollaborationAnalysisTemplate) SetCollaborationArn(v string) *CollaborationAnalysisTemplate {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *CollaborationAnalysisTemplate) SetCollaborationId(v string) *CollaborationAnalysisTemplate {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *CollaborationAnalysisTemplate) SetCreateTime(v time.Time) *CollaborationAnalysisTemplate {
+	s.CreateTime = &v
+	return s
+}
+
+// SetCreatorAccountId sets the CreatorAccountId field's value.
+func (s *CollaborationAnalysisTemplate) SetCreatorAccountId(v string) *CollaborationAnalysisTemplate {
+	s.CreatorAccountId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CollaborationAnalysisTemplate) SetDescription(v string) *CollaborationAnalysisTemplate {
+	s.Description = &v
+	return s
+}
+
+// SetFormat sets the Format field's value.
+func (s *CollaborationAnalysisTemplate) SetFormat(v string) *CollaborationAnalysisTemplate {
+	s.Format = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CollaborationAnalysisTemplate) SetId(v string) *CollaborationAnalysisTemplate {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CollaborationAnalysisTemplate) SetName(v string) *CollaborationAnalysisTemplate {
+	s.Name = &v
+	return s
+}
+
+// SetSchema sets the Schema field's value.
+func (s *CollaborationAnalysisTemplate) SetSchema(v *AnalysisSchema) *CollaborationAnalysisTemplate {
+	s.Schema = v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *CollaborationAnalysisTemplate) SetSource(v *AnalysisSource) *CollaborationAnalysisTemplate {
+	s.Source = v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *CollaborationAnalysisTemplate) SetUpdateTime(v time.Time) *CollaborationAnalysisTemplate {
+	s.UpdateTime = &v
+	return s
+}
+
+// SetValidations sets the Validations field's value.
+func (s *CollaborationAnalysisTemplate) SetValidations(v []*AnalysisTemplateValidationStatusDetail) *CollaborationAnalysisTemplate {
+	s.Validations = v
+	return s
+}
+
+// The metadata of the analysis template within a collaboration.
+type CollaborationAnalysisTemplateSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the analysis template.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The unique ARN for the analysis template’s associated collaboration.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// A unique identifier for the collaboration that the analysis templates belong
+	// to. Currently accepts collaboration ID.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The time that the summary of the analysis template in a collaboration was
+	// created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The identifier used to reference members of the collaboration. Currently
+	// only supports Amazon Web Services account ID.
+	//
+	// CreatorAccountId is a required field
+	CreatorAccountId *string `locationName:"creatorAccountId" min:"12" type:"string" required:"true"`
+
+	// The description of the analysis template.
+	Description *string `locationName:"description" type:"string"`
+
+	// The identifier of the analysis template.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The name of the analysis template.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The time that the summary of the analysis template in the collaboration was
+	// last updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationAnalysisTemplateSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationAnalysisTemplateSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CollaborationAnalysisTemplateSummary) SetArn(v string) *CollaborationAnalysisTemplateSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *CollaborationAnalysisTemplateSummary) SetCollaborationArn(v string) *CollaborationAnalysisTemplateSummary {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *CollaborationAnalysisTemplateSummary) SetCollaborationId(v string) *CollaborationAnalysisTemplateSummary {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *CollaborationAnalysisTemplateSummary) SetCreateTime(v time.Time) *CollaborationAnalysisTemplateSummary {
+	s.CreateTime = &v
+	return s
+}
+
+// SetCreatorAccountId sets the CreatorAccountId field's value.
+func (s *CollaborationAnalysisTemplateSummary) SetCreatorAccountId(v string) *CollaborationAnalysisTemplateSummary {
+	s.CreatorAccountId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CollaborationAnalysisTemplateSummary) SetDescription(v string) *CollaborationAnalysisTemplateSummary {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CollaborationAnalysisTemplateSummary) SetId(v string) *CollaborationAnalysisTemplateSummary {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CollaborationAnalysisTemplateSummary) SetName(v string) *CollaborationAnalysisTemplateSummary {
+	s.Name = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *CollaborationAnalysisTemplateSummary) SetUpdateTime(v time.Time) *CollaborationAnalysisTemplateSummary {
+	s.UpdateTime = &v
+	return s
+}
+
+// The configured audience model association within a collaboration.
+type CollaborationConfiguredAudienceModelAssociation struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the configured audience model association.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The unique ARN for the configured audience model's associated collaboration.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// A unique identifier for the collaboration that the configured audience model
+	// associations belong to. Accepts collaboration ID.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the configure audience model.
+	//
+	// ConfiguredAudienceModelArn is a required field
+	ConfiguredAudienceModelArn *string `locationName:"configuredAudienceModelArn" min:"20" type:"string" required:"true"`
+
+	// The time at which the configured audience model association was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The identifier used to reference members of the collaboration. Only supports
+	// AWS account ID.
+	//
+	// CreatorAccountId is a required field
+	CreatorAccountId *string `locationName:"creatorAccountId" min:"12" type:"string" required:"true"`
+
+	// The description of the configured audience model association.
+	Description *string `locationName:"description" type:"string"`
+
+	// The identifier of the configured audience model association.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The name of the configured audience model association.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The most recent time at which the configured audience model association was
+	// updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationConfiguredAudienceModelAssociation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationConfiguredAudienceModelAssociation) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CollaborationConfiguredAudienceModelAssociation) SetArn(v string) *CollaborationConfiguredAudienceModelAssociation {
+	s.Arn = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *CollaborationConfiguredAudienceModelAssociation) SetCollaborationArn(v string) *CollaborationConfiguredAudienceModelAssociation {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *CollaborationConfiguredAudienceModelAssociation) SetCollaborationId(v string) *CollaborationConfiguredAudienceModelAssociation {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetConfiguredAudienceModelArn sets the ConfiguredAudienceModelArn field's value.
+func (s *CollaborationConfiguredAudienceModelAssociation) SetConfiguredAudienceModelArn(v string) *CollaborationConfiguredAudienceModelAssociation {
+	s.ConfiguredAudienceModelArn = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *CollaborationConfiguredAudienceModelAssociation) SetCreateTime(v time.Time) *CollaborationConfiguredAudienceModelAssociation {
+	s.CreateTime = &v
+	return s
+}
+
+// SetCreatorAccountId sets the CreatorAccountId field's value.
+func (s *CollaborationConfiguredAudienceModelAssociation) SetCreatorAccountId(v string) *CollaborationConfiguredAudienceModelAssociation {
+	s.CreatorAccountId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CollaborationConfiguredAudienceModelAssociation) SetDescription(v string) *CollaborationConfiguredAudienceModelAssociation {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CollaborationConfiguredAudienceModelAssociation) SetId(v string) *CollaborationConfiguredAudienceModelAssociation {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CollaborationConfiguredAudienceModelAssociation) SetName(v string) *CollaborationConfiguredAudienceModelAssociation {
+	s.Name = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *CollaborationConfiguredAudienceModelAssociation) SetUpdateTime(v time.Time) *CollaborationConfiguredAudienceModelAssociation {
+	s.UpdateTime = &v
+	return s
+}
+
+// A summary of the configured audience model association in the collaboration.
+type CollaborationConfiguredAudienceModelAssociationSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the configured audience model association.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The unique ARN for the configured audience model's associated collaboration.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// A unique identifier for the collaboration that the configured audience model
+	// associations belong to. Accepts collaboration ID.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The time at which the configured audience model association was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The identifier used to reference members of the collaboration. Only supports
+	// AWS account ID.
+	//
+	// CreatorAccountId is a required field
+	CreatorAccountId *string `locationName:"creatorAccountId" min:"12" type:"string" required:"true"`
+
+	// The description of the configured audience model association.
+	Description *string `locationName:"description" type:"string"`
+
+	// The identifier of the configured audience model association.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The name of the configured audience model association.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The most recent time at which the configured audience model association was
+	// updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationConfiguredAudienceModelAssociationSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationConfiguredAudienceModelAssociationSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CollaborationConfiguredAudienceModelAssociationSummary) SetArn(v string) *CollaborationConfiguredAudienceModelAssociationSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *CollaborationConfiguredAudienceModelAssociationSummary) SetCollaborationArn(v string) *CollaborationConfiguredAudienceModelAssociationSummary {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *CollaborationConfiguredAudienceModelAssociationSummary) SetCollaborationId(v string) *CollaborationConfiguredAudienceModelAssociationSummary {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *CollaborationConfiguredAudienceModelAssociationSummary) SetCreateTime(v time.Time) *CollaborationConfiguredAudienceModelAssociationSummary {
+	s.CreateTime = &v
+	return s
+}
+
+// SetCreatorAccountId sets the CreatorAccountId field's value.
+func (s *CollaborationConfiguredAudienceModelAssociationSummary) SetCreatorAccountId(v string) *CollaborationConfiguredAudienceModelAssociationSummary {
+	s.CreatorAccountId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CollaborationConfiguredAudienceModelAssociationSummary) SetDescription(v string) *CollaborationConfiguredAudienceModelAssociationSummary {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CollaborationConfiguredAudienceModelAssociationSummary) SetId(v string) *CollaborationConfiguredAudienceModelAssociationSummary {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CollaborationConfiguredAudienceModelAssociationSummary) SetName(v string) *CollaborationConfiguredAudienceModelAssociationSummary {
+	s.Name = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *CollaborationConfiguredAudienceModelAssociationSummary) SetUpdateTime(v time.Time) *CollaborationConfiguredAudienceModelAssociationSummary {
+	s.UpdateTime = &v
+	return s
+}
+
+// A summary of the collaboration privacy budgets. This summary includes the
+// collaboration information, creation information, epsilon provided, and utility
+// in terms of aggregations.
+type CollaborationPrivacyBudgetSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The includes epsilon provided and utility in terms of aggregations.
+	//
+	// Budget is a required field
+	Budget *PrivacyBudget `locationName:"budget" type:"structure" required:"true"`
+
+	// The ARN of the collaboration that includes this privacy budget.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// The unique identifier of the collaboration that includes this privacy budget.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The time at which the privacy budget was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The unique identifier of the account that created this privacy budget.
+	//
+	// CreatorAccountId is a required field
+	CreatorAccountId *string `locationName:"creatorAccountId" min:"12" type:"string" required:"true"`
+
+	// The unique identifier of the collaboration privacy budget.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The ARN of the collaboration privacy budget template.
+	//
+	// PrivacyBudgetTemplateArn is a required field
+	PrivacyBudgetTemplateArn *string `locationName:"privacyBudgetTemplateArn" type:"string" required:"true"`
+
+	// The unique identifier of the collaboration privacy budget template.
+	//
+	// PrivacyBudgetTemplateId is a required field
+	PrivacyBudgetTemplateId *string `locationName:"privacyBudgetTemplateId" min:"36" type:"string" required:"true"`
+
+	// The type of privacy budget template.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"PrivacyBudgetType"`
+
+	// The most recent time at which the privacy budget was updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationPrivacyBudgetSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationPrivacyBudgetSummary) GoString() string {
+	return s.String()
+}
+
+// SetBudget sets the Budget field's value.
+func (s *CollaborationPrivacyBudgetSummary) SetBudget(v *PrivacyBudget) *CollaborationPrivacyBudgetSummary {
+	s.Budget = v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *CollaborationPrivacyBudgetSummary) SetCollaborationArn(v string) *CollaborationPrivacyBudgetSummary {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *CollaborationPrivacyBudgetSummary) SetCollaborationId(v string) *CollaborationPrivacyBudgetSummary {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *CollaborationPrivacyBudgetSummary) SetCreateTime(v time.Time) *CollaborationPrivacyBudgetSummary {
+	s.CreateTime = &v
+	return s
+}
+
+// SetCreatorAccountId sets the CreatorAccountId field's value.
+func (s *CollaborationPrivacyBudgetSummary) SetCreatorAccountId(v string) *CollaborationPrivacyBudgetSummary {
+	s.CreatorAccountId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CollaborationPrivacyBudgetSummary) SetId(v string) *CollaborationPrivacyBudgetSummary {
+	s.Id = &v
+	return s
+}
+
+// SetPrivacyBudgetTemplateArn sets the PrivacyBudgetTemplateArn field's value.
+func (s *CollaborationPrivacyBudgetSummary) SetPrivacyBudgetTemplateArn(v string) *CollaborationPrivacyBudgetSummary {
+	s.PrivacyBudgetTemplateArn = &v
+	return s
+}
+
+// SetPrivacyBudgetTemplateId sets the PrivacyBudgetTemplateId field's value.
+func (s *CollaborationPrivacyBudgetSummary) SetPrivacyBudgetTemplateId(v string) *CollaborationPrivacyBudgetSummary {
+	s.PrivacyBudgetTemplateId = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *CollaborationPrivacyBudgetSummary) SetType(v string) *CollaborationPrivacyBudgetSummary {
+	s.Type = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *CollaborationPrivacyBudgetSummary) SetUpdateTime(v time.Time) *CollaborationPrivacyBudgetSummary {
+	s.UpdateTime = &v
+	return s
+}
+
+// An array that specifies the information for a collaboration's privacy budget
+// template.
+type CollaborationPrivacyBudgetTemplate struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the collaboration privacy budget template.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// How often the privacy budget refreshes.
+	//
+	// If you plan to regularly bring new data into the collaboration, use CALENDAR_MONTH
+	// to automatically get a new privacy budget for the collaboration every calendar
+	// month. Choosing this option allows arbitrary amounts of information to be
+	// revealed about rows of the data when repeatedly queried across refreshes.
+	// Avoid choosing this if the same rows will be repeatedly queried between privacy
+	// budget refreshes.
+	//
+	// AutoRefresh is a required field
+	AutoRefresh *string `locationName:"autoRefresh" type:"string" required:"true" enum:"PrivacyBudgetTemplateAutoRefresh"`
+
+	// The ARN of the collaboration that includes this collaboration privacy budget
+	// template.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// The unique identifier of the collaboration that includes this collaboration
+	// privacy budget template.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The time at which the collaboration privacy budget template was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The unique identifier of the account that created this collaboration privacy
+	// budget template.
+	//
+	// CreatorAccountId is a required field
+	CreatorAccountId *string `locationName:"creatorAccountId" min:"12" type:"string" required:"true"`
+
+	// The unique identifier of the collaboration privacy budget template.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// Specifies the epsilon and noise parameters for the privacy budget template.
+	//
+	// Parameters is a required field
+	Parameters *PrivacyBudgetTemplateParametersOutput_ `locationName:"parameters" type:"structure" required:"true"`
+
+	// The type of privacy budget template.
+	//
+	// PrivacyBudgetType is a required field
+	PrivacyBudgetType *string `locationName:"privacyBudgetType" type:"string" required:"true" enum:"PrivacyBudgetType"`
+
+	// The most recent time at which the collaboration privacy budget template was
+	// updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationPrivacyBudgetTemplate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationPrivacyBudgetTemplate) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CollaborationPrivacyBudgetTemplate) SetArn(v string) *CollaborationPrivacyBudgetTemplate {
+	s.Arn = &v
+	return s
+}
+
+// SetAutoRefresh sets the AutoRefresh field's value.
+func (s *CollaborationPrivacyBudgetTemplate) SetAutoRefresh(v string) *CollaborationPrivacyBudgetTemplate {
+	s.AutoRefresh = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *CollaborationPrivacyBudgetTemplate) SetCollaborationArn(v string) *CollaborationPrivacyBudgetTemplate {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *CollaborationPrivacyBudgetTemplate) SetCollaborationId(v string) *CollaborationPrivacyBudgetTemplate {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *CollaborationPrivacyBudgetTemplate) SetCreateTime(v time.Time) *CollaborationPrivacyBudgetTemplate {
+	s.CreateTime = &v
+	return s
+}
+
+// SetCreatorAccountId sets the CreatorAccountId field's value.
+func (s *CollaborationPrivacyBudgetTemplate) SetCreatorAccountId(v string) *CollaborationPrivacyBudgetTemplate {
+	s.CreatorAccountId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CollaborationPrivacyBudgetTemplate) SetId(v string) *CollaborationPrivacyBudgetTemplate {
+	s.Id = &v
+	return s
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *CollaborationPrivacyBudgetTemplate) SetParameters(v *PrivacyBudgetTemplateParametersOutput_) *CollaborationPrivacyBudgetTemplate {
+	s.Parameters = v
+	return s
+}
+
+// SetPrivacyBudgetType sets the PrivacyBudgetType field's value.
+func (s *CollaborationPrivacyBudgetTemplate) SetPrivacyBudgetType(v string) *CollaborationPrivacyBudgetTemplate {
+	s.PrivacyBudgetType = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *CollaborationPrivacyBudgetTemplate) SetUpdateTime(v time.Time) *CollaborationPrivacyBudgetTemplate {
+	s.UpdateTime = &v
+	return s
+}
+
+// A summary of the collaboration's privacy budget template. This summary includes
+// information about who created the privacy budget template and what collaborations
+// it belongs to.
+type CollaborationPrivacyBudgetTemplateSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the collaboration privacy budget template.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The ARN of the collaboration that contains this collaboration privacy budget
+	// template.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// The unique identifier of the collaboration that contains this collaboration
+	// privacy budget template.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The time at which the collaboration privacy budget template was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The unique identifier of the account that created this collaboration privacy
+	// budget template.
+	//
+	// CreatorAccountId is a required field
+	CreatorAccountId *string `locationName:"creatorAccountId" min:"12" type:"string" required:"true"`
+
+	// The unique identifier of the collaboration privacy budget template.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The type of the privacy budget template.
+	//
+	// PrivacyBudgetType is a required field
+	PrivacyBudgetType *string `locationName:"privacyBudgetType" type:"string" required:"true" enum:"PrivacyBudgetType"`
+
+	// The most recent time at which the collaboration privacy budget template was
+	// updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationPrivacyBudgetTemplateSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CollaborationPrivacyBudgetTemplateSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CollaborationPrivacyBudgetTemplateSummary) SetArn(v string) *CollaborationPrivacyBudgetTemplateSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *CollaborationPrivacyBudgetTemplateSummary) SetCollaborationArn(v string) *CollaborationPrivacyBudgetTemplateSummary {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *CollaborationPrivacyBudgetTemplateSummary) SetCollaborationId(v string) *CollaborationPrivacyBudgetTemplateSummary {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *CollaborationPrivacyBudgetTemplateSummary) SetCreateTime(v time.Time) *CollaborationPrivacyBudgetTemplateSummary {
+	s.CreateTime = &v
+	return s
+}
+
+// SetCreatorAccountId sets the CreatorAccountId field's value.
+func (s *CollaborationPrivacyBudgetTemplateSummary) SetCreatorAccountId(v string) *CollaborationPrivacyBudgetTemplateSummary {
+	s.CreatorAccountId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CollaborationPrivacyBudgetTemplateSummary) SetId(v string) *CollaborationPrivacyBudgetTemplateSummary {
+	s.Id = &v
+	return s
+}
+
+// SetPrivacyBudgetType sets the PrivacyBudgetType field's value.
+func (s *CollaborationPrivacyBudgetTemplateSummary) SetPrivacyBudgetType(v string) *CollaborationPrivacyBudgetTemplateSummary {
+	s.PrivacyBudgetType = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *CollaborationPrivacyBudgetTemplateSummary) SetUpdateTime(v time.Time) *CollaborationPrivacyBudgetTemplateSummary {
+	s.UpdateTime = &v
+	return s
+}
+
 // The metadata of the collaboration.
 type CollaborationSummary struct {
 	_ struct{} `type:"structure"`
@@ -4744,7 +9563,7 @@ type CollaborationSummary struct {
 	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
 
 	// The identifier used to reference members of the collaboration. Currently
-	// only supports AWS Account ID.
+	// only supports Amazon Web Services account ID.
 	//
 	// CreatorAccountId is a required field
 	CreatorAccountId *string `locationName:"creatorAccountId" min:"12" type:"string" required:"true"`
@@ -4860,7 +9679,7 @@ func (s *CollaborationSummary) SetUpdateTime(v time.Time) *CollaborationSummary 
 	return s
 }
 
-// A column within a schema relation, derived from the underlying AWS Glue table.
+// A column within a schema relation, derived from the underlying Glue table.
 type Column struct {
 	_ struct{} `type:"structure"`
 
@@ -4905,11 +9724,322 @@ func (s *Column) SetType(v string) *Column {
 	return s
 }
 
+// Details about the configured audience model association.
+type ConfiguredAudienceModelAssociation struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the configured audience model association.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the collaboration that contains this configured
+	// audience model association.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// A unique identifier of the collaboration that contains this configured audience
+	// model association.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the configured audience model that was
+	// used for this configured audience model association.
+	//
+	// ConfiguredAudienceModelArn is a required field
+	ConfiguredAudienceModelArn *string `locationName:"configuredAudienceModelArn" min:"20" type:"string" required:"true"`
+
+	// The time at which the configured audience model association was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The description of the configured audience model association.
+	Description *string `locationName:"description" type:"string"`
+
+	// A unique identifier of the configured audience model association.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// When TRUE, indicates that the resource policy for the configured audience
+	// model resource being associated is configured for Clean Rooms to manage permissions
+	// related to the given collaboration. When FALSE, indicates that the configured
+	// audience model resource owner will manage permissions related to the given
+	// collaboration.
+	//
+	// ManageResourcePolicies is a required field
+	ManageResourcePolicies *bool `locationName:"manageResourcePolicies" type:"boolean" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the membership that contains this configured
+	// audience model association.
+	//
+	// MembershipArn is a required field
+	MembershipArn *string `locationName:"membershipArn" type:"string" required:"true"`
+
+	// A unique identifier for the membership that contains this configured audience
+	// model association.
+	//
+	// MembershipId is a required field
+	MembershipId *string `locationName:"membershipId" min:"36" type:"string" required:"true"`
+
+	// The name of the configured audience model association.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The most recent time at which the configured audience model association was
+	// updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConfiguredAudienceModelAssociation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConfiguredAudienceModelAssociation) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *ConfiguredAudienceModelAssociation) SetArn(v string) *ConfiguredAudienceModelAssociation {
+	s.Arn = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *ConfiguredAudienceModelAssociation) SetCollaborationArn(v string) *ConfiguredAudienceModelAssociation {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *ConfiguredAudienceModelAssociation) SetCollaborationId(v string) *ConfiguredAudienceModelAssociation {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetConfiguredAudienceModelArn sets the ConfiguredAudienceModelArn field's value.
+func (s *ConfiguredAudienceModelAssociation) SetConfiguredAudienceModelArn(v string) *ConfiguredAudienceModelAssociation {
+	s.ConfiguredAudienceModelArn = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *ConfiguredAudienceModelAssociation) SetCreateTime(v time.Time) *ConfiguredAudienceModelAssociation {
+	s.CreateTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ConfiguredAudienceModelAssociation) SetDescription(v string) *ConfiguredAudienceModelAssociation {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *ConfiguredAudienceModelAssociation) SetId(v string) *ConfiguredAudienceModelAssociation {
+	s.Id = &v
+	return s
+}
+
+// SetManageResourcePolicies sets the ManageResourcePolicies field's value.
+func (s *ConfiguredAudienceModelAssociation) SetManageResourcePolicies(v bool) *ConfiguredAudienceModelAssociation {
+	s.ManageResourcePolicies = &v
+	return s
+}
+
+// SetMembershipArn sets the MembershipArn field's value.
+func (s *ConfiguredAudienceModelAssociation) SetMembershipArn(v string) *ConfiguredAudienceModelAssociation {
+	s.MembershipArn = &v
+	return s
+}
+
+// SetMembershipId sets the MembershipId field's value.
+func (s *ConfiguredAudienceModelAssociation) SetMembershipId(v string) *ConfiguredAudienceModelAssociation {
+	s.MembershipId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ConfiguredAudienceModelAssociation) SetName(v string) *ConfiguredAudienceModelAssociation {
+	s.Name = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *ConfiguredAudienceModelAssociation) SetUpdateTime(v time.Time) *ConfiguredAudienceModelAssociation {
+	s.UpdateTime = &v
+	return s
+}
+
+// A summary of the configured audience model association.
+type ConfiguredAudienceModelAssociationSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the configured audience model association.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the collaboration that contains the configured
+	// audience model association.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// A unique identifier of the collaboration that configured audience model is
+	// associated with.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the configured audience model that was
+	// used for this configured audience model association.
+	//
+	// ConfiguredAudienceModelArn is a required field
+	ConfiguredAudienceModelArn *string `locationName:"configuredAudienceModelArn" min:"20" type:"string" required:"true"`
+
+	// The time at which the configured audience model association was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The description of the configured audience model association.
+	Description *string `locationName:"description" type:"string"`
+
+	// A unique identifier of the configured audience model association.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the membership that contains the configured
+	// audience model association.
+	//
+	// MembershipArn is a required field
+	MembershipArn *string `locationName:"membershipArn" type:"string" required:"true"`
+
+	// A unique identifier of the membership that contains the configured audience
+	// model association.
+	//
+	// MembershipId is a required field
+	MembershipId *string `locationName:"membershipId" min:"36" type:"string" required:"true"`
+
+	// The name of the configured audience model association.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The most recent time at which the configured audience model association was
+	// updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConfiguredAudienceModelAssociationSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConfiguredAudienceModelAssociationSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *ConfiguredAudienceModelAssociationSummary) SetArn(v string) *ConfiguredAudienceModelAssociationSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *ConfiguredAudienceModelAssociationSummary) SetCollaborationArn(v string) *ConfiguredAudienceModelAssociationSummary {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *ConfiguredAudienceModelAssociationSummary) SetCollaborationId(v string) *ConfiguredAudienceModelAssociationSummary {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetConfiguredAudienceModelArn sets the ConfiguredAudienceModelArn field's value.
+func (s *ConfiguredAudienceModelAssociationSummary) SetConfiguredAudienceModelArn(v string) *ConfiguredAudienceModelAssociationSummary {
+	s.ConfiguredAudienceModelArn = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *ConfiguredAudienceModelAssociationSummary) SetCreateTime(v time.Time) *ConfiguredAudienceModelAssociationSummary {
+	s.CreateTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ConfiguredAudienceModelAssociationSummary) SetDescription(v string) *ConfiguredAudienceModelAssociationSummary {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *ConfiguredAudienceModelAssociationSummary) SetId(v string) *ConfiguredAudienceModelAssociationSummary {
+	s.Id = &v
+	return s
+}
+
+// SetMembershipArn sets the MembershipArn field's value.
+func (s *ConfiguredAudienceModelAssociationSummary) SetMembershipArn(v string) *ConfiguredAudienceModelAssociationSummary {
+	s.MembershipArn = &v
+	return s
+}
+
+// SetMembershipId sets the MembershipId field's value.
+func (s *ConfiguredAudienceModelAssociationSummary) SetMembershipId(v string) *ConfiguredAudienceModelAssociationSummary {
+	s.MembershipId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ConfiguredAudienceModelAssociationSummary) SetName(v string) *ConfiguredAudienceModelAssociationSummary {
+	s.Name = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *ConfiguredAudienceModelAssociationSummary) SetUpdateTime(v time.Time) *ConfiguredAudienceModelAssociationSummary {
+	s.UpdateTime = &v
+	return s
+}
+
 // A table that has been configured for use in a collaboration.
 type ConfiguredTable struct {
 	_ struct{} `type:"structure"`
 
-	// The columns within the underlying AWS Glue table that can be utilized within
+	// The columns within the underlying Glue table that can be utilized within
 	// collaborations.
 	//
 	// AllowedColumns is a required field
@@ -4921,9 +10051,8 @@ type ConfiguredTable struct {
 	// AnalysisMethod is a required field
 	AnalysisMethod *string `locationName:"analysisMethod" type:"string" required:"true" enum:"AnalysisMethod"`
 
-	// The types of analysis rules associated with this configured table. Valid
-	// values are `AGGREGATION` and `LIST`. Currently, only one analysis rule may
-	// be associated with a configured table.
+	// The types of analysis rules associated with this configured table. Currently,
+	// only one analysis rule may be associated with a configured table.
 	//
 	// AnalysisRuleTypes is a required field
 	AnalysisRuleTypes []*string `locationName:"analysisRuleTypes" type:"list" required:"true" enum:"ConfiguredTableAnalysisRuleType"`
@@ -4951,7 +10080,7 @@ type ConfiguredTable struct {
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The AWS Glue table that this configured table represents.
+	// The Glue table that this configured table represents.
 	//
 	// TableReference is a required field
 	TableReference *TableReference `locationName:"tableReference" type:"structure" required:"true"`
@@ -5065,8 +10194,7 @@ type ConfiguredTableAnalysisRule struct {
 	// Policy is a required field
 	Policy *ConfiguredTableAnalysisRulePolicy `locationName:"policy" type:"structure" required:"true"`
 
-	// The type of configured table analysis rule. Valid values are `AGGREGATION`
-	// and `LIST`.
+	// The type of configured table analysis rule.
 	//
 	// Type is a required field
 	Type *string `locationName:"type" type:"string" required:"true" enum:"ConfiguredTableAnalysisRuleType"`
@@ -5186,6 +10314,10 @@ type ConfiguredTableAnalysisRulePolicyV1 struct {
 	// table.
 	Aggregation *AnalysisRuleAggregation `locationName:"aggregation" type:"structure"`
 
+	// A type of analysis rule that enables the table owner to approve custom SQL
+	// queries on their configured tables. It supports differential privacy.
+	Custom *AnalysisRuleCustom `locationName:"custom" type:"structure"`
+
 	// Analysis rule type that enables only list queries on a configured table.
 	List *AnalysisRuleList `locationName:"list" type:"structure"`
 }
@@ -5216,6 +10348,11 @@ func (s *ConfiguredTableAnalysisRulePolicyV1) Validate() error {
 			invalidParams.AddNested("Aggregation", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.Custom != nil {
+		if err := s.Custom.Validate(); err != nil {
+			invalidParams.AddNested("Custom", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.List != nil {
 		if err := s.List.Validate(); err != nil {
 			invalidParams.AddNested("List", err.(request.ErrInvalidParams))
@@ -5231,6 +10368,12 @@ func (s *ConfiguredTableAnalysisRulePolicyV1) Validate() error {
 // SetAggregation sets the Aggregation field's value.
 func (s *ConfiguredTableAnalysisRulePolicyV1) SetAggregation(v *AnalysisRuleAggregation) *ConfiguredTableAnalysisRulePolicyV1 {
 	s.Aggregation = v
+	return s
+}
+
+// SetCustom sets the Custom field's value.
+func (s *ConfiguredTableAnalysisRulePolicyV1) SetCustom(v *AnalysisRuleCustom) *ConfiguredTableAnalysisRulePolicyV1 {
+	s.Custom = v
 	return s
 }
 
@@ -5676,6 +10819,175 @@ func (s *ConflictException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type CreateAnalysisTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The parameters of the analysis template.
+	AnalysisParameters []*AnalysisParameter `locationName:"analysisParameters" type:"list"`
+
+	// The description of the analysis template.
+	Description *string `locationName:"description" type:"string"`
+
+	// The format of the analysis template.
+	//
+	// Format is a required field
+	Format *string `locationName:"format" type:"string" required:"true" enum:"AnalysisFormat"`
+
+	// The identifier for a membership resource.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// The name of the analysis template.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The information in the analysis template. Currently supports text, the query
+	// text for the analysis template.
+	//
+	// Source is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateAnalysisTemplateInput's
+	// String and GoString methods.
+	//
+	// Source is a required field
+	Source *AnalysisSource `locationName:"source" type:"structure" required:"true" sensitive:"true"`
+
+	// An optional label that you can assign to a resource when you create it. Each
+	// tag consists of a key and an optional value, both of which you define. When
+	// you use tagging, you can also use tag-based access control in IAM policies
+	// to control access to this resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAnalysisTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAnalysisTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateAnalysisTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateAnalysisTemplateInput"}
+	if s.Format == nil {
+		invalidParams.Add(request.NewErrParamRequired("Format"))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Source == nil {
+		invalidParams.Add(request.NewErrParamRequired("Source"))
+	}
+	if s.AnalysisParameters != nil {
+		for i, v := range s.AnalysisParameters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AnalysisParameters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnalysisParameters sets the AnalysisParameters field's value.
+func (s *CreateAnalysisTemplateInput) SetAnalysisParameters(v []*AnalysisParameter) *CreateAnalysisTemplateInput {
+	s.AnalysisParameters = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateAnalysisTemplateInput) SetDescription(v string) *CreateAnalysisTemplateInput {
+	s.Description = &v
+	return s
+}
+
+// SetFormat sets the Format field's value.
+func (s *CreateAnalysisTemplateInput) SetFormat(v string) *CreateAnalysisTemplateInput {
+	s.Format = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *CreateAnalysisTemplateInput) SetMembershipIdentifier(v string) *CreateAnalysisTemplateInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateAnalysisTemplateInput) SetName(v string) *CreateAnalysisTemplateInput {
+	s.Name = &v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *CreateAnalysisTemplateInput) SetSource(v *AnalysisSource) *CreateAnalysisTemplateInput {
+	s.Source = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateAnalysisTemplateInput) SetTags(v map[string]*string) *CreateAnalysisTemplateInput {
+	s.Tags = v
+	return s
+}
+
+type CreateAnalysisTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The analysis template.
+	//
+	// AnalysisTemplate is a required field
+	AnalysisTemplate *AnalysisTemplate `locationName:"analysisTemplate" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAnalysisTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAnalysisTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetAnalysisTemplate sets the AnalysisTemplate field's value.
+func (s *CreateAnalysisTemplateOutput) SetAnalysisTemplate(v *AnalysisTemplate) *CreateAnalysisTemplateOutput {
+	s.AnalysisTemplate = v
+	return s
+}
+
 type CreateCollaborationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5688,6 +11000,13 @@ type CreateCollaborationInput struct {
 	//
 	// CreatorMemberAbilities is a required field
 	CreatorMemberAbilities []*string `locationName:"creatorMemberAbilities" type:"list" required:"true" enum:"MemberAbility"`
+
+	// The collaboration creator's payment responsibilities set by the collaboration
+	// creator.
+	//
+	// If the collaboration creator hasn't specified anyone as the member paying
+	// for query compute costs, then the member who can query is the default payer.
+	CreatorPaymentConfiguration *PaymentConfiguration `locationName:"creatorPaymentConfiguration" type:"structure"`
 
 	// The settings for client-side encryption with Cryptographic Computing for
 	// Clean Rooms.
@@ -5769,6 +11088,11 @@ func (s *CreateCollaborationInput) Validate() error {
 	if s.QueryLogStatus == nil {
 		invalidParams.Add(request.NewErrParamRequired("QueryLogStatus"))
 	}
+	if s.CreatorPaymentConfiguration != nil {
+		if err := s.CreatorPaymentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("CreatorPaymentConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.DataEncryptionMetadata != nil {
 		if err := s.DataEncryptionMetadata.Validate(); err != nil {
 			invalidParams.AddNested("DataEncryptionMetadata", err.(request.ErrInvalidParams))
@@ -5800,6 +11124,12 @@ func (s *CreateCollaborationInput) SetCreatorDisplayName(v string) *CreateCollab
 // SetCreatorMemberAbilities sets the CreatorMemberAbilities field's value.
 func (s *CreateCollaborationInput) SetCreatorMemberAbilities(v []*string) *CreateCollaborationInput {
 	s.CreatorMemberAbilities = v
+	return s
+}
+
+// SetCreatorPaymentConfiguration sets the CreatorPaymentConfiguration field's value.
+func (s *CreateCollaborationInput) SetCreatorPaymentConfiguration(v *PaymentConfiguration) *CreateCollaborationInput {
+	s.CreatorPaymentConfiguration = v
 	return s
 }
 
@@ -5872,6 +11202,169 @@ func (s *CreateCollaborationOutput) SetCollaboration(v *Collaboration) *CreateCo
 	return s
 }
 
+type CreateConfiguredAudienceModelAssociationInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier for the configured audience model that you want to associate.
+	//
+	// ConfiguredAudienceModelArn is a required field
+	ConfiguredAudienceModelArn *string `locationName:"configuredAudienceModelArn" min:"20" type:"string" required:"true"`
+
+	// The name of the configured audience model association.
+	//
+	// ConfiguredAudienceModelAssociationName is a required field
+	ConfiguredAudienceModelAssociationName *string `locationName:"configuredAudienceModelAssociationName" min:"1" type:"string" required:"true"`
+
+	// A description of the configured audience model association.
+	Description *string `locationName:"description" type:"string"`
+
+	// When TRUE, indicates that the resource policy for the configured audience
+	// model resource being associated is configured for Clean Rooms to manage permissions
+	// related to the given collaboration. When FALSE, indicates that the configured
+	// audience model resource owner will manage permissions related to the given
+	// collaboration.
+	//
+	// Setting this to TRUE requires you to have permissions to create, update,
+	// and delete the resource policy for the cleanrooms-ml resource when you call
+	// the DeleteConfiguredAudienceModelAssociation resource. In addition, if you
+	// are the collaboration creator and specify TRUE, you must have the same permissions
+	// when you call the DeleteMember and DeleteCollaboration APIs.
+	//
+	// ManageResourcePolicies is a required field
+	ManageResourcePolicies *bool `locationName:"manageResourcePolicies" type:"boolean" required:"true"`
+
+	// A unique identifier for one of your memberships for a collaboration. The
+	// configured audience model is associated to the collaboration that this membership
+	// belongs to. Accepts a membership ID.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// An optional label that you can assign to a resource when you create it. Each
+	// tag consists of a key and an optional value, both of which you define. When
+	// you use tagging, you can also use tag-based access control in IAM policies
+	// to control access to this resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConfiguredAudienceModelAssociationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConfiguredAudienceModelAssociationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateConfiguredAudienceModelAssociationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateConfiguredAudienceModelAssociationInput"}
+	if s.ConfiguredAudienceModelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConfiguredAudienceModelArn"))
+	}
+	if s.ConfiguredAudienceModelArn != nil && len(*s.ConfiguredAudienceModelArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfiguredAudienceModelArn", 20))
+	}
+	if s.ConfiguredAudienceModelAssociationName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConfiguredAudienceModelAssociationName"))
+	}
+	if s.ConfiguredAudienceModelAssociationName != nil && len(*s.ConfiguredAudienceModelAssociationName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfiguredAudienceModelAssociationName", 1))
+	}
+	if s.ManageResourcePolicies == nil {
+		invalidParams.Add(request.NewErrParamRequired("ManageResourcePolicies"))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfiguredAudienceModelArn sets the ConfiguredAudienceModelArn field's value.
+func (s *CreateConfiguredAudienceModelAssociationInput) SetConfiguredAudienceModelArn(v string) *CreateConfiguredAudienceModelAssociationInput {
+	s.ConfiguredAudienceModelArn = &v
+	return s
+}
+
+// SetConfiguredAudienceModelAssociationName sets the ConfiguredAudienceModelAssociationName field's value.
+func (s *CreateConfiguredAudienceModelAssociationInput) SetConfiguredAudienceModelAssociationName(v string) *CreateConfiguredAudienceModelAssociationInput {
+	s.ConfiguredAudienceModelAssociationName = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateConfiguredAudienceModelAssociationInput) SetDescription(v string) *CreateConfiguredAudienceModelAssociationInput {
+	s.Description = &v
+	return s
+}
+
+// SetManageResourcePolicies sets the ManageResourcePolicies field's value.
+func (s *CreateConfiguredAudienceModelAssociationInput) SetManageResourcePolicies(v bool) *CreateConfiguredAudienceModelAssociationInput {
+	s.ManageResourcePolicies = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *CreateConfiguredAudienceModelAssociationInput) SetMembershipIdentifier(v string) *CreateConfiguredAudienceModelAssociationInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateConfiguredAudienceModelAssociationInput) SetTags(v map[string]*string) *CreateConfiguredAudienceModelAssociationInput {
+	s.Tags = v
+	return s
+}
+
+type CreateConfiguredAudienceModelAssociationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the configured audience model association.
+	//
+	// ConfiguredAudienceModelAssociation is a required field
+	ConfiguredAudienceModelAssociation *ConfiguredAudienceModelAssociation `locationName:"configuredAudienceModelAssociation" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConfiguredAudienceModelAssociationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConfiguredAudienceModelAssociationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfiguredAudienceModelAssociation sets the ConfiguredAudienceModelAssociation field's value.
+func (s *CreateConfiguredAudienceModelAssociationOutput) SetConfiguredAudienceModelAssociation(v *ConfiguredAudienceModelAssociation) *CreateConfiguredAudienceModelAssociationOutput {
+	s.ConfiguredAudienceModelAssociation = v
+	return s
+}
+
 type CreateConfiguredTableAnalysisRuleInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5880,7 +11373,7 @@ type CreateConfiguredTableAnalysisRuleInput struct {
 	// AnalysisRulePolicy is a required field
 	AnalysisRulePolicy *ConfiguredTableAnalysisRulePolicy `locationName:"analysisRulePolicy" type:"structure" required:"true"`
 
-	// The type of analysis rule. Valid values are AGGREGATION and LIST.
+	// The type of analysis rule.
 	//
 	// AnalysisRuleType is a required field
 	AnalysisRuleType *string `locationName:"analysisRuleType" type:"string" required:"true" enum:"ConfiguredTableAnalysisRuleType"`
@@ -6167,7 +11660,7 @@ type CreateConfiguredTableInput struct {
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
-	// A reference to the AWS Glue table being configured.
+	// A reference to the Glue table being configured.
 	//
 	// TableReference is a required field
 	TableReference *TableReference `locationName:"tableReference" type:"structure" required:"true"`
@@ -6307,8 +11800,20 @@ type CreateMembershipInput struct {
 	// CollaborationIdentifier is a required field
 	CollaborationIdentifier *string `locationName:"collaborationIdentifier" min:"36" type:"string" required:"true"`
 
+	// The default protected query result configuration as specified by the member
+	// who can receive results.
+	DefaultResultConfiguration *MembershipProtectedQueryResultConfiguration `locationName:"defaultResultConfiguration" type:"structure"`
+
+	// The payment responsibilities accepted by the collaboration member.
+	//
+	// Not required if the collaboration member has the member ability to run queries.
+	//
+	// Required if the collaboration member doesn't have the member ability to run
+	// queries but is configured as a payer by the collaboration creator.
+	PaymentConfiguration *MembershipPaymentConfiguration `locationName:"paymentConfiguration" type:"structure"`
+
 	// An indicator as to whether query logging has been enabled or disabled for
-	// the collaboration.
+	// the membership.
 	//
 	// QueryLogStatus is a required field
 	QueryLogStatus *string `locationName:"queryLogStatus" type:"string" required:"true" enum:"MembershipQueryLogStatus"`
@@ -6350,6 +11855,16 @@ func (s *CreateMembershipInput) Validate() error {
 	if s.QueryLogStatus == nil {
 		invalidParams.Add(request.NewErrParamRequired("QueryLogStatus"))
 	}
+	if s.DefaultResultConfiguration != nil {
+		if err := s.DefaultResultConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("DefaultResultConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PaymentConfiguration != nil {
+		if err := s.PaymentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("PaymentConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6360,6 +11875,18 @@ func (s *CreateMembershipInput) Validate() error {
 // SetCollaborationIdentifier sets the CollaborationIdentifier field's value.
 func (s *CreateMembershipInput) SetCollaborationIdentifier(v string) *CreateMembershipInput {
 	s.CollaborationIdentifier = &v
+	return s
+}
+
+// SetDefaultResultConfiguration sets the DefaultResultConfiguration field's value.
+func (s *CreateMembershipInput) SetDefaultResultConfiguration(v *MembershipProtectedQueryResultConfiguration) *CreateMembershipInput {
+	s.DefaultResultConfiguration = v
+	return s
+}
+
+// SetPaymentConfiguration sets the PaymentConfiguration field's value.
+func (s *CreateMembershipInput) SetPaymentConfiguration(v *MembershipPaymentConfiguration) *CreateMembershipInput {
+	s.PaymentConfiguration = v
 	return s
 }
 
@@ -6408,31 +11935,181 @@ func (s *CreateMembershipOutput) SetMembership(v *Membership) *CreateMembershipO
 	return s
 }
 
+type CreatePrivacyBudgetTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// How often the privacy budget refreshes.
+	//
+	// If you plan to regularly bring new data into the collaboration, you can use
+	// CALENDAR_MONTH to automatically get a new privacy budget for the collaboration
+	// every calendar month. Choosing this option allows arbitrary amounts of information
+	// to be revealed about rows of the data when repeatedly queries across refreshes.
+	// Avoid choosing this if the same rows will be repeatedly queried between privacy
+	// budget refreshes.
+	//
+	// AutoRefresh is a required field
+	AutoRefresh *string `locationName:"autoRefresh" type:"string" required:"true" enum:"PrivacyBudgetTemplateAutoRefresh"`
+
+	// A unique identifier for one of your memberships for a collaboration. The
+	// privacy budget template is created in the collaboration that this membership
+	// belongs to. Accepts a membership ID.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// Specifies your parameters for the privacy budget template.
+	//
+	// Parameters is a required field
+	Parameters *PrivacyBudgetTemplateParametersInput_ `locationName:"parameters" type:"structure" required:"true"`
+
+	// Specifies the type of the privacy budget template.
+	//
+	// PrivacyBudgetType is a required field
+	PrivacyBudgetType *string `locationName:"privacyBudgetType" type:"string" required:"true" enum:"PrivacyBudgetType"`
+
+	// An optional label that you can assign to a resource when you create it. Each
+	// tag consists of a key and an optional value, both of which you define. When
+	// you use tagging, you can also use tag-based access control in IAM policies
+	// to control access to this resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePrivacyBudgetTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePrivacyBudgetTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePrivacyBudgetTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePrivacyBudgetTemplateInput"}
+	if s.AutoRefresh == nil {
+		invalidParams.Add(request.NewErrParamRequired("AutoRefresh"))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+	if s.Parameters == nil {
+		invalidParams.Add(request.NewErrParamRequired("Parameters"))
+	}
+	if s.PrivacyBudgetType == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrivacyBudgetType"))
+	}
+	if s.Parameters != nil {
+		if err := s.Parameters.Validate(); err != nil {
+			invalidParams.AddNested("Parameters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAutoRefresh sets the AutoRefresh field's value.
+func (s *CreatePrivacyBudgetTemplateInput) SetAutoRefresh(v string) *CreatePrivacyBudgetTemplateInput {
+	s.AutoRefresh = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *CreatePrivacyBudgetTemplateInput) SetMembershipIdentifier(v string) *CreatePrivacyBudgetTemplateInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *CreatePrivacyBudgetTemplateInput) SetParameters(v *PrivacyBudgetTemplateParametersInput_) *CreatePrivacyBudgetTemplateInput {
+	s.Parameters = v
+	return s
+}
+
+// SetPrivacyBudgetType sets the PrivacyBudgetType field's value.
+func (s *CreatePrivacyBudgetTemplateInput) SetPrivacyBudgetType(v string) *CreatePrivacyBudgetTemplateInput {
+	s.PrivacyBudgetType = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreatePrivacyBudgetTemplateInput) SetTags(v map[string]*string) *CreatePrivacyBudgetTemplateInput {
+	s.Tags = v
+	return s
+}
+
+type CreatePrivacyBudgetTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A summary of the elements in the privacy budget template.
+	//
+	// PrivacyBudgetTemplate is a required field
+	PrivacyBudgetTemplate *PrivacyBudgetTemplate `locationName:"privacyBudgetTemplate" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePrivacyBudgetTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePrivacyBudgetTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetPrivacyBudgetTemplate sets the PrivacyBudgetTemplate field's value.
+func (s *CreatePrivacyBudgetTemplateOutput) SetPrivacyBudgetTemplate(v *PrivacyBudgetTemplate) *CreatePrivacyBudgetTemplateOutput {
+	s.PrivacyBudgetTemplate = v
+	return s
+}
+
 // The settings for client-side encryption for cryptographic computing.
 type DataEncryptionMetadata struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether encrypted tables can contain cleartext data (true) or are
-	// to cryptographically process every column (false).
+	// Indicates whether encrypted tables can contain cleartext data (TRUE) or are
+	// to cryptographically process every column (FALSE).
 	//
 	// AllowCleartext is a required field
 	AllowCleartext *bool `locationName:"allowCleartext" type:"boolean" required:"true"`
 
-	// Indicates whether Fingerprint columns can contain duplicate entries (true)
-	// or are to contain only non-repeated values (false).
+	// Indicates whether Fingerprint columns can contain duplicate entries (TRUE)
+	// or are to contain only non-repeated values (FALSE).
 	//
 	// AllowDuplicates is a required field
 	AllowDuplicates *bool `locationName:"allowDuplicates" type:"boolean" required:"true"`
 
 	// Indicates whether Fingerprint columns can be joined on any other Fingerprint
-	// column with a different name (true) or can only be joined on Fingerprint
-	// columns of the same name (false).
+	// column with a different name (TRUE) or can only be joined on Fingerprint
+	// columns of the same name (FALSE).
 	//
 	// AllowJoinsOnColumnsWithDifferentNames is a required field
 	AllowJoinsOnColumnsWithDifferentNames *bool `locationName:"allowJoinsOnColumnsWithDifferentNames" type:"boolean" required:"true"`
 
 	// Indicates whether NULL values are to be copied as NULL to encrypted tables
-	// (true) or cryptographically processed (false).
+	// (TRUE) or cryptographically processed (FALSE).
 	//
 	// PreserveNulls is a required field
 	PreserveNulls *bool `locationName:"preserveNulls" type:"boolean" required:"true"`
@@ -6500,6 +12177,94 @@ func (s *DataEncryptionMetadata) SetAllowJoinsOnColumnsWithDifferentNames(v bool
 func (s *DataEncryptionMetadata) SetPreserveNulls(v bool) *DataEncryptionMetadata {
 	s.PreserveNulls = &v
 	return s
+}
+
+type DeleteAnalysisTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier for the analysis template resource.
+	//
+	// AnalysisTemplateIdentifier is a required field
+	AnalysisTemplateIdentifier *string `location:"uri" locationName:"analysisTemplateIdentifier" min:"36" type:"string" required:"true"`
+
+	// The identifier for a membership resource.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAnalysisTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAnalysisTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteAnalysisTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteAnalysisTemplateInput"}
+	if s.AnalysisTemplateIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnalysisTemplateIdentifier"))
+	}
+	if s.AnalysisTemplateIdentifier != nil && len(*s.AnalysisTemplateIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AnalysisTemplateIdentifier", 36))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnalysisTemplateIdentifier sets the AnalysisTemplateIdentifier field's value.
+func (s *DeleteAnalysisTemplateInput) SetAnalysisTemplateIdentifier(v string) *DeleteAnalysisTemplateInput {
+	s.AnalysisTemplateIdentifier = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *DeleteAnalysisTemplateInput) SetMembershipIdentifier(v string) *DeleteAnalysisTemplateInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+type DeleteAnalysisTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAnalysisTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAnalysisTemplateOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteCollaborationInput struct {
@@ -6570,6 +12335,96 @@ func (s DeleteCollaborationOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s DeleteCollaborationOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteConfiguredAudienceModelAssociationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique identifier of the configured audience model association that you
+	// want to delete.
+	//
+	// ConfiguredAudienceModelAssociationIdentifier is a required field
+	ConfiguredAudienceModelAssociationIdentifier *string `location:"uri" locationName:"configuredAudienceModelAssociationIdentifier" min:"36" type:"string" required:"true"`
+
+	// A unique identifier of the membership that contains the audience model association
+	// that you want to delete.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConfiguredAudienceModelAssociationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConfiguredAudienceModelAssociationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteConfiguredAudienceModelAssociationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteConfiguredAudienceModelAssociationInput"}
+	if s.ConfiguredAudienceModelAssociationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConfiguredAudienceModelAssociationIdentifier"))
+	}
+	if s.ConfiguredAudienceModelAssociationIdentifier != nil && len(*s.ConfiguredAudienceModelAssociationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfiguredAudienceModelAssociationIdentifier", 36))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfiguredAudienceModelAssociationIdentifier sets the ConfiguredAudienceModelAssociationIdentifier field's value.
+func (s *DeleteConfiguredAudienceModelAssociationInput) SetConfiguredAudienceModelAssociationIdentifier(v string) *DeleteConfiguredAudienceModelAssociationInput {
+	s.ConfiguredAudienceModelAssociationIdentifier = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *DeleteConfiguredAudienceModelAssociationInput) SetMembershipIdentifier(v string) *DeleteConfiguredAudienceModelAssociationInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+type DeleteConfiguredAudienceModelAssociationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConfiguredAudienceModelAssociationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConfiguredAudienceModelAssociationOutput) GoString() string {
 	return s.String()
 }
 
@@ -6986,6 +12841,1056 @@ func (s DeleteMembershipOutput) GoString() string {
 	return s.String()
 }
 
+type DeletePrivacyBudgetTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique identifier for one of your memberships for a collaboration. The
+	// privacy budget template is deleted from the collaboration that this membership
+	// belongs to. Accepts a membership ID.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// A unique identifier for your privacy budget template.
+	//
+	// PrivacyBudgetTemplateIdentifier is a required field
+	PrivacyBudgetTemplateIdentifier *string `location:"uri" locationName:"privacyBudgetTemplateIdentifier" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePrivacyBudgetTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePrivacyBudgetTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeletePrivacyBudgetTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeletePrivacyBudgetTemplateInput"}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+	if s.PrivacyBudgetTemplateIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrivacyBudgetTemplateIdentifier"))
+	}
+	if s.PrivacyBudgetTemplateIdentifier != nil && len(*s.PrivacyBudgetTemplateIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("PrivacyBudgetTemplateIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *DeletePrivacyBudgetTemplateInput) SetMembershipIdentifier(v string) *DeletePrivacyBudgetTemplateInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetPrivacyBudgetTemplateIdentifier sets the PrivacyBudgetTemplateIdentifier field's value.
+func (s *DeletePrivacyBudgetTemplateInput) SetPrivacyBudgetTemplateIdentifier(v string) *DeletePrivacyBudgetTemplateInput {
+	s.PrivacyBudgetTemplateIdentifier = &v
+	return s
+}
+
+type DeletePrivacyBudgetTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePrivacyBudgetTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePrivacyBudgetTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// Specifies the name of the column that contains the unique identifier of your
+// users, whose privacy you want to protect.
+type DifferentialPrivacyColumn struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the column, such as user_id, that contains the unique identifier
+	// of your users, whose privacy you want to protect. If you want to turn on
+	// differential privacy for two or more tables in a collaboration, you must
+	// configure the same column as the user identifier column in both analysis
+	// rules.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyColumn) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyColumn) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DifferentialPrivacyColumn) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DifferentialPrivacyColumn"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *DifferentialPrivacyColumn) SetName(v string) *DifferentialPrivacyColumn {
+	s.Name = &v
+	return s
+}
+
+// Specifies the unique identifier for your users.
+type DifferentialPrivacyConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the column (such as user_id) that contains the unique identifier
+	// of your users whose privacy you want to protect. If you want to turn on diﬀerential
+	// privacy for two or more tables in a collaboration, you must conﬁgure the
+	// same column as the user identiﬁer column in both analysis rules.
+	//
+	// Columns is a required field
+	Columns []*DifferentialPrivacyColumn `locationName:"columns" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DifferentialPrivacyConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DifferentialPrivacyConfiguration"}
+	if s.Columns == nil {
+		invalidParams.Add(request.NewErrParamRequired("Columns"))
+	}
+	if s.Columns != nil && len(s.Columns) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Columns", 1))
+	}
+	if s.Columns != nil {
+		for i, v := range s.Columns {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Columns", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetColumns sets the Columns field's value.
+func (s *DifferentialPrivacyConfiguration) SetColumns(v []*DifferentialPrivacyColumn) *DifferentialPrivacyConfiguration {
+	s.Columns = v
+	return s
+}
+
+// An array that contains the sensitivity parameters.
+type DifferentialPrivacyParameters struct {
+	_ struct{} `type:"structure"`
+
+	// Provides the sensitivity parameters that you can use to better understand
+	// the total amount of noise in query results.
+	//
+	// SensitivityParameters is a required field
+	SensitivityParameters []*DifferentialPrivacySensitivityParameters `locationName:"sensitivityParameters" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyParameters) GoString() string {
+	return s.String()
+}
+
+// SetSensitivityParameters sets the SensitivityParameters field's value.
+func (s *DifferentialPrivacyParameters) SetSensitivityParameters(v []*DifferentialPrivacySensitivityParameters) *DifferentialPrivacyParameters {
+	s.SensitivityParameters = v
+	return s
+}
+
+// Provides an estimate of the number of aggregation functions that the member
+// who can query can run given the epsilon and noise parameters.
+type DifferentialPrivacyPreviewAggregation struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of aggregations that the member who can query can run
+	// given the epsilon and noise parameters.
+	//
+	// MaxCount is a required field
+	MaxCount *int64 `locationName:"maxCount" type:"integer" required:"true"`
+
+	// The type of aggregation function.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"DifferentialPrivacyAggregationType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyPreviewAggregation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyPreviewAggregation) GoString() string {
+	return s.String()
+}
+
+// SetMaxCount sets the MaxCount field's value.
+func (s *DifferentialPrivacyPreviewAggregation) SetMaxCount(v int64) *DifferentialPrivacyPreviewAggregation {
+	s.MaxCount = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *DifferentialPrivacyPreviewAggregation) SetType(v string) *DifferentialPrivacyPreviewAggregation {
+	s.Type = &v
+	return s
+}
+
+// The epsilon and noise parameters that you want to preview.
+type DifferentialPrivacyPreviewParametersInput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The epsilon value that you want to preview.
+	//
+	// Epsilon is a required field
+	Epsilon *int64 `locationName:"epsilon" min:"1" type:"integer" required:"true"`
+
+	// Noise added per query is measured in terms of the number of users whose contributions
+	// you want to obscure. This value governs the rate at which the privacy budget
+	// is depleted.
+	//
+	// UsersNoisePerQuery is a required field
+	UsersNoisePerQuery *int64 `locationName:"usersNoisePerQuery" min:"10" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyPreviewParametersInput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyPreviewParametersInput_) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DifferentialPrivacyPreviewParametersInput_) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DifferentialPrivacyPreviewParametersInput_"}
+	if s.Epsilon == nil {
+		invalidParams.Add(request.NewErrParamRequired("Epsilon"))
+	}
+	if s.Epsilon != nil && *s.Epsilon < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Epsilon", 1))
+	}
+	if s.UsersNoisePerQuery == nil {
+		invalidParams.Add(request.NewErrParamRequired("UsersNoisePerQuery"))
+	}
+	if s.UsersNoisePerQuery != nil && *s.UsersNoisePerQuery < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("UsersNoisePerQuery", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEpsilon sets the Epsilon field's value.
+func (s *DifferentialPrivacyPreviewParametersInput_) SetEpsilon(v int64) *DifferentialPrivacyPreviewParametersInput_ {
+	s.Epsilon = &v
+	return s
+}
+
+// SetUsersNoisePerQuery sets the UsersNoisePerQuery field's value.
+func (s *DifferentialPrivacyPreviewParametersInput_) SetUsersNoisePerQuery(v int64) *DifferentialPrivacyPreviewParametersInput_ {
+	s.UsersNoisePerQuery = &v
+	return s
+}
+
+// Specifies the configured epsilon value and the utility in terms of total
+// aggregations, as well as the remaining aggregations available.
+type DifferentialPrivacyPrivacyBudget struct {
+	_ struct{} `type:"structure"`
+
+	// This information includes the configured epsilon value and the utility in
+	// terms of total aggregations, as well as the remaining aggregations.
+	//
+	// Aggregations is a required field
+	Aggregations []*DifferentialPrivacyPrivacyBudgetAggregation `locationName:"aggregations" type:"list" required:"true"`
+
+	// The epsilon value that you configured.
+	//
+	// Epsilon is a required field
+	Epsilon *int64 `locationName:"epsilon" min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyPrivacyBudget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyPrivacyBudget) GoString() string {
+	return s.String()
+}
+
+// SetAggregations sets the Aggregations field's value.
+func (s *DifferentialPrivacyPrivacyBudget) SetAggregations(v []*DifferentialPrivacyPrivacyBudgetAggregation) *DifferentialPrivacyPrivacyBudget {
+	s.Aggregations = v
+	return s
+}
+
+// SetEpsilon sets the Epsilon field's value.
+func (s *DifferentialPrivacyPrivacyBudget) SetEpsilon(v int64) *DifferentialPrivacyPrivacyBudget {
+	s.Epsilon = &v
+	return s
+}
+
+// Information about the total number of aggregations, as well as the remaining
+// aggregations.
+type DifferentialPrivacyPrivacyBudgetAggregation struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of aggregation functions that you can perform with the
+	// given privacy budget.
+	//
+	// MaxCount is a required field
+	MaxCount *int64 `locationName:"maxCount" type:"integer" required:"true"`
+
+	// The remaining number of aggregation functions that can be run with the available
+	// privacy budget.
+	//
+	// RemainingCount is a required field
+	RemainingCount *int64 `locationName:"remainingCount" type:"integer" required:"true"`
+
+	// The different types of aggregation functions that you can perform.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"DifferentialPrivacyAggregationType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyPrivacyBudgetAggregation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyPrivacyBudgetAggregation) GoString() string {
+	return s.String()
+}
+
+// SetMaxCount sets the MaxCount field's value.
+func (s *DifferentialPrivacyPrivacyBudgetAggregation) SetMaxCount(v int64) *DifferentialPrivacyPrivacyBudgetAggregation {
+	s.MaxCount = &v
+	return s
+}
+
+// SetRemainingCount sets the RemainingCount field's value.
+func (s *DifferentialPrivacyPrivacyBudgetAggregation) SetRemainingCount(v int64) *DifferentialPrivacyPrivacyBudgetAggregation {
+	s.RemainingCount = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *DifferentialPrivacyPrivacyBudgetAggregation) SetType(v string) *DifferentialPrivacyPrivacyBudgetAggregation {
+	s.Type = &v
+	return s
+}
+
+// Information about the number of aggregation functions that the member who
+// can query can run given the epsilon and noise parameters.
+type DifferentialPrivacyPrivacyImpact struct {
+	_ struct{} `type:"structure"`
+
+	// The number of aggregation functions that you can perform.
+	//
+	// Aggregations is a required field
+	Aggregations []*DifferentialPrivacyPreviewAggregation `locationName:"aggregations" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyPrivacyImpact) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyPrivacyImpact) GoString() string {
+	return s.String()
+}
+
+// SetAggregations sets the Aggregations field's value.
+func (s *DifferentialPrivacyPrivacyImpact) SetAggregations(v []*DifferentialPrivacyPreviewAggregation) *DifferentialPrivacyPrivacyImpact {
+	s.Aggregations = v
+	return s
+}
+
+// Provides the sensitivity parameters.
+type DifferentialPrivacySensitivityParameters struct {
+	_ struct{} `type:"structure"`
+
+	// The aggregation expression that was run.
+	//
+	// AggregationExpression is a required field
+	AggregationExpression *string `locationName:"aggregationExpression" min:"1" type:"string" required:"true"`
+
+	// The type of aggregation function that was run.
+	//
+	// AggregationType is a required field
+	AggregationType *string `locationName:"aggregationType" type:"string" required:"true" enum:"DifferentialPrivacyAggregationType"`
+
+	// The upper bound of the aggregation expression.
+	MaxColumnValue *float64 `locationName:"maxColumnValue" type:"float"`
+
+	// The lower bound of the aggregation expression.
+	MinColumnValue *float64 `locationName:"minColumnValue" type:"float"`
+
+	// The maximum number of rows contributed by a user in a SQL query.
+	//
+	// UserContributionLimit is a required field
+	UserContributionLimit *int64 `locationName:"userContributionLimit" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacySensitivityParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacySensitivityParameters) GoString() string {
+	return s.String()
+}
+
+// SetAggregationExpression sets the AggregationExpression field's value.
+func (s *DifferentialPrivacySensitivityParameters) SetAggregationExpression(v string) *DifferentialPrivacySensitivityParameters {
+	s.AggregationExpression = &v
+	return s
+}
+
+// SetAggregationType sets the AggregationType field's value.
+func (s *DifferentialPrivacySensitivityParameters) SetAggregationType(v string) *DifferentialPrivacySensitivityParameters {
+	s.AggregationType = &v
+	return s
+}
+
+// SetMaxColumnValue sets the MaxColumnValue field's value.
+func (s *DifferentialPrivacySensitivityParameters) SetMaxColumnValue(v float64) *DifferentialPrivacySensitivityParameters {
+	s.MaxColumnValue = &v
+	return s
+}
+
+// SetMinColumnValue sets the MinColumnValue field's value.
+func (s *DifferentialPrivacySensitivityParameters) SetMinColumnValue(v float64) *DifferentialPrivacySensitivityParameters {
+	s.MinColumnValue = &v
+	return s
+}
+
+// SetUserContributionLimit sets the UserContributionLimit field's value.
+func (s *DifferentialPrivacySensitivityParameters) SetUserContributionLimit(v int64) *DifferentialPrivacySensitivityParameters {
+	s.UserContributionLimit = &v
+	return s
+}
+
+// The epsilon and noise parameter values that you want to use for the differential
+// privacy template.
+type DifferentialPrivacyTemplateParametersInput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The epsilon value that you want to use.
+	//
+	// Epsilon is a required field
+	Epsilon *int64 `locationName:"epsilon" min:"1" type:"integer" required:"true"`
+
+	// Noise added per query is measured in terms of the number of users whose contributions
+	// you want to obscure. This value governs the rate at which the privacy budget
+	// is depleted.
+	//
+	// UsersNoisePerQuery is a required field
+	UsersNoisePerQuery *int64 `locationName:"usersNoisePerQuery" min:"10" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyTemplateParametersInput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyTemplateParametersInput_) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DifferentialPrivacyTemplateParametersInput_) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DifferentialPrivacyTemplateParametersInput_"}
+	if s.Epsilon == nil {
+		invalidParams.Add(request.NewErrParamRequired("Epsilon"))
+	}
+	if s.Epsilon != nil && *s.Epsilon < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Epsilon", 1))
+	}
+	if s.UsersNoisePerQuery == nil {
+		invalidParams.Add(request.NewErrParamRequired("UsersNoisePerQuery"))
+	}
+	if s.UsersNoisePerQuery != nil && *s.UsersNoisePerQuery < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("UsersNoisePerQuery", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEpsilon sets the Epsilon field's value.
+func (s *DifferentialPrivacyTemplateParametersInput_) SetEpsilon(v int64) *DifferentialPrivacyTemplateParametersInput_ {
+	s.Epsilon = &v
+	return s
+}
+
+// SetUsersNoisePerQuery sets the UsersNoisePerQuery field's value.
+func (s *DifferentialPrivacyTemplateParametersInput_) SetUsersNoisePerQuery(v int64) *DifferentialPrivacyTemplateParametersInput_ {
+	s.UsersNoisePerQuery = &v
+	return s
+}
+
+// The epsilon and noise parameter values that were used for the differential
+// privacy template.
+type DifferentialPrivacyTemplateParametersOutput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The epsilon value that you specified.
+	//
+	// Epsilon is a required field
+	Epsilon *int64 `locationName:"epsilon" min:"1" type:"integer" required:"true"`
+
+	// Noise added per query is measured in terms of the number of users whose contributions
+	// you want to obscure. This value governs the rate at which the privacy budget
+	// is depleted.
+	//
+	// UsersNoisePerQuery is a required field
+	UsersNoisePerQuery *int64 `locationName:"usersNoisePerQuery" min:"10" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyTemplateParametersOutput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyTemplateParametersOutput_) GoString() string {
+	return s.String()
+}
+
+// SetEpsilon sets the Epsilon field's value.
+func (s *DifferentialPrivacyTemplateParametersOutput_) SetEpsilon(v int64) *DifferentialPrivacyTemplateParametersOutput_ {
+	s.Epsilon = &v
+	return s
+}
+
+// SetUsersNoisePerQuery sets the UsersNoisePerQuery field's value.
+func (s *DifferentialPrivacyTemplateParametersOutput_) SetUsersNoisePerQuery(v int64) *DifferentialPrivacyTemplateParametersOutput_ {
+	s.UsersNoisePerQuery = &v
+	return s
+}
+
+// The epsilon and noise parameter values that you want to update in the differential
+// privacy template.
+type DifferentialPrivacyTemplateUpdateParameters struct {
+	_ struct{} `type:"structure"`
+
+	// The updated epsilon value that you want to use.
+	Epsilon *int64 `locationName:"epsilon" min:"1" type:"integer"`
+
+	// The updated value of noise added per query. It is measured in terms of the
+	// number of users whose contributions you want to obscure. This value governs
+	// the rate at which the privacy budget is depleted.
+	UsersNoisePerQuery *int64 `locationName:"usersNoisePerQuery" min:"10" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyTemplateUpdateParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DifferentialPrivacyTemplateUpdateParameters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DifferentialPrivacyTemplateUpdateParameters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DifferentialPrivacyTemplateUpdateParameters"}
+	if s.Epsilon != nil && *s.Epsilon < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Epsilon", 1))
+	}
+	if s.UsersNoisePerQuery != nil && *s.UsersNoisePerQuery < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("UsersNoisePerQuery", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEpsilon sets the Epsilon field's value.
+func (s *DifferentialPrivacyTemplateUpdateParameters) SetEpsilon(v int64) *DifferentialPrivacyTemplateUpdateParameters {
+	s.Epsilon = &v
+	return s
+}
+
+// SetUsersNoisePerQuery sets the UsersNoisePerQuery field's value.
+func (s *DifferentialPrivacyTemplateUpdateParameters) SetUsersNoisePerQuery(v int64) *DifferentialPrivacyTemplateUpdateParameters {
+	s.UsersNoisePerQuery = &v
+	return s
+}
+
+type GetAnalysisTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The identifier for the analysis template resource.
+	//
+	// AnalysisTemplateIdentifier is a required field
+	AnalysisTemplateIdentifier *string `location:"uri" locationName:"analysisTemplateIdentifier" min:"36" type:"string" required:"true"`
+
+	// The identifier for a membership resource.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAnalysisTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAnalysisTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetAnalysisTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetAnalysisTemplateInput"}
+	if s.AnalysisTemplateIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnalysisTemplateIdentifier"))
+	}
+	if s.AnalysisTemplateIdentifier != nil && len(*s.AnalysisTemplateIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AnalysisTemplateIdentifier", 36))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnalysisTemplateIdentifier sets the AnalysisTemplateIdentifier field's value.
+func (s *GetAnalysisTemplateInput) SetAnalysisTemplateIdentifier(v string) *GetAnalysisTemplateInput {
+	s.AnalysisTemplateIdentifier = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *GetAnalysisTemplateInput) SetMembershipIdentifier(v string) *GetAnalysisTemplateInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+type GetAnalysisTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The analysis template.
+	//
+	// AnalysisTemplate is a required field
+	AnalysisTemplate *AnalysisTemplate `locationName:"analysisTemplate" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAnalysisTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAnalysisTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetAnalysisTemplate sets the AnalysisTemplate field's value.
+func (s *GetAnalysisTemplateOutput) SetAnalysisTemplate(v *AnalysisTemplate) *GetAnalysisTemplateOutput {
+	s.AnalysisTemplate = v
+	return s
+}
+
+type GetCollaborationAnalysisTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The Amazon Resource Name (ARN) associated with the analysis template within
+	// a collaboration.
+	//
+	// AnalysisTemplateArn is a required field
+	AnalysisTemplateArn *string `location:"uri" locationName:"analysisTemplateArn" type:"string" required:"true"`
+
+	// A unique identifier for the collaboration that the analysis templates belong
+	// to. Currently accepts collaboration ID.
+	//
+	// CollaborationIdentifier is a required field
+	CollaborationIdentifier *string `location:"uri" locationName:"collaborationIdentifier" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationAnalysisTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationAnalysisTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCollaborationAnalysisTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCollaborationAnalysisTemplateInput"}
+	if s.AnalysisTemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnalysisTemplateArn"))
+	}
+	if s.AnalysisTemplateArn != nil && len(*s.AnalysisTemplateArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AnalysisTemplateArn", 1))
+	}
+	if s.CollaborationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollaborationIdentifier"))
+	}
+	if s.CollaborationIdentifier != nil && len(*s.CollaborationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("CollaborationIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnalysisTemplateArn sets the AnalysisTemplateArn field's value.
+func (s *GetCollaborationAnalysisTemplateInput) SetAnalysisTemplateArn(v string) *GetCollaborationAnalysisTemplateInput {
+	s.AnalysisTemplateArn = &v
+	return s
+}
+
+// SetCollaborationIdentifier sets the CollaborationIdentifier field's value.
+func (s *GetCollaborationAnalysisTemplateInput) SetCollaborationIdentifier(v string) *GetCollaborationAnalysisTemplateInput {
+	s.CollaborationIdentifier = &v
+	return s
+}
+
+type GetCollaborationAnalysisTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The analysis template within a collaboration.
+	//
+	// CollaborationAnalysisTemplate is a required field
+	CollaborationAnalysisTemplate *CollaborationAnalysisTemplate `locationName:"collaborationAnalysisTemplate" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationAnalysisTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationAnalysisTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetCollaborationAnalysisTemplate sets the CollaborationAnalysisTemplate field's value.
+func (s *GetCollaborationAnalysisTemplateOutput) SetCollaborationAnalysisTemplate(v *CollaborationAnalysisTemplate) *GetCollaborationAnalysisTemplateOutput {
+	s.CollaborationAnalysisTemplate = v
+	return s
+}
+
+type GetCollaborationConfiguredAudienceModelAssociationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique identifier for the collaboration that the configured audience model
+	// association belongs to. Accepts a collaboration ID.
+	//
+	// CollaborationIdentifier is a required field
+	CollaborationIdentifier *string `location:"uri" locationName:"collaborationIdentifier" min:"36" type:"string" required:"true"`
+
+	// A unique identifier for the configured audience model association that you
+	// want to retrieve.
+	//
+	// ConfiguredAudienceModelAssociationIdentifier is a required field
+	ConfiguredAudienceModelAssociationIdentifier *string `location:"uri" locationName:"configuredAudienceModelAssociationIdentifier" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationConfiguredAudienceModelAssociationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationConfiguredAudienceModelAssociationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCollaborationConfiguredAudienceModelAssociationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCollaborationConfiguredAudienceModelAssociationInput"}
+	if s.CollaborationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollaborationIdentifier"))
+	}
+	if s.CollaborationIdentifier != nil && len(*s.CollaborationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("CollaborationIdentifier", 36))
+	}
+	if s.ConfiguredAudienceModelAssociationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConfiguredAudienceModelAssociationIdentifier"))
+	}
+	if s.ConfiguredAudienceModelAssociationIdentifier != nil && len(*s.ConfiguredAudienceModelAssociationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfiguredAudienceModelAssociationIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCollaborationIdentifier sets the CollaborationIdentifier field's value.
+func (s *GetCollaborationConfiguredAudienceModelAssociationInput) SetCollaborationIdentifier(v string) *GetCollaborationConfiguredAudienceModelAssociationInput {
+	s.CollaborationIdentifier = &v
+	return s
+}
+
+// SetConfiguredAudienceModelAssociationIdentifier sets the ConfiguredAudienceModelAssociationIdentifier field's value.
+func (s *GetCollaborationConfiguredAudienceModelAssociationInput) SetConfiguredAudienceModelAssociationIdentifier(v string) *GetCollaborationConfiguredAudienceModelAssociationInput {
+	s.ConfiguredAudienceModelAssociationIdentifier = &v
+	return s
+}
+
+type GetCollaborationConfiguredAudienceModelAssociationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata of the configured audience model association.
+	//
+	// CollaborationConfiguredAudienceModelAssociation is a required field
+	CollaborationConfiguredAudienceModelAssociation *CollaborationConfiguredAudienceModelAssociation `locationName:"collaborationConfiguredAudienceModelAssociation" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationConfiguredAudienceModelAssociationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationConfiguredAudienceModelAssociationOutput) GoString() string {
+	return s.String()
+}
+
+// SetCollaborationConfiguredAudienceModelAssociation sets the CollaborationConfiguredAudienceModelAssociation field's value.
+func (s *GetCollaborationConfiguredAudienceModelAssociationOutput) SetCollaborationConfiguredAudienceModelAssociation(v *CollaborationConfiguredAudienceModelAssociation) *GetCollaborationConfiguredAudienceModelAssociationOutput {
+	s.CollaborationConfiguredAudienceModelAssociation = v
+	return s
+}
+
 type GetCollaborationInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -7065,6 +13970,206 @@ func (s GetCollaborationOutput) GoString() string {
 // SetCollaboration sets the Collaboration field's value.
 func (s *GetCollaborationOutput) SetCollaboration(v *Collaboration) *GetCollaborationOutput {
 	s.Collaboration = v
+	return s
+}
+
+type GetCollaborationPrivacyBudgetTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique identifier for one of your collaborations.
+	//
+	// CollaborationIdentifier is a required field
+	CollaborationIdentifier *string `location:"uri" locationName:"collaborationIdentifier" min:"36" type:"string" required:"true"`
+
+	// A unique identifier for one of your privacy budget templates.
+	//
+	// PrivacyBudgetTemplateIdentifier is a required field
+	PrivacyBudgetTemplateIdentifier *string `location:"uri" locationName:"privacyBudgetTemplateIdentifier" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationPrivacyBudgetTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationPrivacyBudgetTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCollaborationPrivacyBudgetTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCollaborationPrivacyBudgetTemplateInput"}
+	if s.CollaborationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollaborationIdentifier"))
+	}
+	if s.CollaborationIdentifier != nil && len(*s.CollaborationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("CollaborationIdentifier", 36))
+	}
+	if s.PrivacyBudgetTemplateIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrivacyBudgetTemplateIdentifier"))
+	}
+	if s.PrivacyBudgetTemplateIdentifier != nil && len(*s.PrivacyBudgetTemplateIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("PrivacyBudgetTemplateIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCollaborationIdentifier sets the CollaborationIdentifier field's value.
+func (s *GetCollaborationPrivacyBudgetTemplateInput) SetCollaborationIdentifier(v string) *GetCollaborationPrivacyBudgetTemplateInput {
+	s.CollaborationIdentifier = &v
+	return s
+}
+
+// SetPrivacyBudgetTemplateIdentifier sets the PrivacyBudgetTemplateIdentifier field's value.
+func (s *GetCollaborationPrivacyBudgetTemplateInput) SetPrivacyBudgetTemplateIdentifier(v string) *GetCollaborationPrivacyBudgetTemplateInput {
+	s.PrivacyBudgetTemplateIdentifier = &v
+	return s
+}
+
+type GetCollaborationPrivacyBudgetTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the details of the privacy budget template that you requested.
+	//
+	// CollaborationPrivacyBudgetTemplate is a required field
+	CollaborationPrivacyBudgetTemplate *CollaborationPrivacyBudgetTemplate `locationName:"collaborationPrivacyBudgetTemplate" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationPrivacyBudgetTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCollaborationPrivacyBudgetTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetCollaborationPrivacyBudgetTemplate sets the CollaborationPrivacyBudgetTemplate field's value.
+func (s *GetCollaborationPrivacyBudgetTemplateOutput) SetCollaborationPrivacyBudgetTemplate(v *CollaborationPrivacyBudgetTemplate) *GetCollaborationPrivacyBudgetTemplateOutput {
+	s.CollaborationPrivacyBudgetTemplate = v
+	return s
+}
+
+type GetConfiguredAudienceModelAssociationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique identifier for the configured audience model association that you
+	// want to retrieve.
+	//
+	// ConfiguredAudienceModelAssociationIdentifier is a required field
+	ConfiguredAudienceModelAssociationIdentifier *string `location:"uri" locationName:"configuredAudienceModelAssociationIdentifier" min:"36" type:"string" required:"true"`
+
+	// A unique identifier for the membership that contains the configured audience
+	// model association that you want to retrieve.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetConfiguredAudienceModelAssociationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetConfiguredAudienceModelAssociationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetConfiguredAudienceModelAssociationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetConfiguredAudienceModelAssociationInput"}
+	if s.ConfiguredAudienceModelAssociationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConfiguredAudienceModelAssociationIdentifier"))
+	}
+	if s.ConfiguredAudienceModelAssociationIdentifier != nil && len(*s.ConfiguredAudienceModelAssociationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfiguredAudienceModelAssociationIdentifier", 36))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfiguredAudienceModelAssociationIdentifier sets the ConfiguredAudienceModelAssociationIdentifier field's value.
+func (s *GetConfiguredAudienceModelAssociationInput) SetConfiguredAudienceModelAssociationIdentifier(v string) *GetConfiguredAudienceModelAssociationInput {
+	s.ConfiguredAudienceModelAssociationIdentifier = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *GetConfiguredAudienceModelAssociationInput) SetMembershipIdentifier(v string) *GetConfiguredAudienceModelAssociationInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+type GetConfiguredAudienceModelAssociationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the configured audience model association that you requested.
+	//
+	// ConfiguredAudienceModelAssociation is a required field
+	ConfiguredAudienceModelAssociation *ConfiguredAudienceModelAssociation `locationName:"configuredAudienceModelAssociation" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetConfiguredAudienceModelAssociationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetConfiguredAudienceModelAssociationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfiguredAudienceModelAssociation sets the ConfiguredAudienceModelAssociation field's value.
+func (s *GetConfiguredAudienceModelAssociationOutput) SetConfiguredAudienceModelAssociation(v *ConfiguredAudienceModelAssociation) *GetConfiguredAudienceModelAssociationOutput {
+	s.ConfiguredAudienceModelAssociation = v
 	return s
 }
 
@@ -7434,6 +14539,107 @@ func (s *GetMembershipOutput) SetMembership(v *Membership) *GetMembershipOutput 
 	return s
 }
 
+type GetPrivacyBudgetTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique identifier for one of your memberships for a collaboration. The
+	// privacy budget template is retrieved from the collaboration that this membership
+	// belongs to. Accepts a membership ID.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// A unique identifier for your privacy budget template.
+	//
+	// PrivacyBudgetTemplateIdentifier is a required field
+	PrivacyBudgetTemplateIdentifier *string `location:"uri" locationName:"privacyBudgetTemplateIdentifier" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPrivacyBudgetTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPrivacyBudgetTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetPrivacyBudgetTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetPrivacyBudgetTemplateInput"}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+	if s.PrivacyBudgetTemplateIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrivacyBudgetTemplateIdentifier"))
+	}
+	if s.PrivacyBudgetTemplateIdentifier != nil && len(*s.PrivacyBudgetTemplateIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("PrivacyBudgetTemplateIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *GetPrivacyBudgetTemplateInput) SetMembershipIdentifier(v string) *GetPrivacyBudgetTemplateInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetPrivacyBudgetTemplateIdentifier sets the PrivacyBudgetTemplateIdentifier field's value.
+func (s *GetPrivacyBudgetTemplateInput) SetPrivacyBudgetTemplateIdentifier(v string) *GetPrivacyBudgetTemplateInput {
+	s.PrivacyBudgetTemplateIdentifier = &v
+	return s
+}
+
+type GetPrivacyBudgetTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns the details of the privacy budget template that you requested.
+	//
+	// PrivacyBudgetTemplate is a required field
+	PrivacyBudgetTemplate *PrivacyBudgetTemplate `locationName:"privacyBudgetTemplate" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPrivacyBudgetTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPrivacyBudgetTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetPrivacyBudgetTemplate sets the PrivacyBudgetTemplate field's value.
+func (s *GetPrivacyBudgetTemplateOutput) SetPrivacyBudgetTemplate(v *PrivacyBudgetTemplate) *GetPrivacyBudgetTemplateOutput {
+	s.PrivacyBudgetTemplate = v
+	return s
+}
+
 type GetProtectedQueryInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -7445,7 +14651,7 @@ type GetProtectedQueryInput struct {
 	// The identifier for a protected query instance.
 	//
 	// ProtectedQueryIdentifier is a required field
-	ProtectedQueryIdentifier *string `location:"uri" locationName:"protectedQueryIdentifier" min:"1" type:"string" required:"true"`
+	ProtectedQueryIdentifier *string `location:"uri" locationName:"protectedQueryIdentifier" min:"36" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -7478,8 +14684,8 @@ func (s *GetProtectedQueryInput) Validate() error {
 	if s.ProtectedQueryIdentifier == nil {
 		invalidParams.Add(request.NewErrParamRequired("ProtectedQueryIdentifier"))
 	}
-	if s.ProtectedQueryIdentifier != nil && len(*s.ProtectedQueryIdentifier) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("ProtectedQueryIdentifier", 1))
+	if s.ProtectedQueryIdentifier != nil && len(*s.ProtectedQueryIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ProtectedQueryIdentifier", 36))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7752,16 +14958,16 @@ func (s *GetSchemaOutput) SetSchema(v *Schema) *GetSchemaOutput {
 	return s
 }
 
-// A reference to a table within an AWS Glue data catalog.
+// A reference to a table within an Glue data catalog.
 type GlueTableReference struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the database the AWS Glue table belongs to.
+	// The name of the database the Glue table belongs to.
 	//
 	// DatabaseName is a required field
 	DatabaseName *string `locationName:"databaseName" type:"string" required:"true"`
 
-	// The name of the AWS Glue table.
+	// The name of the Glue table.
 	//
 	// TableName is a required field
 	TableName *string `locationName:"tableName" type:"string" required:"true"`
@@ -7877,6 +15083,598 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type ListAnalysisTemplatesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum size of the results that is returned per call.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The identifier for a membership resource.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnalysisTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnalysisTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAnalysisTemplatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAnalysisTemplatesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAnalysisTemplatesInput) SetMaxResults(v int64) *ListAnalysisTemplatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *ListAnalysisTemplatesInput) SetMembershipIdentifier(v string) *ListAnalysisTemplatesInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAnalysisTemplatesInput) SetNextToken(v string) *ListAnalysisTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAnalysisTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Lists analysis template metadata.
+	//
+	// AnalysisTemplateSummaries is a required field
+	AnalysisTemplateSummaries []*AnalysisTemplateSummary `locationName:"analysisTemplateSummaries" type:"list" required:"true"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnalysisTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnalysisTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetAnalysisTemplateSummaries sets the AnalysisTemplateSummaries field's value.
+func (s *ListAnalysisTemplatesOutput) SetAnalysisTemplateSummaries(v []*AnalysisTemplateSummary) *ListAnalysisTemplatesOutput {
+	s.AnalysisTemplateSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAnalysisTemplatesOutput) SetNextToken(v string) *ListAnalysisTemplatesOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCollaborationAnalysisTemplatesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique identifier for the collaboration that the analysis templates belong
+	// to. Currently accepts collaboration ID.
+	//
+	// CollaborationIdentifier is a required field
+	CollaborationIdentifier *string `location:"uri" locationName:"collaborationIdentifier" min:"36" type:"string" required:"true"`
+
+	// The maximum size of the results that is returned per call.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationAnalysisTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationAnalysisTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCollaborationAnalysisTemplatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCollaborationAnalysisTemplatesInput"}
+	if s.CollaborationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollaborationIdentifier"))
+	}
+	if s.CollaborationIdentifier != nil && len(*s.CollaborationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("CollaborationIdentifier", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCollaborationIdentifier sets the CollaborationIdentifier field's value.
+func (s *ListCollaborationAnalysisTemplatesInput) SetCollaborationIdentifier(v string) *ListCollaborationAnalysisTemplatesInput {
+	s.CollaborationIdentifier = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCollaborationAnalysisTemplatesInput) SetMaxResults(v int64) *ListCollaborationAnalysisTemplatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCollaborationAnalysisTemplatesInput) SetNextToken(v string) *ListCollaborationAnalysisTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCollaborationAnalysisTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata of the analysis template within a collaboration.
+	//
+	// CollaborationAnalysisTemplateSummaries is a required field
+	CollaborationAnalysisTemplateSummaries []*CollaborationAnalysisTemplateSummary `locationName:"collaborationAnalysisTemplateSummaries" type:"list" required:"true"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationAnalysisTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationAnalysisTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetCollaborationAnalysisTemplateSummaries sets the CollaborationAnalysisTemplateSummaries field's value.
+func (s *ListCollaborationAnalysisTemplatesOutput) SetCollaborationAnalysisTemplateSummaries(v []*CollaborationAnalysisTemplateSummary) *ListCollaborationAnalysisTemplatesOutput {
+	s.CollaborationAnalysisTemplateSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCollaborationAnalysisTemplatesOutput) SetNextToken(v string) *ListCollaborationAnalysisTemplatesOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCollaborationConfiguredAudienceModelAssociationsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique identifier for the collaboration that the configured audience model
+	// association belongs to. Accepts a collaboration ID.
+	//
+	// CollaborationIdentifier is a required field
+	CollaborationIdentifier *string `location:"uri" locationName:"collaborationIdentifier" min:"36" type:"string" required:"true"`
+
+	// The maximum size of the results that is returned per call.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationConfiguredAudienceModelAssociationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationConfiguredAudienceModelAssociationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCollaborationConfiguredAudienceModelAssociationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCollaborationConfiguredAudienceModelAssociationsInput"}
+	if s.CollaborationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollaborationIdentifier"))
+	}
+	if s.CollaborationIdentifier != nil && len(*s.CollaborationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("CollaborationIdentifier", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCollaborationIdentifier sets the CollaborationIdentifier field's value.
+func (s *ListCollaborationConfiguredAudienceModelAssociationsInput) SetCollaborationIdentifier(v string) *ListCollaborationConfiguredAudienceModelAssociationsInput {
+	s.CollaborationIdentifier = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCollaborationConfiguredAudienceModelAssociationsInput) SetMaxResults(v int64) *ListCollaborationConfiguredAudienceModelAssociationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCollaborationConfiguredAudienceModelAssociationsInput) SetNextToken(v string) *ListCollaborationConfiguredAudienceModelAssociationsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCollaborationConfiguredAudienceModelAssociationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The metadata of the configured audience model association within a collaboration.
+	//
+	// CollaborationConfiguredAudienceModelAssociationSummaries is a required field
+	CollaborationConfiguredAudienceModelAssociationSummaries []*CollaborationConfiguredAudienceModelAssociationSummary `locationName:"collaborationConfiguredAudienceModelAssociationSummaries" type:"list" required:"true"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationConfiguredAudienceModelAssociationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationConfiguredAudienceModelAssociationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetCollaborationConfiguredAudienceModelAssociationSummaries sets the CollaborationConfiguredAudienceModelAssociationSummaries field's value.
+func (s *ListCollaborationConfiguredAudienceModelAssociationsOutput) SetCollaborationConfiguredAudienceModelAssociationSummaries(v []*CollaborationConfiguredAudienceModelAssociationSummary) *ListCollaborationConfiguredAudienceModelAssociationsOutput {
+	s.CollaborationConfiguredAudienceModelAssociationSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCollaborationConfiguredAudienceModelAssociationsOutput) SetNextToken(v string) *ListCollaborationConfiguredAudienceModelAssociationsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCollaborationPrivacyBudgetTemplatesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique identifier for one of your collaborations.
+	//
+	// CollaborationIdentifier is a required field
+	CollaborationIdentifier *string `location:"uri" locationName:"collaborationIdentifier" min:"36" type:"string" required:"true"`
+
+	// The maximum size of the results that is returned per call. Service chooses
+	// a default if it has not been set. Service may return a nextToken even if
+	// the maximum results has not been met.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationPrivacyBudgetTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationPrivacyBudgetTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCollaborationPrivacyBudgetTemplatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCollaborationPrivacyBudgetTemplatesInput"}
+	if s.CollaborationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollaborationIdentifier"))
+	}
+	if s.CollaborationIdentifier != nil && len(*s.CollaborationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("CollaborationIdentifier", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCollaborationIdentifier sets the CollaborationIdentifier field's value.
+func (s *ListCollaborationPrivacyBudgetTemplatesInput) SetCollaborationIdentifier(v string) *ListCollaborationPrivacyBudgetTemplatesInput {
+	s.CollaborationIdentifier = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCollaborationPrivacyBudgetTemplatesInput) SetMaxResults(v int64) *ListCollaborationPrivacyBudgetTemplatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCollaborationPrivacyBudgetTemplatesInput) SetNextToken(v string) *ListCollaborationPrivacyBudgetTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCollaborationPrivacyBudgetTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array that summarizes the collaboration privacy budget templates. The
+	// summary includes collaboration information, creation information, the privacy
+	// budget type.
+	//
+	// CollaborationPrivacyBudgetTemplateSummaries is a required field
+	CollaborationPrivacyBudgetTemplateSummaries []*CollaborationPrivacyBudgetTemplateSummary `locationName:"collaborationPrivacyBudgetTemplateSummaries" type:"list" required:"true"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationPrivacyBudgetTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationPrivacyBudgetTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetCollaborationPrivacyBudgetTemplateSummaries sets the CollaborationPrivacyBudgetTemplateSummaries field's value.
+func (s *ListCollaborationPrivacyBudgetTemplatesOutput) SetCollaborationPrivacyBudgetTemplateSummaries(v []*CollaborationPrivacyBudgetTemplateSummary) *ListCollaborationPrivacyBudgetTemplatesOutput {
+	s.CollaborationPrivacyBudgetTemplateSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCollaborationPrivacyBudgetTemplatesOutput) SetNextToken(v string) *ListCollaborationPrivacyBudgetTemplatesOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCollaborationPrivacyBudgetsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique identifier for one of your collaborations.
+	//
+	// CollaborationIdentifier is a required field
+	CollaborationIdentifier *string `location:"uri" locationName:"collaborationIdentifier" min:"36" type:"string" required:"true"`
+
+	// The maximum size of the results that is returned per call. Service chooses
+	// a default if it has not been set. Service may return a nextToken even if
+	// the maximum results has not been met.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// Specifies the type of the privacy budget.
+	//
+	// PrivacyBudgetType is a required field
+	PrivacyBudgetType *string `location:"querystring" locationName:"privacyBudgetType" type:"string" required:"true" enum:"PrivacyBudgetType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationPrivacyBudgetsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationPrivacyBudgetsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCollaborationPrivacyBudgetsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCollaborationPrivacyBudgetsInput"}
+	if s.CollaborationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollaborationIdentifier"))
+	}
+	if s.CollaborationIdentifier != nil && len(*s.CollaborationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("CollaborationIdentifier", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.PrivacyBudgetType == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrivacyBudgetType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCollaborationIdentifier sets the CollaborationIdentifier field's value.
+func (s *ListCollaborationPrivacyBudgetsInput) SetCollaborationIdentifier(v string) *ListCollaborationPrivacyBudgetsInput {
+	s.CollaborationIdentifier = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCollaborationPrivacyBudgetsInput) SetMaxResults(v int64) *ListCollaborationPrivacyBudgetsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCollaborationPrivacyBudgetsInput) SetNextToken(v string) *ListCollaborationPrivacyBudgetsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPrivacyBudgetType sets the PrivacyBudgetType field's value.
+func (s *ListCollaborationPrivacyBudgetsInput) SetPrivacyBudgetType(v string) *ListCollaborationPrivacyBudgetsInput {
+	s.PrivacyBudgetType = &v
+	return s
+}
+
+type ListCollaborationPrivacyBudgetsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Summaries of the collaboration privacy budgets.
+	//
+	// CollaborationPrivacyBudgetSummaries is a required field
+	CollaborationPrivacyBudgetSummaries []*CollaborationPrivacyBudgetSummary `locationName:"collaborationPrivacyBudgetSummaries" type:"list" required:"true"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationPrivacyBudgetsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCollaborationPrivacyBudgetsOutput) GoString() string {
+	return s.String()
+}
+
+// SetCollaborationPrivacyBudgetSummaries sets the CollaborationPrivacyBudgetSummaries field's value.
+func (s *ListCollaborationPrivacyBudgetsOutput) SetCollaborationPrivacyBudgetSummaries(v []*CollaborationPrivacyBudgetSummary) *ListCollaborationPrivacyBudgetsOutput {
+	s.CollaborationPrivacyBudgetSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCollaborationPrivacyBudgetsOutput) SetNextToken(v string) *ListCollaborationPrivacyBudgetsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListCollaborationsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -7981,6 +15779,122 @@ func (s *ListCollaborationsOutput) SetCollaborationList(v []*CollaborationSummar
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListCollaborationsOutput) SetNextToken(v string) *ListCollaborationsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListConfiguredAudienceModelAssociationsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum size of the results that is returned per call. Service chooses
+	// a default if it has not been set. Service may return a nextToken even if
+	// the maximum results has not been met.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// A unique identifier for a membership that contains the configured audience
+	// model associations that you want to retrieve.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConfiguredAudienceModelAssociationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConfiguredAudienceModelAssociationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListConfiguredAudienceModelAssociationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListConfiguredAudienceModelAssociationsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListConfiguredAudienceModelAssociationsInput) SetMaxResults(v int64) *ListConfiguredAudienceModelAssociationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *ListConfiguredAudienceModelAssociationsInput) SetMembershipIdentifier(v string) *ListConfiguredAudienceModelAssociationsInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConfiguredAudienceModelAssociationsInput) SetNextToken(v string) *ListConfiguredAudienceModelAssociationsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListConfiguredAudienceModelAssociationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Summaries of the configured audience model associations that you requested.
+	//
+	// ConfiguredAudienceModelAssociationSummaries is a required field
+	ConfiguredAudienceModelAssociationSummaries []*ConfiguredAudienceModelAssociationSummary `locationName:"configuredAudienceModelAssociationSummaries" type:"list" required:"true"`
+
+	// The token value provided to access the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConfiguredAudienceModelAssociationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConfiguredAudienceModelAssociationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfiguredAudienceModelAssociationSummaries sets the ConfiguredAudienceModelAssociationSummaries field's value.
+func (s *ListConfiguredAudienceModelAssociationsOutput) SetConfiguredAudienceModelAssociationSummaries(v []*ConfiguredAudienceModelAssociationSummary) *ListConfiguredAudienceModelAssociationsOutput {
+	s.ConfiguredAudienceModelAssociationSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConfiguredAudienceModelAssociationsOutput) SetNextToken(v string) *ListConfiguredAudienceModelAssociationsOutput {
 	s.NextToken = &v
 	return s
 }
@@ -8417,6 +16331,259 @@ func (s *ListMembershipsOutput) SetNextToken(v string) *ListMembershipsOutput {
 	return s
 }
 
+type ListPrivacyBudgetTemplatesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum size of the results that is returned per call. Service chooses
+	// a default if it has not been set. Service may return a nextToken even if
+	// the maximum results has not been met.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// A unique identifier for one of your memberships for a collaboration. The
+	// privacy budget templates are retrieved from the collaboration that this membership
+	// belongs to. Accepts a membership ID.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPrivacyBudgetTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPrivacyBudgetTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPrivacyBudgetTemplatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPrivacyBudgetTemplatesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListPrivacyBudgetTemplatesInput) SetMaxResults(v int64) *ListPrivacyBudgetTemplatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *ListPrivacyBudgetTemplatesInput) SetMembershipIdentifier(v string) *ListPrivacyBudgetTemplatesInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPrivacyBudgetTemplatesInput) SetNextToken(v string) *ListPrivacyBudgetTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListPrivacyBudgetTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// An array that summarizes the privacy budget templates. The summary includes
+	// collaboration information, creation information, and privacy budget type.
+	//
+	// PrivacyBudgetTemplateSummaries is a required field
+	PrivacyBudgetTemplateSummaries []*PrivacyBudgetTemplateSummary `locationName:"privacyBudgetTemplateSummaries" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPrivacyBudgetTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPrivacyBudgetTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPrivacyBudgetTemplatesOutput) SetNextToken(v string) *ListPrivacyBudgetTemplatesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPrivacyBudgetTemplateSummaries sets the PrivacyBudgetTemplateSummaries field's value.
+func (s *ListPrivacyBudgetTemplatesOutput) SetPrivacyBudgetTemplateSummaries(v []*PrivacyBudgetTemplateSummary) *ListPrivacyBudgetTemplatesOutput {
+	s.PrivacyBudgetTemplateSummaries = v
+	return s
+}
+
+type ListPrivacyBudgetsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum size of the results that is returned per call. Service chooses
+	// a default if it has not been set. Service may return a nextToken even if
+	// the maximum results has not been met.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// A unique identifier for one of your memberships for a collaboration. The
+	// privacy budget is retrieved from the collaboration that this membership belongs
+	// to. Accepts a membership ID.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The privacy budget type.
+	//
+	// PrivacyBudgetType is a required field
+	PrivacyBudgetType *string `location:"querystring" locationName:"privacyBudgetType" type:"string" required:"true" enum:"PrivacyBudgetType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPrivacyBudgetsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPrivacyBudgetsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPrivacyBudgetsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPrivacyBudgetsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+	if s.PrivacyBudgetType == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrivacyBudgetType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListPrivacyBudgetsInput) SetMaxResults(v int64) *ListPrivacyBudgetsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *ListPrivacyBudgetsInput) SetMembershipIdentifier(v string) *ListPrivacyBudgetsInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPrivacyBudgetsInput) SetNextToken(v string) *ListPrivacyBudgetsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPrivacyBudgetType sets the PrivacyBudgetType field's value.
+func (s *ListPrivacyBudgetsInput) SetPrivacyBudgetType(v string) *ListPrivacyBudgetsInput {
+	s.PrivacyBudgetType = &v
+	return s
+}
+
+type ListPrivacyBudgetsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token value retrieved from a previous call to access the next page of
+	// results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// An array that summarizes the privacy budgets. The summary includes collaboration
+	// information, membership information, privacy budget template information,
+	// and privacy budget details.
+	//
+	// PrivacyBudgetSummaries is a required field
+	PrivacyBudgetSummaries []*PrivacyBudgetSummary `locationName:"privacyBudgetSummaries" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPrivacyBudgetsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPrivacyBudgetsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPrivacyBudgetsOutput) SetNextToken(v string) *ListPrivacyBudgetsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPrivacyBudgetSummaries sets the PrivacyBudgetSummaries field's value.
+func (s *ListPrivacyBudgetsOutput) SetPrivacyBudgetSummaries(v []*PrivacyBudgetSummary) *ListPrivacyBudgetsOutput {
+	s.PrivacyBudgetSummaries = v
+	return s
+}
+
 type ListProtectedQueriesInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -8755,7 +16922,7 @@ type MemberSpecification struct {
 	_ struct{} `type:"structure"`
 
 	// The identifier used to reference members of the collaboration. Currently
-	// only supports AWS Account ID.
+	// only supports Amazon Web Services account ID.
 	//
 	// AccountId is a required field
 	AccountId *string `locationName:"accountId" min:"12" type:"string" required:"true"`
@@ -8769,6 +16936,13 @@ type MemberSpecification struct {
 	//
 	// MemberAbilities is a required field
 	MemberAbilities []*string `locationName:"memberAbilities" type:"list" required:"true" enum:"MemberAbility"`
+
+	// The collaboration member's payment responsibilities set by the collaboration
+	// creator.
+	//
+	// If the collaboration creator hasn't speciﬁed anyone as the member paying
+	// for query compute costs, then the member who can query is the default payer.
+	PaymentConfiguration *PaymentConfiguration `locationName:"paymentConfiguration" type:"structure"`
 }
 
 // String returns the string representation.
@@ -8807,6 +16981,11 @@ func (s *MemberSpecification) Validate() error {
 	if s.MemberAbilities == nil {
 		invalidParams.Add(request.NewErrParamRequired("MemberAbilities"))
 	}
+	if s.PaymentConfiguration != nil {
+		if err := s.PaymentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("PaymentConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -8832,6 +17011,12 @@ func (s *MemberSpecification) SetMemberAbilities(v []*string) *MemberSpecificati
 	return s
 }
 
+// SetPaymentConfiguration sets the PaymentConfiguration field's value.
+func (s *MemberSpecification) SetPaymentConfiguration(v *PaymentConfiguration) *MemberSpecification {
+	s.PaymentConfiguration = v
+	return s
+}
+
 // The member object listed by the request.
 type MemberSummary struct {
 	_ struct{} `type:"structure"`
@@ -8842,7 +17027,7 @@ type MemberSummary struct {
 	Abilities []*string `locationName:"abilities" type:"list" required:"true" enum:"MemberAbility"`
 
 	// The identifier used to reference members of the collaboration. Currently
-	// only supports AWS Account ID.
+	// only supports Amazon Web Services account ID.
 	//
 	// AccountId is a required field
 	AccountId *string `locationName:"accountId" min:"12" type:"string" required:"true"`
@@ -8863,8 +17048,13 @@ type MemberSummary struct {
 	// The unique ID for the member's associated membership, if present.
 	MembershipId *string `locationName:"membershipId" min:"36" type:"string"`
 
-	// The status of the member. Valid values are `INVITED`, `ACTIVE`, `LEFT`, and
-	// `REMOVED`.
+	// The collaboration member's payment responsibilities set by the collaboration
+	// creator.
+	//
+	// PaymentConfiguration is a required field
+	PaymentConfiguration *PaymentConfiguration `locationName:"paymentConfiguration" type:"structure" required:"true"`
+
+	// The status of the member.
 	//
 	// Status is a required field
 	Status *string `locationName:"status" type:"string" required:"true" enum:"MemberStatus"`
@@ -8929,6 +17119,12 @@ func (s *MemberSummary) SetMembershipId(v string) *MemberSummary {
 	return s
 }
 
+// SetPaymentConfiguration sets the PaymentConfiguration field's value.
+func (s *MemberSummary) SetPaymentConfiguration(v *PaymentConfiguration) *MemberSummary {
+	s.PaymentConfiguration = v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *MemberSummary) SetStatus(v string) *MemberSummary {
 	s.Status = &v
@@ -8956,7 +17152,7 @@ type Membership struct {
 	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
 
 	// The identifier used to reference members of the collaboration. Currently
-	// only supports AWS account ID.
+	// only supports Amazon Web Services account ID.
 	//
 	// CollaborationCreatorAccountId is a required field
 	CollaborationCreatorAccountId *string `locationName:"collaborationCreatorAccountId" min:"12" type:"string" required:"true"`
@@ -8981,6 +17177,10 @@ type Membership struct {
 	// CreateTime is a required field
 	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
 
+	// The default protected query result configuration as specified by the member
+	// who can receive results.
+	DefaultResultConfiguration *MembershipProtectedQueryResultConfiguration `locationName:"defaultResultConfiguration" type:"structure"`
+
 	// The unique ID of the membership.
 	//
 	// Id is a required field
@@ -8991,13 +17191,18 @@ type Membership struct {
 	// MemberAbilities is a required field
 	MemberAbilities []*string `locationName:"memberAbilities" type:"list" required:"true" enum:"MemberAbility"`
 
+	// The payment responsibilities accepted by the collaboration member.
+	//
+	// PaymentConfiguration is a required field
+	PaymentConfiguration *MembershipPaymentConfiguration `locationName:"paymentConfiguration" type:"structure" required:"true"`
+
 	// An indicator as to whether query logging has been enabled or disabled for
-	// the collaboration.
+	// the membership.
 	//
 	// QueryLogStatus is a required field
 	QueryLogStatus *string `locationName:"queryLogStatus" type:"string" required:"true" enum:"MembershipQueryLogStatus"`
 
-	// The status of the membership. Valid values are `ACTIVE`, `REMOVED`, and `COLLABORATION_DELETED`.
+	// The status of the membership.
 	//
 	// Status is a required field
 	Status *string `locationName:"status" type:"string" required:"true" enum:"MembershipStatus"`
@@ -9068,6 +17273,12 @@ func (s *Membership) SetCreateTime(v time.Time) *Membership {
 	return s
 }
 
+// SetDefaultResultConfiguration sets the DefaultResultConfiguration field's value.
+func (s *Membership) SetDefaultResultConfiguration(v *MembershipProtectedQueryResultConfiguration) *Membership {
+	s.DefaultResultConfiguration = v
+	return s
+}
+
 // SetId sets the Id field's value.
 func (s *Membership) SetId(v string) *Membership {
 	s.Id = &v
@@ -9077,6 +17288,12 @@ func (s *Membership) SetId(v string) *Membership {
 // SetMemberAbilities sets the MemberAbilities field's value.
 func (s *Membership) SetMemberAbilities(v []*string) *Membership {
 	s.MemberAbilities = v
+	return s
+}
+
+// SetPaymentConfiguration sets the PaymentConfiguration field's value.
+func (s *Membership) SetPaymentConfiguration(v *MembershipPaymentConfiguration) *Membership {
+	s.PaymentConfiguration = v
 	return s
 }
 
@@ -9098,6 +17315,233 @@ func (s *Membership) SetUpdateTime(v time.Time) *Membership {
 	return s
 }
 
+// An object representing the payment responsibilities accepted by the collaboration
+// member.
+type MembershipPaymentConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The payment responsibilities accepted by the collaboration member for query
+	// compute costs.
+	//
+	// QueryCompute is a required field
+	QueryCompute *MembershipQueryComputePaymentConfig `locationName:"queryCompute" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MembershipPaymentConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MembershipPaymentConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MembershipPaymentConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MembershipPaymentConfiguration"}
+	if s.QueryCompute == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryCompute"))
+	}
+	if s.QueryCompute != nil {
+		if err := s.QueryCompute.Validate(); err != nil {
+			invalidParams.AddNested("QueryCompute", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetQueryCompute sets the QueryCompute field's value.
+func (s *MembershipPaymentConfiguration) SetQueryCompute(v *MembershipQueryComputePaymentConfig) *MembershipPaymentConfiguration {
+	s.QueryCompute = v
+	return s
+}
+
+// Contains configurations for protected query results.
+type MembershipProtectedQueryOutputConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Contains the configuration to write the query results to S3.
+	S3 *ProtectedQueryS3OutputConfiguration `locationName:"s3" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MembershipProtectedQueryOutputConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MembershipProtectedQueryOutputConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MembershipProtectedQueryOutputConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MembershipProtectedQueryOutputConfiguration"}
+	if s.S3 != nil {
+		if err := s.S3.Validate(); err != nil {
+			invalidParams.AddNested("S3", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3 sets the S3 field's value.
+func (s *MembershipProtectedQueryOutputConfiguration) SetS3(v *ProtectedQueryS3OutputConfiguration) *MembershipProtectedQueryOutputConfiguration {
+	s.S3 = v
+	return s
+}
+
+// Contains configurations for protected query results.
+type MembershipProtectedQueryResultConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration for protected query results.
+	//
+	// OutputConfiguration is a required field
+	OutputConfiguration *MembershipProtectedQueryOutputConfiguration `locationName:"outputConfiguration" type:"structure" required:"true"`
+
+	// The unique ARN for an IAM role that is used by Clean Rooms to write protected
+	// query results to the result location, given by the member who can receive
+	// results.
+	RoleArn *string `locationName:"roleArn" min:"32" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MembershipProtectedQueryResultConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MembershipProtectedQueryResultConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MembershipProtectedQueryResultConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MembershipProtectedQueryResultConfiguration"}
+	if s.OutputConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutputConfiguration"))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 32))
+	}
+	if s.OutputConfiguration != nil {
+		if err := s.OutputConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("OutputConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOutputConfiguration sets the OutputConfiguration field's value.
+func (s *MembershipProtectedQueryResultConfiguration) SetOutputConfiguration(v *MembershipProtectedQueryOutputConfiguration) *MembershipProtectedQueryResultConfiguration {
+	s.OutputConfiguration = v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *MembershipProtectedQueryResultConfiguration) SetRoleArn(v string) *MembershipProtectedQueryResultConfiguration {
+	s.RoleArn = &v
+	return s
+}
+
+// An object representing the payment responsibilities accepted by the collaboration
+// member for query compute costs.
+type MembershipQueryComputePaymentConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether the collaboration member has accepted to pay for query
+	// compute costs (TRUE) or has not accepted to pay for query compute costs (FALSE).
+	//
+	// If the collaboration creator has not specified anyone to pay for query compute
+	// costs, then the member who can query is the default payer.
+	//
+	// An error message is returned for the following reasons:
+	//
+	//    * If you set the value to FALSE but you are responsible to pay for query
+	//    compute costs.
+	//
+	//    * If you set the value to TRUE but you are not responsible to pay for
+	//    query compute costs.
+	//
+	// IsResponsible is a required field
+	IsResponsible *bool `locationName:"isResponsible" type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MembershipQueryComputePaymentConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MembershipQueryComputePaymentConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MembershipQueryComputePaymentConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MembershipQueryComputePaymentConfig"}
+	if s.IsResponsible == nil {
+		invalidParams.Add(request.NewErrParamRequired("IsResponsible"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIsResponsible sets the IsResponsible field's value.
+func (s *MembershipQueryComputePaymentConfig) SetIsResponsible(v bool) *MembershipQueryComputePaymentConfig {
+	s.IsResponsible = &v
+	return s
+}
+
 // The membership object listed by the request.
 type MembershipSummary struct {
 	_ struct{} `type:"structure"`
@@ -9112,8 +17556,8 @@ type MembershipSummary struct {
 	// CollaborationArn is a required field
 	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
 
-	// The identifier of the AWS principal that created the collaboration. Currently
-	// only supports AWS account ID.
+	// The identifier of the Amazon Web Services principal that created the collaboration.
+	// Currently only supports Amazon Web Services account ID.
 	//
 	// CollaborationCreatorAccountId is a required field
 	CollaborationCreatorAccountId *string `locationName:"collaborationCreatorAccountId" min:"12" type:"string" required:"true"`
@@ -9148,7 +17592,12 @@ type MembershipSummary struct {
 	// MemberAbilities is a required field
 	MemberAbilities []*string `locationName:"memberAbilities" type:"list" required:"true" enum:"MemberAbility"`
 
-	// The status of the membership. Valid values are `ACTIVE`, `REMOVED`, and `COLLABORATION_DELETED`.
+	// The payment responsibilities accepted by the collaboration member.
+	//
+	// PaymentConfiguration is a required field
+	PaymentConfiguration *MembershipPaymentConfiguration `locationName:"paymentConfiguration" type:"structure" required:"true"`
+
+	// The status of the membership.
 	//
 	// Status is a required field
 	Status *string `locationName:"status" type:"string" required:"true" enum:"MembershipStatus"`
@@ -9231,6 +17680,12 @@ func (s *MembershipSummary) SetMemberAbilities(v []*string) *MembershipSummary {
 	return s
 }
 
+// SetPaymentConfiguration sets the PaymentConfiguration field's value.
+func (s *MembershipSummary) SetPaymentConfiguration(v *MembershipPaymentConfiguration) *MembershipSummary {
+	s.PaymentConfiguration = v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *MembershipSummary) SetStatus(v string) *MembershipSummary {
 	s.Status = &v
@@ -9243,7 +17698,833 @@ func (s *MembershipSummary) SetUpdateTime(v time.Time) *MembershipSummary {
 	return s
 }
 
-// The parameters for an AWS Clean Rooms protected query.
+// An object representing the collaboration member's payment responsibilities
+// set by the collaboration creator.
+type PaymentConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The collaboration member's payment responsibilities set by the collaboration
+	// creator for query compute costs.
+	//
+	// QueryCompute is a required field
+	QueryCompute *QueryComputePaymentConfig `locationName:"queryCompute" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PaymentConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PaymentConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PaymentConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PaymentConfiguration"}
+	if s.QueryCompute == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryCompute"))
+	}
+	if s.QueryCompute != nil {
+		if err := s.QueryCompute.Validate(); err != nil {
+			invalidParams.AddNested("QueryCompute", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetQueryCompute sets the QueryCompute field's value.
+func (s *PaymentConfiguration) SetQueryCompute(v *QueryComputePaymentConfig) *PaymentConfiguration {
+	s.QueryCompute = v
+	return s
+}
+
+type PreviewPrivacyImpactInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier for one of your memberships for a collaboration. Accepts
+	// a membership ID.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// Specifies the desired epsilon and noise parameters to preview.
+	//
+	// Parameters is a required field
+	Parameters *PreviewPrivacyImpactParametersInput_ `locationName:"parameters" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PreviewPrivacyImpactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PreviewPrivacyImpactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PreviewPrivacyImpactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PreviewPrivacyImpactInput"}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+	if s.Parameters == nil {
+		invalidParams.Add(request.NewErrParamRequired("Parameters"))
+	}
+	if s.Parameters != nil {
+		if err := s.Parameters.Validate(); err != nil {
+			invalidParams.AddNested("Parameters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *PreviewPrivacyImpactInput) SetMembershipIdentifier(v string) *PreviewPrivacyImpactInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *PreviewPrivacyImpactInput) SetParameters(v *PreviewPrivacyImpactParametersInput_) *PreviewPrivacyImpactInput {
+	s.Parameters = v
+	return s
+}
+
+type PreviewPrivacyImpactOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An estimate of the number of aggregation functions that the member who can
+	// query can run given the epsilon and noise parameters. This does not change
+	// the privacy budget.
+	//
+	// PrivacyImpact is a required field
+	PrivacyImpact *PrivacyImpact `locationName:"privacyImpact" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PreviewPrivacyImpactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PreviewPrivacyImpactOutput) GoString() string {
+	return s.String()
+}
+
+// SetPrivacyImpact sets the PrivacyImpact field's value.
+func (s *PreviewPrivacyImpactOutput) SetPrivacyImpact(v *PrivacyImpact) *PreviewPrivacyImpactOutput {
+	s.PrivacyImpact = v
+	return s
+}
+
+// Specifies the updated epsilon and noise parameters to preview. The preview
+// allows you to see how the maximum number of each type of aggregation function
+// would change with the new parameters.
+type PreviewPrivacyImpactParametersInput_ struct {
+	_ struct{} `type:"structure"`
+
+	// An array that specifies the epsilon and noise parameters.
+	DifferentialPrivacy *DifferentialPrivacyPreviewParametersInput_ `locationName:"differentialPrivacy" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PreviewPrivacyImpactParametersInput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PreviewPrivacyImpactParametersInput_) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PreviewPrivacyImpactParametersInput_) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PreviewPrivacyImpactParametersInput_"}
+	if s.DifferentialPrivacy != nil {
+		if err := s.DifferentialPrivacy.Validate(); err != nil {
+			invalidParams.AddNested("DifferentialPrivacy", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDifferentialPrivacy sets the DifferentialPrivacy field's value.
+func (s *PreviewPrivacyImpactParametersInput_) SetDifferentialPrivacy(v *DifferentialPrivacyPreviewParametersInput_) *PreviewPrivacyImpactParametersInput_ {
+	s.DifferentialPrivacy = v
+	return s
+}
+
+// The epsilon parameter value and number of each aggregation function that
+// you can perform.
+type PrivacyBudget struct {
+	_ struct{} `type:"structure"`
+
+	// An object that specifies the epsilon parameter and the utility in terms of
+	// total aggregations, as well as the remaining aggregations available.
+	DifferentialPrivacy *DifferentialPrivacyPrivacyBudget `locationName:"differentialPrivacy" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudget) GoString() string {
+	return s.String()
+}
+
+// SetDifferentialPrivacy sets the DifferentialPrivacy field's value.
+func (s *PrivacyBudget) SetDifferentialPrivacy(v *DifferentialPrivacyPrivacyBudget) *PrivacyBudget {
+	s.DifferentialPrivacy = v
+	return s
+}
+
+// An array that summaries the specified privacy budget. This summary includes
+// collaboration information, creation information, membership information,
+// and privacy budget information.
+type PrivacyBudgetSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The provided privacy budget.
+	//
+	// Budget is a required field
+	Budget *PrivacyBudget `locationName:"budget" type:"structure" required:"true"`
+
+	// The ARN of the collaboration that contains this privacy budget.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// The unique identifier of the collaboration that contains this privacy budget.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The time at which the privacy budget was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The unique identifier of the privacy budget.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the member who created the privacy budget
+	// summary.
+	//
+	// MembershipArn is a required field
+	MembershipArn *string `locationName:"membershipArn" type:"string" required:"true"`
+
+	// The identifier for a membership resource.
+	//
+	// MembershipId is a required field
+	MembershipId *string `locationName:"membershipId" min:"36" type:"string" required:"true"`
+
+	// The ARN of the privacy budget template.
+	//
+	// PrivacyBudgetTemplateArn is a required field
+	PrivacyBudgetTemplateArn *string `locationName:"privacyBudgetTemplateArn" type:"string" required:"true"`
+
+	// The unique identifier of the privacy budget template.
+	//
+	// PrivacyBudgetTemplateId is a required field
+	PrivacyBudgetTemplateId *string `locationName:"privacyBudgetTemplateId" min:"36" type:"string" required:"true"`
+
+	// Specifies the type of the privacy budget.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"PrivacyBudgetType"`
+
+	// The most recent time at which the privacy budget was updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetSummary) GoString() string {
+	return s.String()
+}
+
+// SetBudget sets the Budget field's value.
+func (s *PrivacyBudgetSummary) SetBudget(v *PrivacyBudget) *PrivacyBudgetSummary {
+	s.Budget = v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *PrivacyBudgetSummary) SetCollaborationArn(v string) *PrivacyBudgetSummary {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *PrivacyBudgetSummary) SetCollaborationId(v string) *PrivacyBudgetSummary {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *PrivacyBudgetSummary) SetCreateTime(v time.Time) *PrivacyBudgetSummary {
+	s.CreateTime = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *PrivacyBudgetSummary) SetId(v string) *PrivacyBudgetSummary {
+	s.Id = &v
+	return s
+}
+
+// SetMembershipArn sets the MembershipArn field's value.
+func (s *PrivacyBudgetSummary) SetMembershipArn(v string) *PrivacyBudgetSummary {
+	s.MembershipArn = &v
+	return s
+}
+
+// SetMembershipId sets the MembershipId field's value.
+func (s *PrivacyBudgetSummary) SetMembershipId(v string) *PrivacyBudgetSummary {
+	s.MembershipId = &v
+	return s
+}
+
+// SetPrivacyBudgetTemplateArn sets the PrivacyBudgetTemplateArn field's value.
+func (s *PrivacyBudgetSummary) SetPrivacyBudgetTemplateArn(v string) *PrivacyBudgetSummary {
+	s.PrivacyBudgetTemplateArn = &v
+	return s
+}
+
+// SetPrivacyBudgetTemplateId sets the PrivacyBudgetTemplateId field's value.
+func (s *PrivacyBudgetSummary) SetPrivacyBudgetTemplateId(v string) *PrivacyBudgetSummary {
+	s.PrivacyBudgetTemplateId = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *PrivacyBudgetSummary) SetType(v string) *PrivacyBudgetSummary {
+	s.Type = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *PrivacyBudgetSummary) SetUpdateTime(v time.Time) *PrivacyBudgetSummary {
+	s.UpdateTime = &v
+	return s
+}
+
+// An object that defines the privacy budget template.
+type PrivacyBudgetTemplate struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the privacy budget template.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// How often the privacy budget refreshes.
+	//
+	// If you plan to regularly bring new data into the collaboration, use CALENDAR_MONTH
+	// to automatically get a new privacy budget for the collaboration every calendar
+	// month. Choosing this option allows arbitrary amounts of information to be
+	// revealed about rows of the data when repeatedly queried across refreshes.
+	// Avoid choosing this if the same rows will be repeatedly queried between privacy
+	// budget refreshes.
+	//
+	// AutoRefresh is a required field
+	AutoRefresh *string `locationName:"autoRefresh" type:"string" required:"true" enum:"PrivacyBudgetTemplateAutoRefresh"`
+
+	// The ARN of the collaboration that contains this privacy budget template.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// The unique ID of the collaboration that contains this privacy budget template.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The time at which the privacy budget template was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The unique identifier of the privacy budget template.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the member who created the privacy budget
+	// template.
+	//
+	// MembershipArn is a required field
+	MembershipArn *string `locationName:"membershipArn" type:"string" required:"true"`
+
+	// The identifier for a membership resource.
+	//
+	// MembershipId is a required field
+	MembershipId *string `locationName:"membershipId" min:"36" type:"string" required:"true"`
+
+	// Specifies the epislon and noise parameters for the privacy budget template.
+	//
+	// Parameters is a required field
+	Parameters *PrivacyBudgetTemplateParametersOutput_ `locationName:"parameters" type:"structure" required:"true"`
+
+	// Specifies the type of the privacy budget template.
+	//
+	// PrivacyBudgetType is a required field
+	PrivacyBudgetType *string `locationName:"privacyBudgetType" type:"string" required:"true" enum:"PrivacyBudgetType"`
+
+	// The most recent time at which the privacy budget template was updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetTemplate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetTemplate) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *PrivacyBudgetTemplate) SetArn(v string) *PrivacyBudgetTemplate {
+	s.Arn = &v
+	return s
+}
+
+// SetAutoRefresh sets the AutoRefresh field's value.
+func (s *PrivacyBudgetTemplate) SetAutoRefresh(v string) *PrivacyBudgetTemplate {
+	s.AutoRefresh = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *PrivacyBudgetTemplate) SetCollaborationArn(v string) *PrivacyBudgetTemplate {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *PrivacyBudgetTemplate) SetCollaborationId(v string) *PrivacyBudgetTemplate {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *PrivacyBudgetTemplate) SetCreateTime(v time.Time) *PrivacyBudgetTemplate {
+	s.CreateTime = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *PrivacyBudgetTemplate) SetId(v string) *PrivacyBudgetTemplate {
+	s.Id = &v
+	return s
+}
+
+// SetMembershipArn sets the MembershipArn field's value.
+func (s *PrivacyBudgetTemplate) SetMembershipArn(v string) *PrivacyBudgetTemplate {
+	s.MembershipArn = &v
+	return s
+}
+
+// SetMembershipId sets the MembershipId field's value.
+func (s *PrivacyBudgetTemplate) SetMembershipId(v string) *PrivacyBudgetTemplate {
+	s.MembershipId = &v
+	return s
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *PrivacyBudgetTemplate) SetParameters(v *PrivacyBudgetTemplateParametersOutput_) *PrivacyBudgetTemplate {
+	s.Parameters = v
+	return s
+}
+
+// SetPrivacyBudgetType sets the PrivacyBudgetType field's value.
+func (s *PrivacyBudgetTemplate) SetPrivacyBudgetType(v string) *PrivacyBudgetTemplate {
+	s.PrivacyBudgetType = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *PrivacyBudgetTemplate) SetUpdateTime(v time.Time) *PrivacyBudgetTemplate {
+	s.UpdateTime = &v
+	return s
+}
+
+// The epsilon and noise parameters that you want to use for the privacy budget
+// template.
+type PrivacyBudgetTemplateParametersInput_ struct {
+	_ struct{} `type:"structure"`
+
+	// An object that specifies the epsilon and noise parameters.
+	DifferentialPrivacy *DifferentialPrivacyTemplateParametersInput_ `locationName:"differentialPrivacy" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetTemplateParametersInput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetTemplateParametersInput_) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PrivacyBudgetTemplateParametersInput_) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PrivacyBudgetTemplateParametersInput_"}
+	if s.DifferentialPrivacy != nil {
+		if err := s.DifferentialPrivacy.Validate(); err != nil {
+			invalidParams.AddNested("DifferentialPrivacy", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDifferentialPrivacy sets the DifferentialPrivacy field's value.
+func (s *PrivacyBudgetTemplateParametersInput_) SetDifferentialPrivacy(v *DifferentialPrivacyTemplateParametersInput_) *PrivacyBudgetTemplateParametersInput_ {
+	s.DifferentialPrivacy = v
+	return s
+}
+
+// The epsilon and noise parameters that were used in the privacy budget template.
+type PrivacyBudgetTemplateParametersOutput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The epsilon and noise parameters.
+	DifferentialPrivacy *DifferentialPrivacyTemplateParametersOutput_ `locationName:"differentialPrivacy" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetTemplateParametersOutput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetTemplateParametersOutput_) GoString() string {
+	return s.String()
+}
+
+// SetDifferentialPrivacy sets the DifferentialPrivacy field's value.
+func (s *PrivacyBudgetTemplateParametersOutput_) SetDifferentialPrivacy(v *DifferentialPrivacyTemplateParametersOutput_) *PrivacyBudgetTemplateParametersOutput_ {
+	s.DifferentialPrivacy = v
+	return s
+}
+
+// A summary of the privacy budget template. The summary includes membership
+// information, collaboration information, and creation information.
+type PrivacyBudgetTemplateSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the privacy budget template.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The ARN of the collaboration that contains this privacy budget template.
+	//
+	// CollaborationArn is a required field
+	CollaborationArn *string `locationName:"collaborationArn" type:"string" required:"true"`
+
+	// The unique ID of the collaboration that contains this privacy budget template.
+	//
+	// CollaborationId is a required field
+	CollaborationId *string `locationName:"collaborationId" min:"36" type:"string" required:"true"`
+
+	// The time at which the privacy budget template was created.
+	//
+	// CreateTime is a required field
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The unique identifier of the privacy budget template.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the member who created the privacy budget
+	// template.
+	//
+	// MembershipArn is a required field
+	MembershipArn *string `locationName:"membershipArn" type:"string" required:"true"`
+
+	// The identifier for a membership resource.
+	//
+	// MembershipId is a required field
+	MembershipId *string `locationName:"membershipId" min:"36" type:"string" required:"true"`
+
+	// The type of the privacy budget template.
+	//
+	// PrivacyBudgetType is a required field
+	PrivacyBudgetType *string `locationName:"privacyBudgetType" type:"string" required:"true" enum:"PrivacyBudgetType"`
+
+	// The most recent time at which the privacy budget template was updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetTemplateSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetTemplateSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *PrivacyBudgetTemplateSummary) SetArn(v string) *PrivacyBudgetTemplateSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCollaborationArn sets the CollaborationArn field's value.
+func (s *PrivacyBudgetTemplateSummary) SetCollaborationArn(v string) *PrivacyBudgetTemplateSummary {
+	s.CollaborationArn = &v
+	return s
+}
+
+// SetCollaborationId sets the CollaborationId field's value.
+func (s *PrivacyBudgetTemplateSummary) SetCollaborationId(v string) *PrivacyBudgetTemplateSummary {
+	s.CollaborationId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *PrivacyBudgetTemplateSummary) SetCreateTime(v time.Time) *PrivacyBudgetTemplateSummary {
+	s.CreateTime = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *PrivacyBudgetTemplateSummary) SetId(v string) *PrivacyBudgetTemplateSummary {
+	s.Id = &v
+	return s
+}
+
+// SetMembershipArn sets the MembershipArn field's value.
+func (s *PrivacyBudgetTemplateSummary) SetMembershipArn(v string) *PrivacyBudgetTemplateSummary {
+	s.MembershipArn = &v
+	return s
+}
+
+// SetMembershipId sets the MembershipId field's value.
+func (s *PrivacyBudgetTemplateSummary) SetMembershipId(v string) *PrivacyBudgetTemplateSummary {
+	s.MembershipId = &v
+	return s
+}
+
+// SetPrivacyBudgetType sets the PrivacyBudgetType field's value.
+func (s *PrivacyBudgetTemplateSummary) SetPrivacyBudgetType(v string) *PrivacyBudgetTemplateSummary {
+	s.PrivacyBudgetType = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *PrivacyBudgetTemplateSummary) SetUpdateTime(v time.Time) *PrivacyBudgetTemplateSummary {
+	s.UpdateTime = &v
+	return s
+}
+
+// The epsilon and noise parameters that you want to update in the privacy budget
+// template.
+type PrivacyBudgetTemplateUpdateParameters struct {
+	_ struct{} `type:"structure"`
+
+	// An object that specifies the new values for the epsilon and noise parameters.
+	DifferentialPrivacy *DifferentialPrivacyTemplateUpdateParameters `locationName:"differentialPrivacy" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetTemplateUpdateParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyBudgetTemplateUpdateParameters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PrivacyBudgetTemplateUpdateParameters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PrivacyBudgetTemplateUpdateParameters"}
+	if s.DifferentialPrivacy != nil {
+		if err := s.DifferentialPrivacy.Validate(); err != nil {
+			invalidParams.AddNested("DifferentialPrivacy", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDifferentialPrivacy sets the DifferentialPrivacy field's value.
+func (s *PrivacyBudgetTemplateUpdateParameters) SetDifferentialPrivacy(v *DifferentialPrivacyTemplateUpdateParameters) *PrivacyBudgetTemplateUpdateParameters {
+	s.DifferentialPrivacy = v
+	return s
+}
+
+// Provides an estimate of the number of aggregation functions that the member
+// who can query can run given the epsilon and noise parameters.
+type PrivacyImpact struct {
+	_ struct{} `type:"structure"`
+
+	// An object that lists the number and type of aggregation functions you can
+	// perform.
+	DifferentialPrivacy *DifferentialPrivacyPrivacyImpact `locationName:"differentialPrivacy" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyImpact) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivacyImpact) GoString() string {
+	return s.String()
+}
+
+// SetDifferentialPrivacy sets the DifferentialPrivacy field's value.
+func (s *PrivacyImpact) SetDifferentialPrivacy(v *DifferentialPrivacyPrivacyImpact) *PrivacyImpact {
+	s.DifferentialPrivacy = v
+	return s
+}
+
+// The parameters for an Clean Rooms protected query.
 type ProtectedQuery struct {
 	_ struct{} `type:"structure"`
 
@@ -9251,6 +18532,10 @@ type ProtectedQuery struct {
 	//
 	// CreateTime is a required field
 	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
+
+	// The sensitivity parameters of the differential privacy results of the protected
+	// query.
+	DifferentialPrivacy *DifferentialPrivacyParameters `locationName:"differentialPrivacy" type:"structure"`
 
 	// An error thrown by the protected query.
 	Error *ProtectedQueryError `locationName:"error" type:"structure"`
@@ -9274,18 +18559,14 @@ type ProtectedQuery struct {
 	Result *ProtectedQueryResult `locationName:"result" type:"structure"`
 
 	// Contains any details needed to write the query results.
-	//
-	// ResultConfiguration is a required field
-	ResultConfiguration *ProtectedQueryResultConfiguration `locationName:"resultConfiguration" type:"structure" required:"true"`
+	ResultConfiguration *ProtectedQueryResultConfiguration `locationName:"resultConfiguration" type:"structure"`
 
 	// The protected query SQL parameters.
 	//
 	// SqlParameters is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by ProtectedQuery's
 	// String and GoString methods.
-	//
-	// SqlParameters is a required field
-	SqlParameters *ProtectedQuerySQLParameters `locationName:"sqlParameters" type:"structure" required:"true" sensitive:"true"`
+	SqlParameters *ProtectedQuerySQLParameters `locationName:"sqlParameters" type:"structure" sensitive:"true"`
 
 	// Statistics about protected query execution.
 	Statistics *ProtectedQueryStatistics `locationName:"statistics" type:"structure"`
@@ -9317,6 +18598,12 @@ func (s ProtectedQuery) GoString() string {
 // SetCreateTime sets the CreateTime field's value.
 func (s *ProtectedQuery) SetCreateTime(v time.Time) *ProtectedQuery {
 	s.CreateTime = &v
+	return s
+}
+
+// SetDifferentialPrivacy sets the DifferentialPrivacy field's value.
+func (s *ProtectedQuery) SetDifferentialPrivacy(v *DifferentialPrivacyParameters) *ProtectedQuery {
+	s.DifferentialPrivacy = v
 	return s
 }
 
@@ -9470,6 +18757,10 @@ func (s *ProtectedQueryOutputConfiguration) SetS3(v *ProtectedQueryS3OutputConfi
 type ProtectedQueryOutput_ struct {
 	_ struct{} `type:"structure"`
 
+	// The list of member Amazon Web Services account(s) that received the results
+	// of the query.
+	MemberList []*ProtectedQuerySingleMemberOutput_ `locationName:"memberList" type:"list"`
+
 	// If present, the output for a protected query with an `S3` output type.
 	S3 *ProtectedQueryS3Output_ `locationName:"s3" type:"structure"`
 }
@@ -9490,6 +18781,12 @@ func (s ProtectedQueryOutput_) String() string {
 // value will be replaced with "sensitive".
 func (s ProtectedQueryOutput_) GoString() string {
 	return s.String()
+}
+
+// SetMemberList sets the MemberList field's value.
+func (s *ProtectedQueryOutput_) SetMemberList(v []*ProtectedQuerySingleMemberOutput_) *ProtectedQueryOutput_ {
+	s.MemberList = v
+	return s
 }
 
 // SetS3 sets the S3 field's value.
@@ -9695,10 +18992,15 @@ func (s *ProtectedQueryS3Output_) SetLocation(v string) *ProtectedQueryS3Output_
 type ProtectedQuerySQLParameters struct {
 	_ struct{} `type:"structure" sensitive:"true"`
 
+	// The Amazon Resource Name (ARN) associated with the analysis template within
+	// a collaboration.
+	AnalysisTemplateArn *string `locationName:"analysisTemplateArn" type:"string"`
+
+	// The protected query SQL parameters.
+	Parameters map[string]*string `locationName:"parameters" type:"map"`
+
 	// The query string to be submitted.
-	//
-	// QueryString is a required field
-	QueryString *string `locationName:"queryString" type:"string" required:"true"`
+	QueryString *string `locationName:"queryString" type:"string"`
 }
 
 // String returns the string representation.
@@ -9719,22 +19021,56 @@ func (s ProtectedQuerySQLParameters) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *ProtectedQuerySQLParameters) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "ProtectedQuerySQLParameters"}
-	if s.QueryString == nil {
-		invalidParams.Add(request.NewErrParamRequired("QueryString"))
-	}
+// SetAnalysisTemplateArn sets the AnalysisTemplateArn field's value.
+func (s *ProtectedQuerySQLParameters) SetAnalysisTemplateArn(v string) *ProtectedQuerySQLParameters {
+	s.AnalysisTemplateArn = &v
+	return s
+}
 
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
+// SetParameters sets the Parameters field's value.
+func (s *ProtectedQuerySQLParameters) SetParameters(v map[string]*string) *ProtectedQuerySQLParameters {
+	s.Parameters = v
+	return s
 }
 
 // SetQueryString sets the QueryString field's value.
 func (s *ProtectedQuerySQLParameters) SetQueryString(v string) *ProtectedQuerySQLParameters {
 	s.QueryString = &v
+	return s
+}
+
+// Details about the member who received the query result.
+type ProtectedQuerySingleMemberOutput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Web Services account ID of the member in the collaboration who
+	// can receive results for the query.
+	//
+	// AccountId is a required field
+	AccountId *string `locationName:"accountId" min:"12" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProtectedQuerySingleMemberOutput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProtectedQuerySingleMemberOutput_) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *ProtectedQuerySingleMemberOutput_) SetAccountId(v string) *ProtectedQuerySingleMemberOutput_ {
+	s.AccountId = &v
 	return s
 }
 
@@ -9849,6 +19185,65 @@ func (s *ProtectedQuerySummary) SetStatus(v string) *ProtectedQuerySummary {
 	return s
 }
 
+// An object representing the collaboration member's payment responsibilities
+// set by the collaboration creator for query compute costs.
+type QueryComputePaymentConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether the collaboration creator has configured the collaboration
+	// member to pay for query compute costs (TRUE) or has not configured the collaboration
+	// member to pay for query compute costs (FALSE).
+	//
+	// Exactly one member can be configured to pay for query compute costs. An error
+	// is returned if the collaboration creator sets a TRUE value for more than
+	// one member in the collaboration.
+	//
+	// If the collaboration creator hasn't specified anyone as the member paying
+	// for query compute costs, then the member who can query is the default payer.
+	// An error is returned if the collaboration creator sets a FALSE value for
+	// the member who can query.
+	//
+	// IsResponsible is a required field
+	IsResponsible *bool `locationName:"isResponsible" type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QueryComputePaymentConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QueryComputePaymentConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *QueryComputePaymentConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "QueryComputePaymentConfig"}
+	if s.IsResponsible == nil {
+		invalidParams.Add(request.NewErrParamRequired("IsResponsible"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIsResponsible sets the IsResponsible field's value.
+func (s *QueryComputePaymentConfig) SetIsResponsible(v bool) *QueryComputePaymentConfig {
+	s.IsResponsible = &v
+	return s
+}
+
 // Request references a resource which does not exist.
 type ResourceNotFoundException struct {
 	_            struct{}                  `type:"structure"`
@@ -9930,8 +19325,8 @@ type Schema struct {
 	// The analysis method for the schema. The only valid value is currently DIRECT_QUERY.
 	AnalysisMethod *string `locationName:"analysisMethod" type:"string" enum:"AnalysisMethod"`
 
-	// The analysis rule types associated with the schema. Valued values are LIST
-	// and AGGREGATION. Currently, only one entry is present.
+	// The analysis rule types associated with the schema. Currently, only one entry
+	// is present.
 	//
 	// AnalysisRuleTypes is a required field
 	AnalysisRuleTypes []*string `locationName:"analysisRuleTypes" type:"list" required:"true" enum:"AnalysisRuleType"`
@@ -9956,7 +19351,7 @@ type Schema struct {
 	// CreateTime is a required field
 	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
 
-	// The unique account ID for the AWS account that owns the schema.
+	// The unique account ID for the Amazon Web Services account that owns the schema.
 	//
 	// CreatorAccountId is a required field
 	CreatorAccountId *string `locationName:"creatorAccountId" min:"12" type:"string" required:"true"`
@@ -9976,6 +19371,11 @@ type Schema struct {
 	//
 	// PartitionKeys is a required field
 	PartitionKeys []*Column `locationName:"partitionKeys" type:"list" required:"true"`
+
+	// Details about the status of the schema. Currently, only one entry is present.
+	//
+	// SchemaStatusDetails is a required field
+	SchemaStatusDetails []*SchemaStatusDetail `locationName:"schemaStatusDetails" type:"list" required:"true"`
 
 	// The type of schema. The only valid value is currently `TABLE`.
 	//
@@ -10066,6 +19466,12 @@ func (s *Schema) SetPartitionKeys(v []*Column) *Schema {
 	return s
 }
 
+// SetSchemaStatusDetails sets the SchemaStatusDetails field's value.
+func (s *Schema) SetSchemaStatusDetails(v []*SchemaStatusDetail) *Schema {
+	s.SchemaStatusDetails = v
+	return s
+}
+
 // SetType sets the Type field's value.
 func (s *Schema) SetType(v string) *Schema {
 	s.Type = &v
@@ -10075,6 +19481,179 @@ func (s *Schema) SetType(v string) *Schema {
 // SetUpdateTime sets the UpdateTime field's value.
 func (s *Schema) SetUpdateTime(v time.Time) *Schema {
 	s.UpdateTime = &v
+	return s
+}
+
+// Defines the information that's necessary to retrieve an analysis rule schema.
+// Schema analysis rules are uniquely identiﬁed by a combination of the schema
+// name and the analysis rule type for a given collaboration.
+type SchemaAnalysisRuleRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the analysis rule schema that you are requesting.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The type of analysis rule schema that you are requesting.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"AnalysisRuleType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchemaAnalysisRuleRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchemaAnalysisRuleRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SchemaAnalysisRuleRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SchemaAnalysisRuleRequest"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *SchemaAnalysisRuleRequest) SetName(v string) *SchemaAnalysisRuleRequest {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *SchemaAnalysisRuleRequest) SetType(v string) *SchemaAnalysisRuleRequest {
+	s.Type = &v
+	return s
+}
+
+// Information about the schema status.
+//
+// A status of READY means that based on the schema analysis rule, queries of
+// the given analysis rule type are properly configured to run queries on this
+// schema.
+type SchemaStatusDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The analysis rule type for which the schema status has been evaluated.
+	AnalysisRuleType *string `locationName:"analysisRuleType" type:"string" enum:"AnalysisRuleType"`
+
+	// The configuration details of the schema analysis rule for the given type.
+	Configurations []*string `locationName:"configurations" type:"list" enum:"SchemaConfiguration"`
+
+	// The reasons why the schema status is set to its current state.
+	Reasons []*SchemaStatusReason `locationName:"reasons" type:"list"`
+
+	// The status of the schema.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"SchemaStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchemaStatusDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchemaStatusDetail) GoString() string {
+	return s.String()
+}
+
+// SetAnalysisRuleType sets the AnalysisRuleType field's value.
+func (s *SchemaStatusDetail) SetAnalysisRuleType(v string) *SchemaStatusDetail {
+	s.AnalysisRuleType = &v
+	return s
+}
+
+// SetConfigurations sets the Configurations field's value.
+func (s *SchemaStatusDetail) SetConfigurations(v []*string) *SchemaStatusDetail {
+	s.Configurations = v
+	return s
+}
+
+// SetReasons sets the Reasons field's value.
+func (s *SchemaStatusDetail) SetReasons(v []*SchemaStatusReason) *SchemaStatusDetail {
+	s.Reasons = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *SchemaStatusDetail) SetStatus(v string) *SchemaStatusDetail {
+	s.Status = &v
+	return s
+}
+
+// A reason why the schema status is set to its current value.
+type SchemaStatusReason struct {
+	_ struct{} `type:"structure"`
+
+	// The schema status reason code.
+	//
+	// Code is a required field
+	Code *string `locationName:"code" type:"string" required:"true" enum:"SchemaStatusReasonCode"`
+
+	// An explanation of the schema status reason code.
+	//
+	// Message is a required field
+	Message *string `locationName:"message" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchemaStatusReason) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchemaStatusReason) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *SchemaStatusReason) SetCode(v string) *SchemaStatusReason {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *SchemaStatusReason) SetMessage(v string) *SchemaStatusReason {
+	s.Message = &v
 	return s
 }
 
@@ -10106,7 +19685,7 @@ type SchemaSummary struct {
 	// CreateTime is a required field
 	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
 
-	// The unique account ID for the AWS account that owns the schema.
+	// The unique account ID for the Amazon Web Services account that owns the schema.
 	//
 	// CreatorAccountId is a required field
 	CreatorAccountId *string `locationName:"creatorAccountId" min:"12" type:"string" required:"true"`
@@ -10283,9 +19862,7 @@ type StartProtectedQueryInput struct {
 	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
 
 	// The details needed to write the query results.
-	//
-	// ResultConfiguration is a required field
-	ResultConfiguration *ProtectedQueryResultConfiguration `locationName:"resultConfiguration" type:"structure" required:"true"`
+	ResultConfiguration *ProtectedQueryResultConfiguration `locationName:"resultConfiguration" type:"structure"`
 
 	// The protected SQL query parameters.
 	//
@@ -10329,9 +19906,6 @@ func (s *StartProtectedQueryInput) Validate() error {
 	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
 	}
-	if s.ResultConfiguration == nil {
-		invalidParams.Add(request.NewErrParamRequired("ResultConfiguration"))
-	}
 	if s.SqlParameters == nil {
 		invalidParams.Add(request.NewErrParamRequired("SqlParameters"))
 	}
@@ -10341,11 +19915,6 @@ func (s *StartProtectedQueryInput) Validate() error {
 	if s.ResultConfiguration != nil {
 		if err := s.ResultConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("ResultConfiguration", err.(request.ErrInvalidParams))
-		}
-	}
-	if s.SqlParameters != nil {
-		if err := s.SqlParameters.Validate(); err != nil {
-			invalidParams.AddNested("SqlParameters", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -10413,11 +19982,11 @@ func (s *StartProtectedQueryOutput) SetProtectedQuery(v *ProtectedQuery) *StartP
 }
 
 // A pointer to the dataset that underlies this table. Currently, this can only
-// be an AWS Glue table.
+// be an Glue table.
 type TableReference struct {
 	_ struct{} `type:"structure"`
 
-	// If present, a reference to the AWS Glue table referred to by this table reference.
+	// If present, a reference to the Glue table referred to by this table reference.
 	Glue *GlueTableReference `locationName:"glue" type:"structure"`
 }
 
@@ -10695,6 +20264,114 @@ func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateAnalysisTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier for the analysis template resource.
+	//
+	// AnalysisTemplateIdentifier is a required field
+	AnalysisTemplateIdentifier *string `location:"uri" locationName:"analysisTemplateIdentifier" min:"36" type:"string" required:"true"`
+
+	// A new description for the analysis template.
+	Description *string `locationName:"description" type:"string"`
+
+	// The identifier for a membership resource.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAnalysisTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAnalysisTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateAnalysisTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateAnalysisTemplateInput"}
+	if s.AnalysisTemplateIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("AnalysisTemplateIdentifier"))
+	}
+	if s.AnalysisTemplateIdentifier != nil && len(*s.AnalysisTemplateIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AnalysisTemplateIdentifier", 36))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnalysisTemplateIdentifier sets the AnalysisTemplateIdentifier field's value.
+func (s *UpdateAnalysisTemplateInput) SetAnalysisTemplateIdentifier(v string) *UpdateAnalysisTemplateInput {
+	s.AnalysisTemplateIdentifier = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateAnalysisTemplateInput) SetDescription(v string) *UpdateAnalysisTemplateInput {
+	s.Description = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *UpdateAnalysisTemplateInput) SetMembershipIdentifier(v string) *UpdateAnalysisTemplateInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+type UpdateAnalysisTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The analysis template.
+	//
+	// AnalysisTemplate is a required field
+	AnalysisTemplate *AnalysisTemplate `locationName:"analysisTemplate" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAnalysisTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAnalysisTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetAnalysisTemplate sets the AnalysisTemplate field's value.
+func (s *UpdateAnalysisTemplateOutput) SetAnalysisTemplate(v *AnalysisTemplate) *UpdateAnalysisTemplateOutput {
+	s.AnalysisTemplate = v
+	return s
+}
+
 type UpdateCollaborationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -10799,6 +20476,128 @@ func (s UpdateCollaborationOutput) GoString() string {
 // SetCollaboration sets the Collaboration field's value.
 func (s *UpdateCollaborationOutput) SetCollaboration(v *Collaboration) *UpdateCollaborationOutput {
 	s.Collaboration = v
+	return s
+}
+
+type UpdateConfiguredAudienceModelAssociationInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier for the configured audience model association that you
+	// want to update.
+	//
+	// ConfiguredAudienceModelAssociationIdentifier is a required field
+	ConfiguredAudienceModelAssociationIdentifier *string `location:"uri" locationName:"configuredAudienceModelAssociationIdentifier" min:"36" type:"string" required:"true"`
+
+	// A new description for the configured audience model association.
+	Description *string `locationName:"description" type:"string"`
+
+	// A unique identifier of the membership that contains the configured audience
+	// model association that you want to update.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// A new name for the configured audience model association.
+	Name *string `locationName:"name" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConfiguredAudienceModelAssociationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConfiguredAudienceModelAssociationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateConfiguredAudienceModelAssociationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateConfiguredAudienceModelAssociationInput"}
+	if s.ConfiguredAudienceModelAssociationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConfiguredAudienceModelAssociationIdentifier"))
+	}
+	if s.ConfiguredAudienceModelAssociationIdentifier != nil && len(*s.ConfiguredAudienceModelAssociationIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfiguredAudienceModelAssociationIdentifier", 36))
+	}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfiguredAudienceModelAssociationIdentifier sets the ConfiguredAudienceModelAssociationIdentifier field's value.
+func (s *UpdateConfiguredAudienceModelAssociationInput) SetConfiguredAudienceModelAssociationIdentifier(v string) *UpdateConfiguredAudienceModelAssociationInput {
+	s.ConfiguredAudienceModelAssociationIdentifier = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateConfiguredAudienceModelAssociationInput) SetDescription(v string) *UpdateConfiguredAudienceModelAssociationInput {
+	s.Description = &v
+	return s
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *UpdateConfiguredAudienceModelAssociationInput) SetMembershipIdentifier(v string) *UpdateConfiguredAudienceModelAssociationInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateConfiguredAudienceModelAssociationInput) SetName(v string) *UpdateConfiguredAudienceModelAssociationInput {
+	s.Name = &v
+	return s
+}
+
+type UpdateConfiguredAudienceModelAssociationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Details about the configured audience model association that you updated.
+	//
+	// ConfiguredAudienceModelAssociation is a required field
+	ConfiguredAudienceModelAssociation *ConfiguredAudienceModelAssociation `locationName:"configuredAudienceModelAssociation" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConfiguredAudienceModelAssociationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConfiguredAudienceModelAssociationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfiguredAudienceModelAssociation sets the ConfiguredAudienceModelAssociation field's value.
+func (s *UpdateConfiguredAudienceModelAssociationOutput) SetConfiguredAudienceModelAssociation(v *ConfiguredAudienceModelAssociation) *UpdateConfiguredAudienceModelAssociationOutput {
+	s.ConfiguredAudienceModelAssociation = v
 	return s
 }
 
@@ -11153,13 +20952,17 @@ func (s *UpdateConfiguredTableOutput) SetConfiguredTable(v *ConfiguredTable) *Up
 type UpdateMembershipInput struct {
 	_ struct{} `type:"structure"`
 
+	// The default protected query result configuration as specified by the member
+	// who can receive results.
+	DefaultResultConfiguration *MembershipProtectedQueryResultConfiguration `locationName:"defaultResultConfiguration" type:"structure"`
+
 	// The unique identifier of the membership.
 	//
 	// MembershipIdentifier is a required field
 	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
 
 	// An indicator as to whether query logging has been enabled or disabled for
-	// the collaboration.
+	// the membership.
 	QueryLogStatus *string `locationName:"queryLogStatus" type:"string" enum:"MembershipQueryLogStatus"`
 }
 
@@ -11190,11 +20993,22 @@ func (s *UpdateMembershipInput) Validate() error {
 	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
 	}
+	if s.DefaultResultConfiguration != nil {
+		if err := s.DefaultResultConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("DefaultResultConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetDefaultResultConfiguration sets the DefaultResultConfiguration field's value.
+func (s *UpdateMembershipInput) SetDefaultResultConfiguration(v *MembershipProtectedQueryResultConfiguration) *UpdateMembershipInput {
+	s.DefaultResultConfiguration = v
+	return s
 }
 
 // SetMembershipIdentifier sets the MembershipIdentifier field's value.
@@ -11242,6 +21056,135 @@ func (s *UpdateMembershipOutput) SetMembership(v *Membership) *UpdateMembershipO
 	return s
 }
 
+type UpdatePrivacyBudgetTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier for one of your memberships for a collaboration. The
+	// privacy budget template is updated in the collaboration that this membership
+	// belongs to. Accepts a membership ID.
+	//
+	// MembershipIdentifier is a required field
+	MembershipIdentifier *string `location:"uri" locationName:"membershipIdentifier" min:"36" type:"string" required:"true"`
+
+	// Specifies the epsilon and noise parameters for the privacy budget template.
+	Parameters *PrivacyBudgetTemplateUpdateParameters `locationName:"parameters" type:"structure"`
+
+	// A unique identifier for your privacy budget template that you want to update.
+	//
+	// PrivacyBudgetTemplateIdentifier is a required field
+	PrivacyBudgetTemplateIdentifier *string `location:"uri" locationName:"privacyBudgetTemplateIdentifier" min:"36" type:"string" required:"true"`
+
+	// Specifies the type of the privacy budget template.
+	//
+	// PrivacyBudgetType is a required field
+	PrivacyBudgetType *string `locationName:"privacyBudgetType" type:"string" required:"true" enum:"PrivacyBudgetType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePrivacyBudgetTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePrivacyBudgetTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdatePrivacyBudgetTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdatePrivacyBudgetTemplateInput"}
+	if s.MembershipIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MembershipIdentifier"))
+	}
+	if s.MembershipIdentifier != nil && len(*s.MembershipIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("MembershipIdentifier", 36))
+	}
+	if s.PrivacyBudgetTemplateIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrivacyBudgetTemplateIdentifier"))
+	}
+	if s.PrivacyBudgetTemplateIdentifier != nil && len(*s.PrivacyBudgetTemplateIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("PrivacyBudgetTemplateIdentifier", 36))
+	}
+	if s.PrivacyBudgetType == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrivacyBudgetType"))
+	}
+	if s.Parameters != nil {
+		if err := s.Parameters.Validate(); err != nil {
+			invalidParams.AddNested("Parameters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMembershipIdentifier sets the MembershipIdentifier field's value.
+func (s *UpdatePrivacyBudgetTemplateInput) SetMembershipIdentifier(v string) *UpdatePrivacyBudgetTemplateInput {
+	s.MembershipIdentifier = &v
+	return s
+}
+
+// SetParameters sets the Parameters field's value.
+func (s *UpdatePrivacyBudgetTemplateInput) SetParameters(v *PrivacyBudgetTemplateUpdateParameters) *UpdatePrivacyBudgetTemplateInput {
+	s.Parameters = v
+	return s
+}
+
+// SetPrivacyBudgetTemplateIdentifier sets the PrivacyBudgetTemplateIdentifier field's value.
+func (s *UpdatePrivacyBudgetTemplateInput) SetPrivacyBudgetTemplateIdentifier(v string) *UpdatePrivacyBudgetTemplateInput {
+	s.PrivacyBudgetTemplateIdentifier = &v
+	return s
+}
+
+// SetPrivacyBudgetType sets the PrivacyBudgetType field's value.
+func (s *UpdatePrivacyBudgetTemplateInput) SetPrivacyBudgetType(v string) *UpdatePrivacyBudgetTemplateInput {
+	s.PrivacyBudgetType = &v
+	return s
+}
+
+type UpdatePrivacyBudgetTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Summary of the privacy budget template.
+	//
+	// PrivacyBudgetTemplate is a required field
+	PrivacyBudgetTemplate *PrivacyBudgetTemplate `locationName:"privacyBudgetTemplate" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePrivacyBudgetTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePrivacyBudgetTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetPrivacyBudgetTemplate sets the PrivacyBudgetTemplate field's value.
+func (s *UpdatePrivacyBudgetTemplateOutput) SetPrivacyBudgetTemplate(v *PrivacyBudgetTemplate) *UpdatePrivacyBudgetTemplateOutput {
+	s.PrivacyBudgetTemplate = v
+	return s
+}
+
 type UpdateProtectedQueryInput struct {
 	_ struct{} `type:"structure"`
 
@@ -11253,7 +21196,7 @@ type UpdateProtectedQueryInput struct {
 	// The identifier for a protected query instance.
 	//
 	// ProtectedQueryIdentifier is a required field
-	ProtectedQueryIdentifier *string `location:"uri" locationName:"protectedQueryIdentifier" min:"1" type:"string" required:"true"`
+	ProtectedQueryIdentifier *string `location:"uri" locationName:"protectedQueryIdentifier" min:"36" type:"string" required:"true"`
 
 	// The target status of a query. Used to update the execution status of a currently
 	// running query.
@@ -11292,8 +21235,8 @@ func (s *UpdateProtectedQueryInput) Validate() error {
 	if s.ProtectedQueryIdentifier == nil {
 		invalidParams.Add(request.NewErrParamRequired("ProtectedQueryIdentifier"))
 	}
-	if s.ProtectedQueryIdentifier != nil && len(*s.ProtectedQueryIdentifier) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("ProtectedQueryIdentifier", 1))
+	if s.ProtectedQueryIdentifier != nil && len(*s.ProtectedQueryIdentifier) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ProtectedQueryIdentifier", 36))
 	}
 	if s.TargetStatus == nil {
 		invalidParams.Add(request.NewErrParamRequired("TargetStatus"))
@@ -11524,6 +21467,18 @@ func AggregationType_Values() []string {
 }
 
 const (
+	// AnalysisFormatSql is a AnalysisFormat enum value
+	AnalysisFormatSql = "SQL"
+)
+
+// AnalysisFormat_Values returns all elements of the AnalysisFormat enum
+func AnalysisFormat_Values() []string {
+	return []string{
+		AnalysisFormatSql,
+	}
+}
+
+const (
 	// AnalysisMethodDirectQuery is a AnalysisMethod enum value
 	AnalysisMethodDirectQuery = "DIRECT_QUERY"
 )
@@ -11541,6 +21496,9 @@ const (
 
 	// AnalysisRuleTypeList is a AnalysisRuleType enum value
 	AnalysisRuleTypeList = "LIST"
+
+	// AnalysisRuleTypeCustom is a AnalysisRuleType enum value
+	AnalysisRuleTypeCustom = "CUSTOM"
 )
 
 // AnalysisRuleType_Values returns all elements of the AnalysisRuleType enum
@@ -11548,6 +21506,39 @@ func AnalysisRuleType_Values() []string {
 	return []string{
 		AnalysisRuleTypeAggregation,
 		AnalysisRuleTypeList,
+		AnalysisRuleTypeCustom,
+	}
+}
+
+const (
+	// AnalysisTemplateValidationStatusValid is a AnalysisTemplateValidationStatus enum value
+	AnalysisTemplateValidationStatusValid = "VALID"
+
+	// AnalysisTemplateValidationStatusInvalid is a AnalysisTemplateValidationStatus enum value
+	AnalysisTemplateValidationStatusInvalid = "INVALID"
+
+	// AnalysisTemplateValidationStatusUnableToValidate is a AnalysisTemplateValidationStatus enum value
+	AnalysisTemplateValidationStatusUnableToValidate = "UNABLE_TO_VALIDATE"
+)
+
+// AnalysisTemplateValidationStatus_Values returns all elements of the AnalysisTemplateValidationStatus enum
+func AnalysisTemplateValidationStatus_Values() []string {
+	return []string{
+		AnalysisTemplateValidationStatusValid,
+		AnalysisTemplateValidationStatusInvalid,
+		AnalysisTemplateValidationStatusUnableToValidate,
+	}
+}
+
+const (
+	// AnalysisTemplateValidationTypeDifferentialPrivacy is a AnalysisTemplateValidationType enum value
+	AnalysisTemplateValidationTypeDifferentialPrivacy = "DIFFERENTIAL_PRIVACY"
+)
+
+// AnalysisTemplateValidationType_Values returns all elements of the AnalysisTemplateValidationType enum
+func AnalysisTemplateValidationType_Values() []string {
+	return []string{
+		AnalysisTemplateValidationTypeDifferentialPrivacy,
 	}
 }
 
@@ -11573,6 +21564,9 @@ const (
 
 	// ConfiguredTableAnalysisRuleTypeList is a ConfiguredTableAnalysisRuleType enum value
 	ConfiguredTableAnalysisRuleTypeList = "LIST"
+
+	// ConfiguredTableAnalysisRuleTypeCustom is a ConfiguredTableAnalysisRuleType enum value
+	ConfiguredTableAnalysisRuleTypeCustom = "CUSTOM"
 )
 
 // ConfiguredTableAnalysisRuleType_Values returns all elements of the ConfiguredTableAnalysisRuleType enum
@@ -11580,6 +21574,7 @@ func ConfiguredTableAnalysisRuleType_Values() []string {
 	return []string{
 		ConfiguredTableAnalysisRuleTypeAggregation,
 		ConfiguredTableAnalysisRuleTypeList,
+		ConfiguredTableAnalysisRuleTypeCustom,
 	}
 }
 
@@ -11604,6 +21599,34 @@ func ConflictExceptionReason_Values() []string {
 }
 
 const (
+	// DifferentialPrivacyAggregationTypeAvg is a DifferentialPrivacyAggregationType enum value
+	DifferentialPrivacyAggregationTypeAvg = "AVG"
+
+	// DifferentialPrivacyAggregationTypeCount is a DifferentialPrivacyAggregationType enum value
+	DifferentialPrivacyAggregationTypeCount = "COUNT"
+
+	// DifferentialPrivacyAggregationTypeCountDistinct is a DifferentialPrivacyAggregationType enum value
+	DifferentialPrivacyAggregationTypeCountDistinct = "COUNT_DISTINCT"
+
+	// DifferentialPrivacyAggregationTypeSum is a DifferentialPrivacyAggregationType enum value
+	DifferentialPrivacyAggregationTypeSum = "SUM"
+
+	// DifferentialPrivacyAggregationTypeStddev is a DifferentialPrivacyAggregationType enum value
+	DifferentialPrivacyAggregationTypeStddev = "STDDEV"
+)
+
+// DifferentialPrivacyAggregationType_Values returns all elements of the DifferentialPrivacyAggregationType enum
+func DifferentialPrivacyAggregationType_Values() []string {
+	return []string{
+		DifferentialPrivacyAggregationTypeAvg,
+		DifferentialPrivacyAggregationTypeCount,
+		DifferentialPrivacyAggregationTypeCountDistinct,
+		DifferentialPrivacyAggregationTypeSum,
+		DifferentialPrivacyAggregationTypeStddev,
+	}
+}
+
+const (
 	// FilterableMemberStatusInvited is a FilterableMemberStatus enum value
 	FilterableMemberStatusInvited = "INVITED"
 
@@ -11616,6 +21639,22 @@ func FilterableMemberStatus_Values() []string {
 	return []string{
 		FilterableMemberStatusInvited,
 		FilterableMemberStatusActive,
+	}
+}
+
+const (
+	// JoinOperatorOr is a JoinOperator enum value
+	JoinOperatorOr = "OR"
+
+	// JoinOperatorAnd is a JoinOperator enum value
+	JoinOperatorAnd = "AND"
+)
+
+// JoinOperator_Values returns all elements of the JoinOperator enum
+func JoinOperator_Values() []string {
+	return []string{
+		JoinOperatorOr,
+		JoinOperatorAnd,
 	}
 }
 
@@ -11708,6 +21747,102 @@ func MembershipStatus_Values() []string {
 }
 
 const (
+	// ParameterTypeSmallint is a ParameterType enum value
+	ParameterTypeSmallint = "SMALLINT"
+
+	// ParameterTypeInteger is a ParameterType enum value
+	ParameterTypeInteger = "INTEGER"
+
+	// ParameterTypeBigint is a ParameterType enum value
+	ParameterTypeBigint = "BIGINT"
+
+	// ParameterTypeDecimal is a ParameterType enum value
+	ParameterTypeDecimal = "DECIMAL"
+
+	// ParameterTypeReal is a ParameterType enum value
+	ParameterTypeReal = "REAL"
+
+	// ParameterTypeDoublePrecision is a ParameterType enum value
+	ParameterTypeDoublePrecision = "DOUBLE_PRECISION"
+
+	// ParameterTypeBoolean is a ParameterType enum value
+	ParameterTypeBoolean = "BOOLEAN"
+
+	// ParameterTypeChar is a ParameterType enum value
+	ParameterTypeChar = "CHAR"
+
+	// ParameterTypeVarchar is a ParameterType enum value
+	ParameterTypeVarchar = "VARCHAR"
+
+	// ParameterTypeDate is a ParameterType enum value
+	ParameterTypeDate = "DATE"
+
+	// ParameterTypeTimestamp is a ParameterType enum value
+	ParameterTypeTimestamp = "TIMESTAMP"
+
+	// ParameterTypeTimestamptz is a ParameterType enum value
+	ParameterTypeTimestamptz = "TIMESTAMPTZ"
+
+	// ParameterTypeTime is a ParameterType enum value
+	ParameterTypeTime = "TIME"
+
+	// ParameterTypeTimetz is a ParameterType enum value
+	ParameterTypeTimetz = "TIMETZ"
+
+	// ParameterTypeVarbyte is a ParameterType enum value
+	ParameterTypeVarbyte = "VARBYTE"
+)
+
+// ParameterType_Values returns all elements of the ParameterType enum
+func ParameterType_Values() []string {
+	return []string{
+		ParameterTypeSmallint,
+		ParameterTypeInteger,
+		ParameterTypeBigint,
+		ParameterTypeDecimal,
+		ParameterTypeReal,
+		ParameterTypeDoublePrecision,
+		ParameterTypeBoolean,
+		ParameterTypeChar,
+		ParameterTypeVarchar,
+		ParameterTypeDate,
+		ParameterTypeTimestamp,
+		ParameterTypeTimestamptz,
+		ParameterTypeTime,
+		ParameterTypeTimetz,
+		ParameterTypeVarbyte,
+	}
+}
+
+const (
+	// PrivacyBudgetTemplateAutoRefreshCalendarMonth is a PrivacyBudgetTemplateAutoRefresh enum value
+	PrivacyBudgetTemplateAutoRefreshCalendarMonth = "CALENDAR_MONTH"
+
+	// PrivacyBudgetTemplateAutoRefreshNone is a PrivacyBudgetTemplateAutoRefresh enum value
+	PrivacyBudgetTemplateAutoRefreshNone = "NONE"
+)
+
+// PrivacyBudgetTemplateAutoRefresh_Values returns all elements of the PrivacyBudgetTemplateAutoRefresh enum
+func PrivacyBudgetTemplateAutoRefresh_Values() []string {
+	return []string{
+		PrivacyBudgetTemplateAutoRefreshCalendarMonth,
+		PrivacyBudgetTemplateAutoRefreshNone,
+	}
+}
+
+const (
+	// PrivacyBudgetTypeDifferentialPrivacy is a PrivacyBudgetType enum value
+	PrivacyBudgetTypeDifferentialPrivacy = "DIFFERENTIAL_PRIVACY"
+)
+
+// PrivacyBudgetType_Values returns all elements of the PrivacyBudgetType enum
+func PrivacyBudgetType_Values() []string {
+	return []string{
+		PrivacyBudgetTypeDifferentialPrivacy,
+	}
+}
+
+const (
 	// ProtectedQueryStatusSubmitted is a ProtectedQueryStatus enum value
 	ProtectedQueryStatusSubmitted = "SUBMITTED"
 
@@ -11796,17 +21931,35 @@ func ResultFormat_Values() []string {
 }
 
 const (
-	// ScalarFunctionsTrunc is a ScalarFunctions enum value
-	ScalarFunctionsTrunc = "TRUNC"
-
 	// ScalarFunctionsAbs is a ScalarFunctions enum value
 	ScalarFunctionsAbs = "ABS"
+
+	// ScalarFunctionsCast is a ScalarFunctions enum value
+	ScalarFunctionsCast = "CAST"
 
 	// ScalarFunctionsCeiling is a ScalarFunctions enum value
 	ScalarFunctionsCeiling = "CEILING"
 
+	// ScalarFunctionsCoalesce is a ScalarFunctions enum value
+	ScalarFunctionsCoalesce = "COALESCE"
+
+	// ScalarFunctionsConvert is a ScalarFunctions enum value
+	ScalarFunctionsConvert = "CONVERT"
+
+	// ScalarFunctionsCurrentDate is a ScalarFunctions enum value
+	ScalarFunctionsCurrentDate = "CURRENT_DATE"
+
+	// ScalarFunctionsDateadd is a ScalarFunctions enum value
+	ScalarFunctionsDateadd = "DATEADD"
+
+	// ScalarFunctionsExtract is a ScalarFunctions enum value
+	ScalarFunctionsExtract = "EXTRACT"
+
 	// ScalarFunctionsFloor is a ScalarFunctions enum value
 	ScalarFunctionsFloor = "FLOOR"
+
+	// ScalarFunctionsGetdate is a ScalarFunctions enum value
+	ScalarFunctionsGetdate = "GETDATE"
 
 	// ScalarFunctionsLn is a ScalarFunctions enum value
 	ScalarFunctionsLn = "LN"
@@ -11814,44 +21967,122 @@ const (
 	// ScalarFunctionsLog is a ScalarFunctions enum value
 	ScalarFunctionsLog = "LOG"
 
-	// ScalarFunctionsRound is a ScalarFunctions enum value
-	ScalarFunctionsRound = "ROUND"
-
-	// ScalarFunctionsSqrt is a ScalarFunctions enum value
-	ScalarFunctionsSqrt = "SQRT"
-
-	// ScalarFunctionsCast is a ScalarFunctions enum value
-	ScalarFunctionsCast = "CAST"
-
 	// ScalarFunctionsLower is a ScalarFunctions enum value
 	ScalarFunctionsLower = "LOWER"
+
+	// ScalarFunctionsRound is a ScalarFunctions enum value
+	ScalarFunctionsRound = "ROUND"
 
 	// ScalarFunctionsRtrim is a ScalarFunctions enum value
 	ScalarFunctionsRtrim = "RTRIM"
 
+	// ScalarFunctionsSqrt is a ScalarFunctions enum value
+	ScalarFunctionsSqrt = "SQRT"
+
+	// ScalarFunctionsSubstring is a ScalarFunctions enum value
+	ScalarFunctionsSubstring = "SUBSTRING"
+
+	// ScalarFunctionsToChar is a ScalarFunctions enum value
+	ScalarFunctionsToChar = "TO_CHAR"
+
+	// ScalarFunctionsToDate is a ScalarFunctions enum value
+	ScalarFunctionsToDate = "TO_DATE"
+
+	// ScalarFunctionsToNumber is a ScalarFunctions enum value
+	ScalarFunctionsToNumber = "TO_NUMBER"
+
+	// ScalarFunctionsToTimestamp is a ScalarFunctions enum value
+	ScalarFunctionsToTimestamp = "TO_TIMESTAMP"
+
+	// ScalarFunctionsTrim is a ScalarFunctions enum value
+	ScalarFunctionsTrim = "TRIM"
+
+	// ScalarFunctionsTrunc is a ScalarFunctions enum value
+	ScalarFunctionsTrunc = "TRUNC"
+
 	// ScalarFunctionsUpper is a ScalarFunctions enum value
 	ScalarFunctionsUpper = "UPPER"
-
-	// ScalarFunctionsCoalesce is a ScalarFunctions enum value
-	ScalarFunctionsCoalesce = "COALESCE"
 )
 
 // ScalarFunctions_Values returns all elements of the ScalarFunctions enum
 func ScalarFunctions_Values() []string {
 	return []string{
-		ScalarFunctionsTrunc,
 		ScalarFunctionsAbs,
+		ScalarFunctionsCast,
 		ScalarFunctionsCeiling,
+		ScalarFunctionsCoalesce,
+		ScalarFunctionsConvert,
+		ScalarFunctionsCurrentDate,
+		ScalarFunctionsDateadd,
+		ScalarFunctionsExtract,
 		ScalarFunctionsFloor,
+		ScalarFunctionsGetdate,
 		ScalarFunctionsLn,
 		ScalarFunctionsLog,
-		ScalarFunctionsRound,
-		ScalarFunctionsSqrt,
-		ScalarFunctionsCast,
 		ScalarFunctionsLower,
+		ScalarFunctionsRound,
 		ScalarFunctionsRtrim,
+		ScalarFunctionsSqrt,
+		ScalarFunctionsSubstring,
+		ScalarFunctionsToChar,
+		ScalarFunctionsToDate,
+		ScalarFunctionsToNumber,
+		ScalarFunctionsToTimestamp,
+		ScalarFunctionsTrim,
+		ScalarFunctionsTrunc,
 		ScalarFunctionsUpper,
-		ScalarFunctionsCoalesce,
+	}
+}
+
+const (
+	// SchemaConfigurationDifferentialPrivacy is a SchemaConfiguration enum value
+	SchemaConfigurationDifferentialPrivacy = "DIFFERENTIAL_PRIVACY"
+)
+
+// SchemaConfiguration_Values returns all elements of the SchemaConfiguration enum
+func SchemaConfiguration_Values() []string {
+	return []string{
+		SchemaConfigurationDifferentialPrivacy,
+	}
+}
+
+const (
+	// SchemaStatusReady is a SchemaStatus enum value
+	SchemaStatusReady = "READY"
+
+	// SchemaStatusNotReady is a SchemaStatus enum value
+	SchemaStatusNotReady = "NOT_READY"
+)
+
+// SchemaStatus_Values returns all elements of the SchemaStatus enum
+func SchemaStatus_Values() []string {
+	return []string{
+		SchemaStatusReady,
+		SchemaStatusNotReady,
+	}
+}
+
+const (
+	// SchemaStatusReasonCodeAnalysisRuleMissing is a SchemaStatusReasonCode enum value
+	SchemaStatusReasonCodeAnalysisRuleMissing = "ANALYSIS_RULE_MISSING"
+
+	// SchemaStatusReasonCodeAnalysisTemplatesNotConfigured is a SchemaStatusReasonCode enum value
+	SchemaStatusReasonCodeAnalysisTemplatesNotConfigured = "ANALYSIS_TEMPLATES_NOT_CONFIGURED"
+
+	// SchemaStatusReasonCodeAnalysisProvidersNotConfigured is a SchemaStatusReasonCode enum value
+	SchemaStatusReasonCodeAnalysisProvidersNotConfigured = "ANALYSIS_PROVIDERS_NOT_CONFIGURED"
+
+	// SchemaStatusReasonCodeDifferentialPrivacyPolicyNotConfigured is a SchemaStatusReasonCode enum value
+	SchemaStatusReasonCodeDifferentialPrivacyPolicyNotConfigured = "DIFFERENTIAL_PRIVACY_POLICY_NOT_CONFIGURED"
+)
+
+// SchemaStatusReasonCode_Values returns all elements of the SchemaStatusReasonCode enum
+func SchemaStatusReasonCode_Values() []string {
+	return []string{
+		SchemaStatusReasonCodeAnalysisRuleMissing,
+		SchemaStatusReasonCodeAnalysisTemplatesNotConfigured,
+		SchemaStatusReasonCodeAnalysisProvidersNotConfigured,
+		SchemaStatusReasonCodeDifferentialPrivacyPolicyNotConfigured,
 	}
 }
 
@@ -11888,6 +22119,9 @@ const (
 
 	// ValidationExceptionReasonInvalidQuery is a ValidationExceptionReason enum value
 	ValidationExceptionReasonInvalidQuery = "INVALID_QUERY"
+
+	// ValidationExceptionReasonIamSynchronizationDelay is a ValidationExceptionReason enum value
+	ValidationExceptionReasonIamSynchronizationDelay = "IAM_SYNCHRONIZATION_DELAY"
 )
 
 // ValidationExceptionReason_Values returns all elements of the ValidationExceptionReason enum
@@ -11896,5 +22130,6 @@ func ValidationExceptionReason_Values() []string {
 		ValidationExceptionReasonFieldValidationFailed,
 		ValidationExceptionReasonInvalidConfiguration,
 		ValidationExceptionReasonInvalidQuery,
+		ValidationExceptionReasonIamSynchronizationDelay,
 	}
 }

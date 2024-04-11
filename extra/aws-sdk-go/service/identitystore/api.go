@@ -28,14 +28,13 @@ const opCreateGroup = "CreateGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateGroupRequest method.
+//	req, resp := client.CreateGroupRequest(params)
 //
-//    // Example sending a request using the CreateGroupRequest method.
-//    req, resp := client.CreateGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/CreateGroup
 func (c *IdentityStore) CreateGroupRequest(input *CreateGroupInput) (req *request.Request, output *CreateGroupOutput) {
@@ -66,35 +65,36 @@ func (c *IdentityStore) CreateGroupRequest(input *CreateGroupInput) (req *reques
 // API operation CreateGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * ConflictException
-//   This request cannot be completed for one of the following reasons:
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//      * Performing the requested operation would violate an existing uniqueness
-//      claim in the identity store. Resolve the conflict before retrying this
-//      request.
+//   - ConflictException
+//     This request cannot be completed for one of the following reasons:
 //
-//      * The requested resource was being concurrently modified by another request.
+//   - Performing the requested operation would violate an existing uniqueness
+//     claim in the identity store. Resolve the conflict before retrying this
+//     request.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - The requested resource was being concurrently modified by another request.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause the number of users or groups in the identity store
-//   to exceed the maximum allowed.
+//   - ValidationException
+//     The request failed because it contains a syntax error.
+//
+//   - ServiceQuotaExceededException
+//     The request would cause the number of users or groups in the identity store
+//     to exceed the maximum allowed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/CreateGroup
 func (c *IdentityStore) CreateGroup(input *CreateGroupInput) (*CreateGroupOutput, error) {
@@ -134,14 +134,13 @@ const opCreateGroupMembership = "CreateGroupMembership"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateGroupMembershipRequest method.
+//	req, resp := client.CreateGroupMembershipRequest(params)
 //
-//    // Example sending a request using the CreateGroupMembershipRequest method.
-//    req, resp := client.CreateGroupMembershipRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/CreateGroupMembership
 func (c *IdentityStore) CreateGroupMembershipRequest(input *CreateGroupMembershipInput) (req *request.Request, output *CreateGroupMembershipOutput) {
@@ -173,35 +172,36 @@ func (c *IdentityStore) CreateGroupMembershipRequest(input *CreateGroupMembershi
 // API operation CreateGroupMembership for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * ConflictException
-//   This request cannot be completed for one of the following reasons:
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//      * Performing the requested operation would violate an existing uniqueness
-//      claim in the identity store. Resolve the conflict before retrying this
-//      request.
+//   - ConflictException
+//     This request cannot be completed for one of the following reasons:
 //
-//      * The requested resource was being concurrently modified by another request.
+//   - Performing the requested operation would violate an existing uniqueness
+//     claim in the identity store. Resolve the conflict before retrying this
+//     request.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - The requested resource was being concurrently modified by another request.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause the number of users or groups in the identity store
-//   to exceed the maximum allowed.
+//   - ValidationException
+//     The request failed because it contains a syntax error.
+//
+//   - ServiceQuotaExceededException
+//     The request would cause the number of users or groups in the identity store
+//     to exceed the maximum allowed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/CreateGroupMembership
 func (c *IdentityStore) CreateGroupMembership(input *CreateGroupMembershipInput) (*CreateGroupMembershipOutput, error) {
@@ -241,14 +241,13 @@ const opCreateUser = "CreateUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateUserRequest method.
+//	req, resp := client.CreateUserRequest(params)
 //
-//    // Example sending a request using the CreateUserRequest method.
-//    req, resp := client.CreateUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/CreateUser
 func (c *IdentityStore) CreateUserRequest(input *CreateUserInput) (req *request.Request, output *CreateUserOutput) {
@@ -279,35 +278,36 @@ func (c *IdentityStore) CreateUserRequest(input *CreateUserInput) (req *request.
 // API operation CreateUser for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * ConflictException
-//   This request cannot be completed for one of the following reasons:
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//      * Performing the requested operation would violate an existing uniqueness
-//      claim in the identity store. Resolve the conflict before retrying this
-//      request.
+//   - ConflictException
+//     This request cannot be completed for one of the following reasons:
 //
-//      * The requested resource was being concurrently modified by another request.
+//   - Performing the requested operation would violate an existing uniqueness
+//     claim in the identity store. Resolve the conflict before retrying this
+//     request.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - The requested resource was being concurrently modified by another request.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause the number of users or groups in the identity store
-//   to exceed the maximum allowed.
+//   - ValidationException
+//     The request failed because it contains a syntax error.
+//
+//   - ServiceQuotaExceededException
+//     The request would cause the number of users or groups in the identity store
+//     to exceed the maximum allowed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/CreateUser
 func (c *IdentityStore) CreateUser(input *CreateUserInput) (*CreateUserOutput, error) {
@@ -347,14 +347,13 @@ const opDeleteGroup = "DeleteGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteGroupRequest method.
+//	req, resp := client.DeleteGroupRequest(params)
 //
-//    // Example sending a request using the DeleteGroupRequest method.
-//    req, resp := client.DeleteGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DeleteGroup
 func (c *IdentityStore) DeleteGroupRequest(input *DeleteGroupInput) (req *request.Request, output *DeleteGroupOutput) {
@@ -386,31 +385,32 @@ func (c *IdentityStore) DeleteGroupRequest(input *DeleteGroupInput) (req *reques
 // API operation DeleteGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * ConflictException
-//   This request cannot be completed for one of the following reasons:
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//      * Performing the requested operation would violate an existing uniqueness
-//      claim in the identity store. Resolve the conflict before retrying this
-//      request.
+//   - ConflictException
+//     This request cannot be completed for one of the following reasons:
 //
-//      * The requested resource was being concurrently modified by another request.
+//   - Performing the requested operation would violate an existing uniqueness
+//     claim in the identity store. Resolve the conflict before retrying this
+//     request.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - The requested resource was being concurrently modified by another request.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DeleteGroup
 func (c *IdentityStore) DeleteGroup(input *DeleteGroupInput) (*DeleteGroupOutput, error) {
@@ -450,14 +450,13 @@ const opDeleteGroupMembership = "DeleteGroupMembership"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteGroupMembershipRequest method.
+//	req, resp := client.DeleteGroupMembershipRequest(params)
 //
-//    // Example sending a request using the DeleteGroupMembershipRequest method.
-//    req, resp := client.DeleteGroupMembershipRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DeleteGroupMembership
 func (c *IdentityStore) DeleteGroupMembershipRequest(input *DeleteGroupMembershipInput) (req *request.Request, output *DeleteGroupMembershipOutput) {
@@ -489,31 +488,32 @@ func (c *IdentityStore) DeleteGroupMembershipRequest(input *DeleteGroupMembershi
 // API operation DeleteGroupMembership for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * ConflictException
-//   This request cannot be completed for one of the following reasons:
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//      * Performing the requested operation would violate an existing uniqueness
-//      claim in the identity store. Resolve the conflict before retrying this
-//      request.
+//   - ConflictException
+//     This request cannot be completed for one of the following reasons:
 //
-//      * The requested resource was being concurrently modified by another request.
+//   - Performing the requested operation would violate an existing uniqueness
+//     claim in the identity store. Resolve the conflict before retrying this
+//     request.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - The requested resource was being concurrently modified by another request.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DeleteGroupMembership
 func (c *IdentityStore) DeleteGroupMembership(input *DeleteGroupMembershipInput) (*DeleteGroupMembershipOutput, error) {
@@ -553,14 +553,13 @@ const opDeleteUser = "DeleteUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteUserRequest method.
+//	req, resp := client.DeleteUserRequest(params)
 //
-//    // Example sending a request using the DeleteUserRequest method.
-//    req, resp := client.DeleteUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DeleteUser
 func (c *IdentityStore) DeleteUserRequest(input *DeleteUserInput) (req *request.Request, output *DeleteUserOutput) {
@@ -592,31 +591,32 @@ func (c *IdentityStore) DeleteUserRequest(input *DeleteUserInput) (req *request.
 // API operation DeleteUser for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * ConflictException
-//   This request cannot be completed for one of the following reasons:
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//      * Performing the requested operation would violate an existing uniqueness
-//      claim in the identity store. Resolve the conflict before retrying this
-//      request.
+//   - ConflictException
+//     This request cannot be completed for one of the following reasons:
 //
-//      * The requested resource was being concurrently modified by another request.
+//   - Performing the requested operation would violate an existing uniqueness
+//     claim in the identity store. Resolve the conflict before retrying this
+//     request.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - The requested resource was being concurrently modified by another request.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DeleteUser
 func (c *IdentityStore) DeleteUser(input *DeleteUserInput) (*DeleteUserOutput, error) {
@@ -656,14 +656,13 @@ const opDescribeGroup = "DescribeGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeGroupRequest method.
+//	req, resp := client.DescribeGroupRequest(params)
 //
-//    // Example sending a request using the DescribeGroupRequest method.
-//    req, resp := client.DescribeGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DescribeGroup
 func (c *IdentityStore) DescribeGroupRequest(input *DescribeGroupInput) (req *request.Request, output *DescribeGroupOutput) {
@@ -686,6 +685,10 @@ func (c *IdentityStore) DescribeGroupRequest(input *DescribeGroupInput) (req *re
 //
 // Retrieves the group metadata and attributes from GroupId in an identity store.
 //
+// If you have administrator access to a member account, you can use this API
+// from the member account. Read about member accounts (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+// in the Organizations User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -694,22 +697,23 @@ func (c *IdentityStore) DescribeGroupRequest(input *DescribeGroupInput) (req *re
 // API operation DescribeGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DescribeGroup
 func (c *IdentityStore) DescribeGroup(input *DescribeGroupInput) (*DescribeGroupOutput, error) {
@@ -749,14 +753,13 @@ const opDescribeGroupMembership = "DescribeGroupMembership"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeGroupMembershipRequest method.
+//	req, resp := client.DescribeGroupMembershipRequest(params)
 //
-//    // Example sending a request using the DescribeGroupMembershipRequest method.
-//    req, resp := client.DescribeGroupMembershipRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DescribeGroupMembership
 func (c *IdentityStore) DescribeGroupMembershipRequest(input *DescribeGroupMembershipInput) (req *request.Request, output *DescribeGroupMembershipOutput) {
@@ -780,6 +783,10 @@ func (c *IdentityStore) DescribeGroupMembershipRequest(input *DescribeGroupMembe
 // Retrieves membership metadata and attributes from MembershipId in an identity
 // store.
 //
+// If you have administrator access to a member account, you can use this API
+// from the member account. Read about member accounts (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+// in the Organizations User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -788,22 +795,23 @@ func (c *IdentityStore) DescribeGroupMembershipRequest(input *DescribeGroupMembe
 // API operation DescribeGroupMembership for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DescribeGroupMembership
 func (c *IdentityStore) DescribeGroupMembership(input *DescribeGroupMembershipInput) (*DescribeGroupMembershipOutput, error) {
@@ -843,14 +851,13 @@ const opDescribeUser = "DescribeUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeUserRequest method.
+//	req, resp := client.DescribeUserRequest(params)
 //
-//    // Example sending a request using the DescribeUserRequest method.
-//    req, resp := client.DescribeUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DescribeUser
 func (c *IdentityStore) DescribeUserRequest(input *DescribeUserInput) (req *request.Request, output *DescribeUserOutput) {
@@ -874,6 +881,10 @@ func (c *IdentityStore) DescribeUserRequest(input *DescribeUserInput) (req *requ
 // Retrieves the user metadata and attributes from the UserId in an identity
 // store.
 //
+// If you have administrator access to a member account, you can use this API
+// from the member account. Read about member accounts (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+// in the Organizations User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -882,22 +893,23 @@ func (c *IdentityStore) DescribeUserRequest(input *DescribeUserInput) (req *requ
 // API operation DescribeUser for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/DescribeUser
 func (c *IdentityStore) DescribeUser(input *DescribeUserInput) (*DescribeUserOutput, error) {
@@ -937,14 +949,13 @@ const opGetGroupId = "GetGroupId"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetGroupIdRequest method.
+//	req, resp := client.GetGroupIdRequest(params)
 //
-//    // Example sending a request using the GetGroupIdRequest method.
-//    req, resp := client.GetGroupIdRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/GetGroupId
 func (c *IdentityStore) GetGroupIdRequest(input *GetGroupIdInput) (req *request.Request, output *GetGroupIdOutput) {
@@ -967,6 +978,10 @@ func (c *IdentityStore) GetGroupIdRequest(input *GetGroupIdInput) (req *request.
 //
 // Retrieves GroupId in an identity store.
 //
+// If you have administrator access to a member account, you can use this API
+// from the member account. Read about member accounts (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+// in the Organizations User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -975,22 +990,23 @@ func (c *IdentityStore) GetGroupIdRequest(input *GetGroupIdInput) (req *request.
 // API operation GetGroupId for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/GetGroupId
 func (c *IdentityStore) GetGroupId(input *GetGroupIdInput) (*GetGroupIdOutput, error) {
@@ -1030,14 +1046,13 @@ const opGetGroupMembershipId = "GetGroupMembershipId"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetGroupMembershipIdRequest method.
+//	req, resp := client.GetGroupMembershipIdRequest(params)
 //
-//    // Example sending a request using the GetGroupMembershipIdRequest method.
-//    req, resp := client.GetGroupMembershipIdRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/GetGroupMembershipId
 func (c *IdentityStore) GetGroupMembershipIdRequest(input *GetGroupMembershipIdInput) (req *request.Request, output *GetGroupMembershipIdOutput) {
@@ -1060,6 +1075,10 @@ func (c *IdentityStore) GetGroupMembershipIdRequest(input *GetGroupMembershipIdI
 //
 // Retrieves the MembershipId in an identity store.
 //
+// If you have administrator access to a member account, you can use this API
+// from the member account. Read about member accounts (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+// in the Organizations User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1068,22 +1087,23 @@ func (c *IdentityStore) GetGroupMembershipIdRequest(input *GetGroupMembershipIdI
 // API operation GetGroupMembershipId for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/GetGroupMembershipId
 func (c *IdentityStore) GetGroupMembershipId(input *GetGroupMembershipIdInput) (*GetGroupMembershipIdOutput, error) {
@@ -1123,14 +1143,13 @@ const opGetUserId = "GetUserId"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetUserIdRequest method.
+//	req, resp := client.GetUserIdRequest(params)
 //
-//    // Example sending a request using the GetUserIdRequest method.
-//    req, resp := client.GetUserIdRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/GetUserId
 func (c *IdentityStore) GetUserIdRequest(input *GetUserIdInput) (req *request.Request, output *GetUserIdOutput) {
@@ -1153,6 +1172,10 @@ func (c *IdentityStore) GetUserIdRequest(input *GetUserIdInput) (req *request.Re
 //
 // Retrieves the UserId in an identity store.
 //
+// If you have administrator access to a member account, you can use this API
+// from the member account. Read about member accounts (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+// in the Organizations User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1161,22 +1184,23 @@ func (c *IdentityStore) GetUserIdRequest(input *GetUserIdInput) (req *request.Re
 // API operation GetUserId for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/GetUserId
 func (c *IdentityStore) GetUserId(input *GetUserIdInput) (*GetUserIdOutput, error) {
@@ -1216,14 +1240,13 @@ const opIsMemberInGroups = "IsMemberInGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the IsMemberInGroupsRequest method.
+//	req, resp := client.IsMemberInGroupsRequest(params)
 //
-//    // Example sending a request using the IsMemberInGroupsRequest method.
-//    req, resp := client.IsMemberInGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/IsMemberInGroups
 func (c *IdentityStore) IsMemberInGroupsRequest(input *IsMemberInGroupsInput) (req *request.Request, output *IsMemberInGroupsOutput) {
@@ -1247,6 +1270,10 @@ func (c *IdentityStore) IsMemberInGroupsRequest(input *IsMemberInGroupsInput) (r
 // Checks the user's membership in all requested groups and returns if the member
 // exists in all queried groups.
 //
+// If you have administrator access to a member account, you can use this API
+// from the member account. Read about member accounts (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+// in the Organizations User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1255,22 +1282,23 @@ func (c *IdentityStore) IsMemberInGroupsRequest(input *IsMemberInGroupsInput) (r
 // API operation IsMemberInGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/IsMemberInGroups
 func (c *IdentityStore) IsMemberInGroups(input *IsMemberInGroupsInput) (*IsMemberInGroupsOutput, error) {
@@ -1310,14 +1338,13 @@ const opListGroupMemberships = "ListGroupMemberships"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListGroupMembershipsRequest method.
+//	req, resp := client.ListGroupMembershipsRequest(params)
 //
-//    // Example sending a request using the ListGroupMembershipsRequest method.
-//    req, resp := client.ListGroupMembershipsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/ListGroupMemberships
 func (c *IdentityStore) ListGroupMembershipsRequest(input *ListGroupMembershipsInput) (req *request.Request, output *ListGroupMembershipsOutput) {
@@ -1347,6 +1374,10 @@ func (c *IdentityStore) ListGroupMembershipsRequest(input *ListGroupMembershipsI
 // For the specified group in the specified identity store, returns the list
 // of all GroupMembership objects and returns results in paginated form.
 //
+// If you have administrator access to a member account, you can use this API
+// from the member account. Read about member accounts (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+// in the Organizations User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1355,22 +1386,23 @@ func (c *IdentityStore) ListGroupMembershipsRequest(input *ListGroupMembershipsI
 // API operation ListGroupMemberships for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/ListGroupMemberships
 func (c *IdentityStore) ListGroupMemberships(input *ListGroupMembershipsInput) (*ListGroupMembershipsOutput, error) {
@@ -1402,15 +1434,14 @@ func (c *IdentityStore) ListGroupMembershipsWithContext(ctx aws.Context, input *
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListGroupMemberships operation.
-//    pageNum := 0
-//    err := client.ListGroupMembershipsPages(params,
-//        func(page *identitystore.ListGroupMembershipsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListGroupMemberships operation.
+//	pageNum := 0
+//	err := client.ListGroupMembershipsPages(params,
+//	    func(page *identitystore.ListGroupMembershipsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IdentityStore) ListGroupMembershipsPages(input *ListGroupMembershipsInput, fn func(*ListGroupMembershipsOutput, bool) bool) error {
 	return c.ListGroupMembershipsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1462,14 +1493,13 @@ const opListGroupMembershipsForMember = "ListGroupMembershipsForMember"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListGroupMembershipsForMemberRequest method.
+//	req, resp := client.ListGroupMembershipsForMemberRequest(params)
 //
-//    // Example sending a request using the ListGroupMembershipsForMemberRequest method.
-//    req, resp := client.ListGroupMembershipsForMemberRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/ListGroupMembershipsForMember
 func (c *IdentityStore) ListGroupMembershipsForMemberRequest(input *ListGroupMembershipsForMemberInput) (req *request.Request, output *ListGroupMembershipsForMemberOutput) {
@@ -1499,6 +1529,10 @@ func (c *IdentityStore) ListGroupMembershipsForMemberRequest(input *ListGroupMem
 // For the specified member in the specified identity store, returns the list
 // of all GroupMembership objects and returns results in paginated form.
 //
+// If you have administrator access to a member account, you can use this API
+// from the member account. Read about member accounts (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+// in the Organizations User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1507,22 +1541,23 @@ func (c *IdentityStore) ListGroupMembershipsForMemberRequest(input *ListGroupMem
 // API operation ListGroupMembershipsForMember for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/ListGroupMembershipsForMember
 func (c *IdentityStore) ListGroupMembershipsForMember(input *ListGroupMembershipsForMemberInput) (*ListGroupMembershipsForMemberOutput, error) {
@@ -1554,15 +1589,14 @@ func (c *IdentityStore) ListGroupMembershipsForMemberWithContext(ctx aws.Context
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListGroupMembershipsForMember operation.
-//    pageNum := 0
-//    err := client.ListGroupMembershipsForMemberPages(params,
-//        func(page *identitystore.ListGroupMembershipsForMemberOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListGroupMembershipsForMember operation.
+//	pageNum := 0
+//	err := client.ListGroupMembershipsForMemberPages(params,
+//	    func(page *identitystore.ListGroupMembershipsForMemberOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IdentityStore) ListGroupMembershipsForMemberPages(input *ListGroupMembershipsForMemberInput, fn func(*ListGroupMembershipsForMemberOutput, bool) bool) error {
 	return c.ListGroupMembershipsForMemberPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1614,14 +1648,13 @@ const opListGroups = "ListGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListGroupsRequest method.
+//	req, resp := client.ListGroupsRequest(params)
 //
-//    // Example sending a request using the ListGroupsRequest method.
-//    req, resp := client.ListGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/ListGroups
 func (c *IdentityStore) ListGroupsRequest(input *ListGroupsInput) (req *request.Request, output *ListGroupsOutput) {
@@ -1652,6 +1685,10 @@ func (c *IdentityStore) ListGroupsRequest(input *ListGroupsInput) (req *request.
 // Group objects. Filtering for a Group by the DisplayName attribute is deprecated.
 // Instead, use the GetGroupId API action.
 //
+// If you have administrator access to a member account, you can use this API
+// from the member account. Read about member accounts (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+// in the Organizations User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1660,22 +1697,23 @@ func (c *IdentityStore) ListGroupsRequest(input *ListGroupsInput) (req *request.
 // API operation ListGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/ListGroups
 func (c *IdentityStore) ListGroups(input *ListGroupsInput) (*ListGroupsOutput, error) {
@@ -1707,15 +1745,14 @@ func (c *IdentityStore) ListGroupsWithContext(ctx aws.Context, input *ListGroups
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListGroups operation.
-//    pageNum := 0
-//    err := client.ListGroupsPages(params,
-//        func(page *identitystore.ListGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListGroups operation.
+//	pageNum := 0
+//	err := client.ListGroupsPages(params,
+//	    func(page *identitystore.ListGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IdentityStore) ListGroupsPages(input *ListGroupsInput, fn func(*ListGroupsOutput, bool) bool) error {
 	return c.ListGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1767,14 +1804,13 @@ const opListUsers = "ListUsers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListUsersRequest method.
+//	req, resp := client.ListUsersRequest(params)
 //
-//    // Example sending a request using the ListUsersRequest method.
-//    req, resp := client.ListUsersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/ListUsers
 func (c *IdentityStore) ListUsersRequest(input *ListUsersInput) (req *request.Request, output *ListUsersOutput) {
@@ -1805,6 +1841,10 @@ func (c *IdentityStore) ListUsersRequest(input *ListUsersInput) (req *request.Re
 // User objects. Filtering for a User by the UserName attribute is deprecated.
 // Instead, use the GetUserId API action.
 //
+// If you have administrator access to a member account, you can use this API
+// from the member account. Read about member accounts (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html)
+// in the Organizations User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1813,22 +1853,23 @@ func (c *IdentityStore) ListUsersRequest(input *ListUsersInput) (req *request.Re
 // API operation ListUsers for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
+//
+//   - ValidationException
+//     The request failed because it contains a syntax error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/ListUsers
 func (c *IdentityStore) ListUsers(input *ListUsersInput) (*ListUsersOutput, error) {
@@ -1860,15 +1901,14 @@ func (c *IdentityStore) ListUsersWithContext(ctx aws.Context, input *ListUsersIn
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListUsers operation.
-//    pageNum := 0
-//    err := client.ListUsersPages(params,
-//        func(page *identitystore.ListUsersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListUsers operation.
+//	pageNum := 0
+//	err := client.ListUsersPages(params,
+//	    func(page *identitystore.ListUsersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IdentityStore) ListUsersPages(input *ListUsersInput, fn func(*ListUsersOutput, bool) bool) error {
 	return c.ListUsersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1920,14 +1960,13 @@ const opUpdateGroup = "UpdateGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateGroupRequest method.
+//	req, resp := client.UpdateGroupRequest(params)
 //
-//    // Example sending a request using the UpdateGroupRequest method.
-//    req, resp := client.UpdateGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/UpdateGroup
 func (c *IdentityStore) UpdateGroupRequest(input *UpdateGroupInput) (req *request.Request, output *UpdateGroupOutput) {
@@ -1960,35 +1999,36 @@ func (c *IdentityStore) UpdateGroupRequest(input *UpdateGroupInput) (req *reques
 // API operation UpdateGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * ConflictException
-//   This request cannot be completed for one of the following reasons:
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//      * Performing the requested operation would violate an existing uniqueness
-//      claim in the identity store. Resolve the conflict before retrying this
-//      request.
+//   - ConflictException
+//     This request cannot be completed for one of the following reasons:
 //
-//      * The requested resource was being concurrently modified by another request.
+//   - Performing the requested operation would violate an existing uniqueness
+//     claim in the identity store. Resolve the conflict before retrying this
+//     request.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - The requested resource was being concurrently modified by another request.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause the number of users or groups in the identity store
-//   to exceed the maximum allowed.
+//   - ValidationException
+//     The request failed because it contains a syntax error.
+//
+//   - ServiceQuotaExceededException
+//     The request would cause the number of users or groups in the identity store
+//     to exceed the maximum allowed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/UpdateGroup
 func (c *IdentityStore) UpdateGroup(input *UpdateGroupInput) (*UpdateGroupOutput, error) {
@@ -2028,14 +2068,13 @@ const opUpdateUser = "UpdateUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateUserRequest method.
+//	req, resp := client.UpdateUserRequest(params)
 //
-//    // Example sending a request using the UpdateUserRequest method.
-//    req, resp := client.UpdateUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/UpdateUser
 func (c *IdentityStore) UpdateUserRequest(input *UpdateUserInput) (req *request.Request, output *UpdateUserOutput) {
@@ -2068,35 +2107,36 @@ func (c *IdentityStore) UpdateUserRequest(input *UpdateUserInput) (req *request.
 // API operation UpdateUser for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Indicates that a requested resource is not found.
 //
-//   * ThrottlingException
-//   Indicates that the principal has crossed the throttling limits of the API
-//   operations.
+//   - ResourceNotFoundException
+//     Indicates that a requested resource is not found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Indicates that the principal has crossed the throttling limits of the API
+//     operations.
 //
-//   * ConflictException
-//   This request cannot be completed for one of the following reasons:
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//      * Performing the requested operation would violate an existing uniqueness
-//      claim in the identity store. Resolve the conflict before retrying this
-//      request.
+//   - ConflictException
+//     This request cannot be completed for one of the following reasons:
 //
-//      * The requested resource was being concurrently modified by another request.
+//   - Performing the requested operation would violate an existing uniqueness
+//     claim in the identity store. Resolve the conflict before retrying this
+//     request.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception
-//   or failure with an internal server.
+//   - The requested resource was being concurrently modified by another request.
 //
-//   * ValidationException
-//   The request failed because it contains a syntax error.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception
+//     or failure with an internal server.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause the number of users or groups in the identity store
-//   to exceed the maximum allowed.
+//   - ValidationException
+//     The request failed because it contains a syntax error.
+//
+//   - ServiceQuotaExceededException
+//     The request would cause the number of users or groups in the identity store
+//     to exceed the maximum allowed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/identitystore-2020-06-15/UpdateUser
 func (c *IdentityStore) UpdateUser(input *UpdateUserInput) (*UpdateUserOutput, error) {
@@ -2451,11 +2491,11 @@ func (s *AttributeOperation) SetAttributePath(v string) *AttributeOperation {
 
 // This request cannot be completed for one of the following reasons:
 //
-//    * Performing the requested operation would violate an existing uniqueness
-//    claim in the identity store. Resolve the conflict before retrying this
-//    request.
+//   - Performing the requested operation would violate an existing uniqueness
+//     claim in the identity store. Resolve the conflict before retrying this
+//     request.
 //
-//    * The requested resource was being concurrently modified by another request.
+//   - The requested resource was being concurrently modified by another request.
 type ConflictException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -2544,8 +2584,8 @@ type CreateGroupInput struct {
 	Description *string `min:"1" type:"string" sensitive:"true"`
 
 	// A string containing the name of the group. This value is commonly displayed
-	// when the group is referenced. "Administrator" and "AWSAdministrators" are
-	// reserved names and can't be used for users or groups.
+	// when the group is referenced. Administrator and AWSAdministrators are reserved
+	// names and can't be used for users or groups.
 	//
 	// DisplayName is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by CreateGroupInput's
@@ -2867,9 +2907,8 @@ type CreateUserInput struct {
 	// A unique string used to identify the user. The length limit is 128 characters.
 	// This value can consist of letters, accented characters, symbols, numbers,
 	// and punctuation. This value is specified at the time the user is created
-	// and stored as an attribute of the user object in the identity store. "Administrator"
-	// and "AWSAdministrators" are reserved names and can't be used for users or
-	// groups.
+	// and stored as an attribute of the user object in the identity store. Administrator
+	// and AWSAdministrators are reserved names and can't be used for users or groups.
 	//
 	// UserName is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by CreateUserInput's

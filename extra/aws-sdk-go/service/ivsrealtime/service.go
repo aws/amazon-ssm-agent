@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a IVSRealTime client from just a session.
-//     svc := ivsrealtime.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a IVSRealTime client with additional configuration
-//     svc := ivsrealtime.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a IVSRealTime client from just a session.
+//	svc := ivsrealtime.New(mySession)
+//
+//	// Create a IVSRealTime client with additional configuration
+//	svc := ivsrealtime.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *IVSRealTime {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

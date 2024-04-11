@@ -26,7 +26,6 @@ func parseTime(layout, value string) *time.Time {
 }
 
 // To create an application
-//
 // The following create-application example creates an application in AWS AppConfig.
 func ExampleAppConfig_CreateApplication_shared00() {
 	svc := appconfig.New(session.New())
@@ -41,6 +40,8 @@ func ExampleAppConfig_CreateApplication_shared00() {
 			switch aerr.Code() {
 			case appconfig.ErrCodeBadRequestException:
 				fmt.Println(appconfig.ErrCodeBadRequestException, aerr.Error())
+			case appconfig.ErrCodeServiceQuotaExceededException:
+				fmt.Println(appconfig.ErrCodeServiceQuotaExceededException, aerr.Error())
 			case appconfig.ErrCodeInternalServerException:
 				fmt.Println(appconfig.ErrCodeInternalServerException, aerr.Error())
 			default:
@@ -58,7 +59,6 @@ func ExampleAppConfig_CreateApplication_shared00() {
 }
 
 // To create a configuration profile
-//
 // The following create-configuration-profile example creates a configuration profile
 // using a configuration stored in Parameter Store, a capability of Systems Manager.
 func ExampleAppConfig_CreateConfigurationProfile_shared00() {
@@ -80,6 +80,8 @@ func ExampleAppConfig_CreateConfigurationProfile_shared00() {
 				fmt.Println(appconfig.ErrCodeResourceNotFoundException, aerr.Error())
 			case appconfig.ErrCodeInternalServerException:
 				fmt.Println(appconfig.ErrCodeInternalServerException, aerr.Error())
+			case appconfig.ErrCodeServiceQuotaExceededException:
+				fmt.Println(appconfig.ErrCodeServiceQuotaExceededException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -95,7 +97,6 @@ func ExampleAppConfig_CreateConfigurationProfile_shared00() {
 }
 
 // To create a deployment strategy
-//
 // The following create-deployment-strategy example creates a deployment strategy called
 // Example-Deployment that takes 15 minutes and deploys the configuration to 25% of
 // the application at a time. The strategy is also copied to an SSM Document.
@@ -114,6 +115,8 @@ func ExampleAppConfig_CreateDeploymentStrategy_shared00() {
 			switch aerr.Code() {
 			case appconfig.ErrCodeInternalServerException:
 				fmt.Println(appconfig.ErrCodeInternalServerException, aerr.Error())
+			case appconfig.ErrCodeServiceQuotaExceededException:
+				fmt.Println(appconfig.ErrCodeServiceQuotaExceededException, aerr.Error())
 			case appconfig.ErrCodeBadRequestException:
 				fmt.Println(appconfig.ErrCodeBadRequestException, aerr.Error())
 			default:
@@ -131,7 +134,6 @@ func ExampleAppConfig_CreateDeploymentStrategy_shared00() {
 }
 
 // To create an environment
-//
 // The following create-environment example creates an AWS AppConfig environment named
 // Example-Environment using the application you created using create-application
 func ExampleAppConfig_CreateEnvironment_shared00() {
@@ -151,6 +153,8 @@ func ExampleAppConfig_CreateEnvironment_shared00() {
 				fmt.Println(appconfig.ErrCodeResourceNotFoundException, aerr.Error())
 			case appconfig.ErrCodeBadRequestException:
 				fmt.Println(appconfig.ErrCodeBadRequestException, aerr.Error())
+			case appconfig.ErrCodeServiceQuotaExceededException:
+				fmt.Println(appconfig.ErrCodeServiceQuotaExceededException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -166,7 +170,6 @@ func ExampleAppConfig_CreateEnvironment_shared00() {
 }
 
 // To create a hosted configuration version
-//
 // The following create-hosted-configuration-version example creates a new configuration
 // in the AWS AppConfig configuration store.
 func ExampleAppConfig_CreateHostedConfigurationVersion_shared00() {
@@ -210,7 +213,6 @@ func ExampleAppConfig_CreateHostedConfigurationVersion_shared00() {
 }
 
 // To delete an application
-//
 // The following delete-application example deletes the specified application.
 func ExampleAppConfig_DeleteApplication_shared00() {
 	svc := appconfig.New(session.New())
@@ -243,7 +245,6 @@ func ExampleAppConfig_DeleteApplication_shared00() {
 }
 
 // To delete a configuration profile
-//
 // The following delete-configuration-profile example deletes the specified configuration
 // profile.
 func ExampleAppConfig_DeleteConfigurationProfile_shared00() {
@@ -280,7 +281,6 @@ func ExampleAppConfig_DeleteConfigurationProfile_shared00() {
 }
 
 // To delete a deployment strategy
-//
 // The following delete-deployment-strategy example deletes the specified deployment
 // strategy.
 func ExampleAppConfig_DeleteDeploymentStrategy_shared00() {
@@ -314,7 +314,6 @@ func ExampleAppConfig_DeleteDeploymentStrategy_shared00() {
 }
 
 // To delete an environment
-//
 // The following delete-environment example deletes the specified application environment.
 func ExampleAppConfig_DeleteEnvironment_shared00() {
 	svc := appconfig.New(session.New())
@@ -350,7 +349,6 @@ func ExampleAppConfig_DeleteEnvironment_shared00() {
 }
 
 // To delete a hosted configuration version
-//
 // The following delete-hosted-configuration-version example deletes a configuration
 // version hosted in the AWS AppConfig configuration store.
 func ExampleAppConfig_DeleteHostedConfigurationVersion_shared00() {
@@ -386,7 +384,6 @@ func ExampleAppConfig_DeleteHostedConfigurationVersion_shared00() {
 }
 
 // To list details of an application
-//
 // The following get-application example lists the details of the specified application.
 func ExampleAppConfig_GetApplication_shared00() {
 	svc := appconfig.New(session.New())
@@ -419,7 +416,6 @@ func ExampleAppConfig_GetApplication_shared00() {
 }
 
 // To retrieve configuration details
-//
 // The following get-configuration example returns the configuration details of the
 // example application. On subsequent calls to get-configuration, use the client-configuration-version
 // parameter to only update the configuration of your application if the version has
@@ -459,7 +455,6 @@ func ExampleAppConfig_GetConfiguration_shared00() {
 }
 
 // To retrieve configuration profile details
-//
 // The following get-configuration-profile example returns the details of the specified
 // configuration profile.
 func ExampleAppConfig_GetConfigurationProfile_shared00() {
@@ -494,7 +489,6 @@ func ExampleAppConfig_GetConfigurationProfile_shared00() {
 }
 
 // To retrieve deployment details
-//
 // The following get-deployment example lists details of the deployment to the application
 // in the specified environment and deployment.
 func ExampleAppConfig_GetDeployment_shared00() {
@@ -530,7 +524,6 @@ func ExampleAppConfig_GetDeployment_shared00() {
 }
 
 // To retrieve details of a deployment strategy
-//
 // The following get-deployment-strategy example lists the details of the specified
 // deployment strategy.
 func ExampleAppConfig_GetDeploymentStrategy_shared00() {
@@ -564,7 +557,6 @@ func ExampleAppConfig_GetDeploymentStrategy_shared00() {
 }
 
 // To retrieve environment details
-//
 // The following get-environment example returns the details and state of the specified
 // environment.
 func ExampleAppConfig_GetEnvironment_shared00() {
@@ -599,7 +591,6 @@ func ExampleAppConfig_GetEnvironment_shared00() {
 }
 
 // To retrieve hosted configuration details
-//
 // The following get-hosted-configuration-version example retrieves the configuration
 // details of the AWS AppConfig hosted configuration.
 func ExampleAppConfig_GetHostedConfigurationVersion_shared00() {
@@ -635,7 +626,6 @@ func ExampleAppConfig_GetHostedConfigurationVersion_shared00() {
 }
 
 // To list the available applications
-//
 // The following list-applications example lists the available applications in your
 // AWS account.
 func ExampleAppConfig_ListApplications_shared00() {
@@ -665,7 +655,6 @@ func ExampleAppConfig_ListApplications_shared00() {
 }
 
 // To list the available configuration profiles
-//
 // The following list-configuration-profiles example lists the available configuration
 // profiles for the specified application.
 func ExampleAppConfig_ListConfigurationProfiles_shared00() {
@@ -699,7 +688,6 @@ func ExampleAppConfig_ListConfigurationProfiles_shared00() {
 }
 
 // To list the available deployment strategies
-//
 // The following list-deployment-strategies example lists the available deployment strategies
 // in your AWS account.
 func ExampleAppConfig_ListDeploymentStrategies_shared00() {
@@ -729,7 +717,6 @@ func ExampleAppConfig_ListDeploymentStrategies_shared00() {
 }
 
 // To list the available deployments
-//
 // The following list-deployments example lists the available deployments in your AWS
 // account for the specified application and environment.
 func ExampleAppConfig_ListDeployments_shared00() {
@@ -764,7 +751,6 @@ func ExampleAppConfig_ListDeployments_shared00() {
 }
 
 // To list the available environments
-//
 // The following list-environments example lists the available environments in your
 // AWS account for the specified application.
 func ExampleAppConfig_ListEnvironments_shared00() {
@@ -798,7 +784,6 @@ func ExampleAppConfig_ListEnvironments_shared00() {
 }
 
 // To list the available hosted configuration versions
-//
 // The following list-hosted-configuration-versions example lists the configurations
 // versions hosted in the AWS AppConfig hosted configuration store for the specified
 // application and configuration profile.
@@ -834,7 +819,6 @@ func ExampleAppConfig_ListHostedConfigurationVersions_shared00() {
 }
 
 // To list the tags of an application
-//
 // The following list-tags-for-resource example lists the tags of a specified application.
 func ExampleAppConfig_ListTagsForResource_shared00() {
 	svc := appconfig.New(session.New())
@@ -867,7 +851,6 @@ func ExampleAppConfig_ListTagsForResource_shared00() {
 }
 
 // To start a configuration deployment
-//
 // The following start-deployment example starts a deployment to the application using
 // the specified environment, deployment strategy, and configuration profile.
 func ExampleAppConfig_StartDeployment_shared00() {
@@ -909,7 +892,6 @@ func ExampleAppConfig_StartDeployment_shared00() {
 }
 
 // To stop configuration deployment
-//
 // The following stop-deployment example stops the deployment of an application configuration
 // to the specified environment.
 func ExampleAppConfig_StopDeployment_shared00() {
@@ -945,7 +927,6 @@ func ExampleAppConfig_StopDeployment_shared00() {
 }
 
 // To tag an application
-//
 // The following tag-resource example tags an application resource.
 func ExampleAppConfig_TagResource_shared00() {
 	svc := appconfig.New(session.New())
@@ -981,7 +962,6 @@ func ExampleAppConfig_TagResource_shared00() {
 }
 
 // To remove a tag from an application
-//
 // The following untag-resource example removes the group1 tag from the specified application.
 func ExampleAppConfig_UntagResource_shared00() {
 	svc := appconfig.New(session.New())
@@ -1017,7 +997,6 @@ func ExampleAppConfig_UntagResource_shared00() {
 }
 
 // To update an application
-//
 // The following update-application example updates the name of the specified application.
 func ExampleAppConfig_UpdateApplication_shared00() {
 	svc := appconfig.New(session.New())
@@ -1052,7 +1031,6 @@ func ExampleAppConfig_UpdateApplication_shared00() {
 }
 
 // To update a configuration profile
-//
 // The following update-configuration-profile example updates the description of the
 // specified configuration profile.
 func ExampleAppConfig_UpdateConfigurationProfile_shared00() {
@@ -1088,7 +1066,6 @@ func ExampleAppConfig_UpdateConfigurationProfile_shared00() {
 }
 
 // To update a deployment strategy
-//
 // The following update-deployment-strategy example updates final bake time to 20 minutes
 // in the specified deployment strategy. ::
 func ExampleAppConfig_UpdateDeploymentStrategy_shared00() {
@@ -1123,7 +1100,6 @@ func ExampleAppConfig_UpdateDeploymentStrategy_shared00() {
 }
 
 // To update an environment
-//
 // The following update-environment example updates an environment's description.
 func ExampleAppConfig_UpdateEnvironment_shared00() {
 	svc := appconfig.New(session.New())
@@ -1158,7 +1134,6 @@ func ExampleAppConfig_UpdateEnvironment_shared00() {
 }
 
 // To validate a configuration
-//
 // The following validate-configuration example uses the validators in a configuration
 // profile to validate a configuration.
 func ExampleAppConfig_ValidateConfiguration_shared00() {

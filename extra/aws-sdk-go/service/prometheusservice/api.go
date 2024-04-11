@@ -29,14 +29,13 @@ const opCreateAlertManagerDefinition = "CreateAlertManagerDefinition"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAlertManagerDefinitionRequest method.
+//	req, resp := client.CreateAlertManagerDefinitionRequest(params)
 //
-//    // Example sending a request using the CreateAlertManagerDefinitionRequest method.
-//    req, resp := client.CreateAlertManagerDefinitionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/CreateAlertManagerDefinition
 func (c *PrometheusService) CreateAlertManagerDefinitionRequest(input *CreateAlertManagerDefinitionInput) (req *request.Request, output *CreateAlertManagerDefinitionOutput) {
@@ -57,7 +56,9 @@ func (c *PrometheusService) CreateAlertManagerDefinitionRequest(input *CreateAle
 
 // CreateAlertManagerDefinition API operation for Amazon Prometheus Service.
 //
-// Create an alert manager definition.
+// The CreateAlertManagerDefinition operation creates the alert manager definition
+// in a workspace. If a workspace already has an alert manager definition, don't
+// use this operation to update it. Instead, use PutAlertManagerDefinition.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -67,26 +68,28 @@ func (c *PrometheusService) CreateAlertManagerDefinitionRequest(input *CreateAle
 // API operation CreateAlertManagerDefinition for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ConflictException
+//     The request would cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
+//
+//   - ServiceQuotaExceededException
+//     Completing the request would cause a service quota to be exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/CreateAlertManagerDefinition
 func (c *PrometheusService) CreateAlertManagerDefinition(input *CreateAlertManagerDefinitionInput) (*CreateAlertManagerDefinitionOutput, error) {
@@ -126,14 +129,13 @@ const opCreateLoggingConfiguration = "CreateLoggingConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateLoggingConfigurationRequest method.
+//	req, resp := client.CreateLoggingConfigurationRequest(params)
 //
-//    // Example sending a request using the CreateLoggingConfigurationRequest method.
-//    req, resp := client.CreateLoggingConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/CreateLoggingConfiguration
 func (c *PrometheusService) CreateLoggingConfigurationRequest(input *CreateLoggingConfigurationInput) (req *request.Request, output *CreateLoggingConfigurationOutput) {
@@ -154,7 +156,9 @@ func (c *PrometheusService) CreateLoggingConfigurationRequest(input *CreateLoggi
 
 // CreateLoggingConfiguration API operation for Amazon Prometheus Service.
 //
-// Create logging configuration.
+// The CreateLoggingConfiguration operation creates a logging configuration
+// for the workspace. Use this operation to set the CloudWatch log group to
+// which the logs will be published to.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -164,17 +168,19 @@ func (c *PrometheusService) CreateLoggingConfigurationRequest(input *CreateLoggi
 // API operation CreateLoggingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/CreateLoggingConfiguration
 func (c *PrometheusService) CreateLoggingConfiguration(input *CreateLoggingConfigurationInput) (*CreateLoggingConfigurationOutput, error) {
@@ -214,14 +220,13 @@ const opCreateRuleGroupsNamespace = "CreateRuleGroupsNamespace"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRuleGroupsNamespaceRequest method.
+//	req, resp := client.CreateRuleGroupsNamespaceRequest(params)
 //
-//    // Example sending a request using the CreateRuleGroupsNamespaceRequest method.
-//    req, resp := client.CreateRuleGroupsNamespaceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/CreateRuleGroupsNamespace
 func (c *PrometheusService) CreateRuleGroupsNamespaceRequest(input *CreateRuleGroupsNamespaceInput) (req *request.Request, output *CreateRuleGroupsNamespaceOutput) {
@@ -242,7 +247,12 @@ func (c *PrometheusService) CreateRuleGroupsNamespaceRequest(input *CreateRuleGr
 
 // CreateRuleGroupsNamespace API operation for Amazon Prometheus Service.
 //
-// Create a rule group namespace.
+// The CreateRuleGroupsNamespace operation creates a rule groups namespace within
+// a workspace. A rule groups namespace is associated with exactly one rules
+// file. A workspace can have multiple rule groups namespaces.
+//
+// Use this operation only to create new rule groups namespaces. To update an
+// existing rule groups namespace, use PutRuleGroupsNamespace.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -252,26 +262,28 @@ func (c *PrometheusService) CreateRuleGroupsNamespaceRequest(input *CreateRuleGr
 // API operation CreateRuleGroupsNamespace for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ConflictException
+//     The request would cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
+//
+//   - ServiceQuotaExceededException
+//     Completing the request would cause a service quota to be exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/CreateRuleGroupsNamespace
 func (c *PrometheusService) CreateRuleGroupsNamespace(input *CreateRuleGroupsNamespaceInput) (*CreateRuleGroupsNamespaceOutput, error) {
@@ -295,6 +307,124 @@ func (c *PrometheusService) CreateRuleGroupsNamespaceWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
+const opCreateScraper = "CreateScraper"
+
+// CreateScraperRequest generates a "aws/request.Request" representing the
+// client's request for the CreateScraper operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateScraper for more information on using the CreateScraper
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateScraperRequest method.
+//	req, resp := client.CreateScraperRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/CreateScraper
+func (c *PrometheusService) CreateScraperRequest(input *CreateScraperInput) (req *request.Request, output *CreateScraperOutput) {
+	op := &request.Operation{
+		Name:       opCreateScraper,
+		HTTPMethod: "POST",
+		HTTPPath:   "/scrapers",
+	}
+
+	if input == nil {
+		input = &CreateScraperInput{}
+	}
+
+	output = &CreateScraperOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateScraper API operation for Amazon Prometheus Service.
+//
+// The CreateScraper operation creates a scraper to collect metrics. A scraper
+// pulls metrics from Prometheus-compatible sources within an Amazon EKS cluster,
+// and sends them to your Amazon Managed Service for Prometheus workspace. You
+// can configure the scraper to control what metrics are collected, and what
+// transformations are applied prior to sending them to your workspace.
+//
+// If needed, an IAM role will be created for you that gives Amazon Managed
+// Service for Prometheus access to the metrics in your cluster. For more information,
+// see Using roles for scraping metrics from EKS (https://docs.aws.amazon.com/prometheus/latest/userguide/using-service-linked-roles.html#using-service-linked-roles-prom-scraper)
+// in the Amazon Managed Service for Prometheus User Guide.
+//
+// You cannot update a scraper. If you want to change the configuration of the
+// scraper, create a new scraper and delete the old one.
+//
+// The scrapeConfiguration parameter contains the base64-encoded version of
+// the YAML configuration file.
+//
+// For more information about collectors, including what metrics are collected,
+// and how to configure the scraper, see Amazon Web Services managed collectors
+// (https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-collector.html)
+// in the Amazon Managed Service for Prometheus User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Prometheus Service's
+// API operation CreateScraper for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ConflictException
+//     The request would cause an inconsistent state.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
+//
+//   - ServiceQuotaExceededException
+//     Completing the request would cause a service quota to be exceeded.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/CreateScraper
+func (c *PrometheusService) CreateScraper(input *CreateScraperInput) (*CreateScraperOutput, error) {
+	req, out := c.CreateScraperRequest(input)
+	return out, req.Send()
+}
+
+// CreateScraperWithContext is the same as CreateScraper with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateScraper for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *PrometheusService) CreateScraperWithContext(ctx aws.Context, input *CreateScraperInput, opts ...request.Option) (*CreateScraperOutput, error) {
+	req, out := c.CreateScraperRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateWorkspace = "CreateWorkspace"
 
 // CreateWorkspaceRequest generates a "aws/request.Request" representing the
@@ -311,14 +441,13 @@ const opCreateWorkspace = "CreateWorkspace"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWorkspaceRequest method.
+//	req, resp := client.CreateWorkspaceRequest(params)
 //
-//    // Example sending a request using the CreateWorkspaceRequest method.
-//    req, resp := client.CreateWorkspaceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/CreateWorkspace
 func (c *PrometheusService) CreateWorkspaceRequest(input *CreateWorkspaceInput) (req *request.Request, output *CreateWorkspaceOutput) {
@@ -339,7 +468,9 @@ func (c *PrometheusService) CreateWorkspaceRequest(input *CreateWorkspaceInput) 
 
 // CreateWorkspace API operation for Amazon Prometheus Service.
 //
-// Creates a new AMP workspace.
+// Creates a Prometheus workspace. A workspace is a logical space dedicated
+// to the storage and querying of Prometheus metrics. You can have one or more
+// workspaces in each Region in your account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -349,23 +480,25 @@ func (c *PrometheusService) CreateWorkspaceRequest(input *CreateWorkspaceInput) 
 // API operation CreateWorkspace for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ConflictException
+//     The request would cause an inconsistent state.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
+//
+//   - ServiceQuotaExceededException
+//     Completing the request would cause a service quota to be exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/CreateWorkspace
 func (c *PrometheusService) CreateWorkspace(input *CreateWorkspaceInput) (*CreateWorkspaceOutput, error) {
@@ -405,14 +538,13 @@ const opDeleteAlertManagerDefinition = "DeleteAlertManagerDefinition"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAlertManagerDefinitionRequest method.
+//	req, resp := client.DeleteAlertManagerDefinitionRequest(params)
 //
-//    // Example sending a request using the DeleteAlertManagerDefinitionRequest method.
-//    req, resp := client.DeleteAlertManagerDefinitionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DeleteAlertManagerDefinition
 func (c *PrometheusService) DeleteAlertManagerDefinitionRequest(input *DeleteAlertManagerDefinitionInput) (req *request.Request, output *DeleteAlertManagerDefinitionOutput) {
@@ -434,7 +566,7 @@ func (c *PrometheusService) DeleteAlertManagerDefinitionRequest(input *DeleteAle
 
 // DeleteAlertManagerDefinition API operation for Amazon Prometheus Service.
 //
-// Deletes an alert manager definition.
+// Deletes the alert manager definition from a workspace.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -444,23 +576,25 @@ func (c *PrometheusService) DeleteAlertManagerDefinitionRequest(input *DeleteAle
 // API operation DeleteAlertManagerDefinition for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ConflictException
+//     The request would cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DeleteAlertManagerDefinition
 func (c *PrometheusService) DeleteAlertManagerDefinition(input *DeleteAlertManagerDefinitionInput) (*DeleteAlertManagerDefinitionOutput, error) {
@@ -500,14 +634,13 @@ const opDeleteLoggingConfiguration = "DeleteLoggingConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteLoggingConfigurationRequest method.
+//	req, resp := client.DeleteLoggingConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteLoggingConfigurationRequest method.
-//    req, resp := client.DeleteLoggingConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DeleteLoggingConfiguration
 func (c *PrometheusService) DeleteLoggingConfigurationRequest(input *DeleteLoggingConfigurationInput) (req *request.Request, output *DeleteLoggingConfigurationOutput) {
@@ -529,7 +662,7 @@ func (c *PrometheusService) DeleteLoggingConfigurationRequest(input *DeleteLoggi
 
 // DeleteLoggingConfiguration API operation for Amazon Prometheus Service.
 //
-// Delete logging configuration.
+// Deletes the logging configuration for a workspace.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -539,20 +672,22 @@ func (c *PrometheusService) DeleteLoggingConfigurationRequest(input *DeleteLoggi
 // API operation DeleteLoggingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ConflictException
+//     The request would cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DeleteLoggingConfiguration
 func (c *PrometheusService) DeleteLoggingConfiguration(input *DeleteLoggingConfigurationInput) (*DeleteLoggingConfigurationOutput, error) {
@@ -592,14 +727,13 @@ const opDeleteRuleGroupsNamespace = "DeleteRuleGroupsNamespace"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRuleGroupsNamespaceRequest method.
+//	req, resp := client.DeleteRuleGroupsNamespaceRequest(params)
 //
-//    // Example sending a request using the DeleteRuleGroupsNamespaceRequest method.
-//    req, resp := client.DeleteRuleGroupsNamespaceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DeleteRuleGroupsNamespace
 func (c *PrometheusService) DeleteRuleGroupsNamespaceRequest(input *DeleteRuleGroupsNamespaceInput) (req *request.Request, output *DeleteRuleGroupsNamespaceOutput) {
@@ -621,7 +755,7 @@ func (c *PrometheusService) DeleteRuleGroupsNamespaceRequest(input *DeleteRuleGr
 
 // DeleteRuleGroupsNamespace API operation for Amazon Prometheus Service.
 //
-// Delete a rule groups namespace.
+// Deletes one rule groups namespace and its associated rule groups definition.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -631,23 +765,25 @@ func (c *PrometheusService) DeleteRuleGroupsNamespaceRequest(input *DeleteRuleGr
 // API operation DeleteRuleGroupsNamespace for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ConflictException
+//     The request would cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DeleteRuleGroupsNamespace
 func (c *PrometheusService) DeleteRuleGroupsNamespace(input *DeleteRuleGroupsNamespaceInput) (*DeleteRuleGroupsNamespaceOutput, error) {
@@ -671,6 +807,102 @@ func (c *PrometheusService) DeleteRuleGroupsNamespaceWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
+const opDeleteScraper = "DeleteScraper"
+
+// DeleteScraperRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteScraper operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteScraper for more information on using the DeleteScraper
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteScraperRequest method.
+//	req, resp := client.DeleteScraperRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DeleteScraper
+func (c *PrometheusService) DeleteScraperRequest(input *DeleteScraperInput) (req *request.Request, output *DeleteScraperOutput) {
+	op := &request.Operation{
+		Name:       opDeleteScraper,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/scrapers/{scraperId}",
+	}
+
+	if input == nil {
+		input = &DeleteScraperInput{}
+	}
+
+	output = &DeleteScraperOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteScraper API operation for Amazon Prometheus Service.
+//
+// The DeleteScraper operation deletes one scraper, and stops any metrics collection
+// that the scraper performs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Prometheus Service's
+// API operation DeleteScraper for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ConflictException
+//     The request would cause an inconsistent state.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DeleteScraper
+func (c *PrometheusService) DeleteScraper(input *DeleteScraperInput) (*DeleteScraperOutput, error) {
+	req, out := c.DeleteScraperRequest(input)
+	return out, req.Send()
+}
+
+// DeleteScraperWithContext is the same as DeleteScraper with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteScraper for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *PrometheusService) DeleteScraperWithContext(ctx aws.Context, input *DeleteScraperInput, opts ...request.Option) (*DeleteScraperOutput, error) {
+	req, out := c.DeleteScraperRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteWorkspace = "DeleteWorkspace"
 
 // DeleteWorkspaceRequest generates a "aws/request.Request" representing the
@@ -687,14 +919,13 @@ const opDeleteWorkspace = "DeleteWorkspace"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWorkspaceRequest method.
+//	req, resp := client.DeleteWorkspaceRequest(params)
 //
-//    // Example sending a request using the DeleteWorkspaceRequest method.
-//    req, resp := client.DeleteWorkspaceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DeleteWorkspace
 func (c *PrometheusService) DeleteWorkspaceRequest(input *DeleteWorkspaceInput) (req *request.Request, output *DeleteWorkspaceOutput) {
@@ -716,7 +947,10 @@ func (c *PrometheusService) DeleteWorkspaceRequest(input *DeleteWorkspaceInput) 
 
 // DeleteWorkspace API operation for Amazon Prometheus Service.
 //
-// Deletes an AMP workspace.
+// Deletes an existing workspace.
+//
+// When you delete a workspace, the data that has been ingested into it is not
+// immediately deleted. It will be permanently deleted within one month.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -726,23 +960,25 @@ func (c *PrometheusService) DeleteWorkspaceRequest(input *DeleteWorkspaceInput) 
 // API operation DeleteWorkspace for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ConflictException
+//     The request would cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DeleteWorkspace
 func (c *PrometheusService) DeleteWorkspace(input *DeleteWorkspaceInput) (*DeleteWorkspaceOutput, error) {
@@ -782,14 +1018,13 @@ const opDescribeAlertManagerDefinition = "DescribeAlertManagerDefinition"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeAlertManagerDefinitionRequest method.
+//	req, resp := client.DescribeAlertManagerDefinitionRequest(params)
 //
-//    // Example sending a request using the DescribeAlertManagerDefinitionRequest method.
-//    req, resp := client.DescribeAlertManagerDefinitionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DescribeAlertManagerDefinition
 func (c *PrometheusService) DescribeAlertManagerDefinitionRequest(input *DescribeAlertManagerDefinitionInput) (req *request.Request, output *DescribeAlertManagerDefinitionOutput) {
@@ -810,7 +1045,7 @@ func (c *PrometheusService) DescribeAlertManagerDefinitionRequest(input *Describ
 
 // DescribeAlertManagerDefinition API operation for Amazon Prometheus Service.
 //
-// Describes an alert manager definition.
+// Retrieves the full information about the alert manager definition for a workspace.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -820,20 +1055,22 @@ func (c *PrometheusService) DescribeAlertManagerDefinitionRequest(input *Describ
 // API operation DescribeAlertManagerDefinition for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DescribeAlertManagerDefinition
 func (c *PrometheusService) DescribeAlertManagerDefinition(input *DescribeAlertManagerDefinitionInput) (*DescribeAlertManagerDefinitionOutput, error) {
@@ -873,14 +1110,13 @@ const opDescribeLoggingConfiguration = "DescribeLoggingConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeLoggingConfigurationRequest method.
+//	req, resp := client.DescribeLoggingConfigurationRequest(params)
 //
-//    // Example sending a request using the DescribeLoggingConfigurationRequest method.
-//    req, resp := client.DescribeLoggingConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DescribeLoggingConfiguration
 func (c *PrometheusService) DescribeLoggingConfigurationRequest(input *DescribeLoggingConfigurationInput) (req *request.Request, output *DescribeLoggingConfigurationOutput) {
@@ -901,7 +1137,8 @@ func (c *PrometheusService) DescribeLoggingConfigurationRequest(input *DescribeL
 
 // DescribeLoggingConfiguration API operation for Amazon Prometheus Service.
 //
-// Describes logging configuration.
+// Returns complete information about the current logging configuration of the
+// workspace.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -911,17 +1148,19 @@ func (c *PrometheusService) DescribeLoggingConfigurationRequest(input *DescribeL
 // API operation DescribeLoggingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DescribeLoggingConfiguration
 func (c *PrometheusService) DescribeLoggingConfiguration(input *DescribeLoggingConfigurationInput) (*DescribeLoggingConfigurationOutput, error) {
@@ -961,14 +1200,13 @@ const opDescribeRuleGroupsNamespace = "DescribeRuleGroupsNamespace"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeRuleGroupsNamespaceRequest method.
+//	req, resp := client.DescribeRuleGroupsNamespaceRequest(params)
 //
-//    // Example sending a request using the DescribeRuleGroupsNamespaceRequest method.
-//    req, resp := client.DescribeRuleGroupsNamespaceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DescribeRuleGroupsNamespace
 func (c *PrometheusService) DescribeRuleGroupsNamespaceRequest(input *DescribeRuleGroupsNamespaceInput) (req *request.Request, output *DescribeRuleGroupsNamespaceOutput) {
@@ -989,7 +1227,8 @@ func (c *PrometheusService) DescribeRuleGroupsNamespaceRequest(input *DescribeRu
 
 // DescribeRuleGroupsNamespace API operation for Amazon Prometheus Service.
 //
-// Describe a rule groups namespace.
+// Returns complete information about one rule groups namespace. To retrieve
+// a list of rule groups namespaces, use ListRuleGroupsNamespaces.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -999,20 +1238,22 @@ func (c *PrometheusService) DescribeRuleGroupsNamespaceRequest(input *DescribeRu
 // API operation DescribeRuleGroupsNamespace for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DescribeRuleGroupsNamespace
 func (c *PrometheusService) DescribeRuleGroupsNamespace(input *DescribeRuleGroupsNamespaceInput) (*DescribeRuleGroupsNamespaceOutput, error) {
@@ -1036,6 +1277,98 @@ func (c *PrometheusService) DescribeRuleGroupsNamespaceWithContext(ctx aws.Conte
 	return out, req.Send()
 }
 
+const opDescribeScraper = "DescribeScraper"
+
+// DescribeScraperRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeScraper operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeScraper for more information on using the DescribeScraper
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DescribeScraperRequest method.
+//	req, resp := client.DescribeScraperRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DescribeScraper
+func (c *PrometheusService) DescribeScraperRequest(input *DescribeScraperInput) (req *request.Request, output *DescribeScraperOutput) {
+	op := &request.Operation{
+		Name:       opDescribeScraper,
+		HTTPMethod: "GET",
+		HTTPPath:   "/scrapers/{scraperId}",
+	}
+
+	if input == nil {
+		input = &DescribeScraperInput{}
+	}
+
+	output = &DescribeScraperOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeScraper API operation for Amazon Prometheus Service.
+//
+// The DescribeScraper operation displays information about an existing scraper.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Prometheus Service's
+// API operation DescribeScraper for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DescribeScraper
+func (c *PrometheusService) DescribeScraper(input *DescribeScraperInput) (*DescribeScraperOutput, error) {
+	req, out := c.DescribeScraperRequest(input)
+	return out, req.Send()
+}
+
+// DescribeScraperWithContext is the same as DescribeScraper with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeScraper for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *PrometheusService) DescribeScraperWithContext(ctx aws.Context, input *DescribeScraperInput, opts ...request.Option) (*DescribeScraperOutput, error) {
+	req, out := c.DescribeScraperRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeWorkspace = "DescribeWorkspace"
 
 // DescribeWorkspaceRequest generates a "aws/request.Request" representing the
@@ -1052,14 +1385,13 @@ const opDescribeWorkspace = "DescribeWorkspace"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeWorkspaceRequest method.
+//	req, resp := client.DescribeWorkspaceRequest(params)
 //
-//    // Example sending a request using the DescribeWorkspaceRequest method.
-//    req, resp := client.DescribeWorkspaceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DescribeWorkspace
 func (c *PrometheusService) DescribeWorkspaceRequest(input *DescribeWorkspaceInput) (req *request.Request, output *DescribeWorkspaceOutput) {
@@ -1080,7 +1412,7 @@ func (c *PrometheusService) DescribeWorkspaceRequest(input *DescribeWorkspaceInp
 
 // DescribeWorkspace API operation for Amazon Prometheus Service.
 //
-// Describes an existing AMP workspace.
+// Returns information about an existing workspace.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1090,20 +1422,22 @@ func (c *PrometheusService) DescribeWorkspaceRequest(input *DescribeWorkspaceInp
 // API operation DescribeWorkspace for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/DescribeWorkspace
 func (c *PrometheusService) DescribeWorkspace(input *DescribeWorkspaceInput) (*DescribeWorkspaceOutput, error) {
@@ -1127,6 +1461,92 @@ func (c *PrometheusService) DescribeWorkspaceWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opGetDefaultScraperConfiguration = "GetDefaultScraperConfiguration"
+
+// GetDefaultScraperConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the GetDefaultScraperConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetDefaultScraperConfiguration for more information on using the GetDefaultScraperConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetDefaultScraperConfigurationRequest method.
+//	req, resp := client.GetDefaultScraperConfigurationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/GetDefaultScraperConfiguration
+func (c *PrometheusService) GetDefaultScraperConfigurationRequest(input *GetDefaultScraperConfigurationInput) (req *request.Request, output *GetDefaultScraperConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opGetDefaultScraperConfiguration,
+		HTTPMethod: "GET",
+		HTTPPath:   "/scraperconfiguration",
+	}
+
+	if input == nil {
+		input = &GetDefaultScraperConfigurationInput{}
+	}
+
+	output = &GetDefaultScraperConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetDefaultScraperConfiguration API operation for Amazon Prometheus Service.
+//
+// The GetDefaultScraperConfiguration operation returns the default scraper
+// configuration used when Amazon EKS creates a scraper for you.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Prometheus Service's
+// API operation GetDefaultScraperConfiguration for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/GetDefaultScraperConfiguration
+func (c *PrometheusService) GetDefaultScraperConfiguration(input *GetDefaultScraperConfigurationInput) (*GetDefaultScraperConfigurationOutput, error) {
+	req, out := c.GetDefaultScraperConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// GetDefaultScraperConfigurationWithContext is the same as GetDefaultScraperConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetDefaultScraperConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *PrometheusService) GetDefaultScraperConfigurationWithContext(ctx aws.Context, input *GetDefaultScraperConfigurationInput, opts ...request.Option) (*GetDefaultScraperConfigurationOutput, error) {
+	req, out := c.GetDefaultScraperConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListRuleGroupsNamespaces = "ListRuleGroupsNamespaces"
 
 // ListRuleGroupsNamespacesRequest generates a "aws/request.Request" representing the
@@ -1143,14 +1563,13 @@ const opListRuleGroupsNamespaces = "ListRuleGroupsNamespaces"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRuleGroupsNamespacesRequest method.
+//	req, resp := client.ListRuleGroupsNamespacesRequest(params)
 //
-//    // Example sending a request using the ListRuleGroupsNamespacesRequest method.
-//    req, resp := client.ListRuleGroupsNamespacesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/ListRuleGroupsNamespaces
 func (c *PrometheusService) ListRuleGroupsNamespacesRequest(input *ListRuleGroupsNamespacesInput) (req *request.Request, output *ListRuleGroupsNamespacesOutput) {
@@ -1177,7 +1596,7 @@ func (c *PrometheusService) ListRuleGroupsNamespacesRequest(input *ListRuleGroup
 
 // ListRuleGroupsNamespaces API operation for Amazon Prometheus Service.
 //
-// Lists rule groups namespaces.
+// Returns a list of rule groups namespaces in a workspace.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1187,20 +1606,22 @@ func (c *PrometheusService) ListRuleGroupsNamespacesRequest(input *ListRuleGroup
 // API operation ListRuleGroupsNamespaces for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/ListRuleGroupsNamespaces
 func (c *PrometheusService) ListRuleGroupsNamespaces(input *ListRuleGroupsNamespacesInput) (*ListRuleGroupsNamespacesOutput, error) {
@@ -1232,15 +1653,14 @@ func (c *PrometheusService) ListRuleGroupsNamespacesWithContext(ctx aws.Context,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRuleGroupsNamespaces operation.
-//    pageNum := 0
-//    err := client.ListRuleGroupsNamespacesPages(params,
-//        func(page *prometheusservice.ListRuleGroupsNamespacesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRuleGroupsNamespaces operation.
+//	pageNum := 0
+//	err := client.ListRuleGroupsNamespacesPages(params,
+//	    func(page *prometheusservice.ListRuleGroupsNamespacesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *PrometheusService) ListRuleGroupsNamespacesPages(input *ListRuleGroupsNamespacesInput, fn func(*ListRuleGroupsNamespacesOutput, bool) bool) error {
 	return c.ListRuleGroupsNamespacesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1276,6 +1696,154 @@ func (c *PrometheusService) ListRuleGroupsNamespacesPagesWithContext(ctx aws.Con
 	return p.Err()
 }
 
+const opListScrapers = "ListScrapers"
+
+// ListScrapersRequest generates a "aws/request.Request" representing the
+// client's request for the ListScrapers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListScrapers for more information on using the ListScrapers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListScrapersRequest method.
+//	req, resp := client.ListScrapersRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/ListScrapers
+func (c *PrometheusService) ListScrapersRequest(input *ListScrapersInput) (req *request.Request, output *ListScrapersOutput) {
+	op := &request.Operation{
+		Name:       opListScrapers,
+		HTTPMethod: "GET",
+		HTTPPath:   "/scrapers",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListScrapersInput{}
+	}
+
+	output = &ListScrapersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListScrapers API operation for Amazon Prometheus Service.
+//
+// The ListScrapers operation lists all of the scrapers in your account. This
+// includes scrapers being created or deleted. You can optionally filter the
+// returned list.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Prometheus Service's
+// API operation ListScrapers for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/ListScrapers
+func (c *PrometheusService) ListScrapers(input *ListScrapersInput) (*ListScrapersOutput, error) {
+	req, out := c.ListScrapersRequest(input)
+	return out, req.Send()
+}
+
+// ListScrapersWithContext is the same as ListScrapers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListScrapers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *PrometheusService) ListScrapersWithContext(ctx aws.Context, input *ListScrapersInput, opts ...request.Option) (*ListScrapersOutput, error) {
+	req, out := c.ListScrapersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListScrapersPages iterates over the pages of a ListScrapers operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListScrapers method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListScrapers operation.
+//	pageNum := 0
+//	err := client.ListScrapersPages(params,
+//	    func(page *prometheusservice.ListScrapersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *PrometheusService) ListScrapersPages(input *ListScrapersInput, fn func(*ListScrapersOutput, bool) bool) error {
+	return c.ListScrapersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListScrapersPagesWithContext same as ListScrapersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *PrometheusService) ListScrapersPagesWithContext(ctx aws.Context, input *ListScrapersInput, fn func(*ListScrapersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListScrapersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListScrapersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListScrapersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
@@ -1292,14 +1860,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/ListTagsForResource
 func (c *PrometheusService) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1320,7 +1887,9 @@ func (c *PrometheusService) ListTagsForResourceRequest(input *ListTagsForResourc
 
 // ListTagsForResource API operation for Amazon Prometheus Service.
 //
-// Lists the tags you have assigned to the resource.
+// The ListTagsForResource operation returns the tags that are associated with
+// an Amazon Managed Service for Prometheus resource. Currently, the only resources
+// that can be tagged are workspaces and rule groups namespaces.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1330,20 +1899,22 @@ func (c *PrometheusService) ListTagsForResourceRequest(input *ListTagsForResourc
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/ListTagsForResource
 func (c *PrometheusService) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1383,14 +1954,13 @@ const opListWorkspaces = "ListWorkspaces"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWorkspacesRequest method.
+//	req, resp := client.ListWorkspacesRequest(params)
 //
-//    // Example sending a request using the ListWorkspacesRequest method.
-//    req, resp := client.ListWorkspacesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/ListWorkspaces
 func (c *PrometheusService) ListWorkspacesRequest(input *ListWorkspacesInput) (req *request.Request, output *ListWorkspacesOutput) {
@@ -1417,7 +1987,8 @@ func (c *PrometheusService) ListWorkspacesRequest(input *ListWorkspacesInput) (r
 
 // ListWorkspaces API operation for Amazon Prometheus Service.
 //
-// Lists all AMP workspaces, including workspaces being created or deleted.
+// Lists all of the Amazon Managed Service for Prometheus workspaces in your
+// account. This includes workspaces being created or deleted.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1427,17 +1998,19 @@ func (c *PrometheusService) ListWorkspacesRequest(input *ListWorkspacesInput) (r
 // API operation ListWorkspaces for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/ListWorkspaces
 func (c *PrometheusService) ListWorkspaces(input *ListWorkspacesInput) (*ListWorkspacesOutput, error) {
@@ -1469,15 +2042,14 @@ func (c *PrometheusService) ListWorkspacesWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWorkspaces operation.
-//    pageNum := 0
-//    err := client.ListWorkspacesPages(params,
-//        func(page *prometheusservice.ListWorkspacesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWorkspaces operation.
+//	pageNum := 0
+//	err := client.ListWorkspacesPages(params,
+//	    func(page *prometheusservice.ListWorkspacesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *PrometheusService) ListWorkspacesPages(input *ListWorkspacesInput, fn func(*ListWorkspacesOutput, bool) bool) error {
 	return c.ListWorkspacesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1529,14 +2101,13 @@ const opPutAlertManagerDefinition = "PutAlertManagerDefinition"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutAlertManagerDefinitionRequest method.
+//	req, resp := client.PutAlertManagerDefinitionRequest(params)
 //
-//    // Example sending a request using the PutAlertManagerDefinitionRequest method.
-//    req, resp := client.PutAlertManagerDefinitionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/PutAlertManagerDefinition
 func (c *PrometheusService) PutAlertManagerDefinitionRequest(input *PutAlertManagerDefinitionInput) (req *request.Request, output *PutAlertManagerDefinitionOutput) {
@@ -1557,7 +2128,9 @@ func (c *PrometheusService) PutAlertManagerDefinitionRequest(input *PutAlertMana
 
 // PutAlertManagerDefinition API operation for Amazon Prometheus Service.
 //
-// Update an alert manager definition.
+// Updates an existing alert manager definition in a workspace. If the workspace
+// does not already have an alert manager definition, don't use this operation
+// to create it. Instead, use CreateAlertManagerDefinition.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1567,26 +2140,28 @@ func (c *PrometheusService) PutAlertManagerDefinitionRequest(input *PutAlertMana
 // API operation PutAlertManagerDefinition for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ConflictException
+//     The request would cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
+//
+//   - ServiceQuotaExceededException
+//     Completing the request would cause a service quota to be exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/PutAlertManagerDefinition
 func (c *PrometheusService) PutAlertManagerDefinition(input *PutAlertManagerDefinitionInput) (*PutAlertManagerDefinitionOutput, error) {
@@ -1626,14 +2201,13 @@ const opPutRuleGroupsNamespace = "PutRuleGroupsNamespace"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutRuleGroupsNamespaceRequest method.
+//	req, resp := client.PutRuleGroupsNamespaceRequest(params)
 //
-//    // Example sending a request using the PutRuleGroupsNamespaceRequest method.
-//    req, resp := client.PutRuleGroupsNamespaceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/PutRuleGroupsNamespace
 func (c *PrometheusService) PutRuleGroupsNamespaceRequest(input *PutRuleGroupsNamespaceInput) (req *request.Request, output *PutRuleGroupsNamespaceOutput) {
@@ -1654,7 +2228,15 @@ func (c *PrometheusService) PutRuleGroupsNamespaceRequest(input *PutRuleGroupsNa
 
 // PutRuleGroupsNamespace API operation for Amazon Prometheus Service.
 //
-// Update a rule groups namespace.
+// Updates an existing rule groups namespace within a workspace. A rule groups
+// namespace is associated with exactly one rules file. A workspace can have
+// multiple rule groups namespaces.
+//
+// Use this operation only to update existing rule groups namespaces. To create
+// a new rule groups namespace, use CreateRuleGroupsNamespace.
+//
+// You can't use this operation to add tags to an existing rule groups namespace.
+// Instead, use TagResource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1664,26 +2246,28 @@ func (c *PrometheusService) PutRuleGroupsNamespaceRequest(input *PutRuleGroupsNa
 // API operation PutRuleGroupsNamespace for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ConflictException
+//     The request would cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
+//
+//   - ServiceQuotaExceededException
+//     Completing the request would cause a service quota to be exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/PutRuleGroupsNamespace
 func (c *PrometheusService) PutRuleGroupsNamespace(input *PutRuleGroupsNamespaceInput) (*PutRuleGroupsNamespaceOutput, error) {
@@ -1723,14 +2307,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/TagResource
 func (c *PrometheusService) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1752,7 +2335,14 @@ func (c *PrometheusService) TagResourceRequest(input *TagResourceInput) (req *re
 
 // TagResource API operation for Amazon Prometheus Service.
 //
-// Creates tags for the specified resource.
+// The TagResource operation associates tags with an Amazon Managed Service
+// for Prometheus resource. The only resources that can be tagged are workspaces
+// and rule groups namespaces.
+//
+// If you specify a new tag key for the resource, this tag is appended to the
+// list of tags associated with the resource. If you specify a tag key that
+// is already associated with the resource, the new tag value that you specify
+// replaces the previous value for that tag.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1762,20 +2352,22 @@ func (c *PrometheusService) TagResourceRequest(input *TagResourceInput) (req *re
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/TagResource
 func (c *PrometheusService) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1815,14 +2407,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/UntagResource
 func (c *PrometheusService) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -1844,7 +2435,9 @@ func (c *PrometheusService) UntagResourceRequest(input *UntagResourceInput) (req
 
 // UntagResource API operation for Amazon Prometheus Service.
 //
-// Deletes tags from the specified resource.
+// Removes the specified tags from an Amazon Managed Service for Prometheus
+// resource. The only resources that can be tagged are workspaces and rule groups
+// namespaces.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1854,20 +2447,22 @@ func (c *PrometheusService) UntagResourceRequest(input *UntagResourceInput) (req
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/UntagResource
 func (c *PrometheusService) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -1907,14 +2502,13 @@ const opUpdateLoggingConfiguration = "UpdateLoggingConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateLoggingConfigurationRequest method.
+//	req, resp := client.UpdateLoggingConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateLoggingConfigurationRequest method.
-//    req, resp := client.UpdateLoggingConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/UpdateLoggingConfiguration
 func (c *PrometheusService) UpdateLoggingConfigurationRequest(input *UpdateLoggingConfigurationInput) (req *request.Request, output *UpdateLoggingConfigurationOutput) {
@@ -1935,7 +2529,7 @@ func (c *PrometheusService) UpdateLoggingConfigurationRequest(input *UpdateLoggi
 
 // UpdateLoggingConfiguration API operation for Amazon Prometheus Service.
 //
-// Update logging configuration.
+// Updates the log group ARN or the workspace ID of the current logging configuration.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1945,20 +2539,22 @@ func (c *PrometheusService) UpdateLoggingConfigurationRequest(input *UpdateLoggi
 // API operation UpdateLoggingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ConflictException
+//     The request would cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/UpdateLoggingConfiguration
 func (c *PrometheusService) UpdateLoggingConfiguration(input *UpdateLoggingConfigurationInput) (*UpdateLoggingConfigurationOutput, error) {
@@ -1998,14 +2594,13 @@ const opUpdateWorkspaceAlias = "UpdateWorkspaceAlias"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateWorkspaceAliasRequest method.
+//	req, resp := client.UpdateWorkspaceAliasRequest(params)
 //
-//    // Example sending a request using the UpdateWorkspaceAliasRequest method.
-//    req, resp := client.UpdateWorkspaceAliasRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/UpdateWorkspaceAlias
 func (c *PrometheusService) UpdateWorkspaceAliasRequest(input *UpdateWorkspaceAliasInput) (req *request.Request, output *UpdateWorkspaceAliasOutput) {
@@ -2027,7 +2622,7 @@ func (c *PrometheusService) UpdateWorkspaceAliasRequest(input *UpdateWorkspaceAl
 
 // UpdateWorkspaceAlias API operation for Amazon Prometheus Service.
 //
-// Updates an AMP workspace alias.
+// Updates the alias of an existing workspace.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2037,26 +2632,28 @@ func (c *PrometheusService) UpdateWorkspaceAliasRequest(input *UpdateWorkspaceAl
 // API operation UpdateWorkspaceAlias for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Request was denied due to request throttling.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ConflictException
+//     The request would cause an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource which does not exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resources that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error during processing of request.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - InternalServerException
+//     An unexpected error occurred during the processing of the request.
+//
+//   - ServiceQuotaExceededException
+//     Completing the request would cause a service quota to be exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/amp-2020-08-01/UpdateWorkspaceAlias
 func (c *PrometheusService) UpdateWorkspaceAlias(input *UpdateWorkspaceAliasInput) (*UpdateWorkspaceAliasOutput, error) {
@@ -2080,7 +2677,7 @@ func (c *PrometheusService) UpdateWorkspaceAliasWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
-// User does not have sufficient access to perform this action.
+// You do not have sufficient access to perform this action.
 type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -2145,27 +2742,30 @@ func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Represents the properties of an alert manager definition.
+// The details of an alert manager definition.
 type AlertManagerDefinitionDescription struct {
 	_ struct{} `type:"structure"`
 
-	// The time when the alert manager definition was created.
+	// The date and time that the alert manager definition was created.
 	//
 	// CreatedAt is a required field
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" required:"true"`
 
-	// The alert manager definition.
+	// The actual alert manager definition.
+	//
+	// For details about the alert manager definition, see AlertManagedDefinitionData
+	// (https://docs.aws.amazon.com/prometheus/latest/APIReference/yaml-AlertManagerDefinitionData.html).
 	// Data is automatically base64 encoded/decoded by the SDK.
 	//
 	// Data is a required field
 	Data []byte `locationName:"data" type:"blob" required:"true"`
 
-	// The time when the alert manager definition was modified.
+	// The date and time that the alert manager definition was most recently changed.
 	//
 	// ModifiedAt is a required field
 	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" required:"true"`
 
-	// The status of alert manager definition.
+	// A structure that displays the current status of the alert manager definition..
 	//
 	// Status is a required field
 	Status *AlertManagerDefinitionStatus `locationName:"status" type:"structure" required:"true"`
@@ -2213,16 +2813,16 @@ func (s *AlertManagerDefinitionDescription) SetStatus(v *AlertManagerDefinitionS
 	return s
 }
 
-// Represents the status of a definition.
+// The status of the alert manager.
 type AlertManagerDefinitionStatus struct {
 	_ struct{} `type:"structure"`
 
-	// Status code of this definition.
+	// The current status of the alert manager.
 	//
 	// StatusCode is a required field
 	StatusCode *string `locationName:"statusCode" type:"string" required:"true" enum:"AlertManagerDefinitionStatusCode"`
 
-	// The reason for failure if any.
+	// If there is a failure, the reason for the failure.
 	StatusReason *string `locationName:"statusReason" type:"string"`
 }
 
@@ -2256,7 +2856,55 @@ func (s *AlertManagerDefinitionStatus) SetStatusReason(v string) *AlertManagerDe
 	return s
 }
 
-// Updating or deleting a resource can cause an inconsistent state.
+// The AmpConfiguration structure defines the Amazon Managed Service for Prometheus
+// instance a scraper should send metrics to.
+type AmpConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// ARN of the Amazon Managed Service for Prometheus workspace.
+	//
+	// WorkspaceArn is a required field
+	WorkspaceArn *string `locationName:"workspaceArn" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AmpConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AmpConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AmpConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AmpConfiguration"}
+	if s.WorkspaceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkspaceArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetWorkspaceArn sets the WorkspaceArn field's value.
+func (s *AmpConfiguration) SetWorkspaceArn(v string) *AmpConfiguration {
+	s.WorkspaceArn = &v
+	return s
+}
+
+// The request would cause an inconsistent state.
 type ConflictException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -2335,17 +2983,21 @@ func (s *ConflictException) RequestID() string {
 type CreateAlertManagerDefinitionInput struct {
 	_ struct{} `type:"structure"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The alert manager definition data.
+	// The alert manager definition to add. A base64-encoded version of the YAML
+	// alert manager definition file.
+	//
+	// For details about the alert manager definition, see AlertManagedDefinitionData
+	// (https://docs.aws.amazon.com/prometheus/latest/APIReference/yaml-AlertManagerDefinitionData.html).
 	// Data is automatically base64 encoded/decoded by the SDK.
 	//
 	// Data is a required field
 	Data []byte `locationName:"data" type:"blob" required:"true"`
 
-	// The ID of the workspace in which to create the alert manager definition.
+	// The ID of the workspace to add the alert manager definition to.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -2413,7 +3065,7 @@ func (s *CreateAlertManagerDefinitionInput) SetWorkspaceId(v string) *CreateAler
 type CreateAlertManagerDefinitionOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The status of alert manager definition.
+	// A structure that displays the current status of the alert manager definition.
 	//
 	// Status is a required field
 	Status *AlertManagerDefinitionStatus `locationName:"status" type:"structure" required:"true"`
@@ -2447,16 +3099,17 @@ func (s *CreateAlertManagerDefinitionOutput) SetStatus(v *AlertManagerDefinition
 type CreateLoggingConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The ARN of the CW log group to which the vended log data will be published.
+	// The ARN of the CloudWatch log group to which the vended log data will be
+	// published. This log group must exist prior to calling this API.
 	//
 	// LogGroupArn is a required field
 	LogGroupArn *string `locationName:"logGroupArn" type:"string" required:"true"`
 
-	// The ID of the workspace to vend logs to.
+	// The ID of the workspace to create the logging configuration for.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -2524,7 +3177,7 @@ func (s *CreateLoggingConfigurationInput) SetWorkspaceId(v string) *CreateLoggin
 type CreateLoggingConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The status of the logging configuration.
+	// A structure that displays the current status of the logging configuration.
 	//
 	// Status is a required field
 	Status *LoggingConfigurationStatus `locationName:"status" type:"structure" required:"true"`
@@ -2558,25 +3211,30 @@ func (s *CreateLoggingConfigurationOutput) SetStatus(v *LoggingConfigurationStat
 type CreateRuleGroupsNamespaceInput struct {
 	_ struct{} `type:"structure"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The namespace data that define the rule groups.
+	// The rules file to use in the new namespace.
+	//
+	// Contains the base64-encoded version of the YAML rules file.
+	//
+	// For details about the rule groups namespace structure, see RuleGroupsNamespaceData
+	// (https://docs.aws.amazon.com/prometheus/latest/APIReference/yaml-RuleGroupsNamespaceData.html).
 	// Data is automatically base64 encoded/decoded by the SDK.
 	//
 	// Data is a required field
 	Data []byte `locationName:"data" type:"blob" required:"true"`
 
-	// The rule groups namespace name.
+	// The name for the new rule groups namespace.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
-	// Optional, user-provided tags for this rule groups namespace.
+	// The list of tag keys and values to associate with the rule groups namespace.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
-	// The ID of the workspace in which to create the rule group namespace.
+	// The ID of the workspace to add the rule groups namespace.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -2662,22 +3320,22 @@ func (s *CreateRuleGroupsNamespaceInput) SetWorkspaceId(v string) *CreateRuleGro
 type CreateRuleGroupsNamespaceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of this rule groups namespace.
+	// The Amazon Resource Name (ARN) of the new rule groups namespace.
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The rule groups namespace name.
+	// The name of the new rule groups namespace.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The status of rule groups namespace.
+	// A structure that returns the current status of the rule groups namespace.
 	//
 	// Status is a required field
 	Status *RuleGroupsNamespaceStatus `locationName:"status" type:"structure" required:"true"`
 
-	// The tags of this rule groups namespace.
+	// The list of tag keys and values that are associated with the namespace.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -2723,19 +3381,215 @@ func (s *CreateRuleGroupsNamespaceOutput) SetTags(v map[string]*string) *CreateR
 	return s
 }
 
+// Represents the input of a CreateScraper operation.
+type CreateScraperInput struct {
+	_ struct{} `type:"structure"`
+
+	// (optional) a name to associate with the scraper. This is for your use, and
+	// does not need to be unique.
+	Alias *string `locationName:"alias" min:"1" type:"string"`
+
+	// (Optional) A unique, case-sensitive identifier that you can provide to ensure
+	// the idempotency of the request.
+	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The Amazon Managed Service for Prometheus workspace to send metrics to.
+	//
+	// Destination is a required field
+	Destination *Destination `locationName:"destination" type:"structure" required:"true"`
+
+	// The configuration file to use in the new scraper. For more information, see
+	// Scraper configuration (prometheus/latest/userguide/AMP-collector-how-to.html#AMP-collector-configuration)
+	// in the Amazon Managed Service for Prometheus User Guide.
+	//
+	// ScrapeConfiguration is a required field
+	ScrapeConfiguration *ScrapeConfiguration `locationName:"scrapeConfiguration" type:"structure" required:"true"`
+
+	// The Amazon EKS cluster from which the scraper will collect metrics.
+	//
+	// Source is a required field
+	Source *Source `locationName:"source" type:"structure" required:"true"`
+
+	// (Optional) The list of tag keys and values to associate with the scraper.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateScraperInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateScraperInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateScraperInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateScraperInput"}
+	if s.Alias != nil && len(*s.Alias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Alias", 1))
+	}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.Destination == nil {
+		invalidParams.Add(request.NewErrParamRequired("Destination"))
+	}
+	if s.ScrapeConfiguration == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScrapeConfiguration"))
+	}
+	if s.Source == nil {
+		invalidParams.Add(request.NewErrParamRequired("Source"))
+	}
+	if s.Destination != nil {
+		if err := s.Destination.Validate(); err != nil {
+			invalidParams.AddNested("Destination", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Source != nil {
+		if err := s.Source.Validate(); err != nil {
+			invalidParams.AddNested("Source", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAlias sets the Alias field's value.
+func (s *CreateScraperInput) SetAlias(v string) *CreateScraperInput {
+	s.Alias = &v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateScraperInput) SetClientToken(v string) *CreateScraperInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDestination sets the Destination field's value.
+func (s *CreateScraperInput) SetDestination(v *Destination) *CreateScraperInput {
+	s.Destination = v
+	return s
+}
+
+// SetScrapeConfiguration sets the ScrapeConfiguration field's value.
+func (s *CreateScraperInput) SetScrapeConfiguration(v *ScrapeConfiguration) *CreateScraperInput {
+	s.ScrapeConfiguration = v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *CreateScraperInput) SetSource(v *Source) *CreateScraperInput {
+	s.Source = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateScraperInput) SetTags(v map[string]*string) *CreateScraperInput {
+	s.Tags = v
+	return s
+}
+
+// Represents the output of a CreateScraper operation.
+type CreateScraperOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the new scraper.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The ID of the new scraper.
+	//
+	// ScraperId is a required field
+	ScraperId *string `locationName:"scraperId" min:"1" type:"string" required:"true"`
+
+	// A structure that displays the current status of the scraper.
+	//
+	// Status is a required field
+	Status *ScraperStatus `locationName:"status" type:"structure" required:"true"`
+
+	// The list of tag keys and values that are associated with the scraper.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateScraperOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateScraperOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateScraperOutput) SetArn(v string) *CreateScraperOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetScraperId sets the ScraperId field's value.
+func (s *CreateScraperOutput) SetScraperId(v string) *CreateScraperOutput {
+	s.ScraperId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateScraperOutput) SetStatus(v *ScraperStatus) *CreateScraperOutput {
+	s.Status = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateScraperOutput) SetTags(v map[string]*string) *CreateScraperOutput {
+	s.Tags = v
+	return s
+}
+
 // Represents the input of a CreateWorkspace operation.
 type CreateWorkspaceInput struct {
 	_ struct{} `type:"structure"`
 
-	// An optional user-assigned alias for this workspace. This alias is for user
-	// reference and does not need to be unique.
+	// An alias that you assign to this workspace to help you identify it. It does
+	// not need to be unique.
+	//
+	// Blank spaces at the beginning or end of the alias that you specify will be
+	// trimmed from the value used.
 	Alias *string `locationName:"alias" min:"1" type:"string"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// Optional, user-provided tags for this workspace.
+	// (optional) The ARN for a customer managed KMS key to use for encrypting data
+	// within your workspace. For more information about using your own key in your
+	// workspace, see Encryption at rest (https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html)
+	// in the Amazon Managed Service for Prometheus User Guide.
+	KmsKeyArn *string `locationName:"kmsKeyArn" min:"20" type:"string"`
+
+	// The list of tag keys and values to associate with the workspace.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -2766,6 +3620,9 @@ func (s *CreateWorkspaceInput) Validate() error {
 	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
 	}
+	if s.KmsKeyArn != nil && len(*s.KmsKeyArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyArn", 20))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -2785,6 +3642,12 @@ func (s *CreateWorkspaceInput) SetClientToken(v string) *CreateWorkspaceInput {
 	return s
 }
 
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *CreateWorkspaceInput) SetKmsKeyArn(v string) *CreateWorkspaceInput {
+	s.KmsKeyArn = &v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *CreateWorkspaceInput) SetTags(v map[string]*string) *CreateWorkspaceInput {
 	s.Tags = v
@@ -2795,20 +3658,25 @@ func (s *CreateWorkspaceInput) SetTags(v map[string]*string) *CreateWorkspaceInp
 type CreateWorkspaceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the workspace that was just created.
+	// The ARN for the new workspace.
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The status of the workspace that was just created (usually CREATING).
+	// (optional) If the workspace was created with a customer managed KMS key,
+	// the ARN for the key used.
+	KmsKeyArn *string `locationName:"kmsKeyArn" min:"20" type:"string"`
+
+	// The current status of the new workspace. Immediately after you create the
+	// workspace, the status is usually CREATING.
 	//
 	// Status is a required field
 	Status *WorkspaceStatus `locationName:"status" type:"structure" required:"true"`
 
-	// The tags of this workspace.
+	// The list of tag keys and values that are associated with the workspace.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
-	// The generated ID of the workspace that was just created.
+	// The unique ID for the new workspace.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -2838,6 +3706,12 @@ func (s *CreateWorkspaceOutput) SetArn(v string) *CreateWorkspaceOutput {
 	return s
 }
 
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *CreateWorkspaceOutput) SetKmsKeyArn(v string) *CreateWorkspaceOutput {
+	s.KmsKeyArn = &v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *CreateWorkspaceOutput) SetStatus(v *WorkspaceStatus) *CreateWorkspaceOutput {
 	s.Status = v
@@ -2860,11 +3734,11 @@ func (s *CreateWorkspaceOutput) SetWorkspaceId(v string) *CreateWorkspaceOutput 
 type DeleteAlertManagerDefinitionInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `location:"querystring" locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The ID of the workspace in which to delete the alert manager definition.
+	// The ID of the workspace to delete the alert manager definition from.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -2945,11 +3819,11 @@ func (s DeleteAlertManagerDefinitionOutput) GoString() string {
 type DeleteLoggingConfigurationInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `location:"querystring" locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The ID of the workspace to vend logs to.
+	// The ID of the workspace containing the logging configuration to delete.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -3030,16 +3904,17 @@ func (s DeleteLoggingConfigurationOutput) GoString() string {
 type DeleteRuleGroupsNamespaceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `location:"querystring" locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The rule groups namespace name.
+	// The name of the rule groups namespace to delete.
 	//
 	// Name is a required field
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The ID of the workspace to delete rule group definition.
+	// The ID of the workspace containing the rule groups namespace and definition
+	// to delete.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -3128,12 +4003,120 @@ func (s DeleteRuleGroupsNamespaceOutput) GoString() string {
 	return s.String()
 }
 
+// Represents the input of a DeleteScraper operation.
+type DeleteScraperInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// (Optional) A unique, case-sensitive identifier that you can provide to ensure
+	// the idempotency of the request.
+	ClientToken *string `location:"querystring" locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The ID of the scraper to delete.
+	//
+	// ScraperId is a required field
+	ScraperId *string `location:"uri" locationName:"scraperId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteScraperInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteScraperInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteScraperInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteScraperInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.ScraperId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScraperId"))
+	}
+	if s.ScraperId != nil && len(*s.ScraperId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ScraperId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *DeleteScraperInput) SetClientToken(v string) *DeleteScraperInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetScraperId sets the ScraperId field's value.
+func (s *DeleteScraperInput) SetScraperId(v string) *DeleteScraperInput {
+	s.ScraperId = &v
+	return s
+}
+
+// Represents the output of a DeleteScraper operation.
+type DeleteScraperOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the scraper to delete.
+	//
+	// ScraperId is a required field
+	ScraperId *string `locationName:"scraperId" min:"1" type:"string" required:"true"`
+
+	// The current status of the scraper.
+	//
+	// Status is a required field
+	Status *ScraperStatus `locationName:"status" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteScraperOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteScraperOutput) GoString() string {
+	return s.String()
+}
+
+// SetScraperId sets the ScraperId field's value.
+func (s *DeleteScraperOutput) SetScraperId(v string) *DeleteScraperOutput {
+	s.ScraperId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DeleteScraperOutput) SetStatus(v *ScraperStatus) *DeleteScraperOutput {
+	s.Status = v
+	return s
+}
+
 // Represents the input of a DeleteWorkspace operation.
 type DeleteWorkspaceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `location:"querystring" locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
 	// The ID of the workspace to delete.
@@ -3217,7 +4200,7 @@ func (s DeleteWorkspaceOutput) GoString() string {
 type DescribeAlertManagerDefinitionInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The ID of the workspace to describe.
+	// The ID of the workspace to retrieve the alert manager definition from.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -3267,7 +4250,7 @@ func (s *DescribeAlertManagerDefinitionInput) SetWorkspaceId(v string) *Describe
 type DescribeAlertManagerDefinitionOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The properties of the selected workspace's alert manager definition.
+	// The alert manager definition.
 	//
 	// AlertManagerDefinition is a required field
 	AlertManagerDefinition *AlertManagerDefinitionDescription `locationName:"alertManagerDefinition" type:"structure" required:"true"`
@@ -3301,7 +4284,7 @@ func (s *DescribeAlertManagerDefinitionOutput) SetAlertManagerDefinition(v *Aler
 type DescribeLoggingConfigurationInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The ID of the workspace to vend logs to.
+	// The ID of the workspace to describe the logging configuration for.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -3351,8 +4334,7 @@ func (s *DescribeLoggingConfigurationInput) SetWorkspaceId(v string) *DescribeLo
 type DescribeLoggingConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Metadata object containing information about the logging configuration of
-	// a workspace.
+	// A structure that displays the information about the logging configuration.
 	//
 	// LoggingConfiguration is a required field
 	LoggingConfiguration *LoggingConfigurationMetadata `locationName:"loggingConfiguration" type:"structure" required:"true"`
@@ -3386,12 +4368,12 @@ func (s *DescribeLoggingConfigurationOutput) SetLoggingConfiguration(v *LoggingC
 type DescribeRuleGroupsNamespaceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The rule groups namespace.
+	// The name of the rule groups namespace that you want information for.
 	//
 	// Name is a required field
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The ID of the workspace to describe.
+	// The ID of the workspace containing the rule groups namespace.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -3453,7 +4435,7 @@ func (s *DescribeRuleGroupsNamespaceInput) SetWorkspaceId(v string) *DescribeRul
 type DescribeRuleGroupsNamespaceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The selected rule groups namespace.
+	// The information about the rule groups namespace.
 	//
 	// RuleGroupsNamespace is a required field
 	RuleGroupsNamespace *RuleGroupsNamespaceDescription `locationName:"ruleGroupsNamespace" type:"structure" required:"true"`
@@ -3480,6 +4462,90 @@ func (s DescribeRuleGroupsNamespaceOutput) GoString() string {
 // SetRuleGroupsNamespace sets the RuleGroupsNamespace field's value.
 func (s *DescribeRuleGroupsNamespaceOutput) SetRuleGroupsNamespace(v *RuleGroupsNamespaceDescription) *DescribeRuleGroupsNamespaceOutput {
 	s.RuleGroupsNamespace = v
+	return s
+}
+
+// Represents the input of a DescribeScraper operation.
+type DescribeScraperInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID of the scraper to describe.
+	//
+	// ScraperId is a required field
+	ScraperId *string `location:"uri" locationName:"scraperId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeScraperInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeScraperInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeScraperInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeScraperInput"}
+	if s.ScraperId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScraperId"))
+	}
+	if s.ScraperId != nil && len(*s.ScraperId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ScraperId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetScraperId sets the ScraperId field's value.
+func (s *DescribeScraperInput) SetScraperId(v string) *DescribeScraperInput {
+	s.ScraperId = &v
+	return s
+}
+
+// Represents the output of a DescribeScraper operation.
+type DescribeScraperOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Contains details about the scraper.
+	//
+	// Scraper is a required field
+	Scraper *ScraperDescription `locationName:"scraper" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeScraperOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeScraperOutput) GoString() string {
+	return s.String()
+}
+
+// SetScraper sets the Scraper field's value.
+func (s *DescribeScraperOutput) SetScraper(v *ScraperDescription) *DescribeScraperOutput {
+	s.Scraper = v
 	return s
 }
 
@@ -3537,7 +4603,7 @@ func (s *DescribeWorkspaceInput) SetWorkspaceId(v string) *DescribeWorkspaceInpu
 type DescribeWorkspaceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The properties of the selected workspace.
+	// A structure that contains details about the workspace.
 	//
 	// Workspace is a required field
 	Workspace *WorkspaceDescription `locationName:"workspace" type:"structure" required:"true"`
@@ -3567,7 +4633,191 @@ func (s *DescribeWorkspaceOutput) SetWorkspace(v *WorkspaceDescription) *Describ
 	return s
 }
 
-// Unexpected error during processing of request.
+// Where to send the metrics from a scraper.
+type Destination struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Managed Service for Prometheusworkspace to send metrics to.
+	AmpConfiguration *AmpConfiguration `locationName:"ampConfiguration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Destination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Destination) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Destination) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Destination"}
+	if s.AmpConfiguration != nil {
+		if err := s.AmpConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("AmpConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAmpConfiguration sets the AmpConfiguration field's value.
+func (s *Destination) SetAmpConfiguration(v *AmpConfiguration) *Destination {
+	s.AmpConfiguration = v
+	return s
+}
+
+// The EksConfiguration structure describes the connection to the Amazon EKS
+// cluster from which a scraper collects metrics.
+type EksConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// ARN of the Amazon EKS cluster.
+	//
+	// ClusterArn is a required field
+	ClusterArn *string `locationName:"clusterArn" type:"string" required:"true"`
+
+	// A list of the security group IDs for the Amazon EKS cluster VPC configuration.
+	SecurityGroupIds []*string `locationName:"securityGroupIds" min:"1" type:"list"`
+
+	// A list of subnet IDs for the Amazon EKS cluster VPC configuration.
+	//
+	// SubnetIds is a required field
+	SubnetIds []*string `locationName:"subnetIds" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EksConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EksConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EksConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EksConfiguration"}
+	if s.ClusterArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterArn"))
+	}
+	if s.SecurityGroupIds != nil && len(s.SecurityGroupIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecurityGroupIds", 1))
+	}
+	if s.SubnetIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("SubnetIds"))
+	}
+	if s.SubnetIds != nil && len(s.SubnetIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubnetIds", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClusterArn sets the ClusterArn field's value.
+func (s *EksConfiguration) SetClusterArn(v string) *EksConfiguration {
+	s.ClusterArn = &v
+	return s
+}
+
+// SetSecurityGroupIds sets the SecurityGroupIds field's value.
+func (s *EksConfiguration) SetSecurityGroupIds(v []*string) *EksConfiguration {
+	s.SecurityGroupIds = v
+	return s
+}
+
+// SetSubnetIds sets the SubnetIds field's value.
+func (s *EksConfiguration) SetSubnetIds(v []*string) *EksConfiguration {
+	s.SubnetIds = v
+	return s
+}
+
+// Represents the input of a GetDefaultScraperConfiguration operation.
+type GetDefaultScraperConfigurationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDefaultScraperConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDefaultScraperConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Represents the output of a GetDefaultScraperConfiguration operation.
+type GetDefaultScraperConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The configuration file. Base 64 encoded. For more information, see Scraper
+	// configuration (https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-collector-how-to.html#AMP-collector-configuration)in
+	// the Amazon Managed Service for Prometheus User Guide.
+	// Configuration is automatically base64 encoded/decoded by the SDK.
+	//
+	// Configuration is a required field
+	Configuration []byte `locationName:"configuration" type:"blob" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDefaultScraperConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDefaultScraperConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *GetDefaultScraperConfigurationOutput) SetConfiguration(v []byte) *GetDefaultScraperConfigurationOutput {
+	s.Configuration = v
+	return s
+}
+
+// An unexpected error occurred during the processing of the request.
 type InternalServerException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -3639,18 +4889,25 @@ func (s *InternalServerException) RequestID() string {
 type ListRuleGroupsNamespacesInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// Maximum results to return in response (default=100, maximum=1000).
+	// The maximum number of results to return. The default is 100.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
-	// Optional filter for rule groups namespace name. Only the rule groups namespace
-	// that begin with this value will be returned.
+	// Use this parameter to filter the rule groups namespaces that are returned.
+	// Only the namespaces with names that begin with the value that you specify
+	// are returned.
 	Name *string `location:"querystring" locationName:"name" min:"1" type:"string"`
 
-	// Pagination token to request the next page in a paginated list. This token
-	// is obtained from the output of the previous ListRuleGroupsNamespaces request.
+	// The token for the next set of items to return. You receive this token from
+	// a previous call, and use it to get the next page of results. The other parameters
+	// must be the same as the initial call.
+	//
+	// For example, if your initial request has maxResults of 10, and there are
+	// 12 rule groups namespaces to return, then your initial request will return
+	// 10 and a nextToken. Using the next token in a subsequent call will return
+	// the remaining 2 namespaces.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 
-	// The ID of the workspace.
+	// The ID of the workspace containing the rule groups namespaces.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -3724,10 +4981,12 @@ func (s *ListRuleGroupsNamespacesInput) SetWorkspaceId(v string) *ListRuleGroups
 type ListRuleGroupsNamespacesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Pagination token to use when requesting the next page in this list.
+	// A token indicating that there are more results to retrieve. You can use this
+	// token as part of your next ListRuleGroupsNamespaces request to retrieve those
+	// results.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// The list of the selected rule groups namespaces.
+	// The returned list of rule groups namespaces.
 	//
 	// RuleGroupsNamespaces is a required field
 	RuleGroupsNamespaces []*RuleGroupsNamespaceSummary `locationName:"ruleGroupsNamespaces" type:"list" required:"true"`
@@ -3763,10 +5022,141 @@ func (s *ListRuleGroupsNamespacesOutput) SetRuleGroupsNamespaces(v []*RuleGroups
 	return s
 }
 
+// Represents the input of a ListScrapers operation.
+type ListScrapersInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// (Optional) A list of key-value pairs to filter the list of scrapers returned.
+	// Keys include status, sourceArn, destinationArn, and alias.
+	//
+	// Filters on the same key are OR'd together, and filters on different keys
+	// are AND'd together. For example, status=ACTIVE&status=CREATING&alias=Test,
+	// will return all scrapers that have the alias Test, and are either in status
+	// ACTIVE or CREATING.
+	//
+	// To find all active scrapers that are sending metrics to a specific Amazon
+	// Managed Service for Prometheus workspace, you would use the ARN of the workspace
+	// in a query:
+	//
+	// status=ACTIVE&destinationArn=arn:aws:aps:us-east-1:123456789012:workspace/ws-example1-1234-abcd-56ef-123456789012
+	//
+	// If this is included, it filters the results to only the scrapers that match
+	// the filter.
+	Filters map[string][]*string `location:"querystring" locationName:"filters" min:"1" type:"map"`
+
+	// Optional) The maximum number of scrapers to return in one ListScrapers operation.
+	// The range is 1-1000.
+	//
+	// If you omit this parameter, the default of 100 is used.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// (Optional) The token for the next set of items to return. (You received this
+	// token from a previous call.)
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListScrapersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListScrapersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListScrapersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListScrapersInput"}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListScrapersInput) SetFilters(v map[string][]*string) *ListScrapersInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListScrapersInput) SetMaxResults(v int64) *ListScrapersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListScrapersInput) SetNextToken(v string) *ListScrapersInput {
+	s.NextToken = &v
+	return s
+}
+
+// Represents the output of a ListScrapers operation.
+type ListScrapersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A token indicating that there are more results to retrieve. You can use this
+	// token as part of your next ListScrapers operation to retrieve those results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// A list of ScraperSummary structures giving information about scrapers in
+	// the account that match the filters provided.
+	//
+	// Scrapers is a required field
+	Scrapers []*ScraperSummary `locationName:"scrapers" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListScrapersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListScrapersOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListScrapersOutput) SetNextToken(v string) *ListScrapersOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetScrapers sets the Scrapers field's value.
+func (s *ListScrapersOutput) SetScrapers(v []*ScraperSummary) *ListScrapersOutput {
+	s.Scrapers = v
+	return s
+}
+
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The ARN of the resource.
+	// The ARN of the resource to list tages for. Must be a workspace or rule groups
+	// namespace resource.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" type:"string" required:"true"`
@@ -3815,7 +5205,7 @@ func (s *ListTagsForResourceInput) SetResourceArn(v string) *ListTagsForResource
 type ListTagsForResourceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The list of tags assigned to the resource.
+	// The list of tag keys and values associated with the resource.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -3847,15 +5237,23 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 type ListWorkspacesInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// Optional filter for workspace alias. Only the workspaces with aliases that
-	// begin with this value will be returned.
+	// If this is included, it filters the results to only the workspaces with names
+	// that start with the value that you specify here.
+	//
+	// Amazon Managed Service for Prometheus will automatically strip any blank
+	// spaces from the beginning and end of the alias that you specify.
 	Alias *string `location:"querystring" locationName:"alias" min:"1" type:"string"`
 
-	// Maximum results to return in response (default=100, maximum=1000).
+	// The maximum number of workspaces to return per request. The default is 100.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
-	// Pagination token to request the next page in a paginated list. This token
-	// is obtained from the output of the previous ListWorkspaces request.
+	// The token for the next set of items to return. You receive this token from
+	// a previous call, and use it to get the next page of results. The other parameters
+	// must be the same as the initial call.
+	//
+	// For example, if your initial request has maxResults of 10, and there are
+	// 12 workspaces to return, then your initial request will return 10 and a nextToken.
+	// Using the next token in a subsequent call will return the remaining 2 workspaces.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
 
@@ -3915,10 +5313,12 @@ func (s *ListWorkspacesInput) SetNextToken(v string) *ListWorkspacesInput {
 type ListWorkspacesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Pagination token to use when requesting the next page in this list.
+	// A token indicating that there are more results to retrieve. You can use this
+	// token as part of your next ListWorkspaces request to retrieve those results.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// The list of existing workspaces, including those undergoing creation or deletion.
+	// An array of WorkspaceSummary structures containing information about the
+	// workspaces requested.
 	//
 	// Workspaces is a required field
 	Workspaces []*WorkspaceSummary `locationName:"workspaces" type:"list" required:"true"`
@@ -3954,31 +5354,32 @@ func (s *ListWorkspacesOutput) SetWorkspaces(v []*WorkspaceSummary) *ListWorkspa
 	return s
 }
 
-// Represents the properties of a logging configuration metadata.
+// Contains information about the logging configuration.
 type LoggingConfigurationMetadata struct {
 	_ struct{} `type:"structure"`
 
-	// The time when the logging configuration was created.
+	// The date and time that the logging configuration was created.
 	//
 	// CreatedAt is a required field
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" required:"true"`
 
-	// The ARN of the CW log group to which the vended log data will be published.
+	// The ARN of the CloudWatch log group to which the vended log data will be
+	// published.
 	//
 	// LogGroupArn is a required field
 	LogGroupArn *string `locationName:"logGroupArn" type:"string" required:"true"`
 
-	// The time when the logging configuration was modified.
+	// The date and time that the logging configuration was most recently changed.
 	//
 	// ModifiedAt is a required field
 	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" required:"true"`
 
-	// The status of the logging configuration.
+	// The current status of the logging configuration.
 	//
 	// Status is a required field
 	Status *LoggingConfigurationStatus `locationName:"status" type:"structure" required:"true"`
 
-	// The workspace where the logging configuration exists.
+	// The ID of the workspace the logging configuration is for.
 	//
 	// Workspace is a required field
 	Workspace *string `locationName:"workspace" min:"1" type:"string" required:"true"`
@@ -4032,16 +5433,16 @@ func (s *LoggingConfigurationMetadata) SetWorkspace(v string) *LoggingConfigurat
 	return s
 }
 
-// Represents the status of a logging configuration.
+// The status of the logging configuration.
 type LoggingConfigurationStatus struct {
 	_ struct{} `type:"structure"`
 
-	// Status code of the logging configuration.
+	// The current status of the logging configuration.
 	//
 	// StatusCode is a required field
 	StatusCode *string `locationName:"statusCode" type:"string" required:"true" enum:"LoggingConfigurationStatusCode"`
 
-	// The reason for failure if any.
+	// If failed, the reason for the failure.
 	StatusReason *string `locationName:"statusReason" type:"string"`
 }
 
@@ -4079,17 +5480,21 @@ func (s *LoggingConfigurationStatus) SetStatusReason(v string) *LoggingConfigura
 type PutAlertManagerDefinitionInput struct {
 	_ struct{} `type:"structure"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The alert manager definition data.
+	// The alert manager definition to use. A base64-encoded version of the YAML
+	// alert manager definition file.
+	//
+	// For details about the alert manager definition, see AlertManagedDefinitionData
+	// (https://docs.aws.amazon.com/prometheus/latest/APIReference/yaml-AlertManagerDefinitionData.html).
 	// Data is automatically base64 encoded/decoded by the SDK.
 	//
 	// Data is a required field
 	Data []byte `locationName:"data" type:"blob" required:"true"`
 
-	// The ID of the workspace in which to update the alert manager definition.
+	// The ID of the workspace to update the alert manager definition in.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -4157,7 +5562,7 @@ func (s *PutAlertManagerDefinitionInput) SetWorkspaceId(v string) *PutAlertManag
 type PutAlertManagerDefinitionOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The status of alert manager definition.
+	// A structure that returns the current status of the alert manager definition.
 	//
 	// Status is a required field
 	Status *AlertManagerDefinitionStatus `locationName:"status" type:"structure" required:"true"`
@@ -4191,22 +5596,26 @@ func (s *PutAlertManagerDefinitionOutput) SetStatus(v *AlertManagerDefinitionSta
 type PutRuleGroupsNamespaceInput struct {
 	_ struct{} `type:"structure"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The namespace data that define the rule groups.
+	// The new rules file to use in the namespace. A base64-encoded version of the
+	// YAML rule groups file.
+	//
+	// For details about the rule groups namespace structure, see RuleGroupsNamespaceData
+	// (https://docs.aws.amazon.com/prometheus/latest/APIReference/yaml-RuleGroupsNamespaceData.html).
 	// Data is automatically base64 encoded/decoded by the SDK.
 	//
 	// Data is a required field
 	Data []byte `locationName:"data" type:"blob" required:"true"`
 
-	// The rule groups namespace name.
+	// The name of the rule groups namespace that you are updating.
 	//
 	// Name is a required field
 	Name *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The ID of the workspace in which to update the rule group namespace.
+	// The ID of the workspace where you are updating the rule groups namespace.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -4286,22 +5695,22 @@ func (s *PutRuleGroupsNamespaceInput) SetWorkspaceId(v string) *PutRuleGroupsNam
 type PutRuleGroupsNamespaceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of this rule groups namespace.
+	// The ARN of the rule groups namespace.
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The rule groups namespace name.
+	// The name of the rule groups namespace that was updated.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The status of rule groups namespace.
+	// A structure that includes the current status of the rule groups namespace.
 	//
 	// Status is a required field
 	Status *RuleGroupsNamespaceStatus `locationName:"status" type:"structure" required:"true"`
 
-	// The tags of this rule groups namespace.
+	// The list of tag keys and values that are associated with the namespace.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -4347,7 +5756,7 @@ func (s *PutRuleGroupsNamespaceOutput) SetTags(v map[string]*string) *PutRuleGro
 	return s
 }
 
-// Request references a resource which does not exist.
+// The request references a resources that doesn't exist.
 type ResourceNotFoundException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4422,42 +5831,46 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Represents a description of the rule groups namespace.
+// The details about one rule groups namespace.
 type RuleGroupsNamespaceDescription struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of this rule groups namespace.
+	// The ARN of the rule groups namespace.
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The time when the rule groups namespace was created.
+	// The date and time that the rule groups namespace was created.
 	//
 	// CreatedAt is a required field
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" required:"true"`
 
-	// The rule groups namespace data.
+	// The rule groups file used in the namespace.
+	//
+	// For details about the rule groups namespace structure, see RuleGroupsNamespaceData
+	// (https://docs.aws.amazon.com/prometheus/latest/APIReference/yaml-RuleGroupsNamespaceData.html).
 	// Data is automatically base64 encoded/decoded by the SDK.
 	//
 	// Data is a required field
 	Data []byte `locationName:"data" type:"blob" required:"true"`
 
-	// The time when the rule groups namespace was modified.
+	// The date and time that the rule groups namespace was most recently changed.
 	//
 	// ModifiedAt is a required field
 	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" required:"true"`
 
-	// The rule groups namespace name.
+	// The name of the rule groups namespace.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The status of rule groups namespace.
+	// The current status of the rule groups namespace.
 	//
 	// Status is a required field
 	Status *RuleGroupsNamespaceStatus `locationName:"status" type:"structure" required:"true"`
 
-	// The tags of this rule groups namespace.
+	// The list of tag keys and values that are associated with the rule groups
+	// namespace.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -4521,16 +5934,16 @@ func (s *RuleGroupsNamespaceDescription) SetTags(v map[string]*string) *RuleGrou
 	return s
 }
 
-// Represents the status of a namespace.
+// The status information about a rule groups namespace.
 type RuleGroupsNamespaceStatus struct {
 	_ struct{} `type:"structure"`
 
-	// Status code of this namespace.
+	// The current status of the namespace.
 	//
 	// StatusCode is a required field
 	StatusCode *string `locationName:"statusCode" type:"string" required:"true" enum:"RuleGroupsNamespaceStatusCode"`
 
-	// The reason for failure if any.
+	// The reason for the failure, if any.
 	StatusReason *string `locationName:"statusReason" type:"string"`
 }
 
@@ -4564,36 +5977,38 @@ func (s *RuleGroupsNamespaceStatus) SetStatusReason(v string) *RuleGroupsNamespa
 	return s
 }
 
-// Represents a summary of the rule groups namespace.
+// The high-level information about a rule groups namespace. To retrieve more
+// information, use DescribeRuleGroupsNamespace.
 type RuleGroupsNamespaceSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of this rule groups namespace.
+	// The ARN of the rule groups namespace.
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The time when the rule groups namespace was created.
+	// The date and time that the rule groups namespace was created.
 	//
 	// CreatedAt is a required field
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" required:"true"`
 
-	// The time when the rule groups namespace was modified.
+	// The date and time that the rule groups namespace was most recently changed.
 	//
 	// ModifiedAt is a required field
 	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" required:"true"`
 
-	// The rule groups namespace name.
+	// The name of the rule groups namespace.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The status of rule groups namespace.
+	// A structure that displays the current status of the rule groups namespace.
 	//
 	// Status is a required field
 	Status *RuleGroupsNamespaceStatus `locationName:"status" type:"structure" required:"true"`
 
-	// The tags of this rule groups namespace.
+	// The list of tag keys and values that are associated with the rule groups
+	// namespace.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
@@ -4651,7 +6066,369 @@ func (s *RuleGroupsNamespaceSummary) SetTags(v map[string]*string) *RuleGroupsNa
 	return s
 }
 
-// Request would cause a service quota to be exceeded.
+// A scrape configuration for a scraper, base 64 encoded. For more information,
+// see Scraper configuration (prometheus/latest/userguide/AMP-collector-how-to.html#AMP-collector-configuration)
+// in the Amazon Managed Service for Prometheus User Guide.
+type ScrapeConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The base 64 encoded scrape configuration file.
+	// ConfigurationBlob is automatically base64 encoded/decoded by the SDK.
+	ConfigurationBlob []byte `locationName:"configurationBlob" type:"blob"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScrapeConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScrapeConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetConfigurationBlob sets the ConfigurationBlob field's value.
+func (s *ScrapeConfiguration) SetConfigurationBlob(v []byte) *ScrapeConfiguration {
+	s.ConfigurationBlob = v
+	return s
+}
+
+// The ScraperDescription structure contains the full details about one scraper
+// in your account.
+type ScraperDescription struct {
+	_ struct{} `type:"structure"`
+
+	// (Optional) A name associated with the scraper.
+	Alias *string `locationName:"alias" min:"1" type:"string"`
+
+	// The Amazon Resource Name (ARN) of the scraper.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The date and time that the scraper was created.
+	//
+	// CreatedAt is a required field
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" required:"true"`
+
+	// The Amazon Managed Service for Prometheus workspace the scraper sends metrics
+	// to.
+	//
+	// Destination is a required field
+	Destination *Destination `locationName:"destination" type:"structure" required:"true"`
+
+	// The date and time that the scraper was last modified.
+	//
+	// LastModifiedAt is a required field
+	LastModifiedAt *time.Time `locationName:"lastModifiedAt" type:"timestamp" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the IAM role that provides permissions
+	// for the scraper to discover and collect metrics on your behalf.
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" type:"string" required:"true"`
+
+	// The configuration file in use by the scraper.
+	//
+	// ScrapeConfiguration is a required field
+	ScrapeConfiguration *ScrapeConfiguration `locationName:"scrapeConfiguration" type:"structure" required:"true"`
+
+	// The ID of the scraper.
+	//
+	// ScraperId is a required field
+	ScraperId *string `locationName:"scraperId" min:"1" type:"string" required:"true"`
+
+	// The Amazon EKS cluster from which the scraper collects metrics.
+	//
+	// Source is a required field
+	Source *Source `locationName:"source" type:"structure" required:"true"`
+
+	// A structure that contains the current status of the scraper.
+	//
+	// Status is a required field
+	Status *ScraperStatus `locationName:"status" type:"structure" required:"true"`
+
+	// If there is a failure, the reason for the failure.
+	StatusReason *string `locationName:"statusReason" min:"1" type:"string"`
+
+	// (Optional) The list of tag keys and values associated with the scraper.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScraperDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScraperDescription) GoString() string {
+	return s.String()
+}
+
+// SetAlias sets the Alias field's value.
+func (s *ScraperDescription) SetAlias(v string) *ScraperDescription {
+	s.Alias = &v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *ScraperDescription) SetArn(v string) *ScraperDescription {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ScraperDescription) SetCreatedAt(v time.Time) *ScraperDescription {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDestination sets the Destination field's value.
+func (s *ScraperDescription) SetDestination(v *Destination) *ScraperDescription {
+	s.Destination = v
+	return s
+}
+
+// SetLastModifiedAt sets the LastModifiedAt field's value.
+func (s *ScraperDescription) SetLastModifiedAt(v time.Time) *ScraperDescription {
+	s.LastModifiedAt = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *ScraperDescription) SetRoleArn(v string) *ScraperDescription {
+	s.RoleArn = &v
+	return s
+}
+
+// SetScrapeConfiguration sets the ScrapeConfiguration field's value.
+func (s *ScraperDescription) SetScrapeConfiguration(v *ScrapeConfiguration) *ScraperDescription {
+	s.ScrapeConfiguration = v
+	return s
+}
+
+// SetScraperId sets the ScraperId field's value.
+func (s *ScraperDescription) SetScraperId(v string) *ScraperDescription {
+	s.ScraperId = &v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *ScraperDescription) SetSource(v *Source) *ScraperDescription {
+	s.Source = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ScraperDescription) SetStatus(v *ScraperStatus) *ScraperDescription {
+	s.Status = v
+	return s
+}
+
+// SetStatusReason sets the StatusReason field's value.
+func (s *ScraperDescription) SetStatusReason(v string) *ScraperDescription {
+	s.StatusReason = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ScraperDescription) SetTags(v map[string]*string) *ScraperDescription {
+	s.Tags = v
+	return s
+}
+
+// The ScraperStatus structure contains status information about the scraper.
+type ScraperStatus struct {
+	_ struct{} `type:"structure"`
+
+	// The current status of the scraper.
+	//
+	// StatusCode is a required field
+	StatusCode *string `locationName:"statusCode" type:"string" required:"true" enum:"ScraperStatusCode"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScraperStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScraperStatus) GoString() string {
+	return s.String()
+}
+
+// SetStatusCode sets the StatusCode field's value.
+func (s *ScraperStatus) SetStatusCode(v string) *ScraperStatus {
+	s.StatusCode = &v
+	return s
+}
+
+// The ScraperSummary structure contains a summary of the details about one
+// scraper in your account.
+type ScraperSummary struct {
+	_ struct{} `type:"structure"`
+
+	// (Optional) A name associated with the scraper.
+	Alias *string `locationName:"alias" min:"1" type:"string"`
+
+	// The Amazon Resource Name (ARN) of the scraper.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The date and time that the scraper was created.
+	//
+	// CreatedAt is a required field
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" required:"true"`
+
+	// The Amazon Managed Service for Prometheus workspace the scraper sends metrics
+	// to.
+	//
+	// Destination is a required field
+	Destination *Destination `locationName:"destination" type:"structure" required:"true"`
+
+	// The date and time that the scraper was last modified.
+	//
+	// LastModifiedAt is a required field
+	LastModifiedAt *time.Time `locationName:"lastModifiedAt" type:"timestamp" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the IAM role that provides permissions
+	// for the scraper to discover and collect metrics on your behalf.
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" type:"string" required:"true"`
+
+	// The ID of the scraper.
+	//
+	// ScraperId is a required field
+	ScraperId *string `locationName:"scraperId" min:"1" type:"string" required:"true"`
+
+	// The Amazon EKS cluster from which the scraper collects metrics.
+	//
+	// Source is a required field
+	Source *Source `locationName:"source" type:"structure" required:"true"`
+
+	// A structure that contains the current status of the scraper.
+	//
+	// Status is a required field
+	Status *ScraperStatus `locationName:"status" type:"structure" required:"true"`
+
+	// If there is a failure, the reason for the failure.
+	StatusReason *string `locationName:"statusReason" min:"1" type:"string"`
+
+	// (Optional) The list of tag keys and values associated with the scraper.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScraperSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScraperSummary) GoString() string {
+	return s.String()
+}
+
+// SetAlias sets the Alias field's value.
+func (s *ScraperSummary) SetAlias(v string) *ScraperSummary {
+	s.Alias = &v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *ScraperSummary) SetArn(v string) *ScraperSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ScraperSummary) SetCreatedAt(v time.Time) *ScraperSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDestination sets the Destination field's value.
+func (s *ScraperSummary) SetDestination(v *Destination) *ScraperSummary {
+	s.Destination = v
+	return s
+}
+
+// SetLastModifiedAt sets the LastModifiedAt field's value.
+func (s *ScraperSummary) SetLastModifiedAt(v time.Time) *ScraperSummary {
+	s.LastModifiedAt = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *ScraperSummary) SetRoleArn(v string) *ScraperSummary {
+	s.RoleArn = &v
+	return s
+}
+
+// SetScraperId sets the ScraperId field's value.
+func (s *ScraperSummary) SetScraperId(v string) *ScraperSummary {
+	s.ScraperId = &v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *ScraperSummary) SetSource(v *Source) *ScraperSummary {
+	s.Source = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ScraperSummary) SetStatus(v *ScraperStatus) *ScraperSummary {
+	s.Status = v
+	return s
+}
+
+// SetStatusReason sets the StatusReason field's value.
+func (s *ScraperSummary) SetStatusReason(v string) *ScraperSummary {
+	s.StatusReason = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ScraperSummary) SetTags(v map[string]*string) *ScraperSummary {
+	s.Tags = v
+	return s
+}
+
+// Completing the request would cause a service quota to be exceeded.
 type ServiceQuotaExceededException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4659,7 +6436,7 @@ type ServiceQuotaExceededException struct {
 	// Description of the error.
 	Message_ *string `locationName:"message" type:"string"`
 
-	// Service Quotas requirement to identify originating quota.
+	// Service quotas code of the originating quota.
 	//
 	// QuotaCode is a required field
 	QuotaCode *string `locationName:"quotaCode" type:"string" required:"true"`
@@ -4674,7 +6451,7 @@ type ServiceQuotaExceededException struct {
 	// ResourceType is a required field
 	ResourceType *string `locationName:"resourceType" type:"string" required:"true"`
 
-	// Service Quotas requirement to identify originating service.
+	// Service quotas code for the originating service.
 	//
 	// ServiceCode is a required field
 	ServiceCode *string `locationName:"serviceCode" type:"string" required:"true"`
@@ -4736,15 +6513,64 @@ func (s *ServiceQuotaExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The source of collected metrics for a scraper.
+type Source struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon EKS cluster from which a scraper collects metrics.
+	EksConfiguration *EksConfiguration `locationName:"eksConfiguration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Source) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Source) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Source) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Source"}
+	if s.EksConfiguration != nil {
+		if err := s.EksConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("EksConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEksConfiguration sets the EksConfiguration field's value.
+func (s *Source) SetEksConfiguration(v *EksConfiguration) *Source {
+	s.EksConfiguration = v
+	return s
+}
+
 type TagResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the resource.
+	// The ARN of the workspace or rule groups namespace to apply tags to.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" type:"string" required:"true"`
 
-	// The list of tags assigned to the resource.
+	// The list of tag keys and values to associate with the resource.
+	//
+	// Keys may not begin with aws:.
 	//
 	// Tags is a required field
 	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
@@ -4821,7 +6647,7 @@ func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
-// Request was denied due to request throttling.
+// The request was denied due to request throttling.
 type ThrottlingException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -4829,13 +6655,13 @@ type ThrottlingException struct {
 	// Description of the error.
 	Message_ *string `locationName:"message" type:"string"`
 
-	// Service Quotas requirement to identify originating quota.
+	// Service quotas code for the originating quota.
 	QuotaCode *string `locationName:"quotaCode" type:"string"`
 
 	// Advice to clients on when the call can be safely retried.
 	RetryAfterSeconds *int64 `location:"header" locationName:"Retry-After" type:"integer"`
 
-	// Service Quotas requirement to identify originating service.
+	// Service quotas code for the originating service.
 	ServiceCode *string `locationName:"serviceCode" type:"string"`
 }
 
@@ -4898,12 +6724,12 @@ func (s *ThrottlingException) RequestID() string {
 type UntagResourceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The ARN of the resource.
+	// The ARN of the workspace or rule groups namespace.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" type:"string" required:"true"`
 
-	// One or more tag keys
+	// The keys of the tags to remove.
 	//
 	// TagKeys is a required field
 	TagKeys []*string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
@@ -4984,16 +6810,17 @@ func (s UntagResourceOutput) GoString() string {
 type UpdateLoggingConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The ARN of the CW log group to which the vended log data will be published.
+	// The ARN of the CloudWatch log group to which the vended log data will be
+	// published.
 	//
 	// LogGroupArn is a required field
 	LogGroupArn *string `locationName:"logGroupArn" type:"string" required:"true"`
 
-	// The ID of the workspace to vend logs to.
+	// The ID of the workspace to update the logging configuration for.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -5061,7 +6888,7 @@ func (s *UpdateLoggingConfigurationInput) SetWorkspaceId(v string) *UpdateLoggin
 type UpdateLoggingConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The status of the logging configuration.
+	// A structure that contains the current status of the logging configuration.
 	//
 	// Status is a required field
 	Status *LoggingConfigurationStatus `locationName:"status" type:"structure" required:"true"`
@@ -5095,14 +6922,17 @@ func (s *UpdateLoggingConfigurationOutput) SetStatus(v *LoggingConfigurationStat
 type UpdateWorkspaceAliasInput struct {
 	_ struct{} `type:"structure"`
 
-	// The new alias of the workspace.
+	// The new alias for the workspace. It does not need to be unique.
+	//
+	// Amazon Managed Service for Prometheus will automatically strip any blank
+	// spaces from the beginning and end of the alias that you specify.
 	Alias *string `locationName:"alias" min:"1" type:"string"`
 
-	// Optional, unique, case-sensitive, user-provided identifier to ensure the
-	// idempotency of the request.
+	// A unique identifier that you can provide to ensure the idempotency of the
+	// request. Case-sensitive.
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The ID of the workspace being updated.
+	// The ID of the workspace to update.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `location:"uri" locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -5188,13 +7018,13 @@ func (s UpdateWorkspaceAliasOutput) GoString() string {
 	return s.String()
 }
 
-// The input fails to satisfy the constraints specified by an AWS service.
+// The input fails to satisfy the constraints specified by an Amazon Web Services
+// service.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
-	// The field that caused the error, if applicable. If more than one field caused
-	// the error, pick one and elaborate in the message.
+	// The field that caused the error, if applicable.
 	FieldList []*ValidationExceptionField `locationName:"fieldList" type:"list"`
 
 	// Description of the error.
@@ -5262,17 +7092,16 @@ func (s *ValidationException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Stores information about a field passed inside a request that resulted in
-// an exception.
+// Information about a field passed into a request that resulted in an exception.
 type ValidationExceptionField struct {
 	_ struct{} `type:"structure"`
 
-	// Message describing why the field failed validation.
+	// A message describing why the field caused an exception.
 	//
 	// Message is a required field
 	Message *string `locationName:"message" type:"string" required:"true"`
 
-	// The field name.
+	// The name of the field that caused an exception.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" type:"string" required:"true"`
@@ -5308,35 +7137,41 @@ func (s *ValidationExceptionField) SetName(v string) *ValidationExceptionField {
 	return s
 }
 
-// Represents the properties of a workspace.
+// The full details about one Amazon Managed Service for Prometheus workspace
+// in your account.
 type WorkspaceDescription struct {
 	_ struct{} `type:"structure"`
 
-	// Alias of this workspace.
+	// The alias that is assigned to this workspace to help identify it. It may
+	// not be unique.
 	Alias *string `locationName:"alias" min:"1" type:"string"`
 
-	// The Amazon Resource Name (ARN) of this workspace.
+	// The ARN of the workspace.
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The time when the workspace was created.
+	// The date and time that the workspace was created.
 	//
 	// CreatedAt is a required field
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" required:"true"`
 
-	// Prometheus endpoint URI.
+	// (optional) If the workspace was created with a customer managed KMS key,
+	// the ARN for the key used.
+	KmsKeyArn *string `locationName:"kmsKeyArn" min:"20" type:"string"`
+
+	// The Prometheus endpoint available for this workspace.
 	PrometheusEndpoint *string `locationName:"prometheusEndpoint" min:"1" type:"string"`
 
-	// The status of this workspace.
+	// The current status of the workspace.
 	//
 	// Status is a required field
 	Status *WorkspaceStatus `locationName:"status" type:"structure" required:"true"`
 
-	// The tags of this workspace.
+	// The list of tag keys and values that are associated with the workspace.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
-	// Unique string identifying this workspace.
+	// The unique ID for the workspace.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -5378,6 +7213,12 @@ func (s *WorkspaceDescription) SetCreatedAt(v time.Time) *WorkspaceDescription {
 	return s
 }
 
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *WorkspaceDescription) SetKmsKeyArn(v string) *WorkspaceDescription {
+	s.KmsKeyArn = &v
+	return s
+}
+
 // SetPrometheusEndpoint sets the PrometheusEndpoint field's value.
 func (s *WorkspaceDescription) SetPrometheusEndpoint(v string) *WorkspaceDescription {
 	s.PrometheusEndpoint = &v
@@ -5402,11 +7243,11 @@ func (s *WorkspaceDescription) SetWorkspaceId(v string) *WorkspaceDescription {
 	return s
 }
 
-// Represents the status of a workspace.
+// The status of the workspace.
 type WorkspaceStatus struct {
 	_ struct{} `type:"structure"`
 
-	// Status code of this workspace.
+	// The current status of the workspace.
 	//
 	// StatusCode is a required field
 	StatusCode *string `locationName:"statusCode" type:"string" required:"true" enum:"WorkspaceStatusCode"`
@@ -5436,32 +7277,38 @@ func (s *WorkspaceStatus) SetStatusCode(v string) *WorkspaceStatus {
 	return s
 }
 
-// Represents a summary of the properties of a workspace.
+// The information about one Amazon Managed Service for Prometheus workspace
+// in your account.
 type WorkspaceSummary struct {
 	_ struct{} `type:"structure"`
 
-	// Alias of this workspace.
+	// The alias that is assigned to this workspace to help identify it. It may
+	// not be unique.
 	Alias *string `locationName:"alias" min:"1" type:"string"`
 
-	// The AmazonResourceName of this workspace.
+	// The ARN of the workspace.
 	//
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
-	// The time when the workspace was created.
+	// The date and time that the workspace was created.
 	//
 	// CreatedAt is a required field
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" required:"true"`
 
-	// The status of this workspace.
+	// (optional) If the workspace was created with a customer managed KMS key,
+	// the ARN for the key used.
+	KmsKeyArn *string `locationName:"kmsKeyArn" min:"20" type:"string"`
+
+	// The current status of the workspace.
 	//
 	// Status is a required field
 	Status *WorkspaceStatus `locationName:"status" type:"structure" required:"true"`
 
-	// The tags of this workspace.
+	// The list of tag keys and values that are associated with the workspace.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
-	// Unique string identifying this workspace.
+	// The unique ID for the workspace.
 	//
 	// WorkspaceId is a required field
 	WorkspaceId *string `locationName:"workspaceId" min:"1" type:"string" required:"true"`
@@ -5503,6 +7350,12 @@ func (s *WorkspaceSummary) SetCreatedAt(v time.Time) *WorkspaceSummary {
 	return s
 }
 
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *WorkspaceSummary) SetKmsKeyArn(v string) *WorkspaceSummary {
+	s.KmsKeyArn = &v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *WorkspaceSummary) SetStatus(v *WorkspaceStatus) *WorkspaceSummary {
 	s.Status = v
@@ -5521,7 +7374,7 @@ func (s *WorkspaceSummary) SetWorkspaceId(v string) *WorkspaceSummary {
 	return s
 }
 
-// State of an alert manager definition.
+// State of an AlertManagerDefinition.
 const (
 	// AlertManagerDefinitionStatusCodeCreating is a AlertManagerDefinitionStatusCode enum value
 	AlertManagerDefinitionStatusCodeCreating = "CREATING"
@@ -5617,6 +7470,35 @@ func RuleGroupsNamespaceStatusCode_Values() []string {
 		RuleGroupsNamespaceStatusCodeDeleting,
 		RuleGroupsNamespaceStatusCodeCreationFailed,
 		RuleGroupsNamespaceStatusCodeUpdateFailed,
+	}
+}
+
+// State of a scraper.
+const (
+	// ScraperStatusCodeCreating is a ScraperStatusCode enum value
+	ScraperStatusCodeCreating = "CREATING"
+
+	// ScraperStatusCodeActive is a ScraperStatusCode enum value
+	ScraperStatusCodeActive = "ACTIVE"
+
+	// ScraperStatusCodeDeleting is a ScraperStatusCode enum value
+	ScraperStatusCodeDeleting = "DELETING"
+
+	// ScraperStatusCodeCreationFailed is a ScraperStatusCode enum value
+	ScraperStatusCodeCreationFailed = "CREATION_FAILED"
+
+	// ScraperStatusCodeDeletionFailed is a ScraperStatusCode enum value
+	ScraperStatusCodeDeletionFailed = "DELETION_FAILED"
+)
+
+// ScraperStatusCode_Values returns all elements of the ScraperStatusCode enum
+func ScraperStatusCode_Values() []string {
+	return []string{
+		ScraperStatusCodeCreating,
+		ScraperStatusCodeActive,
+		ScraperStatusCodeDeleting,
+		ScraperStatusCodeCreationFailed,
+		ScraperStatusCodeDeletionFailed,
 	}
 }
 

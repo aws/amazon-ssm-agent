@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon OpenSearch Service.
-//    func myFunc(svc opensearchserviceiface.OpenSearchServiceAPI) bool {
-//        // Make svc.AcceptInboundConnection request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon OpenSearch Service.
+//	func myFunc(svc opensearchserviceiface.OpenSearchServiceAPI) bool {
+//	    // Make svc.AcceptInboundConnection request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := opensearchservice.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := opensearchservice.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockOpenSearchServiceClient struct {
-//        opensearchserviceiface.OpenSearchServiceAPI
-//    }
-//    func (m *mockOpenSearchServiceClient) AcceptInboundConnection(input *opensearchservice.AcceptInboundConnectionInput) (*opensearchservice.AcceptInboundConnectionOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockOpenSearchServiceClient struct {
+//	    opensearchserviceiface.OpenSearchServiceAPI
+//	}
+//	func (m *mockOpenSearchServiceClient) AcceptInboundConnection(input *opensearchservice.AcceptInboundConnectionInput) (*opensearchservice.AcceptInboundConnectionOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockOpenSearchServiceClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockOpenSearchServiceClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -63,6 +63,10 @@ type OpenSearchServiceAPI interface {
 	AcceptInboundConnection(*opensearchservice.AcceptInboundConnectionInput) (*opensearchservice.AcceptInboundConnectionOutput, error)
 	AcceptInboundConnectionWithContext(aws.Context, *opensearchservice.AcceptInboundConnectionInput, ...request.Option) (*opensearchservice.AcceptInboundConnectionOutput, error)
 	AcceptInboundConnectionRequest(*opensearchservice.AcceptInboundConnectionInput) (*request.Request, *opensearchservice.AcceptInboundConnectionOutput)
+
+	AddDataSource(*opensearchservice.AddDataSourceInput) (*opensearchservice.AddDataSourceOutput, error)
+	AddDataSourceWithContext(aws.Context, *opensearchservice.AddDataSourceInput, ...request.Option) (*opensearchservice.AddDataSourceOutput, error)
+	AddDataSourceRequest(*opensearchservice.AddDataSourceInput) (*request.Request, *opensearchservice.AddDataSourceOutput)
 
 	AddTags(*opensearchservice.AddTagsInput) (*opensearchservice.AddTagsOutput, error)
 	AddTagsWithContext(aws.Context, *opensearchservice.AddTagsInput, ...request.Option) (*opensearchservice.AddTagsOutput, error)
@@ -75,6 +79,10 @@ type OpenSearchServiceAPI interface {
 	AuthorizeVpcEndpointAccess(*opensearchservice.AuthorizeVpcEndpointAccessInput) (*opensearchservice.AuthorizeVpcEndpointAccessOutput, error)
 	AuthorizeVpcEndpointAccessWithContext(aws.Context, *opensearchservice.AuthorizeVpcEndpointAccessInput, ...request.Option) (*opensearchservice.AuthorizeVpcEndpointAccessOutput, error)
 	AuthorizeVpcEndpointAccessRequest(*opensearchservice.AuthorizeVpcEndpointAccessInput) (*request.Request, *opensearchservice.AuthorizeVpcEndpointAccessOutput)
+
+	CancelDomainConfigChange(*opensearchservice.CancelDomainConfigChangeInput) (*opensearchservice.CancelDomainConfigChangeOutput, error)
+	CancelDomainConfigChangeWithContext(aws.Context, *opensearchservice.CancelDomainConfigChangeInput, ...request.Option) (*opensearchservice.CancelDomainConfigChangeOutput, error)
+	CancelDomainConfigChangeRequest(*opensearchservice.CancelDomainConfigChangeInput) (*request.Request, *opensearchservice.CancelDomainConfigChangeOutput)
 
 	CancelServiceSoftwareUpdate(*opensearchservice.CancelServiceSoftwareUpdateInput) (*opensearchservice.CancelServiceSoftwareUpdateOutput, error)
 	CancelServiceSoftwareUpdateWithContext(aws.Context, *opensearchservice.CancelServiceSoftwareUpdateInput, ...request.Option) (*opensearchservice.CancelServiceSoftwareUpdateOutput, error)
@@ -95,6 +103,10 @@ type OpenSearchServiceAPI interface {
 	CreateVpcEndpoint(*opensearchservice.CreateVpcEndpointInput) (*opensearchservice.CreateVpcEndpointOutput, error)
 	CreateVpcEndpointWithContext(aws.Context, *opensearchservice.CreateVpcEndpointInput, ...request.Option) (*opensearchservice.CreateVpcEndpointOutput, error)
 	CreateVpcEndpointRequest(*opensearchservice.CreateVpcEndpointInput) (*request.Request, *opensearchservice.CreateVpcEndpointOutput)
+
+	DeleteDataSource(*opensearchservice.DeleteDataSourceInput) (*opensearchservice.DeleteDataSourceOutput, error)
+	DeleteDataSourceWithContext(aws.Context, *opensearchservice.DeleteDataSourceInput, ...request.Option) (*opensearchservice.DeleteDataSourceOutput, error)
+	DeleteDataSourceRequest(*opensearchservice.DeleteDataSourceInput) (*request.Request, *opensearchservice.DeleteDataSourceOutput)
 
 	DeleteDomain(*opensearchservice.DeleteDomainInput) (*opensearchservice.DeleteDomainOutput, error)
 	DeleteDomainWithContext(aws.Context, *opensearchservice.DeleteDomainInput, ...request.Option) (*opensearchservice.DeleteDomainOutput, error)
@@ -202,6 +214,14 @@ type OpenSearchServiceAPI interface {
 	GetCompatibleVersionsWithContext(aws.Context, *opensearchservice.GetCompatibleVersionsInput, ...request.Option) (*opensearchservice.GetCompatibleVersionsOutput, error)
 	GetCompatibleVersionsRequest(*opensearchservice.GetCompatibleVersionsInput) (*request.Request, *opensearchservice.GetCompatibleVersionsOutput)
 
+	GetDataSource(*opensearchservice.GetDataSourceInput) (*opensearchservice.GetDataSourceOutput, error)
+	GetDataSourceWithContext(aws.Context, *opensearchservice.GetDataSourceInput, ...request.Option) (*opensearchservice.GetDataSourceOutput, error)
+	GetDataSourceRequest(*opensearchservice.GetDataSourceInput) (*request.Request, *opensearchservice.GetDataSourceOutput)
+
+	GetDomainMaintenanceStatus(*opensearchservice.GetDomainMaintenanceStatusInput) (*opensearchservice.GetDomainMaintenanceStatusOutput, error)
+	GetDomainMaintenanceStatusWithContext(aws.Context, *opensearchservice.GetDomainMaintenanceStatusInput, ...request.Option) (*opensearchservice.GetDomainMaintenanceStatusOutput, error)
+	GetDomainMaintenanceStatusRequest(*opensearchservice.GetDomainMaintenanceStatusInput) (*request.Request, *opensearchservice.GetDomainMaintenanceStatusOutput)
+
 	GetPackageVersionHistory(*opensearchservice.GetPackageVersionHistoryInput) (*opensearchservice.GetPackageVersionHistoryOutput, error)
 	GetPackageVersionHistoryWithContext(aws.Context, *opensearchservice.GetPackageVersionHistoryInput, ...request.Option) (*opensearchservice.GetPackageVersionHistoryOutput, error)
 	GetPackageVersionHistoryRequest(*opensearchservice.GetPackageVersionHistoryInput) (*request.Request, *opensearchservice.GetPackageVersionHistoryOutput)
@@ -219,6 +239,17 @@ type OpenSearchServiceAPI interface {
 	GetUpgradeStatus(*opensearchservice.GetUpgradeStatusInput) (*opensearchservice.GetUpgradeStatusOutput, error)
 	GetUpgradeStatusWithContext(aws.Context, *opensearchservice.GetUpgradeStatusInput, ...request.Option) (*opensearchservice.GetUpgradeStatusOutput, error)
 	GetUpgradeStatusRequest(*opensearchservice.GetUpgradeStatusInput) (*request.Request, *opensearchservice.GetUpgradeStatusOutput)
+
+	ListDataSources(*opensearchservice.ListDataSourcesInput) (*opensearchservice.ListDataSourcesOutput, error)
+	ListDataSourcesWithContext(aws.Context, *opensearchservice.ListDataSourcesInput, ...request.Option) (*opensearchservice.ListDataSourcesOutput, error)
+	ListDataSourcesRequest(*opensearchservice.ListDataSourcesInput) (*request.Request, *opensearchservice.ListDataSourcesOutput)
+
+	ListDomainMaintenances(*opensearchservice.ListDomainMaintenancesInput) (*opensearchservice.ListDomainMaintenancesOutput, error)
+	ListDomainMaintenancesWithContext(aws.Context, *opensearchservice.ListDomainMaintenancesInput, ...request.Option) (*opensearchservice.ListDomainMaintenancesOutput, error)
+	ListDomainMaintenancesRequest(*opensearchservice.ListDomainMaintenancesInput) (*request.Request, *opensearchservice.ListDomainMaintenancesOutput)
+
+	ListDomainMaintenancesPages(*opensearchservice.ListDomainMaintenancesInput, func(*opensearchservice.ListDomainMaintenancesOutput, bool) bool) error
+	ListDomainMaintenancesPagesWithContext(aws.Context, *opensearchservice.ListDomainMaintenancesInput, func(*opensearchservice.ListDomainMaintenancesOutput, bool) bool, ...request.Option) error
 
 	ListDomainNames(*opensearchservice.ListDomainNamesInput) (*opensearchservice.ListDomainNamesOutput, error)
 	ListDomainNamesWithContext(aws.Context, *opensearchservice.ListDomainNamesInput, ...request.Option) (*opensearchservice.ListDomainNamesOutput, error)
@@ -291,9 +322,17 @@ type OpenSearchServiceAPI interface {
 	RevokeVpcEndpointAccessWithContext(aws.Context, *opensearchservice.RevokeVpcEndpointAccessInput, ...request.Option) (*opensearchservice.RevokeVpcEndpointAccessOutput, error)
 	RevokeVpcEndpointAccessRequest(*opensearchservice.RevokeVpcEndpointAccessInput) (*request.Request, *opensearchservice.RevokeVpcEndpointAccessOutput)
 
+	StartDomainMaintenance(*opensearchservice.StartDomainMaintenanceInput) (*opensearchservice.StartDomainMaintenanceOutput, error)
+	StartDomainMaintenanceWithContext(aws.Context, *opensearchservice.StartDomainMaintenanceInput, ...request.Option) (*opensearchservice.StartDomainMaintenanceOutput, error)
+	StartDomainMaintenanceRequest(*opensearchservice.StartDomainMaintenanceInput) (*request.Request, *opensearchservice.StartDomainMaintenanceOutput)
+
 	StartServiceSoftwareUpdate(*opensearchservice.StartServiceSoftwareUpdateInput) (*opensearchservice.StartServiceSoftwareUpdateOutput, error)
 	StartServiceSoftwareUpdateWithContext(aws.Context, *opensearchservice.StartServiceSoftwareUpdateInput, ...request.Option) (*opensearchservice.StartServiceSoftwareUpdateOutput, error)
 	StartServiceSoftwareUpdateRequest(*opensearchservice.StartServiceSoftwareUpdateInput) (*request.Request, *opensearchservice.StartServiceSoftwareUpdateOutput)
+
+	UpdateDataSource(*opensearchservice.UpdateDataSourceInput) (*opensearchservice.UpdateDataSourceOutput, error)
+	UpdateDataSourceWithContext(aws.Context, *opensearchservice.UpdateDataSourceInput, ...request.Option) (*opensearchservice.UpdateDataSourceOutput, error)
+	UpdateDataSourceRequest(*opensearchservice.UpdateDataSourceInput) (*request.Request, *opensearchservice.UpdateDataSourceOutput)
 
 	UpdateDomainConfig(*opensearchservice.UpdateDomainConfigInput) (*opensearchservice.UpdateDomainConfigOutput, error)
 	UpdateDomainConfigWithContext(aws.Context, *opensearchservice.UpdateDomainConfigInput, ...request.Option) (*opensearchservice.UpdateDomainConfigOutput, error)

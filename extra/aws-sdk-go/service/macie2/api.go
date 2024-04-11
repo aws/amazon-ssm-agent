@@ -29,14 +29,13 @@ const opAcceptInvitation = "AcceptInvitation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AcceptInvitationRequest method.
+//	req, resp := client.AcceptInvitationRequest(params)
 //
-//    // Example sending a request using the AcceptInvitationRequest method.
-//    req, resp := client.AcceptInvitationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/AcceptInvitation
 func (c *Macie2) AcceptInvitationRequest(input *AcceptInvitationInput) (req *request.Request, output *AcceptInvitationOutput) {
@@ -69,33 +68,34 @@ func (c *Macie2) AcceptInvitationRequest(input *AcceptInvitationInput) (req *req
 // API operation AcceptInvitation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/AcceptInvitation
 func (c *Macie2) AcceptInvitation(input *AcceptInvitationInput) (*AcceptInvitationOutput, error) {
@@ -135,14 +135,13 @@ const opBatchGetCustomDataIdentifiers = "BatchGetCustomDataIdentifiers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetCustomDataIdentifiersRequest method.
+//	req, resp := client.BatchGetCustomDataIdentifiersRequest(params)
 //
-//    // Example sending a request using the BatchGetCustomDataIdentifiersRequest method.
-//    req, resp := client.BatchGetCustomDataIdentifiersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/BatchGetCustomDataIdentifiers
 func (c *Macie2) BatchGetCustomDataIdentifiersRequest(input *BatchGetCustomDataIdentifiersInput) (req *request.Request, output *BatchGetCustomDataIdentifiersOutput) {
@@ -173,33 +172,34 @@ func (c *Macie2) BatchGetCustomDataIdentifiersRequest(input *BatchGetCustomDataI
 // API operation BatchGetCustomDataIdentifiers for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/BatchGetCustomDataIdentifiers
 func (c *Macie2) BatchGetCustomDataIdentifiers(input *BatchGetCustomDataIdentifiersInput) (*BatchGetCustomDataIdentifiersOutput, error) {
@@ -239,14 +239,13 @@ const opCreateAllowList = "CreateAllowList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAllowListRequest method.
+//	req, resp := client.CreateAllowListRequest(params)
 //
-//    // Example sending a request using the CreateAllowListRequest method.
-//    req, resp := client.CreateAllowListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateAllowList
 func (c *Macie2) CreateAllowListRequest(input *CreateAllowListInput) (req *request.Request, output *CreateAllowListOutput) {
@@ -277,33 +276,34 @@ func (c *Macie2) CreateAllowListRequest(input *CreateAllowListInput) (req *reque
 // API operation CreateAllowList for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateAllowList
 func (c *Macie2) CreateAllowList(input *CreateAllowListInput) (*CreateAllowListOutput, error) {
@@ -343,14 +343,13 @@ const opCreateClassificationJob = "CreateClassificationJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateClassificationJobRequest method.
+//	req, resp := client.CreateClassificationJobRequest(params)
 //
-//    // Example sending a request using the CreateClassificationJobRequest method.
-//    req, resp := client.CreateClassificationJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateClassificationJob
 func (c *Macie2) CreateClassificationJobRequest(input *CreateClassificationJobInput) (req *request.Request, output *CreateClassificationJobOutput) {
@@ -381,33 +380,34 @@ func (c *Macie2) CreateClassificationJobRequest(input *CreateClassificationJobIn
 // API operation CreateClassificationJob for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateClassificationJob
 func (c *Macie2) CreateClassificationJob(input *CreateClassificationJobInput) (*CreateClassificationJobOutput, error) {
@@ -447,14 +447,13 @@ const opCreateCustomDataIdentifier = "CreateCustomDataIdentifier"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateCustomDataIdentifierRequest method.
+//	req, resp := client.CreateCustomDataIdentifierRequest(params)
 //
-//    // Example sending a request using the CreateCustomDataIdentifierRequest method.
-//    req, resp := client.CreateCustomDataIdentifierRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateCustomDataIdentifier
 func (c *Macie2) CreateCustomDataIdentifierRequest(input *CreateCustomDataIdentifierInput) (req *request.Request, output *CreateCustomDataIdentifierOutput) {
@@ -485,33 +484,34 @@ func (c *Macie2) CreateCustomDataIdentifierRequest(input *CreateCustomDataIdenti
 // API operation CreateCustomDataIdentifier for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateCustomDataIdentifier
 func (c *Macie2) CreateCustomDataIdentifier(input *CreateCustomDataIdentifierInput) (*CreateCustomDataIdentifierOutput, error) {
@@ -551,14 +551,13 @@ const opCreateFindingsFilter = "CreateFindingsFilter"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFindingsFilterRequest method.
+//	req, resp := client.CreateFindingsFilterRequest(params)
 //
-//    // Example sending a request using the CreateFindingsFilterRequest method.
-//    req, resp := client.CreateFindingsFilterRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateFindingsFilter
 func (c *Macie2) CreateFindingsFilterRequest(input *CreateFindingsFilterInput) (req *request.Request, output *CreateFindingsFilterOutput) {
@@ -589,33 +588,34 @@ func (c *Macie2) CreateFindingsFilterRequest(input *CreateFindingsFilterInput) (
 // API operation CreateFindingsFilter for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateFindingsFilter
 func (c *Macie2) CreateFindingsFilter(input *CreateFindingsFilterInput) (*CreateFindingsFilterOutput, error) {
@@ -655,14 +655,13 @@ const opCreateInvitations = "CreateInvitations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateInvitationsRequest method.
+//	req, resp := client.CreateInvitationsRequest(params)
 //
-//    // Example sending a request using the CreateInvitationsRequest method.
-//    req, resp := client.CreateInvitationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateInvitations
 func (c *Macie2) CreateInvitationsRequest(input *CreateInvitationsInput) (req *request.Request, output *CreateInvitationsOutput) {
@@ -693,33 +692,34 @@ func (c *Macie2) CreateInvitationsRequest(input *CreateInvitationsInput) (req *r
 // API operation CreateInvitations for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateInvitations
 func (c *Macie2) CreateInvitations(input *CreateInvitationsInput) (*CreateInvitationsOutput, error) {
@@ -759,14 +759,13 @@ const opCreateMember = "CreateMember"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateMemberRequest method.
+//	req, resp := client.CreateMemberRequest(params)
 //
-//    // Example sending a request using the CreateMemberRequest method.
-//    req, resp := client.CreateMemberRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateMember
 func (c *Macie2) CreateMemberRequest(input *CreateMemberInput) (req *request.Request, output *CreateMemberOutput) {
@@ -797,33 +796,34 @@ func (c *Macie2) CreateMemberRequest(input *CreateMemberInput) (req *request.Req
 // API operation CreateMember for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateMember
 func (c *Macie2) CreateMember(input *CreateMemberInput) (*CreateMemberOutput, error) {
@@ -863,14 +863,13 @@ const opCreateSampleFindings = "CreateSampleFindings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSampleFindingsRequest method.
+//	req, resp := client.CreateSampleFindingsRequest(params)
 //
-//    // Example sending a request using the CreateSampleFindingsRequest method.
-//    req, resp := client.CreateSampleFindingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateSampleFindings
 func (c *Macie2) CreateSampleFindingsRequest(input *CreateSampleFindingsInput) (req *request.Request, output *CreateSampleFindingsOutput) {
@@ -902,33 +901,34 @@ func (c *Macie2) CreateSampleFindingsRequest(input *CreateSampleFindingsInput) (
 // API operation CreateSampleFindings for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/CreateSampleFindings
 func (c *Macie2) CreateSampleFindings(input *CreateSampleFindingsInput) (*CreateSampleFindingsOutput, error) {
@@ -968,14 +968,13 @@ const opDeclineInvitations = "DeclineInvitations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeclineInvitationsRequest method.
+//	req, resp := client.DeclineInvitationsRequest(params)
 //
-//    // Example sending a request using the DeclineInvitationsRequest method.
-//    req, resp := client.DeclineInvitationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeclineInvitations
 func (c *Macie2) DeclineInvitationsRequest(input *DeclineInvitationsInput) (req *request.Request, output *DeclineInvitationsOutput) {
@@ -1007,33 +1006,34 @@ func (c *Macie2) DeclineInvitationsRequest(input *DeclineInvitationsInput) (req 
 // API operation DeclineInvitations for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeclineInvitations
 func (c *Macie2) DeclineInvitations(input *DeclineInvitationsInput) (*DeclineInvitationsOutput, error) {
@@ -1073,14 +1073,13 @@ const opDeleteAllowList = "DeleteAllowList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAllowListRequest method.
+//	req, resp := client.DeleteAllowListRequest(params)
 //
-//    // Example sending a request using the DeleteAllowListRequest method.
-//    req, resp := client.DeleteAllowListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeleteAllowList
 func (c *Macie2) DeleteAllowListRequest(input *DeleteAllowListInput) (req *request.Request, output *DeleteAllowListOutput) {
@@ -1112,25 +1111,26 @@ func (c *Macie2) DeleteAllowListRequest(input *DeleteAllowListInput) (req *reque
 // API operation DeleteAllowList for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeleteAllowList
 func (c *Macie2) DeleteAllowList(input *DeleteAllowListInput) (*DeleteAllowListOutput, error) {
@@ -1170,14 +1170,13 @@ const opDeleteCustomDataIdentifier = "DeleteCustomDataIdentifier"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCustomDataIdentifierRequest method.
+//	req, resp := client.DeleteCustomDataIdentifierRequest(params)
 //
-//    // Example sending a request using the DeleteCustomDataIdentifierRequest method.
-//    req, resp := client.DeleteCustomDataIdentifierRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeleteCustomDataIdentifier
 func (c *Macie2) DeleteCustomDataIdentifierRequest(input *DeleteCustomDataIdentifierInput) (req *request.Request, output *DeleteCustomDataIdentifierOutput) {
@@ -1209,33 +1208,34 @@ func (c *Macie2) DeleteCustomDataIdentifierRequest(input *DeleteCustomDataIdenti
 // API operation DeleteCustomDataIdentifier for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeleteCustomDataIdentifier
 func (c *Macie2) DeleteCustomDataIdentifier(input *DeleteCustomDataIdentifierInput) (*DeleteCustomDataIdentifierOutput, error) {
@@ -1275,14 +1275,13 @@ const opDeleteFindingsFilter = "DeleteFindingsFilter"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFindingsFilterRequest method.
+//	req, resp := client.DeleteFindingsFilterRequest(params)
 //
-//    // Example sending a request using the DeleteFindingsFilterRequest method.
-//    req, resp := client.DeleteFindingsFilterRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeleteFindingsFilter
 func (c *Macie2) DeleteFindingsFilterRequest(input *DeleteFindingsFilterInput) (req *request.Request, output *DeleteFindingsFilterOutput) {
@@ -1314,33 +1313,34 @@ func (c *Macie2) DeleteFindingsFilterRequest(input *DeleteFindingsFilterInput) (
 // API operation DeleteFindingsFilter for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeleteFindingsFilter
 func (c *Macie2) DeleteFindingsFilter(input *DeleteFindingsFilterInput) (*DeleteFindingsFilterOutput, error) {
@@ -1380,14 +1380,13 @@ const opDeleteInvitations = "DeleteInvitations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteInvitationsRequest method.
+//	req, resp := client.DeleteInvitationsRequest(params)
 //
-//    // Example sending a request using the DeleteInvitationsRequest method.
-//    req, resp := client.DeleteInvitationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeleteInvitations
 func (c *Macie2) DeleteInvitationsRequest(input *DeleteInvitationsInput) (req *request.Request, output *DeleteInvitationsOutput) {
@@ -1419,33 +1418,34 @@ func (c *Macie2) DeleteInvitationsRequest(input *DeleteInvitationsInput) (req *r
 // API operation DeleteInvitations for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeleteInvitations
 func (c *Macie2) DeleteInvitations(input *DeleteInvitationsInput) (*DeleteInvitationsOutput, error) {
@@ -1485,14 +1485,13 @@ const opDeleteMember = "DeleteMember"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMemberRequest method.
+//	req, resp := client.DeleteMemberRequest(params)
 //
-//    // Example sending a request using the DeleteMemberRequest method.
-//    req, resp := client.DeleteMemberRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeleteMember
 func (c *Macie2) DeleteMemberRequest(input *DeleteMemberInput) (req *request.Request, output *DeleteMemberOutput) {
@@ -1525,33 +1524,34 @@ func (c *Macie2) DeleteMemberRequest(input *DeleteMemberInput) (req *request.Req
 // API operation DeleteMember for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DeleteMember
 func (c *Macie2) DeleteMember(input *DeleteMemberInput) (*DeleteMemberOutput, error) {
@@ -1591,14 +1591,13 @@ const opDescribeBuckets = "DescribeBuckets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeBucketsRequest method.
+//	req, resp := client.DescribeBucketsRequest(params)
 //
-//    // Example sending a request using the DescribeBucketsRequest method.
-//    req, resp := client.DescribeBucketsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DescribeBuckets
 func (c *Macie2) DescribeBucketsRequest(input *DescribeBucketsInput) (req *request.Request, output *DescribeBucketsOutput) {
@@ -1636,33 +1635,34 @@ func (c *Macie2) DescribeBucketsRequest(input *DescribeBucketsInput) (req *reque
 // API operation DescribeBuckets for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DescribeBuckets
 func (c *Macie2) DescribeBuckets(input *DescribeBucketsInput) (*DescribeBucketsOutput, error) {
@@ -1694,15 +1694,14 @@ func (c *Macie2) DescribeBucketsWithContext(ctx aws.Context, input *DescribeBuck
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeBuckets operation.
-//    pageNum := 0
-//    err := client.DescribeBucketsPages(params,
-//        func(page *macie2.DescribeBucketsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeBuckets operation.
+//	pageNum := 0
+//	err := client.DescribeBucketsPages(params,
+//	    func(page *macie2.DescribeBucketsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) DescribeBucketsPages(input *DescribeBucketsInput, fn func(*DescribeBucketsOutput, bool) bool) error {
 	return c.DescribeBucketsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1754,14 +1753,13 @@ const opDescribeClassificationJob = "DescribeClassificationJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeClassificationJobRequest method.
+//	req, resp := client.DescribeClassificationJobRequest(params)
 //
-//    // Example sending a request using the DescribeClassificationJobRequest method.
-//    req, resp := client.DescribeClassificationJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DescribeClassificationJob
 func (c *Macie2) DescribeClassificationJobRequest(input *DescribeClassificationJobInput) (req *request.Request, output *DescribeClassificationJobOutput) {
@@ -1792,33 +1790,34 @@ func (c *Macie2) DescribeClassificationJobRequest(input *DescribeClassificationJ
 // API operation DescribeClassificationJob for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DescribeClassificationJob
 func (c *Macie2) DescribeClassificationJob(input *DescribeClassificationJobInput) (*DescribeClassificationJobOutput, error) {
@@ -1858,14 +1857,13 @@ const opDescribeOrganizationConfiguration = "DescribeOrganizationConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeOrganizationConfigurationRequest method.
+//	req, resp := client.DescribeOrganizationConfigurationRequest(params)
 //
-//    // Example sending a request using the DescribeOrganizationConfigurationRequest method.
-//    req, resp := client.DescribeOrganizationConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DescribeOrganizationConfiguration
 func (c *Macie2) DescribeOrganizationConfigurationRequest(input *DescribeOrganizationConfigurationInput) (req *request.Request, output *DescribeOrganizationConfigurationOutput) {
@@ -1897,33 +1895,34 @@ func (c *Macie2) DescribeOrganizationConfigurationRequest(input *DescribeOrganiz
 // API operation DescribeOrganizationConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DescribeOrganizationConfiguration
 func (c *Macie2) DescribeOrganizationConfiguration(input *DescribeOrganizationConfigurationInput) (*DescribeOrganizationConfigurationOutput, error) {
@@ -1963,14 +1962,13 @@ const opDisableMacie = "DisableMacie"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisableMacieRequest method.
+//	req, resp := client.DisableMacieRequest(params)
 //
-//    // Example sending a request using the DisableMacieRequest method.
-//    req, resp := client.DisableMacieRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DisableMacie
 func (c *Macie2) DisableMacieRequest(input *DisableMacieInput) (req *request.Request, output *DisableMacieOutput) {
@@ -2003,33 +2001,34 @@ func (c *Macie2) DisableMacieRequest(input *DisableMacieInput) (req *request.Req
 // API operation DisableMacie for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DisableMacie
 func (c *Macie2) DisableMacie(input *DisableMacieInput) (*DisableMacieOutput, error) {
@@ -2069,14 +2068,13 @@ const opDisableOrganizationAdminAccount = "DisableOrganizationAdminAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisableOrganizationAdminAccountRequest method.
+//	req, resp := client.DisableOrganizationAdminAccountRequest(params)
 //
-//    // Example sending a request using the DisableOrganizationAdminAccountRequest method.
-//    req, resp := client.DisableOrganizationAdminAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DisableOrganizationAdminAccount
 func (c *Macie2) DisableOrganizationAdminAccountRequest(input *DisableOrganizationAdminAccountInput) (req *request.Request, output *DisableOrganizationAdminAccountOutput) {
@@ -2109,33 +2107,34 @@ func (c *Macie2) DisableOrganizationAdminAccountRequest(input *DisableOrganizati
 // API operation DisableOrganizationAdminAccount for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DisableOrganizationAdminAccount
 func (c *Macie2) DisableOrganizationAdminAccount(input *DisableOrganizationAdminAccountInput) (*DisableOrganizationAdminAccountOutput, error) {
@@ -2175,14 +2174,13 @@ const opDisassociateFromAdministratorAccount = "DisassociateFromAdministratorAcc
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateFromAdministratorAccountRequest method.
+//	req, resp := client.DisassociateFromAdministratorAccountRequest(params)
 //
-//    // Example sending a request using the DisassociateFromAdministratorAccountRequest method.
-//    req, resp := client.DisassociateFromAdministratorAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DisassociateFromAdministratorAccount
 func (c *Macie2) DisassociateFromAdministratorAccountRequest(input *DisassociateFromAdministratorAccountInput) (req *request.Request, output *DisassociateFromAdministratorAccountOutput) {
@@ -2214,33 +2212,34 @@ func (c *Macie2) DisassociateFromAdministratorAccountRequest(input *Disassociate
 // API operation DisassociateFromAdministratorAccount for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DisassociateFromAdministratorAccount
 func (c *Macie2) DisassociateFromAdministratorAccount(input *DisassociateFromAdministratorAccountInput) (*DisassociateFromAdministratorAccountOutput, error) {
@@ -2280,14 +2279,13 @@ const opDisassociateFromMasterAccount = "DisassociateFromMasterAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateFromMasterAccountRequest method.
+//	req, resp := client.DisassociateFromMasterAccountRequest(params)
 //
-//    // Example sending a request using the DisassociateFromMasterAccountRequest method.
-//    req, resp := client.DisassociateFromMasterAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DisassociateFromMasterAccount
 func (c *Macie2) DisassociateFromMasterAccountRequest(input *DisassociateFromMasterAccountInput) (req *request.Request, output *DisassociateFromMasterAccountOutput) {
@@ -2321,33 +2319,34 @@ func (c *Macie2) DisassociateFromMasterAccountRequest(input *DisassociateFromMas
 // API operation DisassociateFromMasterAccount for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DisassociateFromMasterAccount
 func (c *Macie2) DisassociateFromMasterAccount(input *DisassociateFromMasterAccountInput) (*DisassociateFromMasterAccountOutput, error) {
@@ -2387,14 +2386,13 @@ const opDisassociateMember = "DisassociateMember"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateMemberRequest method.
+//	req, resp := client.DisassociateMemberRequest(params)
 //
-//    // Example sending a request using the DisassociateMemberRequest method.
-//    req, resp := client.DisassociateMemberRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DisassociateMember
 func (c *Macie2) DisassociateMemberRequest(input *DisassociateMemberInput) (req *request.Request, output *DisassociateMemberOutput) {
@@ -2426,33 +2424,34 @@ func (c *Macie2) DisassociateMemberRequest(input *DisassociateMemberInput) (req 
 // API operation DisassociateMember for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/DisassociateMember
 func (c *Macie2) DisassociateMember(input *DisassociateMemberInput) (*DisassociateMemberOutput, error) {
@@ -2492,14 +2491,13 @@ const opEnableMacie = "EnableMacie"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EnableMacieRequest method.
+//	req, resp := client.EnableMacieRequest(params)
 //
-//    // Example sending a request using the EnableMacieRequest method.
-//    req, resp := client.EnableMacieRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/EnableMacie
 func (c *Macie2) EnableMacieRequest(input *EnableMacieInput) (req *request.Request, output *EnableMacieOutput) {
@@ -2532,33 +2530,34 @@ func (c *Macie2) EnableMacieRequest(input *EnableMacieInput) (req *request.Reque
 // API operation EnableMacie for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/EnableMacie
 func (c *Macie2) EnableMacie(input *EnableMacieInput) (*EnableMacieOutput, error) {
@@ -2598,14 +2597,13 @@ const opEnableOrganizationAdminAccount = "EnableOrganizationAdminAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EnableOrganizationAdminAccountRequest method.
+//	req, resp := client.EnableOrganizationAdminAccountRequest(params)
 //
-//    // Example sending a request using the EnableOrganizationAdminAccountRequest method.
-//    req, resp := client.EnableOrganizationAdminAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/EnableOrganizationAdminAccount
 func (c *Macie2) EnableOrganizationAdminAccountRequest(input *EnableOrganizationAdminAccountInput) (req *request.Request, output *EnableOrganizationAdminAccountOutput) {
@@ -2638,33 +2636,34 @@ func (c *Macie2) EnableOrganizationAdminAccountRequest(input *EnableOrganization
 // API operation EnableOrganizationAdminAccount for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/EnableOrganizationAdminAccount
 func (c *Macie2) EnableOrganizationAdminAccount(input *EnableOrganizationAdminAccountInput) (*EnableOrganizationAdminAccountOutput, error) {
@@ -2704,14 +2703,13 @@ const opGetAdministratorAccount = "GetAdministratorAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAdministratorAccountRequest method.
+//	req, resp := client.GetAdministratorAccountRequest(params)
 //
-//    // Example sending a request using the GetAdministratorAccountRequest method.
-//    req, resp := client.GetAdministratorAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetAdministratorAccount
 func (c *Macie2) GetAdministratorAccountRequest(input *GetAdministratorAccountInput) (req *request.Request, output *GetAdministratorAccountOutput) {
@@ -2743,33 +2741,34 @@ func (c *Macie2) GetAdministratorAccountRequest(input *GetAdministratorAccountIn
 // API operation GetAdministratorAccount for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetAdministratorAccount
 func (c *Macie2) GetAdministratorAccount(input *GetAdministratorAccountInput) (*GetAdministratorAccountOutput, error) {
@@ -2809,14 +2808,13 @@ const opGetAllowList = "GetAllowList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAllowListRequest method.
+//	req, resp := client.GetAllowListRequest(params)
 //
-//    // Example sending a request using the GetAllowListRequest method.
-//    req, resp := client.GetAllowListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetAllowList
 func (c *Macie2) GetAllowListRequest(input *GetAllowListInput) (req *request.Request, output *GetAllowListOutput) {
@@ -2847,25 +2845,26 @@ func (c *Macie2) GetAllowListRequest(input *GetAllowListInput) (req *request.Req
 // API operation GetAllowList for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetAllowList
 func (c *Macie2) GetAllowList(input *GetAllowListInput) (*GetAllowListOutput, error) {
@@ -2905,14 +2904,13 @@ const opGetAutomatedDiscoveryConfiguration = "GetAutomatedDiscoveryConfiguration
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAutomatedDiscoveryConfigurationRequest method.
+//	req, resp := client.GetAutomatedDiscoveryConfigurationRequest(params)
 //
-//    // Example sending a request using the GetAutomatedDiscoveryConfigurationRequest method.
-//    req, resp := client.GetAutomatedDiscoveryConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetAutomatedDiscoveryConfiguration
 func (c *Macie2) GetAutomatedDiscoveryConfigurationRequest(input *GetAutomatedDiscoveryConfigurationInput) (req *request.Request, output *GetAutomatedDiscoveryConfigurationOutput) {
@@ -2944,21 +2942,22 @@ func (c *Macie2) GetAutomatedDiscoveryConfigurationRequest(input *GetAutomatedDi
 // API operation GetAutomatedDiscoveryConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetAutomatedDiscoveryConfiguration
 func (c *Macie2) GetAutomatedDiscoveryConfiguration(input *GetAutomatedDiscoveryConfigurationInput) (*GetAutomatedDiscoveryConfigurationOutput, error) {
@@ -2998,14 +2997,13 @@ const opGetBucketStatistics = "GetBucketStatistics"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetBucketStatisticsRequest method.
+//	req, resp := client.GetBucketStatisticsRequest(params)
 //
-//    // Example sending a request using the GetBucketStatisticsRequest method.
-//    req, resp := client.GetBucketStatisticsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetBucketStatistics
 func (c *Macie2) GetBucketStatisticsRequest(input *GetBucketStatisticsInput) (req *request.Request, output *GetBucketStatisticsOutput) {
@@ -3037,33 +3035,34 @@ func (c *Macie2) GetBucketStatisticsRequest(input *GetBucketStatisticsInput) (re
 // API operation GetBucketStatistics for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetBucketStatistics
 func (c *Macie2) GetBucketStatistics(input *GetBucketStatisticsInput) (*GetBucketStatisticsOutput, error) {
@@ -3103,14 +3102,13 @@ const opGetClassificationExportConfiguration = "GetClassificationExportConfigura
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetClassificationExportConfigurationRequest method.
+//	req, resp := client.GetClassificationExportConfigurationRequest(params)
 //
-//    // Example sending a request using the GetClassificationExportConfigurationRequest method.
-//    req, resp := client.GetClassificationExportConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetClassificationExportConfiguration
 func (c *Macie2) GetClassificationExportConfigurationRequest(input *GetClassificationExportConfigurationInput) (req *request.Request, output *GetClassificationExportConfigurationOutput) {
@@ -3141,33 +3139,34 @@ func (c *Macie2) GetClassificationExportConfigurationRequest(input *GetClassific
 // API operation GetClassificationExportConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetClassificationExportConfiguration
 func (c *Macie2) GetClassificationExportConfiguration(input *GetClassificationExportConfigurationInput) (*GetClassificationExportConfigurationOutput, error) {
@@ -3207,14 +3206,13 @@ const opGetClassificationScope = "GetClassificationScope"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetClassificationScopeRequest method.
+//	req, resp := client.GetClassificationScopeRequest(params)
 //
-//    // Example sending a request using the GetClassificationScopeRequest method.
-//    req, resp := client.GetClassificationScopeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetClassificationScope
 func (c *Macie2) GetClassificationScopeRequest(input *GetClassificationScopeInput) (req *request.Request, output *GetClassificationScopeOutput) {
@@ -3245,25 +3243,26 @@ func (c *Macie2) GetClassificationScopeRequest(input *GetClassificationScopeInpu
 // API operation GetClassificationScope for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetClassificationScope
 func (c *Macie2) GetClassificationScope(input *GetClassificationScopeInput) (*GetClassificationScopeOutput, error) {
@@ -3303,14 +3302,13 @@ const opGetCustomDataIdentifier = "GetCustomDataIdentifier"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetCustomDataIdentifierRequest method.
+//	req, resp := client.GetCustomDataIdentifierRequest(params)
 //
-//    // Example sending a request using the GetCustomDataIdentifierRequest method.
-//    req, resp := client.GetCustomDataIdentifierRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetCustomDataIdentifier
 func (c *Macie2) GetCustomDataIdentifierRequest(input *GetCustomDataIdentifierInput) (req *request.Request, output *GetCustomDataIdentifierOutput) {
@@ -3341,33 +3339,34 @@ func (c *Macie2) GetCustomDataIdentifierRequest(input *GetCustomDataIdentifierIn
 // API operation GetCustomDataIdentifier for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetCustomDataIdentifier
 func (c *Macie2) GetCustomDataIdentifier(input *GetCustomDataIdentifierInput) (*GetCustomDataIdentifierOutput, error) {
@@ -3407,14 +3406,13 @@ const opGetFindingStatistics = "GetFindingStatistics"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFindingStatisticsRequest method.
+//	req, resp := client.GetFindingStatisticsRequest(params)
 //
-//    // Example sending a request using the GetFindingStatisticsRequest method.
-//    req, resp := client.GetFindingStatisticsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetFindingStatistics
 func (c *Macie2) GetFindingStatisticsRequest(input *GetFindingStatisticsInput) (req *request.Request, output *GetFindingStatisticsOutput) {
@@ -3445,33 +3443,34 @@ func (c *Macie2) GetFindingStatisticsRequest(input *GetFindingStatisticsInput) (
 // API operation GetFindingStatistics for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetFindingStatistics
 func (c *Macie2) GetFindingStatistics(input *GetFindingStatisticsInput) (*GetFindingStatisticsOutput, error) {
@@ -3511,14 +3510,13 @@ const opGetFindings = "GetFindings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFindingsRequest method.
+//	req, resp := client.GetFindingsRequest(params)
 //
-//    // Example sending a request using the GetFindingsRequest method.
-//    req, resp := client.GetFindingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetFindings
 func (c *Macie2) GetFindingsRequest(input *GetFindingsInput) (req *request.Request, output *GetFindingsOutput) {
@@ -3549,33 +3547,34 @@ func (c *Macie2) GetFindingsRequest(input *GetFindingsInput) (req *request.Reque
 // API operation GetFindings for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetFindings
 func (c *Macie2) GetFindings(input *GetFindingsInput) (*GetFindingsOutput, error) {
@@ -3615,14 +3614,13 @@ const opGetFindingsFilter = "GetFindingsFilter"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFindingsFilterRequest method.
+//	req, resp := client.GetFindingsFilterRequest(params)
 //
-//    // Example sending a request using the GetFindingsFilterRequest method.
-//    req, resp := client.GetFindingsFilterRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetFindingsFilter
 func (c *Macie2) GetFindingsFilterRequest(input *GetFindingsFilterInput) (req *request.Request, output *GetFindingsFilterOutput) {
@@ -3653,33 +3651,34 @@ func (c *Macie2) GetFindingsFilterRequest(input *GetFindingsFilterInput) (req *r
 // API operation GetFindingsFilter for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetFindingsFilter
 func (c *Macie2) GetFindingsFilter(input *GetFindingsFilterInput) (*GetFindingsFilterOutput, error) {
@@ -3719,14 +3718,13 @@ const opGetFindingsPublicationConfiguration = "GetFindingsPublicationConfigurati
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFindingsPublicationConfigurationRequest method.
+//	req, resp := client.GetFindingsPublicationConfigurationRequest(params)
 //
-//    // Example sending a request using the GetFindingsPublicationConfigurationRequest method.
-//    req, resp := client.GetFindingsPublicationConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetFindingsPublicationConfiguration
 func (c *Macie2) GetFindingsPublicationConfigurationRequest(input *GetFindingsPublicationConfigurationInput) (req *request.Request, output *GetFindingsPublicationConfigurationOutput) {
@@ -3758,33 +3756,34 @@ func (c *Macie2) GetFindingsPublicationConfigurationRequest(input *GetFindingsPu
 // API operation GetFindingsPublicationConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetFindingsPublicationConfiguration
 func (c *Macie2) GetFindingsPublicationConfiguration(input *GetFindingsPublicationConfigurationInput) (*GetFindingsPublicationConfigurationOutput, error) {
@@ -3824,14 +3823,13 @@ const opGetInvitationsCount = "GetInvitationsCount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetInvitationsCountRequest method.
+//	req, resp := client.GetInvitationsCountRequest(params)
 //
-//    // Example sending a request using the GetInvitationsCountRequest method.
-//    req, resp := client.GetInvitationsCountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetInvitationsCount
 func (c *Macie2) GetInvitationsCountRequest(input *GetInvitationsCountInput) (req *request.Request, output *GetInvitationsCountOutput) {
@@ -3863,33 +3861,34 @@ func (c *Macie2) GetInvitationsCountRequest(input *GetInvitationsCountInput) (re
 // API operation GetInvitationsCount for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetInvitationsCount
 func (c *Macie2) GetInvitationsCount(input *GetInvitationsCountInput) (*GetInvitationsCountOutput, error) {
@@ -3929,14 +3928,13 @@ const opGetMacieSession = "GetMacieSession"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMacieSessionRequest method.
+//	req, resp := client.GetMacieSessionRequest(params)
 //
-//    // Example sending a request using the GetMacieSessionRequest method.
-//    req, resp := client.GetMacieSessionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetMacieSession
 func (c *Macie2) GetMacieSessionRequest(input *GetMacieSessionInput) (req *request.Request, output *GetMacieSessionOutput) {
@@ -3967,33 +3965,34 @@ func (c *Macie2) GetMacieSessionRequest(input *GetMacieSessionInput) (req *reque
 // API operation GetMacieSession for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetMacieSession
 func (c *Macie2) GetMacieSession(input *GetMacieSessionInput) (*GetMacieSessionOutput, error) {
@@ -4033,14 +4032,13 @@ const opGetMasterAccount = "GetMasterAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMasterAccountRequest method.
+//	req, resp := client.GetMasterAccountRequest(params)
 //
-//    // Example sending a request using the GetMasterAccountRequest method.
-//    req, resp := client.GetMasterAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetMasterAccount
 func (c *Macie2) GetMasterAccountRequest(input *GetMasterAccountInput) (req *request.Request, output *GetMasterAccountOutput) {
@@ -4073,33 +4071,34 @@ func (c *Macie2) GetMasterAccountRequest(input *GetMasterAccountInput) (req *req
 // API operation GetMasterAccount for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetMasterAccount
 func (c *Macie2) GetMasterAccount(input *GetMasterAccountInput) (*GetMasterAccountOutput, error) {
@@ -4139,14 +4138,13 @@ const opGetMember = "GetMember"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMemberRequest method.
+//	req, resp := client.GetMemberRequest(params)
 //
-//    // Example sending a request using the GetMemberRequest method.
-//    req, resp := client.GetMemberRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetMember
 func (c *Macie2) GetMemberRequest(input *GetMemberInput) (req *request.Request, output *GetMemberOutput) {
@@ -4178,33 +4176,34 @@ func (c *Macie2) GetMemberRequest(input *GetMemberInput) (req *request.Request, 
 // API operation GetMember for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetMember
 func (c *Macie2) GetMember(input *GetMemberInput) (*GetMemberOutput, error) {
@@ -4244,14 +4243,13 @@ const opGetResourceProfile = "GetResourceProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResourceProfileRequest method.
+//	req, resp := client.GetResourceProfileRequest(params)
 //
-//    // Example sending a request using the GetResourceProfileRequest method.
-//    req, resp := client.GetResourceProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetResourceProfile
 func (c *Macie2) GetResourceProfileRequest(input *GetResourceProfileInput) (req *request.Request, output *GetResourceProfileOutput) {
@@ -4283,29 +4281,30 @@ func (c *Macie2) GetResourceProfileRequest(input *GetResourceProfileInput) (req 
 // API operation GetResourceProfile for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
+//
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetResourceProfile
 func (c *Macie2) GetResourceProfile(input *GetResourceProfileInput) (*GetResourceProfileOutput, error) {
@@ -4345,14 +4344,13 @@ const opGetRevealConfiguration = "GetRevealConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRevealConfigurationRequest method.
+//	req, resp := client.GetRevealConfigurationRequest(params)
 //
-//    // Example sending a request using the GetRevealConfigurationRequest method.
-//    req, resp := client.GetRevealConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetRevealConfiguration
 func (c *Macie2) GetRevealConfigurationRequest(input *GetRevealConfigurationInput) (req *request.Request, output *GetRevealConfigurationOutput) {
@@ -4384,21 +4382,22 @@ func (c *Macie2) GetRevealConfigurationRequest(input *GetRevealConfigurationInpu
 // API operation GetRevealConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetRevealConfiguration
 func (c *Macie2) GetRevealConfiguration(input *GetRevealConfigurationInput) (*GetRevealConfigurationOutput, error) {
@@ -4438,14 +4437,13 @@ const opGetSensitiveDataOccurrences = "GetSensitiveDataOccurrences"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSensitiveDataOccurrencesRequest method.
+//	req, resp := client.GetSensitiveDataOccurrencesRequest(params)
 //
-//    // Example sending a request using the GetSensitiveDataOccurrencesRequest method.
-//    req, resp := client.GetSensitiveDataOccurrencesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetSensitiveDataOccurrences
 func (c *Macie2) GetSensitiveDataOccurrencesRequest(input *GetSensitiveDataOccurrencesInput) (req *request.Request, output *GetSensitiveDataOccurrencesOutput) {
@@ -4476,29 +4474,30 @@ func (c *Macie2) GetSensitiveDataOccurrencesRequest(input *GetSensitiveDataOccur
 // API operation GetSensitiveDataOccurrences for usage and error information.
 //
 // Returned Error Types:
-//   * UnprocessableEntityException
-//   Provides information about an error that occurred due to an unprocessable
-//   entity.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - UnprocessableEntityException
+//     Provides information about an error that occurred due to an unprocessable
+//     entity.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
+//
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetSensitiveDataOccurrences
 func (c *Macie2) GetSensitiveDataOccurrences(input *GetSensitiveDataOccurrencesInput) (*GetSensitiveDataOccurrencesOutput, error) {
@@ -4538,14 +4537,13 @@ const opGetSensitiveDataOccurrencesAvailability = "GetSensitiveDataOccurrencesAv
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSensitiveDataOccurrencesAvailabilityRequest method.
+//	req, resp := client.GetSensitiveDataOccurrencesAvailabilityRequest(params)
 //
-//    // Example sending a request using the GetSensitiveDataOccurrencesAvailabilityRequest method.
-//    req, resp := client.GetSensitiveDataOccurrencesAvailabilityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetSensitiveDataOccurrencesAvailability
 func (c *Macie2) GetSensitiveDataOccurrencesAvailabilityRequest(input *GetSensitiveDataOccurrencesAvailabilityInput) (req *request.Request, output *GetSensitiveDataOccurrencesAvailabilityOutput) {
@@ -4576,21 +4574,22 @@ func (c *Macie2) GetSensitiveDataOccurrencesAvailabilityRequest(input *GetSensit
 // API operation GetSensitiveDataOccurrencesAvailability for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetSensitiveDataOccurrencesAvailability
 func (c *Macie2) GetSensitiveDataOccurrencesAvailability(input *GetSensitiveDataOccurrencesAvailabilityInput) (*GetSensitiveDataOccurrencesAvailabilityOutput, error) {
@@ -4630,14 +4629,13 @@ const opGetSensitivityInspectionTemplate = "GetSensitivityInspectionTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSensitivityInspectionTemplateRequest method.
+//	req, resp := client.GetSensitivityInspectionTemplateRequest(params)
 //
-//    // Example sending a request using the GetSensitivityInspectionTemplateRequest method.
-//    req, resp := client.GetSensitivityInspectionTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetSensitivityInspectionTemplate
 func (c *Macie2) GetSensitivityInspectionTemplateRequest(input *GetSensitivityInspectionTemplateInput) (req *request.Request, output *GetSensitivityInspectionTemplateOutput) {
@@ -4668,25 +4666,26 @@ func (c *Macie2) GetSensitivityInspectionTemplateRequest(input *GetSensitivityIn
 // API operation GetSensitivityInspectionTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetSensitivityInspectionTemplate
 func (c *Macie2) GetSensitivityInspectionTemplate(input *GetSensitivityInspectionTemplateInput) (*GetSensitivityInspectionTemplateOutput, error) {
@@ -4726,14 +4725,13 @@ const opGetUsageStatistics = "GetUsageStatistics"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetUsageStatisticsRequest method.
+//	req, resp := client.GetUsageStatisticsRequest(params)
 //
-//    // Example sending a request using the GetUsageStatisticsRequest method.
-//    req, resp := client.GetUsageStatisticsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetUsageStatistics
 func (c *Macie2) GetUsageStatisticsRequest(input *GetUsageStatisticsInput) (req *request.Request, output *GetUsageStatisticsOutput) {
@@ -4770,33 +4768,34 @@ func (c *Macie2) GetUsageStatisticsRequest(input *GetUsageStatisticsInput) (req 
 // API operation GetUsageStatistics for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetUsageStatistics
 func (c *Macie2) GetUsageStatistics(input *GetUsageStatisticsInput) (*GetUsageStatisticsOutput, error) {
@@ -4828,15 +4827,14 @@ func (c *Macie2) GetUsageStatisticsWithContext(ctx aws.Context, input *GetUsageS
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetUsageStatistics operation.
-//    pageNum := 0
-//    err := client.GetUsageStatisticsPages(params,
-//        func(page *macie2.GetUsageStatisticsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetUsageStatistics operation.
+//	pageNum := 0
+//	err := client.GetUsageStatisticsPages(params,
+//	    func(page *macie2.GetUsageStatisticsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) GetUsageStatisticsPages(input *GetUsageStatisticsInput, fn func(*GetUsageStatisticsOutput, bool) bool) error {
 	return c.GetUsageStatisticsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4888,14 +4886,13 @@ const opGetUsageTotals = "GetUsageTotals"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetUsageTotalsRequest method.
+//	req, resp := client.GetUsageTotalsRequest(params)
 //
-//    // Example sending a request using the GetUsageTotalsRequest method.
-//    req, resp := client.GetUsageTotalsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetUsageTotals
 func (c *Macie2) GetUsageTotalsRequest(input *GetUsageTotalsInput) (req *request.Request, output *GetUsageTotalsOutput) {
@@ -4926,33 +4923,34 @@ func (c *Macie2) GetUsageTotalsRequest(input *GetUsageTotalsInput) (req *request
 // API operation GetUsageTotals for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/GetUsageTotals
 func (c *Macie2) GetUsageTotals(input *GetUsageTotalsInput) (*GetUsageTotalsOutput, error) {
@@ -4992,14 +4990,13 @@ const opListAllowLists = "ListAllowLists"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAllowListsRequest method.
+//	req, resp := client.ListAllowListsRequest(params)
 //
-//    // Example sending a request using the ListAllowListsRequest method.
-//    req, resp := client.ListAllowListsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListAllowLists
 func (c *Macie2) ListAllowListsRequest(input *ListAllowListsInput) (req *request.Request, output *ListAllowListsOutput) {
@@ -5036,21 +5033,22 @@ func (c *Macie2) ListAllowListsRequest(input *ListAllowListsInput) (req *request
 // API operation ListAllowLists for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListAllowLists
 func (c *Macie2) ListAllowLists(input *ListAllowListsInput) (*ListAllowListsOutput, error) {
@@ -5082,15 +5080,14 @@ func (c *Macie2) ListAllowListsWithContext(ctx aws.Context, input *ListAllowList
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAllowLists operation.
-//    pageNum := 0
-//    err := client.ListAllowListsPages(params,
-//        func(page *macie2.ListAllowListsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAllowLists operation.
+//	pageNum := 0
+//	err := client.ListAllowListsPages(params,
+//	    func(page *macie2.ListAllowListsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListAllowListsPages(input *ListAllowListsInput, fn func(*ListAllowListsOutput, bool) bool) error {
 	return c.ListAllowListsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5142,14 +5139,13 @@ const opListClassificationJobs = "ListClassificationJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListClassificationJobsRequest method.
+//	req, resp := client.ListClassificationJobsRequest(params)
 //
-//    // Example sending a request using the ListClassificationJobsRequest method.
-//    req, resp := client.ListClassificationJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListClassificationJobs
 func (c *Macie2) ListClassificationJobsRequest(input *ListClassificationJobsInput) (req *request.Request, output *ListClassificationJobsOutput) {
@@ -5186,33 +5182,34 @@ func (c *Macie2) ListClassificationJobsRequest(input *ListClassificationJobsInpu
 // API operation ListClassificationJobs for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListClassificationJobs
 func (c *Macie2) ListClassificationJobs(input *ListClassificationJobsInput) (*ListClassificationJobsOutput, error) {
@@ -5244,15 +5241,14 @@ func (c *Macie2) ListClassificationJobsWithContext(ctx aws.Context, input *ListC
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListClassificationJobs operation.
-//    pageNum := 0
-//    err := client.ListClassificationJobsPages(params,
-//        func(page *macie2.ListClassificationJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListClassificationJobs operation.
+//	pageNum := 0
+//	err := client.ListClassificationJobsPages(params,
+//	    func(page *macie2.ListClassificationJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListClassificationJobsPages(input *ListClassificationJobsInput, fn func(*ListClassificationJobsOutput, bool) bool) error {
 	return c.ListClassificationJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5304,14 +5300,13 @@ const opListClassificationScopes = "ListClassificationScopes"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListClassificationScopesRequest method.
+//	req, resp := client.ListClassificationScopesRequest(params)
 //
-//    // Example sending a request using the ListClassificationScopesRequest method.
-//    req, resp := client.ListClassificationScopesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListClassificationScopes
 func (c *Macie2) ListClassificationScopesRequest(input *ListClassificationScopesInput) (req *request.Request, output *ListClassificationScopesOutput) {
@@ -5348,21 +5343,22 @@ func (c *Macie2) ListClassificationScopesRequest(input *ListClassificationScopes
 // API operation ListClassificationScopes for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListClassificationScopes
 func (c *Macie2) ListClassificationScopes(input *ListClassificationScopesInput) (*ListClassificationScopesOutput, error) {
@@ -5394,15 +5390,14 @@ func (c *Macie2) ListClassificationScopesWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListClassificationScopes operation.
-//    pageNum := 0
-//    err := client.ListClassificationScopesPages(params,
-//        func(page *macie2.ListClassificationScopesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListClassificationScopes operation.
+//	pageNum := 0
+//	err := client.ListClassificationScopesPages(params,
+//	    func(page *macie2.ListClassificationScopesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListClassificationScopesPages(input *ListClassificationScopesInput, fn func(*ListClassificationScopesOutput, bool) bool) error {
 	return c.ListClassificationScopesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5454,14 +5449,13 @@ const opListCustomDataIdentifiers = "ListCustomDataIdentifiers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCustomDataIdentifiersRequest method.
+//	req, resp := client.ListCustomDataIdentifiersRequest(params)
 //
-//    // Example sending a request using the ListCustomDataIdentifiersRequest method.
-//    req, resp := client.ListCustomDataIdentifiersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListCustomDataIdentifiers
 func (c *Macie2) ListCustomDataIdentifiersRequest(input *ListCustomDataIdentifiersInput) (req *request.Request, output *ListCustomDataIdentifiersOutput) {
@@ -5499,33 +5493,34 @@ func (c *Macie2) ListCustomDataIdentifiersRequest(input *ListCustomDataIdentifie
 // API operation ListCustomDataIdentifiers for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListCustomDataIdentifiers
 func (c *Macie2) ListCustomDataIdentifiers(input *ListCustomDataIdentifiersInput) (*ListCustomDataIdentifiersOutput, error) {
@@ -5557,15 +5552,14 @@ func (c *Macie2) ListCustomDataIdentifiersWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCustomDataIdentifiers operation.
-//    pageNum := 0
-//    err := client.ListCustomDataIdentifiersPages(params,
-//        func(page *macie2.ListCustomDataIdentifiersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCustomDataIdentifiers operation.
+//	pageNum := 0
+//	err := client.ListCustomDataIdentifiersPages(params,
+//	    func(page *macie2.ListCustomDataIdentifiersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListCustomDataIdentifiersPages(input *ListCustomDataIdentifiersInput, fn func(*ListCustomDataIdentifiersOutput, bool) bool) error {
 	return c.ListCustomDataIdentifiersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5617,14 +5611,13 @@ const opListFindings = "ListFindings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFindingsRequest method.
+//	req, resp := client.ListFindingsRequest(params)
 //
-//    // Example sending a request using the ListFindingsRequest method.
-//    req, resp := client.ListFindingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListFindings
 func (c *Macie2) ListFindingsRequest(input *ListFindingsInput) (req *request.Request, output *ListFindingsOutput) {
@@ -5661,33 +5654,34 @@ func (c *Macie2) ListFindingsRequest(input *ListFindingsInput) (req *request.Req
 // API operation ListFindings for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListFindings
 func (c *Macie2) ListFindings(input *ListFindingsInput) (*ListFindingsOutput, error) {
@@ -5719,15 +5713,14 @@ func (c *Macie2) ListFindingsWithContext(ctx aws.Context, input *ListFindingsInp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFindings operation.
-//    pageNum := 0
-//    err := client.ListFindingsPages(params,
-//        func(page *macie2.ListFindingsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFindings operation.
+//	pageNum := 0
+//	err := client.ListFindingsPages(params,
+//	    func(page *macie2.ListFindingsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListFindingsPages(input *ListFindingsInput, fn func(*ListFindingsOutput, bool) bool) error {
 	return c.ListFindingsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5779,14 +5772,13 @@ const opListFindingsFilters = "ListFindingsFilters"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFindingsFiltersRequest method.
+//	req, resp := client.ListFindingsFiltersRequest(params)
 //
-//    // Example sending a request using the ListFindingsFiltersRequest method.
-//    req, resp := client.ListFindingsFiltersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListFindingsFilters
 func (c *Macie2) ListFindingsFiltersRequest(input *ListFindingsFiltersInput) (req *request.Request, output *ListFindingsFiltersOutput) {
@@ -5823,33 +5815,34 @@ func (c *Macie2) ListFindingsFiltersRequest(input *ListFindingsFiltersInput) (re
 // API operation ListFindingsFilters for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListFindingsFilters
 func (c *Macie2) ListFindingsFilters(input *ListFindingsFiltersInput) (*ListFindingsFiltersOutput, error) {
@@ -5881,15 +5874,14 @@ func (c *Macie2) ListFindingsFiltersWithContext(ctx aws.Context, input *ListFind
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFindingsFilters operation.
-//    pageNum := 0
-//    err := client.ListFindingsFiltersPages(params,
-//        func(page *macie2.ListFindingsFiltersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFindingsFilters operation.
+//	pageNum := 0
+//	err := client.ListFindingsFiltersPages(params,
+//	    func(page *macie2.ListFindingsFiltersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListFindingsFiltersPages(input *ListFindingsFiltersInput, fn func(*ListFindingsFiltersOutput, bool) bool) error {
 	return c.ListFindingsFiltersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5941,14 +5933,13 @@ const opListInvitations = "ListInvitations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListInvitationsRequest method.
+//	req, resp := client.ListInvitationsRequest(params)
 //
-//    // Example sending a request using the ListInvitationsRequest method.
-//    req, resp := client.ListInvitationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListInvitations
 func (c *Macie2) ListInvitationsRequest(input *ListInvitationsInput) (req *request.Request, output *ListInvitationsOutput) {
@@ -5986,33 +5977,34 @@ func (c *Macie2) ListInvitationsRequest(input *ListInvitationsInput) (req *reque
 // API operation ListInvitations for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListInvitations
 func (c *Macie2) ListInvitations(input *ListInvitationsInput) (*ListInvitationsOutput, error) {
@@ -6044,15 +6036,14 @@ func (c *Macie2) ListInvitationsWithContext(ctx aws.Context, input *ListInvitati
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListInvitations operation.
-//    pageNum := 0
-//    err := client.ListInvitationsPages(params,
-//        func(page *macie2.ListInvitationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListInvitations operation.
+//	pageNum := 0
+//	err := client.ListInvitationsPages(params,
+//	    func(page *macie2.ListInvitationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListInvitationsPages(input *ListInvitationsInput, fn func(*ListInvitationsOutput, bool) bool) error {
 	return c.ListInvitationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6104,14 +6095,13 @@ const opListManagedDataIdentifiers = "ListManagedDataIdentifiers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListManagedDataIdentifiersRequest method.
+//	req, resp := client.ListManagedDataIdentifiersRequest(params)
 //
-//    // Example sending a request using the ListManagedDataIdentifiersRequest method.
-//    req, resp := client.ListManagedDataIdentifiersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListManagedDataIdentifiers
 func (c *Macie2) ListManagedDataIdentifiersRequest(input *ListManagedDataIdentifiersInput) (req *request.Request, output *ListManagedDataIdentifiersOutput) {
@@ -6177,15 +6167,14 @@ func (c *Macie2) ListManagedDataIdentifiersWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListManagedDataIdentifiers operation.
-//    pageNum := 0
-//    err := client.ListManagedDataIdentifiersPages(params,
-//        func(page *macie2.ListManagedDataIdentifiersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListManagedDataIdentifiers operation.
+//	pageNum := 0
+//	err := client.ListManagedDataIdentifiersPages(params,
+//	    func(page *macie2.ListManagedDataIdentifiersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListManagedDataIdentifiersPages(input *ListManagedDataIdentifiersInput, fn func(*ListManagedDataIdentifiersOutput, bool) bool) error {
 	return c.ListManagedDataIdentifiersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6237,14 +6226,13 @@ const opListMembers = "ListMembers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMembersRequest method.
+//	req, resp := client.ListMembersRequest(params)
 //
-//    // Example sending a request using the ListMembersRequest method.
-//    req, resp := client.ListMembersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListMembers
 func (c *Macie2) ListMembersRequest(input *ListMembersInput) (req *request.Request, output *ListMembersOutput) {
@@ -6282,33 +6270,34 @@ func (c *Macie2) ListMembersRequest(input *ListMembersInput) (req *request.Reque
 // API operation ListMembers for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListMembers
 func (c *Macie2) ListMembers(input *ListMembersInput) (*ListMembersOutput, error) {
@@ -6340,15 +6329,14 @@ func (c *Macie2) ListMembersWithContext(ctx aws.Context, input *ListMembersInput
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMembers operation.
-//    pageNum := 0
-//    err := client.ListMembersPages(params,
-//        func(page *macie2.ListMembersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMembers operation.
+//	pageNum := 0
+//	err := client.ListMembersPages(params,
+//	    func(page *macie2.ListMembersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListMembersPages(input *ListMembersInput, fn func(*ListMembersOutput, bool) bool) error {
 	return c.ListMembersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6400,14 +6388,13 @@ const opListOrganizationAdminAccounts = "ListOrganizationAdminAccounts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListOrganizationAdminAccountsRequest method.
+//	req, resp := client.ListOrganizationAdminAccountsRequest(params)
 //
-//    // Example sending a request using the ListOrganizationAdminAccountsRequest method.
-//    req, resp := client.ListOrganizationAdminAccountsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListOrganizationAdminAccounts
 func (c *Macie2) ListOrganizationAdminAccountsRequest(input *ListOrganizationAdminAccountsInput) (req *request.Request, output *ListOrganizationAdminAccountsOutput) {
@@ -6445,33 +6432,34 @@ func (c *Macie2) ListOrganizationAdminAccountsRequest(input *ListOrganizationAdm
 // API operation ListOrganizationAdminAccounts for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListOrganizationAdminAccounts
 func (c *Macie2) ListOrganizationAdminAccounts(input *ListOrganizationAdminAccountsInput) (*ListOrganizationAdminAccountsOutput, error) {
@@ -6503,15 +6491,14 @@ func (c *Macie2) ListOrganizationAdminAccountsWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListOrganizationAdminAccounts operation.
-//    pageNum := 0
-//    err := client.ListOrganizationAdminAccountsPages(params,
-//        func(page *macie2.ListOrganizationAdminAccountsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListOrganizationAdminAccounts operation.
+//	pageNum := 0
+//	err := client.ListOrganizationAdminAccountsPages(params,
+//	    func(page *macie2.ListOrganizationAdminAccountsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListOrganizationAdminAccountsPages(input *ListOrganizationAdminAccountsInput, fn func(*ListOrganizationAdminAccountsOutput, bool) bool) error {
 	return c.ListOrganizationAdminAccountsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6563,14 +6550,13 @@ const opListResourceProfileArtifacts = "ListResourceProfileArtifacts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResourceProfileArtifactsRequest method.
+//	req, resp := client.ListResourceProfileArtifactsRequest(params)
 //
-//    // Example sending a request using the ListResourceProfileArtifactsRequest method.
-//    req, resp := client.ListResourceProfileArtifactsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListResourceProfileArtifacts
 func (c *Macie2) ListResourceProfileArtifactsRequest(input *ListResourceProfileArtifactsInput) (req *request.Request, output *ListResourceProfileArtifactsOutput) {
@@ -6608,25 +6594,26 @@ func (c *Macie2) ListResourceProfileArtifactsRequest(input *ListResourceProfileA
 // API operation ListResourceProfileArtifacts for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListResourceProfileArtifacts
 func (c *Macie2) ListResourceProfileArtifacts(input *ListResourceProfileArtifactsInput) (*ListResourceProfileArtifactsOutput, error) {
@@ -6658,15 +6645,14 @@ func (c *Macie2) ListResourceProfileArtifactsWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResourceProfileArtifacts operation.
-//    pageNum := 0
-//    err := client.ListResourceProfileArtifactsPages(params,
-//        func(page *macie2.ListResourceProfileArtifactsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResourceProfileArtifacts operation.
+//	pageNum := 0
+//	err := client.ListResourceProfileArtifactsPages(params,
+//	    func(page *macie2.ListResourceProfileArtifactsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListResourceProfileArtifactsPages(input *ListResourceProfileArtifactsInput, fn func(*ListResourceProfileArtifactsOutput, bool) bool) error {
 	return c.ListResourceProfileArtifactsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6718,14 +6704,13 @@ const opListResourceProfileDetections = "ListResourceProfileDetections"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResourceProfileDetectionsRequest method.
+//	req, resp := client.ListResourceProfileDetectionsRequest(params)
 //
-//    // Example sending a request using the ListResourceProfileDetectionsRequest method.
-//    req, resp := client.ListResourceProfileDetectionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListResourceProfileDetections
 func (c *Macie2) ListResourceProfileDetectionsRequest(input *ListResourceProfileDetectionsInput) (req *request.Request, output *ListResourceProfileDetectionsOutput) {
@@ -6763,29 +6748,30 @@ func (c *Macie2) ListResourceProfileDetectionsRequest(input *ListResourceProfile
 // API operation ListResourceProfileDetections for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
+//
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListResourceProfileDetections
 func (c *Macie2) ListResourceProfileDetections(input *ListResourceProfileDetectionsInput) (*ListResourceProfileDetectionsOutput, error) {
@@ -6817,15 +6803,14 @@ func (c *Macie2) ListResourceProfileDetectionsWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResourceProfileDetections operation.
-//    pageNum := 0
-//    err := client.ListResourceProfileDetectionsPages(params,
-//        func(page *macie2.ListResourceProfileDetectionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResourceProfileDetections operation.
+//	pageNum := 0
+//	err := client.ListResourceProfileDetectionsPages(params,
+//	    func(page *macie2.ListResourceProfileDetectionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListResourceProfileDetectionsPages(input *ListResourceProfileDetectionsInput, fn func(*ListResourceProfileDetectionsOutput, bool) bool) error {
 	return c.ListResourceProfileDetectionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6877,14 +6862,13 @@ const opListSensitivityInspectionTemplates = "ListSensitivityInspectionTemplates
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSensitivityInspectionTemplatesRequest method.
+//	req, resp := client.ListSensitivityInspectionTemplatesRequest(params)
 //
-//    // Example sending a request using the ListSensitivityInspectionTemplatesRequest method.
-//    req, resp := client.ListSensitivityInspectionTemplatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListSensitivityInspectionTemplates
 func (c *Macie2) ListSensitivityInspectionTemplatesRequest(input *ListSensitivityInspectionTemplatesInput) (req *request.Request, output *ListSensitivityInspectionTemplatesOutput) {
@@ -6922,25 +6906,26 @@ func (c *Macie2) ListSensitivityInspectionTemplatesRequest(input *ListSensitivit
 // API operation ListSensitivityInspectionTemplates for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListSensitivityInspectionTemplates
 func (c *Macie2) ListSensitivityInspectionTemplates(input *ListSensitivityInspectionTemplatesInput) (*ListSensitivityInspectionTemplatesOutput, error) {
@@ -6972,15 +6957,14 @@ func (c *Macie2) ListSensitivityInspectionTemplatesWithContext(ctx aws.Context, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSensitivityInspectionTemplates operation.
-//    pageNum := 0
-//    err := client.ListSensitivityInspectionTemplatesPages(params,
-//        func(page *macie2.ListSensitivityInspectionTemplatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSensitivityInspectionTemplates operation.
+//	pageNum := 0
+//	err := client.ListSensitivityInspectionTemplatesPages(params,
+//	    func(page *macie2.ListSensitivityInspectionTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) ListSensitivityInspectionTemplatesPages(input *ListSensitivityInspectionTemplatesInput, fn func(*ListSensitivityInspectionTemplatesOutput, bool) bool) error {
 	return c.ListSensitivityInspectionTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -7032,14 +7016,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/ListTagsForResource
 func (c *Macie2) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -7107,14 +7090,13 @@ const opPutClassificationExportConfiguration = "PutClassificationExportConfigura
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutClassificationExportConfigurationRequest method.
+//	req, resp := client.PutClassificationExportConfigurationRequest(params)
 //
-//    // Example sending a request using the PutClassificationExportConfigurationRequest method.
-//    req, resp := client.PutClassificationExportConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/PutClassificationExportConfiguration
 func (c *Macie2) PutClassificationExportConfigurationRequest(input *PutClassificationExportConfigurationInput) (req *request.Request, output *PutClassificationExportConfigurationOutput) {
@@ -7146,33 +7128,34 @@ func (c *Macie2) PutClassificationExportConfigurationRequest(input *PutClassific
 // API operation PutClassificationExportConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/PutClassificationExportConfiguration
 func (c *Macie2) PutClassificationExportConfiguration(input *PutClassificationExportConfigurationInput) (*PutClassificationExportConfigurationOutput, error) {
@@ -7212,14 +7195,13 @@ const opPutFindingsPublicationConfiguration = "PutFindingsPublicationConfigurati
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutFindingsPublicationConfigurationRequest method.
+//	req, resp := client.PutFindingsPublicationConfigurationRequest(params)
 //
-//    // Example sending a request using the PutFindingsPublicationConfigurationRequest method.
-//    req, resp := client.PutFindingsPublicationConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/PutFindingsPublicationConfiguration
 func (c *Macie2) PutFindingsPublicationConfigurationRequest(input *PutFindingsPublicationConfigurationInput) (req *request.Request, output *PutFindingsPublicationConfigurationOutput) {
@@ -7251,33 +7233,34 @@ func (c *Macie2) PutFindingsPublicationConfigurationRequest(input *PutFindingsPu
 // API operation PutFindingsPublicationConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/PutFindingsPublicationConfiguration
 func (c *Macie2) PutFindingsPublicationConfiguration(input *PutFindingsPublicationConfigurationInput) (*PutFindingsPublicationConfigurationOutput, error) {
@@ -7317,14 +7300,13 @@ const opSearchResources = "SearchResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchResourcesRequest method.
+//	req, resp := client.SearchResourcesRequest(params)
 //
-//    // Example sending a request using the SearchResourcesRequest method.
-//    req, resp := client.SearchResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/SearchResources
 func (c *Macie2) SearchResourcesRequest(input *SearchResourcesInput) (req *request.Request, output *SearchResourcesOutput) {
@@ -7362,33 +7344,34 @@ func (c *Macie2) SearchResourcesRequest(input *SearchResourcesInput) (req *reque
 // API operation SearchResources for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/SearchResources
 func (c *Macie2) SearchResources(input *SearchResourcesInput) (*SearchResourcesOutput, error) {
@@ -7420,15 +7403,14 @@ func (c *Macie2) SearchResourcesWithContext(ctx aws.Context, input *SearchResour
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchResources operation.
-//    pageNum := 0
-//    err := client.SearchResourcesPages(params,
-//        func(page *macie2.SearchResourcesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchResources operation.
+//	pageNum := 0
+//	err := client.SearchResourcesPages(params,
+//	    func(page *macie2.SearchResourcesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Macie2) SearchResourcesPages(input *SearchResourcesInput, fn func(*SearchResourcesOutput, bool) bool) error {
 	return c.SearchResourcesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -7480,14 +7462,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/TagResource
 func (c *Macie2) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -7556,14 +7537,13 @@ const opTestCustomDataIdentifier = "TestCustomDataIdentifier"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TestCustomDataIdentifierRequest method.
+//	req, resp := client.TestCustomDataIdentifierRequest(params)
 //
-//    // Example sending a request using the TestCustomDataIdentifierRequest method.
-//    req, resp := client.TestCustomDataIdentifierRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/TestCustomDataIdentifier
 func (c *Macie2) TestCustomDataIdentifierRequest(input *TestCustomDataIdentifierInput) (req *request.Request, output *TestCustomDataIdentifierOutput) {
@@ -7594,33 +7574,34 @@ func (c *Macie2) TestCustomDataIdentifierRequest(input *TestCustomDataIdentifier
 // API operation TestCustomDataIdentifier for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/TestCustomDataIdentifier
 func (c *Macie2) TestCustomDataIdentifier(input *TestCustomDataIdentifierInput) (*TestCustomDataIdentifierOutput, error) {
@@ -7660,14 +7641,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UntagResource
 func (c *Macie2) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -7735,14 +7715,13 @@ const opUpdateAllowList = "UpdateAllowList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAllowListRequest method.
+//	req, resp := client.UpdateAllowListRequest(params)
 //
-//    // Example sending a request using the UpdateAllowListRequest method.
-//    req, resp := client.UpdateAllowListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateAllowList
 func (c *Macie2) UpdateAllowListRequest(input *UpdateAllowListInput) (req *request.Request, output *UpdateAllowListOutput) {
@@ -7773,25 +7752,26 @@ func (c *Macie2) UpdateAllowListRequest(input *UpdateAllowListInput) (req *reque
 // API operation UpdateAllowList for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateAllowList
 func (c *Macie2) UpdateAllowList(input *UpdateAllowListInput) (*UpdateAllowListOutput, error) {
@@ -7831,14 +7811,13 @@ const opUpdateAutomatedDiscoveryConfiguration = "UpdateAutomatedDiscoveryConfigu
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAutomatedDiscoveryConfigurationRequest method.
+//	req, resp := client.UpdateAutomatedDiscoveryConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateAutomatedDiscoveryConfigurationRequest method.
-//    req, resp := client.UpdateAutomatedDiscoveryConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateAutomatedDiscoveryConfiguration
 func (c *Macie2) UpdateAutomatedDiscoveryConfigurationRequest(input *UpdateAutomatedDiscoveryConfigurationInput) (req *request.Request, output *UpdateAutomatedDiscoveryConfigurationOutput) {
@@ -7870,21 +7849,22 @@ func (c *Macie2) UpdateAutomatedDiscoveryConfigurationRequest(input *UpdateAutom
 // API operation UpdateAutomatedDiscoveryConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateAutomatedDiscoveryConfiguration
 func (c *Macie2) UpdateAutomatedDiscoveryConfiguration(input *UpdateAutomatedDiscoveryConfigurationInput) (*UpdateAutomatedDiscoveryConfigurationOutput, error) {
@@ -7924,14 +7904,13 @@ const opUpdateClassificationJob = "UpdateClassificationJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateClassificationJobRequest method.
+//	req, resp := client.UpdateClassificationJobRequest(params)
 //
-//    // Example sending a request using the UpdateClassificationJobRequest method.
-//    req, resp := client.UpdateClassificationJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateClassificationJob
 func (c *Macie2) UpdateClassificationJobRequest(input *UpdateClassificationJobInput) (req *request.Request, output *UpdateClassificationJobOutput) {
@@ -7963,33 +7942,34 @@ func (c *Macie2) UpdateClassificationJobRequest(input *UpdateClassificationJobIn
 // API operation UpdateClassificationJob for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateClassificationJob
 func (c *Macie2) UpdateClassificationJob(input *UpdateClassificationJobInput) (*UpdateClassificationJobOutput, error) {
@@ -8029,14 +8009,13 @@ const opUpdateClassificationScope = "UpdateClassificationScope"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateClassificationScopeRequest method.
+//	req, resp := client.UpdateClassificationScopeRequest(params)
 //
-//    // Example sending a request using the UpdateClassificationScopeRequest method.
-//    req, resp := client.UpdateClassificationScopeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateClassificationScope
 func (c *Macie2) UpdateClassificationScopeRequest(input *UpdateClassificationScopeInput) (req *request.Request, output *UpdateClassificationScopeOutput) {
@@ -8068,25 +8047,26 @@ func (c *Macie2) UpdateClassificationScopeRequest(input *UpdateClassificationSco
 // API operation UpdateClassificationScope for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateClassificationScope
 func (c *Macie2) UpdateClassificationScope(input *UpdateClassificationScopeInput) (*UpdateClassificationScopeOutput, error) {
@@ -8126,14 +8106,13 @@ const opUpdateFindingsFilter = "UpdateFindingsFilter"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFindingsFilterRequest method.
+//	req, resp := client.UpdateFindingsFilterRequest(params)
 //
-//    // Example sending a request using the UpdateFindingsFilterRequest method.
-//    req, resp := client.UpdateFindingsFilterRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateFindingsFilter
 func (c *Macie2) UpdateFindingsFilterRequest(input *UpdateFindingsFilterInput) (req *request.Request, output *UpdateFindingsFilterOutput) {
@@ -8164,33 +8143,34 @@ func (c *Macie2) UpdateFindingsFilterRequest(input *UpdateFindingsFilterInput) (
 // API operation UpdateFindingsFilter for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateFindingsFilter
 func (c *Macie2) UpdateFindingsFilter(input *UpdateFindingsFilterInput) (*UpdateFindingsFilterOutput, error) {
@@ -8230,14 +8210,13 @@ const opUpdateMacieSession = "UpdateMacieSession"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateMacieSessionRequest method.
+//	req, resp := client.UpdateMacieSessionRequest(params)
 //
-//    // Example sending a request using the UpdateMacieSessionRequest method.
-//    req, resp := client.UpdateMacieSessionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateMacieSession
 func (c *Macie2) UpdateMacieSessionRequest(input *UpdateMacieSessionInput) (req *request.Request, output *UpdateMacieSessionOutput) {
@@ -8270,33 +8249,34 @@ func (c *Macie2) UpdateMacieSessionRequest(input *UpdateMacieSessionInput) (req 
 // API operation UpdateMacieSession for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateMacieSession
 func (c *Macie2) UpdateMacieSession(input *UpdateMacieSessionInput) (*UpdateMacieSessionOutput, error) {
@@ -8336,14 +8316,13 @@ const opUpdateMemberSession = "UpdateMemberSession"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateMemberSessionRequest method.
+//	req, resp := client.UpdateMemberSessionRequest(params)
 //
-//    // Example sending a request using the UpdateMemberSessionRequest method.
-//    req, resp := client.UpdateMemberSessionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateMemberSession
 func (c *Macie2) UpdateMemberSessionRequest(input *UpdateMemberSessionInput) (req *request.Request, output *UpdateMemberSessionOutput) {
@@ -8376,33 +8355,34 @@ func (c *Macie2) UpdateMemberSessionRequest(input *UpdateMemberSessionInput) (re
 // API operation UpdateMemberSession for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateMemberSession
 func (c *Macie2) UpdateMemberSession(input *UpdateMemberSessionInput) (*UpdateMemberSessionOutput, error) {
@@ -8442,14 +8422,13 @@ const opUpdateOrganizationConfiguration = "UpdateOrganizationConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateOrganizationConfigurationRequest method.
+//	req, resp := client.UpdateOrganizationConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateOrganizationConfigurationRequest method.
-//    req, resp := client.UpdateOrganizationConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateOrganizationConfiguration
 func (c *Macie2) UpdateOrganizationConfigurationRequest(input *UpdateOrganizationConfigurationInput) (req *request.Request, output *UpdateOrganizationConfigurationOutput) {
@@ -8481,33 +8460,34 @@ func (c *Macie2) UpdateOrganizationConfigurationRequest(input *UpdateOrganizatio
 // API operation UpdateOrganizationConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ConflictException
-//   Provides information about an error that occurred due to a versioning conflict
-//   for a specified resource.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
+//
+//   - ConflictException
+//     Provides information about an error that occurred due to a versioning conflict
+//     for a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateOrganizationConfiguration
 func (c *Macie2) UpdateOrganizationConfiguration(input *UpdateOrganizationConfigurationInput) (*UpdateOrganizationConfigurationOutput, error) {
@@ -8547,14 +8527,13 @@ const opUpdateResourceProfile = "UpdateResourceProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateResourceProfileRequest method.
+//	req, resp := client.UpdateResourceProfileRequest(params)
 //
-//    // Example sending a request using the UpdateResourceProfileRequest method.
-//    req, resp := client.UpdateResourceProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateResourceProfile
 func (c *Macie2) UpdateResourceProfileRequest(input *UpdateResourceProfileInput) (req *request.Request, output *UpdateResourceProfileOutput) {
@@ -8586,29 +8565,30 @@ func (c *Macie2) UpdateResourceProfileRequest(input *UpdateResourceProfileInput)
 // API operation UpdateResourceProfile for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
+//
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateResourceProfile
 func (c *Macie2) UpdateResourceProfile(input *UpdateResourceProfileInput) (*UpdateResourceProfileOutput, error) {
@@ -8648,14 +8628,13 @@ const opUpdateResourceProfileDetections = "UpdateResourceProfileDetections"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateResourceProfileDetectionsRequest method.
+//	req, resp := client.UpdateResourceProfileDetectionsRequest(params)
 //
-//    // Example sending a request using the UpdateResourceProfileDetectionsRequest method.
-//    req, resp := client.UpdateResourceProfileDetectionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateResourceProfileDetections
 func (c *Macie2) UpdateResourceProfileDetectionsRequest(input *UpdateResourceProfileDetectionsInput) (req *request.Request, output *UpdateResourceProfileDetectionsOutput) {
@@ -8687,29 +8666,30 @@ func (c *Macie2) UpdateResourceProfileDetectionsRequest(input *UpdateResourcePro
 // API operation UpdateResourceProfileDetections for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * ServiceQuotaExceededException
-//   Provides information about an error that occurred due to one or more service
-//   quotas for an account.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - ServiceQuotaExceededException
+//     Provides information about an error that occurred due to one or more service
+//     quotas for an account.
 //
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
+//
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateResourceProfileDetections
 func (c *Macie2) UpdateResourceProfileDetections(input *UpdateResourceProfileDetectionsInput) (*UpdateResourceProfileDetectionsOutput, error) {
@@ -8749,14 +8729,13 @@ const opUpdateRevealConfiguration = "UpdateRevealConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRevealConfigurationRequest method.
+//	req, resp := client.UpdateRevealConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateRevealConfigurationRequest method.
-//    req, resp := client.UpdateRevealConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateRevealConfiguration
 func (c *Macie2) UpdateRevealConfigurationRequest(input *UpdateRevealConfigurationInput) (req *request.Request, output *UpdateRevealConfigurationOutput) {
@@ -8788,21 +8767,22 @@ func (c *Macie2) UpdateRevealConfigurationRequest(input *UpdateRevealConfigurati
 // API operation UpdateRevealConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateRevealConfiguration
 func (c *Macie2) UpdateRevealConfiguration(input *UpdateRevealConfigurationInput) (*UpdateRevealConfigurationOutput, error) {
@@ -8842,14 +8822,13 @@ const opUpdateSensitivityInspectionTemplate = "UpdateSensitivityInspectionTempla
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSensitivityInspectionTemplateRequest method.
+//	req, resp := client.UpdateSensitivityInspectionTemplateRequest(params)
 //
-//    // Example sending a request using the UpdateSensitivityInspectionTemplateRequest method.
-//    req, resp := client.UpdateSensitivityInspectionTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateSensitivityInspectionTemplate
 func (c *Macie2) UpdateSensitivityInspectionTemplateRequest(input *UpdateSensitivityInspectionTemplateInput) (req *request.Request, output *UpdateSensitivityInspectionTemplateOutput) {
@@ -8881,25 +8860,26 @@ func (c *Macie2) UpdateSensitivityInspectionTemplateRequest(input *UpdateSensiti
 // API operation UpdateSensitivityInspectionTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Provides information about an error that occurred because a specified resource
-//   wasn't found.
 //
-//   * ThrottlingException
-//   Provides information about an error that occurred because too many requests
-//   were sent during a certain amount of time.
+//   - ResourceNotFoundException
+//     Provides information about an error that occurred because a specified resource
+//     wasn't found.
 //
-//   * ValidationException
-//   Provides information about an error that occurred due to a syntax error in
-//   a request.
+//   - ThrottlingException
+//     Provides information about an error that occurred because too many requests
+//     were sent during a certain amount of time.
 //
-//   * InternalServerException
-//   Provides information about an error that occurred due to an unknown internal
-//   server error, exception, or failure.
+//   - ValidationException
+//     Provides information about an error that occurred due to a syntax error in
+//     a request.
 //
-//   * AccessDeniedException
-//   Provides information about an error that occurred due to insufficient access
-//   to a specified resource.
+//   - InternalServerException
+//     Provides information about an error that occurred due to an unknown internal
+//     server error, exception, or failure.
+//
+//   - AccessDeniedException
+//     Provides information about an error that occurred due to insufficient access
+//     to a specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/macie2-2020-01-01/UpdateSensitivityInspectionTemplate
 func (c *Macie2) UpdateSensitivityInspectionTemplate(input *UpdateSensitivityInspectionTemplateInput) (*UpdateSensitivityInspectionTemplateOutput, error) {
@@ -11287,8 +11267,9 @@ func (s *CreateAllowListOutput) SetId(v string) *CreateAllowListOutput {
 
 // Specifies the scope, schedule, and other settings for a classification job.
 // You can't change any settings for a classification job after you create it.
-// This helps ensure that you have an immutable history of sensitive data findings
-// and discovery results for data privacy and protection audits or investigations.
+// This helps to ensure that you have an immutable history of sensitive data
+// findings and discovery results for data privacy and protection audits or
+// investigations.
 type CreateClassificationJobInput struct {
 	_ struct{} `type:"structure"`
 
@@ -11498,7 +11479,7 @@ func (s *CreateClassificationJobOutput) SetJobId(v string) *CreateClassification
 
 // Specifies the detection criteria and other settings for a custom data identifier.
 // You can't change a custom data identifier after you create it. This helps
-// ensure that you have an immutable history of sensitive data findings and
+// to ensure that you have an immutable history of sensitive data findings and
 // discovery results for data privacy and protection audits or investigations.
 type CreateCustomDataIdentifierInput struct {
 	_ struct{} `type:"structure"`
@@ -16109,13 +16090,16 @@ func (s GetRevealConfigurationInput) GoString() string {
 type GetRevealConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the configuration settings for retrieving occurrences of sensitive
-	// data reported by findings, and the status of the configuration for an Amazon
-	// Macie account. When you enable the configuration for the first time, your
-	// request must specify an Key Management Service (KMS) key. Otherwise, an error
-	// occurs. Macie uses the specified key to encrypt the sensitive data that you
-	// retrieve.
+	// Specifies the status of the Amazon Macie configuration for retrieving occurrences
+	// of sensitive data reported by findings, and the Key Management Service (KMS)
+	// key to use to encrypt sensitive data that's retrieved. When you enable the
+	// configuration for the first time, your request must specify an KMS key. Otherwise,
+	// an error occurs.
 	Configuration *RevealConfiguration `locationName:"configuration" type:"structure"`
+
+	// Provides information about the access method and settings that are used to
+	// retrieve occurrences of sensitive data reported by findings.
+	RetrievalConfiguration *RetrievalConfiguration `locationName:"retrievalConfiguration" type:"structure"`
 }
 
 // String returns the string representation.
@@ -16139,6 +16123,12 @@ func (s GetRevealConfigurationOutput) GoString() string {
 // SetConfiguration sets the Configuration field's value.
 func (s *GetRevealConfigurationOutput) SetConfiguration(v *RevealConfiguration) *GetRevealConfigurationOutput {
 	s.Configuration = v
+	return s
+}
+
+// SetRetrievalConfiguration sets the RetrievalConfiguration field's value.
+func (s *GetRevealConfigurationOutput) SetRetrievalConfiguration(v *RetrievalConfiguration) *GetRevealConfigurationOutput {
+	s.RetrievalConfiguration = v
 	return s
 }
 
@@ -20114,12 +20104,63 @@ func (s *ResourcesAffected) SetS3Object(v *S3Object) *ResourcesAffected {
 	return s
 }
 
-// Specifies the configuration settings for retrieving occurrences of sensitive
-// data reported by findings, and the status of the configuration for an Amazon
-// Macie account. When you enable the configuration for the first time, your
-// request must specify an Key Management Service (KMS) key. Otherwise, an error
-// occurs. Macie uses the specified key to encrypt the sensitive data that you
-// retrieve.
+// Provides information about the access method and settings that are used to
+// retrieve occurrences of sensitive data reported by findings.
+type RetrievalConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	ExternalId *string `locationName:"externalId" type:"string"`
+
+	// The access method to use when retrieving occurrences of sensitive data reported
+	// by findings. Valid values are:
+	//
+	// RetrievalMode is a required field
+	RetrievalMode *string `locationName:"retrievalMode" type:"string" required:"true" enum:"RetrievalMode"`
+
+	RoleName *string `locationName:"roleName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RetrievalConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RetrievalConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetExternalId sets the ExternalId field's value.
+func (s *RetrievalConfiguration) SetExternalId(v string) *RetrievalConfiguration {
+	s.ExternalId = &v
+	return s
+}
+
+// SetRetrievalMode sets the RetrievalMode field's value.
+func (s *RetrievalConfiguration) SetRetrievalMode(v string) *RetrievalConfiguration {
+	s.RetrievalMode = &v
+	return s
+}
+
+// SetRoleName sets the RoleName field's value.
+func (s *RetrievalConfiguration) SetRoleName(v string) *RetrievalConfiguration {
+	s.RoleName = &v
+	return s
+}
+
+// Specifies the status of the Amazon Macie configuration for retrieving occurrences
+// of sensitive data reported by findings, and the Key Management Service (KMS)
+// key to use to encrypt sensitive data that's retrieved. When you enable the
+// configuration for the first time, your request must specify an KMS key. Otherwise,
+// an error occurs.
 type RevealConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -22029,7 +22070,7 @@ func (s *Severity) SetScore(v int64) *Severity {
 
 // Specifies a severity level for findings that a custom data identifier produces.
 // A severity level determines which severity is assigned to the findings, based
-// on the number of occurrences of text that matches the custom data identifier's
+// on the number of occurrences of text that match the custom data identifier's
 // detection criteria.
 type SeverityLevel struct {
 	_ struct{} `type:"structure"`
@@ -23858,21 +23899,101 @@ func (s UpdateResourceProfileOutput) GoString() string {
 	return s.String()
 }
 
-// Specifies the configuration settings for retrieving occurrences of sensitive
+// Specifies the access method and settings to use when retrieving occurrences
+// of sensitive data reported by findings. If your request specifies an Identity
+// and Access Management (IAM) role to assume, Amazon Macie verifies that the
+// role exists and the attached policies are configured correctly. If there's
+// an issue, Macie returns an error. For information about addressing the issue,
+// see Configuration options and requirements for retrieving sensitive data
+// samples (https://docs.aws.amazon.com/macie/latest/user/findings-retrieve-sd-options.html)
+// in the Amazon Macie User Guide.
+type UpdateRetrievalConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The access method to use when retrieving occurrences of sensitive data reported
+	// by findings. Valid values are:
+	//
+	// RetrievalMode is a required field
+	RetrievalMode *string `locationName:"retrievalMode" type:"string" required:"true" enum:"RetrievalMode"`
+
+	RoleName *string `locationName:"roleName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRetrievalConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRetrievalConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateRetrievalConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateRetrievalConfiguration"}
+	if s.RetrievalMode == nil {
+		invalidParams.Add(request.NewErrParamRequired("RetrievalMode"))
+	}
+	if s.RoleName != nil && len(*s.RoleName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRetrievalMode sets the RetrievalMode field's value.
+func (s *UpdateRetrievalConfiguration) SetRetrievalMode(v string) *UpdateRetrievalConfiguration {
+	s.RetrievalMode = &v
+	return s
+}
+
+// SetRoleName sets the RoleName field's value.
+func (s *UpdateRetrievalConfiguration) SetRoleName(v string) *UpdateRetrievalConfiguration {
+	s.RoleName = &v
+	return s
+}
+
+// Specifies configuration settings for retrieving occurrences of sensitive
 // data reported by findings, and the status of the configuration for an Amazon
-// Macie account.
+// Macie account. If you don't specify retrievalConfiguration settings for an
+// existing configuration, Macie sets the access method to CALLER_CREDENTIALS.
+// If your current access method is ASSUME_ROLE, Macie also deletes the external
+// ID and role name currently specified for the configuration. To keep these
+// settings for an existing configuration, specify your current retrievalConfiguration
+// settings in your request.
 type UpdateRevealConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the configuration settings for retrieving occurrences of sensitive
-	// data reported by findings, and the status of the configuration for an Amazon
-	// Macie account. When you enable the configuration for the first time, your
-	// request must specify an Key Management Service (KMS) key. Otherwise, an error
-	// occurs. Macie uses the specified key to encrypt the sensitive data that you
-	// retrieve.
+	// Specifies the status of the Amazon Macie configuration for retrieving occurrences
+	// of sensitive data reported by findings, and the Key Management Service (KMS)
+	// key to use to encrypt sensitive data that's retrieved. When you enable the
+	// configuration for the first time, your request must specify an KMS key. Otherwise,
+	// an error occurs.
 	//
 	// Configuration is a required field
 	Configuration *RevealConfiguration `locationName:"configuration" type:"structure" required:"true"`
+
+	// Specifies the access method and settings to use when retrieving occurrences
+	// of sensitive data reported by findings. If your request specifies an Identity
+	// and Access Management (IAM) role to assume, Amazon Macie verifies that the
+	// role exists and the attached policies are configured correctly. If there's
+	// an issue, Macie returns an error. For information about addressing the issue,
+	// see Configuration options and requirements for retrieving sensitive data
+	// samples (https://docs.aws.amazon.com/macie/latest/user/findings-retrieve-sd-options.html)
+	// in the Amazon Macie User Guide.
+	RetrievalConfiguration *UpdateRetrievalConfiguration `locationName:"retrievalConfiguration" type:"structure"`
 }
 
 // String returns the string representation.
@@ -23904,6 +24025,11 @@ func (s *UpdateRevealConfigurationInput) Validate() error {
 			invalidParams.AddNested("Configuration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.RetrievalConfiguration != nil {
+		if err := s.RetrievalConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("RetrievalConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -23917,19 +24043,28 @@ func (s *UpdateRevealConfigurationInput) SetConfiguration(v *RevealConfiguration
 	return s
 }
 
+// SetRetrievalConfiguration sets the RetrievalConfiguration field's value.
+func (s *UpdateRevealConfigurationInput) SetRetrievalConfiguration(v *UpdateRetrievalConfiguration) *UpdateRevealConfigurationInput {
+	s.RetrievalConfiguration = v
+	return s
+}
+
 // Provides information about updated configuration settings for retrieving
 // occurrences of sensitive data reported by findings, and the status of the
 // configuration for an Amazon Macie account.
 type UpdateRevealConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the configuration settings for retrieving occurrences of sensitive
-	// data reported by findings, and the status of the configuration for an Amazon
-	// Macie account. When you enable the configuration for the first time, your
-	// request must specify an Key Management Service (KMS) key. Otherwise, an error
-	// occurs. Macie uses the specified key to encrypt the sensitive data that you
-	// retrieve.
+	// Specifies the status of the Amazon Macie configuration for retrieving occurrences
+	// of sensitive data reported by findings, and the Key Management Service (KMS)
+	// key to use to encrypt sensitive data that's retrieved. When you enable the
+	// configuration for the first time, your request must specify an KMS key. Otherwise,
+	// an error occurs.
 	Configuration *RevealConfiguration `locationName:"configuration" type:"structure"`
+
+	// Provides information about the access method and settings that are used to
+	// retrieve occurrences of sensitive data reported by findings.
+	RetrievalConfiguration *RetrievalConfiguration `locationName:"retrievalConfiguration" type:"structure"`
 }
 
 // String returns the string representation.
@@ -23953,6 +24088,12 @@ func (s UpdateRevealConfigurationOutput) GoString() string {
 // SetConfiguration sets the Configuration field's value.
 func (s *UpdateRevealConfigurationOutput) SetConfiguration(v *RevealConfiguration) *UpdateRevealConfigurationOutput {
 	s.Configuration = v
+	return s
+}
+
+// SetRetrievalConfiguration sets the RetrievalConfiguration field's value.
+func (s *UpdateRevealConfigurationOutput) SetRetrievalConfiguration(v *RetrievalConfiguration) *UpdateRevealConfigurationOutput {
+	s.RetrievalConfiguration = v
 	return s
 }
 
@@ -24903,6 +25044,9 @@ const (
 
 	// EncryptionTypeUnknown is a EncryptionType enum value
 	EncryptionTypeUnknown = "UNKNOWN"
+
+	// EncryptionTypeAwsKmsDsse is a EncryptionType enum value
+	EncryptionTypeAwsKmsDsse = "aws:kms:dsse"
 )
 
 // EncryptionType_Values returns all elements of the EncryptionType enum
@@ -24912,6 +25056,7 @@ func EncryptionType_Values() []string {
 		EncryptionTypeAes256,
 		EncryptionTypeAwsKms,
 		EncryptionTypeUnknown,
+		EncryptionTypeAwsKmsDsse,
 	}
 }
 
@@ -25335,6 +25480,9 @@ const (
 
 	// ManagedDataIdentifierSelectorNone is a ManagedDataIdentifierSelector enum value
 	ManagedDataIdentifierSelectorNone = "NONE"
+
+	// ManagedDataIdentifierSelectorRecommended is a ManagedDataIdentifierSelector enum value
+	ManagedDataIdentifierSelectorRecommended = "RECOMMENDED"
 )
 
 // ManagedDataIdentifierSelector_Values returns all elements of the ManagedDataIdentifierSelector enum
@@ -25344,6 +25492,7 @@ func ManagedDataIdentifierSelector_Values() []string {
 		ManagedDataIdentifierSelectorExclude,
 		ManagedDataIdentifierSelectorInclude,
 		ManagedDataIdentifierSelectorNone,
+		ManagedDataIdentifierSelectorRecommended,
 	}
 }
 
@@ -25428,6 +25577,24 @@ func RelationshipStatus_Values() []string {
 		RelationshipStatusEmailVerificationFailed,
 		RelationshipStatusRegionDisabled,
 		RelationshipStatusAccountSuspended,
+	}
+}
+
+// The access method to use when retrieving occurrences of sensitive data reported
+// by findings. Valid values are:
+const (
+	// RetrievalModeCallerCredentials is a RetrievalMode enum value
+	RetrievalModeCallerCredentials = "CALLER_CREDENTIALS"
+
+	// RetrievalModeAssumeRole is a RetrievalMode enum value
+	RetrievalModeAssumeRole = "ASSUME_ROLE"
+)
+
+// RetrievalMode_Values returns all elements of the RetrievalMode enum
+func RetrievalMode_Values() []string {
+	return []string{
+		RetrievalModeCallerCredentials,
+		RetrievalModeAssumeRole,
 	}
 }
 
@@ -25750,6 +25917,9 @@ const (
 
 	// TypeAwsKms is a Type enum value
 	TypeAwsKms = "aws:kms"
+
+	// TypeAwsKmsDsse is a Type enum value
+	TypeAwsKmsDsse = "aws:kms:dsse"
 )
 
 // Type_Values returns all elements of the Type enum
@@ -25758,6 +25928,7 @@ func Type_Values() []string {
 		TypeNone,
 		TypeAes256,
 		TypeAwsKms,
+		TypeAwsKmsDsse,
 	}
 }
 
@@ -25778,6 +25949,24 @@ const (
 
 	// UnavailabilityReasonCodeObjectUnavailable is a UnavailabilityReasonCode enum value
 	UnavailabilityReasonCodeObjectUnavailable = "OBJECT_UNAVAILABLE"
+
+	// UnavailabilityReasonCodeAccountNotInOrganization is a UnavailabilityReasonCode enum value
+	UnavailabilityReasonCodeAccountNotInOrganization = "ACCOUNT_NOT_IN_ORGANIZATION"
+
+	// UnavailabilityReasonCodeMissingGetMemberPermission is a UnavailabilityReasonCode enum value
+	UnavailabilityReasonCodeMissingGetMemberPermission = "MISSING_GET_MEMBER_PERMISSION"
+
+	// UnavailabilityReasonCodeRoleTooPermissive is a UnavailabilityReasonCode enum value
+	UnavailabilityReasonCodeRoleTooPermissive = "ROLE_TOO_PERMISSIVE"
+
+	// UnavailabilityReasonCodeMemberRoleTooPermissive is a UnavailabilityReasonCode enum value
+	UnavailabilityReasonCodeMemberRoleTooPermissive = "MEMBER_ROLE_TOO_PERMISSIVE"
+
+	// UnavailabilityReasonCodeInvalidResultSignature is a UnavailabilityReasonCode enum value
+	UnavailabilityReasonCodeInvalidResultSignature = "INVALID_RESULT_SIGNATURE"
+
+	// UnavailabilityReasonCodeResultNotSigned is a UnavailabilityReasonCode enum value
+	UnavailabilityReasonCodeResultNotSigned = "RESULT_NOT_SIGNED"
 )
 
 // UnavailabilityReasonCode_Values returns all elements of the UnavailabilityReasonCode enum
@@ -25788,6 +25977,12 @@ func UnavailabilityReasonCode_Values() []string {
 		UnavailabilityReasonCodeUnsupportedFindingType,
 		UnavailabilityReasonCodeInvalidClassificationResult,
 		UnavailabilityReasonCodeObjectUnavailable,
+		UnavailabilityReasonCodeAccountNotInOrganization,
+		UnavailabilityReasonCodeMissingGetMemberPermission,
+		UnavailabilityReasonCodeRoleTooPermissive,
+		UnavailabilityReasonCodeMemberRoleTooPermissive,
+		UnavailabilityReasonCodeInvalidResultSignature,
+		UnavailabilityReasonCodeResultNotSigned,
 	}
 }
 

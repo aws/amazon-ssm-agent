@@ -29,14 +29,13 @@ const opAcceptPage = "AcceptPage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AcceptPageRequest method.
+//	req, resp := client.AcceptPageRequest(params)
 //
-//    // Example sending a request using the AcceptPageRequest method.
-//    req, resp := client.AcceptPageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/AcceptPage
 func (c *SSMContacts) AcceptPageRequest(input *AcceptPageInput) (req *request.Request, output *AcceptPageOutput) {
@@ -68,21 +67,22 @@ func (c *SSMContacts) AcceptPageRequest(input *AcceptPageInput) (req *request.Re
 // API operation AcceptPage for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/AcceptPage
 func (c *SSMContacts) AcceptPage(input *AcceptPageInput) (*AcceptPageOutput, error) {
@@ -122,14 +122,13 @@ const opActivateContactChannel = "ActivateContactChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ActivateContactChannelRequest method.
+//	req, resp := client.ActivateContactChannelRequest(params)
 //
-//    // Example sending a request using the ActivateContactChannelRequest method.
-//    req, resp := client.ActivateContactChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ActivateContactChannel
 func (c *SSMContacts) ActivateContactChannelRequest(input *ActivateContactChannelInput) (req *request.Request, output *ActivateContactChannelOutput) {
@@ -162,21 +161,22 @@ func (c *SSMContacts) ActivateContactChannelRequest(input *ActivateContactChanne
 // API operation ActivateContactChannel for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ActivateContactChannel
 func (c *SSMContacts) ActivateContactChannel(input *ActivateContactChannelInput) (*ActivateContactChannelOutput, error) {
@@ -216,14 +216,13 @@ const opCreateContact = "CreateContact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateContactRequest method.
+//	req, resp := client.CreateContactRequest(params)
 //
-//    // Example sending a request using the CreateContactRequest method.
-//    req, resp := client.CreateContactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/CreateContact
 func (c *SSMContacts) CreateContactRequest(input *CreateContactInput) (req *request.Request, output *CreateContactOutput) {
@@ -256,27 +255,28 @@ func (c *SSMContacts) CreateContactRequest(input *CreateContactInput) (req *requ
 // API operation CreateContact for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * ConflictException
-//   Updating or deleting a resource causes an inconsistent state.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - ConflictException
+//     Updating or deleting a resource causes an inconsistent state.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     Request would cause a service quota to be exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * DataEncryptionException
-//   The operation failed to due an encryption key error.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - DataEncryptionException
+//     The operation failed to due an encryption key error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/CreateContact
 func (c *SSMContacts) CreateContact(input *CreateContactInput) (*CreateContactOutput, error) {
@@ -316,14 +316,13 @@ const opCreateContactChannel = "CreateContactChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateContactChannelRequest method.
+//	req, resp := client.CreateContactChannelRequest(params)
 //
-//    // Example sending a request using the CreateContactChannelRequest method.
-//    req, resp := client.CreateContactChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/CreateContactChannel
 func (c *SSMContacts) CreateContactChannelRequest(input *CreateContactChannelInput) (req *request.Request, output *CreateContactChannelOutput) {
@@ -355,24 +354,25 @@ func (c *SSMContacts) CreateContactChannelRequest(input *CreateContactChannelInp
 // API operation CreateContactChannel for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * ConflictException
-//   Updating or deleting a resource causes an inconsistent state.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * DataEncryptionException
-//   The operation failed to due an encryption key error.
+//   - ConflictException
+//     Updating or deleting a resource causes an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - DataEncryptionException
+//     The operation failed to due an encryption key error.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/CreateContactChannel
 func (c *SSMContacts) CreateContactChannel(input *CreateContactChannelInput) (*CreateContactChannelOutput, error) {
@@ -412,14 +412,13 @@ const opCreateRotation = "CreateRotation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRotationRequest method.
+//	req, resp := client.CreateRotationRequest(params)
 //
-//    // Example sending a request using the CreateRotationRequest method.
-//    req, resp := client.CreateRotationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/CreateRotation
 func (c *SSMContacts) CreateRotationRequest(input *CreateRotationInput) (req *request.Request, output *CreateRotationOutput) {
@@ -450,24 +449,25 @@ func (c *SSMContacts) CreateRotationRequest(input *CreateRotationInput) (req *re
 // API operation CreateRotation for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     Request would cause a service quota to be exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/CreateRotation
 func (c *SSMContacts) CreateRotation(input *CreateRotationInput) (*CreateRotationOutput, error) {
@@ -507,14 +507,13 @@ const opCreateRotationOverride = "CreateRotationOverride"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRotationOverrideRequest method.
+//	req, resp := client.CreateRotationOverrideRequest(params)
 //
-//    // Example sending a request using the CreateRotationOverrideRequest method.
-//    req, resp := client.CreateRotationOverrideRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/CreateRotationOverride
 func (c *SSMContacts) CreateRotationOverrideRequest(input *CreateRotationOverrideInput) (req *request.Request, output *CreateRotationOverrideOutput) {
@@ -545,24 +544,25 @@ func (c *SSMContacts) CreateRotationOverrideRequest(input *CreateRotationOverrid
 // API operation CreateRotationOverride for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     Request would cause a service quota to be exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/CreateRotationOverride
 func (c *SSMContacts) CreateRotationOverride(input *CreateRotationOverrideInput) (*CreateRotationOverrideOutput, error) {
@@ -602,14 +602,13 @@ const opDeactivateContactChannel = "DeactivateContactChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeactivateContactChannelRequest method.
+//	req, resp := client.DeactivateContactChannelRequest(params)
 //
-//    // Example sending a request using the DeactivateContactChannelRequest method.
-//    req, resp := client.DeactivateContactChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DeactivateContactChannel
 func (c *SSMContacts) DeactivateContactChannelRequest(input *DeactivateContactChannelInput) (req *request.Request, output *DeactivateContactChannelOutput) {
@@ -642,21 +641,22 @@ func (c *SSMContacts) DeactivateContactChannelRequest(input *DeactivateContactCh
 // API operation DeactivateContactChannel for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DeactivateContactChannel
 func (c *SSMContacts) DeactivateContactChannel(input *DeactivateContactChannelInput) (*DeactivateContactChannelOutput, error) {
@@ -696,14 +696,13 @@ const opDeleteContact = "DeleteContact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteContactRequest method.
+//	req, resp := client.DeleteContactRequest(params)
 //
-//    // Example sending a request using the DeleteContactRequest method.
-//    req, resp := client.DeleteContactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DeleteContact
 func (c *SSMContacts) DeleteContactRequest(input *DeleteContactInput) (req *request.Request, output *DeleteContactOutput) {
@@ -739,24 +738,25 @@ func (c *SSMContacts) DeleteContactRequest(input *DeleteContactInput) (req *requ
 // API operation DeleteContact for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource causes an inconsistent state.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ConflictException
+//     Updating or deleting a resource causes an inconsistent state.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DeleteContact
 func (c *SSMContacts) DeleteContact(input *DeleteContactInput) (*DeleteContactOutput, error) {
@@ -796,14 +796,13 @@ const opDeleteContactChannel = "DeleteContactChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteContactChannelRequest method.
+//	req, resp := client.DeleteContactChannelRequest(params)
 //
-//    // Example sending a request using the DeleteContactChannelRequest method.
-//    req, resp := client.DeleteContactChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DeleteContactChannel
 func (c *SSMContacts) DeleteContactChannelRequest(input *DeleteContactChannelInput) (req *request.Request, output *DeleteContactChannelOutput) {
@@ -838,21 +837,22 @@ func (c *SSMContacts) DeleteContactChannelRequest(input *DeleteContactChannelInp
 // API operation DeleteContactChannel for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DeleteContactChannel
 func (c *SSMContacts) DeleteContactChannel(input *DeleteContactChannelInput) (*DeleteContactChannelOutput, error) {
@@ -892,14 +892,13 @@ const opDeleteRotation = "DeleteRotation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRotationRequest method.
+//	req, resp := client.DeleteRotationRequest(params)
 //
-//    // Example sending a request using the DeleteRotationRequest method.
-//    req, resp := client.DeleteRotationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DeleteRotation
 func (c *SSMContacts) DeleteRotationRequest(input *DeleteRotationInput) (req *request.Request, output *DeleteRotationOutput) {
@@ -932,24 +931,25 @@ func (c *SSMContacts) DeleteRotationRequest(input *DeleteRotationInput) (req *re
 // API operation DeleteRotation for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * ConflictException
-//   Updating or deleting a resource causes an inconsistent state.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - ConflictException
+//     Updating or deleting a resource causes an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DeleteRotation
 func (c *SSMContacts) DeleteRotation(input *DeleteRotationInput) (*DeleteRotationOutput, error) {
@@ -989,14 +989,13 @@ const opDeleteRotationOverride = "DeleteRotationOverride"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRotationOverrideRequest method.
+//	req, resp := client.DeleteRotationOverrideRequest(params)
 //
-//    // Example sending a request using the DeleteRotationOverrideRequest method.
-//    req, resp := client.DeleteRotationOverrideRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DeleteRotationOverride
 func (c *SSMContacts) DeleteRotationOverrideRequest(input *DeleteRotationOverrideInput) (req *request.Request, output *DeleteRotationOverrideOutput) {
@@ -1028,21 +1027,22 @@ func (c *SSMContacts) DeleteRotationOverrideRequest(input *DeleteRotationOverrid
 // API operation DeleteRotationOverride for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DeleteRotationOverride
 func (c *SSMContacts) DeleteRotationOverride(input *DeleteRotationOverrideInput) (*DeleteRotationOverrideOutput, error) {
@@ -1082,14 +1082,13 @@ const opDescribeEngagement = "DescribeEngagement"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeEngagementRequest method.
+//	req, resp := client.DescribeEngagementRequest(params)
 //
-//    // Example sending a request using the DescribeEngagementRequest method.
-//    req, resp := client.DescribeEngagementRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DescribeEngagement
 func (c *SSMContacts) DescribeEngagementRequest(input *DescribeEngagementInput) (req *request.Request, output *DescribeEngagementOutput) {
@@ -1122,24 +1121,25 @@ func (c *SSMContacts) DescribeEngagementRequest(input *DescribeEngagementInput) 
 // API operation DescribeEngagement for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * DataEncryptionException
-//   The operation failed to due an encryption key error.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - DataEncryptionException
+//     The operation failed to due an encryption key error.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DescribeEngagement
 func (c *SSMContacts) DescribeEngagement(input *DescribeEngagementInput) (*DescribeEngagementOutput, error) {
@@ -1179,14 +1179,13 @@ const opDescribePage = "DescribePage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribePageRequest method.
+//	req, resp := client.DescribePageRequest(params)
 //
-//    // Example sending a request using the DescribePageRequest method.
-//    req, resp := client.DescribePageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DescribePage
 func (c *SSMContacts) DescribePageRequest(input *DescribePageInput) (req *request.Request, output *DescribePageOutput) {
@@ -1217,24 +1216,25 @@ func (c *SSMContacts) DescribePageRequest(input *DescribePageInput) (req *reques
 // API operation DescribePage for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * DataEncryptionException
-//   The operation failed to due an encryption key error.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - DataEncryptionException
+//     The operation failed to due an encryption key error.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/DescribePage
 func (c *SSMContacts) DescribePage(input *DescribePageInput) (*DescribePageOutput, error) {
@@ -1274,14 +1274,13 @@ const opGetContact = "GetContact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetContactRequest method.
+//	req, resp := client.GetContactRequest(params)
 //
-//    // Example sending a request using the GetContactRequest method.
-//    req, resp := client.GetContactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/GetContact
 func (c *SSMContacts) GetContactRequest(input *GetContactInput) (req *request.Request, output *GetContactOutput) {
@@ -1312,24 +1311,25 @@ func (c *SSMContacts) GetContactRequest(input *GetContactInput) (req *request.Re
 // API operation GetContact for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * DataEncryptionException
-//   The operation failed to due an encryption key error.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - DataEncryptionException
+//     The operation failed to due an encryption key error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/GetContact
 func (c *SSMContacts) GetContact(input *GetContactInput) (*GetContactOutput, error) {
@@ -1369,14 +1369,13 @@ const opGetContactChannel = "GetContactChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetContactChannelRequest method.
+//	req, resp := client.GetContactChannelRequest(params)
 //
-//    // Example sending a request using the GetContactChannelRequest method.
-//    req, resp := client.GetContactChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/GetContactChannel
 func (c *SSMContacts) GetContactChannelRequest(input *GetContactChannelInput) (req *request.Request, output *GetContactChannelOutput) {
@@ -1407,24 +1406,25 @@ func (c *SSMContacts) GetContactChannelRequest(input *GetContactChannelInput) (r
 // API operation GetContactChannel for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * DataEncryptionException
-//   The operation failed to due an encryption key error.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - DataEncryptionException
+//     The operation failed to due an encryption key error.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/GetContactChannel
 func (c *SSMContacts) GetContactChannel(input *GetContactChannelInput) (*GetContactChannelOutput, error) {
@@ -1464,14 +1464,13 @@ const opGetContactPolicy = "GetContactPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetContactPolicyRequest method.
+//	req, resp := client.GetContactPolicyRequest(params)
 //
-//    // Example sending a request using the GetContactPolicyRequest method.
-//    req, resp := client.GetContactPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/GetContactPolicy
 func (c *SSMContacts) GetContactPolicyRequest(input *GetContactPolicyInput) (req *request.Request, output *GetContactPolicyOutput) {
@@ -1503,21 +1502,22 @@ func (c *SSMContacts) GetContactPolicyRequest(input *GetContactPolicyInput) (req
 // API operation GetContactPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/GetContactPolicy
 func (c *SSMContacts) GetContactPolicy(input *GetContactPolicyInput) (*GetContactPolicyOutput, error) {
@@ -1557,14 +1557,13 @@ const opGetRotation = "GetRotation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRotationRequest method.
+//	req, resp := client.GetRotationRequest(params)
 //
-//    // Example sending a request using the GetRotationRequest method.
-//    req, resp := client.GetRotationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/GetRotation
 func (c *SSMContacts) GetRotationRequest(input *GetRotationInput) (req *request.Request, output *GetRotationOutput) {
@@ -1595,21 +1594,22 @@ func (c *SSMContacts) GetRotationRequest(input *GetRotationInput) (req *request.
 // API operation GetRotation for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/GetRotation
 func (c *SSMContacts) GetRotation(input *GetRotationInput) (*GetRotationOutput, error) {
@@ -1649,14 +1649,13 @@ const opGetRotationOverride = "GetRotationOverride"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRotationOverrideRequest method.
+//	req, resp := client.GetRotationOverrideRequest(params)
 //
-//    // Example sending a request using the GetRotationOverrideRequest method.
-//    req, resp := client.GetRotationOverrideRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/GetRotationOverride
 func (c *SSMContacts) GetRotationOverrideRequest(input *GetRotationOverrideInput) (req *request.Request, output *GetRotationOverrideOutput) {
@@ -1687,21 +1686,22 @@ func (c *SSMContacts) GetRotationOverrideRequest(input *GetRotationOverrideInput
 // API operation GetRotationOverride for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/GetRotationOverride
 func (c *SSMContacts) GetRotationOverride(input *GetRotationOverrideInput) (*GetRotationOverrideOutput, error) {
@@ -1741,14 +1741,13 @@ const opListContactChannels = "ListContactChannels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListContactChannelsRequest method.
+//	req, resp := client.ListContactChannelsRequest(params)
 //
-//    // Example sending a request using the ListContactChannelsRequest method.
-//    req, resp := client.ListContactChannelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListContactChannels
 func (c *SSMContacts) ListContactChannelsRequest(input *ListContactChannelsInput) (req *request.Request, output *ListContactChannelsOutput) {
@@ -1785,24 +1784,25 @@ func (c *SSMContacts) ListContactChannelsRequest(input *ListContactChannelsInput
 // API operation ListContactChannels for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * DataEncryptionException
-//   The operation failed to due an encryption key error.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - DataEncryptionException
+//     The operation failed to due an encryption key error.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListContactChannels
 func (c *SSMContacts) ListContactChannels(input *ListContactChannelsInput) (*ListContactChannelsOutput, error) {
@@ -1834,15 +1834,14 @@ func (c *SSMContacts) ListContactChannelsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListContactChannels operation.
-//    pageNum := 0
-//    err := client.ListContactChannelsPages(params,
-//        func(page *ssmcontacts.ListContactChannelsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListContactChannels operation.
+//	pageNum := 0
+//	err := client.ListContactChannelsPages(params,
+//	    func(page *ssmcontacts.ListContactChannelsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SSMContacts) ListContactChannelsPages(input *ListContactChannelsInput, fn func(*ListContactChannelsOutput, bool) bool) error {
 	return c.ListContactChannelsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1894,14 +1893,13 @@ const opListContacts = "ListContacts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListContactsRequest method.
+//	req, resp := client.ListContactsRequest(params)
 //
-//    // Example sending a request using the ListContactsRequest method.
-//    req, resp := client.ListContactsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListContacts
 func (c *SSMContacts) ListContactsRequest(input *ListContactsInput) (req *request.Request, output *ListContactsOutput) {
@@ -1938,18 +1936,19 @@ func (c *SSMContacts) ListContactsRequest(input *ListContactsInput) (req *reques
 // API operation ListContacts for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListContacts
 func (c *SSMContacts) ListContacts(input *ListContactsInput) (*ListContactsOutput, error) {
@@ -1981,15 +1980,14 @@ func (c *SSMContacts) ListContactsWithContext(ctx aws.Context, input *ListContac
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListContacts operation.
-//    pageNum := 0
-//    err := client.ListContactsPages(params,
-//        func(page *ssmcontacts.ListContactsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListContacts operation.
+//	pageNum := 0
+//	err := client.ListContactsPages(params,
+//	    func(page *ssmcontacts.ListContactsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SSMContacts) ListContactsPages(input *ListContactsInput, fn func(*ListContactsOutput, bool) bool) error {
 	return c.ListContactsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2041,14 +2039,13 @@ const opListEngagements = "ListEngagements"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListEngagementsRequest method.
+//	req, resp := client.ListEngagementsRequest(params)
 //
-//    // Example sending a request using the ListEngagementsRequest method.
-//    req, resp := client.ListEngagementsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListEngagements
 func (c *SSMContacts) ListEngagementsRequest(input *ListEngagementsInput) (req *request.Request, output *ListEngagementsOutput) {
@@ -2085,18 +2082,19 @@ func (c *SSMContacts) ListEngagementsRequest(input *ListEngagementsInput) (req *
 // API operation ListEngagements for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListEngagements
 func (c *SSMContacts) ListEngagements(input *ListEngagementsInput) (*ListEngagementsOutput, error) {
@@ -2128,15 +2126,14 @@ func (c *SSMContacts) ListEngagementsWithContext(ctx aws.Context, input *ListEng
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListEngagements operation.
-//    pageNum := 0
-//    err := client.ListEngagementsPages(params,
-//        func(page *ssmcontacts.ListEngagementsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListEngagements operation.
+//	pageNum := 0
+//	err := client.ListEngagementsPages(params,
+//	    func(page *ssmcontacts.ListEngagementsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SSMContacts) ListEngagementsPages(input *ListEngagementsInput, fn func(*ListEngagementsOutput, bool) bool) error {
 	return c.ListEngagementsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2188,14 +2185,13 @@ const opListPageReceipts = "ListPageReceipts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPageReceiptsRequest method.
+//	req, resp := client.ListPageReceiptsRequest(params)
 //
-//    // Example sending a request using the ListPageReceiptsRequest method.
-//    req, resp := client.ListPageReceiptsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListPageReceipts
 func (c *SSMContacts) ListPageReceiptsRequest(input *ListPageReceiptsInput) (req *request.Request, output *ListPageReceiptsOutput) {
@@ -2232,21 +2228,22 @@ func (c *SSMContacts) ListPageReceiptsRequest(input *ListPageReceiptsInput) (req
 // API operation ListPageReceipts for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListPageReceipts
 func (c *SSMContacts) ListPageReceipts(input *ListPageReceiptsInput) (*ListPageReceiptsOutput, error) {
@@ -2278,15 +2275,14 @@ func (c *SSMContacts) ListPageReceiptsWithContext(ctx aws.Context, input *ListPa
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPageReceipts operation.
-//    pageNum := 0
-//    err := client.ListPageReceiptsPages(params,
-//        func(page *ssmcontacts.ListPageReceiptsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPageReceipts operation.
+//	pageNum := 0
+//	err := client.ListPageReceiptsPages(params,
+//	    func(page *ssmcontacts.ListPageReceiptsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SSMContacts) ListPageReceiptsPages(input *ListPageReceiptsInput, fn func(*ListPageReceiptsOutput, bool) bool) error {
 	return c.ListPageReceiptsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2338,14 +2334,13 @@ const opListPageResolutions = "ListPageResolutions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPageResolutionsRequest method.
+//	req, resp := client.ListPageResolutionsRequest(params)
 //
-//    // Example sending a request using the ListPageResolutionsRequest method.
-//    req, resp := client.ListPageResolutionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListPageResolutions
 func (c *SSMContacts) ListPageResolutionsRequest(input *ListPageResolutionsInput) (req *request.Request, output *ListPageResolutionsOutput) {
@@ -2386,21 +2381,22 @@ func (c *SSMContacts) ListPageResolutionsRequest(input *ListPageResolutionsInput
 // API operation ListPageResolutions for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListPageResolutions
 func (c *SSMContacts) ListPageResolutions(input *ListPageResolutionsInput) (*ListPageResolutionsOutput, error) {
@@ -2432,15 +2428,14 @@ func (c *SSMContacts) ListPageResolutionsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPageResolutions operation.
-//    pageNum := 0
-//    err := client.ListPageResolutionsPages(params,
-//        func(page *ssmcontacts.ListPageResolutionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPageResolutions operation.
+//	pageNum := 0
+//	err := client.ListPageResolutionsPages(params,
+//	    func(page *ssmcontacts.ListPageResolutionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SSMContacts) ListPageResolutionsPages(input *ListPageResolutionsInput, fn func(*ListPageResolutionsOutput, bool) bool) error {
 	return c.ListPageResolutionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2492,14 +2487,13 @@ const opListPagesByContact = "ListPagesByContact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPagesByContactRequest method.
+//	req, resp := client.ListPagesByContactRequest(params)
 //
-//    // Example sending a request using the ListPagesByContactRequest method.
-//    req, resp := client.ListPagesByContactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListPagesByContact
 func (c *SSMContacts) ListPagesByContactRequest(input *ListPagesByContactInput) (req *request.Request, output *ListPagesByContactOutput) {
@@ -2536,21 +2530,22 @@ func (c *SSMContacts) ListPagesByContactRequest(input *ListPagesByContactInput) 
 // API operation ListPagesByContact for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListPagesByContact
 func (c *SSMContacts) ListPagesByContact(input *ListPagesByContactInput) (*ListPagesByContactOutput, error) {
@@ -2582,15 +2577,14 @@ func (c *SSMContacts) ListPagesByContactWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPagesByContact operation.
-//    pageNum := 0
-//    err := client.ListPagesByContactPages(params,
-//        func(page *ssmcontacts.ListPagesByContactOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPagesByContact operation.
+//	pageNum := 0
+//	err := client.ListPagesByContactPages(params,
+//	    func(page *ssmcontacts.ListPagesByContactOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SSMContacts) ListPagesByContactPages(input *ListPagesByContactInput, fn func(*ListPagesByContactOutput, bool) bool) error {
 	return c.ListPagesByContactPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2642,14 +2636,13 @@ const opListPagesByEngagement = "ListPagesByEngagement"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPagesByEngagementRequest method.
+//	req, resp := client.ListPagesByEngagementRequest(params)
 //
-//    // Example sending a request using the ListPagesByEngagementRequest method.
-//    req, resp := client.ListPagesByEngagementRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListPagesByEngagement
 func (c *SSMContacts) ListPagesByEngagementRequest(input *ListPagesByEngagementInput) (req *request.Request, output *ListPagesByEngagementOutput) {
@@ -2686,21 +2679,22 @@ func (c *SSMContacts) ListPagesByEngagementRequest(input *ListPagesByEngagementI
 // API operation ListPagesByEngagement for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListPagesByEngagement
 func (c *SSMContacts) ListPagesByEngagement(input *ListPagesByEngagementInput) (*ListPagesByEngagementOutput, error) {
@@ -2732,15 +2726,14 @@ func (c *SSMContacts) ListPagesByEngagementWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPagesByEngagement operation.
-//    pageNum := 0
-//    err := client.ListPagesByEngagementPages(params,
-//        func(page *ssmcontacts.ListPagesByEngagementOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPagesByEngagement operation.
+//	pageNum := 0
+//	err := client.ListPagesByEngagementPages(params,
+//	    func(page *ssmcontacts.ListPagesByEngagementOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SSMContacts) ListPagesByEngagementPages(input *ListPagesByEngagementInput, fn func(*ListPagesByEngagementOutput, bool) bool) error {
 	return c.ListPagesByEngagementPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2792,14 +2785,13 @@ const opListPreviewRotationShifts = "ListPreviewRotationShifts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPreviewRotationShiftsRequest method.
+//	req, resp := client.ListPreviewRotationShiftsRequest(params)
 //
-//    // Example sending a request using the ListPreviewRotationShiftsRequest method.
-//    req, resp := client.ListPreviewRotationShiftsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListPreviewRotationShifts
 func (c *SSMContacts) ListPreviewRotationShiftsRequest(input *ListPreviewRotationShiftsInput) (req *request.Request, output *ListPreviewRotationShiftsOutput) {
@@ -2839,18 +2831,19 @@ func (c *SSMContacts) ListPreviewRotationShiftsRequest(input *ListPreviewRotatio
 // API operation ListPreviewRotationShifts for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListPreviewRotationShifts
 func (c *SSMContacts) ListPreviewRotationShifts(input *ListPreviewRotationShiftsInput) (*ListPreviewRotationShiftsOutput, error) {
@@ -2882,15 +2875,14 @@ func (c *SSMContacts) ListPreviewRotationShiftsWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPreviewRotationShifts operation.
-//    pageNum := 0
-//    err := client.ListPreviewRotationShiftsPages(params,
-//        func(page *ssmcontacts.ListPreviewRotationShiftsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPreviewRotationShifts operation.
+//	pageNum := 0
+//	err := client.ListPreviewRotationShiftsPages(params,
+//	    func(page *ssmcontacts.ListPreviewRotationShiftsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SSMContacts) ListPreviewRotationShiftsPages(input *ListPreviewRotationShiftsInput, fn func(*ListPreviewRotationShiftsOutput, bool) bool) error {
 	return c.ListPreviewRotationShiftsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2942,14 +2934,13 @@ const opListRotationOverrides = "ListRotationOverrides"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRotationOverridesRequest method.
+//	req, resp := client.ListRotationOverridesRequest(params)
 //
-//    // Example sending a request using the ListRotationOverridesRequest method.
-//    req, resp := client.ListRotationOverridesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListRotationOverrides
 func (c *SSMContacts) ListRotationOverridesRequest(input *ListRotationOverridesInput) (req *request.Request, output *ListRotationOverridesOutput) {
@@ -2986,21 +2977,22 @@ func (c *SSMContacts) ListRotationOverridesRequest(input *ListRotationOverridesI
 // API operation ListRotationOverrides for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListRotationOverrides
 func (c *SSMContacts) ListRotationOverrides(input *ListRotationOverridesInput) (*ListRotationOverridesOutput, error) {
@@ -3032,15 +3024,14 @@ func (c *SSMContacts) ListRotationOverridesWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRotationOverrides operation.
-//    pageNum := 0
-//    err := client.ListRotationOverridesPages(params,
-//        func(page *ssmcontacts.ListRotationOverridesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRotationOverrides operation.
+//	pageNum := 0
+//	err := client.ListRotationOverridesPages(params,
+//	    func(page *ssmcontacts.ListRotationOverridesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SSMContacts) ListRotationOverridesPages(input *ListRotationOverridesInput, fn func(*ListRotationOverridesOutput, bool) bool) error {
 	return c.ListRotationOverridesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3092,14 +3083,13 @@ const opListRotationShifts = "ListRotationShifts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRotationShiftsRequest method.
+//	req, resp := client.ListRotationShiftsRequest(params)
 //
-//    // Example sending a request using the ListRotationShiftsRequest method.
-//    req, resp := client.ListRotationShiftsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListRotationShifts
 func (c *SSMContacts) ListRotationShiftsRequest(input *ListRotationShiftsInput) (req *request.Request, output *ListRotationShiftsOutput) {
@@ -3136,24 +3126,25 @@ func (c *SSMContacts) ListRotationShiftsRequest(input *ListRotationShiftsInput) 
 // API operation ListRotationShifts for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * ConflictException
-//   Updating or deleting a resource causes an inconsistent state.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - ConflictException
+//     Updating or deleting a resource causes an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListRotationShifts
 func (c *SSMContacts) ListRotationShifts(input *ListRotationShiftsInput) (*ListRotationShiftsOutput, error) {
@@ -3185,15 +3176,14 @@ func (c *SSMContacts) ListRotationShiftsWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRotationShifts operation.
-//    pageNum := 0
-//    err := client.ListRotationShiftsPages(params,
-//        func(page *ssmcontacts.ListRotationShiftsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRotationShifts operation.
+//	pageNum := 0
+//	err := client.ListRotationShiftsPages(params,
+//	    func(page *ssmcontacts.ListRotationShiftsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SSMContacts) ListRotationShiftsPages(input *ListRotationShiftsInput, fn func(*ListRotationShiftsOutput, bool) bool) error {
 	return c.ListRotationShiftsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3245,14 +3235,13 @@ const opListRotations = "ListRotations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRotationsRequest method.
+//	req, resp := client.ListRotationsRequest(params)
 //
-//    // Example sending a request using the ListRotationsRequest method.
-//    req, resp := client.ListRotationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListRotations
 func (c *SSMContacts) ListRotationsRequest(input *ListRotationsInput) (req *request.Request, output *ListRotationsOutput) {
@@ -3289,21 +3278,22 @@ func (c *SSMContacts) ListRotationsRequest(input *ListRotationsInput) (req *requ
 // API operation ListRotations for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListRotations
 func (c *SSMContacts) ListRotations(input *ListRotationsInput) (*ListRotationsOutput, error) {
@@ -3335,15 +3325,14 @@ func (c *SSMContacts) ListRotationsWithContext(ctx aws.Context, input *ListRotat
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRotations operation.
-//    pageNum := 0
-//    err := client.ListRotationsPages(params,
-//        func(page *ssmcontacts.ListRotationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRotations operation.
+//	pageNum := 0
+//	err := client.ListRotationsPages(params,
+//	    func(page *ssmcontacts.ListRotationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SSMContacts) ListRotationsPages(input *ListRotationsInput, fn func(*ListRotationsOutput, bool) bool) error {
 	return c.ListRotationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3395,14 +3384,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListTagsForResource
 func (c *SSMContacts) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -3433,21 +3421,22 @@ func (c *SSMContacts) ListTagsForResourceRequest(input *ListTagsForResourceInput
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/ListTagsForResource
 func (c *SSMContacts) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -3487,14 +3476,13 @@ const opPutContactPolicy = "PutContactPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutContactPolicyRequest method.
+//	req, resp := client.PutContactPolicyRequest(params)
 //
-//    // Example sending a request using the PutContactPolicyRequest method.
-//    req, resp := client.PutContactPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/PutContactPolicy
 func (c *SSMContacts) PutContactPolicyRequest(input *PutContactPolicyInput) (req *request.Request, output *PutContactPolicyOutput) {
@@ -3529,24 +3517,25 @@ func (c *SSMContacts) PutContactPolicyRequest(input *PutContactPolicyInput) (req
 // API operation PutContactPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * ConflictException
-//   Updating or deleting a resource causes an inconsistent state.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ConflictException
+//     Updating or deleting a resource causes an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/PutContactPolicy
 func (c *SSMContacts) PutContactPolicy(input *PutContactPolicyInput) (*PutContactPolicyOutput, error) {
@@ -3586,14 +3575,13 @@ const opSendActivationCode = "SendActivationCode"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SendActivationCodeRequest method.
+//	req, resp := client.SendActivationCodeRequest(params)
 //
-//    // Example sending a request using the SendActivationCodeRequest method.
-//    req, resp := client.SendActivationCodeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/SendActivationCode
 func (c *SSMContacts) SendActivationCodeRequest(input *SendActivationCodeInput) (req *request.Request, output *SendActivationCodeOutput) {
@@ -3628,27 +3616,28 @@ func (c *SSMContacts) SendActivationCodeRequest(input *SendActivationCodeInput) 
 // API operation SendActivationCode for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * DataEncryptionException
-//   The operation failed to due an encryption key error.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - DataEncryptionException
+//     The operation failed to due an encryption key error.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     Request would cause a service quota to be exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/SendActivationCode
 func (c *SSMContacts) SendActivationCode(input *SendActivationCodeInput) (*SendActivationCodeOutput, error) {
@@ -3688,14 +3677,13 @@ const opStartEngagement = "StartEngagement"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartEngagementRequest method.
+//	req, resp := client.StartEngagementRequest(params)
 //
-//    // Example sending a request using the StartEngagementRequest method.
-//    req, resp := client.StartEngagementRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/StartEngagement
 func (c *SSMContacts) StartEngagementRequest(input *StartEngagementInput) (req *request.Request, output *StartEngagementOutput) {
@@ -3727,24 +3715,25 @@ func (c *SSMContacts) StartEngagementRequest(input *StartEngagementInput) (req *
 // API operation StartEngagement for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * DataEncryptionException
-//   The operation failed to due an encryption key error.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - DataEncryptionException
+//     The operation failed to due an encryption key error.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/StartEngagement
 func (c *SSMContacts) StartEngagement(input *StartEngagementInput) (*StartEngagementOutput, error) {
@@ -3784,14 +3773,13 @@ const opStopEngagement = "StopEngagement"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopEngagementRequest method.
+//	req, resp := client.StopEngagementRequest(params)
 //
-//    // Example sending a request using the StopEngagementRequest method.
-//    req, resp := client.StopEngagementRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/StopEngagement
 func (c *SSMContacts) StopEngagementRequest(input *StopEngagementInput) (req *request.Request, output *StopEngagementOutput) {
@@ -3824,21 +3812,22 @@ func (c *SSMContacts) StopEngagementRequest(input *StopEngagementInput) (req *re
 // API operation StopEngagement for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/StopEngagement
 func (c *SSMContacts) StopEngagement(input *StopEngagementInput) (*StopEngagementOutput, error) {
@@ -3878,14 +3867,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/TagResource
 func (c *SSMContacts) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -3918,24 +3906,25 @@ func (c *SSMContacts) TagResourceRequest(input *TagResourceInput) (req *request.
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ServiceQuotaExceededException
+//     Request would cause a service quota to be exceeded.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/TagResource
 func (c *SSMContacts) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -3975,14 +3964,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/UntagResource
 func (c *SSMContacts) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -4014,21 +4002,22 @@ func (c *SSMContacts) UntagResourceRequest(input *UntagResourceInput) (req *requ
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/UntagResource
 func (c *SSMContacts) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -4068,14 +4057,13 @@ const opUpdateContact = "UpdateContact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateContactRequest method.
+//	req, resp := client.UpdateContactRequest(params)
 //
-//    // Example sending a request using the UpdateContactRequest method.
-//    req, resp := client.UpdateContactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/UpdateContact
 func (c *SSMContacts) UpdateContactRequest(input *UpdateContactInput) (req *request.Request, output *UpdateContactOutput) {
@@ -4107,27 +4095,28 @@ func (c *SSMContacts) UpdateContactRequest(input *UpdateContactInput) (req *requ
 // API operation UpdateContact for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ServiceQuotaExceededException
-//   Request would cause a service quota to be exceeded.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     Request would cause a service quota to be exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * DataEncryptionException
-//   The operation failed to due an encryption key error.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - DataEncryptionException
+//     The operation failed to due an encryption key error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/UpdateContact
 func (c *SSMContacts) UpdateContact(input *UpdateContactInput) (*UpdateContactOutput, error) {
@@ -4167,14 +4156,13 @@ const opUpdateContactChannel = "UpdateContactChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateContactChannelRequest method.
+//	req, resp := client.UpdateContactChannelRequest(params)
 //
-//    // Example sending a request using the UpdateContactChannelRequest method.
-//    req, resp := client.UpdateContactChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/UpdateContactChannel
 func (c *SSMContacts) UpdateContactChannelRequest(input *UpdateContactChannelInput) (req *request.Request, output *UpdateContactChannelOutput) {
@@ -4206,27 +4194,28 @@ func (c *SSMContacts) UpdateContactChannelRequest(input *UpdateContactChannelInp
 // API operation UpdateContactChannel for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * ConflictException
-//   Updating or deleting a resource causes an inconsistent state.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * DataEncryptionException
-//   The operation failed to due an encryption key error.
+//   - ConflictException
+//     Updating or deleting a resource causes an inconsistent state.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - DataEncryptionException
+//     The operation failed to due an encryption key error.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/UpdateContactChannel
 func (c *SSMContacts) UpdateContactChannel(input *UpdateContactChannelInput) (*UpdateContactChannelOutput, error) {
@@ -4266,14 +4255,13 @@ const opUpdateRotation = "UpdateRotation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRotationRequest method.
+//	req, resp := client.UpdateRotationRequest(params)
 //
-//    // Example sending a request using the UpdateRotationRequest method.
-//    req, resp := client.UpdateRotationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/UpdateRotation
 func (c *SSMContacts) UpdateRotationRequest(input *UpdateRotationInput) (req *request.Request, output *UpdateRotationOutput) {
@@ -4305,24 +4293,25 @@ func (c *SSMContacts) UpdateRotationRequest(input *UpdateRotationInput) (req *re
 // API operation UpdateRotation for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient access to perform this operation.
 //
-//   * ConflictException
-//   Updating or deleting a resource causes an inconsistent state.
+//   - AccessDeniedException
+//     You don't have sufficient access to perform this operation.
 //
-//   * InternalServerException
-//   Unexpected error occurred while processing the request.
+//   - ConflictException
+//     Updating or deleting a resource causes an inconsistent state.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - InternalServerException
+//     Unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-contacts-2021-05-03/UpdateRotation
 func (c *SSMContacts) UpdateRotation(input *UpdateRotationInput) (*UpdateRotationOutput, error) {

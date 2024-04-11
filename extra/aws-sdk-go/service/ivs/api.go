@@ -29,14 +29,13 @@ const opBatchGetChannel = "BatchGetChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetChannelRequest method.
+//	req, resp := client.BatchGetChannelRequest(params)
 //
-//    // Example sending a request using the BatchGetChannelRequest method.
-//    req, resp := client.BatchGetChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/BatchGetChannel
 func (c *IVS) BatchGetChannelRequest(input *BatchGetChannelInput) (req *request.Request, output *BatchGetChannelOutput) {
@@ -103,14 +102,13 @@ const opBatchGetStreamKey = "BatchGetStreamKey"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetStreamKeyRequest method.
+//	req, resp := client.BatchGetStreamKeyRequest(params)
 //
-//    // Example sending a request using the BatchGetStreamKeyRequest method.
-//    req, resp := client.BatchGetStreamKeyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/BatchGetStreamKey
 func (c *IVS) BatchGetStreamKeyRequest(input *BatchGetStreamKeyInput) (req *request.Request, output *BatchGetStreamKeyOutput) {
@@ -161,6 +159,91 @@ func (c *IVS) BatchGetStreamKeyWithContext(ctx aws.Context, input *BatchGetStrea
 	return out, req.Send()
 }
 
+const opBatchStartViewerSessionRevocation = "BatchStartViewerSessionRevocation"
+
+// BatchStartViewerSessionRevocationRequest generates a "aws/request.Request" representing the
+// client's request for the BatchStartViewerSessionRevocation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchStartViewerSessionRevocation for more information on using the BatchStartViewerSessionRevocation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the BatchStartViewerSessionRevocationRequest method.
+//	req, resp := client.BatchStartViewerSessionRevocationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/BatchStartViewerSessionRevocation
+func (c *IVS) BatchStartViewerSessionRevocationRequest(input *BatchStartViewerSessionRevocationInput) (req *request.Request, output *BatchStartViewerSessionRevocationOutput) {
+	op := &request.Operation{
+		Name:       opBatchStartViewerSessionRevocation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/BatchStartViewerSessionRevocation",
+	}
+
+	if input == nil {
+		input = &BatchStartViewerSessionRevocationInput{}
+	}
+
+	output = &BatchStartViewerSessionRevocationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchStartViewerSessionRevocation API operation for Amazon Interactive Video Service.
+//
+// Performs StartViewerSessionRevocation on multiple channel ARN and viewer
+// ID pairs simultaneously.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Interactive Video Service's
+// API operation BatchStartViewerSessionRevocation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//
+//   - ValidationException
+//
+//   - PendingVerification
+//
+//   - ThrottlingException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/BatchStartViewerSessionRevocation
+func (c *IVS) BatchStartViewerSessionRevocation(input *BatchStartViewerSessionRevocationInput) (*BatchStartViewerSessionRevocationOutput, error) {
+	req, out := c.BatchStartViewerSessionRevocationRequest(input)
+	return out, req.Send()
+}
+
+// BatchStartViewerSessionRevocationWithContext is the same as BatchStartViewerSessionRevocation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchStartViewerSessionRevocation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IVS) BatchStartViewerSessionRevocationWithContext(ctx aws.Context, input *BatchStartViewerSessionRevocationInput, opts ...request.Option) (*BatchStartViewerSessionRevocationOutput, error) {
+	req, out := c.BatchStartViewerSessionRevocationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateChannel = "CreateChannel"
 
 // CreateChannelRequest generates a "aws/request.Request" representing the
@@ -177,14 +260,13 @@ const opCreateChannel = "CreateChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateChannelRequest method.
+//	req, resp := client.CreateChannelRequest(params)
 //
-//    // Example sending a request using the CreateChannelRequest method.
-//    req, resp := client.CreateChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/CreateChannel
 func (c *IVS) CreateChannelRequest(input *CreateChannelInput) (req *request.Request, output *CreateChannelOutput) {
@@ -215,15 +297,16 @@ func (c *IVS) CreateChannelRequest(input *CreateChannelInput) (req *request.Requ
 // API operation CreateChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * PendingVerification
+//   - ValidationException
 //
-//   * ServiceQuotaExceededException
+//   - PendingVerification
+//
+//   - ServiceQuotaExceededException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/CreateChannel
 func (c *IVS) CreateChannel(input *CreateChannelInput) (*CreateChannelOutput, error) {
@@ -247,6 +330,93 @@ func (c *IVS) CreateChannelWithContext(ctx aws.Context, input *CreateChannelInpu
 	return out, req.Send()
 }
 
+const opCreatePlaybackRestrictionPolicy = "CreatePlaybackRestrictionPolicy"
+
+// CreatePlaybackRestrictionPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the CreatePlaybackRestrictionPolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreatePlaybackRestrictionPolicy for more information on using the CreatePlaybackRestrictionPolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreatePlaybackRestrictionPolicyRequest method.
+//	req, resp := client.CreatePlaybackRestrictionPolicyRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/CreatePlaybackRestrictionPolicy
+func (c *IVS) CreatePlaybackRestrictionPolicyRequest(input *CreatePlaybackRestrictionPolicyInput) (req *request.Request, output *CreatePlaybackRestrictionPolicyOutput) {
+	op := &request.Operation{
+		Name:       opCreatePlaybackRestrictionPolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/CreatePlaybackRestrictionPolicy",
+	}
+
+	if input == nil {
+		input = &CreatePlaybackRestrictionPolicyInput{}
+	}
+
+	output = &CreatePlaybackRestrictionPolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreatePlaybackRestrictionPolicy API operation for Amazon Interactive Video Service.
+//
+// Creates a new playback restriction policy, for constraining playback by countries
+// and/or origins.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Interactive Video Service's
+// API operation CreatePlaybackRestrictionPolicy for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//
+//   - ValidationException
+//
+//   - PendingVerification
+//
+//   - ThrottlingException
+//
+//   - ServiceQuotaExceededException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/CreatePlaybackRestrictionPolicy
+func (c *IVS) CreatePlaybackRestrictionPolicy(input *CreatePlaybackRestrictionPolicyInput) (*CreatePlaybackRestrictionPolicyOutput, error) {
+	req, out := c.CreatePlaybackRestrictionPolicyRequest(input)
+	return out, req.Send()
+}
+
+// CreatePlaybackRestrictionPolicyWithContext is the same as CreatePlaybackRestrictionPolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreatePlaybackRestrictionPolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IVS) CreatePlaybackRestrictionPolicyWithContext(ctx aws.Context, input *CreatePlaybackRestrictionPolicyInput, opts ...request.Option) (*CreatePlaybackRestrictionPolicyOutput, error) {
+	req, out := c.CreatePlaybackRestrictionPolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateRecordingConfiguration = "CreateRecordingConfiguration"
 
 // CreateRecordingConfigurationRequest generates a "aws/request.Request" representing the
@@ -263,14 +433,13 @@ const opCreateRecordingConfiguration = "CreateRecordingConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRecordingConfigurationRequest method.
+//	req, resp := client.CreateRecordingConfigurationRequest(params)
 //
-//    // Example sending a request using the CreateRecordingConfigurationRequest method.
-//    req, resp := client.CreateRecordingConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/CreateRecordingConfiguration
 func (c *IVS) CreateRecordingConfigurationRequest(input *CreateRecordingConfigurationInput) (req *request.Request, output *CreateRecordingConfigurationOutput) {
@@ -313,17 +482,18 @@ func (c *IVS) CreateRecordingConfigurationRequest(input *CreateRecordingConfigur
 // API operation CreateRecordingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * PendingVerification
+//   - ValidationException
 //
-//   * ConflictException
+//   - PendingVerification
 //
-//   * ServiceQuotaExceededException
+//   - ConflictException
+//
+//   - ServiceQuotaExceededException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/CreateRecordingConfiguration
 func (c *IVS) CreateRecordingConfiguration(input *CreateRecordingConfigurationInput) (*CreateRecordingConfigurationOutput, error) {
@@ -363,14 +533,13 @@ const opCreateStreamKey = "CreateStreamKey"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateStreamKeyRequest method.
+//	req, resp := client.CreateStreamKeyRequest(params)
 //
-//    // Example sending a request using the CreateStreamKeyRequest method.
-//    req, resp := client.CreateStreamKeyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/CreateStreamKey
 func (c *IVS) CreateStreamKeyRequest(input *CreateStreamKeyInput) (req *request.Request, output *CreateStreamKeyOutput) {
@@ -407,15 +576,16 @@ func (c *IVS) CreateStreamKeyRequest(input *CreateStreamKeyInput) (req *request.
 // API operation CreateStreamKey for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * PendingVerification
+//   - ValidationException
 //
-//   * ServiceQuotaExceededException
+//   - PendingVerification
+//
+//   - ServiceQuotaExceededException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/CreateStreamKey
 func (c *IVS) CreateStreamKey(input *CreateStreamKeyInput) (*CreateStreamKeyOutput, error) {
@@ -455,14 +625,13 @@ const opDeleteChannel = "DeleteChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteChannelRequest method.
+//	req, resp := client.DeleteChannelRequest(params)
 //
-//    // Example sending a request using the DeleteChannelRequest method.
-//    req, resp := client.DeleteChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeleteChannel
 func (c *IVS) DeleteChannelRequest(input *DeleteChannelInput) (req *request.Request, output *DeleteChannelOutput) {
@@ -499,15 +668,16 @@ func (c *IVS) DeleteChannelRequest(input *DeleteChannelInput) (req *request.Requ
 // API operation DeleteChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * PendingVerification
+//   - ValidationException
 //
-//   * ConflictException
+//   - PendingVerification
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeleteChannel
 func (c *IVS) DeleteChannel(input *DeleteChannelInput) (*DeleteChannelOutput, error) {
@@ -547,14 +717,13 @@ const opDeletePlaybackKeyPair = "DeletePlaybackKeyPair"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePlaybackKeyPairRequest method.
+//	req, resp := client.DeletePlaybackKeyPairRequest(params)
 //
-//    // Example sending a request using the DeletePlaybackKeyPairRequest method.
-//    req, resp := client.DeletePlaybackKeyPairRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeletePlaybackKeyPair
 func (c *IVS) DeletePlaybackKeyPairRequest(input *DeletePlaybackKeyPairInput) (req *request.Request, output *DeletePlaybackKeyPairOutput) {
@@ -589,13 +758,14 @@ func (c *IVS) DeletePlaybackKeyPairRequest(input *DeletePlaybackKeyPairInput) (r
 // API operation DeletePlaybackKeyPair for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * PendingVerification
+//   - ValidationException
+//
+//   - PendingVerification
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeletePlaybackKeyPair
 func (c *IVS) DeletePlaybackKeyPair(input *DeletePlaybackKeyPairInput) (*DeletePlaybackKeyPairOutput, error) {
@@ -619,6 +789,93 @@ func (c *IVS) DeletePlaybackKeyPairWithContext(ctx aws.Context, input *DeletePla
 	return out, req.Send()
 }
 
+const opDeletePlaybackRestrictionPolicy = "DeletePlaybackRestrictionPolicy"
+
+// DeletePlaybackRestrictionPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the DeletePlaybackRestrictionPolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeletePlaybackRestrictionPolicy for more information on using the DeletePlaybackRestrictionPolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeletePlaybackRestrictionPolicyRequest method.
+//	req, resp := client.DeletePlaybackRestrictionPolicyRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeletePlaybackRestrictionPolicy
+func (c *IVS) DeletePlaybackRestrictionPolicyRequest(input *DeletePlaybackRestrictionPolicyInput) (req *request.Request, output *DeletePlaybackRestrictionPolicyOutput) {
+	op := &request.Operation{
+		Name:       opDeletePlaybackRestrictionPolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/DeletePlaybackRestrictionPolicy",
+	}
+
+	if input == nil {
+		input = &DeletePlaybackRestrictionPolicyInput{}
+	}
+
+	output = &DeletePlaybackRestrictionPolicyOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeletePlaybackRestrictionPolicy API operation for Amazon Interactive Video Service.
+//
+// Deletes the specified playback restriction policy.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Interactive Video Service's
+// API operation DeletePlaybackRestrictionPolicy for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//
+//   - AccessDeniedException
+//
+//   - ValidationException
+//
+//   - PendingVerification
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeletePlaybackRestrictionPolicy
+func (c *IVS) DeletePlaybackRestrictionPolicy(input *DeletePlaybackRestrictionPolicyInput) (*DeletePlaybackRestrictionPolicyOutput, error) {
+	req, out := c.DeletePlaybackRestrictionPolicyRequest(input)
+	return out, req.Send()
+}
+
+// DeletePlaybackRestrictionPolicyWithContext is the same as DeletePlaybackRestrictionPolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeletePlaybackRestrictionPolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IVS) DeletePlaybackRestrictionPolicyWithContext(ctx aws.Context, input *DeletePlaybackRestrictionPolicyInput, opts ...request.Option) (*DeletePlaybackRestrictionPolicyOutput, error) {
+	req, out := c.DeletePlaybackRestrictionPolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteRecordingConfiguration = "DeleteRecordingConfiguration"
 
 // DeleteRecordingConfigurationRequest generates a "aws/request.Request" representing the
@@ -635,14 +892,13 @@ const opDeleteRecordingConfiguration = "DeleteRecordingConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRecordingConfigurationRequest method.
+//	req, resp := client.DeleteRecordingConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteRecordingConfigurationRequest method.
-//    req, resp := client.DeleteRecordingConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeleteRecordingConfiguration
 func (c *IVS) DeleteRecordingConfigurationRequest(input *DeleteRecordingConfigurationInput) (req *request.Request, output *DeleteRecordingConfigurationOutput) {
@@ -679,15 +935,16 @@ func (c *IVS) DeleteRecordingConfigurationRequest(input *DeleteRecordingConfigur
 // API operation DeleteRecordingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ConflictException
+//   - ValidationException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeleteRecordingConfiguration
 func (c *IVS) DeleteRecordingConfiguration(input *DeleteRecordingConfigurationInput) (*DeleteRecordingConfigurationOutput, error) {
@@ -727,14 +984,13 @@ const opDeleteStreamKey = "DeleteStreamKey"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteStreamKeyRequest method.
+//	req, resp := client.DeleteStreamKeyRequest(params)
 //
-//    // Example sending a request using the DeleteStreamKeyRequest method.
-//    req, resp := client.DeleteStreamKeyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeleteStreamKey
 func (c *IVS) DeleteStreamKeyRequest(input *DeleteStreamKeyInput) (req *request.Request, output *DeleteStreamKeyOutput) {
@@ -767,13 +1023,14 @@ func (c *IVS) DeleteStreamKeyRequest(input *DeleteStreamKeyInput) (req *request.
 // API operation DeleteStreamKey for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * PendingVerification
+//   - ValidationException
+//
+//   - PendingVerification
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/DeleteStreamKey
 func (c *IVS) DeleteStreamKey(input *DeleteStreamKeyInput) (*DeleteStreamKeyOutput, error) {
@@ -813,14 +1070,13 @@ const opGetChannel = "GetChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetChannelRequest method.
+//	req, resp := client.GetChannelRequest(params)
 //
-//    // Example sending a request using the GetChannelRequest method.
-//    req, resp := client.GetChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetChannel
 func (c *IVS) GetChannelRequest(input *GetChannelInput) (req *request.Request, output *GetChannelOutput) {
@@ -851,11 +1107,12 @@ func (c *IVS) GetChannelRequest(input *GetChannelInput) (req *request.Request, o
 // API operation GetChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetChannel
 func (c *IVS) GetChannel(input *GetChannelInput) (*GetChannelOutput, error) {
@@ -895,14 +1152,13 @@ const opGetPlaybackKeyPair = "GetPlaybackKeyPair"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPlaybackKeyPairRequest method.
+//	req, resp := client.GetPlaybackKeyPairRequest(params)
 //
-//    // Example sending a request using the GetPlaybackKeyPairRequest method.
-//    req, resp := client.GetPlaybackKeyPairRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetPlaybackKeyPair
 func (c *IVS) GetPlaybackKeyPairRequest(input *GetPlaybackKeyPairInput) (req *request.Request, output *GetPlaybackKeyPairOutput) {
@@ -937,11 +1193,12 @@ func (c *IVS) GetPlaybackKeyPairRequest(input *GetPlaybackKeyPairInput) (req *re
 // API operation GetPlaybackKeyPair for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetPlaybackKeyPair
 func (c *IVS) GetPlaybackKeyPair(input *GetPlaybackKeyPairInput) (*GetPlaybackKeyPairOutput, error) {
@@ -965,6 +1222,90 @@ func (c *IVS) GetPlaybackKeyPairWithContext(ctx aws.Context, input *GetPlaybackK
 	return out, req.Send()
 }
 
+const opGetPlaybackRestrictionPolicy = "GetPlaybackRestrictionPolicy"
+
+// GetPlaybackRestrictionPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the GetPlaybackRestrictionPolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetPlaybackRestrictionPolicy for more information on using the GetPlaybackRestrictionPolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetPlaybackRestrictionPolicyRequest method.
+//	req, resp := client.GetPlaybackRestrictionPolicyRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetPlaybackRestrictionPolicy
+func (c *IVS) GetPlaybackRestrictionPolicyRequest(input *GetPlaybackRestrictionPolicyInput) (req *request.Request, output *GetPlaybackRestrictionPolicyOutput) {
+	op := &request.Operation{
+		Name:       opGetPlaybackRestrictionPolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/GetPlaybackRestrictionPolicy",
+	}
+
+	if input == nil {
+		input = &GetPlaybackRestrictionPolicyInput{}
+	}
+
+	output = &GetPlaybackRestrictionPolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetPlaybackRestrictionPolicy API operation for Amazon Interactive Video Service.
+//
+// Gets the specified playback restriction policy.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Interactive Video Service's
+// API operation GetPlaybackRestrictionPolicy for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//
+//   - AccessDeniedException
+//
+//   - ValidationException
+//
+//   - PendingVerification
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetPlaybackRestrictionPolicy
+func (c *IVS) GetPlaybackRestrictionPolicy(input *GetPlaybackRestrictionPolicyInput) (*GetPlaybackRestrictionPolicyOutput, error) {
+	req, out := c.GetPlaybackRestrictionPolicyRequest(input)
+	return out, req.Send()
+}
+
+// GetPlaybackRestrictionPolicyWithContext is the same as GetPlaybackRestrictionPolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetPlaybackRestrictionPolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IVS) GetPlaybackRestrictionPolicyWithContext(ctx aws.Context, input *GetPlaybackRestrictionPolicyInput, opts ...request.Option) (*GetPlaybackRestrictionPolicyOutput, error) {
+	req, out := c.GetPlaybackRestrictionPolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetRecordingConfiguration = "GetRecordingConfiguration"
 
 // GetRecordingConfigurationRequest generates a "aws/request.Request" representing the
@@ -981,14 +1322,13 @@ const opGetRecordingConfiguration = "GetRecordingConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRecordingConfigurationRequest method.
+//	req, resp := client.GetRecordingConfigurationRequest(params)
 //
-//    // Example sending a request using the GetRecordingConfigurationRequest method.
-//    req, resp := client.GetRecordingConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetRecordingConfiguration
 func (c *IVS) GetRecordingConfigurationRequest(input *GetRecordingConfigurationInput) (req *request.Request, output *GetRecordingConfigurationOutput) {
@@ -1019,13 +1359,14 @@ func (c *IVS) GetRecordingConfigurationRequest(input *GetRecordingConfigurationI
 // API operation GetRecordingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetRecordingConfiguration
 func (c *IVS) GetRecordingConfiguration(input *GetRecordingConfigurationInput) (*GetRecordingConfigurationOutput, error) {
@@ -1065,14 +1406,13 @@ const opGetStream = "GetStream"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetStreamRequest method.
+//	req, resp := client.GetStreamRequest(params)
 //
-//    // Example sending a request using the GetStreamRequest method.
-//    req, resp := client.GetStreamRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetStream
 func (c *IVS) GetStreamRequest(input *GetStreamInput) (req *request.Request, output *GetStreamOutput) {
@@ -1103,13 +1443,14 @@ func (c *IVS) GetStreamRequest(input *GetStreamInput) (req *request.Request, out
 // API operation GetStream for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ChannelNotBroadcasting
+//   - ValidationException
+//
+//   - ChannelNotBroadcasting
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetStream
 func (c *IVS) GetStream(input *GetStreamInput) (*GetStreamOutput, error) {
@@ -1149,14 +1490,13 @@ const opGetStreamKey = "GetStreamKey"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetStreamKeyRequest method.
+//	req, resp := client.GetStreamKeyRequest(params)
 //
-//    // Example sending a request using the GetStreamKeyRequest method.
-//    req, resp := client.GetStreamKeyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetStreamKey
 func (c *IVS) GetStreamKeyRequest(input *GetStreamKeyInput) (req *request.Request, output *GetStreamKeyOutput) {
@@ -1187,11 +1527,12 @@ func (c *IVS) GetStreamKeyRequest(input *GetStreamKeyInput) (req *request.Reques
 // API operation GetStreamKey for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetStreamKey
 func (c *IVS) GetStreamKey(input *GetStreamKeyInput) (*GetStreamKeyOutput, error) {
@@ -1231,14 +1572,13 @@ const opGetStreamSession = "GetStreamSession"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetStreamSessionRequest method.
+//	req, resp := client.GetStreamSessionRequest(params)
 //
-//    // Example sending a request using the GetStreamSessionRequest method.
-//    req, resp := client.GetStreamSessionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetStreamSession
 func (c *IVS) GetStreamSessionRequest(input *GetStreamSessionInput) (req *request.Request, output *GetStreamSessionOutput) {
@@ -1269,11 +1609,12 @@ func (c *IVS) GetStreamSessionRequest(input *GetStreamSessionInput) (req *reques
 // API operation GetStreamSession for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/GetStreamSession
 func (c *IVS) GetStreamSession(input *GetStreamSessionInput) (*GetStreamSessionOutput, error) {
@@ -1313,14 +1654,13 @@ const opImportPlaybackKeyPair = "ImportPlaybackKeyPair"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ImportPlaybackKeyPairRequest method.
+//	req, resp := client.ImportPlaybackKeyPairRequest(params)
 //
-//    // Example sending a request using the ImportPlaybackKeyPairRequest method.
-//    req, resp := client.ImportPlaybackKeyPairRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ImportPlaybackKeyPair
 func (c *IVS) ImportPlaybackKeyPairRequest(input *ImportPlaybackKeyPairInput) (req *request.Request, output *ImportPlaybackKeyPairOutput) {
@@ -1355,15 +1695,16 @@ func (c *IVS) ImportPlaybackKeyPairRequest(input *ImportPlaybackKeyPairInput) (r
 // API operation ImportPlaybackKeyPair for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * PendingVerification
+//   - ValidationException
 //
-//   * ConflictException
+//   - PendingVerification
 //
-//   * ServiceQuotaExceededException
+//   - ConflictException
+//
+//   - ServiceQuotaExceededException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ImportPlaybackKeyPair
 func (c *IVS) ImportPlaybackKeyPair(input *ImportPlaybackKeyPairInput) (*ImportPlaybackKeyPairOutput, error) {
@@ -1403,14 +1744,13 @@ const opListChannels = "ListChannels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListChannelsRequest method.
+//	req, resp := client.ListChannelsRequest(params)
 //
-//    // Example sending a request using the ListChannelsRequest method.
-//    req, resp := client.ListChannelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListChannels
 func (c *IVS) ListChannelsRequest(input *ListChannelsInput) (req *request.Request, output *ListChannelsOutput) {
@@ -1451,11 +1791,12 @@ func (c *IVS) ListChannelsRequest(input *ListChannelsInput) (req *request.Reques
 // API operation ListChannels for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ConflictException
+//   - ValidationException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListChannels
 func (c *IVS) ListChannels(input *ListChannelsInput) (*ListChannelsOutput, error) {
@@ -1487,15 +1828,14 @@ func (c *IVS) ListChannelsWithContext(ctx aws.Context, input *ListChannelsInput,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListChannels operation.
-//    pageNum := 0
-//    err := client.ListChannelsPages(params,
-//        func(page *ivs.ListChannelsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListChannels operation.
+//	pageNum := 0
+//	err := client.ListChannelsPages(params,
+//	    func(page *ivs.ListChannelsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IVS) ListChannelsPages(input *ListChannelsInput, fn func(*ListChannelsOutput, bool) bool) error {
 	return c.ListChannelsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1547,14 +1887,13 @@ const opListPlaybackKeyPairs = "ListPlaybackKeyPairs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPlaybackKeyPairsRequest method.
+//	req, resp := client.ListPlaybackKeyPairsRequest(params)
 //
-//    // Example sending a request using the ListPlaybackKeyPairsRequest method.
-//    req, resp := client.ListPlaybackKeyPairsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListPlaybackKeyPairs
 func (c *IVS) ListPlaybackKeyPairsRequest(input *ListPlaybackKeyPairsInput) (req *request.Request, output *ListPlaybackKeyPairsOutput) {
@@ -1593,9 +1932,10 @@ func (c *IVS) ListPlaybackKeyPairsRequest(input *ListPlaybackKeyPairsInput) (req
 // API operation ListPlaybackKeyPairs for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListPlaybackKeyPairs
 func (c *IVS) ListPlaybackKeyPairs(input *ListPlaybackKeyPairsInput) (*ListPlaybackKeyPairsOutput, error) {
@@ -1627,15 +1967,14 @@ func (c *IVS) ListPlaybackKeyPairsWithContext(ctx aws.Context, input *ListPlayba
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPlaybackKeyPairs operation.
-//    pageNum := 0
-//    err := client.ListPlaybackKeyPairsPages(params,
-//        func(page *ivs.ListPlaybackKeyPairsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPlaybackKeyPairs operation.
+//	pageNum := 0
+//	err := client.ListPlaybackKeyPairsPages(params,
+//	    func(page *ivs.ListPlaybackKeyPairsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IVS) ListPlaybackKeyPairsPages(input *ListPlaybackKeyPairsInput, fn func(*ListPlaybackKeyPairsOutput, bool) bool) error {
 	return c.ListPlaybackKeyPairsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1671,6 +2010,147 @@ func (c *IVS) ListPlaybackKeyPairsPagesWithContext(ctx aws.Context, input *ListP
 	return p.Err()
 }
 
+const opListPlaybackRestrictionPolicies = "ListPlaybackRestrictionPolicies"
+
+// ListPlaybackRestrictionPoliciesRequest generates a "aws/request.Request" representing the
+// client's request for the ListPlaybackRestrictionPolicies operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListPlaybackRestrictionPolicies for more information on using the ListPlaybackRestrictionPolicies
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListPlaybackRestrictionPoliciesRequest method.
+//	req, resp := client.ListPlaybackRestrictionPoliciesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListPlaybackRestrictionPolicies
+func (c *IVS) ListPlaybackRestrictionPoliciesRequest(input *ListPlaybackRestrictionPoliciesInput) (req *request.Request, output *ListPlaybackRestrictionPoliciesOutput) {
+	op := &request.Operation{
+		Name:       opListPlaybackRestrictionPolicies,
+		HTTPMethod: "POST",
+		HTTPPath:   "/ListPlaybackRestrictionPolicies",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListPlaybackRestrictionPoliciesInput{}
+	}
+
+	output = &ListPlaybackRestrictionPoliciesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListPlaybackRestrictionPolicies API operation for Amazon Interactive Video Service.
+//
+// Gets summary information about playback restriction policies.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Interactive Video Service's
+// API operation ListPlaybackRestrictionPolicies for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//
+//   - ValidationException
+//
+//   - PendingVerification
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListPlaybackRestrictionPolicies
+func (c *IVS) ListPlaybackRestrictionPolicies(input *ListPlaybackRestrictionPoliciesInput) (*ListPlaybackRestrictionPoliciesOutput, error) {
+	req, out := c.ListPlaybackRestrictionPoliciesRequest(input)
+	return out, req.Send()
+}
+
+// ListPlaybackRestrictionPoliciesWithContext is the same as ListPlaybackRestrictionPolicies with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListPlaybackRestrictionPolicies for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IVS) ListPlaybackRestrictionPoliciesWithContext(ctx aws.Context, input *ListPlaybackRestrictionPoliciesInput, opts ...request.Option) (*ListPlaybackRestrictionPoliciesOutput, error) {
+	req, out := c.ListPlaybackRestrictionPoliciesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListPlaybackRestrictionPoliciesPages iterates over the pages of a ListPlaybackRestrictionPolicies operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPlaybackRestrictionPolicies method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListPlaybackRestrictionPolicies operation.
+//	pageNum := 0
+//	err := client.ListPlaybackRestrictionPoliciesPages(params,
+//	    func(page *ivs.ListPlaybackRestrictionPoliciesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *IVS) ListPlaybackRestrictionPoliciesPages(input *ListPlaybackRestrictionPoliciesInput, fn func(*ListPlaybackRestrictionPoliciesOutput, bool) bool) error {
+	return c.ListPlaybackRestrictionPoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPlaybackRestrictionPoliciesPagesWithContext same as ListPlaybackRestrictionPoliciesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IVS) ListPlaybackRestrictionPoliciesPagesWithContext(ctx aws.Context, input *ListPlaybackRestrictionPoliciesInput, fn func(*ListPlaybackRestrictionPoliciesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPlaybackRestrictionPoliciesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPlaybackRestrictionPoliciesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPlaybackRestrictionPoliciesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListRecordingConfigurations = "ListRecordingConfigurations"
 
 // ListRecordingConfigurationsRequest generates a "aws/request.Request" representing the
@@ -1687,14 +2167,13 @@ const opListRecordingConfigurations = "ListRecordingConfigurations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRecordingConfigurationsRequest method.
+//	req, resp := client.ListRecordingConfigurationsRequest(params)
 //
-//    // Example sending a request using the ListRecordingConfigurationsRequest method.
-//    req, resp := client.ListRecordingConfigurationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListRecordingConfigurations
 func (c *IVS) ListRecordingConfigurationsRequest(input *ListRecordingConfigurationsInput) (req *request.Request, output *ListRecordingConfigurationsOutput) {
@@ -1732,11 +2211,12 @@ func (c *IVS) ListRecordingConfigurationsRequest(input *ListRecordingConfigurati
 // API operation ListRecordingConfigurations for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListRecordingConfigurations
 func (c *IVS) ListRecordingConfigurations(input *ListRecordingConfigurationsInput) (*ListRecordingConfigurationsOutput, error) {
@@ -1768,15 +2248,14 @@ func (c *IVS) ListRecordingConfigurationsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRecordingConfigurations operation.
-//    pageNum := 0
-//    err := client.ListRecordingConfigurationsPages(params,
-//        func(page *ivs.ListRecordingConfigurationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRecordingConfigurations operation.
+//	pageNum := 0
+//	err := client.ListRecordingConfigurationsPages(params,
+//	    func(page *ivs.ListRecordingConfigurationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IVS) ListRecordingConfigurationsPages(input *ListRecordingConfigurationsInput, fn func(*ListRecordingConfigurationsOutput, bool) bool) error {
 	return c.ListRecordingConfigurationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1828,14 +2307,13 @@ const opListStreamKeys = "ListStreamKeys"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListStreamKeysRequest method.
+//	req, resp := client.ListStreamKeysRequest(params)
 //
-//    // Example sending a request using the ListStreamKeysRequest method.
-//    req, resp := client.ListStreamKeysRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListStreamKeys
 func (c *IVS) ListStreamKeysRequest(input *ListStreamKeysInput) (req *request.Request, output *ListStreamKeysOutput) {
@@ -1872,11 +2350,12 @@ func (c *IVS) ListStreamKeysRequest(input *ListStreamKeysInput) (req *request.Re
 // API operation ListStreamKeys for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListStreamKeys
 func (c *IVS) ListStreamKeys(input *ListStreamKeysInput) (*ListStreamKeysOutput, error) {
@@ -1908,15 +2387,14 @@ func (c *IVS) ListStreamKeysWithContext(ctx aws.Context, input *ListStreamKeysIn
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListStreamKeys operation.
-//    pageNum := 0
-//    err := client.ListStreamKeysPages(params,
-//        func(page *ivs.ListStreamKeysOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListStreamKeys operation.
+//	pageNum := 0
+//	err := client.ListStreamKeysPages(params,
+//	    func(page *ivs.ListStreamKeysOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IVS) ListStreamKeysPages(input *ListStreamKeysInput, fn func(*ListStreamKeysOutput, bool) bool) error {
 	return c.ListStreamKeysPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1968,14 +2446,13 @@ const opListStreamSessions = "ListStreamSessions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListStreamSessionsRequest method.
+//	req, resp := client.ListStreamSessionsRequest(params)
 //
-//    // Example sending a request using the ListStreamSessionsRequest method.
-//    req, resp := client.ListStreamSessionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListStreamSessions
 func (c *IVS) ListStreamSessionsRequest(input *ListStreamSessionsInput) (req *request.Request, output *ListStreamSessionsOutput) {
@@ -2013,11 +2490,12 @@ func (c *IVS) ListStreamSessionsRequest(input *ListStreamSessionsInput) (req *re
 // API operation ListStreamSessions for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListStreamSessions
 func (c *IVS) ListStreamSessions(input *ListStreamSessionsInput) (*ListStreamSessionsOutput, error) {
@@ -2049,15 +2527,14 @@ func (c *IVS) ListStreamSessionsWithContext(ctx aws.Context, input *ListStreamSe
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListStreamSessions operation.
-//    pageNum := 0
-//    err := client.ListStreamSessionsPages(params,
-//        func(page *ivs.ListStreamSessionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListStreamSessions operation.
+//	pageNum := 0
+//	err := client.ListStreamSessionsPages(params,
+//	    func(page *ivs.ListStreamSessionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IVS) ListStreamSessionsPages(input *ListStreamSessionsInput, fn func(*ListStreamSessionsOutput, bool) bool) error {
 	return c.ListStreamSessionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2109,14 +2586,13 @@ const opListStreams = "ListStreams"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListStreamsRequest method.
+//	req, resp := client.ListStreamsRequest(params)
 //
-//    // Example sending a request using the ListStreamsRequest method.
-//    req, resp := client.ListStreamsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListStreams
 func (c *IVS) ListStreamsRequest(input *ListStreamsInput) (req *request.Request, output *ListStreamsOutput) {
@@ -2154,9 +2630,10 @@ func (c *IVS) ListStreamsRequest(input *ListStreamsInput) (req *request.Request,
 // API operation ListStreams for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListStreams
 func (c *IVS) ListStreams(input *ListStreamsInput) (*ListStreamsOutput, error) {
@@ -2188,15 +2665,14 @@ func (c *IVS) ListStreamsWithContext(ctx aws.Context, input *ListStreamsInput, o
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListStreams operation.
-//    pageNum := 0
-//    err := client.ListStreamsPages(params,
-//        func(page *ivs.ListStreamsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListStreams operation.
+//	pageNum := 0
+//	err := client.ListStreamsPages(params,
+//	    func(page *ivs.ListStreamsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IVS) ListStreamsPages(input *ListStreamsInput, fn func(*ListStreamsOutput, bool) bool) error {
 	return c.ListStreamsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2248,14 +2724,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListTagsForResource
 func (c *IVS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2286,11 +2761,12 @@ func (c *IVS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - InternalServerException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/ListTagsForResource
 func (c *IVS) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2330,14 +2806,13 @@ const opPutMetadata = "PutMetadata"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutMetadataRequest method.
+//	req, resp := client.PutMetadataRequest(params)
 //
-//    // Example sending a request using the PutMetadataRequest method.
-//    req, resp := client.PutMetadataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/PutMetadata
 func (c *IVS) PutMetadataRequest(input *PutMetadataInput) (req *request.Request, output *PutMetadataOutput) {
@@ -2374,15 +2849,16 @@ func (c *IVS) PutMetadataRequest(input *PutMetadataInput) (req *request.Request,
 // API operation PutMetadata for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ChannelNotBroadcasting
+//   - ValidationException
 //
-//   * ThrottlingException
+//   - ChannelNotBroadcasting
+//
+//   - ThrottlingException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/PutMetadata
 func (c *IVS) PutMetadata(input *PutMetadataInput) (*PutMetadataOutput, error) {
@@ -2406,6 +2882,99 @@ func (c *IVS) PutMetadataWithContext(ctx aws.Context, input *PutMetadataInput, o
 	return out, req.Send()
 }
 
+const opStartViewerSessionRevocation = "StartViewerSessionRevocation"
+
+// StartViewerSessionRevocationRequest generates a "aws/request.Request" representing the
+// client's request for the StartViewerSessionRevocation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartViewerSessionRevocation for more information on using the StartViewerSessionRevocation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StartViewerSessionRevocationRequest method.
+//	req, resp := client.StartViewerSessionRevocationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/StartViewerSessionRevocation
+func (c *IVS) StartViewerSessionRevocationRequest(input *StartViewerSessionRevocationInput) (req *request.Request, output *StartViewerSessionRevocationOutput) {
+	op := &request.Operation{
+		Name:       opStartViewerSessionRevocation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/StartViewerSessionRevocation",
+	}
+
+	if input == nil {
+		input = &StartViewerSessionRevocationInput{}
+	}
+
+	output = &StartViewerSessionRevocationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StartViewerSessionRevocation API operation for Amazon Interactive Video Service.
+//
+// Starts the process of revoking the viewer session associated with a specified
+// channel ARN and viewer ID. Optionally, you can provide a version to revoke
+// viewer sessions less than and including that version. For instructions on
+// associating a viewer ID with a viewer session, see Setting Up Private Channels
+// (https://docs.aws.amazon.com/ivs/latest/userguide/private-channels.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Interactive Video Service's
+// API operation StartViewerSessionRevocation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//
+//   - InternalServerException
+//
+//   - AccessDeniedException
+//
+//   - ValidationException
+//
+//   - PendingVerification
+//
+//   - ThrottlingException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/StartViewerSessionRevocation
+func (c *IVS) StartViewerSessionRevocation(input *StartViewerSessionRevocationInput) (*StartViewerSessionRevocationOutput, error) {
+	req, out := c.StartViewerSessionRevocationRequest(input)
+	return out, req.Send()
+}
+
+// StartViewerSessionRevocationWithContext is the same as StartViewerSessionRevocation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartViewerSessionRevocation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IVS) StartViewerSessionRevocationWithContext(ctx aws.Context, input *StartViewerSessionRevocationInput, opts ...request.Option) (*StartViewerSessionRevocationOutput, error) {
+	req, out := c.StartViewerSessionRevocationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStopStream = "StopStream"
 
 // StopStreamRequest generates a "aws/request.Request" representing the
@@ -2422,14 +2991,13 @@ const opStopStream = "StopStream"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopStreamRequest method.
+//	req, resp := client.StopStreamRequest(params)
 //
-//    // Example sending a request using the StopStreamRequest method.
-//    req, resp := client.StopStreamRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/StopStream
 func (c *IVS) StopStreamRequest(input *StopStreamInput) (req *request.Request, output *StopStreamOutput) {
@@ -2466,15 +3034,16 @@ func (c *IVS) StopStreamRequest(input *StopStreamInput) (req *request.Request, o
 // API operation StopStream for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ChannelNotBroadcasting
+//   - ValidationException
 //
-//   * StreamUnavailable
+//   - ChannelNotBroadcasting
+//
+//   - StreamUnavailable
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/StopStream
 func (c *IVS) StopStream(input *StopStreamInput) (*StopStreamOutput, error) {
@@ -2514,14 +3083,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/TagResource
 func (c *IVS) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2554,11 +3122,12 @@ func (c *IVS) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - InternalServerException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/TagResource
 func (c *IVS) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2598,14 +3167,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/UntagResource
 func (c *IVS) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2637,11 +3205,12 @@ func (c *IVS) UntagResourceRequest(input *UntagResourceInput) (req *request.Requ
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - InternalServerException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/UntagResource
 func (c *IVS) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2681,14 +3250,13 @@ const opUpdateChannel = "UpdateChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateChannelRequest method.
+//	req, resp := client.UpdateChannelRequest(params)
 //
-//    // Example sending a request using the UpdateChannelRequest method.
-//    req, resp := client.UpdateChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/UpdateChannel
 func (c *IVS) UpdateChannelRequest(input *UpdateChannelInput) (req *request.Request, output *UpdateChannelOutput) {
@@ -2709,9 +3277,9 @@ func (c *IVS) UpdateChannelRequest(input *UpdateChannelInput) (req *request.Requ
 
 // UpdateChannel API operation for Amazon Interactive Video Service.
 //
-// Updates a channel's configuration. This does not affect an ongoing stream
-// of this channel. You must stop and restart the stream for the changes to
-// take effect.
+// Updates a channel's configuration. Live channels cannot be updated. You must
+// stop the ongoing stream, update the channel, and restart the stream for the
+// changes to take effect.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2721,15 +3289,16 @@ func (c *IVS) UpdateChannelRequest(input *UpdateChannelInput) (req *request.Requ
 // API operation UpdateChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - ResourceNotFoundException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * PendingVerification
+//   - ValidationException
 //
-//   * ConflictException
+//   - PendingVerification
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/UpdateChannel
 func (c *IVS) UpdateChannel(input *UpdateChannelInput) (*UpdateChannelOutput, error) {
@@ -2748,6 +3317,92 @@ func (c *IVS) UpdateChannel(input *UpdateChannelInput) (*UpdateChannelOutput, er
 // for more information on using Contexts.
 func (c *IVS) UpdateChannelWithContext(ctx aws.Context, input *UpdateChannelInput, opts ...request.Option) (*UpdateChannelOutput, error) {
 	req, out := c.UpdateChannelRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdatePlaybackRestrictionPolicy = "UpdatePlaybackRestrictionPolicy"
+
+// UpdatePlaybackRestrictionPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the UpdatePlaybackRestrictionPolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdatePlaybackRestrictionPolicy for more information on using the UpdatePlaybackRestrictionPolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdatePlaybackRestrictionPolicyRequest method.
+//	req, resp := client.UpdatePlaybackRestrictionPolicyRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/UpdatePlaybackRestrictionPolicy
+func (c *IVS) UpdatePlaybackRestrictionPolicyRequest(input *UpdatePlaybackRestrictionPolicyInput) (req *request.Request, output *UpdatePlaybackRestrictionPolicyOutput) {
+	op := &request.Operation{
+		Name:       opUpdatePlaybackRestrictionPolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/UpdatePlaybackRestrictionPolicy",
+	}
+
+	if input == nil {
+		input = &UpdatePlaybackRestrictionPolicyInput{}
+	}
+
+	output = &UpdatePlaybackRestrictionPolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdatePlaybackRestrictionPolicy API operation for Amazon Interactive Video Service.
+//
+// Updates a specified playback restriction policy.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Interactive Video Service's
+// API operation UpdatePlaybackRestrictionPolicy for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//
+//   - AccessDeniedException
+//
+//   - ValidationException
+//
+//   - PendingVerification
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ivs-2020-07-14/UpdatePlaybackRestrictionPolicy
+func (c *IVS) UpdatePlaybackRestrictionPolicy(input *UpdatePlaybackRestrictionPolicyInput) (*UpdatePlaybackRestrictionPolicyOutput, error) {
+	req, out := c.UpdatePlaybackRestrictionPolicyRequest(input)
+	return out, req.Send()
+}
+
+// UpdatePlaybackRestrictionPolicyWithContext is the same as UpdatePlaybackRestrictionPolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdatePlaybackRestrictionPolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IVS) UpdatePlaybackRestrictionPolicyWithContext(ctx aws.Context, input *UpdatePlaybackRestrictionPolicyInput, opts ...request.Option) (*UpdatePlaybackRestrictionPolicyOutput, error) {
+	req, out := c.UpdatePlaybackRestrictionPolicyRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3106,6 +3761,240 @@ func (s *BatchGetStreamKeyOutput) SetStreamKeys(v []*StreamKey) *BatchGetStreamK
 	return s
 }
 
+// Error for a request in the batch for BatchStartViewerSessionRevocation. Each
+// error is related to a specific channel-ARN and viewer-ID pair.
+type BatchStartViewerSessionRevocationError struct {
+	_ struct{} `type:"structure"`
+
+	// Channel ARN.
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `locationName:"channelArn" min:"1" type:"string" required:"true"`
+
+	// Error code.
+	Code *string `locationName:"code" type:"string"`
+
+	// Error message, determined by the application.
+	Message *string `locationName:"message" type:"string"`
+
+	// The ID of the viewer session to revoke.
+	//
+	// ViewerId is a required field
+	ViewerId *string `locationName:"viewerId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchStartViewerSessionRevocationError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchStartViewerSessionRevocationError) GoString() string {
+	return s.String()
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *BatchStartViewerSessionRevocationError) SetChannelArn(v string) *BatchStartViewerSessionRevocationError {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetCode sets the Code field's value.
+func (s *BatchStartViewerSessionRevocationError) SetCode(v string) *BatchStartViewerSessionRevocationError {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *BatchStartViewerSessionRevocationError) SetMessage(v string) *BatchStartViewerSessionRevocationError {
+	s.Message = &v
+	return s
+}
+
+// SetViewerId sets the ViewerId field's value.
+func (s *BatchStartViewerSessionRevocationError) SetViewerId(v string) *BatchStartViewerSessionRevocationError {
+	s.ViewerId = &v
+	return s
+}
+
+type BatchStartViewerSessionRevocationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Array of viewer sessions, one per channel-ARN and viewer-ID pair.
+	//
+	// ViewerSessions is a required field
+	ViewerSessions []*BatchStartViewerSessionRevocationViewerSession `locationName:"viewerSessions" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchStartViewerSessionRevocationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchStartViewerSessionRevocationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchStartViewerSessionRevocationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchStartViewerSessionRevocationInput"}
+	if s.ViewerSessions == nil {
+		invalidParams.Add(request.NewErrParamRequired("ViewerSessions"))
+	}
+	if s.ViewerSessions != nil && len(s.ViewerSessions) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ViewerSessions", 1))
+	}
+	if s.ViewerSessions != nil {
+		for i, v := range s.ViewerSessions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ViewerSessions", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetViewerSessions sets the ViewerSessions field's value.
+func (s *BatchStartViewerSessionRevocationInput) SetViewerSessions(v []*BatchStartViewerSessionRevocationViewerSession) *BatchStartViewerSessionRevocationInput {
+	s.ViewerSessions = v
+	return s
+}
+
+type BatchStartViewerSessionRevocationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Each error object is related to a specific channelArn and viewerId pair in
+	// the request.
+	Errors []*BatchStartViewerSessionRevocationError `locationName:"errors" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchStartViewerSessionRevocationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchStartViewerSessionRevocationOutput) GoString() string {
+	return s.String()
+}
+
+// SetErrors sets the Errors field's value.
+func (s *BatchStartViewerSessionRevocationOutput) SetErrors(v []*BatchStartViewerSessionRevocationError) *BatchStartViewerSessionRevocationOutput {
+	s.Errors = v
+	return s
+}
+
+// A viewer session to revoke in the call to BatchStartViewerSessionRevocation.
+type BatchStartViewerSessionRevocationViewerSession struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel associated with the viewer session to revoke.
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `locationName:"channelArn" min:"1" type:"string" required:"true"`
+
+	// The ID of the viewer associated with the viewer session to revoke. Do not
+	// use this field for personally identifying, confidential, or sensitive information.
+	//
+	// ViewerId is a required field
+	ViewerId *string `locationName:"viewerId" min:"1" type:"string" required:"true"`
+
+	// An optional filter on which versions of the viewer session to revoke. All
+	// versions less than or equal to the specified version will be revoked. Default:
+	// 0.
+	ViewerSessionVersionsLessThanOrEqualTo *int64 `locationName:"viewerSessionVersionsLessThanOrEqualTo" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchStartViewerSessionRevocationViewerSession) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchStartViewerSessionRevocationViewerSession) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchStartViewerSessionRevocationViewerSession) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchStartViewerSessionRevocationViewerSession"}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 1))
+	}
+	if s.ViewerId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ViewerId"))
+	}
+	if s.ViewerId != nil && len(*s.ViewerId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ViewerId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *BatchStartViewerSessionRevocationViewerSession) SetChannelArn(v string) *BatchStartViewerSessionRevocationViewerSession {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetViewerId sets the ViewerId field's value.
+func (s *BatchStartViewerSessionRevocationViewerSession) SetViewerId(v string) *BatchStartViewerSessionRevocationViewerSession {
+	s.ViewerId = &v
+	return s
+}
+
+// SetViewerSessionVersionsLessThanOrEqualTo sets the ViewerSessionVersionsLessThanOrEqualTo field's value.
+func (s *BatchStartViewerSessionRevocationViewerSession) SetViewerSessionVersionsLessThanOrEqualTo(v int64) *BatchStartViewerSessionRevocationViewerSession {
+	s.ViewerSessionVersionsLessThanOrEqualTo = &v
+	return s
+}
+
 // Object specifying a channel.
 type Channel struct {
 	_ struct{} `type:"structure"`
@@ -3126,19 +4015,32 @@ type Channel struct {
 
 	// Channel latency mode. Use NORMAL to broadcast and deliver live video up to
 	// Full HD. Use LOW for near-real-time interaction with viewers. Default: LOW.
-	// (Note: In the Amazon IVS console, LOW and NORMAL correspond to Ultra-low
-	// and Standard, respectively.)
 	LatencyMode *string `locationName:"latencyMode" type:"string" enum:"ChannelLatencyMode"`
 
 	// Channel name.
 	Name *string `locationName:"name" type:"string"`
 
+	// Playback-restriction-policy ARN. A valid ARN value here both specifies the
+	// ARN and enables playback restriction. Default: "" (empty string, no playback
+	// restriction policy is applied).
+	PlaybackRestrictionPolicyArn *string `locationName:"playbackRestrictionPolicyArn" type:"string"`
+
 	// Channel playback URL.
 	PlaybackUrl *string `locationName:"playbackUrl" type:"string"`
 
-	// Recording-configuration ARN. A value other than an empty string indicates
-	// that recording is enabled. Default: "" (empty string, recording is disabled).
+	// Optional transcode preset for the channel. This is selectable only for ADVANCED_HD
+	// and ADVANCED_SD channel types. For those channel types, the default preset
+	// is HIGHER_BANDWIDTH_DELIVERY. For other channel types (BASIC and STANDARD),
+	// preset is the empty string ("").
+	Preset *string `locationName:"preset" type:"string" enum:"TranscodePreset"`
+
+	// Recording-configuration ARN. A valid ARN value here both specifies the ARN
+	// and enables recording. Default: "" (empty string, recording is disabled).
 	RecordingConfigurationArn *string `locationName:"recordingConfigurationArn" type:"string"`
+
+	// Specifies the endpoint and optional passphrase for streaming with the SRT
+	// protocol.
+	Srt *Srt `locationName:"srt" type:"structure"`
 
 	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
 	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
@@ -3148,20 +4050,9 @@ type Channel struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
 	// Channel type, which determines the allowable resolution and bitrate. If you
-	// exceed the allowable resolution or bitrate, the stream probably will disconnect
-	// immediately. Default: STANDARD. Valid values:
-	//
-	//    * STANDARD: Video is transcoded: multiple qualities are generated from
-	//    the original input, to automatically give viewers the best experience
-	//    for their devices and network conditions. Transcoding allows higher playback
-	//    quality across a range of download speeds. Resolution can be up to 1080p
-	//    and bitrate can be up to 8.5 Mbps. Audio is transcoded only for renditions
-	//    360p and below; above that, audio is passed through. This is the default.
-	//
-	//    * BASIC: Video is transmuxed: Amazon IVS delivers the original input to
-	//    viewers. The viewer’s video-quality choice is limited to the original
-	//    input. Resolution can be up to 1080p and bitrate can be up to 1.5 Mbps
-	//    for 480p and up to 3.5 Mbps for resolutions between 480p and 1080p.
+	// exceed the allowable input resolution or bitrate, the stream probably will
+	// disconnect immediately. Default: STANDARD. For details, see Channel Types
+	// (https://docs.aws.amazon.com/ivs/latest/LowLatencyAPIReference/channel-types.html).
 	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
@@ -3219,15 +4110,33 @@ func (s *Channel) SetName(v string) *Channel {
 	return s
 }
 
+// SetPlaybackRestrictionPolicyArn sets the PlaybackRestrictionPolicyArn field's value.
+func (s *Channel) SetPlaybackRestrictionPolicyArn(v string) *Channel {
+	s.PlaybackRestrictionPolicyArn = &v
+	return s
+}
+
 // SetPlaybackUrl sets the PlaybackUrl field's value.
 func (s *Channel) SetPlaybackUrl(v string) *Channel {
 	s.PlaybackUrl = &v
 	return s
 }
 
+// SetPreset sets the Preset field's value.
+func (s *Channel) SetPreset(v string) *Channel {
+	s.Preset = &v
+	return s
+}
+
 // SetRecordingConfigurationArn sets the RecordingConfigurationArn field's value.
 func (s *Channel) SetRecordingConfigurationArn(v string) *Channel {
 	s.RecordingConfigurationArn = &v
+	return s
+}
+
+// SetSrt sets the Srt field's value.
+func (s *Channel) SetSrt(v *Srt) *Channel {
+	s.Srt = v
 	return s
 }
 
@@ -3325,15 +4234,24 @@ type ChannelSummary struct {
 
 	// Channel latency mode. Use NORMAL to broadcast and deliver live video up to
 	// Full HD. Use LOW for near-real-time interaction with viewers. Default: LOW.
-	// (Note: In the Amazon IVS console, LOW and NORMAL correspond to Ultra-low
-	// and Standard, respectively.)
 	LatencyMode *string `locationName:"latencyMode" type:"string" enum:"ChannelLatencyMode"`
 
 	// Channel name.
 	Name *string `locationName:"name" type:"string"`
 
-	// Recording-configuration ARN. A value other than an empty string indicates
-	// that recording is enabled. Default: "" (empty string, recording is disabled).
+	// Playback-restriction-policy ARN. A valid ARN value here both specifies the
+	// ARN and enables playback restriction. Default: "" (empty string, no playback
+	// restriction policy is applied).
+	PlaybackRestrictionPolicyArn *string `locationName:"playbackRestrictionPolicyArn" type:"string"`
+
+	// Optional transcode preset for the channel. This is selectable only for ADVANCED_HD
+	// and ADVANCED_SD channel types. For those channel types, the default preset
+	// is HIGHER_BANDWIDTH_DELIVERY. For other channel types (BASIC and STANDARD),
+	// preset is the empty string ("").
+	Preset *string `locationName:"preset" type:"string" enum:"TranscodePreset"`
+
+	// Recording-configuration ARN. A valid ARN value here both specifies the ARN
+	// and enables recording. Default: "" (empty string, recording is disabled).
 	RecordingConfigurationArn *string `locationName:"recordingConfigurationArn" type:"string"`
 
 	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
@@ -3342,6 +4260,12 @@ type ChannelSummary struct {
 	// naming limits and requirements"; Amazon IVS has no service-specific constraints
 	// beyond what is documented there.
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// Channel type, which determines the allowable resolution and bitrate. If you
+	// exceed the allowable input resolution or bitrate, the stream probably will
+	// disconnect immediately. Default: STANDARD. For details, see Channel Types
+	// (https://docs.aws.amazon.com/ivs/latest/LowLatencyAPIReference/channel-types.html).
+	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
 // String returns the string representation.
@@ -3392,6 +4316,18 @@ func (s *ChannelSummary) SetName(v string) *ChannelSummary {
 	return s
 }
 
+// SetPlaybackRestrictionPolicyArn sets the PlaybackRestrictionPolicyArn field's value.
+func (s *ChannelSummary) SetPlaybackRestrictionPolicyArn(v string) *ChannelSummary {
+	s.PlaybackRestrictionPolicyArn = &v
+	return s
+}
+
+// SetPreset sets the Preset field's value.
+func (s *ChannelSummary) SetPreset(v string) *ChannelSummary {
+	s.Preset = &v
+	return s
+}
+
 // SetRecordingConfigurationArn sets the RecordingConfigurationArn field's value.
 func (s *ChannelSummary) SetRecordingConfigurationArn(v string) *ChannelSummary {
 	s.RecordingConfigurationArn = &v
@@ -3401,6 +4337,12 @@ func (s *ChannelSummary) SetRecordingConfigurationArn(v string) *ChannelSummary 
 // SetTags sets the Tags field's value.
 func (s *ChannelSummary) SetTags(v map[string]*string) *ChannelSummary {
 	s.Tags = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ChannelSummary) SetType(v string) *ChannelSummary {
+	s.Type = &v
 	return s
 }
 
@@ -3477,19 +4419,29 @@ type CreateChannelInput struct {
 	// false.
 	Authorized *bool `locationName:"authorized" type:"boolean"`
 
-	// Whether the channel allows insecure RTMP ingest. Default: false.
+	// Whether the channel allows insecure RTMP and SRT ingest. Default: false.
 	InsecureIngest *bool `locationName:"insecureIngest" type:"boolean"`
 
 	// Channel latency mode. Use NORMAL to broadcast and deliver live video up to
-	// Full HD. Use LOW for near-real-time interaction with viewers. (Note: In the
-	// Amazon IVS console, LOW and NORMAL correspond to Ultra-low and Standard,
-	// respectively.) Default: LOW.
+	// Full HD. Use LOW for near-real-time interaction with viewers. Default: LOW.
 	LatencyMode *string `locationName:"latencyMode" type:"string" enum:"ChannelLatencyMode"`
 
 	// Channel name.
 	Name *string `locationName:"name" type:"string"`
 
-	// Recording-configuration ARN. Default: "" (empty string, recording is disabled).
+	// Playback-restriction-policy ARN. A valid ARN value here both specifies the
+	// ARN and enables playback restriction. Default: "" (empty string, no playback
+	// restriction policy is applied).
+	PlaybackRestrictionPolicyArn *string `locationName:"playbackRestrictionPolicyArn" type:"string"`
+
+	// Optional transcode preset for the channel. This is selectable only for ADVANCED_HD
+	// and ADVANCED_SD channel types. For those channel types, the default preset
+	// is HIGHER_BANDWIDTH_DELIVERY. For other channel types (BASIC and STANDARD),
+	// preset is the empty string ("").
+	Preset *string `locationName:"preset" type:"string" enum:"TranscodePreset"`
+
+	// Recording-configuration ARN. A valid ARN value here both specifies the ARN
+	// and enables recording. Default: "" (empty string, recording is disabled).
 	RecordingConfigurationArn *string `locationName:"recordingConfigurationArn" type:"string"`
 
 	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
@@ -3500,20 +4452,9 @@ type CreateChannelInput struct {
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
 	// Channel type, which determines the allowable resolution and bitrate. If you
-	// exceed the allowable resolution or bitrate, the stream probably will disconnect
-	// immediately. Default: STANDARD. Valid values:
-	//
-	//    * STANDARD: Video is transcoded: multiple qualities are generated from
-	//    the original input, to automatically give viewers the best experience
-	//    for their devices and network conditions. Transcoding allows higher playback
-	//    quality across a range of download speeds. Resolution can be up to 1080p
-	//    and bitrate can be up to 8.5 Mbps. Audio is transcoded only for renditions
-	//    360p and below; above that, audio is passed through. This is the default.
-	//
-	//    * BASIC: Video is transmuxed: Amazon IVS delivers the original input to
-	//    viewers. The viewer’s video-quality choice is limited to the original
-	//    input. Resolution can be up to 1080p and bitrate can be up to 1.5 Mbps
-	//    for 480p and up to 3.5 Mbps for resolutions between 480p and 1080p.
+	// exceed the allowable input resolution or bitrate, the stream probably will
+	// disconnect immediately. Default: STANDARD. For details, see Channel Types
+	// (https://docs.aws.amazon.com/ivs/latest/LowLatencyAPIReference/channel-types.html).
 	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
@@ -3556,6 +4497,18 @@ func (s *CreateChannelInput) SetLatencyMode(v string) *CreateChannelInput {
 // SetName sets the Name field's value.
 func (s *CreateChannelInput) SetName(v string) *CreateChannelInput {
 	s.Name = &v
+	return s
+}
+
+// SetPlaybackRestrictionPolicyArn sets the PlaybackRestrictionPolicyArn field's value.
+func (s *CreateChannelInput) SetPlaybackRestrictionPolicyArn(v string) *CreateChannelInput {
+	s.PlaybackRestrictionPolicyArn = &v
+	return s
+}
+
+// SetPreset sets the Preset field's value.
+func (s *CreateChannelInput) SetPreset(v string) *CreateChannelInput {
+	s.Preset = &v
 	return s
 }
 
@@ -3617,6 +4570,114 @@ func (s *CreateChannelOutput) SetStreamKey(v *StreamKey) *CreateChannelOutput {
 	return s
 }
 
+type CreatePlaybackRestrictionPolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of country codes that control geoblocking restriction. Allowed values
+	// are the officially assigned ISO 3166-1 alpha-2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+	// codes. Default: All countries (an empty array).
+	AllowedCountries []*string `locationName:"allowedCountries" type:"list"`
+
+	// A list of origin sites that control CORS restriction. Allowed values are
+	// the same as valid values of the Origin header defined at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin
+	// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin). Default:
+	// All origins (an empty array).
+	AllowedOrigins []*string `locationName:"allowedOrigins" type:"list"`
+
+	// Whether channel playback is constrained by origin site. Default: false.
+	EnableStrictOriginEnforcement *bool `locationName:"enableStrictOriginEnforcement" type:"boolean"`
+
+	// Playback-restriction-policy name. The value does not need to be unique.
+	Name *string `locationName:"name" type:"string"`
+
+	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
+	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePlaybackRestrictionPolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePlaybackRestrictionPolicyInput) GoString() string {
+	return s.String()
+}
+
+// SetAllowedCountries sets the AllowedCountries field's value.
+func (s *CreatePlaybackRestrictionPolicyInput) SetAllowedCountries(v []*string) *CreatePlaybackRestrictionPolicyInput {
+	s.AllowedCountries = v
+	return s
+}
+
+// SetAllowedOrigins sets the AllowedOrigins field's value.
+func (s *CreatePlaybackRestrictionPolicyInput) SetAllowedOrigins(v []*string) *CreatePlaybackRestrictionPolicyInput {
+	s.AllowedOrigins = v
+	return s
+}
+
+// SetEnableStrictOriginEnforcement sets the EnableStrictOriginEnforcement field's value.
+func (s *CreatePlaybackRestrictionPolicyInput) SetEnableStrictOriginEnforcement(v bool) *CreatePlaybackRestrictionPolicyInput {
+	s.EnableStrictOriginEnforcement = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreatePlaybackRestrictionPolicyInput) SetName(v string) *CreatePlaybackRestrictionPolicyInput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreatePlaybackRestrictionPolicyInput) SetTags(v map[string]*string) *CreatePlaybackRestrictionPolicyInput {
+	s.Tags = v
+	return s
+}
+
+type CreatePlaybackRestrictionPolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object representing a policy to constrain playback by country and/or origin
+	// sites.
+	PlaybackRestrictionPolicy *PlaybackRestrictionPolicy `locationName:"playbackRestrictionPolicy" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePlaybackRestrictionPolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePlaybackRestrictionPolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetPlaybackRestrictionPolicy sets the PlaybackRestrictionPolicy field's value.
+func (s *CreatePlaybackRestrictionPolicyOutput) SetPlaybackRestrictionPolicy(v *PlaybackRestrictionPolicy) *CreatePlaybackRestrictionPolicyOutput {
+	s.PlaybackRestrictionPolicy = v
+	return s
+}
+
 type CreateRecordingConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3633,6 +4694,9 @@ type CreateRecordingConfigurationInput struct {
 	// the multiple streams will be considered a single broadcast and merged together.
 	// Default: 0.
 	RecordingReconnectWindowSeconds *int64 `locationName:"recordingReconnectWindowSeconds" type:"integer"`
+
+	// Object that describes which renditions should be recorded for a stream.
+	RenditionConfiguration *RenditionConfiguration `locationName:"renditionConfiguration" type:"structure"`
 
 	// Array of 1-50 maps, each of the form string:string (key:value). See Tagging
 	// Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
@@ -3703,6 +4767,12 @@ func (s *CreateRecordingConfigurationInput) SetName(v string) *CreateRecordingCo
 // SetRecordingReconnectWindowSeconds sets the RecordingReconnectWindowSeconds field's value.
 func (s *CreateRecordingConfigurationInput) SetRecordingReconnectWindowSeconds(v int64) *CreateRecordingConfigurationInput {
 	s.RecordingReconnectWindowSeconds = &v
+	return s
+}
+
+// SetRenditionConfiguration sets the RenditionConfiguration field's value.
+func (s *CreateRecordingConfigurationInput) SetRenditionConfiguration(v *RenditionConfiguration) *CreateRecordingConfigurationInput {
+	s.RenditionConfiguration = v
 	return s
 }
 
@@ -3981,6 +5051,77 @@ func (s DeletePlaybackKeyPairOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s DeletePlaybackKeyPairOutput) GoString() string {
+	return s.String()
+}
+
+type DeletePlaybackRestrictionPolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// ARN of the playback restriction policy to be deleted.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePlaybackRestrictionPolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePlaybackRestrictionPolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeletePlaybackRestrictionPolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeletePlaybackRestrictionPolicyInput"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Arn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *DeletePlaybackRestrictionPolicyInput) SetArn(v string) *DeletePlaybackRestrictionPolicyInput {
+	s.Arn = &v
+	return s
+}
+
+type DeletePlaybackRestrictionPolicyOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePlaybackRestrictionPolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePlaybackRestrictionPolicyOutput) GoString() string {
 	return s.String()
 }
 
@@ -4329,6 +5470,87 @@ func (s GetPlaybackKeyPairOutput) GoString() string {
 // SetKeyPair sets the KeyPair field's value.
 func (s *GetPlaybackKeyPairOutput) SetKeyPair(v *PlaybackKeyPair) *GetPlaybackKeyPairOutput {
 	s.KeyPair = v
+	return s
+}
+
+type GetPlaybackRestrictionPolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// ARN of the playback restriction policy to be returned.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPlaybackRestrictionPolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPlaybackRestrictionPolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetPlaybackRestrictionPolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetPlaybackRestrictionPolicyInput"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Arn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetPlaybackRestrictionPolicyInput) SetArn(v string) *GetPlaybackRestrictionPolicyInput {
+	s.Arn = &v
+	return s
+}
+
+type GetPlaybackRestrictionPolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object representing a policy to constrain playback by country and/or origin
+	// sites.
+	PlaybackRestrictionPolicy *PlaybackRestrictionPolicy `locationName:"playbackRestrictionPolicy" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPlaybackRestrictionPolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPlaybackRestrictionPolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetPlaybackRestrictionPolicy sets the PlaybackRestrictionPolicy field's value.
+func (s *GetPlaybackRestrictionPolicyOutput) SetPlaybackRestrictionPolicy(v *PlaybackRestrictionPolicy) *GetPlaybackRestrictionPolicyOutput {
+	s.PlaybackRestrictionPolicy = v
 	return s
 }
 
@@ -4876,6 +6098,9 @@ type ListChannelsInput struct {
 	// Filters the channel list to match the specified name.
 	FilterByName *string `locationName:"filterByName" type:"string"`
 
+	// Filters the channel list to match the specified policy.
+	FilterByPlaybackRestrictionPolicyArn *string `locationName:"filterByPlaybackRestrictionPolicyArn" type:"string"`
+
 	// Filters the channel list to match the specified recording-configuration ARN.
 	FilterByRecordingConfigurationArn *string `locationName:"filterByRecordingConfigurationArn" type:"string"`
 
@@ -4921,6 +6146,12 @@ func (s *ListChannelsInput) Validate() error {
 // SetFilterByName sets the FilterByName field's value.
 func (s *ListChannelsInput) SetFilterByName(v string) *ListChannelsInput {
 	s.FilterByName = &v
+	return s
+}
+
+// SetFilterByPlaybackRestrictionPolicyArn sets the FilterByPlaybackRestrictionPolicyArn field's value.
+func (s *ListChannelsInput) SetFilterByPlaybackRestrictionPolicyArn(v string) *ListChannelsInput {
+	s.FilterByPlaybackRestrictionPolicyArn = &v
 	return s
 }
 
@@ -5080,6 +6311,103 @@ func (s *ListPlaybackKeyPairsOutput) SetKeyPairs(v []*PlaybackKeyPairSummary) *L
 // SetNextToken sets the NextToken field's value.
 func (s *ListPlaybackKeyPairsOutput) SetNextToken(v string) *ListPlaybackKeyPairsOutput {
 	s.NextToken = &v
+	return s
+}
+
+type ListPlaybackRestrictionPoliciesInput struct {
+	_ struct{} `type:"structure"`
+
+	// Maximum number of policies to return. Default: 1.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// The first policy to retrieve. This is used for pagination; see the nextToken
+	// response field.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPlaybackRestrictionPoliciesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPlaybackRestrictionPoliciesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPlaybackRestrictionPoliciesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPlaybackRestrictionPoliciesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListPlaybackRestrictionPoliciesInput) SetMaxResults(v int64) *ListPlaybackRestrictionPoliciesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPlaybackRestrictionPoliciesInput) SetNextToken(v string) *ListPlaybackRestrictionPoliciesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListPlaybackRestrictionPoliciesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If there are more channels than maxResults, use nextToken in the request
+	// to get the next set.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// List of the matching policies.
+	//
+	// PlaybackRestrictionPolicies is a required field
+	PlaybackRestrictionPolicies []*PlaybackRestrictionPolicySummary `locationName:"playbackRestrictionPolicies" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPlaybackRestrictionPoliciesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPlaybackRestrictionPoliciesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPlaybackRestrictionPoliciesOutput) SetNextToken(v string) *ListPlaybackRestrictionPoliciesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPlaybackRestrictionPolicies sets the PlaybackRestrictionPolicies field's value.
+func (s *ListPlaybackRestrictionPoliciesOutput) SetPlaybackRestrictionPolicies(v []*PlaybackRestrictionPolicySummary) *ListPlaybackRestrictionPoliciesOutput {
+	s.PlaybackRestrictionPolicies = v
 	return s
 }
 
@@ -5781,6 +7109,191 @@ func (s *PlaybackKeyPairSummary) SetTags(v map[string]*string) *PlaybackKeyPairS
 	return s
 }
 
+// An object representing a policy to constrain playback by country and/or origin
+// sites.
+type PlaybackRestrictionPolicy struct {
+	_ struct{} `type:"structure"`
+
+	// A list of country codes that control geoblocking restriction. Allowed values
+	// are the officially assigned ISO 3166-1 alpha-2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+	// codes. Default: All countries (an empty array).
+	//
+	// AllowedCountries is a required field
+	AllowedCountries []*string `locationName:"allowedCountries" type:"list" required:"true"`
+
+	// A list of origin sites that control CORS restriction. Allowed values are
+	// the same as valid values of the Origin header defined at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin
+	// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin). Default:
+	// All origins (an empty array).
+	//
+	// AllowedOrigins is a required field
+	AllowedOrigins []*string `locationName:"allowedOrigins" type:"list" required:"true"`
+
+	// Playback-restriction-policy ARN
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+
+	// Whether channel playback is constrained by origin site. Default: false.
+	EnableStrictOriginEnforcement *bool `locationName:"enableStrictOriginEnforcement" type:"boolean"`
+
+	// Playback-restriction-policy name. The value does not need to be unique.
+	Name *string `locationName:"name" type:"string"`
+
+	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PlaybackRestrictionPolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PlaybackRestrictionPolicy) GoString() string {
+	return s.String()
+}
+
+// SetAllowedCountries sets the AllowedCountries field's value.
+func (s *PlaybackRestrictionPolicy) SetAllowedCountries(v []*string) *PlaybackRestrictionPolicy {
+	s.AllowedCountries = v
+	return s
+}
+
+// SetAllowedOrigins sets the AllowedOrigins field's value.
+func (s *PlaybackRestrictionPolicy) SetAllowedOrigins(v []*string) *PlaybackRestrictionPolicy {
+	s.AllowedOrigins = v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *PlaybackRestrictionPolicy) SetArn(v string) *PlaybackRestrictionPolicy {
+	s.Arn = &v
+	return s
+}
+
+// SetEnableStrictOriginEnforcement sets the EnableStrictOriginEnforcement field's value.
+func (s *PlaybackRestrictionPolicy) SetEnableStrictOriginEnforcement(v bool) *PlaybackRestrictionPolicy {
+	s.EnableStrictOriginEnforcement = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *PlaybackRestrictionPolicy) SetName(v string) *PlaybackRestrictionPolicy {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *PlaybackRestrictionPolicy) SetTags(v map[string]*string) *PlaybackRestrictionPolicy {
+	s.Tags = v
+	return s
+}
+
+// Summary information about a PlaybackRestrictionPolicy.
+type PlaybackRestrictionPolicySummary struct {
+	_ struct{} `type:"structure"`
+
+	// A list of country codes that control geoblocking restriction. Allowed values
+	// are the officially assigned ISO 3166-1 alpha-2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+	// codes. Default: All countries (an empty array).
+	//
+	// AllowedCountries is a required field
+	AllowedCountries []*string `locationName:"allowedCountries" type:"list" required:"true"`
+
+	// A list of origin sites that control CORS restriction. Allowed values are
+	// the same as valid values of the Origin header defined at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin
+	// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin). Default:
+	// All origins (an empty array).
+	//
+	// AllowedOrigins is a required field
+	AllowedOrigins []*string `locationName:"allowedOrigins" type:"list" required:"true"`
+
+	// Playback-restriction-policy ARN
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+
+	// Whether channel playback is constrained by origin site. Default: false.
+	EnableStrictOriginEnforcement *bool `locationName:"enableStrictOriginEnforcement" type:"boolean"`
+
+	// Playback-restriction-policy name. The value does not need to be unique.
+	Name *string `locationName:"name" type:"string"`
+
+	// Tags attached to the resource. Array of 1-50 maps, each of the form string:string
+	// (key:value). See Tagging Amazon Web Services Resources (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html)
+	// for more information, including restrictions that apply to tags and "Tag
+	// naming limits and requirements"; Amazon IVS has no service-specific constraints
+	// beyond what is documented there.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PlaybackRestrictionPolicySummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PlaybackRestrictionPolicySummary) GoString() string {
+	return s.String()
+}
+
+// SetAllowedCountries sets the AllowedCountries field's value.
+func (s *PlaybackRestrictionPolicySummary) SetAllowedCountries(v []*string) *PlaybackRestrictionPolicySummary {
+	s.AllowedCountries = v
+	return s
+}
+
+// SetAllowedOrigins sets the AllowedOrigins field's value.
+func (s *PlaybackRestrictionPolicySummary) SetAllowedOrigins(v []*string) *PlaybackRestrictionPolicySummary {
+	s.AllowedOrigins = v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *PlaybackRestrictionPolicySummary) SetArn(v string) *PlaybackRestrictionPolicySummary {
+	s.Arn = &v
+	return s
+}
+
+// SetEnableStrictOriginEnforcement sets the EnableStrictOriginEnforcement field's value.
+func (s *PlaybackRestrictionPolicySummary) SetEnableStrictOriginEnforcement(v bool) *PlaybackRestrictionPolicySummary {
+	s.EnableStrictOriginEnforcement = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *PlaybackRestrictionPolicySummary) SetName(v string) *PlaybackRestrictionPolicySummary {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *PlaybackRestrictionPolicySummary) SetTags(v map[string]*string) *PlaybackRestrictionPolicySummary {
+	s.Tags = v
+	return s
+}
+
 type PutMetadataInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5897,6 +7410,9 @@ type RecordingConfiguration struct {
 	// Default: 0.
 	RecordingReconnectWindowSeconds *int64 `locationName:"recordingReconnectWindowSeconds" type:"integer"`
 
+	// Object that describes which renditions should be recorded for a stream.
+	RenditionConfiguration *RenditionConfiguration `locationName:"renditionConfiguration" type:"structure"`
+
 	// Indicates the current state of the recording configuration. When the state
 	// is ACTIVE, the configuration is ready for recording a channel stream.
 	//
@@ -5955,6 +7471,12 @@ func (s *RecordingConfiguration) SetName(v string) *RecordingConfiguration {
 // SetRecordingReconnectWindowSeconds sets the RecordingReconnectWindowSeconds field's value.
 func (s *RecordingConfiguration) SetRecordingReconnectWindowSeconds(v int64) *RecordingConfiguration {
 	s.RecordingReconnectWindowSeconds = &v
+	return s
+}
+
+// SetRenditionConfiguration sets the RenditionConfiguration field's value.
+func (s *RecordingConfiguration) SetRenditionConfiguration(v *RenditionConfiguration) *RecordingConfiguration {
+	s.RenditionConfiguration = v
 	return s
 }
 
@@ -6053,6 +7575,54 @@ func (s *RecordingConfigurationSummary) SetState(v string) *RecordingConfigurati
 // SetTags sets the Tags field's value.
 func (s *RecordingConfigurationSummary) SetTags(v map[string]*string) *RecordingConfigurationSummary {
 	s.Tags = v
+	return s
+}
+
+// Object that describes which renditions should be recorded for a stream.
+type RenditionConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates which set of renditions are recorded for a stream. For BASIC channels,
+	// the CUSTOM value has no effect. If CUSTOM is specified, a set of renditions
+	// must be specified in the renditions field. Default: ALL.
+	RenditionSelection *string `locationName:"renditionSelection" type:"string" enum:"RenditionConfigurationRenditionSelection"`
+
+	// Indicates which renditions are recorded for a stream, if renditionSelection
+	// is CUSTOM; otherwise, this field is irrelevant. The selected renditions are
+	// recorded if they are available during the stream. If a selected rendition
+	// is unavailable, the best available rendition is recorded. For details on
+	// the resolution dimensions of each rendition, see Auto-Record to Amazon S3
+	// (https://docs.aws.amazon.com/ivs/latest/userguide/record-to-s3.html).
+	Renditions []*string `locationName:"renditions" type:"list" enum:"RenditionConfigurationRendition"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RenditionConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RenditionConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetRenditionSelection sets the RenditionSelection field's value.
+func (s *RenditionConfiguration) SetRenditionSelection(v string) *RenditionConfiguration {
+	s.RenditionSelection = &v
+	return s
+}
+
+// SetRenditions sets the Renditions field's value.
+func (s *RenditionConfiguration) SetRenditions(v []*string) *RenditionConfiguration {
+	s.Renditions = v
 	return s
 }
 
@@ -6237,6 +7807,152 @@ func (s *ServiceQuotaExceededException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ServiceQuotaExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Specifies information needed to stream using the SRT protocol.
+type Srt struct {
+	_ struct{} `type:"structure"`
+
+	// The endpoint to be used when streaming with IVS using the SRT protocol.
+	Endpoint *string `locationName:"endpoint" type:"string"`
+
+	// Auto-generated passphrase to enable encryption. This field is applicable
+	// only if the end user has not enabled the insecureIngest option for the channel.
+	//
+	// Passphrase is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Srt's
+	// String and GoString methods.
+	Passphrase *string `locationName:"passphrase" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Srt) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Srt) GoString() string {
+	return s.String()
+}
+
+// SetEndpoint sets the Endpoint field's value.
+func (s *Srt) SetEndpoint(v string) *Srt {
+	s.Endpoint = &v
+	return s
+}
+
+// SetPassphrase sets the Passphrase field's value.
+func (s *Srt) SetPassphrase(v string) *Srt {
+	s.Passphrase = &v
+	return s
+}
+
+type StartViewerSessionRevocationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the channel associated with the viewer session to revoke.
+	//
+	// ChannelArn is a required field
+	ChannelArn *string `locationName:"channelArn" min:"1" type:"string" required:"true"`
+
+	// The ID of the viewer associated with the viewer session to revoke. Do not
+	// use this field for personally identifying, confidential, or sensitive information.
+	//
+	// ViewerId is a required field
+	ViewerId *string `locationName:"viewerId" min:"1" type:"string" required:"true"`
+
+	// An optional filter on which versions of the viewer session to revoke. All
+	// versions less than or equal to the specified version will be revoked. Default:
+	// 0.
+	ViewerSessionVersionsLessThanOrEqualTo *int64 `locationName:"viewerSessionVersionsLessThanOrEqualTo" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartViewerSessionRevocationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartViewerSessionRevocationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartViewerSessionRevocationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartViewerSessionRevocationInput"}
+	if s.ChannelArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelArn"))
+	}
+	if s.ChannelArn != nil && len(*s.ChannelArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelArn", 1))
+	}
+	if s.ViewerId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ViewerId"))
+	}
+	if s.ViewerId != nil && len(*s.ViewerId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ViewerId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *StartViewerSessionRevocationInput) SetChannelArn(v string) *StartViewerSessionRevocationInput {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetViewerId sets the ViewerId field's value.
+func (s *StartViewerSessionRevocationInput) SetViewerId(v string) *StartViewerSessionRevocationInput {
+	s.ViewerId = &v
+	return s
+}
+
+// SetViewerSessionVersionsLessThanOrEqualTo sets the ViewerSessionVersionsLessThanOrEqualTo field's value.
+func (s *StartViewerSessionRevocationInput) SetViewerSessionVersionsLessThanOrEqualTo(v int64) *StartViewerSessionRevocationInput {
+	s.ViewerSessionVersionsLessThanOrEqualTo = &v
+	return s
+}
+
+type StartViewerSessionRevocationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartViewerSessionRevocationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartViewerSessionRevocationOutput) GoString() string {
+	return s.String()
 }
 
 type StopStreamInput struct {
@@ -7073,14 +8789,29 @@ type ThumbnailConfiguration struct {
 	// Thumbnail recording mode. Default: INTERVAL.
 	RecordingMode *string `locationName:"recordingMode" type:"string" enum:"RecordingMode"`
 
+	// Indicates the desired resolution of recorded thumbnails. Thumbnails are recorded
+	// at the selected resolution if the corresponding rendition is available during
+	// the stream; otherwise, they are recorded at source resolution. For more information
+	// about resolution values and their corresponding height and width dimensions,
+	// see Auto-Record to Amazon S3 (https://docs.aws.amazon.com/ivs/latest/userguide/record-to-s3.html).
+	// Default: Null (source resolution is returned).
+	Resolution *string `locationName:"resolution" type:"string" enum:"ThumbnailConfigurationResolution"`
+
+	// Indicates the format in which thumbnails are recorded. SEQUENTIAL records
+	// all generated thumbnails in a serial manner, to the media/thumbnails directory.
+	// LATEST saves the latest thumbnail in media/latest_thumbnail/thumb.jpg and
+	// overwrites it at the interval specified by targetIntervalSeconds. You can
+	// enable both SEQUENTIAL and LATEST. Default: SEQUENTIAL.
+	Storage []*string `locationName:"storage" type:"list" enum:"ThumbnailConfigurationStorage"`
+
 	// The targeted thumbnail-generation interval in seconds. This is configurable
 	// (and required) only if recordingMode is INTERVAL. Default: 60.
 	//
-	// Important: Setting a value for targetIntervalSeconds does not guarantee that
-	// thumbnails are generated at the specified interval. For thumbnails to be
-	// generated at the targetIntervalSeconds interval, the IDR/Keyframe value for
-	// the input video must be less than the targetIntervalSeconds value. See Amazon
-	// IVS Streaming Configuration (https://docs.aws.amazon.com/ivs/latest/userguide/streaming-config.html)
+	// Important: For the BASIC channel type, setting a value for targetIntervalSeconds
+	// does not guarantee that thumbnails are generated at the specified interval.
+	// For thumbnails to be generated at the targetIntervalSeconds interval, the
+	// IDR/Keyframe value for the input video must be less than the targetIntervalSeconds
+	// value. See Amazon IVS Streaming Configuration (https://docs.aws.amazon.com/ivs/latest/userguide/streaming-config.html)
 	// for information on setting IDR/Keyframe to the recommended value in video-encoder
 	// settings.
 	TargetIntervalSeconds *int64 `locationName:"targetIntervalSeconds" min:"1" type:"long"`
@@ -7120,6 +8851,18 @@ func (s *ThumbnailConfiguration) Validate() error {
 // SetRecordingMode sets the RecordingMode field's value.
 func (s *ThumbnailConfiguration) SetRecordingMode(v string) *ThumbnailConfiguration {
 	s.RecordingMode = &v
+	return s
+}
+
+// SetResolution sets the Resolution field's value.
+func (s *ThumbnailConfiguration) SetResolution(v string) *ThumbnailConfiguration {
+	s.Resolution = &v
+	return s
+}
+
+// SetStorage sets the Storage field's value.
+func (s *ThumbnailConfiguration) SetStorage(v []*string) *ThumbnailConfiguration {
+	s.Storage = v
 	return s
 }
 
@@ -7229,38 +8972,35 @@ type UpdateChannelInput struct {
 	// Whether the channel is private (enabled for playback authorization).
 	Authorized *bool `locationName:"authorized" type:"boolean"`
 
-	// Whether the channel allows insecure RTMP ingest. Default: false.
+	// Whether the channel allows insecure RTMP and SRT ingest. Default: false.
 	InsecureIngest *bool `locationName:"insecureIngest" type:"boolean"`
 
 	// Channel latency mode. Use NORMAL to broadcast and deliver live video up to
-	// Full HD. Use LOW for near-real-time interaction with viewers. (Note: In the
-	// Amazon IVS console, LOW and NORMAL correspond to Ultra-low and Standard,
-	// respectively.)
+	// Full HD. Use LOW for near-real-time interaction with viewers.
 	LatencyMode *string `locationName:"latencyMode" type:"string" enum:"ChannelLatencyMode"`
 
 	// Channel name.
 	Name *string `locationName:"name" type:"string"`
 
-	// Recording-configuration ARN. If this is set to an empty string, recording
-	// is disabled. A value other than an empty string indicates that recording
-	// is enabled
+	// Playback-restriction-policy ARN. A valid ARN value here both specifies the
+	// ARN and enables playback restriction. If this is set to an empty string,
+	// playback restriction policy is disabled.
+	PlaybackRestrictionPolicyArn *string `locationName:"playbackRestrictionPolicyArn" type:"string"`
+
+	// Optional transcode preset for the channel. This is selectable only for ADVANCED_HD
+	// and ADVANCED_SD channel types. For those channel types, the default preset
+	// is HIGHER_BANDWIDTH_DELIVERY. For other channel types (BASIC and STANDARD),
+	// preset is the empty string ("").
+	Preset *string `locationName:"preset" type:"string" enum:"TranscodePreset"`
+
+	// Recording-configuration ARN. A valid ARN value here both specifies the ARN
+	// and enables recording. If this is set to an empty string, recording is disabled.
 	RecordingConfigurationArn *string `locationName:"recordingConfigurationArn" type:"string"`
 
 	// Channel type, which determines the allowable resolution and bitrate. If you
-	// exceed the allowable resolution or bitrate, the stream probably will disconnect
-	// immediately. Valid values:
-	//
-	//    * STANDARD: Video is transcoded: multiple qualities are generated from
-	//    the original input, to automatically give viewers the best experience
-	//    for their devices and network conditions. Transcoding allows higher playback
-	//    quality across a range of download speeds. Resolution can be up to 1080p
-	//    and bitrate can be up to 8.5 Mbps. Audio is transcoded only for renditions
-	//    360p and below; above that, audio is passed through. This is the default.
-	//
-	//    * BASIC: Video is transmuxed: Amazon IVS delivers the original input to
-	//    viewers. The viewer’s video-quality choice is limited to the original
-	//    input. Resolution can be up to 1080p and bitrate can be up to 1.5 Mbps
-	//    for 480p and up to 3.5 Mbps for resolutions between 480p and 1080p.
+	// exceed the allowable input resolution or bitrate, the stream probably will
+	// disconnect immediately. Default: STANDARD. For details, see Channel Types
+	// (https://docs.aws.amazon.com/ivs/latest/LowLatencyAPIReference/channel-types.html).
 	Type *string `locationName:"type" type:"string" enum:"ChannelType"`
 }
 
@@ -7328,6 +9068,18 @@ func (s *UpdateChannelInput) SetName(v string) *UpdateChannelInput {
 	return s
 }
 
+// SetPlaybackRestrictionPolicyArn sets the PlaybackRestrictionPolicyArn field's value.
+func (s *UpdateChannelInput) SetPlaybackRestrictionPolicyArn(v string) *UpdateChannelInput {
+	s.PlaybackRestrictionPolicyArn = &v
+	return s
+}
+
+// SetPreset sets the Preset field's value.
+func (s *UpdateChannelInput) SetPreset(v string) *UpdateChannelInput {
+	s.Preset = &v
+	return s
+}
+
 // SetRecordingConfigurationArn sets the RecordingConfigurationArn field's value.
 func (s *UpdateChannelInput) SetRecordingConfigurationArn(v string) *UpdateChannelInput {
 	s.RecordingConfigurationArn = &v
@@ -7343,7 +9095,7 @@ func (s *UpdateChannelInput) SetType(v string) *UpdateChannelInput {
 type UpdateChannelOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Object specifying a channel.
+	// Object specifying the updated channel.
 	Channel *Channel `locationName:"channel" type:"structure"`
 }
 
@@ -7368,6 +9120,127 @@ func (s UpdateChannelOutput) GoString() string {
 // SetChannel sets the Channel field's value.
 func (s *UpdateChannelOutput) SetChannel(v *Channel) *UpdateChannelOutput {
 	s.Channel = v
+	return s
+}
+
+type UpdatePlaybackRestrictionPolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of country codes that control geoblocking restriction. Allowed values
+	// are the officially assigned ISO 3166-1 alpha-2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+	// codes. Default: All countries (an empty array).
+	AllowedCountries []*string `locationName:"allowedCountries" type:"list"`
+
+	// A list of origin sites that control CORS restriction. Allowed values are
+	// the same as valid values of the Origin header defined at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin
+	// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin). Default:
+	// All origins (an empty array).
+	AllowedOrigins []*string `locationName:"allowedOrigins" type:"list"`
+
+	// ARN of the playback-restriction-policy to be updated.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+
+	// Whether channel playback is constrained by origin site. Default: false.
+	EnableStrictOriginEnforcement *bool `locationName:"enableStrictOriginEnforcement" type:"boolean"`
+
+	// Playback-restriction-policy name. The value does not need to be unique.
+	Name *string `locationName:"name" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePlaybackRestrictionPolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePlaybackRestrictionPolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdatePlaybackRestrictionPolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdatePlaybackRestrictionPolicyInput"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Arn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllowedCountries sets the AllowedCountries field's value.
+func (s *UpdatePlaybackRestrictionPolicyInput) SetAllowedCountries(v []*string) *UpdatePlaybackRestrictionPolicyInput {
+	s.AllowedCountries = v
+	return s
+}
+
+// SetAllowedOrigins sets the AllowedOrigins field's value.
+func (s *UpdatePlaybackRestrictionPolicyInput) SetAllowedOrigins(v []*string) *UpdatePlaybackRestrictionPolicyInput {
+	s.AllowedOrigins = v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdatePlaybackRestrictionPolicyInput) SetArn(v string) *UpdatePlaybackRestrictionPolicyInput {
+	s.Arn = &v
+	return s
+}
+
+// SetEnableStrictOriginEnforcement sets the EnableStrictOriginEnforcement field's value.
+func (s *UpdatePlaybackRestrictionPolicyInput) SetEnableStrictOriginEnforcement(v bool) *UpdatePlaybackRestrictionPolicyInput {
+	s.EnableStrictOriginEnforcement = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdatePlaybackRestrictionPolicyInput) SetName(v string) *UpdatePlaybackRestrictionPolicyInput {
+	s.Name = &v
+	return s
+}
+
+type UpdatePlaybackRestrictionPolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Object specifying the updated policy.
+	PlaybackRestrictionPolicy *PlaybackRestrictionPolicy `locationName:"playbackRestrictionPolicy" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePlaybackRestrictionPolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePlaybackRestrictionPolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetPlaybackRestrictionPolicy sets the PlaybackRestrictionPolicy field's value.
+func (s *UpdatePlaybackRestrictionPolicyOutput) SetPlaybackRestrictionPolicy(v *PlaybackRestrictionPolicy) *UpdatePlaybackRestrictionPolicyOutput {
+	s.PlaybackRestrictionPolicy = v
 	return s
 }
 
@@ -7560,6 +9433,12 @@ const (
 
 	// ChannelTypeStandard is a ChannelType enum value
 	ChannelTypeStandard = "STANDARD"
+
+	// ChannelTypeAdvancedSd is a ChannelType enum value
+	ChannelTypeAdvancedSd = "ADVANCED_SD"
+
+	// ChannelTypeAdvancedHd is a ChannelType enum value
+	ChannelTypeAdvancedHd = "ADVANCED_HD"
 )
 
 // ChannelType_Values returns all elements of the ChannelType enum
@@ -7567,6 +9446,8 @@ func ChannelType_Values() []string {
 	return []string{
 		ChannelTypeBasic,
 		ChannelTypeStandard,
+		ChannelTypeAdvancedSd,
+		ChannelTypeAdvancedHd,
 	}
 }
 
@@ -7607,6 +9488,50 @@ func RecordingMode_Values() []string {
 }
 
 const (
+	// RenditionConfigurationRenditionFullHd is a RenditionConfigurationRendition enum value
+	RenditionConfigurationRenditionFullHd = "FULL_HD"
+
+	// RenditionConfigurationRenditionHd is a RenditionConfigurationRendition enum value
+	RenditionConfigurationRenditionHd = "HD"
+
+	// RenditionConfigurationRenditionSd is a RenditionConfigurationRendition enum value
+	RenditionConfigurationRenditionSd = "SD"
+
+	// RenditionConfigurationRenditionLowestResolution is a RenditionConfigurationRendition enum value
+	RenditionConfigurationRenditionLowestResolution = "LOWEST_RESOLUTION"
+)
+
+// RenditionConfigurationRendition_Values returns all elements of the RenditionConfigurationRendition enum
+func RenditionConfigurationRendition_Values() []string {
+	return []string{
+		RenditionConfigurationRenditionFullHd,
+		RenditionConfigurationRenditionHd,
+		RenditionConfigurationRenditionSd,
+		RenditionConfigurationRenditionLowestResolution,
+	}
+}
+
+const (
+	// RenditionConfigurationRenditionSelectionAll is a RenditionConfigurationRenditionSelection enum value
+	RenditionConfigurationRenditionSelectionAll = "ALL"
+
+	// RenditionConfigurationRenditionSelectionNone is a RenditionConfigurationRenditionSelection enum value
+	RenditionConfigurationRenditionSelectionNone = "NONE"
+
+	// RenditionConfigurationRenditionSelectionCustom is a RenditionConfigurationRenditionSelection enum value
+	RenditionConfigurationRenditionSelectionCustom = "CUSTOM"
+)
+
+// RenditionConfigurationRenditionSelection_Values returns all elements of the RenditionConfigurationRenditionSelection enum
+func RenditionConfigurationRenditionSelection_Values() []string {
+	return []string{
+		RenditionConfigurationRenditionSelectionAll,
+		RenditionConfigurationRenditionSelectionNone,
+		RenditionConfigurationRenditionSelectionCustom,
+	}
+}
+
+const (
 	// StreamHealthHealthy is a StreamHealth enum value
 	StreamHealthHealthy = "HEALTHY"
 
@@ -7639,5 +9564,61 @@ func StreamState_Values() []string {
 	return []string{
 		StreamStateLive,
 		StreamStateOffline,
+	}
+}
+
+const (
+	// ThumbnailConfigurationResolutionFullHd is a ThumbnailConfigurationResolution enum value
+	ThumbnailConfigurationResolutionFullHd = "FULL_HD"
+
+	// ThumbnailConfigurationResolutionHd is a ThumbnailConfigurationResolution enum value
+	ThumbnailConfigurationResolutionHd = "HD"
+
+	// ThumbnailConfigurationResolutionSd is a ThumbnailConfigurationResolution enum value
+	ThumbnailConfigurationResolutionSd = "SD"
+
+	// ThumbnailConfigurationResolutionLowestResolution is a ThumbnailConfigurationResolution enum value
+	ThumbnailConfigurationResolutionLowestResolution = "LOWEST_RESOLUTION"
+)
+
+// ThumbnailConfigurationResolution_Values returns all elements of the ThumbnailConfigurationResolution enum
+func ThumbnailConfigurationResolution_Values() []string {
+	return []string{
+		ThumbnailConfigurationResolutionFullHd,
+		ThumbnailConfigurationResolutionHd,
+		ThumbnailConfigurationResolutionSd,
+		ThumbnailConfigurationResolutionLowestResolution,
+	}
+}
+
+const (
+	// ThumbnailConfigurationStorageSequential is a ThumbnailConfigurationStorage enum value
+	ThumbnailConfigurationStorageSequential = "SEQUENTIAL"
+
+	// ThumbnailConfigurationStorageLatest is a ThumbnailConfigurationStorage enum value
+	ThumbnailConfigurationStorageLatest = "LATEST"
+)
+
+// ThumbnailConfigurationStorage_Values returns all elements of the ThumbnailConfigurationStorage enum
+func ThumbnailConfigurationStorage_Values() []string {
+	return []string{
+		ThumbnailConfigurationStorageSequential,
+		ThumbnailConfigurationStorageLatest,
+	}
+}
+
+const (
+	// TranscodePresetHigherBandwidthDelivery is a TranscodePreset enum value
+	TranscodePresetHigherBandwidthDelivery = "HIGHER_BANDWIDTH_DELIVERY"
+
+	// TranscodePresetConstrainedBandwidthDelivery is a TranscodePreset enum value
+	TranscodePresetConstrainedBandwidthDelivery = "CONSTRAINED_BANDWIDTH_DELIVERY"
+)
+
+// TranscodePreset_Values returns all elements of the TranscodePreset enum
+func TranscodePreset_Values() []string {
+	return []string{
+		TranscodePresetHigherBandwidthDelivery,
+		TranscodePresetConstrainedBandwidthDelivery,
 	}
 }

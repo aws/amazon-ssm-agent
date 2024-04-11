@@ -29,14 +29,13 @@ const opCreateApplication = "CreateApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateApplicationRequest method.
+//	req, resp := client.CreateApplicationRequest(params)
 //
-//    // Example sending a request using the CreateApplicationRequest method.
-//    req, resp := client.CreateApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/CreateApplication
 func (c *MigrationHubRefactorSpaces) CreateApplicationRequest(input *CreateApplicationInput) (req *request.Request, output *CreateApplicationOutput) {
@@ -78,26 +77,27 @@ func (c *MigrationHubRefactorSpaces) CreateApplicationRequest(input *CreateAppli
 // API operation CreateApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/CreateApplication
 func (c *MigrationHubRefactorSpaces) CreateApplication(input *CreateApplicationInput) (*CreateApplicationOutput, error) {
@@ -137,14 +137,13 @@ const opCreateEnvironment = "CreateEnvironment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateEnvironmentRequest method.
+//	req, resp := client.CreateEnvironmentRequest(params)
 //
-//    // Example sending a request using the CreateEnvironmentRequest method.
-//    req, resp := client.CreateEnvironmentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/CreateEnvironment
 func (c *MigrationHubRefactorSpaces) CreateEnvironmentRequest(input *CreateEnvironmentInput) (req *request.Request, output *CreateEnvironmentOutput) {
@@ -188,26 +187,27 @@ func (c *MigrationHubRefactorSpaces) CreateEnvironmentRequest(input *CreateEnvir
 // API operation CreateEnvironment for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/CreateEnvironment
 func (c *MigrationHubRefactorSpaces) CreateEnvironment(input *CreateEnvironmentInput) (*CreateEnvironmentOutput, error) {
@@ -247,14 +247,13 @@ const opCreateRoute = "CreateRoute"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRouteRequest method.
+//	req, resp := client.CreateRouteRequest(params)
 //
-//    // Example sending a request using the CreateRouteRequest method.
-//    req, resp := client.CreateRouteRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/CreateRoute
 func (c *MigrationHubRefactorSpaces) CreateRouteRequest(input *CreateRouteInput) (req *request.Request, output *CreateRouteOutput) {
@@ -290,46 +289,46 @@ func (c *MigrationHubRefactorSpaces) CreateRouteRequest(input *CreateRouteInput)
 // When you create a route, Refactor Spaces configures the Amazon API Gateway
 // to send traffic to the target service as follows:
 //
-//    * URL Endpoints If the service has a URL endpoint, and the endpoint resolves
-//    to a private IP address, Refactor Spaces routes traffic using the API
-//    Gateway VPC link. If a service endpoint resolves to a public IP address,
-//    Refactor Spaces routes traffic over the public internet. Services can
-//    have HTTP or HTTPS URL endpoints. For HTTPS URLs, publicly-signed certificates
-//    are supported. Private Certificate Authorities (CAs) are permitted only
-//    if the CA's domain is also publicly resolvable. Refactor Spaces automatically
-//    resolves the public Domain Name System (DNS) names that are set in CreateService:UrlEndpoint
-//    when you create a service. The DNS names resolve when the DNS time-to-live
-//    (TTL) expires, or every 60 seconds for TTLs less than 60 seconds. This
-//    periodic DNS resolution ensures that the route configuration remains up-to-date.
-//    One-time health check A one-time health check is performed on the service
-//    when either the route is updated from inactive to active, or when it is
-//    created with an active state. If the health check fails, the route transitions
-//    the route state to FAILED, an error code of SERVICE_ENDPOINT_HEALTH_CHECK_FAILURE
-//    is provided, and no traffic is sent to the service. For private URLs,
-//    a target group is created on the Network Load Balancer and the load balancer
-//    target group runs default target health checks. By default, the health
-//    check is run against the service endpoint URL. Optionally, the health
-//    check can be performed against a different protocol, port, and/or path
-//    using the CreateService:UrlEndpoint (https://docs.aws.amazon.com/migrationhub-refactor-spaces/latest/APIReference/API_CreateService.html#migrationhubrefactorspaces-CreateService-request-UrlEndpoint)
-//    parameter. All other health check settings for the load balancer use the
-//    default values described in the Health checks for your target groups (https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html)
-//    in the Elastic Load Balancing guide. The health check is considered successful
-//    if at least one target within the target group transitions to a healthy
-//    state.
+//   - URL Endpoints If the service has a URL endpoint, and the endpoint resolves
+//     to a private IP address, Refactor Spaces routes traffic using the API
+//     Gateway VPC link. If a service endpoint resolves to a public IP address,
+//     Refactor Spaces routes traffic over the public internet. Services can
+//     have HTTP or HTTPS URL endpoints. For HTTPS URLs, publicly-signed certificates
+//     are supported. Private Certificate Authorities (CAs) are permitted only
+//     if the CA's domain is also publicly resolvable. Refactor Spaces automatically
+//     resolves the public Domain Name System (DNS) names that are set in CreateService:UrlEndpoint
+//     when you create a service. The DNS names resolve when the DNS time-to-live
+//     (TTL) expires, or every 60 seconds for TTLs less than 60 seconds. This
+//     periodic DNS resolution ensures that the route configuration remains up-to-date.
+//     One-time health check A one-time health check is performed on the service
+//     when either the route is updated from inactive to active, or when it is
+//     created with an active state. If the health check fails, the route transitions
+//     the route state to FAILED, an error code of SERVICE_ENDPOINT_HEALTH_CHECK_FAILURE
+//     is provided, and no traffic is sent to the service. For private URLs,
+//     a target group is created on the Network Load Balancer and the load balancer
+//     target group runs default target health checks. By default, the health
+//     check is run against the service endpoint URL. Optionally, the health
+//     check can be performed against a different protocol, port, and/or path
+//     using the CreateService:UrlEndpoint (https://docs.aws.amazon.com/migrationhub-refactor-spaces/latest/APIReference/API_CreateService.html#migrationhubrefactorspaces-CreateService-request-UrlEndpoint)
+//     parameter. All other health check settings for the load balancer use the
+//     default values described in the Health checks for your target groups (https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html)
+//     in the Elastic Load Balancing guide. The health check is considered successful
+//     if at least one target within the target group transitions to a healthy
+//     state.
 //
-//    * Lambda function endpoints If the service has an Lambda function endpoint,
-//    then Refactor Spaces configures the Lambda function's resource policy
-//    to allow the application's API Gateway to invoke the function. The Lambda
-//    function state is checked. If the function is not active, the function
-//    configuration is updated so that Lambda resources are provisioned. If
-//    the Lambda state is Failed, then the route creation fails. For more information,
-//    see the GetFunctionConfiguration's State response parameter (https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html#SSS-GetFunctionConfiguration-response-State)
-//    in the Lambda Developer Guide. A check is performed to determine that
-//    a Lambda function with the specified ARN exists. If it does not exist,
-//    the health check fails. For public URLs, a connection is opened to the
-//    public endpoint. If the URL is not reachable, the health check fails.
+//   - Lambda function endpoints If the service has an Lambda function endpoint,
+//     then Refactor Spaces configures the Lambda function's resource policy
+//     to allow the application's API Gateway to invoke the function. The Lambda
+//     function state is checked. If the function is not active, the function
+//     configuration is updated so that Lambda resources are provisioned. If
+//     the Lambda state is Failed, then the route creation fails. For more information,
+//     see the GetFunctionConfiguration's State response parameter (https://docs.aws.amazon.com/lambda/latest/dg/API_GetFunctionConfiguration.html#SSS-GetFunctionConfiguration-response-State)
+//     in the Lambda Developer Guide. A check is performed to determine that
+//     a Lambda function with the specified ARN exists. If it does not exist,
+//     the health check fails. For public URLs, a connection is opened to the
+//     public endpoint. If the URL is not reachable, the health check fails.
 //
-// Environments without a network bridge
+// # Environments without a network bridge
 //
 // When you create environments without a network bridge (CreateEnvironment:NetworkFabricType
 // (https://docs.aws.amazon.com/migrationhub-refactor-spaces/latest/APIReference/API_CreateEnvironment.html#migrationhubrefactorspaces-CreateEnvironment-request-NetworkFabricType)
@@ -349,26 +348,27 @@ func (c *MigrationHubRefactorSpaces) CreateRouteRequest(input *CreateRouteInput)
 // API operation CreateRoute for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/CreateRoute
 func (c *MigrationHubRefactorSpaces) CreateRoute(input *CreateRouteInput) (*CreateRouteOutput, error) {
@@ -408,14 +408,13 @@ const opCreateService = "CreateService"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateServiceRequest method.
+//	req, resp := client.CreateServiceRequest(params)
 //
-//    // Example sending a request using the CreateServiceRequest method.
-//    req, resp := client.CreateServiceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/CreateService
 func (c *MigrationHubRefactorSpaces) CreateServiceRequest(input *CreateServiceInput) (req *request.Request, output *CreateServiceOutput) {
@@ -454,26 +453,27 @@ func (c *MigrationHubRefactorSpaces) CreateServiceRequest(input *CreateServiceIn
 // API operation CreateService for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/CreateService
 func (c *MigrationHubRefactorSpaces) CreateService(input *CreateServiceInput) (*CreateServiceOutput, error) {
@@ -513,14 +513,13 @@ const opDeleteApplication = "DeleteApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApplicationRequest method.
+//	req, resp := client.DeleteApplicationRequest(params)
 //
-//    // Example sending a request using the DeleteApplicationRequest method.
-//    req, resp := client.DeleteApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/DeleteApplication
 func (c *MigrationHubRefactorSpaces) DeleteApplicationRequest(input *DeleteApplicationInput) (req *request.Request, output *DeleteApplicationOutput) {
@@ -553,23 +552,24 @@ func (c *MigrationHubRefactorSpaces) DeleteApplicationRequest(input *DeleteAppli
 // API operation DeleteApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/DeleteApplication
 func (c *MigrationHubRefactorSpaces) DeleteApplication(input *DeleteApplicationInput) (*DeleteApplicationOutput, error) {
@@ -609,14 +609,13 @@ const opDeleteEnvironment = "DeleteEnvironment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteEnvironmentRequest method.
+//	req, resp := client.DeleteEnvironmentRequest(params)
 //
-//    // Example sending a request using the DeleteEnvironmentRequest method.
-//    req, resp := client.DeleteEnvironmentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/DeleteEnvironment
 func (c *MigrationHubRefactorSpaces) DeleteEnvironmentRequest(input *DeleteEnvironmentInput) (req *request.Request, output *DeleteEnvironmentOutput) {
@@ -649,23 +648,24 @@ func (c *MigrationHubRefactorSpaces) DeleteEnvironmentRequest(input *DeleteEnvir
 // API operation DeleteEnvironment for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/DeleteEnvironment
 func (c *MigrationHubRefactorSpaces) DeleteEnvironment(input *DeleteEnvironmentInput) (*DeleteEnvironmentOutput, error) {
@@ -705,14 +705,13 @@ const opDeleteResourcePolicy = "DeleteResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResourcePolicyRequest method.
+//	req, resp := client.DeleteResourcePolicyRequest(params)
 //
-//    // Example sending a request using the DeleteResourcePolicyRequest method.
-//    req, resp := client.DeleteResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/DeleteResourcePolicy
 func (c *MigrationHubRefactorSpaces) DeleteResourcePolicyRequest(input *DeleteResourcePolicyInput) (req *request.Request, output *DeleteResourcePolicyOutput) {
@@ -744,20 +743,21 @@ func (c *MigrationHubRefactorSpaces) DeleteResourcePolicyRequest(input *DeleteRe
 // API operation DeleteResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/DeleteResourcePolicy
 func (c *MigrationHubRefactorSpaces) DeleteResourcePolicy(input *DeleteResourcePolicyInput) (*DeleteResourcePolicyOutput, error) {
@@ -797,14 +797,13 @@ const opDeleteRoute = "DeleteRoute"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRouteRequest method.
+//	req, resp := client.DeleteRouteRequest(params)
 //
-//    // Example sending a request using the DeleteRouteRequest method.
-//    req, resp := client.DeleteRouteRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/DeleteRoute
 func (c *MigrationHubRefactorSpaces) DeleteRouteRequest(input *DeleteRouteInput) (req *request.Request, output *DeleteRouteOutput) {
@@ -835,23 +834,24 @@ func (c *MigrationHubRefactorSpaces) DeleteRouteRequest(input *DeleteRouteInput)
 // API operation DeleteRoute for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/DeleteRoute
 func (c *MigrationHubRefactorSpaces) DeleteRoute(input *DeleteRouteInput) (*DeleteRouteOutput, error) {
@@ -891,14 +891,13 @@ const opDeleteService = "DeleteService"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteServiceRequest method.
+//	req, resp := client.DeleteServiceRequest(params)
 //
-//    // Example sending a request using the DeleteServiceRequest method.
-//    req, resp := client.DeleteServiceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/DeleteService
 func (c *MigrationHubRefactorSpaces) DeleteServiceRequest(input *DeleteServiceInput) (req *request.Request, output *DeleteServiceOutput) {
@@ -929,23 +928,24 @@ func (c *MigrationHubRefactorSpaces) DeleteServiceRequest(input *DeleteServiceIn
 // API operation DeleteService for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/DeleteService
 func (c *MigrationHubRefactorSpaces) DeleteService(input *DeleteServiceInput) (*DeleteServiceOutput, error) {
@@ -985,14 +985,13 @@ const opGetApplication = "GetApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetApplicationRequest method.
+//	req, resp := client.GetApplicationRequest(params)
 //
-//    // Example sending a request using the GetApplicationRequest method.
-//    req, resp := client.GetApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/GetApplication
 func (c *MigrationHubRefactorSpaces) GetApplicationRequest(input *GetApplicationInput) (req *request.Request, output *GetApplicationOutput) {
@@ -1023,20 +1022,21 @@ func (c *MigrationHubRefactorSpaces) GetApplicationRequest(input *GetApplication
 // API operation GetApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/GetApplication
 func (c *MigrationHubRefactorSpaces) GetApplication(input *GetApplicationInput) (*GetApplicationOutput, error) {
@@ -1076,14 +1076,13 @@ const opGetEnvironment = "GetEnvironment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetEnvironmentRequest method.
+//	req, resp := client.GetEnvironmentRequest(params)
 //
-//    // Example sending a request using the GetEnvironmentRequest method.
-//    req, resp := client.GetEnvironmentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/GetEnvironment
 func (c *MigrationHubRefactorSpaces) GetEnvironmentRequest(input *GetEnvironmentInput) (req *request.Request, output *GetEnvironmentOutput) {
@@ -1114,20 +1113,21 @@ func (c *MigrationHubRefactorSpaces) GetEnvironmentRequest(input *GetEnvironment
 // API operation GetEnvironment for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/GetEnvironment
 func (c *MigrationHubRefactorSpaces) GetEnvironment(input *GetEnvironmentInput) (*GetEnvironmentOutput, error) {
@@ -1167,14 +1167,13 @@ const opGetResourcePolicy = "GetResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResourcePolicyRequest method.
+//	req, resp := client.GetResourcePolicyRequest(params)
 //
-//    // Example sending a request using the GetResourcePolicyRequest method.
-//    req, resp := client.GetResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/GetResourcePolicy
 func (c *MigrationHubRefactorSpaces) GetResourcePolicyRequest(input *GetResourcePolicyInput) (req *request.Request, output *GetResourcePolicyOutput) {
@@ -1205,20 +1204,21 @@ func (c *MigrationHubRefactorSpaces) GetResourcePolicyRequest(input *GetResource
 // API operation GetResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/GetResourcePolicy
 func (c *MigrationHubRefactorSpaces) GetResourcePolicy(input *GetResourcePolicyInput) (*GetResourcePolicyOutput, error) {
@@ -1258,14 +1258,13 @@ const opGetRoute = "GetRoute"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRouteRequest method.
+//	req, resp := client.GetRouteRequest(params)
 //
-//    // Example sending a request using the GetRouteRequest method.
-//    req, resp := client.GetRouteRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/GetRoute
 func (c *MigrationHubRefactorSpaces) GetRouteRequest(input *GetRouteInput) (req *request.Request, output *GetRouteOutput) {
@@ -1296,20 +1295,21 @@ func (c *MigrationHubRefactorSpaces) GetRouteRequest(input *GetRouteInput) (req 
 // API operation GetRoute for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/GetRoute
 func (c *MigrationHubRefactorSpaces) GetRoute(input *GetRouteInput) (*GetRouteOutput, error) {
@@ -1349,14 +1349,13 @@ const opGetService = "GetService"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetServiceRequest method.
+//	req, resp := client.GetServiceRequest(params)
 //
-//    // Example sending a request using the GetServiceRequest method.
-//    req, resp := client.GetServiceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/GetService
 func (c *MigrationHubRefactorSpaces) GetServiceRequest(input *GetServiceInput) (req *request.Request, output *GetServiceOutput) {
@@ -1387,20 +1386,21 @@ func (c *MigrationHubRefactorSpaces) GetServiceRequest(input *GetServiceInput) (
 // API operation GetService for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/GetService
 func (c *MigrationHubRefactorSpaces) GetService(input *GetServiceInput) (*GetServiceOutput, error) {
@@ -1440,14 +1440,13 @@ const opListApplications = "ListApplications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListApplicationsRequest method.
+//	req, resp := client.ListApplicationsRequest(params)
 //
-//    // Example sending a request using the ListApplicationsRequest method.
-//    req, resp := client.ListApplicationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListApplications
 func (c *MigrationHubRefactorSpaces) ListApplicationsRequest(input *ListApplicationsInput) (req *request.Request, output *ListApplicationsOutput) {
@@ -1485,26 +1484,27 @@ func (c *MigrationHubRefactorSpaces) ListApplicationsRequest(input *ListApplicat
 // API operation ListApplications for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListApplications
 func (c *MigrationHubRefactorSpaces) ListApplications(input *ListApplicationsInput) (*ListApplicationsOutput, error) {
@@ -1536,15 +1536,14 @@ func (c *MigrationHubRefactorSpaces) ListApplicationsWithContext(ctx aws.Context
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListApplications operation.
-//    pageNum := 0
-//    err := client.ListApplicationsPages(params,
-//        func(page *migrationhubrefactorspaces.ListApplicationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListApplications operation.
+//	pageNum := 0
+//	err := client.ListApplicationsPages(params,
+//	    func(page *migrationhubrefactorspaces.ListApplicationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubRefactorSpaces) ListApplicationsPages(input *ListApplicationsInput, fn func(*ListApplicationsOutput, bool) bool) error {
 	return c.ListApplicationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1596,14 +1595,13 @@ const opListEnvironmentVpcs = "ListEnvironmentVpcs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListEnvironmentVpcsRequest method.
+//	req, resp := client.ListEnvironmentVpcsRequest(params)
 //
-//    // Example sending a request using the ListEnvironmentVpcsRequest method.
-//    req, resp := client.ListEnvironmentVpcsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListEnvironmentVpcs
 func (c *MigrationHubRefactorSpaces) ListEnvironmentVpcsRequest(input *ListEnvironmentVpcsInput) (req *request.Request, output *ListEnvironmentVpcsOutput) {
@@ -1641,20 +1639,21 @@ func (c *MigrationHubRefactorSpaces) ListEnvironmentVpcsRequest(input *ListEnvir
 // API operation ListEnvironmentVpcs for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListEnvironmentVpcs
 func (c *MigrationHubRefactorSpaces) ListEnvironmentVpcs(input *ListEnvironmentVpcsInput) (*ListEnvironmentVpcsOutput, error) {
@@ -1686,15 +1685,14 @@ func (c *MigrationHubRefactorSpaces) ListEnvironmentVpcsWithContext(ctx aws.Cont
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListEnvironmentVpcs operation.
-//    pageNum := 0
-//    err := client.ListEnvironmentVpcsPages(params,
-//        func(page *migrationhubrefactorspaces.ListEnvironmentVpcsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListEnvironmentVpcs operation.
+//	pageNum := 0
+//	err := client.ListEnvironmentVpcsPages(params,
+//	    func(page *migrationhubrefactorspaces.ListEnvironmentVpcsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubRefactorSpaces) ListEnvironmentVpcsPages(input *ListEnvironmentVpcsInput, fn func(*ListEnvironmentVpcsOutput, bool) bool) error {
 	return c.ListEnvironmentVpcsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1746,14 +1744,13 @@ const opListEnvironments = "ListEnvironments"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListEnvironmentsRequest method.
+//	req, resp := client.ListEnvironmentsRequest(params)
 //
-//    // Example sending a request using the ListEnvironmentsRequest method.
-//    req, resp := client.ListEnvironmentsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListEnvironments
 func (c *MigrationHubRefactorSpaces) ListEnvironmentsRequest(input *ListEnvironmentsInput) (req *request.Request, output *ListEnvironmentsOutput) {
@@ -1791,20 +1788,21 @@ func (c *MigrationHubRefactorSpaces) ListEnvironmentsRequest(input *ListEnvironm
 // API operation ListEnvironments for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListEnvironments
 func (c *MigrationHubRefactorSpaces) ListEnvironments(input *ListEnvironmentsInput) (*ListEnvironmentsOutput, error) {
@@ -1836,15 +1834,14 @@ func (c *MigrationHubRefactorSpaces) ListEnvironmentsWithContext(ctx aws.Context
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListEnvironments operation.
-//    pageNum := 0
-//    err := client.ListEnvironmentsPages(params,
-//        func(page *migrationhubrefactorspaces.ListEnvironmentsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListEnvironments operation.
+//	pageNum := 0
+//	err := client.ListEnvironmentsPages(params,
+//	    func(page *migrationhubrefactorspaces.ListEnvironmentsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubRefactorSpaces) ListEnvironmentsPages(input *ListEnvironmentsInput, fn func(*ListEnvironmentsOutput, bool) bool) error {
 	return c.ListEnvironmentsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1896,14 +1893,13 @@ const opListRoutes = "ListRoutes"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRoutesRequest method.
+//	req, resp := client.ListRoutesRequest(params)
 //
-//    // Example sending a request using the ListRoutesRequest method.
-//    req, resp := client.ListRoutesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListRoutes
 func (c *MigrationHubRefactorSpaces) ListRoutesRequest(input *ListRoutesInput) (req *request.Request, output *ListRoutesOutput) {
@@ -1941,26 +1937,27 @@ func (c *MigrationHubRefactorSpaces) ListRoutesRequest(input *ListRoutesInput) (
 // API operation ListRoutes for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListRoutes
 func (c *MigrationHubRefactorSpaces) ListRoutes(input *ListRoutesInput) (*ListRoutesOutput, error) {
@@ -1992,15 +1989,14 @@ func (c *MigrationHubRefactorSpaces) ListRoutesWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRoutes operation.
-//    pageNum := 0
-//    err := client.ListRoutesPages(params,
-//        func(page *migrationhubrefactorspaces.ListRoutesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRoutes operation.
+//	pageNum := 0
+//	err := client.ListRoutesPages(params,
+//	    func(page *migrationhubrefactorspaces.ListRoutesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubRefactorSpaces) ListRoutesPages(input *ListRoutesInput, fn func(*ListRoutesOutput, bool) bool) error {
 	return c.ListRoutesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2052,14 +2048,13 @@ const opListServices = "ListServices"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListServicesRequest method.
+//	req, resp := client.ListServicesRequest(params)
 //
-//    // Example sending a request using the ListServicesRequest method.
-//    req, resp := client.ListServicesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListServices
 func (c *MigrationHubRefactorSpaces) ListServicesRequest(input *ListServicesInput) (req *request.Request, output *ListServicesOutput) {
@@ -2097,26 +2092,27 @@ func (c *MigrationHubRefactorSpaces) ListServicesRequest(input *ListServicesInpu
 // API operation ListServices for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListServices
 func (c *MigrationHubRefactorSpaces) ListServices(input *ListServicesInput) (*ListServicesOutput, error) {
@@ -2148,15 +2144,14 @@ func (c *MigrationHubRefactorSpaces) ListServicesWithContext(ctx aws.Context, in
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListServices operation.
-//    pageNum := 0
-//    err := client.ListServicesPages(params,
-//        func(page *migrationhubrefactorspaces.ListServicesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListServices operation.
+//	pageNum := 0
+//	err := client.ListServicesPages(params,
+//	    func(page *migrationhubrefactorspaces.ListServicesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubRefactorSpaces) ListServicesPages(input *ListServicesInput, fn func(*ListServicesOutput, bool) bool) error {
 	return c.ListServicesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2208,14 +2203,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListTagsForResource
 func (c *MigrationHubRefactorSpaces) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2247,14 +2241,15 @@ func (c *MigrationHubRefactorSpaces) ListTagsForResourceRequest(input *ListTagsF
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
+//
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/ListTagsForResource
 func (c *MigrationHubRefactorSpaces) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2294,14 +2289,13 @@ const opPutResourcePolicy = "PutResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutResourcePolicyRequest method.
+//	req, resp := client.PutResourcePolicyRequest(params)
 //
-//    // Example sending a request using the PutResourcePolicyRequest method.
-//    req, resp := client.PutResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/PutResourcePolicy
 func (c *MigrationHubRefactorSpaces) PutResourcePolicyRequest(input *PutResourcePolicyInput) (req *request.Request, output *PutResourcePolicyOutput) {
@@ -2337,23 +2331,24 @@ func (c *MigrationHubRefactorSpaces) PutResourcePolicyRequest(input *PutResource
 // API operation PutResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InvalidResourcePolicyException
-//   The resource policy is not valid.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InvalidResourcePolicyException
+//     The resource policy is not valid.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/PutResourcePolicy
 func (c *MigrationHubRefactorSpaces) PutResourcePolicy(input *PutResourcePolicyInput) (*PutResourcePolicyOutput, error) {
@@ -2393,14 +2388,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/TagResource
 func (c *MigrationHubRefactorSpaces) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2438,14 +2432,15 @@ func (c *MigrationHubRefactorSpaces) TagResourceRequest(input *TagResourceInput)
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
+//
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/TagResource
 func (c *MigrationHubRefactorSpaces) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2485,14 +2480,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/UntagResource
 func (c *MigrationHubRefactorSpaces) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2527,14 +2521,15 @@ func (c *MigrationHubRefactorSpaces) UntagResourceRequest(input *UntagResourceIn
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
+//
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/UntagResource
 func (c *MigrationHubRefactorSpaces) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2574,14 +2569,13 @@ const opUpdateRoute = "UpdateRoute"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRouteRequest method.
+//	req, resp := client.UpdateRouteRequest(params)
 //
-//    // Example sending a request using the UpdateRouteRequest method.
-//    req, resp := client.UpdateRouteRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/UpdateRoute
 func (c *MigrationHubRefactorSpaces) UpdateRouteRequest(input *UpdateRouteInput) (req *request.Request, output *UpdateRouteOutput) {
@@ -2612,20 +2606,21 @@ func (c *MigrationHubRefactorSpaces) UpdateRouteRequest(input *UpdateRouteInput)
 // API operation UpdateRoute for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Service.
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
-//   * ThrottlingException
-//   Request was denied because the request was throttled.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ThrottlingException
+//     Request was denied because the request was throttled.
+//
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migration-hub-refactor-spaces-2021-10-26/UpdateRoute
 func (c *MigrationHubRefactorSpaces) UpdateRoute(input *UpdateRouteInput) (*UpdateRouteOutput, error) {
@@ -2810,8 +2805,12 @@ type ApiGatewayProxyInput_ struct {
 	//
 	// If the value is set to PRIVATE in the request, this creates a private API
 	// endpoint that is isolated from the public internet. The private endpoint
-	// can only be accessed by using Amazon Virtual Private Cloud (Amazon VPC) endpoints
-	// for Amazon API Gateway that have been granted access.
+	// can only be accessed by using Amazon Virtual Private Cloud (Amazon VPC) interface
+	// endpoints for the Amazon API Gateway that has been granted access. For more
+	// information about creating a private connection with Refactor Spaces and
+	// interface endpoint (Amazon Web Services PrivateLink) availability, see Access
+	// Refactor Spaces using an interface endpoint (Amazon Web Services PrivateLink)
+	// (https://docs.aws.amazon.com/migrationhub-refactor-spaces/latest/userguide/vpc-interface-endpoints.html).
 	EndpointType *string `type:"string" enum:"ApiGatewayEndpointType"`
 
 	// The name of the API Gateway stage. The name defaults to prod.
@@ -5887,6 +5886,9 @@ func (s *GetRouteInput) SetRouteIdentifier(v string) *GetRouteInput {
 type GetRouteOutput struct {
 	_ struct{} `type:"structure"`
 
+	// If set to true, this option appends the source path to the service URL endpoint.
+	AppendSourcePath *bool `type:"boolean"`
+
 	// The ID of the application that the route belongs to.
 	ApplicationId *string `min:"14" type:"string"`
 
@@ -5939,8 +5941,10 @@ type GetRouteOutput struct {
 	// The unique identifier of the service.
 	ServiceId *string `min:"14" type:"string"`
 
-	// The path to use to match traffic. Paths must start with / and are relative
-	// to the base of the application.
+	// This is the path that Refactor Spaces uses to match traffic. Paths must start
+	// with / and are relative to the base of the application. To use path parameters
+	// in the source path, add a variable in curly braces. For example, the resource
+	// path {user} represents a path parameter called 'user'.
 	SourcePath *string `min:"1" type:"string"`
 
 	// The current state of the route.
@@ -5971,6 +5975,12 @@ func (s GetRouteOutput) String() string {
 // value will be replaced with "sensitive".
 func (s GetRouteOutput) GoString() string {
 	return s.String()
+}
+
+// SetAppendSourcePath sets the AppendSourcePath field's value.
+func (s *GetRouteOutput) SetAppendSourcePath(v bool) *GetRouteOutput {
+	s.AppendSourcePath = &v
+	return s
 }
 
 // SetApplicationId sets the ApplicationId field's value.
@@ -7425,6 +7435,9 @@ func (s *ResourceNotFoundException) RequestID() string {
 type RouteSummary struct {
 	_ struct{} `type:"structure"`
 
+	// If set to true, this option appends the source path to the service URL endpoint.
+	AppendSourcePath *bool `type:"boolean"`
+
 	// The unique identifier of the application.
 	ApplicationId *string `min:"14" type:"string"`
 
@@ -7471,8 +7484,10 @@ type RouteSummary struct {
 	// The unique identifier of the service.
 	ServiceId *string `min:"14" type:"string"`
 
-	// The path to use to match traffic. Paths must start with / and are relative
-	// to the base of the application.
+	// This is the path that Refactor Spaces uses to match traffic. Paths must start
+	// with / and are relative to the base of the application. To use path parameters
+	// in the source path, add a variable in curly braces. For example, the resource
+	// path {user} represents a path parameter called 'user'.
 	SourcePath *string `min:"1" type:"string"`
 
 	// The current state of the route.
@@ -7502,6 +7517,12 @@ func (s RouteSummary) String() string {
 // value will be replaced with "sensitive".
 func (s RouteSummary) GoString() string {
 	return s.String()
+}
+
+// SetAppendSourcePath sets the AppendSourcePath field's value.
+func (s *RouteSummary) SetAppendSourcePath(v bool) *RouteSummary {
+	s.AppendSourcePath = &v
+	return s
 }
 
 // SetApplicationId sets the ApplicationId field's value.
@@ -8310,6 +8331,9 @@ type UriPathRouteInput_ struct {
 	// ActivationState is a required field
 	ActivationState *string `type:"string" required:"true" enum:"RouteActivationState"`
 
+	// If set to true, this option appends the source path to the service URL endpoint.
+	AppendSourcePath *bool `type:"boolean"`
+
 	// Indicates whether to match all subpaths of the given source path. If this
 	// value is false, requests must match the source path exactly before they are
 	// forwarded to this route's service.
@@ -8320,8 +8344,10 @@ type UriPathRouteInput_ struct {
 	// service.
 	Methods []*string `type:"list" enum:"HttpMethod"`
 
-	// The path to use to match traffic. Paths must start with / and are relative
-	// to the base of the application.
+	// This is the path that Refactor Spaces uses to match traffic. Paths must start
+	// with / and are relative to the base of the application. To use path parameters
+	// in the source path, add a variable in curly braces. For example, the resource
+	// path {user} represents a path parameter called 'user'.
 	//
 	// SourcePath is a required field
 	SourcePath *string `min:"1" type:"string" required:"true"`
@@ -8367,6 +8393,12 @@ func (s *UriPathRouteInput_) Validate() error {
 // SetActivationState sets the ActivationState field's value.
 func (s *UriPathRouteInput_) SetActivationState(v string) *UriPathRouteInput_ {
 	s.ActivationState = &v
+	return s
+}
+
+// SetAppendSourcePath sets the AppendSourcePath field's value.
+func (s *UriPathRouteInput_) SetAppendSourcePath(v bool) *UriPathRouteInput_ {
+	s.AppendSourcePath = &v
 	return s
 }
 

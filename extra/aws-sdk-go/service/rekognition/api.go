@@ -13,6 +13,140 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
+const opAssociateFaces = "AssociateFaces"
+
+// AssociateFacesRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateFaces operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateFaces for more information on using the AssociateFaces
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the AssociateFacesRequest method.
+//	req, resp := client.AssociateFacesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *Rekognition) AssociateFacesRequest(input *AssociateFacesInput) (req *request.Request, output *AssociateFacesOutput) {
+	op := &request.Operation{
+		Name:       opAssociateFaces,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AssociateFacesInput{}
+	}
+
+	output = &AssociateFacesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// AssociateFaces API operation for Amazon Rekognition.
+//
+// Associates one or more faces with an existing UserID. Takes an array of FaceIds.
+// Each FaceId that are present in the FaceIds list is associated with the provided
+// UserID. The maximum number of total FaceIds per UserID is 100.
+//
+// The UserMatchThreshold parameter specifies the minimum user match confidence
+// required for the face to be associated with a UserID that has at least one
+// FaceID already associated. This ensures that the FaceIds are associated with
+// the right UserID. The value ranges from 0-100 and default value is 75.
+//
+// If successful, an array of AssociatedFace objects containing the associated
+// FaceIds is returned. If a given face is already associated with the given
+// UserID, it will be ignored and will not be returned in the response. If a
+// given face is already associated to a different UserID, isn't found in the
+// collection, doesn’t meet the UserMatchThreshold, or there are already 100
+// faces associated with the UserID, it will be returned as part of an array
+// of UnsuccessfulFaceAssociations.
+//
+// The UserStatus reflects the status of an operation which updates a UserID
+// representation with a list of given faces. The UserStatus can be:
+//
+//   - ACTIVE - All associations or disassociations of FaceID(s) for a UserID
+//     are complete.
+//
+//   - CREATED - A UserID has been created, but has no FaceID(s) associated
+//     with it.
+//
+//   - UPDATING - A UserID is being updated and there are current associations
+//     or disassociations of FaceID(s) taking place.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation AssociateFaces for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
+//
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
+//
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
+//
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
+//
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
+//
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
+//
+//   - ConflictException
+//     A User with the same Id already exists within the collection, or the update
+//     or deletion of the User caused an inconsistent state. **
+//
+//   - ServiceQuotaExceededException
+//     The size of the collection exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
+func (c *Rekognition) AssociateFaces(input *AssociateFacesInput) (*AssociateFacesOutput, error) {
+	req, out := c.AssociateFacesRequest(input)
+	return out, req.Send()
+}
+
+// AssociateFacesWithContext is the same as AssociateFaces with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateFaces for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) AssociateFacesWithContext(ctx aws.Context, input *AssociateFacesInput, opts ...request.Option) (*AssociateFacesOutput, error) {
+	req, out := c.AssociateFacesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCompareFaces = "CompareFaces"
 
 // CompareFacesRequest generates a "aws/request.Request" representing the
@@ -29,14 +163,13 @@ const opCompareFaces = "CompareFaces"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CompareFacesRequest method.
+//	req, resp := client.CompareFacesRequest(params)
 //
-//    // Example sending a request using the CompareFacesRequest method.
-//    req, resp := client.CompareFacesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) CompareFacesRequest(input *CompareFacesInput) (req *request.Request, output *CompareFacesOutput) {
 	op := &request.Operation{
 		Name:       opCompareFaces,
@@ -122,36 +255,36 @@ func (c *Rekognition) CompareFacesRequest(input *CompareFacesInput) (req *reques
 // API operation CompareFaces for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
 //
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ImageTooLargeException
-//   The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
-//   the image size or resolution exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - ImageTooLargeException
+//     The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+//     the image size or resolution exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidImageFormatException
-//   The provided image format is not supported.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
 func (c *Rekognition) CompareFaces(input *CompareFacesInput) (*CompareFacesOutput, error) {
 	req, out := c.CompareFacesRequest(input)
 	return out, req.Send()
@@ -189,14 +322,13 @@ const opCopyProjectVersion = "CopyProjectVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CopyProjectVersionRequest method.
+//	req, resp := client.CopyProjectVersionRequest(params)
 //
-//    // Example sending a request using the CopyProjectVersionRequest method.
-//    req, resp := client.CopyProjectVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) CopyProjectVersionRequest(input *CopyProjectVersionInput) (req *request.Request, output *CopyProjectVersionOutput) {
 	op := &request.Operation{
 		Name:       opCopyProjectVersion,
@@ -214,6 +346,8 @@ func (c *Rekognition) CopyProjectVersionRequest(input *CopyProjectVersionInput) 
 }
 
 // CopyProjectVersion API operation for Amazon Rekognition.
+//
+// This operation applies only to Amazon Rekognition Custom Labels.
 //
 // Copies a version of an Amazon Rekognition Custom Labels model from a source
 // project to a destination project. The source and destination projects can
@@ -233,6 +367,8 @@ func (c *Rekognition) CopyProjectVersionRequest(input *CopyProjectVersionInput) 
 // If you are copying a model version to a project in the same AWS account,
 // you don't need to create a project policy.
 //
+// Copying project versions is supported only for Custom Labels models.
+//
 // To copy a model, the destination project, source project, and source model
 // version must already exist.
 //
@@ -251,42 +387,42 @@ func (c *Rekognition) CopyProjectVersionRequest(input *CopyProjectVersionInput) 
 // API operation CopyProjectVersion for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * ServiceQuotaExceededException
-//   The size of the collection exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ServiceQuotaExceededException
+//     The size of the collection exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - ResourceInUseException
+//     The specified resource is already being used.
 func (c *Rekognition) CopyProjectVersion(input *CopyProjectVersionInput) (*CopyProjectVersionOutput, error) {
 	req, out := c.CopyProjectVersionRequest(input)
 	return out, req.Send()
@@ -324,14 +460,13 @@ const opCreateCollection = "CreateCollection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateCollectionRequest method.
+//	req, resp := client.CreateCollectionRequest(params)
 //
-//    // Example sending a request using the CreateCollectionRequest method.
-//    req, resp := client.CreateCollectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) CreateCollectionRequest(input *CreateCollectionInput) (req *request.Request, output *CreateCollectionOutput) {
 	op := &request.Operation{
 		Name:       opCreateCollection,
@@ -375,32 +510,32 @@ func (c *Rekognition) CreateCollectionRequest(input *CreateCollectionInput) (req
 // API operation CreateCollection for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceAlreadyExistsException
-//   A resource with the specified ID already exists.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ServiceQuotaExceededException
-//   The size of the collection exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - ResourceAlreadyExistsException
+//     A resource with the specified ID already exists.
 //
+//   - ServiceQuotaExceededException
+//     The size of the collection exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 func (c *Rekognition) CreateCollection(input *CreateCollectionInput) (*CreateCollectionOutput, error) {
 	req, out := c.CreateCollectionRequest(input)
 	return out, req.Send()
@@ -438,14 +573,13 @@ const opCreateDataset = "CreateDataset"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDatasetRequest method.
+//	req, resp := client.CreateDatasetRequest(params)
 //
-//    // Example sending a request using the CreateDatasetRequest method.
-//    req, resp := client.CreateDatasetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) CreateDatasetRequest(input *CreateDatasetInput) (req *request.Request, output *CreateDatasetOutput) {
 	op := &request.Operation{
 		Name:       opCreateDataset,
@@ -464,12 +598,14 @@ func (c *Rekognition) CreateDatasetRequest(input *CreateDatasetInput) (req *requ
 
 // CreateDataset API operation for Amazon Rekognition.
 //
+// This operation applies only to Amazon Rekognition Custom Labels.
+//
 // Creates a new Amazon Rekognition Custom Labels dataset. You can create a
 // dataset by using an Amazon Sagemaker format manifest file or by copying an
 // existing Amazon Rekognition Custom Labels dataset.
 //
-// To create a training dataset for a project, specify train for the value of
-// DatasetType. To create the test dataset for a project, specify test for the
+// To create a training dataset for a project, specify TRAIN for the value of
+// DatasetType. To create the test dataset for a project, specify TEST for the
 // value of DatasetType.
 //
 // The response from CreateDataset is the Amazon Resource Name (ARN) for the
@@ -498,40 +634,40 @@ func (c *Rekognition) CreateDatasetRequest(input *CreateDatasetInput) (req *requ
 // API operation CreateDataset for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
-//   * ResourceAlreadyExistsException
-//   A resource with the specified ID already exists.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ResourceAlreadyExistsException
+//     A resource with the specified ID already exists.
 //
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 func (c *Rekognition) CreateDataset(input *CreateDatasetInput) (*CreateDatasetOutput, error) {
 	req, out := c.CreateDatasetRequest(input)
 	return out, req.Send()
@@ -569,14 +705,13 @@ const opCreateFaceLivenessSession = "CreateFaceLivenessSession"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFaceLivenessSessionRequest method.
+//	req, resp := client.CreateFaceLivenessSessionRequest(params)
 //
-//    // Example sending a request using the CreateFaceLivenessSessionRequest method.
-//    req, resp := client.CreateFaceLivenessSessionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) CreateFaceLivenessSessionRequest(input *CreateFaceLivenessSessionInput) (req *request.Request, output *CreateFaceLivenessSessionOutput) {
 	op := &request.Operation{
 		Name:       opCreateFaceLivenessSession,
@@ -597,12 +732,16 @@ func (c *Rekognition) CreateFaceLivenessSessionRequest(input *CreateFaceLiveness
 //
 // This API operation initiates a Face Liveness session. It returns a SessionId,
 // which you can use to start streaming Face Liveness video and get the results
-// for a Face Liveness session. You can use the OutputConfig option in the Settings
-// parameter to provide an Amazon S3 bucket location. The Amazon S3 bucket stores
-// reference images and audit images. You can use AuditImagesLimit to limit
-// the number of audit images returned. This number is between 0 and 4. By default,
-// it is set to 0. The limit is best effort and based on the duration of the
-// selfie-video.
+// for a Face Liveness session.
+//
+// You can use the OutputConfig option in the Settings parameter to provide
+// an Amazon S3 bucket location. The Amazon S3 bucket stores reference images
+// and audit images. If no Amazon S3 bucket is defined, raw bytes are sent instead.
+//
+// You can use AuditImagesLimit to limit the number of audit images returned
+// when GetFaceLivenessSessionResults is called. This number is between 0 and
+// 4. By default, it is set to 0. The limit is best effort and based on the
+// duration of the selfie-video.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -612,24 +751,24 @@ func (c *Rekognition) CreateFaceLivenessSessionRequest(input *CreateFaceLiveness
 // API operation CreateFaceLivenessSession for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) CreateFaceLivenessSession(input *CreateFaceLivenessSessionInput) (*CreateFaceLivenessSessionOutput, error) {
 	req, out := c.CreateFaceLivenessSessionRequest(input)
 	return out, req.Send()
@@ -667,14 +806,13 @@ const opCreateProject = "CreateProject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProjectRequest method.
+//	req, resp := client.CreateProjectRequest(params)
 //
-//    // Example sending a request using the CreateProjectRequest method.
-//    req, resp := client.CreateProjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) CreateProjectRequest(input *CreateProjectInput) (req *request.Request, output *CreateProjectOutput) {
 	op := &request.Operation{
 		Name:       opCreateProject,
@@ -693,12 +831,13 @@ func (c *Rekognition) CreateProjectRequest(input *CreateProjectInput) (req *requ
 
 // CreateProject API operation for Amazon Rekognition.
 //
-// Creates a new Amazon Rekognition Custom Labels project. A project is a group
-// of resources (datasets, model versions) that you use to create and manage
-// Amazon Rekognition Custom Labels models.
-//
-// This operation requires permissions to perform the rekognition:CreateProject
-// action.
+// Creates a new Amazon Rekognition project. A project is a group of resources
+// (datasets, model versions) that you use to create and manage a Amazon Rekognition
+// Custom Labels Model or custom adapter. You can specify a feature to create
+// the project with, if no feature is specified then Custom Labels is used by
+// default. For adapters, you can also choose whether or not to have the project
+// auto update by using the AutoUpdate argument. This operation requires permissions
+// to perform the rekognition:CreateProject action.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -708,34 +847,34 @@ func (c *Rekognition) CreateProjectRequest(input *CreateProjectInput) (req *requ
 // API operation CreateProject for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceInUseException
-//   The specified resource is already being used.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) CreateProject(input *CreateProjectInput) (*CreateProjectOutput, error) {
 	req, out := c.CreateProjectRequest(input)
 	return out, req.Send()
@@ -773,14 +912,13 @@ const opCreateProjectVersion = "CreateProjectVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProjectVersionRequest method.
+//	req, resp := client.CreateProjectVersionRequest(params)
 //
-//    // Example sending a request using the CreateProjectVersionRequest method.
-//    req, resp := client.CreateProjectVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) CreateProjectVersionRequest(input *CreateProjectVersionInput) (req *request.Request, output *CreateProjectVersionOutput) {
 	op := &request.Operation{
 		Name:       opCreateProjectVersion,
@@ -799,14 +937,24 @@ func (c *Rekognition) CreateProjectVersionRequest(input *CreateProjectVersionInp
 
 // CreateProjectVersion API operation for Amazon Rekognition.
 //
-// Creates a new version of a model and begins training. Models are managed
-// as part of an Amazon Rekognition Custom Labels project. The response from
-// CreateProjectVersion is an Amazon Resource Name (ARN) for the version of
-// the model.
+// Creates a new version of Amazon Rekognition project (like a Custom Labels
+// model or a custom adapter) and begins training. Models and adapters are managed
+// as part of a Rekognition project. The response from CreateProjectVersion
+// is an Amazon Resource Name (ARN) for the project version.
 //
-// Training uses the training and test datasets associated with the project.
-// For more information, see Creating training and test dataset in the Amazon
-// Rekognition Custom Labels Developer Guide.
+// The FeatureConfig operation argument allows you to configure specific model
+// or adapter settings. You can provide a description to the project version
+// by using the VersionDescription argment. Training can take a while to complete.
+// You can get the current status by calling DescribeProjectVersions. Training
+// completed successfully if the value of the Status field is TRAINING_COMPLETED.
+// Once training has successfully completed, call DescribeProjectVersions to
+// get the training results and evaluate the model.
+//
+// This operation requires permissions to perform the rekognition:CreateProjectVersion
+// action.
+//
+// The following applies only to projects with Amazon Rekognition Custom Labels
+// as the chosen feature:
 //
 // You can train a model in a project that doesn't have associated datasets
 // by specifying manifest files in the TrainingData and TestingData fields.
@@ -820,23 +968,6 @@ func (c *Rekognition) CreateProjectVersionRequest(input *CreateProjectVersionInp
 // that you use the manifest files to create training and test datasets for
 // the project.
 //
-// Training takes a while to complete. You can get the current status by calling
-// DescribeProjectVersions. Training completed successfully if the value of
-// the Status field is TRAINING_COMPLETED.
-//
-// If training fails, see Debugging a failed model training in the Amazon Rekognition
-// Custom Labels developer guide.
-//
-// Once training has successfully completed, call DescribeProjectVersions to
-// get the training results and evaluate the model. For more information, see
-// Improving a trained Amazon Rekognition Custom Labels model in the Amazon
-// Rekognition Custom Labels developers guide.
-//
-// After evaluating the model, you start the model by calling StartProjectVersion.
-//
-// This operation requires permissions to perform the rekognition:CreateProjectVersion
-// action.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -845,42 +976,42 @@ func (c *Rekognition) CreateProjectVersionRequest(input *CreateProjectVersionInp
 // API operation CreateProjectVersion for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceInUseException
-//   The specified resource is already being used.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ServiceQuotaExceededException
-//   The size of the collection exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - ServiceQuotaExceededException
+//     The size of the collection exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 func (c *Rekognition) CreateProjectVersion(input *CreateProjectVersionInput) (*CreateProjectVersionOutput, error) {
 	req, out := c.CreateProjectVersionRequest(input)
 	return out, req.Send()
@@ -918,14 +1049,13 @@ const opCreateStreamProcessor = "CreateStreamProcessor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateStreamProcessorRequest method.
+//	req, resp := client.CreateStreamProcessorRequest(params)
 //
-//    // Example sending a request using the CreateStreamProcessorRequest method.
-//    req, resp := client.CreateStreamProcessorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) CreateStreamProcessorRequest(input *CreateStreamProcessorInput) (req *request.Request, output *CreateStreamProcessorOutput) {
 	op := &request.Operation{
 		Name:       opCreateStreamProcessor,
@@ -951,23 +1081,23 @@ func (c *Rekognition) CreateStreamProcessorRequest(input *CreateStreamProcessorI
 // Video Streams. There are two different settings for stream processors in
 // Amazon Rekognition: detecting faces and detecting labels.
 //
-//    * If you are creating a stream processor for detecting faces, you provide
-//    as input a Kinesis video stream (Input) and a Kinesis data stream (Output)
-//    stream for receiving the output. You must use the FaceSearch option in
-//    Settings, specifying the collection that contains the faces you want to
-//    recognize. After you have finished analyzing a streaming video, use StopStreamProcessor
-//    to stop processing.
+//   - If you are creating a stream processor for detecting faces, you provide
+//     as input a Kinesis video stream (Input) and a Kinesis data stream (Output)
+//     stream for receiving the output. You must use the FaceSearch option in
+//     Settings, specifying the collection that contains the faces you want to
+//     recognize. After you have finished analyzing a streaming video, use StopStreamProcessor
+//     to stop processing.
 //
-//    * If you are creating a stream processor to detect labels, you provide
-//    as input a Kinesis video stream (Input), Amazon S3 bucket information
-//    (Output), and an Amazon SNS topic ARN (NotificationChannel). You can also
-//    provide a KMS key ID to encrypt the data sent to your Amazon S3 bucket.
-//    You specify what you want to detect by using the ConnectedHome option
-//    in settings, and selecting one of the following: PERSON, PET, PACKAGE,
-//    ALL You can also specify where in the frame you want Amazon Rekognition
-//    to monitor with RegionsOfInterest. When you run the StartStreamProcessor
-//    operation on a label detection stream processor, you input start and stop
-//    information to determine the length of the processing time.
+//   - If you are creating a stream processor to detect labels, you provide
+//     as input a Kinesis video stream (Input), Amazon S3 bucket information
+//     (Output), and an Amazon SNS topic ARN (NotificationChannel). You can also
+//     provide a KMS key ID to encrypt the data sent to your Amazon S3 bucket.
+//     You specify what you want to detect by using the ConnectedHome option
+//     in settings, and selecting one of the following: PERSON, PET, PACKAGE,
+//     ALL You can also specify where in the frame you want Amazon Rekognition
+//     to monitor with RegionsOfInterest. When you run the StartStreamProcessor
+//     operation on a label detection stream processor, you input start and stop
+//     information to determine the length of the processing time.
 //
 // Use Name to assign an identifier for the stream processor. You use Name to
 // manage the stream processor. For example, you can start processing the source
@@ -985,39 +1115,39 @@ func (c *Rekognition) CreateStreamProcessorRequest(input *CreateStreamProcessorI
 // API operation CreateStreamProcessor for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
-//   * ServiceQuotaExceededException
-//   The size of the collection exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - ServiceQuotaExceededException
+//     The size of the collection exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 func (c *Rekognition) CreateStreamProcessor(input *CreateStreamProcessorInput) (*CreateStreamProcessorOutput, error) {
 	req, out := c.CreateStreamProcessorRequest(input)
 	return out, req.Send()
@@ -1039,6 +1169,122 @@ func (c *Rekognition) CreateStreamProcessorWithContext(ctx aws.Context, input *C
 	return out, req.Send()
 }
 
+const opCreateUser = "CreateUser"
+
+// CreateUserRequest generates a "aws/request.Request" representing the
+// client's request for the CreateUser operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateUser for more information on using the CreateUser
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateUserRequest method.
+//	req, resp := client.CreateUserRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *Rekognition) CreateUserRequest(input *CreateUserInput) (req *request.Request, output *CreateUserOutput) {
+	op := &request.Operation{
+		Name:       opCreateUser,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateUserInput{}
+	}
+
+	output = &CreateUserOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreateUser API operation for Amazon Rekognition.
+//
+// Creates a new User within a collection specified by CollectionId. Takes UserId
+// as a parameter, which is a user provided ID which should be unique within
+// the collection. The provided UserId will alias the system generated UUID
+// to make the UserId more user friendly.
+//
+// Uses a ClientToken, an idempotency token that ensures a call to CreateUser
+// completes only once. If the value is not supplied, the AWS SDK generates
+// an idempotency token for the requests. This prevents retries after a network
+// error results from making multiple CreateUser calls.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation CreateUser for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
+//
+//   - ConflictException
+//     A User with the same Id already exists within the collection, or the update
+//     or deletion of the User caused an inconsistent state. **
+//
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
+//
+//   - ServiceQuotaExceededException
+//     The size of the collection exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
+//
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
+//
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
+//
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
+//
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
+func (c *Rekognition) CreateUser(input *CreateUserInput) (*CreateUserOutput, error) {
+	req, out := c.CreateUserRequest(input)
+	return out, req.Send()
+}
+
+// CreateUserWithContext is the same as CreateUser with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateUser for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) CreateUserWithContext(ctx aws.Context, input *CreateUserInput, opts ...request.Option) (*CreateUserOutput, error) {
+	req, out := c.CreateUserRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteCollection = "DeleteCollection"
 
 // DeleteCollectionRequest generates a "aws/request.Request" representing the
@@ -1055,14 +1301,13 @@ const opDeleteCollection = "DeleteCollection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCollectionRequest method.
+//	req, resp := client.DeleteCollectionRequest(params)
 //
-//    // Example sending a request using the DeleteCollectionRequest method.
-//    req, resp := client.DeleteCollectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DeleteCollectionRequest(input *DeleteCollectionInput) (req *request.Request, output *DeleteCollectionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteCollection,
@@ -1095,27 +1340,27 @@ func (c *Rekognition) DeleteCollectionRequest(input *DeleteCollectionInput) (req
 // API operation DeleteCollection for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 func (c *Rekognition) DeleteCollection(input *DeleteCollectionInput) (*DeleteCollectionOutput, error) {
 	req, out := c.DeleteCollectionRequest(input)
 	return out, req.Send()
@@ -1153,14 +1398,13 @@ const opDeleteDataset = "DeleteDataset"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDatasetRequest method.
+//	req, resp := client.DeleteDatasetRequest(params)
 //
-//    // Example sending a request using the DeleteDatasetRequest method.
-//    req, resp := client.DeleteDatasetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DeleteDatasetRequest(input *DeleteDatasetInput) (req *request.Request, output *DeleteDatasetOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDataset,
@@ -1179,6 +1423,8 @@ func (c *Rekognition) DeleteDatasetRequest(input *DeleteDatasetInput) (req *requ
 }
 
 // DeleteDataset API operation for Amazon Rekognition.
+//
+// This operation applies only to Amazon Rekognition Custom Labels.
 //
 // Deletes an existing Amazon Rekognition Custom Labels dataset. Deleting a
 // dataset might take while. Use DescribeDataset to check the current status.
@@ -1200,37 +1446,37 @@ func (c *Rekognition) DeleteDatasetRequest(input *DeleteDatasetInput) (req *requ
 // API operation DeleteDataset for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 func (c *Rekognition) DeleteDataset(input *DeleteDatasetInput) (*DeleteDatasetOutput, error) {
 	req, out := c.DeleteDatasetRequest(input)
 	return out, req.Send()
@@ -1268,14 +1514,13 @@ const opDeleteFaces = "DeleteFaces"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFacesRequest method.
+//	req, resp := client.DeleteFacesRequest(params)
 //
-//    // Example sending a request using the DeleteFacesRequest method.
-//    req, resp := client.DeleteFacesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DeleteFacesRequest(input *DeleteFacesInput) (req *request.Request, output *DeleteFacesOutput) {
 	op := &request.Operation{
 		Name:       opDeleteFaces,
@@ -1308,27 +1553,27 @@ func (c *Rekognition) DeleteFacesRequest(input *DeleteFacesInput) (req *request.
 // API operation DeleteFaces for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 func (c *Rekognition) DeleteFaces(input *DeleteFacesInput) (*DeleteFacesOutput, error) {
 	req, out := c.DeleteFacesRequest(input)
 	return out, req.Send()
@@ -1366,14 +1611,13 @@ const opDeleteProject = "DeleteProject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProjectRequest method.
+//	req, resp := client.DeleteProjectRequest(params)
 //
-//    // Example sending a request using the DeleteProjectRequest method.
-//    req, resp := client.DeleteProjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DeleteProjectRequest(input *DeleteProjectInput) (req *request.Request, output *DeleteProjectOutput) {
 	op := &request.Operation{
 		Name:       opDeleteProject,
@@ -1392,9 +1636,9 @@ func (c *Rekognition) DeleteProjectRequest(input *DeleteProjectInput) (req *requ
 
 // DeleteProject API operation for Amazon Rekognition.
 //
-// Deletes an Amazon Rekognition Custom Labels project. To delete a project
-// you must first delete all models associated with the project. To delete a
-// model, see DeleteProjectVersion.
+// Deletes a Amazon Rekognition project. To delete a project you must first
+// delete all models or adapters associated with the project. To delete a model
+// or adapter, see DeleteProjectVersion.
 //
 // DeleteProject is an asynchronous operation. To check if the project is deleted,
 // call DescribeProjects. The project is deleted when the project no longer
@@ -1412,30 +1656,30 @@ func (c *Rekognition) DeleteProjectRequest(input *DeleteProjectInput) (req *requ
 // API operation DeleteProject for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceInUseException
-//   The specified resource is already being used.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) DeleteProject(input *DeleteProjectInput) (*DeleteProjectOutput, error) {
 	req, out := c.DeleteProjectRequest(input)
 	return out, req.Send()
@@ -1473,14 +1717,13 @@ const opDeleteProjectPolicy = "DeleteProjectPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProjectPolicyRequest method.
+//	req, resp := client.DeleteProjectPolicyRequest(params)
 //
-//    // Example sending a request using the DeleteProjectPolicyRequest method.
-//    req, resp := client.DeleteProjectPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DeleteProjectPolicyRequest(input *DeleteProjectPolicyInput) (req *request.Request, output *DeleteProjectPolicyOutput) {
 	op := &request.Operation{
 		Name:       opDeleteProjectPolicy,
@@ -1500,6 +1743,8 @@ func (c *Rekognition) DeleteProjectPolicyRequest(input *DeleteProjectPolicyInput
 
 // DeleteProjectPolicy API operation for Amazon Rekognition.
 //
+// This operation applies only to Amazon Rekognition Custom Labels.
+//
 // Deletes an existing project policy.
 //
 // To get a list of project policies attached to a project, call ListProjectPolicies.
@@ -1516,30 +1761,30 @@ func (c *Rekognition) DeleteProjectPolicyRequest(input *DeleteProjectPolicyInput
 // API operation DeleteProjectPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidPolicyRevisionIdException
-//   The supplied revision id for the project policy is invalid.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - InvalidPolicyRevisionIdException
+//     The supplied revision id for the project policy is invalid.
 func (c *Rekognition) DeleteProjectPolicy(input *DeleteProjectPolicyInput) (*DeleteProjectPolicyOutput, error) {
 	req, out := c.DeleteProjectPolicyRequest(input)
 	return out, req.Send()
@@ -1577,14 +1822,13 @@ const opDeleteProjectVersion = "DeleteProjectVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProjectVersionRequest method.
+//	req, resp := client.DeleteProjectVersionRequest(params)
 //
-//    // Example sending a request using the DeleteProjectVersionRequest method.
-//    req, resp := client.DeleteProjectVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DeleteProjectVersionRequest(input *DeleteProjectVersionInput) (req *request.Request, output *DeleteProjectVersionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteProjectVersion,
@@ -1603,12 +1847,13 @@ func (c *Rekognition) DeleteProjectVersionRequest(input *DeleteProjectVersionInp
 
 // DeleteProjectVersion API operation for Amazon Rekognition.
 //
-// Deletes an Amazon Rekognition Custom Labels model.
+// Deletes a Rekognition project model or project version, like a Amazon Rekognition
+// Custom Labels model or a custom adapter.
 //
-// You can't delete a model if it is running or if it is training. To check
-// the status of a model, use the Status field returned from DescribeProjectVersions.
-// To stop a running model call StopProjectVersion. If the model is training,
-// wait until it finishes.
+// You can't delete a project version if it is running or if it is training.
+// To check the status of a project version, use the Status field returned from
+// DescribeProjectVersions. To stop a project version call StopProjectVersion.
+// If the project version is training, wait until it finishes.
 //
 // This operation requires permissions to perform the rekognition:DeleteProjectVersion
 // action.
@@ -1621,30 +1866,30 @@ func (c *Rekognition) DeleteProjectVersionRequest(input *DeleteProjectVersionInp
 // API operation DeleteProjectVersion for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) DeleteProjectVersion(input *DeleteProjectVersionInput) (*DeleteProjectVersionOutput, error) {
 	req, out := c.DeleteProjectVersionRequest(input)
 	return out, req.Send()
@@ -1682,14 +1927,13 @@ const opDeleteStreamProcessor = "DeleteStreamProcessor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteStreamProcessorRequest method.
+//	req, resp := client.DeleteStreamProcessorRequest(params)
 //
-//    // Example sending a request using the DeleteStreamProcessorRequest method.
-//    req, resp := client.DeleteStreamProcessorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DeleteStreamProcessorRequest(input *DeleteStreamProcessorInput) (req *request.Request, output *DeleteStreamProcessorOutput) {
 	op := &request.Operation{
 		Name:       opDeleteStreamProcessor,
@@ -1722,30 +1966,30 @@ func (c *Rekognition) DeleteStreamProcessorRequest(input *DeleteStreamProcessorI
 // API operation DeleteStreamProcessor for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) DeleteStreamProcessor(input *DeleteStreamProcessorInput) (*DeleteStreamProcessorOutput, error) {
 	req, out := c.DeleteStreamProcessorRequest(input)
 	return out, req.Send()
@@ -1767,6 +2011,113 @@ func (c *Rekognition) DeleteStreamProcessorWithContext(ctx aws.Context, input *D
 	return out, req.Send()
 }
 
+const opDeleteUser = "DeleteUser"
+
+// DeleteUserRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteUser operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteUser for more information on using the DeleteUser
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteUserRequest method.
+//	req, resp := client.DeleteUserRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *Rekognition) DeleteUserRequest(input *DeleteUserInput) (req *request.Request, output *DeleteUserOutput) {
+	op := &request.Operation{
+		Name:       opDeleteUser,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteUserInput{}
+	}
+
+	output = &DeleteUserOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteUser API operation for Amazon Rekognition.
+//
+// Deletes the specified UserID within the collection. Faces that are associated
+// with the UserID are disassociated from the UserID before deleting the specified
+// UserID. If the specified Collection or UserID is already deleted or not found,
+// a ResourceNotFoundException will be thrown. If the action is successful with
+// a 200 response, an empty HTTP body is returned.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation DeleteUser for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
+//
+//   - ConflictException
+//     A User with the same Id already exists within the collection, or the update
+//     or deletion of the User caused an inconsistent state. **
+//
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
+//
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
+//
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
+//
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
+//
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
+func (c *Rekognition) DeleteUser(input *DeleteUserInput) (*DeleteUserOutput, error) {
+	req, out := c.DeleteUserRequest(input)
+	return out, req.Send()
+}
+
+// DeleteUserWithContext is the same as DeleteUser with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteUser for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) DeleteUserWithContext(ctx aws.Context, input *DeleteUserInput, opts ...request.Option) (*DeleteUserOutput, error) {
+	req, out := c.DeleteUserRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeCollection = "DescribeCollection"
 
 // DescribeCollectionRequest generates a "aws/request.Request" representing the
@@ -1783,14 +2134,13 @@ const opDescribeCollection = "DescribeCollection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeCollectionRequest method.
+//	req, resp := client.DescribeCollectionRequest(params)
 //
-//    // Example sending a request using the DescribeCollectionRequest method.
-//    req, resp := client.DescribeCollectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DescribeCollectionRequest(input *DescribeCollectionInput) (req *request.Request, output *DescribeCollectionOutput) {
 	op := &request.Operation{
 		Name:       opDescribeCollection,
@@ -1824,27 +2174,27 @@ func (c *Rekognition) DescribeCollectionRequest(input *DescribeCollectionInput) 
 // API operation DescribeCollection for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 func (c *Rekognition) DescribeCollection(input *DescribeCollectionInput) (*DescribeCollectionOutput, error) {
 	req, out := c.DescribeCollectionRequest(input)
 	return out, req.Send()
@@ -1882,14 +2232,13 @@ const opDescribeDataset = "DescribeDataset"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeDatasetRequest method.
+//	req, resp := client.DescribeDatasetRequest(params)
 //
-//    // Example sending a request using the DescribeDatasetRequest method.
-//    req, resp := client.DescribeDatasetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DescribeDatasetRequest(input *DescribeDatasetInput) (req *request.Request, output *DescribeDatasetOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDataset,
@@ -1908,6 +2257,8 @@ func (c *Rekognition) DescribeDatasetRequest(input *DescribeDatasetInput) (req *
 
 // DescribeDataset API operation for Amazon Rekognition.
 //
+// This operation applies only to Amazon Rekognition Custom Labels.
+//
 // Describes an Amazon Rekognition Custom Labels dataset. You can get information
 // such as the current status of a dataset and statistics about the images and
 // labels in a dataset.
@@ -1923,27 +2274,27 @@ func (c *Rekognition) DescribeDatasetRequest(input *DescribeDatasetInput) (req *
 // API operation DescribeDataset for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 func (c *Rekognition) DescribeDataset(input *DescribeDatasetInput) (*DescribeDatasetOutput, error) {
 	req, out := c.DescribeDatasetRequest(input)
 	return out, req.Send()
@@ -1981,14 +2332,13 @@ const opDescribeProjectVersions = "DescribeProjectVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProjectVersionsRequest method.
+//	req, resp := client.DescribeProjectVersionsRequest(params)
 //
-//    // Example sending a request using the DescribeProjectVersionsRequest method.
-//    req, resp := client.DescribeProjectVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DescribeProjectVersionsRequest(input *DescribeProjectVersionsInput) (req *request.Request, output *DescribeProjectVersionsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeProjectVersions,
@@ -2013,9 +2363,9 @@ func (c *Rekognition) DescribeProjectVersionsRequest(input *DescribeProjectVersi
 
 // DescribeProjectVersions API operation for Amazon Rekognition.
 //
-// Lists and describes the versions of a model in an Amazon Rekognition Custom
-// Labels project. You can specify up to 10 model versions in ProjectVersionArns.
-// If you don't specify a value, descriptions for all model versions in the
+// Lists and describes the versions of an Amazon Rekognition project. You can
+// specify up to 10 model or adapter versions in ProjectVersionArns. If you
+// don't specify a value, descriptions for all model/adapter versions in the
 // project are returned.
 //
 // This operation requires permissions to perform the rekognition:DescribeProjectVersions
@@ -2029,30 +2379,30 @@ func (c *Rekognition) DescribeProjectVersionsRequest(input *DescribeProjectVersi
 // API operation DescribeProjectVersions for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) DescribeProjectVersions(input *DescribeProjectVersionsInput) (*DescribeProjectVersionsOutput, error) {
 	req, out := c.DescribeProjectVersionsRequest(input)
 	return out, req.Send()
@@ -2082,15 +2432,14 @@ func (c *Rekognition) DescribeProjectVersionsWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeProjectVersions operation.
-//    pageNum := 0
-//    err := client.DescribeProjectVersionsPages(params,
-//        func(page *rekognition.DescribeProjectVersionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeProjectVersions operation.
+//	pageNum := 0
+//	err := client.DescribeProjectVersionsPages(params,
+//	    func(page *rekognition.DescribeProjectVersionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) DescribeProjectVersionsPages(input *DescribeProjectVersionsInput, fn func(*DescribeProjectVersionsOutput, bool) bool) error {
 	return c.DescribeProjectVersionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2142,14 +2491,13 @@ const opDescribeProjects = "DescribeProjects"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProjectsRequest method.
+//	req, resp := client.DescribeProjectsRequest(params)
 //
-//    // Example sending a request using the DescribeProjectsRequest method.
-//    req, resp := client.DescribeProjectsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DescribeProjectsRequest(input *DescribeProjectsInput) (req *request.Request, output *DescribeProjectsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeProjects,
@@ -2174,7 +2522,7 @@ func (c *Rekognition) DescribeProjectsRequest(input *DescribeProjectsInput) (req
 
 // DescribeProjects API operation for Amazon Rekognition.
 //
-// Gets information about your Amazon Rekognition Custom Labels projects.
+// Gets information about your Rekognition projects.
 //
 // This operation requires permissions to perform the rekognition:DescribeProjects
 // action.
@@ -2187,27 +2535,27 @@ func (c *Rekognition) DescribeProjectsRequest(input *DescribeProjectsInput) (req
 // API operation DescribeProjects for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) DescribeProjects(input *DescribeProjectsInput) (*DescribeProjectsOutput, error) {
 	req, out := c.DescribeProjectsRequest(input)
 	return out, req.Send()
@@ -2237,15 +2585,14 @@ func (c *Rekognition) DescribeProjectsWithContext(ctx aws.Context, input *Descri
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeProjects operation.
-//    pageNum := 0
-//    err := client.DescribeProjectsPages(params,
-//        func(page *rekognition.DescribeProjectsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeProjects operation.
+//	pageNum := 0
+//	err := client.DescribeProjectsPages(params,
+//	    func(page *rekognition.DescribeProjectsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) DescribeProjectsPages(input *DescribeProjectsInput, fn func(*DescribeProjectsOutput, bool) bool) error {
 	return c.DescribeProjectsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2297,14 +2644,13 @@ const opDescribeStreamProcessor = "DescribeStreamProcessor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeStreamProcessorRequest method.
+//	req, resp := client.DescribeStreamProcessorRequest(params)
 //
-//    // Example sending a request using the DescribeStreamProcessorRequest method.
-//    req, resp := client.DescribeStreamProcessorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DescribeStreamProcessorRequest(input *DescribeStreamProcessorInput) (req *request.Request, output *DescribeStreamProcessorOutput) {
 	op := &request.Operation{
 		Name:       opDescribeStreamProcessor,
@@ -2336,27 +2682,27 @@ func (c *Rekognition) DescribeStreamProcessorRequest(input *DescribeStreamProces
 // API operation DescribeStreamProcessor for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) DescribeStreamProcessor(input *DescribeStreamProcessorInput) (*DescribeStreamProcessorOutput, error) {
 	req, out := c.DescribeStreamProcessorRequest(input)
 	return out, req.Send()
@@ -2394,14 +2740,13 @@ const opDetectCustomLabels = "DetectCustomLabels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DetectCustomLabelsRequest method.
+//	req, resp := client.DetectCustomLabelsRequest(params)
 //
-//    // Example sending a request using the DetectCustomLabelsRequest method.
-//    req, resp := client.DetectCustomLabelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DetectCustomLabelsRequest(input *DetectCustomLabelsInput) (req *request.Request, output *DetectCustomLabelsOutput) {
 	op := &request.Operation{
 		Name:       opDetectCustomLabels,
@@ -2420,6 +2765,8 @@ func (c *Rekognition) DetectCustomLabelsRequest(input *DetectCustomLabelsInput) 
 
 // DetectCustomLabels API operation for Amazon Rekognition.
 //
+// This operation applies only to Amazon Rekognition Custom Labels.
+//
 // Detects custom labels in a supplied image by using an Amazon Rekognition
 // Custom Labels model.
 //
@@ -2435,7 +2782,8 @@ func (c *Rekognition) DetectCustomLabelsRequest(input *DetectCustomLabelsInput) 
 // a (CustomLabel) object in an array (CustomLabels). Each CustomLabel object
 // provides the label name (Name), the level of confidence that the image contains
 // the object (Confidence), and object location information, if it exists, for
-// the label on the image (Geometry).
+// the label on the image (Geometry). Note that for the DetectCustomLabelsLabels
+// operation, Polygons are not returned in the Geometry section of the response.
 //
 // To filter labels that are returned, specify a value for MinConfidence. DetectCustomLabelsLabels
 // only returns labels with a confidence that's higher than the specified value.
@@ -2469,50 +2817,50 @@ func (c *Rekognition) DetectCustomLabelsRequest(input *DetectCustomLabelsInput) 
 // API operation DetectCustomLabels for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
 //
-//   * ResourceNotReadyException
-//   The requested resource isn't ready. For example, this exception occurs when
-//   you call DetectCustomLabels with a model version that isn't deployed.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//   - ResourceNotReadyException
+//     The requested resource isn't ready. For example, this exception occurs when
+//     you call DetectCustomLabels with a model version that isn't deployed.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * ImageTooLargeException
-//   The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
-//   the image size or resolution exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ImageTooLargeException
+//     The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+//     the image size or resolution exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidImageFormatException
-//   The provided image format is not supported.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
 func (c *Rekognition) DetectCustomLabels(input *DetectCustomLabelsInput) (*DetectCustomLabelsOutput, error) {
 	req, out := c.DetectCustomLabelsRequest(input)
 	return out, req.Send()
@@ -2550,14 +2898,13 @@ const opDetectFaces = "DetectFaces"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DetectFacesRequest method.
+//	req, resp := client.DetectFacesRequest(params)
 //
-//    // Example sending a request using the DetectFacesRequest method.
-//    req, resp := client.DetectFacesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DetectFacesRequest(input *DetectFacesInput) (req *request.Request, output *DetectFacesOutput) {
 	op := &request.Operation{
 		Name:       opDetectFaces,
@@ -2607,36 +2954,36 @@ func (c *Rekognition) DetectFacesRequest(input *DetectFacesInput) (req *request.
 // API operation DetectFaces for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * ImageTooLargeException
-//   The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
-//   the image size or resolution exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - ImageTooLargeException
+//     The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+//     the image size or resolution exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidImageFormatException
-//   The provided image format is not supported.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
 func (c *Rekognition) DetectFaces(input *DetectFacesInput) (*DetectFacesOutput, error) {
 	req, out := c.DetectFacesRequest(input)
 	return out, req.Send()
@@ -2674,14 +3021,13 @@ const opDetectLabels = "DetectLabels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DetectLabelsRequest method.
+//	req, resp := client.DetectLabelsRequest(params)
 //
-//    // Example sending a request using the DetectLabelsRequest method.
-//    req, resp := client.DetectLabelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DetectLabelsRequest(input *DetectLabelsInput) (req *request.Request, output *DetectLabelsOutput) {
 	op := &request.Operation{
 		Name:       opDetectLabels,
@@ -2713,7 +3059,7 @@ func (c *Rekognition) DetectLabelsRequest(input *DetectLabelsInput) (req *reques
 // Rekognition operations, passing image bytes is not supported. The image must
 // be either a PNG or JPEG formatted file.
 //
-// Optional Parameters
+// # Optional Parameters
 //
 // You can specify one or both of the GENERAL_LABELS and IMAGE_PROPERTIES feature
 // types when calling the DetectLabels API. Including GENERAL_LABELS will ensure
@@ -2727,53 +3073,54 @@ func (c *Rekognition) DetectLabelsRequest(input *DetectLabelsInput) (req *reques
 // filters, or a combination of inclusive and exclusive filters. For more information
 // on filtering see Detecting Labels in an Image (https://docs.aws.amazon.com/rekognition/latest/dg/labels-detect-labels-image.html).
 //
-// You can specify MinConfidence to control the confidence threshold for the
-// labels returned. The default is 55%. You can also add the MaxLabels parameter
-// to limit the number of labels returned. The default and upper limit is 1000
-// labels.
+// When getting labels, you can specify MinConfidence to control the confidence
+// threshold for the labels returned. The default is 55%. You can also add the
+// MaxLabels parameter to limit the number of labels returned. The default and
+// upper limit is 1000 labels. These arguments are only valid when supplying
+// GENERAL_LABELS as a feature type.
 //
-// Response Elements
+// # Response Elements
 //
 // For each object, scene, and concept the API returns one or more labels. The
 // API returns the following types of information about labels:
 //
-//    * Name - The name of the detected label.
+//   - Name - The name of the detected label.
 //
-//    * Confidence - The level of confidence in the label assigned to a detected
-//    object.
+//   - Confidence - The level of confidence in the label assigned to a detected
+//     object.
 //
-//    * Parents - The ancestor labels for a detected label. DetectLabels returns
-//    a hierarchical taxonomy of detected labels. For example, a detected car
-//    might be assigned the label car. The label car has two parent labels:
-//    Vehicle (its parent) and Transportation (its grandparent). The response
-//    includes the all ancestors for a label, where every ancestor is a unique
-//    label. In the previous example, Car, Vehicle, and Transportation are returned
-//    as unique labels in the response.
+//   - Parents - The ancestor labels for a detected label. DetectLabels returns
+//     a hierarchical taxonomy of detected labels. For example, a detected car
+//     might be assigned the label car. The label car has two parent labels:
+//     Vehicle (its parent) and Transportation (its grandparent). The response
+//     includes the all ancestors for a label, where every ancestor is a unique
+//     label. In the previous example, Car, Vehicle, and Transportation are returned
+//     as unique labels in the response.
 //
-//    * Aliases - Possible Aliases for the label.
+//   - Aliases - Possible Aliases for the label.
 //
-//    * Categories - The label categories that the detected label belongs to.
+//   - Categories - The label categories that the detected label belongs to.
 //
-//    * BoundingBox — Bounding boxes are described for all instances of detected
-//    common object labels, returned in an array of Instance objects. An Instance
-//    object contains a BoundingBox object, describing the location of the label
-//    on the input image. It also includes the confidence for the accuracy of
-//    the detected bounding box.
+//   - BoundingBox — Bounding boxes are described for all instances of detected
+//     common object labels, returned in an array of Instance objects. An Instance
+//     object contains a BoundingBox object, describing the location of the label
+//     on the input image. It also includes the confidence for the accuracy of
+//     the detected bounding box.
 //
 // The API returns the following information regarding the image, as part of
 // the ImageProperties structure:
 //
-//    * Quality - Information about the Sharpness, Brightness, and Contrast
-//    of the input image, scored between 0 to 100. Image quality is returned
-//    for the entire image, as well as the background and the foreground.
+//   - Quality - Information about the Sharpness, Brightness, and Contrast
+//     of the input image, scored between 0 to 100. Image quality is returned
+//     for the entire image, as well as the background and the foreground.
 //
-//    * Dominant Color - An array of the dominant colors in the image.
+//   - Dominant Color - An array of the dominant colors in the image.
 //
-//    * Foreground - Information about the sharpness, brightness, and dominant
-//    colors of the input image’s foreground.
+//   - Foreground - Information about the sharpness, brightness, and dominant
+//     colors of the input image’s foreground.
 //
-//    * Background - Information about the sharpness, brightness, and dominant
-//    colors of the input image’s background.
+//   - Background - Information about the sharpness, brightness, and dominant
+//     colors of the input image’s background.
 //
 // The list of returned labels will include at least one label for every detected
 // object, along with information about that label. In the following example,
@@ -2816,36 +3163,36 @@ func (c *Rekognition) DetectLabelsRequest(input *DetectLabelsInput) (req *reques
 // API operation DetectLabels for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * ImageTooLargeException
-//   The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
-//   the image size or resolution exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - ImageTooLargeException
+//     The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+//     the image size or resolution exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidImageFormatException
-//   The provided image format is not supported.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
 func (c *Rekognition) DetectLabels(input *DetectLabelsInput) (*DetectLabelsOutput, error) {
 	req, out := c.DetectLabelsRequest(input)
 	return out, req.Send()
@@ -2883,14 +3230,13 @@ const opDetectModerationLabels = "DetectModerationLabels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DetectModerationLabelsRequest method.
+//	req, resp := client.DetectModerationLabelsRequest(params)
 //
-//    // Example sending a request using the DetectModerationLabelsRequest method.
-//    req, resp := client.DetectModerationLabelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DetectModerationLabelsRequest(input *DetectModerationLabelsInput) (req *request.Request, output *DetectModerationLabelsOutput) {
 	op := &request.Operation{
 		Name:       opDetectModerationLabels,
@@ -2925,6 +3271,9 @@ func (c *Rekognition) DetectModerationLabelsRequest(input *DetectModerationLabel
 // Rekognition operations, passing image bytes is not supported. The image must
 // be either a PNG or JPEG formatted file.
 //
+// You can specify an adapter to use when retrieving label predictions by providing
+// a ProjectVersionArn to the ProjectVersion argument.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -2933,40 +3282,47 @@ func (c *Rekognition) DetectModerationLabelsRequest(input *DetectModerationLabel
 // API operation DetectModerationLabels for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * ImageTooLargeException
-//   The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
-//   the image size or resolution exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - ImageTooLargeException
+//     The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+//     the image size or resolution exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidImageFormatException
-//   The provided image format is not supported.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * HumanLoopQuotaExceededException
-//   The number of in-progress human reviews you have has exceeded the number
-//   allowed.
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
 //
+//   - HumanLoopQuotaExceededException
+//     The number of in-progress human reviews you have has exceeded the number
+//     allowed.
+//
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
+//
+//   - ResourceNotReadyException
+//     The requested resource isn't ready. For example, this exception occurs when
+//     you call DetectCustomLabels with a model version that isn't deployed.
 func (c *Rekognition) DetectModerationLabels(input *DetectModerationLabelsInput) (*DetectModerationLabelsOutput, error) {
 	req, out := c.DetectModerationLabelsRequest(input)
 	return out, req.Send()
@@ -3004,14 +3360,13 @@ const opDetectProtectiveEquipment = "DetectProtectiveEquipment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DetectProtectiveEquipmentRequest method.
+//	req, resp := client.DetectProtectiveEquipmentRequest(params)
 //
-//    // Example sending a request using the DetectProtectiveEquipmentRequest method.
-//    req, resp := client.DetectProtectiveEquipmentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DetectProtectiveEquipmentRequest(input *DetectProtectiveEquipmentInput) (req *request.Request, output *DetectProtectiveEquipmentOutput) {
 	op := &request.Operation{
 		Name:       opDetectProtectiveEquipment,
@@ -3033,11 +3388,11 @@ func (c *Rekognition) DetectProtectiveEquipmentRequest(input *DetectProtectiveEq
 // Detects Personal Protective Equipment (PPE) worn by people detected in an
 // image. Amazon Rekognition can detect the following types of PPE.
 //
-//    * Face cover
+//   - Face cover
 //
-//    * Hand cover
+//   - Hand cover
 //
-//    * Head cover
+//   - Head cover
 //
 // You pass the input image as base64-encoded image bytes or as a reference
 // to an image in an Amazon S3 bucket. The image must be either a PNG or JPG
@@ -3056,11 +3411,11 @@ func (c *Rekognition) DetectProtectiveEquipmentRequest(input *DetectProtectiveEq
 // You can optionally request a summary of detected PPE items with the SummarizationAttributes
 // input parameter. The summary provides the following information.
 //
-//    * The persons detected as wearing all of the types of PPE that you specify.
+//   - The persons detected as wearing all of the types of PPE that you specify.
 //
-//    * The persons detected as not wearing all of the types PPE that you specify.
+//   - The persons detected as not wearing all of the types PPE that you specify.
 //
-//    * The persons detected where PPE adornment could not be determined.
+//   - The persons detected where PPE adornment could not be determined.
 //
 // This is a stateless API operation. That is, the operation does not persist
 // any data.
@@ -3076,36 +3431,36 @@ func (c *Rekognition) DetectProtectiveEquipmentRequest(input *DetectProtectiveEq
 // API operation DetectProtectiveEquipment for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * ImageTooLargeException
-//   The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
-//   the image size or resolution exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - ImageTooLargeException
+//     The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+//     the image size or resolution exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidImageFormatException
-//   The provided image format is not supported.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
 func (c *Rekognition) DetectProtectiveEquipment(input *DetectProtectiveEquipmentInput) (*DetectProtectiveEquipmentOutput, error) {
 	req, out := c.DetectProtectiveEquipmentRequest(input)
 	return out, req.Send()
@@ -3143,14 +3498,13 @@ const opDetectText = "DetectText"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DetectTextRequest method.
+//	req, resp := client.DetectTextRequest(params)
 //
-//    // Example sending a request using the DetectTextRequest method.
-//    req, resp := client.DetectTextRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DetectTextRequest(input *DetectTextInput) (req *request.Request, output *DetectTextOutput) {
 	op := &request.Operation{
 		Name:       opDetectText,
@@ -3210,36 +3564,36 @@ func (c *Rekognition) DetectTextRequest(input *DetectTextInput) (req *request.Re
 // API operation DetectText for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * ImageTooLargeException
-//   The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
-//   the image size or resolution exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - ImageTooLargeException
+//     The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+//     the image size or resolution exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidImageFormatException
-//   The provided image format is not supported.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
 func (c *Rekognition) DetectText(input *DetectTextInput) (*DetectTextOutput, error) {
 	req, out := c.DetectTextRequest(input)
 	return out, req.Send()
@@ -3261,6 +3615,115 @@ func (c *Rekognition) DetectTextWithContext(ctx aws.Context, input *DetectTextIn
 	return out, req.Send()
 }
 
+const opDisassociateFaces = "DisassociateFaces"
+
+// DisassociateFacesRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateFaces operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateFaces for more information on using the DisassociateFaces
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DisassociateFacesRequest method.
+//	req, resp := client.DisassociateFacesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *Rekognition) DisassociateFacesRequest(input *DisassociateFacesInput) (req *request.Request, output *DisassociateFacesOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateFaces,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisassociateFacesInput{}
+	}
+
+	output = &DisassociateFacesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DisassociateFaces API operation for Amazon Rekognition.
+//
+// Removes the association between a Face supplied in an array of FaceIds and
+// the User. If the User is not present already, then a ResourceNotFound exception
+// is thrown. If successful, an array of faces that are disassociated from the
+// User is returned. If a given face is already disassociated from the given
+// UserID, it will be ignored and not be returned in the response. If a given
+// face is already associated with a different User or not found in the collection
+// it will be returned as part of UnsuccessfulDisassociations. You can remove
+// 1 - 100 face IDs from a user at one time.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation DisassociateFaces for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
+//
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
+//
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
+//
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
+//
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
+//
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
+//
+//   - ConflictException
+//     A User with the same Id already exists within the collection, or the update
+//     or deletion of the User caused an inconsistent state. **
+func (c *Rekognition) DisassociateFaces(input *DisassociateFacesInput) (*DisassociateFacesOutput, error) {
+	req, out := c.DisassociateFacesRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateFacesWithContext is the same as DisassociateFaces with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateFaces for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) DisassociateFacesWithContext(ctx aws.Context, input *DisassociateFacesInput, opts ...request.Option) (*DisassociateFacesOutput, error) {
+	req, out := c.DisassociateFacesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDistributeDatasetEntries = "DistributeDatasetEntries"
 
 // DistributeDatasetEntriesRequest generates a "aws/request.Request" representing the
@@ -3277,14 +3740,13 @@ const opDistributeDatasetEntries = "DistributeDatasetEntries"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DistributeDatasetEntriesRequest method.
+//	req, resp := client.DistributeDatasetEntriesRequest(params)
 //
-//    // Example sending a request using the DistributeDatasetEntriesRequest method.
-//    req, resp := client.DistributeDatasetEntriesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) DistributeDatasetEntriesRequest(input *DistributeDatasetEntriesInput) (req *request.Request, output *DistributeDatasetEntriesOutput) {
 	op := &request.Operation{
 		Name:       opDistributeDatasetEntries,
@@ -3303,6 +3765,8 @@ func (c *Rekognition) DistributeDatasetEntriesRequest(input *DistributeDatasetEn
 }
 
 // DistributeDatasetEntries API operation for Amazon Rekognition.
+//
+// This operation applies only to Amazon Rekognition Custom Labels.
 //
 // Distributes the entries (images) in a training dataset across the training
 // dataset and the test dataset for a project. DistributeDatasetEntries moves
@@ -3330,31 +3794,31 @@ func (c *Rekognition) DistributeDatasetEntriesRequest(input *DistributeDatasetEn
 // API operation DistributeDatasetEntries for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotReadyException
-//   The requested resource isn't ready. For example, this exception occurs when
-//   you call DetectCustomLabels with a model version that isn't deployed.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - ResourceNotReadyException
+//     The requested resource isn't ready. For example, this exception occurs when
+//     you call DetectCustomLabels with a model version that isn't deployed.
 func (c *Rekognition) DistributeDatasetEntries(input *DistributeDatasetEntriesInput) (*DistributeDatasetEntriesOutput, error) {
 	req, out := c.DistributeDatasetEntriesRequest(input)
 	return out, req.Send()
@@ -3392,14 +3856,13 @@ const opGetCelebrityInfo = "GetCelebrityInfo"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetCelebrityInfoRequest method.
+//	req, resp := client.GetCelebrityInfoRequest(params)
 //
-//    // Example sending a request using the GetCelebrityInfoRequest method.
-//    req, resp := client.GetCelebrityInfoRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) GetCelebrityInfoRequest(input *GetCelebrityInfoInput) (req *request.Request, output *GetCelebrityInfoOutput) {
 	op := &request.Operation{
 		Name:       opGetCelebrityInfo,
@@ -3437,27 +3900,27 @@ func (c *Rekognition) GetCelebrityInfoRequest(input *GetCelebrityInfoInput) (req
 // API operation GetCelebrityInfo for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 func (c *Rekognition) GetCelebrityInfo(input *GetCelebrityInfoInput) (*GetCelebrityInfoOutput, error) {
 	req, out := c.GetCelebrityInfoRequest(input)
 	return out, req.Send()
@@ -3495,14 +3958,13 @@ const opGetCelebrityRecognition = "GetCelebrityRecognition"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetCelebrityRecognitionRequest method.
+//	req, resp := client.GetCelebrityRecognitionRequest(params)
 //
-//    // Example sending a request using the GetCelebrityRecognitionRequest method.
-//    req, resp := client.GetCelebrityRecognitionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) GetCelebrityRecognitionRequest(input *GetCelebrityRecognitionInput) (req *request.Request, output *GetCelebrityRecognitionOutput) {
 	op := &request.Operation{
 		Name:       opGetCelebrityRecognition,
@@ -3583,30 +4045,30 @@ func (c *Rekognition) GetCelebrityRecognitionRequest(input *GetCelebrityRecognit
 // API operation GetCelebrityRecognition for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) GetCelebrityRecognition(input *GetCelebrityRecognitionInput) (*GetCelebrityRecognitionOutput, error) {
 	req, out := c.GetCelebrityRecognitionRequest(input)
 	return out, req.Send()
@@ -3636,15 +4098,14 @@ func (c *Rekognition) GetCelebrityRecognitionWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetCelebrityRecognition operation.
-//    pageNum := 0
-//    err := client.GetCelebrityRecognitionPages(params,
-//        func(page *rekognition.GetCelebrityRecognitionOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetCelebrityRecognition operation.
+//	pageNum := 0
+//	err := client.GetCelebrityRecognitionPages(params,
+//	    func(page *rekognition.GetCelebrityRecognitionOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) GetCelebrityRecognitionPages(input *GetCelebrityRecognitionInput, fn func(*GetCelebrityRecognitionOutput, bool) bool) error {
 	return c.GetCelebrityRecognitionPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3696,14 +4157,13 @@ const opGetContentModeration = "GetContentModeration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetContentModerationRequest method.
+//	req, resp := client.GetContentModerationRequest(params)
 //
-//    // Example sending a request using the GetContentModerationRequest method.
-//    req, resp := client.GetContentModerationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) GetContentModerationRequest(input *GetContentModerationInput) (req *request.Request, output *GetContentModerationOutput) {
 	op := &request.Operation{
 		Name:       opGetContentModeration,
@@ -3772,30 +4232,30 @@ func (c *Rekognition) GetContentModerationRequest(input *GetContentModerationInp
 // API operation GetContentModeration for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) GetContentModeration(input *GetContentModerationInput) (*GetContentModerationOutput, error) {
 	req, out := c.GetContentModerationRequest(input)
 	return out, req.Send()
@@ -3825,15 +4285,14 @@ func (c *Rekognition) GetContentModerationWithContext(ctx aws.Context, input *Ge
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetContentModeration operation.
-//    pageNum := 0
-//    err := client.GetContentModerationPages(params,
-//        func(page *rekognition.GetContentModerationOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetContentModeration operation.
+//	pageNum := 0
+//	err := client.GetContentModerationPages(params,
+//	    func(page *rekognition.GetContentModerationOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) GetContentModerationPages(input *GetContentModerationInput, fn func(*GetContentModerationOutput, bool) bool) error {
 	return c.GetContentModerationPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3885,14 +4344,13 @@ const opGetFaceDetection = "GetFaceDetection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFaceDetectionRequest method.
+//	req, resp := client.GetFaceDetectionRequest(params)
 //
-//    // Example sending a request using the GetFaceDetectionRequest method.
-//    req, resp := client.GetFaceDetectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) GetFaceDetectionRequest(input *GetFaceDetectionInput) (req *request.Request, output *GetFaceDetectionOutput) {
 	op := &request.Operation{
 		Name:       opGetFaceDetection,
@@ -3939,6 +4397,9 @@ func (c *Rekognition) GetFaceDetectionRequest(input *GetFaceDetectionInput) (req
 // the NextToken request parameter with the token value returned from the previous
 // call to GetFaceDetection.
 //
+// Note that for the GetFaceDetection operation, the returned values for FaceOccluded
+// and EyeDirection will always be "null".
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -3947,30 +4408,30 @@ func (c *Rekognition) GetFaceDetectionRequest(input *GetFaceDetectionInput) (req
 // API operation GetFaceDetection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) GetFaceDetection(input *GetFaceDetectionInput) (*GetFaceDetectionOutput, error) {
 	req, out := c.GetFaceDetectionRequest(input)
 	return out, req.Send()
@@ -4000,15 +4461,14 @@ func (c *Rekognition) GetFaceDetectionWithContext(ctx aws.Context, input *GetFac
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetFaceDetection operation.
-//    pageNum := 0
-//    err := client.GetFaceDetectionPages(params,
-//        func(page *rekognition.GetFaceDetectionOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetFaceDetection operation.
+//	pageNum := 0
+//	err := client.GetFaceDetectionPages(params,
+//	    func(page *rekognition.GetFaceDetectionOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) GetFaceDetectionPages(input *GetFaceDetectionInput, fn func(*GetFaceDetectionOutput, bool) bool) error {
 	return c.GetFaceDetectionPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4060,14 +4520,13 @@ const opGetFaceLivenessSessionResults = "GetFaceLivenessSessionResults"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFaceLivenessSessionResultsRequest method.
+//	req, resp := client.GetFaceLivenessSessionResultsRequest(params)
 //
-//    // Example sending a request using the GetFaceLivenessSessionResultsRequest method.
-//    req, resp := client.GetFaceLivenessSessionResultsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) GetFaceLivenessSessionResultsRequest(input *GetFaceLivenessSessionResultsInput) (req *request.Request, output *GetFaceLivenessSessionResultsOutput) {
 	op := &request.Operation{
 		Name:       opGetFaceLivenessSessionResults,
@@ -4090,8 +4549,11 @@ func (c *Rekognition) GetFaceLivenessSessionResultsRequest(input *GetFaceLivenes
 // sessionId as input, which was created using CreateFaceLivenessSession. Returns
 // the corresponding Face Liveness confidence score, a reference image that
 // includes a face bounding box, and audit images that also contain face bounding
-// boxes. The Face Liveness confidence score ranges from 0 to 100. The reference
-// image can optionally be returned.
+// boxes. The Face Liveness confidence score ranges from 0 to 100.
+//
+// The number of audit images returned by GetFaceLivenessSessionResults is defined
+// by the AuditImagesLimit paramater when calling CreateFaceLivenessSession.
+// Reference images are always returned when possible.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4101,27 +4563,27 @@ func (c *Rekognition) GetFaceLivenessSessionResultsRequest(input *GetFaceLivenes
 // API operation GetFaceLivenessSessionResults for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * SessionNotFoundException
-//   Occurs when a given sessionId is not found.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - SessionNotFoundException
+//     Occurs when a given sessionId is not found.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) GetFaceLivenessSessionResults(input *GetFaceLivenessSessionResultsInput) (*GetFaceLivenessSessionResultsOutput, error) {
 	req, out := c.GetFaceLivenessSessionResultsRequest(input)
 	return out, req.Send()
@@ -4159,14 +4621,13 @@ const opGetFaceSearch = "GetFaceSearch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFaceSearchRequest method.
+//	req, resp := client.GetFaceSearchRequest(params)
 //
-//    // Example sending a request using the GetFaceSearchRequest method.
-//    req, resp := client.GetFaceSearchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) GetFaceSearchRequest(input *GetFaceSearchInput) (req *request.Request, output *GetFaceSearchOutput) {
 	op := &request.Operation{
 		Name:       opGetFaceSearch,
@@ -4231,30 +4692,30 @@ func (c *Rekognition) GetFaceSearchRequest(input *GetFaceSearchInput) (req *requ
 // API operation GetFaceSearch for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) GetFaceSearch(input *GetFaceSearchInput) (*GetFaceSearchOutput, error) {
 	req, out := c.GetFaceSearchRequest(input)
 	return out, req.Send()
@@ -4284,15 +4745,14 @@ func (c *Rekognition) GetFaceSearchWithContext(ctx aws.Context, input *GetFaceSe
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetFaceSearch operation.
-//    pageNum := 0
-//    err := client.GetFaceSearchPages(params,
-//        func(page *rekognition.GetFaceSearchOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetFaceSearch operation.
+//	pageNum := 0
+//	err := client.GetFaceSearchPages(params,
+//	    func(page *rekognition.GetFaceSearchOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) GetFaceSearchPages(input *GetFaceSearchInput, fn func(*GetFaceSearchOutput, bool) bool) error {
 	return c.GetFaceSearchPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4344,14 +4804,13 @@ const opGetLabelDetection = "GetLabelDetection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLabelDetectionRequest method.
+//	req, resp := client.GetLabelDetectionRequest(params)
 //
-//    // Example sending a request using the GetLabelDetectionRequest method.
-//    req, resp := client.GetLabelDetectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) GetLabelDetectionRequest(input *GetLabelDetectionInput) (req *request.Request, output *GetLabelDetectionOutput) {
 	op := &request.Operation{
 		Name:       opGetLabelDetection,
@@ -4401,34 +4860,34 @@ func (c *Rekognition) GetLabelDetectionRequest(input *GetLabelDetectionInput) (r
 //
 // The returned Labels array may include the following attributes:
 //
-//    * Name - The name of the detected label.
+//   - Name - The name of the detected label.
 //
-//    * Confidence - The level of confidence in the label assigned to a detected
-//    object.
+//   - Confidence - The level of confidence in the label assigned to a detected
+//     object.
 //
-//    * Parents - The ancestor labels for a detected label. GetLabelDetection
-//    returns a hierarchical taxonomy of detected labels. For example, a detected
-//    car might be assigned the label car. The label car has two parent labels:
-//    Vehicle (its parent) and Transportation (its grandparent). The response
-//    includes the all ancestors for a label, where every ancestor is a unique
-//    label. In the previous example, Car, Vehicle, and Transportation are returned
-//    as unique labels in the response.
+//   - Parents - The ancestor labels for a detected label. GetLabelDetection
+//     returns a hierarchical taxonomy of detected labels. For example, a detected
+//     car might be assigned the label car. The label car has two parent labels:
+//     Vehicle (its parent) and Transportation (its grandparent). The response
+//     includes the all ancestors for a label, where every ancestor is a unique
+//     label. In the previous example, Car, Vehicle, and Transportation are returned
+//     as unique labels in the response.
 //
-//    * Aliases - Possible Aliases for the label.
+//   - Aliases - Possible Aliases for the label.
 //
-//    * Categories - The label categories that the detected label belongs to.
+//   - Categories - The label categories that the detected label belongs to.
 //
-//    * BoundingBox — Bounding boxes are described for all instances of detected
-//    common object labels, returned in an array of Instance objects. An Instance
-//    object contains a BoundingBox object, describing the location of the label
-//    on the input image. It also includes the confidence for the accuracy of
-//    the detected bounding box.
+//   - BoundingBox — Bounding boxes are described for all instances of detected
+//     common object labels, returned in an array of Instance objects. An Instance
+//     object contains a BoundingBox object, describing the location of the label
+//     on the input image. It also includes the confidence for the accuracy of
+//     the detected bounding box.
 //
-//    * Timestamp - Time, in milliseconds from the start of the video, that
-//    the label was detected. For aggregation by SEGMENTS, the StartTimestampMillis,
-//    EndTimestampMillis, and DurationMillis structures are what define a segment.
-//    Although the “Timestamp” structure is still returned with each label,
-//    its value is set to be the same as StartTimestampMillis.
+//   - Timestamp - Time, in milliseconds from the start of the video, that
+//     the label was detected. For aggregation by SEGMENTS, the StartTimestampMillis,
+//     EndTimestampMillis, and DurationMillis structures are what define a segment.
+//     Although the “Timestamp” structure is still returned with each label,
+//     its value is set to be the same as StartTimestampMillis.
 //
 // Timestamp and Bounding box information are returned for detected Instances,
 // only if aggregation is done by TIMESTAMPS. If aggregating by SEGMENTS, information
@@ -4454,30 +4913,30 @@ func (c *Rekognition) GetLabelDetectionRequest(input *GetLabelDetectionInput) (r
 // API operation GetLabelDetection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) GetLabelDetection(input *GetLabelDetectionInput) (*GetLabelDetectionOutput, error) {
 	req, out := c.GetLabelDetectionRequest(input)
 	return out, req.Send()
@@ -4507,15 +4966,14 @@ func (c *Rekognition) GetLabelDetectionWithContext(ctx aws.Context, input *GetLa
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetLabelDetection operation.
-//    pageNum := 0
-//    err := client.GetLabelDetectionPages(params,
-//        func(page *rekognition.GetLabelDetectionOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetLabelDetection operation.
+//	pageNum := 0
+//	err := client.GetLabelDetectionPages(params,
+//	    func(page *rekognition.GetLabelDetectionOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) GetLabelDetectionPages(input *GetLabelDetectionInput, fn func(*GetLabelDetectionOutput, bool) bool) error {
 	return c.GetLabelDetectionPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4551,6 +5009,100 @@ func (c *Rekognition) GetLabelDetectionPagesWithContext(ctx aws.Context, input *
 	return p.Err()
 }
 
+const opGetMediaAnalysisJob = "GetMediaAnalysisJob"
+
+// GetMediaAnalysisJobRequest generates a "aws/request.Request" representing the
+// client's request for the GetMediaAnalysisJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetMediaAnalysisJob for more information on using the GetMediaAnalysisJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetMediaAnalysisJobRequest method.
+//	req, resp := client.GetMediaAnalysisJobRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *Rekognition) GetMediaAnalysisJobRequest(input *GetMediaAnalysisJobInput) (req *request.Request, output *GetMediaAnalysisJobOutput) {
+	op := &request.Operation{
+		Name:       opGetMediaAnalysisJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetMediaAnalysisJobInput{}
+	}
+
+	output = &GetMediaAnalysisJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetMediaAnalysisJob API operation for Amazon Rekognition.
+//
+// Retrieves the results for a given media analysis job. Takes a JobId returned
+// by StartMediaAnalysisJob.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation GetMediaAnalysisJob for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
+//
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
+//
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
+//
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
+//
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
+func (c *Rekognition) GetMediaAnalysisJob(input *GetMediaAnalysisJobInput) (*GetMediaAnalysisJobOutput, error) {
+	req, out := c.GetMediaAnalysisJobRequest(input)
+	return out, req.Send()
+}
+
+// GetMediaAnalysisJobWithContext is the same as GetMediaAnalysisJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetMediaAnalysisJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) GetMediaAnalysisJobWithContext(ctx aws.Context, input *GetMediaAnalysisJobInput, opts ...request.Option) (*GetMediaAnalysisJobOutput, error) {
+	req, out := c.GetMediaAnalysisJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetPersonTracking = "GetPersonTracking"
 
 // GetPersonTrackingRequest generates a "aws/request.Request" representing the
@@ -4567,14 +5119,13 @@ const opGetPersonTracking = "GetPersonTracking"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPersonTrackingRequest method.
+//	req, resp := client.GetPersonTrackingRequest(params)
 //
-//    // Example sending a request using the GetPersonTrackingRequest method.
-//    req, resp := client.GetPersonTrackingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) GetPersonTrackingRequest(input *GetPersonTrackingInput) (req *request.Request, output *GetPersonTrackingOutput) {
 	op := &request.Operation{
 		Name:       opGetPersonTracking,
@@ -4641,30 +5192,30 @@ func (c *Rekognition) GetPersonTrackingRequest(input *GetPersonTrackingInput) (r
 // API operation GetPersonTracking for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) GetPersonTracking(input *GetPersonTrackingInput) (*GetPersonTrackingOutput, error) {
 	req, out := c.GetPersonTrackingRequest(input)
 	return out, req.Send()
@@ -4694,15 +5245,14 @@ func (c *Rekognition) GetPersonTrackingWithContext(ctx aws.Context, input *GetPe
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetPersonTracking operation.
-//    pageNum := 0
-//    err := client.GetPersonTrackingPages(params,
-//        func(page *rekognition.GetPersonTrackingOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetPersonTracking operation.
+//	pageNum := 0
+//	err := client.GetPersonTrackingPages(params,
+//	    func(page *rekognition.GetPersonTrackingOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) GetPersonTrackingPages(input *GetPersonTrackingInput, fn func(*GetPersonTrackingOutput, bool) bool) error {
 	return c.GetPersonTrackingPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4754,14 +5304,13 @@ const opGetSegmentDetection = "GetSegmentDetection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSegmentDetectionRequest method.
+//	req, resp := client.GetSegmentDetectionRequest(params)
 //
-//    // Example sending a request using the GetSegmentDetectionRequest method.
-//    req, resp := client.GetSegmentDetectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) GetSegmentDetectionRequest(input *GetSegmentDetectionInput) (req *request.Request, output *GetSegmentDetectionOutput) {
 	op := &request.Operation{
 		Name:       opGetSegmentDetection,
@@ -4827,30 +5376,30 @@ func (c *Rekognition) GetSegmentDetectionRequest(input *GetSegmentDetectionInput
 // API operation GetSegmentDetection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) GetSegmentDetection(input *GetSegmentDetectionInput) (*GetSegmentDetectionOutput, error) {
 	req, out := c.GetSegmentDetectionRequest(input)
 	return out, req.Send()
@@ -4880,15 +5429,14 @@ func (c *Rekognition) GetSegmentDetectionWithContext(ctx aws.Context, input *Get
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetSegmentDetection operation.
-//    pageNum := 0
-//    err := client.GetSegmentDetectionPages(params,
-//        func(page *rekognition.GetSegmentDetectionOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetSegmentDetection operation.
+//	pageNum := 0
+//	err := client.GetSegmentDetectionPages(params,
+//	    func(page *rekognition.GetSegmentDetectionOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) GetSegmentDetectionPages(input *GetSegmentDetectionInput, fn func(*GetSegmentDetectionOutput, bool) bool) error {
 	return c.GetSegmentDetectionPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4940,14 +5488,13 @@ const opGetTextDetection = "GetTextDetection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTextDetectionRequest method.
+//	req, resp := client.GetTextDetectionRequest(params)
 //
-//    // Example sending a request using the GetTextDetectionRequest method.
-//    req, resp := client.GetTextDetectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) GetTextDetectionRequest(input *GetTextDetectionInput) (req *request.Request, output *GetTextDetectionOutput) {
 	op := &request.Operation{
 		Name:       opGetTextDetection,
@@ -4985,7 +5532,7 @@ func (c *Rekognition) GetTextDetectionRequest(input *GetTextDetectionInput) (req
 // the job identifier (JobId) from the initial call of StartLabelDetection.
 //
 // GetTextDetection returns an array of detected text (TextDetections) sorted
-// by the time the text was detected, up to 50 words per frame of video.
+// by the time the text was detected, up to 100 words per frame of video.
 //
 // Each element of the array includes the detected text, the precentage confidence
 // in the acuracy of the detected text, the time the text was detected, bounding
@@ -5007,30 +5554,30 @@ func (c *Rekognition) GetTextDetectionRequest(input *GetTextDetectionInput) (req
 // API operation GetTextDetection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) GetTextDetection(input *GetTextDetectionInput) (*GetTextDetectionOutput, error) {
 	req, out := c.GetTextDetectionRequest(input)
 	return out, req.Send()
@@ -5060,15 +5607,14 @@ func (c *Rekognition) GetTextDetectionWithContext(ctx aws.Context, input *GetTex
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetTextDetection operation.
-//    pageNum := 0
-//    err := client.GetTextDetectionPages(params,
-//        func(page *rekognition.GetTextDetectionOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetTextDetection operation.
+//	pageNum := 0
+//	err := client.GetTextDetectionPages(params,
+//	    func(page *rekognition.GetTextDetectionOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) GetTextDetectionPages(input *GetTextDetectionInput, fn func(*GetTextDetectionOutput, bool) bool) error {
 	return c.GetTextDetectionPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5120,14 +5666,13 @@ const opIndexFaces = "IndexFaces"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the IndexFacesRequest method.
+//	req, resp := client.IndexFacesRequest(params)
 //
-//    // Example sending a request using the IndexFacesRequest method.
-//    req, resp := client.IndexFacesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) IndexFacesRequest(input *IndexFacesInput) (req *request.Request, output *IndexFacesOutput) {
 	op := &request.Operation{
 		Name:       opIndexFaces,
@@ -5201,31 +5746,31 @@ func (c *Rekognition) IndexFacesRequest(input *IndexFacesInput) (req *request.Re
 // in an array of UnindexedFace objects, UnindexedFaces. Faces aren't indexed
 // for reasons such as:
 //
-//    * The number of faces detected exceeds the value of the MaxFaces request
-//    parameter.
+//   - The number of faces detected exceeds the value of the MaxFaces request
+//     parameter.
 //
-//    * The face is too small compared to the image dimensions.
+//   - The face is too small compared to the image dimensions.
 //
-//    * The face is too blurry.
+//   - The face is too blurry.
 //
-//    * The image is too dark.
+//   - The image is too dark.
 //
-//    * The face has an extreme pose.
+//   - The face has an extreme pose.
 //
-//    * The face doesn’t have enough detail to be suitable for face search.
+//   - The face doesn’t have enough detail to be suitable for face search.
 //
 // In response, the IndexFaces operation returns an array of metadata for all
 // detected faces, FaceRecords. This includes:
 //
-//    * The bounding box, BoundingBox, of the detected face.
+//   - The bounding box, BoundingBox, of the detected face.
 //
-//    * A confidence value, Confidence, which indicates the confidence that
-//    the bounding box contains a face.
+//   - A confidence value, Confidence, which indicates the confidence that
+//     the bounding box contains a face.
 //
-//    * A face ID, FaceId, assigned by the service for each face that's detected
-//    and stored.
+//   - A face ID, FaceId, assigned by the service for each face that's detected
+//     and stored.
 //
-//    * An image ID, ImageId, assigned by the service for the input image.
+//   - An image ID, ImageId, assigned by the service for the input image.
 //
 // If you request ALL or specific facial attributes (e.g., FACE_OCCLUDED) by
 // using the detectionAttributes parameter, Amazon Rekognition returns detailed
@@ -5252,44 +5797,44 @@ func (c *Rekognition) IndexFacesRequest(input *IndexFacesInput) (req *request.Re
 // API operation IndexFaces for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * ImageTooLargeException
-//   The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
-//   the image size or resolution exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - ImageTooLargeException
+//     The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+//     the image size or resolution exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * InvalidImageFormatException
-//   The provided image format is not supported.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * ServiceQuotaExceededException
-//   The size of the collection exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
 //
+//   - ServiceQuotaExceededException
+//     The size of the collection exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 func (c *Rekognition) IndexFaces(input *IndexFacesInput) (*IndexFacesOutput, error) {
 	req, out := c.IndexFacesRequest(input)
 	return out, req.Send()
@@ -5327,14 +5872,13 @@ const opListCollections = "ListCollections"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCollectionsRequest method.
+//	req, resp := client.ListCollectionsRequest(params)
 //
-//    // Example sending a request using the ListCollectionsRequest method.
-//    req, resp := client.ListCollectionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) ListCollectionsRequest(input *ListCollectionsInput) (req *request.Request, output *ListCollectionsOutput) {
 	op := &request.Operation{
 		Name:       opListCollections,
@@ -5377,30 +5921,30 @@ func (c *Rekognition) ListCollectionsRequest(input *ListCollectionsInput) (req *
 // API operation ListCollections for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 func (c *Rekognition) ListCollections(input *ListCollectionsInput) (*ListCollectionsOutput, error) {
 	req, out := c.ListCollectionsRequest(input)
 	return out, req.Send()
@@ -5430,15 +5974,14 @@ func (c *Rekognition) ListCollectionsWithContext(ctx aws.Context, input *ListCol
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCollections operation.
-//    pageNum := 0
-//    err := client.ListCollectionsPages(params,
-//        func(page *rekognition.ListCollectionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCollections operation.
+//	pageNum := 0
+//	err := client.ListCollectionsPages(params,
+//	    func(page *rekognition.ListCollectionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) ListCollectionsPages(input *ListCollectionsInput, fn func(*ListCollectionsOutput, bool) bool) error {
 	return c.ListCollectionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5490,14 +6033,13 @@ const opListDatasetEntries = "ListDatasetEntries"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDatasetEntriesRequest method.
+//	req, resp := client.ListDatasetEntriesRequest(params)
 //
-//    // Example sending a request using the ListDatasetEntriesRequest method.
-//    req, resp := client.ListDatasetEntriesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) ListDatasetEntriesRequest(input *ListDatasetEntriesInput) (req *request.Request, output *ListDatasetEntriesOutput) {
 	op := &request.Operation{
 		Name:       opListDatasetEntries,
@@ -5521,6 +6063,8 @@ func (c *Rekognition) ListDatasetEntriesRequest(input *ListDatasetEntriesInput) 
 }
 
 // ListDatasetEntries API operation for Amazon Rekognition.
+//
+// This operation applies only to Amazon Rekognition Custom Labels.
 //
 // Lists the entries (images) within a dataset. An entry is a JSON Line that
 // contains the information for a single image, including the image location,
@@ -5547,37 +6091,37 @@ func (c *Rekognition) ListDatasetEntriesRequest(input *ListDatasetEntriesInput) 
 // API operation ListDatasetEntries for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * ResourceNotReadyException
-//   The requested resource isn't ready. For example, this exception occurs when
-//   you call DetectCustomLabels with a model version that isn't deployed.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
+//   - ResourceNotReadyException
+//     The requested resource isn't ready. For example, this exception occurs when
+//     you call DetectCustomLabels with a model version that isn't deployed.
 func (c *Rekognition) ListDatasetEntries(input *ListDatasetEntriesInput) (*ListDatasetEntriesOutput, error) {
 	req, out := c.ListDatasetEntriesRequest(input)
 	return out, req.Send()
@@ -5607,15 +6151,14 @@ func (c *Rekognition) ListDatasetEntriesWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDatasetEntries operation.
-//    pageNum := 0
-//    err := client.ListDatasetEntriesPages(params,
-//        func(page *rekognition.ListDatasetEntriesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDatasetEntries operation.
+//	pageNum := 0
+//	err := client.ListDatasetEntriesPages(params,
+//	    func(page *rekognition.ListDatasetEntriesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) ListDatasetEntriesPages(input *ListDatasetEntriesInput, fn func(*ListDatasetEntriesOutput, bool) bool) error {
 	return c.ListDatasetEntriesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5667,14 +6210,13 @@ const opListDatasetLabels = "ListDatasetLabels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDatasetLabelsRequest method.
+//	req, resp := client.ListDatasetLabelsRequest(params)
 //
-//    // Example sending a request using the ListDatasetLabelsRequest method.
-//    req, resp := client.ListDatasetLabelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) ListDatasetLabelsRequest(input *ListDatasetLabelsInput) (req *request.Request, output *ListDatasetLabelsOutput) {
 	op := &request.Operation{
 		Name:       opListDatasetLabels,
@@ -5699,6 +6241,8 @@ func (c *Rekognition) ListDatasetLabelsRequest(input *ListDatasetLabelsInput) (r
 
 // ListDatasetLabels API operation for Amazon Rekognition.
 //
+// This operation applies only to Amazon Rekognition Custom Labels.
+//
 // Lists the labels in a dataset. Amazon Rekognition Custom Labels uses labels
 // to describe images. For more information, see Labeling images (https://docs.aws.amazon.com/rekognition/latest/customlabels-dg/md-labeling-images.html).
 //
@@ -5714,37 +6258,37 @@ func (c *Rekognition) ListDatasetLabelsRequest(input *ListDatasetLabelsInput) (r
 // API operation ListDatasetLabels for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
-//   * ResourceNotReadyException
-//   The requested resource isn't ready. For example, this exception occurs when
-//   you call DetectCustomLabels with a model version that isn't deployed.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - ResourceNotReadyException
+//     The requested resource isn't ready. For example, this exception occurs when
+//     you call DetectCustomLabels with a model version that isn't deployed.
 func (c *Rekognition) ListDatasetLabels(input *ListDatasetLabelsInput) (*ListDatasetLabelsOutput, error) {
 	req, out := c.ListDatasetLabelsRequest(input)
 	return out, req.Send()
@@ -5774,15 +6318,14 @@ func (c *Rekognition) ListDatasetLabelsWithContext(ctx aws.Context, input *ListD
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDatasetLabels operation.
-//    pageNum := 0
-//    err := client.ListDatasetLabelsPages(params,
-//        func(page *rekognition.ListDatasetLabelsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDatasetLabels operation.
+//	pageNum := 0
+//	err := client.ListDatasetLabelsPages(params,
+//	    func(page *rekognition.ListDatasetLabelsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) ListDatasetLabelsPages(input *ListDatasetLabelsInput, fn func(*ListDatasetLabelsOutput, bool) bool) error {
 	return c.ListDatasetLabelsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5834,14 +6377,13 @@ const opListFaces = "ListFaces"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFacesRequest method.
+//	req, resp := client.ListFacesRequest(params)
 //
-//    // Example sending a request using the ListFacesRequest method.
-//    req, resp := client.ListFacesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) ListFacesRequest(input *ListFacesInput) (req *request.Request, output *ListFacesOutput) {
 	op := &request.Operation{
 		Name:       opListFaces,
@@ -5882,30 +6424,30 @@ func (c *Rekognition) ListFacesRequest(input *ListFacesInput) (req *request.Requ
 // API operation ListFaces for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 func (c *Rekognition) ListFaces(input *ListFacesInput) (*ListFacesOutput, error) {
 	req, out := c.ListFacesRequest(input)
 	return out, req.Send()
@@ -5935,15 +6477,14 @@ func (c *Rekognition) ListFacesWithContext(ctx aws.Context, input *ListFacesInpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFaces operation.
-//    pageNum := 0
-//    err := client.ListFacesPages(params,
-//        func(page *rekognition.ListFacesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFaces operation.
+//	pageNum := 0
+//	err := client.ListFacesPages(params,
+//	    func(page *rekognition.ListFacesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) ListFacesPages(input *ListFacesInput, fn func(*ListFacesOutput, bool) bool) error {
 	return c.ListFacesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5979,6 +6520,157 @@ func (c *Rekognition) ListFacesPagesWithContext(ctx aws.Context, input *ListFace
 	return p.Err()
 }
 
+const opListMediaAnalysisJobs = "ListMediaAnalysisJobs"
+
+// ListMediaAnalysisJobsRequest generates a "aws/request.Request" representing the
+// client's request for the ListMediaAnalysisJobs operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListMediaAnalysisJobs for more information on using the ListMediaAnalysisJobs
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListMediaAnalysisJobsRequest method.
+//	req, resp := client.ListMediaAnalysisJobsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *Rekognition) ListMediaAnalysisJobsRequest(input *ListMediaAnalysisJobsInput) (req *request.Request, output *ListMediaAnalysisJobsOutput) {
+	op := &request.Operation{
+		Name:       opListMediaAnalysisJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListMediaAnalysisJobsInput{}
+	}
+
+	output = &ListMediaAnalysisJobsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListMediaAnalysisJobs API operation for Amazon Rekognition.
+//
+// Returns a list of media analysis jobs. Results are sorted by CreationTimestamp
+// in descending order.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation ListMediaAnalysisJobs for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
+//
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
+//
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
+//
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
+//
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
+func (c *Rekognition) ListMediaAnalysisJobs(input *ListMediaAnalysisJobsInput) (*ListMediaAnalysisJobsOutput, error) {
+	req, out := c.ListMediaAnalysisJobsRequest(input)
+	return out, req.Send()
+}
+
+// ListMediaAnalysisJobsWithContext is the same as ListMediaAnalysisJobs with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListMediaAnalysisJobs for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) ListMediaAnalysisJobsWithContext(ctx aws.Context, input *ListMediaAnalysisJobsInput, opts ...request.Option) (*ListMediaAnalysisJobsOutput, error) {
+	req, out := c.ListMediaAnalysisJobsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListMediaAnalysisJobsPages iterates over the pages of a ListMediaAnalysisJobs operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListMediaAnalysisJobs method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListMediaAnalysisJobs operation.
+//	pageNum := 0
+//	err := client.ListMediaAnalysisJobsPages(params,
+//	    func(page *rekognition.ListMediaAnalysisJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Rekognition) ListMediaAnalysisJobsPages(input *ListMediaAnalysisJobsInput, fn func(*ListMediaAnalysisJobsOutput, bool) bool) error {
+	return c.ListMediaAnalysisJobsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListMediaAnalysisJobsPagesWithContext same as ListMediaAnalysisJobsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) ListMediaAnalysisJobsPagesWithContext(ctx aws.Context, input *ListMediaAnalysisJobsInput, fn func(*ListMediaAnalysisJobsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListMediaAnalysisJobsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListMediaAnalysisJobsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListMediaAnalysisJobsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListProjectPolicies = "ListProjectPolicies"
 
 // ListProjectPoliciesRequest generates a "aws/request.Request" representing the
@@ -5995,14 +6687,13 @@ const opListProjectPolicies = "ListProjectPolicies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProjectPoliciesRequest method.
+//	req, resp := client.ListProjectPoliciesRequest(params)
 //
-//    // Example sending a request using the ListProjectPoliciesRequest method.
-//    req, resp := client.ListProjectPoliciesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) ListProjectPoliciesRequest(input *ListProjectPoliciesInput) (req *request.Request, output *ListProjectPoliciesOutput) {
 	op := &request.Operation{
 		Name:       opListProjectPolicies,
@@ -6027,6 +6718,8 @@ func (c *Rekognition) ListProjectPoliciesRequest(input *ListProjectPoliciesInput
 
 // ListProjectPolicies API operation for Amazon Rekognition.
 //
+// This operation applies only to Amazon Rekognition Custom Labels.
+//
 // Gets a list of the project policies attached to a project.
 //
 // To attach a project policy to a project, call PutProjectPolicy. To remove
@@ -6043,30 +6736,30 @@ func (c *Rekognition) ListProjectPoliciesRequest(input *ListProjectPoliciesInput
 // API operation ListProjectPolicies for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 func (c *Rekognition) ListProjectPolicies(input *ListProjectPoliciesInput) (*ListProjectPoliciesOutput, error) {
 	req, out := c.ListProjectPoliciesRequest(input)
 	return out, req.Send()
@@ -6096,15 +6789,14 @@ func (c *Rekognition) ListProjectPoliciesWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListProjectPolicies operation.
-//    pageNum := 0
-//    err := client.ListProjectPoliciesPages(params,
-//        func(page *rekognition.ListProjectPoliciesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListProjectPolicies operation.
+//	pageNum := 0
+//	err := client.ListProjectPoliciesPages(params,
+//	    func(page *rekognition.ListProjectPoliciesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) ListProjectPoliciesPages(input *ListProjectPoliciesInput, fn func(*ListProjectPoliciesOutput, bool) bool) error {
 	return c.ListProjectPoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6156,14 +6848,13 @@ const opListStreamProcessors = "ListStreamProcessors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListStreamProcessorsRequest method.
+//	req, resp := client.ListStreamProcessorsRequest(params)
 //
-//    // Example sending a request using the ListStreamProcessorsRequest method.
-//    req, resp := client.ListStreamProcessorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) ListStreamProcessorsRequest(input *ListStreamProcessorsInput) (req *request.Request, output *ListStreamProcessorsOutput) {
 	op := &request.Operation{
 		Name:       opListStreamProcessors,
@@ -6198,27 +6889,27 @@ func (c *Rekognition) ListStreamProcessorsRequest(input *ListStreamProcessorsInp
 // API operation ListStreamProcessors for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidPaginationTokenException
-//   Pagination token in the request is not valid.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) ListStreamProcessors(input *ListStreamProcessorsInput) (*ListStreamProcessorsOutput, error) {
 	req, out := c.ListStreamProcessorsRequest(input)
 	return out, req.Send()
@@ -6248,15 +6939,14 @@ func (c *Rekognition) ListStreamProcessorsWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListStreamProcessors operation.
-//    pageNum := 0
-//    err := client.ListStreamProcessorsPages(params,
-//        func(page *rekognition.ListStreamProcessorsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListStreamProcessors operation.
+//	pageNum := 0
+//	err := client.ListStreamProcessorsPages(params,
+//	    func(page *rekognition.ListStreamProcessorsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Rekognition) ListStreamProcessorsPages(input *ListStreamProcessorsInput, fn func(*ListStreamProcessorsOutput, bool) bool) error {
 	return c.ListStreamProcessorsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6308,14 +6998,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
 	op := &request.Operation{
 		Name:       opListTagsForResource,
@@ -6348,27 +7037,27 @@ func (c *Rekognition) ListTagsForResourceRequest(input *ListTagsForResourceInput
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
 	return out, req.Send()
@@ -6390,6 +7079,163 @@ func (c *Rekognition) ListTagsForResourceWithContext(ctx aws.Context, input *Lis
 	return out, req.Send()
 }
 
+const opListUsers = "ListUsers"
+
+// ListUsersRequest generates a "aws/request.Request" representing the
+// client's request for the ListUsers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListUsers for more information on using the ListUsers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListUsersRequest method.
+//	req, resp := client.ListUsersRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *Rekognition) ListUsersRequest(input *ListUsersInput) (req *request.Request, output *ListUsersOutput) {
+	op := &request.Operation{
+		Name:       opListUsers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListUsersInput{}
+	}
+
+	output = &ListUsersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListUsers API operation for Amazon Rekognition.
+//
+// Returns metadata of the User such as UserID in the specified collection.
+// Anonymous User (to reserve faces without any identity) is not returned as
+// part of this request. The results are sorted by system generated primary
+// key ID. If the response is truncated, NextToken is returned in the response
+// that can be used in the subsequent request to retrieve the next set of identities.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation ListUsers for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
+//
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
+//
+//   - InvalidPaginationTokenException
+//     Pagination token in the request is not valid.
+//
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
+//
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
+//
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
+func (c *Rekognition) ListUsers(input *ListUsersInput) (*ListUsersOutput, error) {
+	req, out := c.ListUsersRequest(input)
+	return out, req.Send()
+}
+
+// ListUsersWithContext is the same as ListUsers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListUsers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) ListUsersWithContext(ctx aws.Context, input *ListUsersInput, opts ...request.Option) (*ListUsersOutput, error) {
+	req, out := c.ListUsersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListUsersPages iterates over the pages of a ListUsers operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListUsers method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListUsers operation.
+//	pageNum := 0
+//	err := client.ListUsersPages(params,
+//	    func(page *rekognition.ListUsersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Rekognition) ListUsersPages(input *ListUsersInput, fn func(*ListUsersOutput, bool) bool) error {
+	return c.ListUsersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListUsersPagesWithContext same as ListUsersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) ListUsersPagesWithContext(ctx aws.Context, input *ListUsersInput, fn func(*ListUsersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListUsersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListUsersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListUsersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opPutProjectPolicy = "PutProjectPolicy"
 
 // PutProjectPolicyRequest generates a "aws/request.Request" representing the
@@ -6406,14 +7252,13 @@ const opPutProjectPolicy = "PutProjectPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutProjectPolicyRequest method.
+//	req, resp := client.PutProjectPolicyRequest(params)
 //
-//    // Example sending a request using the PutProjectPolicyRequest method.
-//    req, resp := client.PutProjectPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) PutProjectPolicyRequest(input *PutProjectPolicyInput) (req *request.Request, output *PutProjectPolicyOutput) {
 	op := &request.Operation{
 		Name:       opPutProjectPolicy,
@@ -6432,11 +7277,13 @@ func (c *Rekognition) PutProjectPolicyRequest(input *PutProjectPolicyInput) (req
 
 // PutProjectPolicy API operation for Amazon Rekognition.
 //
+// This operation applies only to Amazon Rekognition Custom Labels.
+//
 // Attaches a project policy to a Amazon Rekognition Custom Labels project in
 // a trusting AWS account. A project policy specifies that a trusted AWS account
 // can copy a model version from a trusting AWS account to a project in the
 // trusted AWS account. To copy a model version you use the CopyProjectVersion
-// operation.
+// operation. Only applies to Custom Labels projects.
 //
 // For more information about the format of a project policy document, see Attaching
 // a project policy (SDK) in the Amazon Rekognition Custom Labels Developer
@@ -6463,49 +7310,49 @@ func (c *Rekognition) PutProjectPolicyRequest(input *PutProjectPolicyInput) (req
 // API operation PutProjectPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidPolicyRevisionIdException
-//   The supplied revision id for the project policy is invalid.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * MalformedPolicyDocumentException
-//   The format of the project policy document that you supplied to PutProjectPolicy
-//   is incorrect.
+//   - InvalidPolicyRevisionIdException
+//     The supplied revision id for the project policy is invalid.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - MalformedPolicyDocumentException
+//     The format of the project policy document that you supplied to PutProjectPolicy
+//     is incorrect.
 //
-//   * ResourceAlreadyExistsException
-//   A resource with the specified ID already exists.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceAlreadyExistsException
+//     A resource with the specified ID already exists.
 //
-//   * ServiceQuotaExceededException
-//   The size of the collection exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ServiceQuotaExceededException
+//     The size of the collection exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 func (c *Rekognition) PutProjectPolicy(input *PutProjectPolicyInput) (*PutProjectPolicyOutput, error) {
 	req, out := c.PutProjectPolicyRequest(input)
 	return out, req.Send()
@@ -6543,14 +7390,13 @@ const opRecognizeCelebrities = "RecognizeCelebrities"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RecognizeCelebritiesRequest method.
+//	req, resp := client.RecognizeCelebritiesRequest(params)
 //
-//    // Example sending a request using the RecognizeCelebritiesRequest method.
-//    req, resp := client.RecognizeCelebritiesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) RecognizeCelebritiesRequest(input *RecognizeCelebritiesInput) (req *request.Request, output *RecognizeCelebritiesOutput) {
 	op := &request.Operation{
 		Name:       opRecognizeCelebrities,
@@ -6608,39 +7454,39 @@ func (c *Rekognition) RecognizeCelebritiesRequest(input *RecognizeCelebritiesInp
 // API operation RecognizeCelebrities for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidImageFormatException
-//   The provided image format is not supported.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ImageTooLargeException
-//   The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
-//   the image size or resolution exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - ImageTooLargeException
+//     The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+//     the image size or resolution exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidImageFormatException
-//   The provided image format is not supported.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
 func (c *Rekognition) RecognizeCelebrities(input *RecognizeCelebritiesInput) (*RecognizeCelebritiesOutput, error) {
 	req, out := c.RecognizeCelebritiesRequest(input)
 	return out, req.Send()
@@ -6678,14 +7524,13 @@ const opSearchFaces = "SearchFaces"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchFacesRequest method.
+//	req, resp := client.SearchFacesRequest(params)
 //
-//    // Example sending a request using the SearchFacesRequest method.
-//    req, resp := client.SearchFacesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) SearchFacesRequest(input *SearchFacesInput) (req *request.Request, output *SearchFacesOutput) {
 	op := &request.Operation{
 		Name:       opSearchFaces,
@@ -6732,27 +7577,27 @@ func (c *Rekognition) SearchFacesRequest(input *SearchFacesInput) (req *request.
 // API operation SearchFaces for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 func (c *Rekognition) SearchFaces(input *SearchFacesInput) (*SearchFacesOutput, error) {
 	req, out := c.SearchFacesRequest(input)
 	return out, req.Send()
@@ -6790,14 +7635,13 @@ const opSearchFacesByImage = "SearchFacesByImage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchFacesByImageRequest method.
+//	req, resp := client.SearchFacesByImageRequest(params)
 //
-//    // Example sending a request using the SearchFacesByImageRequest method.
-//    req, resp := client.SearchFacesByImageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) SearchFacesByImageRequest(input *SearchFacesByImageInput) (req *request.Request, output *SearchFacesByImageOutput) {
 	op := &request.Operation{
 		Name:       opSearchFacesByImage,
@@ -6868,39 +7712,39 @@ func (c *Rekognition) SearchFacesByImageRequest(input *SearchFacesByImageInput) 
 // API operation SearchFacesByImage for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * ImageTooLargeException
-//   The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
-//   the image size or resolution exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - ImageTooLargeException
+//     The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+//     the image size or resolution exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * InvalidImageFormatException
-//   The provided image format is not supported.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
 func (c *Rekognition) SearchFacesByImage(input *SearchFacesByImageInput) (*SearchFacesByImageOutput, error) {
 	req, out := c.SearchFacesByImageRequest(input)
 	return out, req.Send()
@@ -6922,6 +7766,219 @@ func (c *Rekognition) SearchFacesByImageWithContext(ctx aws.Context, input *Sear
 	return out, req.Send()
 }
 
+const opSearchUsers = "SearchUsers"
+
+// SearchUsersRequest generates a "aws/request.Request" representing the
+// client's request for the SearchUsers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SearchUsers for more information on using the SearchUsers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the SearchUsersRequest method.
+//	req, resp := client.SearchUsersRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *Rekognition) SearchUsersRequest(input *SearchUsersInput) (req *request.Request, output *SearchUsersOutput) {
+	op := &request.Operation{
+		Name:       opSearchUsers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &SearchUsersInput{}
+	}
+
+	output = &SearchUsersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SearchUsers API operation for Amazon Rekognition.
+//
+// Searches for UserIDs within a collection based on a FaceId or UserId. This
+// API can be used to find the closest UserID (with a highest similarity) to
+// associate a face. The request must be provided with either FaceId or UserId.
+// The operation returns an array of UserID that match the FaceId or UserId,
+// ordered by similarity score with the highest similarity first.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation SearchUsers for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
+//
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
+//
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
+//
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
+//
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
+func (c *Rekognition) SearchUsers(input *SearchUsersInput) (*SearchUsersOutput, error) {
+	req, out := c.SearchUsersRequest(input)
+	return out, req.Send()
+}
+
+// SearchUsersWithContext is the same as SearchUsers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SearchUsers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) SearchUsersWithContext(ctx aws.Context, input *SearchUsersInput, opts ...request.Option) (*SearchUsersOutput, error) {
+	req, out := c.SearchUsersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opSearchUsersByImage = "SearchUsersByImage"
+
+// SearchUsersByImageRequest generates a "aws/request.Request" representing the
+// client's request for the SearchUsersByImage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SearchUsersByImage for more information on using the SearchUsersByImage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the SearchUsersByImageRequest method.
+//	req, resp := client.SearchUsersByImageRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *Rekognition) SearchUsersByImageRequest(input *SearchUsersByImageInput) (req *request.Request, output *SearchUsersByImageOutput) {
+	op := &request.Operation{
+		Name:       opSearchUsersByImage,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &SearchUsersByImageInput{}
+	}
+
+	output = &SearchUsersByImageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SearchUsersByImage API operation for Amazon Rekognition.
+//
+// Searches for UserIDs using a supplied image. It first detects the largest
+// face in the image, and then searches a specified collection for matching
+// UserIDs.
+//
+// The operation returns an array of UserIDs that match the face in the supplied
+// image, ordered by similarity score with the highest similarity first. It
+// also returns a bounding box for the face found in the input image.
+//
+// Information about faces detected in the supplied image, but not used for
+// the search, is returned in an array of UnsearchedFace objects. If no valid
+// face is detected in the image, the response will contain an empty UserMatches
+// list and no SearchedFace object.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation SearchUsersByImage for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
+//
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
+//
+//   - InvalidImageFormatException
+//     The provided image format is not supported.
+//
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
+//
+//   - ImageTooLargeException
+//     The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment,
+//     the image size or resolution exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
+//
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
+//
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
+//
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
+func (c *Rekognition) SearchUsersByImage(input *SearchUsersByImageInput) (*SearchUsersByImageOutput, error) {
+	req, out := c.SearchUsersByImageRequest(input)
+	return out, req.Send()
+}
+
+// SearchUsersByImageWithContext is the same as SearchUsersByImage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SearchUsersByImage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) SearchUsersByImageWithContext(ctx aws.Context, input *SearchUsersByImageInput, opts ...request.Option) (*SearchUsersByImageOutput, error) {
+	req, out := c.SearchUsersByImageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartCelebrityRecognition = "StartCelebrityRecognition"
 
 // StartCelebrityRecognitionRequest generates a "aws/request.Request" representing the
@@ -6938,14 +7995,13 @@ const opStartCelebrityRecognition = "StartCelebrityRecognition"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartCelebrityRecognitionRequest method.
+//	req, resp := client.StartCelebrityRecognitionRequest(params)
 //
-//    // Example sending a request using the StartCelebrityRecognitionRequest method.
-//    req, resp := client.StartCelebrityRecognitionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StartCelebrityRecognitionRequest(input *StartCelebrityRecognitionInput) (req *request.Request, output *StartCelebrityRecognitionOutput) {
 	op := &request.Operation{
 		Name:       opStartCelebrityRecognition,
@@ -6988,43 +8044,43 @@ func (c *Rekognition) StartCelebrityRecognitionRequest(input *StartCelebrityReco
 // API operation StartCelebrityRecognition for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * IdempotentParameterMismatchException
-//   A ClientRequestToken input parameter was reused with an operation, but at
-//   least one of the other input parameters is different from the previous call
-//   to the operation.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
 //
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * VideoTooLargeException
-//   The file size or duration of the supplied media is too large. The maximum
-//   file size is 10GB. The maximum duration is 6 hours.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - VideoTooLargeException
+//     The file size or duration of the supplied media is too large. The maximum
+//     file size is 10GB. The maximum duration is 6 hours.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) StartCelebrityRecognition(input *StartCelebrityRecognitionInput) (*StartCelebrityRecognitionOutput, error) {
 	req, out := c.StartCelebrityRecognitionRequest(input)
 	return out, req.Send()
@@ -7062,14 +8118,13 @@ const opStartContentModeration = "StartContentModeration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartContentModerationRequest method.
+//	req, resp := client.StartContentModerationRequest(params)
 //
-//    // Example sending a request using the StartContentModerationRequest method.
-//    req, resp := client.StartContentModerationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StartContentModerationRequest(input *StartContentModerationInput) (req *request.Request, output *StartContentModerationOutput) {
 	op := &request.Operation{
 		Name:       opStartContentModeration,
@@ -7114,43 +8169,43 @@ func (c *Rekognition) StartContentModerationRequest(input *StartContentModeratio
 // API operation StartContentModeration for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * IdempotentParameterMismatchException
-//   A ClientRequestToken input parameter was reused with an operation, but at
-//   least one of the other input parameters is different from the previous call
-//   to the operation.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
 //
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * VideoTooLargeException
-//   The file size or duration of the supplied media is too large. The maximum
-//   file size is 10GB. The maximum duration is 6 hours.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - VideoTooLargeException
+//     The file size or duration of the supplied media is too large. The maximum
+//     file size is 10GB. The maximum duration is 6 hours.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) StartContentModeration(input *StartContentModerationInput) (*StartContentModerationOutput, error) {
 	req, out := c.StartContentModerationRequest(input)
 	return out, req.Send()
@@ -7188,14 +8243,13 @@ const opStartFaceDetection = "StartFaceDetection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartFaceDetectionRequest method.
+//	req, resp := client.StartFaceDetectionRequest(params)
 //
-//    // Example sending a request using the StartFaceDetectionRequest method.
-//    req, resp := client.StartFaceDetectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StartFaceDetectionRequest(input *StartFaceDetectionInput) (req *request.Request, output *StartFaceDetectionOutput) {
 	op := &request.Operation{
 		Name:       opStartFaceDetection,
@@ -7237,43 +8291,43 @@ func (c *Rekognition) StartFaceDetectionRequest(input *StartFaceDetectionInput) 
 // API operation StartFaceDetection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * IdempotentParameterMismatchException
-//   A ClientRequestToken input parameter was reused with an operation, but at
-//   least one of the other input parameters is different from the previous call
-//   to the operation.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
 //
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * VideoTooLargeException
-//   The file size or duration of the supplied media is too large. The maximum
-//   file size is 10GB. The maximum duration is 6 hours.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - VideoTooLargeException
+//     The file size or duration of the supplied media is too large. The maximum
+//     file size is 10GB. The maximum duration is 6 hours.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) StartFaceDetection(input *StartFaceDetectionInput) (*StartFaceDetectionOutput, error) {
 	req, out := c.StartFaceDetectionRequest(input)
 	return out, req.Send()
@@ -7311,14 +8365,13 @@ const opStartFaceSearch = "StartFaceSearch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartFaceSearchRequest method.
+//	req, resp := client.StartFaceSearchRequest(params)
 //
-//    // Example sending a request using the StartFaceSearchRequest method.
-//    req, resp := client.StartFaceSearchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StartFaceSearchRequest(input *StartFaceSearchInput) (req *request.Request, output *StartFaceSearchOutput) {
 	op := &request.Operation{
 		Name:       opStartFaceSearch,
@@ -7359,46 +8412,46 @@ func (c *Rekognition) StartFaceSearchRequest(input *StartFaceSearchInput) (req *
 // API operation StartFaceSearch for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * IdempotentParameterMismatchException
-//   A ClientRequestToken input parameter was reused with an operation, but at
-//   least one of the other input parameters is different from the previous call
-//   to the operation.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
 //
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * VideoTooLargeException
-//   The file size or duration of the supplied media is too large. The maximum
-//   file size is 10GB. The maximum duration is 6 hours.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - VideoTooLargeException
+//     The file size or duration of the supplied media is too large. The maximum
+//     file size is 10GB. The maximum duration is 6 hours.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) StartFaceSearch(input *StartFaceSearchInput) (*StartFaceSearchOutput, error) {
 	req, out := c.StartFaceSearchRequest(input)
 	return out, req.Send()
@@ -7436,14 +8489,13 @@ const opStartLabelDetection = "StartLabelDetection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartLabelDetectionRequest method.
+//	req, resp := client.StartLabelDetectionRequest(params)
 //
-//    // Example sending a request using the StartLabelDetectionRequest method.
-//    req, resp := client.StartLabelDetectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StartLabelDetectionRequest(input *StartLabelDetectionInput) (req *request.Request, output *StartLabelDetectionOutput) {
 	op := &request.Operation{
 		Name:       opStartLabelDetection,
@@ -7482,7 +8534,7 @@ func (c *Rekognition) StartLabelDetectionRequest(input *StartLabelDetectionInput
 // GetLabelDetection and pass the job identifier (JobId) from the initial call
 // to StartLabelDetection.
 //
-// Optional Parameters
+// # Optional Parameters
 //
 // StartLabelDetection has the GENERAL_LABELS Feature applied by default. This
 // feature allows you to provide filtering criteria to the Settings parameter.
@@ -7502,43 +8554,43 @@ func (c *Rekognition) StartLabelDetectionRequest(input *StartLabelDetectionInput
 // API operation StartLabelDetection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * IdempotentParameterMismatchException
-//   A ClientRequestToken input parameter was reused with an operation, but at
-//   least one of the other input parameters is different from the previous call
-//   to the operation.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
 //
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * VideoTooLargeException
-//   The file size or duration of the supplied media is too large. The maximum
-//   file size is 10GB. The maximum duration is 6 hours.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - VideoTooLargeException
+//     The file size or duration of the supplied media is too large. The maximum
+//     file size is 10GB. The maximum duration is 6 hours.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) StartLabelDetection(input *StartLabelDetectionInput) (*StartLabelDetectionOutput, error) {
 	req, out := c.StartLabelDetectionRequest(input)
 	return out, req.Send()
@@ -7560,6 +8612,124 @@ func (c *Rekognition) StartLabelDetectionWithContext(ctx aws.Context, input *Sta
 	return out, req.Send()
 }
 
+const opStartMediaAnalysisJob = "StartMediaAnalysisJob"
+
+// StartMediaAnalysisJobRequest generates a "aws/request.Request" representing the
+// client's request for the StartMediaAnalysisJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartMediaAnalysisJob for more information on using the StartMediaAnalysisJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StartMediaAnalysisJobRequest method.
+//	req, resp := client.StartMediaAnalysisJobRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *Rekognition) StartMediaAnalysisJobRequest(input *StartMediaAnalysisJobInput) (req *request.Request, output *StartMediaAnalysisJobOutput) {
+	op := &request.Operation{
+		Name:       opStartMediaAnalysisJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartMediaAnalysisJobInput{}
+	}
+
+	output = &StartMediaAnalysisJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartMediaAnalysisJob API operation for Amazon Rekognition.
+//
+// Initiates a new media analysis job. Accepts a manifest file in an Amazon
+// S3 bucket. The output is a manifest file and a summary of the manifest stored
+// in the Amazon S3 bucket.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Rekognition's
+// API operation StartMediaAnalysisJob for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
+//
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
+//
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
+//
+//   - InvalidManifestException
+//     Indicates that a provided manifest file is empty or larger than the allowed
+//     limit.
+//
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
+//
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
+//
+//   - ResourceNotReadyException
+//     The requested resource isn't ready. For example, this exception occurs when
+//     you call DetectCustomLabels with a model version that isn't deployed.
+//
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
+//
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
+//
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
+//
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
+func (c *Rekognition) StartMediaAnalysisJob(input *StartMediaAnalysisJobInput) (*StartMediaAnalysisJobOutput, error) {
+	req, out := c.StartMediaAnalysisJobRequest(input)
+	return out, req.Send()
+}
+
+// StartMediaAnalysisJobWithContext is the same as StartMediaAnalysisJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartMediaAnalysisJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Rekognition) StartMediaAnalysisJobWithContext(ctx aws.Context, input *StartMediaAnalysisJobInput, opts ...request.Option) (*StartMediaAnalysisJobOutput, error) {
+	req, out := c.StartMediaAnalysisJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartPersonTracking = "StartPersonTracking"
 
 // StartPersonTrackingRequest generates a "aws/request.Request" representing the
@@ -7576,14 +8746,13 @@ const opStartPersonTracking = "StartPersonTracking"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartPersonTrackingRequest method.
+//	req, resp := client.StartPersonTrackingRequest(params)
 //
-//    // Example sending a request using the StartPersonTrackingRequest method.
-//    req, resp := client.StartPersonTrackingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StartPersonTrackingRequest(input *StartPersonTrackingInput) (req *request.Request, output *StartPersonTrackingOutput) {
 	op := &request.Operation{
 		Name:       opStartPersonTracking,
@@ -7624,43 +8793,43 @@ func (c *Rekognition) StartPersonTrackingRequest(input *StartPersonTrackingInput
 // API operation StartPersonTracking for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * IdempotentParameterMismatchException
-//   A ClientRequestToken input parameter was reused with an operation, but at
-//   least one of the other input parameters is different from the previous call
-//   to the operation.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
 //
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * VideoTooLargeException
-//   The file size or duration of the supplied media is too large. The maximum
-//   file size is 10GB. The maximum duration is 6 hours.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - VideoTooLargeException
+//     The file size or duration of the supplied media is too large. The maximum
+//     file size is 10GB. The maximum duration is 6 hours.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) StartPersonTracking(input *StartPersonTrackingInput) (*StartPersonTrackingOutput, error) {
 	req, out := c.StartPersonTrackingRequest(input)
 	return out, req.Send()
@@ -7698,14 +8867,13 @@ const opStartProjectVersion = "StartProjectVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartProjectVersionRequest method.
+//	req, resp := client.StartProjectVersionRequest(params)
 //
-//    // Example sending a request using the StartProjectVersionRequest method.
-//    req, resp := client.StartProjectVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StartProjectVersionRequest(input *StartProjectVersionInput) (req *request.Request, output *StartProjectVersionOutput) {
 	op := &request.Operation{
 		Name:       opStartProjectVersion,
@@ -7724,6 +8892,8 @@ func (c *Rekognition) StartProjectVersionRequest(input *StartProjectVersionInput
 
 // StartProjectVersion API operation for Amazon Rekognition.
 //
+// This operation applies only to Amazon Rekognition Custom Labels.
+//
 // Starts the running of the version of a model. Starting a model takes a while
 // to complete. To check the current state of the model, use DescribeProjectVersions.
 //
@@ -7732,9 +8902,6 @@ func (c *Rekognition) StartProjectVersionRequest(input *StartProjectVersionInput
 //
 // You are charged for the amount of time that the model is running. To stop
 // a running model, call StopProjectVersion.
-//
-// For more information, see Running a trained Amazon Rekognition Custom Labels
-// model in the Amazon Rekognition Custom Labels Guide.
 //
 // This operation requires permissions to perform the rekognition:StartProjectVersion
 // action.
@@ -7747,37 +8914,37 @@ func (c *Rekognition) StartProjectVersionRequest(input *StartProjectVersionInput
 // API operation StartProjectVersion for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) StartProjectVersion(input *StartProjectVersionInput) (*StartProjectVersionOutput, error) {
 	req, out := c.StartProjectVersionRequest(input)
 	return out, req.Send()
@@ -7815,14 +8982,13 @@ const opStartSegmentDetection = "StartSegmentDetection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartSegmentDetectionRequest method.
+//	req, resp := client.StartSegmentDetectionRequest(params)
 //
-//    // Example sending a request using the StartSegmentDetectionRequest method.
-//    req, resp := client.StartSegmentDetectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StartSegmentDetectionRequest(input *StartSegmentDetectionInput) (req *request.Request, output *StartSegmentDetectionOutput) {
 	op := &request.Operation{
 		Name:       opStartSegmentDetection,
@@ -7872,43 +9038,43 @@ func (c *Rekognition) StartSegmentDetectionRequest(input *StartSegmentDetectionI
 // API operation StartSegmentDetection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * IdempotentParameterMismatchException
-//   A ClientRequestToken input parameter was reused with an operation, but at
-//   least one of the other input parameters is different from the previous call
-//   to the operation.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
 //
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * VideoTooLargeException
-//   The file size or duration of the supplied media is too large. The maximum
-//   file size is 10GB. The maximum duration is 6 hours.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - VideoTooLargeException
+//     The file size or duration of the supplied media is too large. The maximum
+//     file size is 10GB. The maximum duration is 6 hours.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) StartSegmentDetection(input *StartSegmentDetectionInput) (*StartSegmentDetectionOutput, error) {
 	req, out := c.StartSegmentDetectionRequest(input)
 	return out, req.Send()
@@ -7946,14 +9112,13 @@ const opStartStreamProcessor = "StartStreamProcessor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartStreamProcessorRequest method.
+//	req, resp := client.StartStreamProcessorRequest(params)
 //
-//    // Example sending a request using the StartStreamProcessorRequest method.
-//    req, resp := client.StartStreamProcessorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StartStreamProcessorRequest(input *StartStreamProcessorInput) (req *request.Request, output *StartStreamProcessorOutput) {
 	op := &request.Operation{
 		Name:       opStartStreamProcessor,
@@ -7988,30 +9153,30 @@ func (c *Rekognition) StartStreamProcessorRequest(input *StartStreamProcessorInp
 // API operation StartStreamProcessor for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) StartStreamProcessor(input *StartStreamProcessorInput) (*StartStreamProcessorOutput, error) {
 	req, out := c.StartStreamProcessorRequest(input)
 	return out, req.Send()
@@ -8049,14 +9214,13 @@ const opStartTextDetection = "StartTextDetection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartTextDetectionRequest method.
+//	req, resp := client.StartTextDetectionRequest(params)
 //
-//    // Example sending a request using the StartTextDetectionRequest method.
-//    req, resp := client.StartTextDetectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StartTextDetectionRequest(input *StartTextDetectionInput) (req *request.Request, output *StartTextDetectionOutput) {
 	op := &request.Operation{
 		Name:       opStartTextDetection,
@@ -8097,43 +9261,43 @@ func (c *Rekognition) StartTextDetectionRequest(input *StartTextDetectionInput) 
 // API operation StartTextDetection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * IdempotentParameterMismatchException
-//   A ClientRequestToken input parameter was reused with an operation, but at
-//   least one of the other input parameters is different from the previous call
-//   to the operation.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - IdempotentParameterMismatchException
+//     A ClientRequestToken input parameter was reused with an operation, but at
+//     least one of the other input parameters is different from the previous call
+//     to the operation.
 //
-//   * InvalidS3ObjectException
-//   Amazon Rekognition is unable to access the S3 object specified in the request.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - InvalidS3ObjectException
+//     Amazon Rekognition is unable to access the S3 object specified in the request.
 //
-//   * VideoTooLargeException
-//   The file size or duration of the supplied media is too large. The maximum
-//   file size is 10GB. The maximum duration is 6 hours.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - VideoTooLargeException
+//     The file size or duration of the supplied media is too large. The maximum
+//     file size is 10GB. The maximum duration is 6 hours.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 func (c *Rekognition) StartTextDetection(input *StartTextDetectionInput) (*StartTextDetectionOutput, error) {
 	req, out := c.StartTextDetectionRequest(input)
 	return out, req.Send()
@@ -8171,14 +9335,13 @@ const opStopProjectVersion = "StopProjectVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopProjectVersionRequest method.
+//	req, resp := client.StopProjectVersionRequest(params)
 //
-//    // Example sending a request using the StopProjectVersionRequest method.
-//    req, resp := client.StopProjectVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StopProjectVersionRequest(input *StopProjectVersionInput) (req *request.Request, output *StopProjectVersionOutput) {
 	op := &request.Operation{
 		Name:       opStopProjectVersion,
@@ -8197,8 +9360,11 @@ func (c *Rekognition) StopProjectVersionRequest(input *StopProjectVersionInput) 
 
 // StopProjectVersion API operation for Amazon Rekognition.
 //
+// This operation applies only to Amazon Rekognition Custom Labels.
+//
 // Stops a running model. The operation might take a while to complete. To check
-// the current status, call DescribeProjectVersions.
+// the current status, call DescribeProjectVersions. Only applies to Custom
+// Labels projects.
 //
 // This operation requires permissions to perform the rekognition:StopProjectVersion
 // action.
@@ -8211,30 +9377,30 @@ func (c *Rekognition) StopProjectVersionRequest(input *StopProjectVersionInput) 
 // API operation StopProjectVersion for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) StopProjectVersion(input *StopProjectVersionInput) (*StopProjectVersionOutput, error) {
 	req, out := c.StopProjectVersionRequest(input)
 	return out, req.Send()
@@ -8272,14 +9438,13 @@ const opStopStreamProcessor = "StopStreamProcessor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopStreamProcessorRequest method.
+//	req, resp := client.StopStreamProcessorRequest(params)
 //
-//    // Example sending a request using the StopStreamProcessorRequest method.
-//    req, resp := client.StopStreamProcessorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) StopStreamProcessorRequest(input *StopStreamProcessorInput) (req *request.Request, output *StopStreamProcessorOutput) {
 	op := &request.Operation{
 		Name:       opStopStreamProcessor,
@@ -8309,30 +9474,30 @@ func (c *Rekognition) StopStreamProcessorRequest(input *StopStreamProcessorInput
 // API operation StopStreamProcessor for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) StopStreamProcessor(input *StopStreamProcessorInput) (*StopStreamProcessorOutput, error) {
 	req, out := c.StopStreamProcessorRequest(input)
 	return out, req.Send()
@@ -8370,14 +9535,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
 	op := &request.Operation{
 		Name:       opTagResource,
@@ -8412,32 +9576,32 @@ func (c *Rekognition) TagResourceRequest(input *TagResourceInput) (req *request.
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * ServiceQuotaExceededException
-//   The size of the collection exceeds the allowed limit. For more information,
-//   see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
-//   Developer Guide.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - ServiceQuotaExceededException
+//     The size of the collection exceeds the allowed limit. For more information,
+//     see Guidelines and quotas in Amazon Rekognition in the Amazon Rekognition
+//     Developer Guide.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
 	req, out := c.TagResourceRequest(input)
 	return out, req.Send()
@@ -8475,14 +9639,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
 	op := &request.Operation{
 		Name:       opUntagResource,
@@ -8516,27 +9679,27 @@ func (c *Rekognition) UntagResourceRequest(input *UntagResourceInput) (req *requ
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 func (c *Rekognition) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
 	req, out := c.UntagResourceRequest(input)
 	return out, req.Send()
@@ -8574,14 +9737,13 @@ const opUpdateDatasetEntries = "UpdateDatasetEntries"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDatasetEntriesRequest method.
+//	req, resp := client.UpdateDatasetEntriesRequest(params)
 //
-//    // Example sending a request using the UpdateDatasetEntriesRequest method.
-//    req, resp := client.UpdateDatasetEntriesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) UpdateDatasetEntriesRequest(input *UpdateDatasetEntriesInput) (req *request.Request, output *UpdateDatasetEntriesOutput) {
 	op := &request.Operation{
 		Name:       opUpdateDatasetEntries,
@@ -8600,6 +9762,8 @@ func (c *Rekognition) UpdateDatasetEntriesRequest(input *UpdateDatasetEntriesInp
 }
 
 // UpdateDatasetEntries API operation for Amazon Rekognition.
+//
+// This operation applies only to Amazon Rekognition Custom Labels.
 //
 // Adds or updates one or more entries (images) in a dataset. An entry is a
 // JSON Line which contains the information for a single image, including the
@@ -8637,37 +9801,37 @@ func (c *Rekognition) UpdateDatasetEntriesRequest(input *UpdateDatasetEntriesInp
 // API operation UpdateDatasetEntries for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * LimitExceededException
-//   An Amazon Rekognition service limit was exceeded. For example, if you start
-//   too many Amazon Rekognition Video jobs concurrently, calls to start operations
-//   (StartLabelDetection, for example) will raise a LimitExceededException exception
-//   (HTTP status code: 400) until the number of concurrently running jobs is
-//   below the Amazon Rekognition service limit.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - LimitExceededException
+//     An Amazon Rekognition service limit was exceeded. For example, if you start
+//     too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+//     will raise a LimitExceededException exception (HTTP status code: 400) until
+//     the number of concurrently running jobs is below the Amazon Rekognition service
+//     limit.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - ResourceInUseException
+//     The specified resource is already being used.
 //
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 func (c *Rekognition) UpdateDatasetEntries(input *UpdateDatasetEntriesInput) (*UpdateDatasetEntriesOutput, error) {
 	req, out := c.UpdateDatasetEntriesRequest(input)
 	return out, req.Send()
@@ -8705,14 +9869,13 @@ const opUpdateStreamProcessor = "UpdateStreamProcessor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateStreamProcessorRequest method.
+//	req, resp := client.UpdateStreamProcessorRequest(params)
 //
-//    // Example sending a request using the UpdateStreamProcessorRequest method.
-//    req, resp := client.UpdateStreamProcessorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *Rekognition) UpdateStreamProcessorRequest(input *UpdateStreamProcessorInput) (req *request.Request, output *UpdateStreamProcessorOutput) {
 	op := &request.Operation{
 		Name:       opUpdateStreamProcessor,
@@ -8743,30 +9906,30 @@ func (c *Rekognition) UpdateStreamProcessorRequest(input *UpdateStreamProcessorI
 // API operation UpdateStreamProcessor for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You are not authorized to perform the action.
 //
-//   * InternalServerError
-//   Amazon Rekognition experienced a service issue. Try your call again.
+//   - AccessDeniedException
+//     You are not authorized to perform the action.
 //
-//   * ThrottlingException
-//   Amazon Rekognition is temporarily unable to process the request. Try your
-//   call again.
+//   - InternalServerError
+//     Amazon Rekognition experienced a service issue. Try your call again.
 //
-//   * InvalidParameterException
-//   Input parameter violated a constraint. Validate your parameter before calling
-//   the API operation again.
+//   - ThrottlingException
+//     Amazon Rekognition is temporarily unable to process the request. Try your
+//     call again.
 //
-//   * ResourceNotFoundException
-//   The resource specified in the request cannot be found.
+//   - InvalidParameterException
+//     Input parameter violated a constraint. Validate your parameter before calling
+//     the API operation again.
 //
-//   * ProvisionedThroughputExceededException
-//   The number of requests exceeded your throughput limit. If you want to increase
-//   this limit, contact Amazon Rekognition.
+//   - ResourceNotFoundException
+//     The resource specified in the request cannot be found.
 //
-//   * ResourceInUseException
-//   The specified resource is already being used.
+//   - ProvisionedThroughputExceededException
+//     The number of requests exceeded your throughput limit. If you want to increase
+//     this limit, contact Amazon Rekognition.
 //
+//   - ResourceInUseException
+//     The specified resource is already being used.
 func (c *Rekognition) UpdateStreamProcessor(input *UpdateStreamProcessorInput) (*UpdateStreamProcessorOutput, error) {
 	req, out := c.UpdateStreamProcessorRequest(input)
 	return out, req.Send()
@@ -8945,6 +10108,199 @@ func (s *Asset) Validate() error {
 // SetGroundTruthManifest sets the GroundTruthManifest field's value.
 func (s *Asset) SetGroundTruthManifest(v *GroundTruthManifest) *Asset {
 	s.GroundTruthManifest = v
+	return s
+}
+
+type AssociateFacesInput struct {
+	_ struct{} `type:"structure"`
+
+	// Idempotent token used to identify the request to AssociateFaces. If you use
+	// the same token with multiple AssociateFaces requests, the same response is
+	// returned. Use ClientRequestToken to prevent the same request from being processed
+	// more than once.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The ID of an existing collection containing the UserID.
+	//
+	// CollectionId is a required field
+	CollectionId *string `min:"1" type:"string" required:"true"`
+
+	// An array of FaceIDs to associate with the UserID.
+	//
+	// FaceIds is a required field
+	FaceIds []*string `min:"1" type:"list" required:"true"`
+
+	// The ID for the existing UserID.
+	//
+	// UserId is a required field
+	UserId *string `min:"1" type:"string" required:"true"`
+
+	// An optional value specifying the minimum confidence in the UserID match to
+	// return. The default value is 75.
+	UserMatchThreshold *float64 `type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateFacesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateFacesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateFacesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateFacesInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.CollectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollectionId"))
+	}
+	if s.CollectionId != nil && len(*s.CollectionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CollectionId", 1))
+	}
+	if s.FaceIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("FaceIds"))
+	}
+	if s.FaceIds != nil && len(s.FaceIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FaceIds", 1))
+	}
+	if s.UserId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserId"))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *AssociateFacesInput) SetClientRequestToken(v string) *AssociateFacesInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCollectionId sets the CollectionId field's value.
+func (s *AssociateFacesInput) SetCollectionId(v string) *AssociateFacesInput {
+	s.CollectionId = &v
+	return s
+}
+
+// SetFaceIds sets the FaceIds field's value.
+func (s *AssociateFacesInput) SetFaceIds(v []*string) *AssociateFacesInput {
+	s.FaceIds = v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *AssociateFacesInput) SetUserId(v string) *AssociateFacesInput {
+	s.UserId = &v
+	return s
+}
+
+// SetUserMatchThreshold sets the UserMatchThreshold field's value.
+func (s *AssociateFacesInput) SetUserMatchThreshold(v float64) *AssociateFacesInput {
+	s.UserMatchThreshold = &v
+	return s
+}
+
+type AssociateFacesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of AssociatedFace objects containing FaceIDs that have been successfully
+	// associated with the UserID. Returned if the AssociateFaces action is successful.
+	AssociatedFaces []*AssociatedFace `type:"list"`
+
+	// An array of UnsuccessfulAssociation objects containing FaceIDs that are not
+	// successfully associated along with the reasons. Returned if the AssociateFaces
+	// action is successful.
+	UnsuccessfulFaceAssociations []*UnsuccessfulFaceAssociation `type:"list"`
+
+	// The status of an update made to a UserID. Reflects if the UserID has been
+	// updated for every requested change.
+	UserStatus *string `type:"string" enum:"UserStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateFacesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateFacesOutput) GoString() string {
+	return s.String()
+}
+
+// SetAssociatedFaces sets the AssociatedFaces field's value.
+func (s *AssociateFacesOutput) SetAssociatedFaces(v []*AssociatedFace) *AssociateFacesOutput {
+	s.AssociatedFaces = v
+	return s
+}
+
+// SetUnsuccessfulFaceAssociations sets the UnsuccessfulFaceAssociations field's value.
+func (s *AssociateFacesOutput) SetUnsuccessfulFaceAssociations(v []*UnsuccessfulFaceAssociation) *AssociateFacesOutput {
+	s.UnsuccessfulFaceAssociations = v
+	return s
+}
+
+// SetUserStatus sets the UserStatus field's value.
+func (s *AssociateFacesOutput) SetUserStatus(v string) *AssociateFacesOutput {
+	s.UserStatus = &v
+	return s
+}
+
+// Provides face metadata for the faces that are associated to a specific UserID.
+type AssociatedFace struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier assigned to the face.
+	FaceId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatedFace) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatedFace) GoString() string {
+	return s.String()
+}
+
+// SetFaceId sets the FaceId field's value.
+func (s *AssociatedFace) SetFaceId(v string) *AssociatedFace {
+	s.FaceId = &v
 	return s
 }
 
@@ -9874,6 +11230,71 @@ func (s *ComparedSourceImageFace) SetConfidence(v float64) *ComparedSourceImageF
 	return s
 }
 
+// A User with the same Id already exists within the collection, or the update
+// or deletion of the User caused an inconsistent state. **
+type ConflictException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConflictException) GoString() string {
+	return s.String()
+}
+
+func newErrorConflictException(v protocol.ResponseMetadata) error {
+	return &ConflictException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ConflictException) Code() string {
+	return "ConflictException"
+}
+
+// Message returns the exception's message.
+func (s *ConflictException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ConflictException) OrigErr() error {
+	return nil
+}
+
+func (s *ConflictException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ConflictException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ConflictException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Label detection settings to use on a streaming video. Defining the settings
 // is required in the request parameter for CreateStreamProcessor. Including
 // this setting in the CreateStreamProcessor request enables you to use the
@@ -10006,6 +11427,10 @@ func (s *ConnectedHomeSettingsForUpdate) SetMinConfidence(v float64) *ConnectedH
 type ContentModerationDetection struct {
 	_ struct{} `type:"structure"`
 
+	// A list of predicted results for the type of content an image contains. For
+	// example, the image content might be from animation, sports, or a video game.
+	ContentTypes []*ContentType `type:"list"`
+
 	// The time duration of a segment in milliseconds, I.e. time elapsed from StartTimestampMillis
 	// to EndTimestampMillis.
 	DurationMillis *int64 `type:"long"`
@@ -10045,6 +11470,12 @@ func (s ContentModerationDetection) GoString() string {
 	return s.String()
 }
 
+// SetContentTypes sets the ContentTypes field's value.
+func (s *ContentModerationDetection) SetContentTypes(v []*ContentType) *ContentModerationDetection {
+	s.ContentTypes = v
+	return s
+}
+
 // SetDurationMillis sets the DurationMillis field's value.
 func (s *ContentModerationDetection) SetDurationMillis(v int64) *ContentModerationDetection {
 	s.DurationMillis = &v
@@ -10072,6 +11503,48 @@ func (s *ContentModerationDetection) SetStartTimestampMillis(v int64) *ContentMo
 // SetTimestamp sets the Timestamp field's value.
 func (s *ContentModerationDetection) SetTimestamp(v int64) *ContentModerationDetection {
 	s.Timestamp = &v
+	return s
+}
+
+// Contains information regarding the confidence and name of a detected content
+// type.
+type ContentType struct {
+	_ struct{} `type:"structure"`
+
+	// The confidence level of the label given
+	Confidence *float64 `type:"float"`
+
+	// The name of the label
+	Name *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContentType) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContentType) GoString() string {
+	return s.String()
+}
+
+// SetConfidence sets the Confidence field's value.
+func (s *ContentType) SetConfidence(v float64) *ContentType {
+	s.Confidence = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ContentType) SetName(v string) *ContentType {
+	s.Name = &v
 	return s
 }
 
@@ -10427,8 +11900,8 @@ type CreateDatasetInput struct {
 	// To add labeled images to the dataset, You can use the console or call UpdateDatasetEntries.
 	DatasetSource *DatasetSource `type:"structure"`
 
-	// The type of the dataset. Specify train to create a training dataset. Specify
-	// test to create a test dataset.
+	// The type of the dataset. Specify TRAIN to create a training dataset. Specify
+	// TEST to create a test dataset.
 	//
 	// DatasetType is a required field
 	DatasetType *string `type:"string" required:"true" enum:"DatasetType"`
@@ -10609,7 +12082,11 @@ func (s *CreateFaceLivenessSessionInput) SetSettings(v *CreateFaceLivenessSessio
 type CreateFaceLivenessSessionOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A unique 128-bit UUID identifying a Face Liveness session.
+	// A unique 128-bit UUID identifying a Face Liveness session. A new sessionID
+	// must be used for every Face Liveness check. If a given sessionID is used
+	// for subsequent Face Liveness checks, the checks will fail. Additionally,
+	// a SessionId expires 3 minutes after it's sent, making all Liveness data associated
+	// with the session (e.g., sessionID, reference image, audit images, etc.) unavailable.
 	//
 	// SessionId is a required field
 	SessionId *string `min:"36" type:"string" required:"true"`
@@ -10707,6 +12184,15 @@ func (s *CreateFaceLivenessSessionRequestSettings) SetOutputConfig(v *LivenessOu
 type CreateProjectInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies whether automatic retraining should be attempted for the versions
+	// of the project. Automatic retraining is done as a best effort. Required argument
+	// for Content Moderation. Applicable only to adapters.
+	AutoUpdate *string `type:"string" enum:"ProjectAutoUpdate"`
+
+	// Specifies feature that is being customized. If no value is provided CUSTOM_LABELS
+	// is used as a default.
+	Feature *string `type:"string" enum:"CustomizationFeature"`
+
 	// The name of the project to create.
 	//
 	// ProjectName is a required field
@@ -10745,6 +12231,18 @@ func (s *CreateProjectInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAutoUpdate sets the AutoUpdate field's value.
+func (s *CreateProjectInput) SetAutoUpdate(v string) *CreateProjectInput {
+	s.AutoUpdate = &v
+	return s
+}
+
+// SetFeature sets the Feature field's value.
+func (s *CreateProjectInput) SetFeature(v string) *CreateProjectInput {
+	s.Feature = &v
+	return s
 }
 
 // SetProjectName sets the ProjectName field's value.
@@ -10788,12 +12286,18 @@ func (s *CreateProjectOutput) SetProjectArn(v string) *CreateProjectOutput {
 type CreateProjectVersionInput struct {
 	_ struct{} `type:"structure"`
 
+	// Feature-specific configuration of the training job. If the job configuration
+	// does not match the feature type associated with the project, an InvalidParameterException
+	// is returned.
+	FeatureConfig *CustomizationFeatureConfig `type:"structure"`
+
 	// The identifier for your AWS Key Management Service key (AWS KMS key). You
 	// can supply the Amazon Resource Name (ARN) of your KMS key, the ID of your
 	// KMS key, an alias for your KMS key, or an alias ARN. The key is used to encrypt
-	// training and test images copied into the service for model training. Your
-	// source images are unaffected. The key is also used to encrypt training results
-	// and manifest files written to the output Amazon S3 bucket (OutputConfig).
+	// training images, test images, and manifest files copied into the service
+	// for the project version. Your source images are unaffected. The key is also
+	// used to encrypt training results and manifest files written to the output
+	// Amazon S3 bucket (OutputConfig).
 	//
 	// If you choose to use your own KMS key, you need the following permissions
 	// on the KMS key.
@@ -10810,33 +12314,36 @@ type CreateProjectVersionInput struct {
 	// are encrypted using a key that AWS owns and manages.
 	KmsKeyId *string `min:"1" type:"string"`
 
-	// The Amazon S3 bucket location to store the results of training. The S3 bucket
-	// can be in any AWS account as long as the caller has s3:PutObject permissions
-	// on the S3 bucket.
+	// The Amazon S3 bucket location to store the results of training. The bucket
+	// can be any S3 bucket in your AWS account. You need s3:PutObject permission
+	// on the bucket.
 	//
 	// OutputConfig is a required field
 	OutputConfig *OutputConfig `type:"structure" required:"true"`
 
-	// The ARN of the Amazon Rekognition Custom Labels project that manages the
-	// model that you want to train.
+	// The ARN of the Amazon Rekognition project that will manage the project version
+	// you want to train.
 	//
 	// ProjectArn is a required field
 	ProjectArn *string `min:"20" type:"string" required:"true"`
 
-	// A set of tags (key-value pairs) that you want to attach to the model.
+	// A set of tags (key-value pairs) that you want to attach to the project version.
 	Tags map[string]*string `type:"map"`
 
-	// Specifies an external manifest that the service uses to test the model. If
-	// you specify TestingData you must also specify TrainingData. The project must
-	// not have any associated datasets.
+	// Specifies an external manifest that the service uses to test the project
+	// version. If you specify TestingData you must also specify TrainingData. The
+	// project must not have any associated datasets.
 	TestingData *TestingData `type:"structure"`
 
-	// Specifies an external manifest that the services uses to train the model.
-	// If you specify TrainingData you must also specify TestingData. The project
-	// must not have any associated datasets.
+	// Specifies an external manifest that the services uses to train the project
+	// version. If you specify TrainingData you must also specify TestingData. The
+	// project must not have any associated datasets.
 	TrainingData *TrainingData `type:"structure"`
 
-	// A name for the version of the model. This value must be unique.
+	// A description applied to the project version being created.
+	VersionDescription *string `min:"1" type:"string"`
+
+	// A name for the version of the project version. This value must be unique.
 	//
 	// VersionName is a required field
 	VersionName *string `min:"1" type:"string" required:"true"`
@@ -10875,6 +12382,9 @@ func (s *CreateProjectVersionInput) Validate() error {
 	if s.ProjectArn != nil && len(*s.ProjectArn) < 20 {
 		invalidParams.Add(request.NewErrParamMinLen("ProjectArn", 20))
 	}
+	if s.VersionDescription != nil && len(*s.VersionDescription) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionDescription", 1))
+	}
 	if s.VersionName == nil {
 		invalidParams.Add(request.NewErrParamRequired("VersionName"))
 	}
@@ -10901,6 +12411,12 @@ func (s *CreateProjectVersionInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetFeatureConfig sets the FeatureConfig field's value.
+func (s *CreateProjectVersionInput) SetFeatureConfig(v *CustomizationFeatureConfig) *CreateProjectVersionInput {
+	s.FeatureConfig = v
+	return s
 }
 
 // SetKmsKeyId sets the KmsKeyId field's value.
@@ -10939,6 +12455,12 @@ func (s *CreateProjectVersionInput) SetTrainingData(v *TrainingData) *CreateProj
 	return s
 }
 
+// SetVersionDescription sets the VersionDescription field's value.
+func (s *CreateProjectVersionInput) SetVersionDescription(v string) *CreateProjectVersionInput {
+	s.VersionDescription = &v
+	return s
+}
+
 // SetVersionName sets the VersionName field's value.
 func (s *CreateProjectVersionInput) SetVersionName(v string) *CreateProjectVersionInput {
 	s.VersionName = &v
@@ -10948,7 +12470,7 @@ func (s *CreateProjectVersionInput) SetVersionName(v string) *CreateProjectVersi
 type CreateProjectVersionOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the model version that was created. Use DescribeProjectVersion
+	// The ARN of the model or the project version that was created. Use DescribeProjectVersion
 	// to get the current status of the training operation.
 	ProjectVersionArn *string `min:"20" type:"string"`
 }
@@ -11221,6 +12743,109 @@ func (s *CreateStreamProcessorOutput) SetStreamProcessorArn(v string) *CreateStr
 	return s
 }
 
+type CreateUserInput struct {
+	_ struct{} `type:"structure"`
+
+	// Idempotent token used to identify the request to CreateUser. If you use the
+	// same token with multiple CreateUser requests, the same response is returned.
+	// Use ClientRequestToken to prevent the same request from being processed more
+	// than once.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The ID of an existing collection to which the new UserID needs to be created.
+	//
+	// CollectionId is a required field
+	CollectionId *string `min:"1" type:"string" required:"true"`
+
+	// ID for the UserID to be created. This ID needs to be unique within the collection.
+	//
+	// UserId is a required field
+	UserId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateUserInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateUserInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateUserInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateUserInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.CollectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollectionId"))
+	}
+	if s.CollectionId != nil && len(*s.CollectionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CollectionId", 1))
+	}
+	if s.UserId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserId"))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateUserInput) SetClientRequestToken(v string) *CreateUserInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCollectionId sets the CollectionId field's value.
+func (s *CreateUserInput) SetCollectionId(v string) *CreateUserInput {
+	s.CollectionId = &v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *CreateUserInput) SetUserId(v string) *CreateUserInput {
+	s.UserId = &v
+	return s
+}
+
+type CreateUserOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateUserOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateUserOutput) GoString() string {
+	return s.String()
+}
+
 // A custom label detected in an image by a call to DetectCustomLabels.
 type CustomLabel struct {
 	_ struct{} `type:"structure"`
@@ -11271,6 +12896,74 @@ func (s *CustomLabel) SetGeometry(v *Geometry) *CustomLabel {
 // SetName sets the Name field's value.
 func (s *CustomLabel) SetName(v string) *CustomLabel {
 	s.Name = &v
+	return s
+}
+
+// Feature specific configuration for the training job. Configuration provided
+// for the job must match the feature type parameter associated with project.
+// If configuration and feature type do not match an InvalidParameterException
+// is returned.
+type CustomizationFeatureConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration options for Custom Moderation training.
+	ContentModeration *CustomizationFeatureContentModerationConfig `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomizationFeatureConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomizationFeatureConfig) GoString() string {
+	return s.String()
+}
+
+// SetContentModeration sets the ContentModeration field's value.
+func (s *CustomizationFeatureConfig) SetContentModeration(v *CustomizationFeatureContentModerationConfig) *CustomizationFeatureConfig {
+	s.ContentModeration = v
+	return s
+}
+
+// Configuration options for Content Moderation training.
+type CustomizationFeatureContentModerationConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The confidence level you plan to use to identify if unsafe content is present
+	// during inference.
+	ConfidenceThreshold *float64 `type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomizationFeatureContentModerationConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomizationFeatureContentModerationConfig) GoString() string {
+	return s.String()
+}
+
+// SetConfidenceThreshold sets the ConfidenceThreshold field's value.
+func (s *CustomizationFeatureContentModerationConfig) SetConfidenceThreshold(v float64) *CustomizationFeatureContentModerationConfig {
+	s.ConfidenceThreshold = &v
 	return s
 }
 
@@ -11933,6 +13626,9 @@ type DeleteFacesOutput struct {
 
 	// An array of strings (face IDs) of the faces that were deleted.
 	DeletedFaces []*string `min:"1" type:"list"`
+
+	// An array of any faces that weren't deleted.
+	UnsuccessfulFaceDeletions []*UnsuccessfulFaceDeletion `type:"list"`
 }
 
 // String returns the string representation.
@@ -11956,6 +13652,12 @@ func (s DeleteFacesOutput) GoString() string {
 // SetDeletedFaces sets the DeletedFaces field's value.
 func (s *DeleteFacesOutput) SetDeletedFaces(v []*string) *DeleteFacesOutput {
 	s.DeletedFaces = v
+	return s
+}
+
+// SetUnsuccessfulFaceDeletions sets the UnsuccessfulFaceDeletions field's value.
+func (s *DeleteFacesOutput) SetUnsuccessfulFaceDeletions(v []*UnsuccessfulFaceDeletion) *DeleteFacesOutput {
+	s.UnsuccessfulFaceDeletions = v
 	return s
 }
 
@@ -12140,7 +13842,7 @@ func (s DeleteProjectPolicyOutput) GoString() string {
 type DeleteProjectVersionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the model version that you want to delete.
+	// The Amazon Resource Name (ARN) of the project version that you want to delete.
 	//
 	// ProjectVersionArn is a required field
 	ProjectVersionArn *string `min:"20" type:"string" required:"true"`
@@ -12288,6 +13990,109 @@ func (s DeleteStreamProcessorOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteUserInput struct {
+	_ struct{} `type:"structure"`
+
+	// Idempotent token used to identify the request to DeleteUser. If you use the
+	// same token with multiple DeleteUser requests, the same response is returned.
+	// Use ClientRequestToken to prevent the same request from being processed more
+	// than once.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The ID of an existing collection from which the UserID needs to be deleted.
+	//
+	// CollectionId is a required field
+	CollectionId *string `min:"1" type:"string" required:"true"`
+
+	// ID for the UserID to be deleted.
+	//
+	// UserId is a required field
+	UserId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteUserInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteUserInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteUserInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteUserInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.CollectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollectionId"))
+	}
+	if s.CollectionId != nil && len(*s.CollectionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CollectionId", 1))
+	}
+	if s.UserId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserId"))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DeleteUserInput) SetClientRequestToken(v string) *DeleteUserInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCollectionId sets the CollectionId field's value.
+func (s *DeleteUserInput) SetCollectionId(v string) *DeleteUserInput {
+	s.CollectionId = &v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *DeleteUserInput) SetUserId(v string) *DeleteUserInput {
+	s.UserId = &v
+	return s
+}
+
+type DeleteUserOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteUserOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteUserOutput) GoString() string {
+	return s.String()
+}
+
 type DescribeCollectionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -12357,6 +14162,9 @@ type DescribeCollectionOutput struct {
 	// For more information, see Model versioning in the Amazon Rekognition Developer
 	// Guide.
 	FaceModelVersion *string `type:"string"`
+
+	// The number of UserIDs assigned to the specified colleciton.
+	UserCount *int64 `type:"long"`
 }
 
 // String returns the string representation.
@@ -12398,6 +14206,12 @@ func (s *DescribeCollectionOutput) SetFaceCount(v int64) *DescribeCollectionOutp
 // SetFaceModelVersion sets the FaceModelVersion field's value.
 func (s *DescribeCollectionOutput) SetFaceModelVersion(v string) *DescribeCollectionOutput {
 	s.FaceModelVersion = &v
+	return s
+}
+
+// SetUserCount sets the UserCount field's value.
+func (s *DescribeCollectionOutput) SetUserCount(v int64) *DescribeCollectionOutput {
+	s.UserCount = &v
 	return s
 }
 
@@ -12490,22 +14304,21 @@ type DescribeProjectVersionsInput struct {
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// If the previous response was incomplete (because there is more results to
-	// retrieve), Amazon Rekognition Custom Labels returns a pagination token in
-	// the response. You can use this pagination token to retrieve the next set
-	// of results.
+	// retrieve), Amazon Rekognition returns a pagination token in the response.
+	// You can use this pagination token to retrieve the next set of results.
 	NextToken *string `type:"string"`
 
-	// The Amazon Resource Name (ARN) of the project that contains the models you
-	// want to describe.
+	// The Amazon Resource Name (ARN) of the project that contains the model/adapter
+	// you want to describe.
 	//
 	// ProjectArn is a required field
 	ProjectArn *string `min:"20" type:"string" required:"true"`
 
-	// A list of model version names that you want to describe. You can add up to
-	// 10 model version names to the list. If you don't specify a value, all model
-	// descriptions are returned. A version name is part of a model (ProjectVersion)
-	// ARN. For example, my-model.2020-01-21T09.10.15 is the version name in the
-	// following ARN. arn:aws:rekognition:us-east-1:123456789012:project/getting-started/version/my-model.2020-01-21T09.10.15/1234567890123.
+	// A list of model or project version names that you want to describe. You can
+	// add up to 10 model or project version names to the list. If you don't specify
+	// a value, all project version descriptions are returned. A version name is
+	// part of a project version ARN. For example, my-model.2020-01-21T09.10.15
+	// is the version name in the following ARN. arn:aws:rekognition:us-east-1:123456789012:project/getting-started/version/my-model.2020-01-21T09.10.15/1234567890123.
 	VersionNames []*string `min:"1" type:"list"`
 }
 
@@ -12577,13 +14390,12 @@ type DescribeProjectVersionsOutput struct {
 	_ struct{} `type:"structure"`
 
 	// If the previous response was incomplete (because there is more results to
-	// retrieve), Amazon Rekognition Custom Labels returns a pagination token in
-	// the response. You can use this pagination token to retrieve the next set
-	// of results.
+	// retrieve), Amazon Rekognition returns a pagination token in the response.
+	// You can use this pagination token to retrieve the next set of results.
 	NextToken *string `type:"string"`
 
-	// A list of model descriptions. The list is sorted by the creation date and
-	// time of the model versions, latest to earliest.
+	// A list of project version descriptions. The list is sorted by the creation
+	// date and time of the project versions, latest to earliest.
 	ProjectVersionDescriptions []*ProjectVersionDescription `type:"list"`
 }
 
@@ -12620,20 +14432,23 @@ func (s *DescribeProjectVersionsOutput) SetProjectVersionDescriptions(v []*Proje
 type DescribeProjectsInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies the type of customization to filter projects by. If no value is
+	// specified, CUSTOM_LABELS is used as a default.
+	Features []*string `min:"1" type:"list" enum:"CustomizationFeature"`
+
 	// The maximum number of results to return per paginated call. The largest value
 	// you can specify is 100. If you specify a value greater than 100, a ValidationException
 	// error occurs. The default value is 100.
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// If the previous response was incomplete (because there is more results to
-	// retrieve), Amazon Rekognition Custom Labels returns a pagination token in
-	// the response. You can use this pagination token to retrieve the next set
-	// of results.
+	// retrieve), Rekognition returns a pagination token in the response. You can
+	// use this pagination token to retrieve the next set of results.
 	NextToken *string `type:"string"`
 
-	// A list of the projects that you want Amazon Rekognition Custom Labels to
-	// describe. If you don't specify a value, the response includes descriptions
-	// for all the projects in your AWS account.
+	// A list of the projects that you want Rekognition to describe. If you don't
+	// specify a value, the response includes descriptions for all the projects
+	// in your AWS account.
 	ProjectNames []*string `min:"1" type:"list"`
 }
 
@@ -12658,6 +14473,9 @@ func (s DescribeProjectsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeProjectsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeProjectsInput"}
+	if s.Features != nil && len(s.Features) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Features", 1))
+	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
@@ -12669,6 +14487,12 @@ func (s *DescribeProjectsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetFeatures sets the Features field's value.
+func (s *DescribeProjectsInput) SetFeatures(v []*string) *DescribeProjectsInput {
+	s.Features = v
+	return s
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -12693,9 +14517,8 @@ type DescribeProjectsOutput struct {
 	_ struct{} `type:"structure"`
 
 	// If the previous response was incomplete (because there is more results to
-	// retrieve), Amazon Rekognition Custom Labels returns a pagination token in
-	// the response. You can use this pagination token to retrieve the next set
-	// of results.
+	// retrieve), Amazon Rekognition returns a pagination token in the response.
+	// You can use this pagination token to retrieve the next set of results.
 	NextToken *string `type:"string"`
 
 	// A list of project descriptions. The list is sorted by the date and time the
@@ -12996,7 +14819,10 @@ type DetectCustomLabelsInput struct {
 	// based on the assumed threshold of each label.
 	MinConfidence *float64 `type:"float"`
 
-	// The ARN of the model version that you want to use.
+	// The ARN of the model version that you want to use. Only models associated
+	// with Custom Labels projects accepted by the operation. If a provided ARN
+	// refers to a model version associated with a project for a different feature
+	// type, then an InvalidParameterException is returned.
 	//
 	// ProjectVersionArn is a required field
 	ProjectVersionArn *string `min:"20" type:"string" required:"true"`
@@ -13111,6 +14937,10 @@ type DetectFacesInput struct {
 	//
 	// If you provide both, ["ALL", "DEFAULT"], the service uses a logical "AND"
 	// operator to determine which attributes to return (in this case, all attributes).
+	//
+	// Note that while the FaceOccluded and EyeDirection attributes are supported
+	// when using DetectFaces, they aren't supported when analyzing videos with
+	// StartFaceDetection and GetFaceDetection.
 	Attributes []*string `type:"list" enum:"Attribute"`
 
 	// The input image as base64-encoded bytes or an S3 object. If you use the AWS
@@ -13484,14 +15314,17 @@ type DetectLabelsInput struct {
 	Image *Image `type:"structure" required:"true"`
 
 	// Maximum number of labels you want the service to return in the response.
-	// The service returns the specified number of highest confidence labels.
+	// The service returns the specified number of highest confidence labels. Only
+	// valid when GENERAL_LABELS is specified as a feature type in the Feature input
+	// parameter.
 	MaxLabels *int64 `type:"integer"`
 
 	// Specifies the minimum confidence level for the labels to return. Amazon Rekognition
 	// doesn't return any labels with confidence lower than this specified value.
 	//
 	// If MinConfidence is not specified, the operation returns labels with a confidence
-	// values greater than or equal to 55 percent.
+	// values greater than or equal to 55 percent. Only valid when GENERAL_LABELS
+	// is specified as a feature type in the Feature input parameter.
 	MinConfidence *float64 `type:"float"`
 
 	// A list of the filters to be applied to returned detected labels and image
@@ -13708,6 +15541,10 @@ type DetectModerationLabelsInput struct {
 	// If you don't specify MinConfidence, the operation returns labels with confidence
 	// values greater than or equal to 50 percent.
 	MinConfidence *float64 `type:"float"`
+
+	// Identifier for the custom adapter. Expects the ProjectVersionArn as a value.
+	// Use the CreateProject or CreateProjectVersion APIs to create a custom adapter.
+	ProjectVersion *string `min:"20" type:"string"`
 }
 
 // String returns the string representation.
@@ -13733,6 +15570,9 @@ func (s *DetectModerationLabelsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DetectModerationLabelsInput"}
 	if s.Image == nil {
 		invalidParams.Add(request.NewErrParamRequired("Image"))
+	}
+	if s.ProjectVersion != nil && len(*s.ProjectVersion) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("ProjectVersion", 20))
 	}
 	if s.HumanLoopConfig != nil {
 		if err := s.HumanLoopConfig.Validate(); err != nil {
@@ -13769,8 +15609,18 @@ func (s *DetectModerationLabelsInput) SetMinConfidence(v float64) *DetectModerat
 	return s
 }
 
+// SetProjectVersion sets the ProjectVersion field's value.
+func (s *DetectModerationLabelsInput) SetProjectVersion(v string) *DetectModerationLabelsInput {
+	s.ProjectVersion = &v
+	return s
+}
+
 type DetectModerationLabelsOutput struct {
 	_ struct{} `type:"structure"`
+
+	// A list of predicted results for the type of content an image contains. For
+	// example, the image content might be from animation, sports, or a video game.
+	ContentTypes []*ContentType `type:"list"`
 
 	// Shows the results of the human in the loop evaluation.
 	HumanLoopActivationOutput *HumanLoopActivationOutput `type:"structure"`
@@ -13779,9 +15629,14 @@ type DetectModerationLabelsOutput struct {
 	// start of the video, they were detected.
 	ModerationLabels []*ModerationLabel `type:"list"`
 
-	// Version number of the moderation detection model that was used to detect
+	// Version number of the base moderation detection model that was used to detect
 	// unsafe content.
 	ModerationModelVersion *string `type:"string"`
+
+	// Identifier of the custom adapter that was used during inference. If during
+	// inference the adapter was EXPIRED, then the parameter will not be returned,
+	// indicating that a base moderation detection project version was used.
+	ProjectVersion *string `min:"20" type:"string"`
 }
 
 // String returns the string representation.
@@ -13802,6 +15657,12 @@ func (s DetectModerationLabelsOutput) GoString() string {
 	return s.String()
 }
 
+// SetContentTypes sets the ContentTypes field's value.
+func (s *DetectModerationLabelsOutput) SetContentTypes(v []*ContentType) *DetectModerationLabelsOutput {
+	s.ContentTypes = v
+	return s
+}
+
 // SetHumanLoopActivationOutput sets the HumanLoopActivationOutput field's value.
 func (s *DetectModerationLabelsOutput) SetHumanLoopActivationOutput(v *HumanLoopActivationOutput) *DetectModerationLabelsOutput {
 	s.HumanLoopActivationOutput = v
@@ -13817,6 +15678,12 @@ func (s *DetectModerationLabelsOutput) SetModerationLabels(v []*ModerationLabel)
 // SetModerationModelVersion sets the ModerationModelVersion field's value.
 func (s *DetectModerationLabelsOutput) SetModerationModelVersion(v string) *DetectModerationLabelsOutput {
 	s.ModerationModelVersion = &v
+	return s
+}
+
+// SetProjectVersion sets the ProjectVersion field's value.
+func (s *DetectModerationLabelsOutput) SetProjectVersion(v string) *DetectModerationLabelsOutput {
+	s.ProjectVersion = &v
 	return s
 }
 
@@ -14144,6 +16011,191 @@ func (s *DetectionFilter) SetMinBoundingBoxWidth(v float64) *DetectionFilter {
 // SetMinConfidence sets the MinConfidence field's value.
 func (s *DetectionFilter) SetMinConfidence(v float64) *DetectionFilter {
 	s.MinConfidence = &v
+	return s
+}
+
+type DisassociateFacesInput struct {
+	_ struct{} `type:"structure"`
+
+	// Idempotent token used to identify the request to DisassociateFaces. If you
+	// use the same token with multiple DisassociateFaces requests, the same response
+	// is returned. Use ClientRequestToken to prevent the same request from being
+	// processed more than once.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The ID of an existing collection containing the UserID.
+	//
+	// CollectionId is a required field
+	CollectionId *string `min:"1" type:"string" required:"true"`
+
+	// An array of face IDs to disassociate from the UserID.
+	//
+	// FaceIds is a required field
+	FaceIds []*string `min:"1" type:"list" required:"true"`
+
+	// ID for the existing UserID.
+	//
+	// UserId is a required field
+	UserId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateFacesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateFacesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateFacesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateFacesInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.CollectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollectionId"))
+	}
+	if s.CollectionId != nil && len(*s.CollectionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CollectionId", 1))
+	}
+	if s.FaceIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("FaceIds"))
+	}
+	if s.FaceIds != nil && len(s.FaceIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FaceIds", 1))
+	}
+	if s.UserId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserId"))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DisassociateFacesInput) SetClientRequestToken(v string) *DisassociateFacesInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCollectionId sets the CollectionId field's value.
+func (s *DisassociateFacesInput) SetCollectionId(v string) *DisassociateFacesInput {
+	s.CollectionId = &v
+	return s
+}
+
+// SetFaceIds sets the FaceIds field's value.
+func (s *DisassociateFacesInput) SetFaceIds(v []*string) *DisassociateFacesInput {
+	s.FaceIds = v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *DisassociateFacesInput) SetUserId(v string) *DisassociateFacesInput {
+	s.UserId = &v
+	return s
+}
+
+type DisassociateFacesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of DissociatedFace objects containing FaceIds that are successfully
+	// disassociated with the UserID is returned. Returned if the DisassociatedFaces
+	// action is successful.
+	DisassociatedFaces []*DisassociatedFace `type:"list"`
+
+	// An array of UnsuccessfulDisassociation objects containing FaceIds that are
+	// not successfully associated, along with the reasons for the failure to associate.
+	// Returned if the DisassociateFaces action is successful.
+	UnsuccessfulFaceDisassociations []*UnsuccessfulFaceDisassociation `type:"list"`
+
+	// The status of an update made to a User. Reflects if the User has been updated
+	// for every requested change.
+	UserStatus *string `type:"string" enum:"UserStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateFacesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateFacesOutput) GoString() string {
+	return s.String()
+}
+
+// SetDisassociatedFaces sets the DisassociatedFaces field's value.
+func (s *DisassociateFacesOutput) SetDisassociatedFaces(v []*DisassociatedFace) *DisassociateFacesOutput {
+	s.DisassociatedFaces = v
+	return s
+}
+
+// SetUnsuccessfulFaceDisassociations sets the UnsuccessfulFaceDisassociations field's value.
+func (s *DisassociateFacesOutput) SetUnsuccessfulFaceDisassociations(v []*UnsuccessfulFaceDisassociation) *DisassociateFacesOutput {
+	s.UnsuccessfulFaceDisassociations = v
+	return s
+}
+
+// SetUserStatus sets the UserStatus field's value.
+func (s *DisassociateFacesOutput) SetUserStatus(v string) *DisassociateFacesOutput {
+	s.UserStatus = &v
+	return s
+}
+
+// Provides face metadata for the faces that are disassociated from a specific
+// UserID.
+type DisassociatedFace struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier assigned to the face.
+	FaceId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociatedFace) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociatedFace) GoString() string {
+	return s.String()
+}
+
+// SetFaceId sets the FaceId field's value.
+func (s *DisassociatedFace) SetFaceId(v string) *DisassociatedFace {
+	s.FaceId = &v
 	return s
 }
 
@@ -14516,6 +16568,57 @@ func (s *EvaluationResult) SetSummary(v *Summary) *EvaluationResult {
 	return s
 }
 
+// Indicates the direction the eyes are gazing in (independent of the head pose)
+// as determined by its pitch and yaw.
+type EyeDirection struct {
+	_ struct{} `type:"structure"`
+
+	// The confidence that the service has in its predicted eye direction.
+	Confidence *float64 `type:"float"`
+
+	// Value representing eye direction on the pitch axis.
+	Pitch *float64 `type:"float"`
+
+	// Value representing eye direction on the yaw axis.
+	Yaw *float64 `type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EyeDirection) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EyeDirection) GoString() string {
+	return s.String()
+}
+
+// SetConfidence sets the Confidence field's value.
+func (s *EyeDirection) SetConfidence(v float64) *EyeDirection {
+	s.Confidence = &v
+	return s
+}
+
+// SetPitch sets the Pitch field's value.
+func (s *EyeDirection) SetPitch(v float64) *EyeDirection {
+	s.Pitch = &v
+	return s
+}
+
+// SetYaw sets the Yaw field's value.
+func (s *EyeDirection) SetYaw(v float64) *EyeDirection {
+	s.Yaw = &v
+	return s
+}
+
 // Indicates whether or not the eyes on the face are open, and the confidence
 // level in the determination.
 type EyeOpen struct {
@@ -14624,6 +16727,9 @@ type Face struct {
 	// The version of the face detect and storage model that was used when indexing
 	// the face vector.
 	IndexFacesModelVersion *string `type:"string"`
+
+	// Unique identifier assigned to the user.
+	UserId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -14680,6 +16786,12 @@ func (s *Face) SetIndexFacesModelVersion(v string) *Face {
 	return s
 }
 
+// SetUserId sets the UserId field's value.
+func (s *Face) SetUserId(v string) *Face {
+	s.UserId = &v
+	return s
+}
+
 // Structure containing attributes of the face that the algorithm detected.
 //
 // A FaceDetail object contains either the default facial attributes or all
@@ -14693,11 +16805,11 @@ func (s *Face) SetIndexFacesModelVersion(v string) *Face {
 // attributes. The corresponding Start operations don't have a FaceAttributes
 // input parameter:
 //
-//    * GetCelebrityRecognition
+//   - GetCelebrityRecognition
 //
-//    * GetPersonTracking
+//   - GetPersonTracking
 //
-//    * GetFaceSearch
+//   - GetFaceSearch
 //
 // The Amazon Rekognition Image DetectFaces and IndexFaces operations can return
 // all facial attributes. To specify which attributes to return, use the Attributes
@@ -14727,6 +16839,9 @@ type FaceDetail struct {
 	// person’s internal emotional state and should not be used in such a way.
 	// For example, a person pretending to have a sad face might not be sad emotionally.
 	Emotions []*Emotion `type:"list"`
+
+	// Indicates the direction the eyes are gazing in, as defined by pitch and yaw.
+	EyeDirection *EyeDirection `type:"structure"`
 
 	// Indicates whether or not the face is wearing eye glasses, and the confidence
 	// level in the determination.
@@ -14819,6 +16934,12 @@ func (s *FaceDetail) SetConfidence(v float64) *FaceDetail {
 // SetEmotions sets the Emotions field's value.
 func (s *FaceDetail) SetEmotions(v []*Emotion) *FaceDetail {
 	s.Emotions = v
+	return s
+}
+
+// SetEyeDirection sets the EyeDirection field's value.
+func (s *FaceDetail) SetEyeDirection(v *EyeDirection) *FaceDetail {
+	s.EyeDirection = v
 	return s
 }
 
@@ -16077,7 +18198,7 @@ type GetFaceLivenessSessionResultsOutput struct {
 	// It includes a bounding box of the face and the Base64-encoded bytes that
 	// return an image. If the CreateFaceLivenessSession request included an OutputConfig
 	// argument, the image will be uploaded to an S3Object specified in the output
-	// configuration.
+	// configuration. If no Amazon S3 bucket is defined, raw bytes are sent instead.
 	AuditImages []*AuditImage `type:"list"`
 
 	// Probabalistic confidence score for if the person in the given video was live,
@@ -16605,6 +18726,199 @@ func (s *GetLabelDetectionRequestMetadata) SetAggregateBy(v string) *GetLabelDet
 // SetSortBy sets the SortBy field's value.
 func (s *GetLabelDetectionRequestMetadata) SetSortBy(v string) *GetLabelDetectionRequestMetadata {
 	s.SortBy = &v
+	return s
+}
+
+type GetMediaAnalysisJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier for the media analysis job for which you want to retrieve
+	// results.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMediaAnalysisJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMediaAnalysisJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetMediaAnalysisJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetMediaAnalysisJobInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobId sets the JobId field's value.
+func (s *GetMediaAnalysisJobInput) SetJobId(v string) *GetMediaAnalysisJobInput {
+	s.JobId = &v
+	return s
+}
+
+type GetMediaAnalysisJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Unix date and time when the job finished.
+	CompletionTimestamp *time.Time `type:"timestamp"`
+
+	// The Unix date and time when the job was started.
+	//
+	// CreationTimestamp is a required field
+	CreationTimestamp *time.Time `type:"timestamp" required:"true"`
+
+	// Details about the error that resulted in failure of the job.
+	FailureDetails *MediaAnalysisJobFailureDetails `type:"structure"`
+
+	// Reference to the input manifest that was provided in the job creation request.
+	//
+	// Input is a required field
+	Input *MediaAnalysisInput_ `type:"structure" required:"true"`
+
+	// The identifier for the media analysis job.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+
+	// The name of the media analysis job.
+	JobName *string `min:"1" type:"string"`
+
+	// KMS Key that was provided in the creation request.
+	KmsKeyId *string `min:"1" type:"string"`
+
+	// The summary manifest provides statistics on input manifest and errors identified
+	// in the input manifest.
+	ManifestSummary *MediaAnalysisManifestSummary `type:"structure"`
+
+	// Operation configurations that were provided during job creation.
+	//
+	// OperationsConfig is a required field
+	OperationsConfig *MediaAnalysisOperationsConfig `type:"structure" required:"true"`
+
+	// Output configuration that was provided in the creation request.
+	//
+	// OutputConfig is a required field
+	OutputConfig *MediaAnalysisOutputConfig `type:"structure" required:"true"`
+
+	// Output manifest that contains prediction results.
+	Results *MediaAnalysisResults `type:"structure"`
+
+	// The current status of the media analysis job.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"MediaAnalysisJobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMediaAnalysisJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetMediaAnalysisJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetCompletionTimestamp sets the CompletionTimestamp field's value.
+func (s *GetMediaAnalysisJobOutput) SetCompletionTimestamp(v time.Time) *GetMediaAnalysisJobOutput {
+	s.CompletionTimestamp = &v
+	return s
+}
+
+// SetCreationTimestamp sets the CreationTimestamp field's value.
+func (s *GetMediaAnalysisJobOutput) SetCreationTimestamp(v time.Time) *GetMediaAnalysisJobOutput {
+	s.CreationTimestamp = &v
+	return s
+}
+
+// SetFailureDetails sets the FailureDetails field's value.
+func (s *GetMediaAnalysisJobOutput) SetFailureDetails(v *MediaAnalysisJobFailureDetails) *GetMediaAnalysisJobOutput {
+	s.FailureDetails = v
+	return s
+}
+
+// SetInput sets the Input field's value.
+func (s *GetMediaAnalysisJobOutput) SetInput(v *MediaAnalysisInput_) *GetMediaAnalysisJobOutput {
+	s.Input = v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *GetMediaAnalysisJobOutput) SetJobId(v string) *GetMediaAnalysisJobOutput {
+	s.JobId = &v
+	return s
+}
+
+// SetJobName sets the JobName field's value.
+func (s *GetMediaAnalysisJobOutput) SetJobName(v string) *GetMediaAnalysisJobOutput {
+	s.JobName = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *GetMediaAnalysisJobOutput) SetKmsKeyId(v string) *GetMediaAnalysisJobOutput {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetManifestSummary sets the ManifestSummary field's value.
+func (s *GetMediaAnalysisJobOutput) SetManifestSummary(v *MediaAnalysisManifestSummary) *GetMediaAnalysisJobOutput {
+	s.ManifestSummary = v
+	return s
+}
+
+// SetOperationsConfig sets the OperationsConfig field's value.
+func (s *GetMediaAnalysisJobOutput) SetOperationsConfig(v *MediaAnalysisOperationsConfig) *GetMediaAnalysisJobOutput {
+	s.OperationsConfig = v
+	return s
+}
+
+// SetOutputConfig sets the OutputConfig field's value.
+func (s *GetMediaAnalysisJobOutput) SetOutputConfig(v *MediaAnalysisOutputConfig) *GetMediaAnalysisJobOutput {
+	s.OutputConfig = v
+	return s
+}
+
+// SetResults sets the Results field's value.
+func (s *GetMediaAnalysisJobOutput) SetResults(v *MediaAnalysisResults) *GetMediaAnalysisJobOutput {
+	s.Results = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetMediaAnalysisJobOutput) SetStatus(v string) *GetMediaAnalysisJobOutput {
+	s.Status = &v
 	return s
 }
 
@@ -18157,6 +20471,71 @@ func (s *InvalidImageFormatException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Indicates that a provided manifest file is empty or larger than the allowed
+// limit.
+type InvalidManifestException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvalidManifestException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvalidManifestException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidManifestException(v protocol.ResponseMetadata) error {
+	return &InvalidManifestException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidManifestException) Code() string {
+	return "InvalidManifestException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidManifestException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidManifestException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidManifestException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidManifestException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidManifestException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Pagination token in the request is not valid.
 type InvalidPaginationTokenException struct {
 	_            struct{}                  `type:"structure"`
@@ -18886,10 +21265,10 @@ func (s *Landmark) SetY(v float64) *Landmark {
 }
 
 // An Amazon Rekognition service limit was exceeded. For example, if you start
-// too many Amazon Rekognition Video jobs concurrently, calls to start operations
-// (StartLabelDetection, for example) will raise a LimitExceededException exception
-// (HTTP status code: 400) until the number of concurrently running jobs is
-// below the Amazon Rekognition service limit.
+// too many jobs concurrently, subsequent calls to start operations (ex: StartLabelDetection)
+// will raise a LimitExceededException exception (HTTP status code: 400) until
+// the number of concurrently running jobs is below the Amazon Rekognition service
+// limit.
 type LimitExceededException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -19341,6 +21720,9 @@ type ListFacesInput struct {
 	// CollectionId is a required field
 	CollectionId *string `min:"1" type:"string" required:"true"`
 
+	// An array of face IDs to filter results with when listing faces in a collection.
+	FaceIds []*string `min:"1" type:"list"`
+
 	// Maximum number of faces to return.
 	MaxResults *int64 `type:"integer"`
 
@@ -19348,6 +21730,9 @@ type ListFacesInput struct {
 	// Amazon Rekognition returns a pagination token in the response. You can use
 	// this pagination token to retrieve the next set of faces.
 	NextToken *string `type:"string"`
+
+	// An array of user IDs to filter results with when listing faces in a collection.
+	UserId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -19377,6 +21762,12 @@ func (s *ListFacesInput) Validate() error {
 	if s.CollectionId != nil && len(*s.CollectionId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("CollectionId", 1))
 	}
+	if s.FaceIds != nil && len(s.FaceIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FaceIds", 1))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -19390,6 +21781,12 @@ func (s *ListFacesInput) SetCollectionId(v string) *ListFacesInput {
 	return s
 }
 
+// SetFaceIds sets the FaceIds field's value.
+func (s *ListFacesInput) SetFaceIds(v []*string) *ListFacesInput {
+	s.FaceIds = v
+	return s
+}
+
 // SetMaxResults sets the MaxResults field's value.
 func (s *ListFacesInput) SetMaxResults(v int64) *ListFacesInput {
 	s.MaxResults = &v
@@ -19399,6 +21796,12 @@ func (s *ListFacesInput) SetMaxResults(v int64) *ListFacesInput {
 // SetNextToken sets the NextToken field's value.
 func (s *ListFacesInput) SetNextToken(v string) *ListFacesInput {
 	s.NextToken = &v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *ListFacesInput) SetUserId(v string) *ListFacesInput {
+	s.UserId = &v
 	return s
 }
 
@@ -19449,6 +21852,103 @@ func (s *ListFacesOutput) SetFaces(v []*Face) *ListFacesOutput {
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListFacesOutput) SetNextToken(v string) *ListFacesOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListMediaAnalysisJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return per paginated call. The largest value
+	// user can specify is 100. If user specifies a value greater than 100, an InvalidParameterException
+	// error occurs. The default value is 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Pagination token, if the previous response was incomplete.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMediaAnalysisJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMediaAnalysisJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListMediaAnalysisJobsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListMediaAnalysisJobsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListMediaAnalysisJobsInput) SetMaxResults(v int64) *ListMediaAnalysisJobsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListMediaAnalysisJobsInput) SetNextToken(v string) *ListMediaAnalysisJobsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListMediaAnalysisJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Contains a list of all media analysis jobs.
+	//
+	// MediaAnalysisJobs is a required field
+	MediaAnalysisJobs []*MediaAnalysisJobDescription `type:"list" required:"true"`
+
+	// Pagination token, if the previous response was incomplete.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMediaAnalysisJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMediaAnalysisJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SetMediaAnalysisJobs sets the MediaAnalysisJobs field's value.
+func (s *ListMediaAnalysisJobsOutput) SetMediaAnalysisJobs(v []*MediaAnalysisJobDescription) *ListMediaAnalysisJobsOutput {
+	s.MediaAnalysisJobs = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListMediaAnalysisJobsOutput) SetNextToken(v string) *ListMediaAnalysisJobsOutput {
 	s.NextToken = &v
 	return s
 }
@@ -19750,6 +22250,117 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 	return s
 }
 
+type ListUsersInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of an existing collection.
+	//
+	// CollectionId is a required field
+	CollectionId *string `min:"1" type:"string" required:"true"`
+
+	// Maximum number of UsersID to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Pagingation token to receive the next set of UsersID.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListUsersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListUsersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListUsersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListUsersInput"}
+	if s.CollectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollectionId"))
+	}
+	if s.CollectionId != nil && len(*s.CollectionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CollectionId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCollectionId sets the CollectionId field's value.
+func (s *ListUsersInput) SetCollectionId(v string) *ListUsersInput {
+	s.CollectionId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListUsersInput) SetMaxResults(v int64) *ListUsersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListUsersInput) SetNextToken(v string) *ListUsersInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListUsersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A pagination token to be used with the subsequent request if the response
+	// is truncated.
+	NextToken *string `type:"string"`
+
+	// List of UsersID associated with the specified collection.
+	Users []*User `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListUsersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListUsersOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListUsersOutput) SetNextToken(v string) *ListUsersOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetUsers sets the Users field's value.
+func (s *ListUsersOutput) SetUsers(v []*User) *ListUsersOutput {
+	s.Users = v
+	return s
+}
+
 // Contains settings that specify the location of an Amazon S3 bucket used to
 // store the output of a Face Liveness session. Note that the S3 bucket must
 // be located in the caller's AWS account and in the same region as the Face
@@ -19878,6 +22489,578 @@ func (s *MalformedPolicyDocumentException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Contains metadata for a UserID matched with a given face.
+type MatchedUser struct {
+	_ struct{} `type:"structure"`
+
+	// A provided ID for the UserID. Unique within the collection.
+	UserId *string `min:"1" type:"string"`
+
+	// The status of the user matched to a provided FaceID.
+	UserStatus *string `type:"string" enum:"UserStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MatchedUser) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MatchedUser) GoString() string {
+	return s.String()
+}
+
+// SetUserId sets the UserId field's value.
+func (s *MatchedUser) SetUserId(v string) *MatchedUser {
+	s.UserId = &v
+	return s
+}
+
+// SetUserStatus sets the UserStatus field's value.
+func (s *MatchedUser) SetUserStatus(v string) *MatchedUser {
+	s.UserStatus = &v
+	return s
+}
+
+// Configuration for Moderation Labels Detection.
+type MediaAnalysisDetectModerationLabelsConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the minimum confidence level for the moderation labels to return.
+	// Amazon Rekognition doesn't return any labels with a confidence level lower
+	// than this specified value.
+	MinConfidence *float64 `type:"float"`
+
+	// Specifies the custom moderation model to be used during the label detection
+	// job. If not provided the pre-trained model is used.
+	ProjectVersion *string `min:"20" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisDetectModerationLabelsConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisDetectModerationLabelsConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MediaAnalysisDetectModerationLabelsConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MediaAnalysisDetectModerationLabelsConfig"}
+	if s.ProjectVersion != nil && len(*s.ProjectVersion) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("ProjectVersion", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMinConfidence sets the MinConfidence field's value.
+func (s *MediaAnalysisDetectModerationLabelsConfig) SetMinConfidence(v float64) *MediaAnalysisDetectModerationLabelsConfig {
+	s.MinConfidence = &v
+	return s
+}
+
+// SetProjectVersion sets the ProjectVersion field's value.
+func (s *MediaAnalysisDetectModerationLabelsConfig) SetProjectVersion(v string) *MediaAnalysisDetectModerationLabelsConfig {
+	s.ProjectVersion = &v
+	return s
+}
+
+// Contains input information for a media analysis job.
+type MediaAnalysisInput_ struct {
+	_ struct{} `type:"structure"`
+
+	// Provides the S3 bucket name and object name.
+	//
+	// The region for the S3 bucket containing the S3 object must match the region
+	// you use for Amazon Rekognition operations.
+	//
+	// For Amazon Rekognition to process an S3 object, the user must have permission
+	// to access the S3 object. For more information, see How Amazon Rekognition
+	// works with IAM in the Amazon Rekognition Developer Guide.
+	//
+	// S3Object is a required field
+	S3Object *S3Object `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisInput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisInput_) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MediaAnalysisInput_) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MediaAnalysisInput_"}
+	if s.S3Object == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3Object"))
+	}
+	if s.S3Object != nil {
+		if err := s.S3Object.Validate(); err != nil {
+			invalidParams.AddNested("S3Object", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3Object sets the S3Object field's value.
+func (s *MediaAnalysisInput_) SetS3Object(v *S3Object) *MediaAnalysisInput_ {
+	s.S3Object = v
+	return s
+}
+
+// Description for a media analysis job.
+type MediaAnalysisJobDescription struct {
+	_ struct{} `type:"structure"`
+
+	// The Unix date and time when the job finished.
+	CompletionTimestamp *time.Time `type:"timestamp"`
+
+	// The Unix date and time when the job was started.
+	//
+	// CreationTimestamp is a required field
+	CreationTimestamp *time.Time `type:"timestamp" required:"true"`
+
+	// Details about the error that resulted in failure of the job.
+	FailureDetails *MediaAnalysisJobFailureDetails `type:"structure"`
+
+	// Reference to the input manifest that was provided in the job creation request.
+	//
+	// Input is a required field
+	Input *MediaAnalysisInput_ `type:"structure" required:"true"`
+
+	// The identifier for a media analysis job.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+
+	// The name of a media analysis job.
+	JobName *string `min:"1" type:"string"`
+
+	// KMS Key that was provided in the creation request.
+	KmsKeyId *string `min:"1" type:"string"`
+
+	// Provides statistics on input manifest and errors identified in the input
+	// manifest.
+	ManifestSummary *MediaAnalysisManifestSummary `type:"structure"`
+
+	// Operation configurations that were provided during job creation.
+	//
+	// OperationsConfig is a required field
+	OperationsConfig *MediaAnalysisOperationsConfig `type:"structure" required:"true"`
+
+	// Output configuration that was provided in the creation request.
+	//
+	// OutputConfig is a required field
+	OutputConfig *MediaAnalysisOutputConfig `type:"structure" required:"true"`
+
+	// Output manifest that contains prediction results.
+	Results *MediaAnalysisResults `type:"structure"`
+
+	// The status of the media analysis job being retrieved.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"MediaAnalysisJobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisJobDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisJobDescription) GoString() string {
+	return s.String()
+}
+
+// SetCompletionTimestamp sets the CompletionTimestamp field's value.
+func (s *MediaAnalysisJobDescription) SetCompletionTimestamp(v time.Time) *MediaAnalysisJobDescription {
+	s.CompletionTimestamp = &v
+	return s
+}
+
+// SetCreationTimestamp sets the CreationTimestamp field's value.
+func (s *MediaAnalysisJobDescription) SetCreationTimestamp(v time.Time) *MediaAnalysisJobDescription {
+	s.CreationTimestamp = &v
+	return s
+}
+
+// SetFailureDetails sets the FailureDetails field's value.
+func (s *MediaAnalysisJobDescription) SetFailureDetails(v *MediaAnalysisJobFailureDetails) *MediaAnalysisJobDescription {
+	s.FailureDetails = v
+	return s
+}
+
+// SetInput sets the Input field's value.
+func (s *MediaAnalysisJobDescription) SetInput(v *MediaAnalysisInput_) *MediaAnalysisJobDescription {
+	s.Input = v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *MediaAnalysisJobDescription) SetJobId(v string) *MediaAnalysisJobDescription {
+	s.JobId = &v
+	return s
+}
+
+// SetJobName sets the JobName field's value.
+func (s *MediaAnalysisJobDescription) SetJobName(v string) *MediaAnalysisJobDescription {
+	s.JobName = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *MediaAnalysisJobDescription) SetKmsKeyId(v string) *MediaAnalysisJobDescription {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetManifestSummary sets the ManifestSummary field's value.
+func (s *MediaAnalysisJobDescription) SetManifestSummary(v *MediaAnalysisManifestSummary) *MediaAnalysisJobDescription {
+	s.ManifestSummary = v
+	return s
+}
+
+// SetOperationsConfig sets the OperationsConfig field's value.
+func (s *MediaAnalysisJobDescription) SetOperationsConfig(v *MediaAnalysisOperationsConfig) *MediaAnalysisJobDescription {
+	s.OperationsConfig = v
+	return s
+}
+
+// SetOutputConfig sets the OutputConfig field's value.
+func (s *MediaAnalysisJobDescription) SetOutputConfig(v *MediaAnalysisOutputConfig) *MediaAnalysisJobDescription {
+	s.OutputConfig = v
+	return s
+}
+
+// SetResults sets the Results field's value.
+func (s *MediaAnalysisJobDescription) SetResults(v *MediaAnalysisResults) *MediaAnalysisJobDescription {
+	s.Results = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *MediaAnalysisJobDescription) SetStatus(v string) *MediaAnalysisJobDescription {
+	s.Status = &v
+	return s
+}
+
+// Details about the error that resulted in failure of the job.
+type MediaAnalysisJobFailureDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Error code for the failed job.
+	Code *string `type:"string" enum:"MediaAnalysisJobFailureCode"`
+
+	// Human readable error message.
+	Message *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisJobFailureDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisJobFailureDetails) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *MediaAnalysisJobFailureDetails) SetCode(v string) *MediaAnalysisJobFailureDetails {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *MediaAnalysisJobFailureDetails) SetMessage(v string) *MediaAnalysisJobFailureDetails {
+	s.Message = &v
+	return s
+}
+
+// Summary that provides statistics on input manifest and errors identified
+// in the input manifest.
+type MediaAnalysisManifestSummary struct {
+	_ struct{} `type:"structure"`
+
+	// Provides the S3 bucket name and object name.
+	//
+	// The region for the S3 bucket containing the S3 object must match the region
+	// you use for Amazon Rekognition operations.
+	//
+	// For Amazon Rekognition to process an S3 object, the user must have permission
+	// to access the S3 object. For more information, see How Amazon Rekognition
+	// works with IAM in the Amazon Rekognition Developer Guide.
+	S3Object *S3Object `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisManifestSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisManifestSummary) GoString() string {
+	return s.String()
+}
+
+// SetS3Object sets the S3Object field's value.
+func (s *MediaAnalysisManifestSummary) SetS3Object(v *S3Object) *MediaAnalysisManifestSummary {
+	s.S3Object = v
+	return s
+}
+
+// Object containing information about the model versions of selected features
+// in a given job.
+type MediaAnalysisModelVersions struct {
+	_ struct{} `type:"structure"`
+
+	// The Moderation base model version.
+	Moderation *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisModelVersions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisModelVersions) GoString() string {
+	return s.String()
+}
+
+// SetModeration sets the Moderation field's value.
+func (s *MediaAnalysisModelVersions) SetModeration(v string) *MediaAnalysisModelVersions {
+	s.Moderation = &v
+	return s
+}
+
+// Configuration options for a media analysis job. Configuration is operation-specific.
+type MediaAnalysisOperationsConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Contains configuration options for a DetectModerationLabels job.
+	DetectModerationLabels *MediaAnalysisDetectModerationLabelsConfig `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisOperationsConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisOperationsConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MediaAnalysisOperationsConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MediaAnalysisOperationsConfig"}
+	if s.DetectModerationLabels != nil {
+		if err := s.DetectModerationLabels.Validate(); err != nil {
+			invalidParams.AddNested("DetectModerationLabels", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDetectModerationLabels sets the DetectModerationLabels field's value.
+func (s *MediaAnalysisOperationsConfig) SetDetectModerationLabels(v *MediaAnalysisDetectModerationLabelsConfig) *MediaAnalysisOperationsConfig {
+	s.DetectModerationLabels = v
+	return s
+}
+
+// Output configuration provided in the job creation request.
+type MediaAnalysisOutputConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the Amazon S3 bucket to contain the output of the media analysis
+	// job.
+	//
+	// S3Bucket is a required field
+	S3Bucket *string `min:"3" type:"string" required:"true"`
+
+	// Specifies the Amazon S3 key prefix that comes after the name of the bucket
+	// you have designated for storage.
+	S3KeyPrefix *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisOutputConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisOutputConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MediaAnalysisOutputConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MediaAnalysisOutputConfig"}
+	if s.S3Bucket == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3Bucket"))
+	}
+	if s.S3Bucket != nil && len(*s.S3Bucket) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("S3Bucket", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3Bucket sets the S3Bucket field's value.
+func (s *MediaAnalysisOutputConfig) SetS3Bucket(v string) *MediaAnalysisOutputConfig {
+	s.S3Bucket = &v
+	return s
+}
+
+// SetS3KeyPrefix sets the S3KeyPrefix field's value.
+func (s *MediaAnalysisOutputConfig) SetS3KeyPrefix(v string) *MediaAnalysisOutputConfig {
+	s.S3KeyPrefix = &v
+	return s
+}
+
+// Contains the results for a media analysis job created with StartMediaAnalysisJob.
+type MediaAnalysisResults struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the model versions for the features selected in a given
+	// job.
+	ModelVersions *MediaAnalysisModelVersions `type:"structure"`
+
+	// Provides the S3 bucket name and object name.
+	//
+	// The region for the S3 bucket containing the S3 object must match the region
+	// you use for Amazon Rekognition operations.
+	//
+	// For Amazon Rekognition to process an S3 object, the user must have permission
+	// to access the S3 object. For more information, see How Amazon Rekognition
+	// works with IAM in the Amazon Rekognition Developer Guide.
+	S3Object *S3Object `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisResults) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAnalysisResults) GoString() string {
+	return s.String()
+}
+
+// SetModelVersions sets the ModelVersions field's value.
+func (s *MediaAnalysisResults) SetModelVersions(v *MediaAnalysisModelVersions) *MediaAnalysisResults {
+	s.ModelVersions = v
+	return s
+}
+
+// SetS3Object sets the S3Object field's value.
+func (s *MediaAnalysisResults) SetS3Object(v *S3Object) *MediaAnalysisResults {
+	s.S3Object = v
+	return s
+}
+
 // Provides information about a single type of inappropriate, unwanted, or offensive
 // content found in an image or video. Each type of moderated content has a
 // label within a hierarchical taxonomy. For more information, see Content moderation
@@ -19899,6 +23082,10 @@ type ModerationLabel struct {
 	// The name for the parent label. Labels at the top level of the hierarchy have
 	// the parent label "".
 	ParentName *string `type:"string"`
+
+	// The level of the moderation label with regard to its taxonomy, from 1 to
+	// 3.
+	TaxonomyLevel *int64 `type:"integer"`
 }
 
 // String returns the string representation.
@@ -19934,6 +23121,12 @@ func (s *ModerationLabel) SetName(v string) *ModerationLabel {
 // SetParentName sets the ParentName field's value.
 func (s *ModerationLabel) SetParentName(v string) *ModerationLabel {
 	s.ParentName = &v
+	return s
+}
+
+// SetTaxonomyLevel sets the TaxonomyLevel field's value.
+func (s *ModerationLabel) SetTaxonomyLevel(v int64) *ModerationLabel {
+	s.TaxonomyLevel = &v
 	return s
 }
 
@@ -20436,11 +23629,18 @@ func (s *Pose) SetYaw(v float64) *Pose {
 type ProjectDescription struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates whether automatic retraining will be attempted for the versions
+	// of the project. Applies only to adapters.
+	AutoUpdate *string `type:"string" enum:"ProjectAutoUpdate"`
+
 	// The Unix timestamp for the date and time that the project was created.
 	CreationTimestamp *time.Time `type:"timestamp"`
 
 	// Information about the training and test datasets in the project.
 	Datasets []*DatasetMetadata `type:"list"`
+
+	// Specifies the project that is being customized.
+	Feature *string `type:"string" enum:"CustomizationFeature"`
 
 	// The Amazon Resource Name (ARN) of the project.
 	ProjectArn *string `min:"20" type:"string"`
@@ -20467,6 +23667,12 @@ func (s ProjectDescription) GoString() string {
 	return s.String()
 }
 
+// SetAutoUpdate sets the AutoUpdate field's value.
+func (s *ProjectDescription) SetAutoUpdate(v string) *ProjectDescription {
+	s.AutoUpdate = &v
+	return s
+}
+
 // SetCreationTimestamp sets the CreationTimestamp field's value.
 func (s *ProjectDescription) SetCreationTimestamp(v time.Time) *ProjectDescription {
 	s.CreationTimestamp = &v
@@ -20476,6 +23682,12 @@ func (s *ProjectDescription) SetCreationTimestamp(v time.Time) *ProjectDescripti
 // SetDatasets sets the Datasets field's value.
 func (s *ProjectDescription) SetDatasets(v []*DatasetMetadata) *ProjectDescription {
 	s.Datasets = v
+	return s
+}
+
+// SetFeature sets the Feature field's value.
+func (s *ProjectDescription) SetFeature(v string) *ProjectDescription {
+	s.Feature = &v
 	return s
 }
 
@@ -20569,9 +23781,12 @@ func (s *ProjectPolicy) SetProjectArn(v string) *ProjectPolicy {
 	return s
 }
 
-// A description of a version of an Amazon Rekognition Custom Labels model.
+// A description of a version of a Amazon Rekognition project version.
 type ProjectVersionDescription struct {
 	_ struct{} `type:"structure"`
+
+	// The base detection model version used to create the project version.
+	BaseModelVersion *string `type:"string"`
 
 	// The duration, in seconds, that you were billed for a successful training
 	// of the model version. This value is only returned if the model version has
@@ -20584,6 +23799,12 @@ type ProjectVersionDescription struct {
 	// The training results. EvaluationResult is only returned if training is successful.
 	EvaluationResult *EvaluationResult `type:"structure"`
 
+	// The feature that was customized.
+	Feature *string `type:"string" enum:"CustomizationFeature"`
+
+	// Feature specific configuration that was applied during training.
+	FeatureConfig *CustomizationFeatureConfig `type:"structure"`
+
 	// The identifer for the AWS Key Management Service key (AWS KMS key) that was
 	// used to encrypt the model during training.
 	KmsKeyId *string `min:"1" type:"string"`
@@ -20592,18 +23813,19 @@ type ProjectVersionDescription struct {
 	// data validation results for the training and test datasets.
 	ManifestSummary *GroundTruthManifest `type:"structure"`
 
-	// The maximum number of inference units Amazon Rekognition Custom Labels uses
-	// to auto-scale the model. For more information, see StartProjectVersion.
+	// The maximum number of inference units Amazon Rekognition uses to auto-scale
+	// the model. Applies only to Custom Labels projects. For more information,
+	// see StartProjectVersion.
 	MaxInferenceUnits *int64 `min:"1" type:"integer"`
 
-	// The minimum number of inference units used by the model. For more information,
-	// see StartProjectVersion.
+	// The minimum number of inference units used by the model. Applies only to
+	// Custom Labels projects. For more information, see StartProjectVersion.
 	MinInferenceUnits *int64 `min:"1" type:"integer"`
 
 	// The location where training results are saved.
 	OutputConfig *OutputConfig `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the model version.
+	// The Amazon Resource Name (ARN) of the project version.
 	ProjectVersionArn *string `min:"20" type:"string"`
 
 	// If the model version was copied from a different project, SourceProjectVersionArn
@@ -20624,6 +23846,9 @@ type ProjectVersionDescription struct {
 
 	// The Unix date and time that training of the model ended.
 	TrainingEndTimestamp *time.Time `type:"timestamp"`
+
+	// A user-provided description of the project version.
+	VersionDescription *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -20644,6 +23869,12 @@ func (s ProjectVersionDescription) GoString() string {
 	return s.String()
 }
 
+// SetBaseModelVersion sets the BaseModelVersion field's value.
+func (s *ProjectVersionDescription) SetBaseModelVersion(v string) *ProjectVersionDescription {
+	s.BaseModelVersion = &v
+	return s
+}
+
 // SetBillableTrainingTimeInSeconds sets the BillableTrainingTimeInSeconds field's value.
 func (s *ProjectVersionDescription) SetBillableTrainingTimeInSeconds(v int64) *ProjectVersionDescription {
 	s.BillableTrainingTimeInSeconds = &v
@@ -20659,6 +23890,18 @@ func (s *ProjectVersionDescription) SetCreationTimestamp(v time.Time) *ProjectVe
 // SetEvaluationResult sets the EvaluationResult field's value.
 func (s *ProjectVersionDescription) SetEvaluationResult(v *EvaluationResult) *ProjectVersionDescription {
 	s.EvaluationResult = v
+	return s
+}
+
+// SetFeature sets the Feature field's value.
+func (s *ProjectVersionDescription) SetFeature(v string) *ProjectVersionDescription {
+	s.Feature = &v
+	return s
+}
+
+// SetFeatureConfig sets the FeatureConfig field's value.
+func (s *ProjectVersionDescription) SetFeatureConfig(v *CustomizationFeatureConfig) *ProjectVersionDescription {
+	s.FeatureConfig = v
 	return s
 }
 
@@ -20731,6 +23974,12 @@ func (s *ProjectVersionDescription) SetTrainingDataResult(v *TrainingDataResult)
 // SetTrainingEndTimestamp sets the TrainingEndTimestamp field's value.
 func (s *ProjectVersionDescription) SetTrainingEndTimestamp(v time.Time) *ProjectVersionDescription {
 	s.TrainingEndTimestamp = &v
+	return s
+}
+
+// SetVersionDescription sets the VersionDescription field's value.
+func (s *ProjectVersionDescription) SetVersionDescription(v string) *ProjectVersionDescription {
+	s.VersionDescription = &v
 	return s
 }
 
@@ -22074,6 +25323,470 @@ func (s *SearchFacesOutput) SetSearchedFaceId(v string) *SearchFacesOutput {
 	return s
 }
 
+type SearchUsersByImageInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of an existing collection containing the UserID.
+	//
+	// CollectionId is a required field
+	CollectionId *string `min:"1" type:"string" required:"true"`
+
+	// Provides the input image either as bytes or an S3 object.
+	//
+	// You pass image bytes to an Amazon Rekognition API operation by using the
+	// Bytes property. For example, you would use the Bytes property to pass an
+	// image loaded from a local file system. Image bytes passed by using the Bytes
+	// property must be base64-encoded. Your code may not need to encode image bytes
+	// if you are using an AWS SDK to call Amazon Rekognition API operations.
+	//
+	// For more information, see Analyzing an Image Loaded from a Local File System
+	// in the Amazon Rekognition Developer Guide.
+	//
+	// You pass images stored in an S3 bucket to an Amazon Rekognition API operation
+	// by using the S3Object property. Images stored in an S3 bucket do not need
+	// to be base64-encoded.
+	//
+	// The region for the S3 bucket containing the S3 object must match the region
+	// you use for Amazon Rekognition operations.
+	//
+	// If you use the AWS CLI to call Amazon Rekognition operations, passing image
+	// bytes using the Bytes property is not supported. You must first upload the
+	// image to an Amazon S3 bucket and then call the operation using the S3Object
+	// property.
+	//
+	// For Amazon Rekognition to process an S3 object, the user must have permission
+	// to access the S3 object. For more information, see How Amazon Rekognition
+	// works with IAM in the Amazon Rekognition Developer Guide.
+	//
+	// Image is a required field
+	Image *Image `type:"structure" required:"true"`
+
+	// Maximum number of UserIDs to return.
+	MaxUsers *int64 `min:"1" type:"integer"`
+
+	// A filter that specifies a quality bar for how much filtering is done to identify
+	// faces. Filtered faces aren't searched for in the collection. The default
+	// value is NONE.
+	QualityFilter *string `type:"string" enum:"QualityFilter"`
+
+	// Specifies the minimum confidence in the UserID match to return. Default value
+	// is 80.
+	UserMatchThreshold *float64 `type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersByImageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersByImageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SearchUsersByImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SearchUsersByImageInput"}
+	if s.CollectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollectionId"))
+	}
+	if s.CollectionId != nil && len(*s.CollectionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CollectionId", 1))
+	}
+	if s.Image == nil {
+		invalidParams.Add(request.NewErrParamRequired("Image"))
+	}
+	if s.MaxUsers != nil && *s.MaxUsers < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxUsers", 1))
+	}
+	if s.Image != nil {
+		if err := s.Image.Validate(); err != nil {
+			invalidParams.AddNested("Image", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCollectionId sets the CollectionId field's value.
+func (s *SearchUsersByImageInput) SetCollectionId(v string) *SearchUsersByImageInput {
+	s.CollectionId = &v
+	return s
+}
+
+// SetImage sets the Image field's value.
+func (s *SearchUsersByImageInput) SetImage(v *Image) *SearchUsersByImageInput {
+	s.Image = v
+	return s
+}
+
+// SetMaxUsers sets the MaxUsers field's value.
+func (s *SearchUsersByImageInput) SetMaxUsers(v int64) *SearchUsersByImageInput {
+	s.MaxUsers = &v
+	return s
+}
+
+// SetQualityFilter sets the QualityFilter field's value.
+func (s *SearchUsersByImageInput) SetQualityFilter(v string) *SearchUsersByImageInput {
+	s.QualityFilter = &v
+	return s
+}
+
+// SetUserMatchThreshold sets the UserMatchThreshold field's value.
+func (s *SearchUsersByImageInput) SetUserMatchThreshold(v float64) *SearchUsersByImageInput {
+	s.UserMatchThreshold = &v
+	return s
+}
+
+type SearchUsersByImageOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Version number of the face detection model associated with the input collection
+	// CollectionId.
+	FaceModelVersion *string `type:"string"`
+
+	// A list of FaceDetail objects containing the BoundingBox for the largest face
+	// in image, as well as the confidence in the bounding box, that was searched
+	// for matches. If no valid face is detected in the image the response will
+	// contain no SearchedFace object.
+	SearchedFace *SearchedFaceDetails `type:"structure"`
+
+	// List of UnsearchedFace objects. Contains the face details infered from the
+	// specified image but not used for search. Contains reasons that describe why
+	// a face wasn't used for Search.
+	UnsearchedFaces []*UnsearchedFace `type:"list"`
+
+	// An array of UserID objects that matched the input face, along with the confidence
+	// in the match. The returned structure will be empty if there are no matches.
+	// Returned if the SearchUsersByImageResponse action is successful.
+	UserMatches []*UserMatch `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersByImageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersByImageOutput) GoString() string {
+	return s.String()
+}
+
+// SetFaceModelVersion sets the FaceModelVersion field's value.
+func (s *SearchUsersByImageOutput) SetFaceModelVersion(v string) *SearchUsersByImageOutput {
+	s.FaceModelVersion = &v
+	return s
+}
+
+// SetSearchedFace sets the SearchedFace field's value.
+func (s *SearchUsersByImageOutput) SetSearchedFace(v *SearchedFaceDetails) *SearchUsersByImageOutput {
+	s.SearchedFace = v
+	return s
+}
+
+// SetUnsearchedFaces sets the UnsearchedFaces field's value.
+func (s *SearchUsersByImageOutput) SetUnsearchedFaces(v []*UnsearchedFace) *SearchUsersByImageOutput {
+	s.UnsearchedFaces = v
+	return s
+}
+
+// SetUserMatches sets the UserMatches field's value.
+func (s *SearchUsersByImageOutput) SetUserMatches(v []*UserMatch) *SearchUsersByImageOutput {
+	s.UserMatches = v
+	return s
+}
+
+type SearchUsersInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of an existing collection containing the UserID, used with a UserId
+	// or FaceId. If a FaceId is provided, UserId isn’t required to be present
+	// in the Collection.
+	//
+	// CollectionId is a required field
+	CollectionId *string `min:"1" type:"string" required:"true"`
+
+	// ID for the existing face.
+	FaceId *string `type:"string"`
+
+	// Maximum number of identities to return.
+	MaxUsers *int64 `min:"1" type:"integer"`
+
+	// ID for the existing User.
+	UserId *string `min:"1" type:"string"`
+
+	// Optional value that specifies the minimum confidence in the matched UserID
+	// to return. Default value of 80.
+	UserMatchThreshold *float64 `type:"float"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SearchUsersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SearchUsersInput"}
+	if s.CollectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CollectionId"))
+	}
+	if s.CollectionId != nil && len(*s.CollectionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CollectionId", 1))
+	}
+	if s.MaxUsers != nil && *s.MaxUsers < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxUsers", 1))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCollectionId sets the CollectionId field's value.
+func (s *SearchUsersInput) SetCollectionId(v string) *SearchUsersInput {
+	s.CollectionId = &v
+	return s
+}
+
+// SetFaceId sets the FaceId field's value.
+func (s *SearchUsersInput) SetFaceId(v string) *SearchUsersInput {
+	s.FaceId = &v
+	return s
+}
+
+// SetMaxUsers sets the MaxUsers field's value.
+func (s *SearchUsersInput) SetMaxUsers(v int64) *SearchUsersInput {
+	s.MaxUsers = &v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *SearchUsersInput) SetUserId(v string) *SearchUsersInput {
+	s.UserId = &v
+	return s
+}
+
+// SetUserMatchThreshold sets the UserMatchThreshold field's value.
+func (s *SearchUsersInput) SetUserMatchThreshold(v float64) *SearchUsersInput {
+	s.UserMatchThreshold = &v
+	return s
+}
+
+type SearchUsersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Version number of the face detection model associated with the input CollectionId.
+	FaceModelVersion *string `type:"string"`
+
+	// Contains the ID of a face that was used to search for matches in a collection.
+	SearchedFace *SearchedFace `type:"structure"`
+
+	// Contains the ID of the UserID that was used to search for matches in a collection.
+	SearchedUser *SearchedUser `type:"structure"`
+
+	// An array of UserMatch objects that matched the input face along with the
+	// confidence in the match. Array will be empty if there are no matches.
+	UserMatches []*UserMatch `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchUsersOutput) GoString() string {
+	return s.String()
+}
+
+// SetFaceModelVersion sets the FaceModelVersion field's value.
+func (s *SearchUsersOutput) SetFaceModelVersion(v string) *SearchUsersOutput {
+	s.FaceModelVersion = &v
+	return s
+}
+
+// SetSearchedFace sets the SearchedFace field's value.
+func (s *SearchUsersOutput) SetSearchedFace(v *SearchedFace) *SearchUsersOutput {
+	s.SearchedFace = v
+	return s
+}
+
+// SetSearchedUser sets the SearchedUser field's value.
+func (s *SearchUsersOutput) SetSearchedUser(v *SearchedUser) *SearchUsersOutput {
+	s.SearchedUser = v
+	return s
+}
+
+// SetUserMatches sets the UserMatches field's value.
+func (s *SearchUsersOutput) SetUserMatches(v []*UserMatch) *SearchUsersOutput {
+	s.UserMatches = v
+	return s
+}
+
+// Provides face metadata such as FaceId, BoundingBox, Confidence of the input
+// face used for search.
+type SearchedFace struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier assigned to the face.
+	FaceId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchedFace) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchedFace) GoString() string {
+	return s.String()
+}
+
+// SetFaceId sets the FaceId field's value.
+func (s *SearchedFace) SetFaceId(v string) *SearchedFace {
+	s.FaceId = &v
+	return s
+}
+
+// Contains data regarding the input face used for a search.
+type SearchedFaceDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Structure containing attributes of the face that the algorithm detected.
+	//
+	// A FaceDetail object contains either the default facial attributes or all
+	// facial attributes. The default attributes are BoundingBox, Confidence, Landmarks,
+	// Pose, and Quality.
+	//
+	// GetFaceDetection is the only Amazon Rekognition Video stored video operation
+	// that can return a FaceDetail object with all attributes. To specify which
+	// attributes to return, use the FaceAttributes input parameter for StartFaceDetection.
+	// The following Amazon Rekognition Video operations return only the default
+	// attributes. The corresponding Start operations don't have a FaceAttributes
+	// input parameter:
+	//
+	//    * GetCelebrityRecognition
+	//
+	//    * GetPersonTracking
+	//
+	//    * GetFaceSearch
+	//
+	// The Amazon Rekognition Image DetectFaces and IndexFaces operations can return
+	// all facial attributes. To specify which attributes to return, use the Attributes
+	// input parameter for DetectFaces. For IndexFaces, use the DetectAttributes
+	// input parameter.
+	FaceDetail *FaceDetail `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchedFaceDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchedFaceDetails) GoString() string {
+	return s.String()
+}
+
+// SetFaceDetail sets the FaceDetail field's value.
+func (s *SearchedFaceDetails) SetFaceDetail(v *FaceDetail) *SearchedFaceDetails {
+	s.FaceDetail = v
+	return s
+}
+
+// Contains metadata about a User searched for within a collection.
+type SearchedUser struct {
+	_ struct{} `type:"structure"`
+
+	// A provided ID for the UserID. Unique within the collection.
+	UserId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchedUser) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SearchedUser) GoString() string {
+	return s.String()
+}
+
+// SetUserId sets the UserId field's value.
+func (s *SearchedUser) SetUserId(v string) *SearchedUser {
+	s.UserId = &v
+	return s
+}
+
 // A technical cue or shot detection segment detected in a video. An array of
 // SegmentDetection objects containing all segments detected in a stored video
 // is returned by GetSegmentDetection.
@@ -23223,6 +26936,169 @@ func (s *StartLabelDetectionOutput) SetJobId(v string) *StartLabelDetectionOutpu
 	return s
 }
 
+type StartMediaAnalysisJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// Idempotency token used to prevent the accidental creation of duplicate versions.
+	// If you use the same token with multiple StartMediaAnalysisJobRequest requests,
+	// the same response is returned. Use ClientRequestToken to prevent the same
+	// request from being processed more than once.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// Input data to be analyzed by the job.
+	//
+	// Input is a required field
+	Input *MediaAnalysisInput_ `type:"structure" required:"true"`
+
+	// The name of the job. Does not have to be unique.
+	JobName *string `min:"1" type:"string"`
+
+	// The identifier of customer managed AWS KMS key (name or ARN). The key is
+	// used to encrypt images copied into the service. The key is also used to encrypt
+	// results and manifest files written to the output Amazon S3 bucket.
+	KmsKeyId *string `min:"1" type:"string"`
+
+	// Configuration options for the media analysis job to be created.
+	//
+	// OperationsConfig is a required field
+	OperationsConfig *MediaAnalysisOperationsConfig `type:"structure" required:"true"`
+
+	// The Amazon S3 bucket location to store the results.
+	//
+	// OutputConfig is a required field
+	OutputConfig *MediaAnalysisOutputConfig `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMediaAnalysisJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMediaAnalysisJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartMediaAnalysisJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartMediaAnalysisJobInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.Input == nil {
+		invalidParams.Add(request.NewErrParamRequired("Input"))
+	}
+	if s.JobName != nil && len(*s.JobName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobName", 1))
+	}
+	if s.KmsKeyId != nil && len(*s.KmsKeyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyId", 1))
+	}
+	if s.OperationsConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("OperationsConfig"))
+	}
+	if s.OutputConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutputConfig"))
+	}
+	if s.Input != nil {
+		if err := s.Input.Validate(); err != nil {
+			invalidParams.AddNested("Input", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OperationsConfig != nil {
+		if err := s.OperationsConfig.Validate(); err != nil {
+			invalidParams.AddNested("OperationsConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OutputConfig != nil {
+		if err := s.OutputConfig.Validate(); err != nil {
+			invalidParams.AddNested("OutputConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *StartMediaAnalysisJobInput) SetClientRequestToken(v string) *StartMediaAnalysisJobInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetInput sets the Input field's value.
+func (s *StartMediaAnalysisJobInput) SetInput(v *MediaAnalysisInput_) *StartMediaAnalysisJobInput {
+	s.Input = v
+	return s
+}
+
+// SetJobName sets the JobName field's value.
+func (s *StartMediaAnalysisJobInput) SetJobName(v string) *StartMediaAnalysisJobInput {
+	s.JobName = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *StartMediaAnalysisJobInput) SetKmsKeyId(v string) *StartMediaAnalysisJobInput {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetOperationsConfig sets the OperationsConfig field's value.
+func (s *StartMediaAnalysisJobInput) SetOperationsConfig(v *MediaAnalysisOperationsConfig) *StartMediaAnalysisJobInput {
+	s.OperationsConfig = v
+	return s
+}
+
+// SetOutputConfig sets the OutputConfig field's value.
+func (s *StartMediaAnalysisJobInput) SetOutputConfig(v *MediaAnalysisOutputConfig) *StartMediaAnalysisJobInput {
+	s.OutputConfig = v
+	return s
+}
+
+type StartMediaAnalysisJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier for the created job.
+	//
+	// JobId is a required field
+	JobId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMediaAnalysisJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMediaAnalysisJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetJobId sets the JobId field's value.
+func (s *StartMediaAnalysisJobOutput) SetJobId(v string) *StartMediaAnalysisJobOutput {
+	s.JobId = &v
+	return s
+}
+
 type StartPersonTrackingInput struct {
 	_ struct{} `type:"structure"`
 
@@ -23364,10 +27240,6 @@ type StartProjectVersionInput struct {
 
 	// The minimum number of inference units to use. A single inference unit represents
 	// 1 hour of processing.
-	//
-	// For information about the number of transactions per second (TPS) that an
-	// inference unit can support, see Running a trained Amazon Rekognition Custom
-	// Labels model in the Amazon Rekognition Custom Labels Guide.
 	//
 	// Use a higher number to increase the TPS throughput of your model. You are
 	// charged for the number of inference units that you use.
@@ -24128,7 +28000,7 @@ func (s *StartTextDetectionOutput) SetJobId(v string) *StartTextDetectionOutput 
 type StopProjectVersionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the model version that you want to delete.
+	// The Amazon Resource Name (ARN) of the model version that you want to stop.
 	//
 	// This operation requires permissions to perform the rekognition:StopProjectVersion
 	// action.
@@ -24957,18 +28829,16 @@ func (s *TechnicalCueSegment) SetType(v string) *TechnicalCueSegment {
 }
 
 // The dataset used for testing. Optionally, if AutoCreate is set, Amazon Rekognition
-// Custom Labels uses the training dataset to create a test dataset with a temporary
-// split of the training dataset.
+// uses the training dataset to create a test dataset with a temporary split
+// of the training dataset.
 type TestingData struct {
 	_ struct{} `type:"structure"`
 
 	// The assets used for testing.
 	Assets []*Asset `type:"list"`
 
-	// If specified, Amazon Rekognition Custom Labels temporarily splits the training
-	// dataset (80%) to create a test dataset (20%) for the training job. After
-	// training completes, the test dataset is not stored and the training dataset
-	// reverts to its previous size.
+	// If specified, Rekognition splits training dataset to create a test dataset
+	// for the training job.
 	AutoCreate *bool `type:"boolean"`
 }
 
@@ -25282,7 +29152,8 @@ func (s *ThrottlingException) RequestID() string {
 type TrainingData struct {
 	_ struct{} `type:"structure"`
 
-	// A Sagemaker GroundTruth manifest file that contains the training images (assets).
+	// A manifest file that contains references to the training images and ground-truth
+	// annotations.
 	Assets []*Asset `type:"list"`
 }
 
@@ -25330,20 +29201,20 @@ func (s *TrainingData) SetAssets(v []*Asset) *TrainingData {
 	return s
 }
 
-// Sagemaker Groundtruth format manifest files for the input, output and validation
-// datasets that are used and created during testing.
+// The data validation manifest created for the training dataset during model
+// training.
 type TrainingDataResult struct {
 	_ struct{} `type:"structure"`
 
-	// The training assets that you supplied for training.
+	// The training data that you supplied.
 	Input *TrainingData `type:"structure"`
 
-	// The images (assets) that were actually trained by Amazon Rekognition Custom
-	// Labels.
+	// Reference to images (assets) that were actually used during training with
+	// trained model predictions.
 	Output *TrainingData `type:"structure"`
 
-	// The location of the data validation manifest. The data validation manifest
-	// is created for the training dataset during model training.
+	// A manifest that you supplied for training, with validation results for each
+	// line.
 	Validation *ValidationData `type:"structure"`
 }
 
@@ -25437,6 +29308,233 @@ func (s *UnindexedFace) SetFaceDetail(v *FaceDetail) *UnindexedFace {
 // SetReasons sets the Reasons field's value.
 func (s *UnindexedFace) SetReasons(v []*string) *UnindexedFace {
 	s.Reasons = v
+	return s
+}
+
+// Face details inferred from the image but not used for search. The response
+// attribute contains reasons for why a face wasn't used for Search.
+type UnsearchedFace struct {
+	_ struct{} `type:"structure"`
+
+	// Structure containing attributes of the face that the algorithm detected.
+	//
+	// A FaceDetail object contains either the default facial attributes or all
+	// facial attributes. The default attributes are BoundingBox, Confidence, Landmarks,
+	// Pose, and Quality.
+	//
+	// GetFaceDetection is the only Amazon Rekognition Video stored video operation
+	// that can return a FaceDetail object with all attributes. To specify which
+	// attributes to return, use the FaceAttributes input parameter for StartFaceDetection.
+	// The following Amazon Rekognition Video operations return only the default
+	// attributes. The corresponding Start operations don't have a FaceAttributes
+	// input parameter:
+	//
+	//    * GetCelebrityRecognition
+	//
+	//    * GetPersonTracking
+	//
+	//    * GetFaceSearch
+	//
+	// The Amazon Rekognition Image DetectFaces and IndexFaces operations can return
+	// all facial attributes. To specify which attributes to return, use the Attributes
+	// input parameter for DetectFaces. For IndexFaces, use the DetectAttributes
+	// input parameter.
+	FaceDetails *FaceDetail `type:"structure"`
+
+	// Reasons why a face wasn't used for Search.
+	Reasons []*string `type:"list" enum:"UnsearchedFaceReason"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsearchedFace) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsearchedFace) GoString() string {
+	return s.String()
+}
+
+// SetFaceDetails sets the FaceDetails field's value.
+func (s *UnsearchedFace) SetFaceDetails(v *FaceDetail) *UnsearchedFace {
+	s.FaceDetails = v
+	return s
+}
+
+// SetReasons sets the Reasons field's value.
+func (s *UnsearchedFace) SetReasons(v []*string) *UnsearchedFace {
+	s.Reasons = v
+	return s
+}
+
+// Contains metadata like FaceId, UserID, and Reasons, for a face that was unsuccessfully
+// associated.
+type UnsuccessfulFaceAssociation struct {
+	_ struct{} `type:"structure"`
+
+	// Match confidence with the UserID, provides information regarding if a face
+	// association was unsuccessful because it didn't meet UserMatchThreshold.
+	Confidence *float64 `type:"float"`
+
+	// A unique identifier assigned to the face.
+	FaceId *string `type:"string"`
+
+	// The reason why the association was unsuccessful.
+	Reasons []*string `type:"list" enum:"UnsuccessfulFaceAssociationReason"`
+
+	// A provided ID for the UserID. Unique within the collection.
+	UserId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsuccessfulFaceAssociation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsuccessfulFaceAssociation) GoString() string {
+	return s.String()
+}
+
+// SetConfidence sets the Confidence field's value.
+func (s *UnsuccessfulFaceAssociation) SetConfidence(v float64) *UnsuccessfulFaceAssociation {
+	s.Confidence = &v
+	return s
+}
+
+// SetFaceId sets the FaceId field's value.
+func (s *UnsuccessfulFaceAssociation) SetFaceId(v string) *UnsuccessfulFaceAssociation {
+	s.FaceId = &v
+	return s
+}
+
+// SetReasons sets the Reasons field's value.
+func (s *UnsuccessfulFaceAssociation) SetReasons(v []*string) *UnsuccessfulFaceAssociation {
+	s.Reasons = v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *UnsuccessfulFaceAssociation) SetUserId(v string) *UnsuccessfulFaceAssociation {
+	s.UserId = &v
+	return s
+}
+
+// Contains metadata like FaceId, UserID, and Reasons, for a face that was unsuccessfully
+// deleted.
+type UnsuccessfulFaceDeletion struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier assigned to the face.
+	FaceId *string `type:"string"`
+
+	// The reason why the deletion was unsuccessful.
+	Reasons []*string `type:"list" enum:"UnsuccessfulFaceDeletionReason"`
+
+	// A provided ID for the UserID. Unique within the collection.
+	UserId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsuccessfulFaceDeletion) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsuccessfulFaceDeletion) GoString() string {
+	return s.String()
+}
+
+// SetFaceId sets the FaceId field's value.
+func (s *UnsuccessfulFaceDeletion) SetFaceId(v string) *UnsuccessfulFaceDeletion {
+	s.FaceId = &v
+	return s
+}
+
+// SetReasons sets the Reasons field's value.
+func (s *UnsuccessfulFaceDeletion) SetReasons(v []*string) *UnsuccessfulFaceDeletion {
+	s.Reasons = v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *UnsuccessfulFaceDeletion) SetUserId(v string) *UnsuccessfulFaceDeletion {
+	s.UserId = &v
+	return s
+}
+
+// Contains metadata like FaceId, UserID, and Reasons, for a face that was unsuccessfully
+// disassociated.
+type UnsuccessfulFaceDisassociation struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier assigned to the face.
+	FaceId *string `type:"string"`
+
+	// The reason why the deletion was unsuccessful.
+	Reasons []*string `type:"list" enum:"UnsuccessfulFaceDisassociationReason"`
+
+	// A provided ID for the UserID. Unique within the collection.
+	UserId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsuccessfulFaceDisassociation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnsuccessfulFaceDisassociation) GoString() string {
+	return s.String()
+}
+
+// SetFaceId sets the FaceId field's value.
+func (s *UnsuccessfulFaceDisassociation) SetFaceId(v string) *UnsuccessfulFaceDisassociation {
+	s.FaceId = &v
+	return s
+}
+
+// SetReasons sets the Reasons field's value.
+func (s *UnsuccessfulFaceDisassociation) SetReasons(v []*string) *UnsuccessfulFaceDisassociation {
+	s.Reasons = v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *UnsuccessfulFaceDisassociation) SetUserId(v string) *UnsuccessfulFaceDisassociation {
+	s.UserId = &v
 	return s
 }
 
@@ -25738,6 +29836,90 @@ func (s UpdateStreamProcessorOutput) GoString() string {
 	return s.String()
 }
 
+// Metadata of the user stored in a collection.
+type User struct {
+	_ struct{} `type:"structure"`
+
+	// A provided ID for the User. Unique within the collection.
+	UserId *string `min:"1" type:"string"`
+
+	// Communicates if the UserID has been updated with latest set of faces to be
+	// associated with the UserID.
+	UserStatus *string `type:"string" enum:"UserStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s User) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s User) GoString() string {
+	return s.String()
+}
+
+// SetUserId sets the UserId field's value.
+func (s *User) SetUserId(v string) *User {
+	s.UserId = &v
+	return s
+}
+
+// SetUserStatus sets the UserStatus field's value.
+func (s *User) SetUserStatus(v string) *User {
+	s.UserStatus = &v
+	return s
+}
+
+// Provides UserID metadata along with the confidence in the match of this UserID
+// with the input face.
+type UserMatch struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the UserID metadata.
+	Similarity *float64 `type:"float"`
+
+	// Confidence in the match of this UserID with the input face.
+	User *MatchedUser `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserMatch) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserMatch) GoString() string {
+	return s.String()
+}
+
+// SetSimilarity sets the Similarity field's value.
+func (s *UserMatch) SetSimilarity(v float64) *UserMatch {
+	s.Similarity = &v
+	return s
+}
+
+// SetUser sets the User field's value.
+func (s *UserMatch) SetUser(v *MatchedUser) *UserMatch {
+	s.User = v
+	return s
+}
+
 // Contains the Amazon S3 bucket location of the validation data for a model
 // training job.
 //
@@ -26001,6 +30183,9 @@ const (
 	// AttributeEmotions is a Attribute enum value
 	AttributeEmotions = "EMOTIONS"
 
+	// AttributeEyeDirection is a Attribute enum value
+	AttributeEyeDirection = "EYE_DIRECTION"
+
 	// AttributeEyeglasses is a Attribute enum value
 	AttributeEyeglasses = "EYEGLASSES"
 
@@ -26034,6 +30219,7 @@ func Attribute_Values() []string {
 		AttributeAgeRange,
 		AttributeBeard,
 		AttributeEmotions,
+		AttributeEyeDirection,
 		AttributeEyeglasses,
 		AttributeEyesOpen,
 		AttributeGender,
@@ -26130,6 +30316,22 @@ func ContentModerationSortBy_Values() []string {
 	return []string{
 		ContentModerationSortByName,
 		ContentModerationSortByTimestamp,
+	}
+}
+
+const (
+	// CustomizationFeatureContentModeration is a CustomizationFeature enum value
+	CustomizationFeatureContentModeration = "CONTENT_MODERATION"
+
+	// CustomizationFeatureCustomLabels is a CustomizationFeature enum value
+	CustomizationFeatureCustomLabels = "CUSTOM_LABELS"
+)
+
+// CustomizationFeature_Values returns all elements of the CustomizationFeature enum
+func CustomizationFeature_Values() []string {
+	return []string{
+		CustomizationFeatureContentModeration,
+		CustomizationFeatureCustomLabels,
 	}
 }
 
@@ -26539,6 +30741,78 @@ func LivenessSessionStatus_Values() []string {
 }
 
 const (
+	// MediaAnalysisJobFailureCodeInternalError is a MediaAnalysisJobFailureCode enum value
+	MediaAnalysisJobFailureCodeInternalError = "INTERNAL_ERROR"
+
+	// MediaAnalysisJobFailureCodeInvalidS3Object is a MediaAnalysisJobFailureCode enum value
+	MediaAnalysisJobFailureCodeInvalidS3Object = "INVALID_S3_OBJECT"
+
+	// MediaAnalysisJobFailureCodeInvalidManifest is a MediaAnalysisJobFailureCode enum value
+	MediaAnalysisJobFailureCodeInvalidManifest = "INVALID_MANIFEST"
+
+	// MediaAnalysisJobFailureCodeInvalidOutputConfig is a MediaAnalysisJobFailureCode enum value
+	MediaAnalysisJobFailureCodeInvalidOutputConfig = "INVALID_OUTPUT_CONFIG"
+
+	// MediaAnalysisJobFailureCodeInvalidKmsKey is a MediaAnalysisJobFailureCode enum value
+	MediaAnalysisJobFailureCodeInvalidKmsKey = "INVALID_KMS_KEY"
+
+	// MediaAnalysisJobFailureCodeAccessDenied is a MediaAnalysisJobFailureCode enum value
+	MediaAnalysisJobFailureCodeAccessDenied = "ACCESS_DENIED"
+
+	// MediaAnalysisJobFailureCodeResourceNotFound is a MediaAnalysisJobFailureCode enum value
+	MediaAnalysisJobFailureCodeResourceNotFound = "RESOURCE_NOT_FOUND"
+
+	// MediaAnalysisJobFailureCodeResourceNotReady is a MediaAnalysisJobFailureCode enum value
+	MediaAnalysisJobFailureCodeResourceNotReady = "RESOURCE_NOT_READY"
+
+	// MediaAnalysisJobFailureCodeThrottled is a MediaAnalysisJobFailureCode enum value
+	MediaAnalysisJobFailureCodeThrottled = "THROTTLED"
+)
+
+// MediaAnalysisJobFailureCode_Values returns all elements of the MediaAnalysisJobFailureCode enum
+func MediaAnalysisJobFailureCode_Values() []string {
+	return []string{
+		MediaAnalysisJobFailureCodeInternalError,
+		MediaAnalysisJobFailureCodeInvalidS3Object,
+		MediaAnalysisJobFailureCodeInvalidManifest,
+		MediaAnalysisJobFailureCodeInvalidOutputConfig,
+		MediaAnalysisJobFailureCodeInvalidKmsKey,
+		MediaAnalysisJobFailureCodeAccessDenied,
+		MediaAnalysisJobFailureCodeResourceNotFound,
+		MediaAnalysisJobFailureCodeResourceNotReady,
+		MediaAnalysisJobFailureCodeThrottled,
+	}
+}
+
+const (
+	// MediaAnalysisJobStatusCreated is a MediaAnalysisJobStatus enum value
+	MediaAnalysisJobStatusCreated = "CREATED"
+
+	// MediaAnalysisJobStatusQueued is a MediaAnalysisJobStatus enum value
+	MediaAnalysisJobStatusQueued = "QUEUED"
+
+	// MediaAnalysisJobStatusInProgress is a MediaAnalysisJobStatus enum value
+	MediaAnalysisJobStatusInProgress = "IN_PROGRESS"
+
+	// MediaAnalysisJobStatusSucceeded is a MediaAnalysisJobStatus enum value
+	MediaAnalysisJobStatusSucceeded = "SUCCEEDED"
+
+	// MediaAnalysisJobStatusFailed is a MediaAnalysisJobStatus enum value
+	MediaAnalysisJobStatusFailed = "FAILED"
+)
+
+// MediaAnalysisJobStatus_Values returns all elements of the MediaAnalysisJobStatus enum
+func MediaAnalysisJobStatus_Values() []string {
+	return []string{
+		MediaAnalysisJobStatusCreated,
+		MediaAnalysisJobStatusQueued,
+		MediaAnalysisJobStatusInProgress,
+		MediaAnalysisJobStatusSucceeded,
+		MediaAnalysisJobStatusFailed,
+	}
+}
+
+const (
 	// OrientationCorrectionRotate0 is a OrientationCorrection enum value
 	OrientationCorrectionRotate0 = "ROTATE_0"
 
@@ -26575,6 +30849,22 @@ func PersonTrackingSortBy_Values() []string {
 	return []string{
 		PersonTrackingSortByIndex,
 		PersonTrackingSortByTimestamp,
+	}
+}
+
+const (
+	// ProjectAutoUpdateEnabled is a ProjectAutoUpdate enum value
+	ProjectAutoUpdateEnabled = "ENABLED"
+
+	// ProjectAutoUpdateDisabled is a ProjectAutoUpdate enum value
+	ProjectAutoUpdateDisabled = "DISABLED"
+)
+
+// ProjectAutoUpdate_Values returns all elements of the ProjectAutoUpdate enum
+func ProjectAutoUpdate_Values() []string {
+	return []string{
+		ProjectAutoUpdateEnabled,
+		ProjectAutoUpdateDisabled,
 	}
 }
 
@@ -26634,6 +30924,12 @@ const (
 
 	// ProjectVersionStatusCopyingFailed is a ProjectVersionStatus enum value
 	ProjectVersionStatusCopyingFailed = "COPYING_FAILED"
+
+	// ProjectVersionStatusDeprecated is a ProjectVersionStatus enum value
+	ProjectVersionStatusDeprecated = "DEPRECATED"
+
+	// ProjectVersionStatusExpired is a ProjectVersionStatus enum value
+	ProjectVersionStatusExpired = "EXPIRED"
 )
 
 // ProjectVersionStatus_Values returns all elements of the ProjectVersionStatus enum
@@ -26651,6 +30947,8 @@ func ProjectVersionStatus_Values() []string {
 		ProjectVersionStatusCopyingInProgress,
 		ProjectVersionStatusCopyingCompleted,
 		ProjectVersionStatusCopyingFailed,
+		ProjectVersionStatusDeprecated,
+		ProjectVersionStatusExpired,
 	}
 }
 
@@ -26851,6 +31149,122 @@ func TextTypes_Values() []string {
 	return []string{
 		TextTypesLine,
 		TextTypesWord,
+	}
+}
+
+const (
+	// UnsearchedFaceReasonFaceNotLargest is a UnsearchedFaceReason enum value
+	UnsearchedFaceReasonFaceNotLargest = "FACE_NOT_LARGEST"
+
+	// UnsearchedFaceReasonExceedsMaxFaces is a UnsearchedFaceReason enum value
+	UnsearchedFaceReasonExceedsMaxFaces = "EXCEEDS_MAX_FACES"
+
+	// UnsearchedFaceReasonExtremePose is a UnsearchedFaceReason enum value
+	UnsearchedFaceReasonExtremePose = "EXTREME_POSE"
+
+	// UnsearchedFaceReasonLowBrightness is a UnsearchedFaceReason enum value
+	UnsearchedFaceReasonLowBrightness = "LOW_BRIGHTNESS"
+
+	// UnsearchedFaceReasonLowSharpness is a UnsearchedFaceReason enum value
+	UnsearchedFaceReasonLowSharpness = "LOW_SHARPNESS"
+
+	// UnsearchedFaceReasonLowConfidence is a UnsearchedFaceReason enum value
+	UnsearchedFaceReasonLowConfidence = "LOW_CONFIDENCE"
+
+	// UnsearchedFaceReasonSmallBoundingBox is a UnsearchedFaceReason enum value
+	UnsearchedFaceReasonSmallBoundingBox = "SMALL_BOUNDING_BOX"
+
+	// UnsearchedFaceReasonLowFaceQuality is a UnsearchedFaceReason enum value
+	UnsearchedFaceReasonLowFaceQuality = "LOW_FACE_QUALITY"
+)
+
+// UnsearchedFaceReason_Values returns all elements of the UnsearchedFaceReason enum
+func UnsearchedFaceReason_Values() []string {
+	return []string{
+		UnsearchedFaceReasonFaceNotLargest,
+		UnsearchedFaceReasonExceedsMaxFaces,
+		UnsearchedFaceReasonExtremePose,
+		UnsearchedFaceReasonLowBrightness,
+		UnsearchedFaceReasonLowSharpness,
+		UnsearchedFaceReasonLowConfidence,
+		UnsearchedFaceReasonSmallBoundingBox,
+		UnsearchedFaceReasonLowFaceQuality,
+	}
+}
+
+const (
+	// UnsuccessfulFaceAssociationReasonFaceNotFound is a UnsuccessfulFaceAssociationReason enum value
+	UnsuccessfulFaceAssociationReasonFaceNotFound = "FACE_NOT_FOUND"
+
+	// UnsuccessfulFaceAssociationReasonAssociatedToADifferentUser is a UnsuccessfulFaceAssociationReason enum value
+	UnsuccessfulFaceAssociationReasonAssociatedToADifferentUser = "ASSOCIATED_TO_A_DIFFERENT_USER"
+
+	// UnsuccessfulFaceAssociationReasonLowMatchConfidence is a UnsuccessfulFaceAssociationReason enum value
+	UnsuccessfulFaceAssociationReasonLowMatchConfidence = "LOW_MATCH_CONFIDENCE"
+)
+
+// UnsuccessfulFaceAssociationReason_Values returns all elements of the UnsuccessfulFaceAssociationReason enum
+func UnsuccessfulFaceAssociationReason_Values() []string {
+	return []string{
+		UnsuccessfulFaceAssociationReasonFaceNotFound,
+		UnsuccessfulFaceAssociationReasonAssociatedToADifferentUser,
+		UnsuccessfulFaceAssociationReasonLowMatchConfidence,
+	}
+}
+
+const (
+	// UnsuccessfulFaceDeletionReasonAssociatedToAnExistingUser is a UnsuccessfulFaceDeletionReason enum value
+	UnsuccessfulFaceDeletionReasonAssociatedToAnExistingUser = "ASSOCIATED_TO_AN_EXISTING_USER"
+
+	// UnsuccessfulFaceDeletionReasonFaceNotFound is a UnsuccessfulFaceDeletionReason enum value
+	UnsuccessfulFaceDeletionReasonFaceNotFound = "FACE_NOT_FOUND"
+)
+
+// UnsuccessfulFaceDeletionReason_Values returns all elements of the UnsuccessfulFaceDeletionReason enum
+func UnsuccessfulFaceDeletionReason_Values() []string {
+	return []string{
+		UnsuccessfulFaceDeletionReasonAssociatedToAnExistingUser,
+		UnsuccessfulFaceDeletionReasonFaceNotFound,
+	}
+}
+
+const (
+	// UnsuccessfulFaceDisassociationReasonFaceNotFound is a UnsuccessfulFaceDisassociationReason enum value
+	UnsuccessfulFaceDisassociationReasonFaceNotFound = "FACE_NOT_FOUND"
+
+	// UnsuccessfulFaceDisassociationReasonAssociatedToADifferentUser is a UnsuccessfulFaceDisassociationReason enum value
+	UnsuccessfulFaceDisassociationReasonAssociatedToADifferentUser = "ASSOCIATED_TO_A_DIFFERENT_USER"
+)
+
+// UnsuccessfulFaceDisassociationReason_Values returns all elements of the UnsuccessfulFaceDisassociationReason enum
+func UnsuccessfulFaceDisassociationReason_Values() []string {
+	return []string{
+		UnsuccessfulFaceDisassociationReasonFaceNotFound,
+		UnsuccessfulFaceDisassociationReasonAssociatedToADifferentUser,
+	}
+}
+
+const (
+	// UserStatusActive is a UserStatus enum value
+	UserStatusActive = "ACTIVE"
+
+	// UserStatusUpdating is a UserStatus enum value
+	UserStatusUpdating = "UPDATING"
+
+	// UserStatusCreating is a UserStatus enum value
+	UserStatusCreating = "CREATING"
+
+	// UserStatusCreated is a UserStatus enum value
+	UserStatusCreated = "CREATED"
+)
+
+// UserStatus_Values returns all elements of the UserStatus enum
+func UserStatus_Values() []string {
+	return []string{
+		UserStatusActive,
+		UserStatusUpdating,
+		UserStatusCreating,
+		UserStatusCreated,
 	}
 }
 

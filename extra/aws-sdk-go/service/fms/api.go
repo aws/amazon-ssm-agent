@@ -29,14 +29,13 @@ const opAssociateAdminAccount = "AssociateAdminAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateAdminAccountRequest method.
+//	req, resp := client.AssociateAdminAccountRequest(params)
 //
-//    // Example sending a request using the AssociateAdminAccountRequest method.
-//    req, resp := client.AssociateAdminAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/AssociateAdminAccount
 func (c *FMS) AssociateAdminAccountRequest(input *AssociateAdminAccountInput) (req *request.Request, output *AssociateAdminAccountOutput) {
@@ -76,29 +75,30 @@ func (c *FMS) AssociateAdminAccountRequest(input *AssociateAdminAccountInput) (r
 // API operation AssociateAdminAccount for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * LimitExceededException
-//   The operation exceeds a resource limit, for example, the maximum number of
-//   policy objects that you can create for an Amazon Web Services account. For
-//   more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
-//   in the WAF Developer Guide.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
+//
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/AssociateAdminAccount
 func (c *FMS) AssociateAdminAccount(input *AssociateAdminAccountInput) (*AssociateAdminAccountOutput, error) {
@@ -138,14 +138,13 @@ const opAssociateThirdPartyFirewall = "AssociateThirdPartyFirewall"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateThirdPartyFirewallRequest method.
+//	req, resp := client.AssociateThirdPartyFirewallRequest(params)
 //
-//    // Example sending a request using the AssociateThirdPartyFirewallRequest method.
-//    req, resp := client.AssociateThirdPartyFirewallRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/AssociateThirdPartyFirewall
 func (c *FMS) AssociateThirdPartyFirewallRequest(input *AssociateThirdPartyFirewallInput) (req *request.Request, output *AssociateThirdPartyFirewallOutput) {
@@ -179,23 +178,24 @@ func (c *FMS) AssociateThirdPartyFirewallRequest(input *AssociateThirdPartyFirew
 // API operation AssociateThirdPartyFirewall for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/AssociateThirdPartyFirewall
 func (c *FMS) AssociateThirdPartyFirewall(input *AssociateThirdPartyFirewallInput) (*AssociateThirdPartyFirewallOutput, error) {
@@ -235,14 +235,13 @@ const opBatchAssociateResource = "BatchAssociateResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchAssociateResourceRequest method.
+//	req, resp := client.BatchAssociateResourceRequest(params)
 //
-//    // Example sending a request using the BatchAssociateResourceRequest method.
-//    req, resp := client.BatchAssociateResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/BatchAssociateResource
 func (c *FMS) BatchAssociateResourceRequest(input *BatchAssociateResourceInput) (req *request.Request, output *BatchAssociateResourceOutput) {
@@ -273,29 +272,30 @@ func (c *FMS) BatchAssociateResourceRequest(input *BatchAssociateResourceInput) 
 // API operation BatchAssociateResource for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
-//   * LimitExceededException
-//   The operation exceeds a resource limit, for example, the maximum number of
-//   policy objects that you can create for an Amazon Web Services account. For
-//   more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
-//   in the WAF Developer Guide.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/BatchAssociateResource
 func (c *FMS) BatchAssociateResource(input *BatchAssociateResourceInput) (*BatchAssociateResourceOutput, error) {
@@ -335,14 +335,13 @@ const opBatchDisassociateResource = "BatchDisassociateResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchDisassociateResourceRequest method.
+//	req, resp := client.BatchDisassociateResourceRequest(params)
 //
-//    // Example sending a request using the BatchDisassociateResourceRequest method.
-//    req, resp := client.BatchDisassociateResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/BatchDisassociateResource
 func (c *FMS) BatchDisassociateResourceRequest(input *BatchDisassociateResourceInput) (req *request.Request, output *BatchDisassociateResourceOutput) {
@@ -373,23 +372,24 @@ func (c *FMS) BatchDisassociateResourceRequest(input *BatchDisassociateResourceI
 // API operation BatchDisassociateResource for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/BatchDisassociateResource
 func (c *FMS) BatchDisassociateResource(input *BatchDisassociateResourceInput) (*BatchDisassociateResourceOutput, error) {
@@ -429,14 +429,13 @@ const opDeleteAppsList = "DeleteAppsList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAppsListRequest method.
+//	req, resp := client.DeleteAppsListRequest(params)
 //
-//    // Example sending a request using the DeleteAppsListRequest method.
-//    req, resp := client.DeleteAppsListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DeleteAppsList
 func (c *FMS) DeleteAppsListRequest(input *DeleteAppsListInput) (req *request.Request, output *DeleteAppsListOutput) {
@@ -468,20 +467,21 @@ func (c *FMS) DeleteAppsListRequest(input *DeleteAppsListInput) (req *request.Re
 // API operation DeleteAppsList for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DeleteAppsList
 func (c *FMS) DeleteAppsList(input *DeleteAppsListInput) (*DeleteAppsListOutput, error) {
@@ -521,14 +521,13 @@ const opDeleteNotificationChannel = "DeleteNotificationChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteNotificationChannelRequest method.
+//	req, resp := client.DeleteNotificationChannelRequest(params)
 //
-//    // Example sending a request using the DeleteNotificationChannelRequest method.
-//    req, resp := client.DeleteNotificationChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DeleteNotificationChannel
 func (c *FMS) DeleteNotificationChannelRequest(input *DeleteNotificationChannelInput) (req *request.Request, output *DeleteNotificationChannelOutput) {
@@ -562,20 +561,21 @@ func (c *FMS) DeleteNotificationChannelRequest(input *DeleteNotificationChannelI
 // API operation DeleteNotificationChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DeleteNotificationChannel
 func (c *FMS) DeleteNotificationChannel(input *DeleteNotificationChannelInput) (*DeleteNotificationChannelOutput, error) {
@@ -615,14 +615,13 @@ const opDeletePolicy = "DeletePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePolicyRequest method.
+//	req, resp := client.DeletePolicyRequest(params)
 //
-//    // Example sending a request using the DeletePolicyRequest method.
-//    req, resp := client.DeletePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DeletePolicy
 func (c *FMS) DeletePolicyRequest(input *DeletePolicyInput) (req *request.Request, output *DeletePolicyOutput) {
@@ -654,29 +653,30 @@ func (c *FMS) DeletePolicyRequest(input *DeletePolicyInput) (req *request.Reques
 // API operation DeletePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
-//   * LimitExceededException
-//   The operation exceeds a resource limit, for example, the maximum number of
-//   policy objects that you can create for an Amazon Web Services account. For
-//   more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
-//   in the WAF Developer Guide.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
+//
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DeletePolicy
 func (c *FMS) DeletePolicy(input *DeletePolicyInput) (*DeletePolicyOutput, error) {
@@ -716,14 +716,13 @@ const opDeleteProtocolsList = "DeleteProtocolsList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProtocolsListRequest method.
+//	req, resp := client.DeleteProtocolsListRequest(params)
 //
-//    // Example sending a request using the DeleteProtocolsListRequest method.
-//    req, resp := client.DeleteProtocolsListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DeleteProtocolsList
 func (c *FMS) DeleteProtocolsListRequest(input *DeleteProtocolsListInput) (req *request.Request, output *DeleteProtocolsListOutput) {
@@ -755,20 +754,21 @@ func (c *FMS) DeleteProtocolsListRequest(input *DeleteProtocolsListInput) (req *
 // API operation DeleteProtocolsList for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DeleteProtocolsList
 func (c *FMS) DeleteProtocolsList(input *DeleteProtocolsListInput) (*DeleteProtocolsListOutput, error) {
@@ -808,14 +808,13 @@ const opDeleteResourceSet = "DeleteResourceSet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResourceSetRequest method.
+//	req, resp := client.DeleteResourceSetRequest(params)
 //
-//    // Example sending a request using the DeleteResourceSetRequest method.
-//    req, resp := client.DeleteResourceSetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DeleteResourceSet
 func (c *FMS) DeleteResourceSetRequest(input *DeleteResourceSetInput) (req *request.Request, output *DeleteResourceSetOutput) {
@@ -847,23 +846,24 @@ func (c *FMS) DeleteResourceSetRequest(input *DeleteResourceSetInput) (req *requ
 // API operation DeleteResourceSet for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
+//
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DeleteResourceSet
 func (c *FMS) DeleteResourceSet(input *DeleteResourceSetInput) (*DeleteResourceSetOutput, error) {
@@ -903,14 +903,13 @@ const opDisassociateAdminAccount = "DisassociateAdminAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateAdminAccountRequest method.
+//	req, resp := client.DisassociateAdminAccountRequest(params)
 //
-//    // Example sending a request using the DisassociateAdminAccountRequest method.
-//    req, resp := client.DisassociateAdminAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DisassociateAdminAccount
 func (c *FMS) DisassociateAdminAccountRequest(input *DisassociateAdminAccountInput) (req *request.Request, output *DisassociateAdminAccountOutput) {
@@ -950,20 +949,21 @@ func (c *FMS) DisassociateAdminAccountRequest(input *DisassociateAdminAccountInp
 // API operation DisassociateAdminAccount for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DisassociateAdminAccount
 func (c *FMS) DisassociateAdminAccount(input *DisassociateAdminAccountInput) (*DisassociateAdminAccountOutput, error) {
@@ -1003,14 +1003,13 @@ const opDisassociateThirdPartyFirewall = "DisassociateThirdPartyFirewall"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateThirdPartyFirewallRequest method.
+//	req, resp := client.DisassociateThirdPartyFirewallRequest(params)
 //
-//    // Example sending a request using the DisassociateThirdPartyFirewallRequest method.
-//    req, resp := client.DisassociateThirdPartyFirewallRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DisassociateThirdPartyFirewall
 func (c *FMS) DisassociateThirdPartyFirewallRequest(input *DisassociateThirdPartyFirewallInput) (req *request.Request, output *DisassociateThirdPartyFirewallOutput) {
@@ -1044,23 +1043,24 @@ func (c *FMS) DisassociateThirdPartyFirewallRequest(input *DisassociateThirdPart
 // API operation DisassociateThirdPartyFirewall for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/DisassociateThirdPartyFirewall
 func (c *FMS) DisassociateThirdPartyFirewall(input *DisassociateThirdPartyFirewallInput) (*DisassociateThirdPartyFirewallOutput, error) {
@@ -1100,14 +1100,13 @@ const opGetAdminAccount = "GetAdminAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAdminAccountRequest method.
+//	req, resp := client.GetAdminAccountRequest(params)
 //
-//    // Example sending a request using the GetAdminAccountRequest method.
-//    req, resp := client.GetAdminAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetAdminAccount
 func (c *FMS) GetAdminAccountRequest(input *GetAdminAccountInput) (req *request.Request, output *GetAdminAccountOutput) {
@@ -1139,20 +1138,21 @@ func (c *FMS) GetAdminAccountRequest(input *GetAdminAccountInput) (req *request.
 // API operation GetAdminAccount for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetAdminAccount
 func (c *FMS) GetAdminAccount(input *GetAdminAccountInput) (*GetAdminAccountOutput, error) {
@@ -1192,14 +1192,13 @@ const opGetAdminScope = "GetAdminScope"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAdminScopeRequest method.
+//	req, resp := client.GetAdminScopeRequest(params)
 //
-//    // Example sending a request using the GetAdminScopeRequest method.
-//    req, resp := client.GetAdminScopeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetAdminScope
 func (c *FMS) GetAdminScopeRequest(input *GetAdminScopeInput) (req *request.Request, output *GetAdminScopeOutput) {
@@ -1232,23 +1231,30 @@ func (c *FMS) GetAdminScopeRequest(input *GetAdminScopeInput) (req *request.Requ
 // API operation GetAdminScope for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
+//
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetAdminScope
 func (c *FMS) GetAdminScope(input *GetAdminScopeInput) (*GetAdminScopeOutput, error) {
@@ -1288,14 +1294,13 @@ const opGetAppsList = "GetAppsList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAppsListRequest method.
+//	req, resp := client.GetAppsListRequest(params)
 //
-//    // Example sending a request using the GetAppsListRequest method.
-//    req, resp := client.GetAppsListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetAppsList
 func (c *FMS) GetAppsListRequest(input *GetAppsListInput) (req *request.Request, output *GetAppsListOutput) {
@@ -1326,20 +1331,21 @@ func (c *FMS) GetAppsListRequest(input *GetAppsListInput) (req *request.Request,
 // API operation GetAppsList for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetAppsList
 func (c *FMS) GetAppsList(input *GetAppsListInput) (*GetAppsListOutput, error) {
@@ -1379,14 +1385,13 @@ const opGetComplianceDetail = "GetComplianceDetail"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetComplianceDetailRequest method.
+//	req, resp := client.GetComplianceDetailRequest(params)
 //
-//    // Example sending a request using the GetComplianceDetailRequest method.
-//    req, resp := client.GetComplianceDetailRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetComplianceDetail
 func (c *FMS) GetComplianceDetailRequest(input *GetComplianceDetailInput) (req *request.Request, output *GetComplianceDetailOutput) {
@@ -1411,22 +1416,22 @@ func (c *FMS) GetComplianceDetailRequest(input *GetComplianceDetailInput) (req *
 // Details include resources that are in and out of compliance with the specified
 // policy.
 //
-//    * Resources are considered noncompliant for WAF and Shield Advanced policies
-//    if the specified policy has not been applied to them.
+//   - Resources are considered noncompliant for WAF and Shield Advanced policies
+//     if the specified policy has not been applied to them.
 //
-//    * Resources are considered noncompliant for security group policies if
-//    they are in scope of the policy, they violate one or more of the policy
-//    rules, and remediation is disabled or not possible.
+//   - Resources are considered noncompliant for security group policies if
+//     they are in scope of the policy, they violate one or more of the policy
+//     rules, and remediation is disabled or not possible.
 //
-//    * Resources are considered noncompliant for Network Firewall policies
-//    if a firewall is missing in the VPC, if the firewall endpoint isn't set
-//    up in an expected Availability Zone and subnet, if a subnet created by
-//    the Firewall Manager doesn't have the expected route table, and for modifications
-//    to a firewall policy that violate the Firewall Manager policy's rules.
+//   - Resources are considered noncompliant for Network Firewall policies
+//     if a firewall is missing in the VPC, if the firewall endpoint isn't set
+//     up in an expected Availability Zone and subnet, if a subnet created by
+//     the Firewall Manager doesn't have the expected route table, and for modifications
+//     to a firewall policy that violate the Firewall Manager policy's rules.
 //
-//    * Resources are considered noncompliant for DNS Firewall policies if a
-//    DNS Firewall rule group is missing from the rule group associations for
-//    the VPC.
+//   - Resources are considered noncompliant for DNS Firewall policies if a
+//     DNS Firewall rule group is missing from the rule group associations for
+//     the VPC.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1436,23 +1441,24 @@ func (c *FMS) GetComplianceDetailRequest(input *GetComplianceDetailInput) (req *
 // API operation GetComplianceDetail for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
+//
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetComplianceDetail
 func (c *FMS) GetComplianceDetail(input *GetComplianceDetailInput) (*GetComplianceDetailOutput, error) {
@@ -1492,14 +1498,13 @@ const opGetNotificationChannel = "GetNotificationChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetNotificationChannelRequest method.
+//	req, resp := client.GetNotificationChannelRequest(params)
 //
-//    // Example sending a request using the GetNotificationChannelRequest method.
-//    req, resp := client.GetNotificationChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetNotificationChannel
 func (c *FMS) GetNotificationChannelRequest(input *GetNotificationChannelInput) (req *request.Request, output *GetNotificationChannelOutput) {
@@ -1531,20 +1536,21 @@ func (c *FMS) GetNotificationChannelRequest(input *GetNotificationChannelInput) 
 // API operation GetNotificationChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetNotificationChannel
 func (c *FMS) GetNotificationChannel(input *GetNotificationChannelInput) (*GetNotificationChannelOutput, error) {
@@ -1584,14 +1590,13 @@ const opGetPolicy = "GetPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPolicyRequest method.
+//	req, resp := client.GetPolicyRequest(params)
 //
-//    // Example sending a request using the GetPolicyRequest method.
-//    req, resp := client.GetPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetPolicy
 func (c *FMS) GetPolicyRequest(input *GetPolicyInput) (req *request.Request, output *GetPolicyOutput) {
@@ -1622,23 +1627,24 @@ func (c *FMS) GetPolicyRequest(input *GetPolicyInput) (req *request.Request, out
 // API operation GetPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InvalidTypeException
-//   The value of the Type parameter is invalid.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
+//
+//   - InvalidTypeException
+//     The value of the Type parameter is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetPolicy
 func (c *FMS) GetPolicy(input *GetPolicyInput) (*GetPolicyOutput, error) {
@@ -1678,14 +1684,13 @@ const opGetProtectionStatus = "GetProtectionStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetProtectionStatusRequest method.
+//	req, resp := client.GetProtectionStatusRequest(params)
 //
-//    // Example sending a request using the GetProtectionStatusRequest method.
-//    req, resp := client.GetProtectionStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetProtectionStatus
 func (c *FMS) GetProtectionStatusRequest(input *GetProtectionStatusInput) (req *request.Request, output *GetProtectionStatusOutput) {
@@ -1718,15 +1723,16 @@ func (c *FMS) GetProtectionStatusRequest(input *GetProtectionStatusInput) (req *
 // API operation GetProtectionStatus for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The parameters of the request were invalid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetProtectionStatus
 func (c *FMS) GetProtectionStatus(input *GetProtectionStatusInput) (*GetProtectionStatusOutput, error) {
@@ -1766,14 +1772,13 @@ const opGetProtocolsList = "GetProtocolsList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetProtocolsListRequest method.
+//	req, resp := client.GetProtocolsListRequest(params)
 //
-//    // Example sending a request using the GetProtocolsListRequest method.
-//    req, resp := client.GetProtocolsListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetProtocolsList
 func (c *FMS) GetProtocolsListRequest(input *GetProtocolsListInput) (req *request.Request, output *GetProtocolsListOutput) {
@@ -1804,20 +1809,21 @@ func (c *FMS) GetProtocolsListRequest(input *GetProtocolsListInput) (req *reques
 // API operation GetProtocolsList for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetProtocolsList
 func (c *FMS) GetProtocolsList(input *GetProtocolsListInput) (*GetProtocolsListOutput, error) {
@@ -1857,14 +1863,13 @@ const opGetResourceSet = "GetResourceSet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResourceSetRequest method.
+//	req, resp := client.GetResourceSetRequest(params)
 //
-//    // Example sending a request using the GetResourceSetRequest method.
-//    req, resp := client.GetResourceSetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetResourceSet
 func (c *FMS) GetResourceSetRequest(input *GetResourceSetInput) (req *request.Request, output *GetResourceSetOutput) {
@@ -1895,23 +1900,24 @@ func (c *FMS) GetResourceSetRequest(input *GetResourceSetInput) (req *request.Re
 // API operation GetResourceSet for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetResourceSet
 func (c *FMS) GetResourceSet(input *GetResourceSetInput) (*GetResourceSetOutput, error) {
@@ -1951,14 +1957,13 @@ const opGetThirdPartyFirewallAssociationStatus = "GetThirdPartyFirewallAssociati
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetThirdPartyFirewallAssociationStatusRequest method.
+//	req, resp := client.GetThirdPartyFirewallAssociationStatusRequest(params)
 //
-//    // Example sending a request using the GetThirdPartyFirewallAssociationStatusRequest method.
-//    req, resp := client.GetThirdPartyFirewallAssociationStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetThirdPartyFirewallAssociationStatus
 func (c *FMS) GetThirdPartyFirewallAssociationStatusRequest(input *GetThirdPartyFirewallAssociationStatusInput) (req *request.Request, output *GetThirdPartyFirewallAssociationStatusOutput) {
@@ -1990,23 +1995,24 @@ func (c *FMS) GetThirdPartyFirewallAssociationStatusRequest(input *GetThirdParty
 // API operation GetThirdPartyFirewallAssociationStatus for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetThirdPartyFirewallAssociationStatus
 func (c *FMS) GetThirdPartyFirewallAssociationStatus(input *GetThirdPartyFirewallAssociationStatusInput) (*GetThirdPartyFirewallAssociationStatusOutput, error) {
@@ -2046,14 +2052,13 @@ const opGetViolationDetails = "GetViolationDetails"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetViolationDetailsRequest method.
+//	req, resp := client.GetViolationDetailsRequest(params)
 //
-//    // Example sending a request using the GetViolationDetailsRequest method.
-//    req, resp := client.GetViolationDetailsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetViolationDetails
 func (c *FMS) GetViolationDetailsRequest(input *GetViolationDetailsInput) (req *request.Request, output *GetViolationDetailsOutput) {
@@ -2085,15 +2090,16 @@ func (c *FMS) GetViolationDetailsRequest(input *GetViolationDetailsInput) (req *
 // API operation GetViolationDetails for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/GetViolationDetails
 func (c *FMS) GetViolationDetails(input *GetViolationDetailsInput) (*GetViolationDetailsOutput, error) {
@@ -2133,14 +2139,13 @@ const opListAdminAccountsForOrganization = "ListAdminAccountsForOrganization"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAdminAccountsForOrganizationRequest method.
+//	req, resp := client.ListAdminAccountsForOrganizationRequest(params)
 //
-//    // Example sending a request using the ListAdminAccountsForOrganizationRequest method.
-//    req, resp := client.ListAdminAccountsForOrganizationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListAdminAccountsForOrganization
 func (c *FMS) ListAdminAccountsForOrganizationRequest(input *ListAdminAccountsForOrganizationInput) (req *request.Request, output *ListAdminAccountsForOrganizationOutput) {
@@ -2180,20 +2185,27 @@ func (c *FMS) ListAdminAccountsForOrganizationRequest(input *ListAdminAccountsFo
 // API operation ListAdminAccountsForOrganization for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
+//
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListAdminAccountsForOrganization
 func (c *FMS) ListAdminAccountsForOrganization(input *ListAdminAccountsForOrganizationInput) (*ListAdminAccountsForOrganizationOutput, error) {
@@ -2225,15 +2237,14 @@ func (c *FMS) ListAdminAccountsForOrganizationWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAdminAccountsForOrganization operation.
-//    pageNum := 0
-//    err := client.ListAdminAccountsForOrganizationPages(params,
-//        func(page *fms.ListAdminAccountsForOrganizationOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAdminAccountsForOrganization operation.
+//	pageNum := 0
+//	err := client.ListAdminAccountsForOrganizationPages(params,
+//	    func(page *fms.ListAdminAccountsForOrganizationOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *FMS) ListAdminAccountsForOrganizationPages(input *ListAdminAccountsForOrganizationInput, fn func(*ListAdminAccountsForOrganizationOutput, bool) bool) error {
 	return c.ListAdminAccountsForOrganizationPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2285,14 +2296,13 @@ const opListAdminsManagingAccount = "ListAdminsManagingAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAdminsManagingAccountRequest method.
+//	req, resp := client.ListAdminsManagingAccountRequest(params)
 //
-//    // Example sending a request using the ListAdminsManagingAccountRequest method.
-//    req, resp := client.ListAdminsManagingAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListAdminsManagingAccount
 func (c *FMS) ListAdminsManagingAccountRequest(input *ListAdminsManagingAccountInput) (req *request.Request, output *ListAdminsManagingAccountOutput) {
@@ -2332,15 +2342,16 @@ func (c *FMS) ListAdminsManagingAccountRequest(input *ListAdminsManagingAccountI
 // API operation ListAdminsManagingAccount for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListAdminsManagingAccount
 func (c *FMS) ListAdminsManagingAccount(input *ListAdminsManagingAccountInput) (*ListAdminsManagingAccountOutput, error) {
@@ -2372,15 +2383,14 @@ func (c *FMS) ListAdminsManagingAccountWithContext(ctx aws.Context, input *ListA
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAdminsManagingAccount operation.
-//    pageNum := 0
-//    err := client.ListAdminsManagingAccountPages(params,
-//        func(page *fms.ListAdminsManagingAccountOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAdminsManagingAccount operation.
+//	pageNum := 0
+//	err := client.ListAdminsManagingAccountPages(params,
+//	    func(page *fms.ListAdminsManagingAccountOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *FMS) ListAdminsManagingAccountPages(input *ListAdminsManagingAccountInput, fn func(*ListAdminsManagingAccountOutput, bool) bool) error {
 	return c.ListAdminsManagingAccountPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2432,14 +2442,13 @@ const opListAppsLists = "ListAppsLists"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAppsListsRequest method.
+//	req, resp := client.ListAppsListsRequest(params)
 //
-//    // Example sending a request using the ListAppsListsRequest method.
-//    req, resp := client.ListAppsListsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListAppsLists
 func (c *FMS) ListAppsListsRequest(input *ListAppsListsInput) (req *request.Request, output *ListAppsListsOutput) {
@@ -2476,26 +2485,27 @@ func (c *FMS) ListAppsListsRequest(input *ListAppsListsInput) (req *request.Requ
 // API operation ListAppsLists for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * LimitExceededException
-//   The operation exceeds a resource limit, for example, the maximum number of
-//   policy objects that you can create for an Amazon Web Services account. For
-//   more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
-//   in the WAF Developer Guide.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListAppsLists
 func (c *FMS) ListAppsLists(input *ListAppsListsInput) (*ListAppsListsOutput, error) {
@@ -2527,15 +2537,14 @@ func (c *FMS) ListAppsListsWithContext(ctx aws.Context, input *ListAppsListsInpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAppsLists operation.
-//    pageNum := 0
-//    err := client.ListAppsListsPages(params,
-//        func(page *fms.ListAppsListsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAppsLists operation.
+//	pageNum := 0
+//	err := client.ListAppsListsPages(params,
+//	    func(page *fms.ListAppsListsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *FMS) ListAppsListsPages(input *ListAppsListsInput, fn func(*ListAppsListsOutput, bool) bool) error {
 	return c.ListAppsListsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2587,14 +2596,13 @@ const opListComplianceStatus = "ListComplianceStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListComplianceStatusRequest method.
+//	req, resp := client.ListComplianceStatusRequest(params)
 //
-//    // Example sending a request using the ListComplianceStatusRequest method.
-//    req, resp := client.ListComplianceStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListComplianceStatus
 func (c *FMS) ListComplianceStatusRequest(input *ListComplianceStatusInput) (req *request.Request, output *ListComplianceStatusOutput) {
@@ -2633,12 +2641,13 @@ func (c *FMS) ListComplianceStatusRequest(input *ListComplianceStatusInput) (req
 // API operation ListComplianceStatus for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListComplianceStatus
 func (c *FMS) ListComplianceStatus(input *ListComplianceStatusInput) (*ListComplianceStatusOutput, error) {
@@ -2670,15 +2679,14 @@ func (c *FMS) ListComplianceStatusWithContext(ctx aws.Context, input *ListCompli
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListComplianceStatus operation.
-//    pageNum := 0
-//    err := client.ListComplianceStatusPages(params,
-//        func(page *fms.ListComplianceStatusOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListComplianceStatus operation.
+//	pageNum := 0
+//	err := client.ListComplianceStatusPages(params,
+//	    func(page *fms.ListComplianceStatusOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *FMS) ListComplianceStatusPages(input *ListComplianceStatusInput, fn func(*ListComplianceStatusOutput, bool) bool) error {
 	return c.ListComplianceStatusPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2730,14 +2738,13 @@ const opListDiscoveredResources = "ListDiscoveredResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDiscoveredResourcesRequest method.
+//	req, resp := client.ListDiscoveredResourcesRequest(params)
 //
-//    // Example sending a request using the ListDiscoveredResourcesRequest method.
-//    req, resp := client.ListDiscoveredResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListDiscoveredResources
 func (c *FMS) ListDiscoveredResourcesRequest(input *ListDiscoveredResourcesInput) (req *request.Request, output *ListDiscoveredResourcesOutput) {
@@ -2769,20 +2776,21 @@ func (c *FMS) ListDiscoveredResourcesRequest(input *ListDiscoveredResourcesInput
 // API operation ListDiscoveredResources for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListDiscoveredResources
 func (c *FMS) ListDiscoveredResources(input *ListDiscoveredResourcesInput) (*ListDiscoveredResourcesOutput, error) {
@@ -2822,14 +2830,13 @@ const opListMemberAccounts = "ListMemberAccounts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMemberAccountsRequest method.
+//	req, resp := client.ListMemberAccountsRequest(params)
 //
-//    // Example sending a request using the ListMemberAccountsRequest method.
-//    req, resp := client.ListMemberAccountsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListMemberAccounts
 func (c *FMS) ListMemberAccountsRequest(input *ListMemberAccountsInput) (req *request.Request, output *ListMemberAccountsOutput) {
@@ -2870,12 +2877,13 @@ func (c *FMS) ListMemberAccountsRequest(input *ListMemberAccountsInput) (req *re
 // API operation ListMemberAccounts for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListMemberAccounts
 func (c *FMS) ListMemberAccounts(input *ListMemberAccountsInput) (*ListMemberAccountsOutput, error) {
@@ -2907,15 +2915,14 @@ func (c *FMS) ListMemberAccountsWithContext(ctx aws.Context, input *ListMemberAc
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMemberAccounts operation.
-//    pageNum := 0
-//    err := client.ListMemberAccountsPages(params,
-//        func(page *fms.ListMemberAccountsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMemberAccounts operation.
+//	pageNum := 0
+//	err := client.ListMemberAccountsPages(params,
+//	    func(page *fms.ListMemberAccountsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *FMS) ListMemberAccountsPages(input *ListMemberAccountsInput, fn func(*ListMemberAccountsOutput, bool) bool) error {
 	return c.ListMemberAccountsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2967,14 +2974,13 @@ const opListPolicies = "ListPolicies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPoliciesRequest method.
+//	req, resp := client.ListPoliciesRequest(params)
 //
-//    // Example sending a request using the ListPoliciesRequest method.
-//    req, resp := client.ListPoliciesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListPolicies
 func (c *FMS) ListPoliciesRequest(input *ListPoliciesInput) (req *request.Request, output *ListPoliciesOutput) {
@@ -3011,26 +3017,27 @@ func (c *FMS) ListPoliciesRequest(input *ListPoliciesInput) (req *request.Reques
 // API operation ListPolicies for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * LimitExceededException
-//   The operation exceeds a resource limit, for example, the maximum number of
-//   policy objects that you can create for an Amazon Web Services account. For
-//   more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
-//   in the WAF Developer Guide.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListPolicies
 func (c *FMS) ListPolicies(input *ListPoliciesInput) (*ListPoliciesOutput, error) {
@@ -3062,15 +3069,14 @@ func (c *FMS) ListPoliciesWithContext(ctx aws.Context, input *ListPoliciesInput,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPolicies operation.
-//    pageNum := 0
-//    err := client.ListPoliciesPages(params,
-//        func(page *fms.ListPoliciesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPolicies operation.
+//	pageNum := 0
+//	err := client.ListPoliciesPages(params,
+//	    func(page *fms.ListPoliciesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *FMS) ListPoliciesPages(input *ListPoliciesInput, fn func(*ListPoliciesOutput, bool) bool) error {
 	return c.ListPoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3122,14 +3128,13 @@ const opListProtocolsLists = "ListProtocolsLists"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProtocolsListsRequest method.
+//	req, resp := client.ListProtocolsListsRequest(params)
 //
-//    // Example sending a request using the ListProtocolsListsRequest method.
-//    req, resp := client.ListProtocolsListsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListProtocolsLists
 func (c *FMS) ListProtocolsListsRequest(input *ListProtocolsListsInput) (req *request.Request, output *ListProtocolsListsOutput) {
@@ -3166,20 +3171,21 @@ func (c *FMS) ListProtocolsListsRequest(input *ListProtocolsListsInput) (req *re
 // API operation ListProtocolsLists for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListProtocolsLists
 func (c *FMS) ListProtocolsLists(input *ListProtocolsListsInput) (*ListProtocolsListsOutput, error) {
@@ -3211,15 +3217,14 @@ func (c *FMS) ListProtocolsListsWithContext(ctx aws.Context, input *ListProtocol
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListProtocolsLists operation.
-//    pageNum := 0
-//    err := client.ListProtocolsListsPages(params,
-//        func(page *fms.ListProtocolsListsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListProtocolsLists operation.
+//	pageNum := 0
+//	err := client.ListProtocolsListsPages(params,
+//	    func(page *fms.ListProtocolsListsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *FMS) ListProtocolsListsPages(input *ListProtocolsListsInput, fn func(*ListProtocolsListsOutput, bool) bool) error {
 	return c.ListProtocolsListsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3271,14 +3276,13 @@ const opListResourceSetResources = "ListResourceSetResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResourceSetResourcesRequest method.
+//	req, resp := client.ListResourceSetResourcesRequest(params)
 //
-//    // Example sending a request using the ListResourceSetResourcesRequest method.
-//    req, resp := client.ListResourceSetResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListResourceSetResources
 func (c *FMS) ListResourceSetResourcesRequest(input *ListResourceSetResourcesInput) (req *request.Request, output *ListResourceSetResourcesOutput) {
@@ -3310,23 +3314,24 @@ func (c *FMS) ListResourceSetResourcesRequest(input *ListResourceSetResourcesInp
 // API operation ListResourceSetResources for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListResourceSetResources
 func (c *FMS) ListResourceSetResources(input *ListResourceSetResourcesInput) (*ListResourceSetResourcesOutput, error) {
@@ -3366,14 +3371,13 @@ const opListResourceSets = "ListResourceSets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResourceSetsRequest method.
+//	req, resp := client.ListResourceSetsRequest(params)
 //
-//    // Example sending a request using the ListResourceSetsRequest method.
-//    req, resp := client.ListResourceSetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListResourceSets
 func (c *FMS) ListResourceSetsRequest(input *ListResourceSetsInput) (req *request.Request, output *ListResourceSetsOutput) {
@@ -3404,20 +3408,21 @@ func (c *FMS) ListResourceSetsRequest(input *ListResourceSetsInput) (req *reques
 // API operation ListResourceSets for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListResourceSets
 func (c *FMS) ListResourceSets(input *ListResourceSetsInput) (*ListResourceSetsOutput, error) {
@@ -3457,14 +3462,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListTagsForResource
 func (c *FMS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -3495,23 +3499,24 @@ func (c *FMS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
+//
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListTagsForResource
 func (c *FMS) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -3551,14 +3556,13 @@ const opListThirdPartyFirewallFirewallPolicies = "ListThirdPartyFirewallFirewall
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListThirdPartyFirewallFirewallPoliciesRequest method.
+//	req, resp := client.ListThirdPartyFirewallFirewallPoliciesRequest(params)
 //
-//    // Example sending a request using the ListThirdPartyFirewallFirewallPoliciesRequest method.
-//    req, resp := client.ListThirdPartyFirewallFirewallPoliciesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListThirdPartyFirewallFirewallPolicies
 func (c *FMS) ListThirdPartyFirewallFirewallPoliciesRequest(input *ListThirdPartyFirewallFirewallPoliciesInput) (req *request.Request, output *ListThirdPartyFirewallFirewallPoliciesOutput) {
@@ -3596,23 +3600,24 @@ func (c *FMS) ListThirdPartyFirewallFirewallPoliciesRequest(input *ListThirdPart
 // API operation ListThirdPartyFirewallFirewallPolicies for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/ListThirdPartyFirewallFirewallPolicies
 func (c *FMS) ListThirdPartyFirewallFirewallPolicies(input *ListThirdPartyFirewallFirewallPoliciesInput) (*ListThirdPartyFirewallFirewallPoliciesOutput, error) {
@@ -3644,15 +3649,14 @@ func (c *FMS) ListThirdPartyFirewallFirewallPoliciesWithContext(ctx aws.Context,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListThirdPartyFirewallFirewallPolicies operation.
-//    pageNum := 0
-//    err := client.ListThirdPartyFirewallFirewallPoliciesPages(params,
-//        func(page *fms.ListThirdPartyFirewallFirewallPoliciesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListThirdPartyFirewallFirewallPolicies operation.
+//	pageNum := 0
+//	err := client.ListThirdPartyFirewallFirewallPoliciesPages(params,
+//	    func(page *fms.ListThirdPartyFirewallFirewallPoliciesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *FMS) ListThirdPartyFirewallFirewallPoliciesPages(input *ListThirdPartyFirewallFirewallPoliciesInput, fn func(*ListThirdPartyFirewallFirewallPoliciesOutput, bool) bool) error {
 	return c.ListThirdPartyFirewallFirewallPoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3704,14 +3708,13 @@ const opPutAdminAccount = "PutAdminAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutAdminAccountRequest method.
+//	req, resp := client.PutAdminAccountRequest(params)
 //
-//    // Example sending a request using the PutAdminAccountRequest method.
-//    req, resp := client.PutAdminAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutAdminAccount
 func (c *FMS) PutAdminAccountRequest(input *PutAdminAccountInput) (req *request.Request, output *PutAdminAccountOutput) {
@@ -3752,26 +3755,27 @@ func (c *FMS) PutAdminAccountRequest(input *PutAdminAccountInput) (req *request.
 // API operation PutAdminAccount for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * LimitExceededException
-//   The operation exceeds a resource limit, for example, the maximum number of
-//   policy objects that you can create for an Amazon Web Services account. For
-//   more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
-//   in the WAF Developer Guide.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
+//
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutAdminAccount
 func (c *FMS) PutAdminAccount(input *PutAdminAccountInput) (*PutAdminAccountOutput, error) {
@@ -3811,14 +3815,13 @@ const opPutAppsList = "PutAppsList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutAppsListRequest method.
+//	req, resp := client.PutAppsListRequest(params)
 //
-//    // Example sending a request using the PutAppsListRequest method.
-//    req, resp := client.PutAppsListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutAppsList
 func (c *FMS) PutAppsListRequest(input *PutAppsListInput) (req *request.Request, output *PutAppsListOutput) {
@@ -3849,29 +3852,30 @@ func (c *FMS) PutAppsListRequest(input *PutAppsListInput) (req *request.Request,
 // API operation PutAppsList for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * LimitExceededException
-//   The operation exceeds a resource limit, for example, the maximum number of
-//   policy objects that you can create for an Amazon Web Services account. For
-//   more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
-//   in the WAF Developer Guide.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutAppsList
 func (c *FMS) PutAppsList(input *PutAppsListInput) (*PutAppsListOutput, error) {
@@ -3911,14 +3915,13 @@ const opPutNotificationChannel = "PutNotificationChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutNotificationChannelRequest method.
+//	req, resp := client.PutNotificationChannelRequest(params)
 //
-//    // Example sending a request using the PutNotificationChannelRequest method.
-//    req, resp := client.PutNotificationChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutNotificationChannel
 func (c *FMS) PutNotificationChannelRequest(input *PutNotificationChannelInput) (req *request.Request, output *PutNotificationChannelOutput) {
@@ -3960,20 +3963,21 @@ func (c *FMS) PutNotificationChannelRequest(input *PutNotificationChannelInput) 
 // API operation PutNotificationChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutNotificationChannel
 func (c *FMS) PutNotificationChannel(input *PutNotificationChannelInput) (*PutNotificationChannelOutput, error) {
@@ -4013,14 +4017,13 @@ const opPutPolicy = "PutPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutPolicyRequest method.
+//	req, resp := client.PutPolicyRequest(params)
 //
-//    // Example sending a request using the PutPolicyRequest method.
-//    req, resp := client.PutPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutPolicy
 func (c *FMS) PutPolicyRequest(input *PutPolicyInput) (req *request.Request, output *PutPolicyOutput) {
@@ -4043,32 +4046,41 @@ func (c *FMS) PutPolicyRequest(input *PutPolicyInput) (req *request.Request, out
 //
 // Creates an Firewall Manager policy.
 //
+// A Firewall Manager policy is specific to the individual policy type. If you
+// want to enforce multiple policy types across accounts, you can create multiple
+// policies. You can create more than one policy for each type.
+//
+// If you add a new account to an organization that you created with Organizations,
+// Firewall Manager automatically applies the policy to the resources in that
+// account that are within scope of the policy.
+//
 // Firewall Manager provides the following types of policies:
 //
-//    * An WAF policy (type WAFV2), which defines rule groups to run first in
-//    the corresponding WAF web ACL and rule groups to run last in the web ACL.
+//   - Shield Advanced policy - This policy applies Shield Advanced protection
+//     to specified accounts and resources.
 //
-//    * An WAF Classic policy (type WAF), which defines a rule group.
+//   - Security Groups policy - This type of policy gives you control over
+//     security groups that are in use throughout your organization in Organizations
+//     and lets you enforce a baseline set of rules across your organization.
 //
-//    * A Shield Advanced policy, which applies Shield Advanced protection to
-//    specified accounts and resources.
+//   - Network Firewall policy - This policy applies Network Firewall protection
+//     to your organization's VPCs.
 //
-//    * A security group policy, which manages VPC security groups across your
-//    Amazon Web Services organization.
+//   - DNS Firewall policy - This policy applies Amazon Route 53 Resolver DNS
+//     Firewall protections to your organization's VPCs.
 //
-//    * An Network Firewall policy, which provides firewall rules to filter
-//    network traffic in specified Amazon VPCs.
+//   - Third-party firewall policy - This policy applies third-party firewall
+//     protections. Third-party firewalls are available by subscription through
+//     the Amazon Web Services Marketplace console at Amazon Web Services Marketplace
+//     (https://aws.amazon.com/marketplace). Palo Alto Networks Cloud NGFW policy
 //
-//    * A DNS Firewall policy, which provides Route 53 Resolver DNS Firewall
-//    rules to filter DNS queries for specified VPCs.
-//
-// Each policy is specific to one of the types. If you want to enforce more
-// than one policy type across accounts, create multiple policies. You can create
-// multiple policies for each type.
-//
-// You must be subscribed to Shield Advanced to create a Shield Advanced policy.
-// For more information about subscribing to Shield Advanced, see CreateSubscription
-// (https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html).
+//   - This policy applies Palo Alto Networks Cloud Next Generation Firewall
+//     (NGFW) protections and Palo Alto Networks Cloud NGFW rulestacks to your
+//     organization's VPCs. Fortigate CNF policy - This policy applies Fortigate
+//     Cloud Native Firewall (CNF) protections. Fortigate CNF is a cloud-centered
+//     solution that blocks Zero-Day threats and secures cloud infrastructures
+//     with industry-leading advanced threat prevention, smart web application
+//     firewalls (WAF), and API protection.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4078,32 +4090,33 @@ func (c *FMS) PutPolicyRequest(input *PutPolicyInput) (req *request.Request, out
 // API operation PutPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * LimitExceededException
-//   The operation exceeds a resource limit, for example, the maximum number of
-//   policy objects that you can create for an Amazon Web Services account. For
-//   more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
-//   in the WAF Developer Guide.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
 //
-//   * InvalidTypeException
-//   The value of the Type parameter is invalid.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
+//
+//   - InvalidTypeException
+//     The value of the Type parameter is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutPolicy
 func (c *FMS) PutPolicy(input *PutPolicyInput) (*PutPolicyOutput, error) {
@@ -4143,14 +4156,13 @@ const opPutProtocolsList = "PutProtocolsList"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutProtocolsListRequest method.
+//	req, resp := client.PutProtocolsListRequest(params)
 //
-//    // Example sending a request using the PutProtocolsListRequest method.
-//    req, resp := client.PutProtocolsListRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutProtocolsList
 func (c *FMS) PutProtocolsListRequest(input *PutProtocolsListInput) (req *request.Request, output *PutProtocolsListOutput) {
@@ -4181,29 +4193,30 @@ func (c *FMS) PutProtocolsListRequest(input *PutProtocolsListInput) (req *reques
 // API operation PutProtocolsList for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * LimitExceededException
-//   The operation exceeds a resource limit, for example, the maximum number of
-//   policy objects that you can create for an Amazon Web Services account. For
-//   more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
-//   in the WAF Developer Guide.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutProtocolsList
 func (c *FMS) PutProtocolsList(input *PutProtocolsListInput) (*PutProtocolsListOutput, error) {
@@ -4243,14 +4256,13 @@ const opPutResourceSet = "PutResourceSet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutResourceSetRequest method.
+//	req, resp := client.PutResourceSetRequest(params)
 //
-//    // Example sending a request using the PutResourceSetRequest method.
-//    req, resp := client.PutResourceSetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutResourceSet
 func (c *FMS) PutResourceSetRequest(input *PutResourceSetInput) (req *request.Request, output *PutResourceSetOutput) {
@@ -4284,26 +4296,27 @@ func (c *FMS) PutResourceSetRequest(input *PutResourceSetInput) (req *request.Re
 // API operation PutResourceSet for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * LimitExceededException
-//   The operation exceeds a resource limit, for example, the maximum number of
-//   policy objects that you can create for an Amazon Web Services account. For
-//   more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
-//   in the WAF Developer Guide.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
+//
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/PutResourceSet
 func (c *FMS) PutResourceSet(input *PutResourceSetInput) (*PutResourceSetOutput, error) {
@@ -4343,14 +4356,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/TagResource
 func (c *FMS) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -4382,29 +4394,30 @@ func (c *FMS) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
 //
-//   * LimitExceededException
-//   The operation exceeds a resource limit, for example, the maximum number of
-//   policy objects that you can create for an Amazon Web Services account. For
-//   more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
-//   in the WAF Developer Guide.
+//   - InvalidInputException
+//     The parameters of the request were invalid.
+//
+//   - LimitExceededException
+//     The operation exceeds a resource limit, for example, the maximum number of
+//     policy objects that you can create for an Amazon Web Services account. For
+//     more information, see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+//     in the WAF Developer Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/TagResource
 func (c *FMS) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -4444,14 +4457,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/UntagResource
 func (c *FMS) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -4483,23 +4495,24 @@ func (c *FMS) UntagResourceRequest(input *UntagResourceInput) (req *request.Requ
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidOperationException
-//   The operation failed because there was nothing to do or the operation wasn't
-//   possible. For example, you might have submitted an AssociateAdminAccount
-//   request for an account ID that was already set as the Firewall Manager administrator.
-//   Or you might have tried to access a Region that's disabled by default, and
-//   that you need to enable for the Firewall Manager administrator account and
-//   for Organizations before you can access it.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InternalErrorException
-//   The operation failed because of a system problem, even though the request
-//   was valid. Retry your request.
+//   - InvalidOperationException
+//     The operation failed because there was nothing to do or the operation wasn't
+//     possible. For example, you might have submitted an AssociateAdminAccount
+//     request for an account ID that was already set as the Firewall Manager administrator.
+//     Or you might have tried to access a Region that's disabled by default, and
+//     that you need to enable for the Firewall Manager administrator account and
+//     for Organizations before you can access it.
 //
-//   * InvalidInputException
-//   The parameters of the request were invalid.
+//   - InternalErrorException
+//     The operation failed because of a system problem, even though the request
+//     was valid. Retry your request.
+//
+//   - InvalidInputException
+//     The parameters of the request were invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01/UntagResource
 func (c *FMS) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -5766,6 +5779,10 @@ type DeletePolicyInput struct {
 	//
 	//    * Deletes the security group if it was created through Firewall Manager
 	//    and if it's no longer associated with any resources through another policy
+	//
+	// For security group common policies, even if set to False, Firewall Manager
+	// deletes all security groups created by Firewall Manager that aren't associated
+	// with any other resources through another policy.
 	//
 	// After the cleanup, in-scope resources are no longer protected by web ACLs
 	// in this policy. Protection of out-of-scope resources remains unchanged. Scope
@@ -8186,8 +8203,18 @@ type GetViolationDetailsInput struct {
 	// MemberAccount is a required field
 	MemberAccount *string `min:"1" type:"string" required:"true"`
 
-	// The ID of the Firewall Manager policy that you want the details for. This
-	// currently only supports security group content audit policies.
+	// The ID of the Firewall Manager policy that you want the details for. You
+	// can get violation details for the following policy types:
+	//
+	//    * DNS Firewall
+	//
+	//    * Imported Network Firewall
+	//
+	//    * Network Firewall
+	//
+	//    * Security group content audit
+	//
+	//    * Third-party firewall
 	//
 	// PolicyId is a required field
 	PolicyId *string `min:"36" type:"string" required:"true"`
@@ -11244,13 +11271,23 @@ type Policy struct {
 	// To apply this policy to multiple resource types, specify a resource type
 	// of ResourceTypeList and then specify the resource types in a ResourceTypeList.
 	//
-	// For WAF and Shield Advanced, resource types include AWS::ElasticLoadBalancingV2::LoadBalancer,
-	// AWS::ElasticLoadBalancing::LoadBalancer, AWS::EC2::EIP, and AWS::CloudFront::Distribution.
-	// For a security group common policy, valid values are AWS::EC2::NetworkInterface
-	// and AWS::EC2::Instance. For a security group content audit policy, valid
-	// values are AWS::EC2::SecurityGroup, AWS::EC2::NetworkInterface, and AWS::EC2::Instance.
-	// For a security group usage audit policy, the value is AWS::EC2::SecurityGroup.
-	// For an Network Firewall policy or DNS Firewall policy, the value is AWS::EC2::VPC.
+	// The following are valid resource types for each Firewall Manager policy type:
+	//
+	//    * Amazon Web Services WAF Classic - AWS::ApiGateway::Stage, AWS::CloudFront::Distribution,
+	//    and AWS::ElasticLoadBalancingV2::LoadBalancer.
+	//
+	//    * WAF - AWS::ApiGateway::Stage, AWS::ElasticLoadBalancingV2::LoadBalancer,
+	//    and AWS::CloudFront::Distribution.
+	//
+	//    * DNS Firewall, Network Firewall, and third-party firewall - AWS::EC2::VPC.
+	//
+	//    * Shield Advanced - AWS::ElasticLoadBalancingV2::LoadBalancer, AWS::ElasticLoadBalancing::LoadBalancer,
+	//    AWS::EC2::EIP, and AWS::CloudFront::Distribution.
+	//
+	//    * Security group content audit - AWS::EC2::SecurityGroup, AWS::EC2::NetworkInterface,
+	//    and AWS::EC2::Instance.
+	//
+	//    * Security group usage audit - AWS::EC2::SecurityGroup.
 	//
 	// ResourceType is a required field
 	ResourceType *string `min:"1" type:"string" required:"true"`
@@ -13924,13 +13961,6 @@ type SecurityServicePolicyData struct {
 	//    To use the distributed deployment model, you must set PolicyOption (https://docs.aws.amazon.com/fms/2018-01-01/APIReference/API_PolicyOption.html)
 	//    to NULL.
 	//
-	//    * Example: THIRD_PARTY_FIREWALL "{ "type":"THIRD_PARTY_FIREWALL", "thirdPartyFirewall":"PALO_ALTO_NETWORKS_CLOUD_NGFW",
-	//    "thirdPartyFirewallConfig":{ "thirdPartyFirewallPolicyList":["global-1"]
-	//    }, "firewallDeploymentModel":{ "distributedFirewallDeploymentModel":{
-	//    "distributedFirewallOrchestrationConfig":{ "firewallCreationConfig":{
-	//    "endpointLocation":{ "availabilityZoneConfigList":[ { "availabilityZoneName":"${AvailabilityZone}"
-	//    } ] } }, "allowedIPV4CidrList":[ ] } } } }"
-	//
 	//    * Example: SECURITY_GROUPS_COMMON "{\"type\":\"SECURITY_GROUPS_COMMON\",\"revertManualSecurityGroupChanges\":false,\"exclusiveResourceSecurityGroupManagement\":false,
 	//    \"applyToAllEC2InstanceENIs\":false,\"securityGroups\":[{\"id\":\" sg-000e55995d61a06bd\"}]}"
 	//
@@ -13959,10 +13989,27 @@ type SecurityServicePolicyData struct {
 	//
 	//    * Example: SECURITY_GROUPS_USAGE_AUDIT "{\"type\":\"SECURITY_GROUPS_USAGE_AUDIT\",\"deleteUnusedSecurityGroups\":true,\"coalesceRedundantSecurityGroups\":true}"
 	//
+	//    * Example: SHIELD_ADVANCED with web ACL management "{\"type\":\"SHIELD_ADVANCED\",\"optimizeUnassociatedWebACL\":true}"
+	//    If you set optimizeUnassociatedWebACL to true, Firewall Manager creates
+	//    web ACLs in accounts within the policy scope if the web ACLs will be used
+	//    by at least one resource. Firewall Manager creates web ACLs in the accounts
+	//    within policy scope only if the web ACLs will be used by at least one
+	//    resource. If at any time an account comes into policy scope, Firewall
+	//    Manager automatically creates a web ACL in the account if at least one
+	//    resource will use the web ACL. Upon enablement, Firewall Manager performs
+	//    a one-time cleanup of unused web ACLs in your account. The cleanup process
+	//    can take several hours. If a resource leaves policy scope after Firewall
+	//    Manager creates a web ACL, Firewall Manager doesn't disassociate the resource
+	//    from the web ACL. If you want Firewall Manager to clean up the web ACL,
+	//    you must first manually disassociate the resources from the web ACL, and
+	//    then enable the manage unused web ACLs option in your policy. If you set
+	//    optimizeUnassociatedWebACL to false, and Firewall Manager automatically
+	//    creates an empty web ACL in each account that's within policy scope.
+	//
 	//    * Specification for SHIELD_ADVANCED for Amazon CloudFront distributions
 	//    "{\"type\":\"SHIELD_ADVANCED\",\"automaticResponseConfiguration\": {\"automaticResponseStatus\":\"ENABLED|IGNORED|DISABLED\",
-	//    \"automaticResponseAction\":\"BLOCK|COUNT\"}, \"overrideCustomerWebaclClassic\":true|false}"
-	//    For example: "{\"type\":\"SHIELD_ADVANCED\",\"automaticResponseConfiguration\":
+	//    \"automaticResponseAction\":\"BLOCK|COUNT\"}, \"overrideCustomerWebaclClassic\":true|false,
+	//    \"optimizeUnassociatedWebACL\":true|false}" For example: "{\"type\":\"SHIELD_ADVANCED\",\"automaticResponseConfiguration\":
 	//    {\"automaticResponseStatus\":\"ENABLED\", \"automaticResponseAction\":\"COUNT\"}}"
 	//    The default value for automaticResponseStatus is IGNORED. The value for
 	//    automaticResponseAction is only required when automaticResponseStatus
@@ -13970,28 +14017,60 @@ type SecurityServicePolicyData struct {
 	//    is false. For other resource types that you can protect with a Shield
 	//    Advanced policy, this ManagedServiceData configuration is an empty string.
 	//
-	//    * Example: WAFV2 - Account takeover prevention and Bot Control managed
-	//    rule groups, and rule action override "{\"type\":\"WAFV2\",\"preProcessRuleGroups\":[{\"ruleGroupArn\":null,\"overrideAction\":{\"type\":\"NONE\"},\"managedRuleGroupIdentifier\":{\"versionEnabled\":null,\"version\":null,\"vendorName\":\"AWS\",\"managedRuleGroupName\":\"AWSManagedRulesATPRuleSet\",\"managedRuleGroupConfigs\":[{\"awsmanagedRulesATPRuleSet\":{\"loginPath\":\"/loginpath\",\"requestInspection\":{\"payloadType\":\"FORM_ENCODED|JSON\",\"usernameField\":{\"identifier\":\"/form/username\"},\"passwordField\":{\"identifier\":\"/form/password\"}}}}]},\"ruleGroupType\":\"ManagedRuleGroup\",\"excludeRules\":[],\"sampledRequestsEnabled\":true},{\"ruleGroupArn\":null,\"overrideAction\":{\"type\":\"NONE\"},\"managedRuleGroupIdentifier\":{\"versionEnabled\":null,\"version\":null,\"vendorName\":\"AWS\",\"managedRuleGroupName\":\"AWSManagedRulesBotControlRuleSet\",\"managedRuleGroupConfigs\":[{\"awsmanagedRulesBotControlRuleSet\":{\"inspectionLevel\":\"TARGETED|COMMON\"}}]},\"ruleGroupType\":\"ManagedRuleGroup\",\"excludeRules\":[],\"sampledRequestsEnabled\":true,\"ruleActionOverrides\":[{\"name\":\"Rule1\",\"actionToUse\":{\"allow|block|count|captcha|challenge\":{}}},{\"name\":\"Rule2\",\"actionToUse\":{\"allow|block|count|captcha|challenge\":{}}}]}],\"postProcessRuleGroups\":[],\"defaultAction\":{\"type\":\"ALLOW\"},\"customRequestHandling\":null,\"customResponse\":null,\"overrideCustomerWebACLAssociation\":false,\"loggingConfiguration\":null,\"sampledRequestsEnabledForDefaultActions\":true}"
-	//    Fraud Control account takeover prevention (ATP) - For information about
-	//    the properties available for AWSManagedRulesATPRuleSet managed rule groups,
-	//    see AWSManagedRulesATPRuleSet (https://docs.aws.amazon.com/waf/latest/APIReference/API_AWSManagedRulesATPRuleSet.html)
-	//    in the WAF API Reference. Bot Control - For information about AWSManagedRulesBotControlRuleSet
-	//    managed rule groups, see AWSManagedRulesBotControlRuleSet (https://docs.aws.amazon.com/waf/latest/APIReference/API_AWSManagedRulesBotControlRuleSet.html)
-	//    in the WAF API Reference. Rule action overrides - Firewall Manager supports
-	//    rule action overrides only for managed rule groups. To configure a RuleActionOverrides
-	//    add the Name of the rule to override, and ActionToUse, which is the new
-	//    action to use for the rule. For information about using rule action override,
-	//    see RuleActionOverride (https://docs.aws.amazon.com/waf/latest/APIReference/API_RuleActionOverride.html)
+	//    * Example: THIRD_PARTY_FIREWALL Replace THIRD_PARTY_FIREWALL_NAME with
+	//    the name of the third-party firewall. "{ "type":"THIRD_PARTY_FIREWALL",
+	//    "thirdPartyFirewall":"THIRD_PARTY_FIREWALL_NAME", "thirdPartyFirewallConfig":{
+	//    "thirdPartyFirewallPolicyList":["global-1"] }, "firewallDeploymentModel":{
+	//    "distributedFirewallDeploymentModel":{ "distributedFirewallOrchestrationConfig":{
+	//    "firewallCreationConfig":{ "endpointLocation":{ "availabilityZoneConfigList":[
+	//    { "availabilityZoneName":"${AvailabilityZone}" } ] } }, "allowedIPV4CidrList":[
+	//    ] } } } }"
+	//
+	//    * Example: WAFV2 - Account takeover prevention, Bot Control managed rule
+	//    groups, optimize unassociated web ACL, and rule action override "{\"type\":\"WAFV2\",\"preProcessRuleGroups\":[{\"ruleGroupArn\":null,\"overrideAction\":{\"type\":\"NONE\"},\"managedRuleGroupIdentifier\":{\"versionEnabled\":null,\"version\":null,\"vendorName\":\"AWS\",\"managedRuleGroupName\":\"AWSManagedRulesATPRuleSet\",\"managedRuleGroupConfigs\":[{\"awsmanagedRulesATPRuleSet\":{\"loginPath\":\"/loginpath\",\"requestInspection\":{\"payloadType\":\"FORM_ENCODED|JSON\",\"usernameField\":{\"identifier\":\"/form/username\"},\"passwordField\":{\"identifier\":\"/form/password\"}}}}]},\"ruleGroupType\":\"ManagedRuleGroup\",\"excludeRules\":[],\"sampledRequestsEnabled\":true},{\"ruleGroupArn\":null,\"overrideAction\":{\"type\":\"NONE\"},\"managedRuleGroupIdentifier\":{\"versionEnabled\":null,\"version\":null,\"vendorName\":\"AWS\",\"managedRuleGroupName\":\"AWSManagedRulesBotControlRuleSet\",\"managedRuleGroupConfigs\":[{\"awsmanagedRulesBotControlRuleSet\":{\"inspectionLevel\":\"TARGETED|COMMON\"}}]},\"ruleGroupType\":\"ManagedRuleGroup\",\"excludeRules\":[],\"sampledRequestsEnabled\":true,\"ruleActionOverrides\":[{\"name\":\"Rule1\",\"actionToUse\":{\"allow|block|count|captcha|challenge\":{}}},{\"name\":\"Rule2\",\"actionToUse\":{\"allow|block|count|captcha|challenge\":{}}}]}],\"postProcessRuleGroups\":[],\"defaultAction\":{\"type\":\"ALLOW\"},\"customRequestHandling\":null,\"customResponse\":null,\"overrideCustomerWebACLAssociation\":false,\"loggingConfiguration\":null,\"sampledRequestsEnabledForDefaultActions\":true,\"optimizeUnassociatedWebACL\":true}"
+	//    Bot Control - For information about AWSManagedRulesBotControlRuleSet managed
+	//    rule groups, see AWSManagedRulesBotControlRuleSet (https://docs.aws.amazon.com/waf/latest/APIReference/API_AWSManagedRulesBotControlRuleSet.html)
+	//    in the WAF API Reference. Fraud Control account takeover prevention (ATP)
+	//    - For information about the properties available for AWSManagedRulesATPRuleSet
+	//    managed rule groups, see AWSManagedRulesATPRuleSet (https://docs.aws.amazon.com/waf/latest/APIReference/API_AWSManagedRulesATPRuleSet.html)
+	//    in the WAF API Reference. Optimize unassociated web ACL - If you set optimizeUnassociatedWebACL
+	//    to true, Firewall Manager creates web ACLs in accounts within the policy
+	//    scope if the web ACLs will be used by at least one resource. Firewall
+	//    Manager creates web ACLs in the accounts within policy scope only if the
+	//    web ACLs will be used by at least one resource. If at any time an account
+	//    comes into policy scope, Firewall Manager automatically creates a web
+	//    ACL in the account if at least one resource will use the web ACL. Upon
+	//    enablement, Firewall Manager performs a one-time cleanup of unused web
+	//    ACLs in your account. The cleanup process can take several hours. If a
+	//    resource leaves policy scope after Firewall Manager creates a web ACL,
+	//    Firewall Manager disassociates the resource from the web ACL, but won't
+	//    clean up the unused web ACL. Firewall Manager only cleans up unused web
+	//    ACLs when you first enable management of unused web ACLs in a policy.
+	//    If you set optimizeUnassociatedWebACL to false Firewall Manager doesn't
+	//    manage unused web ACLs, and Firewall Manager automatically creates an
+	//    empty web ACL in each account that's within policy scope. Rule action
+	//    overrides - Firewall Manager supports rule action overrides only for managed
+	//    rule groups. To configure a RuleActionOverrides add the Name of the rule
+	//    to override, and ActionToUse, which is the new action to use for the rule.
+	//    For information about using rule action override, see RuleActionOverride
+	//    (https://docs.aws.amazon.com/waf/latest/APIReference/API_RuleActionOverride.html)
 	//    in the WAF API Reference.
 	//
-	//    * Example: WAFV2 - CAPTCHA and Challenge configs "{\"type\":\"WAFV2\",\"preProcessRuleGroups\":[{\"ruleGroupArn\":null,\"overrideAction\":{\"type\":\"NONE\"},\"managedRuleGroupIdentifier\":{\"versionEnabled\":null,\"version\":null,\"vendorName\":\"AWS\",\"managedRuleGroupName\":\"AWSManagedRulesAdminProtectionRuleSet\"},\"ruleGroupType\":\"ManagedRuleGroup\",\"excludeRules\":[],\"sampledRequestsEnabled\":true}],\"postProcessRuleGroups\":[],\"defaultAction\":{\"type\":\"ALLOW\"},\"customRequestHandling\":null,\"customResponse\":null,\"overrideCustomerWebACLAssociation\":false,\"loggingConfiguration\":null,\"sampledRequestsEnabledForDefaultActions\":true,\"captchaConfig\":{\"immunityTimeProperty\":{\"immunityTime\":500}},\"challengeConfig\":{\"immunityTimeProperty\":{\"immunityTime\":800}},\"tokenDomains\":[\"google.com\",\"amazon.com\"]}"
-	//    If you update the policy's values for captchaConfig, challengeConfig,
-	//    or tokenDomains, Firewall Manager will overwrite your local web ACLs to
-	//    contain the new value(s). However, if you don't update the policy's captchaConfig,
+	//    * Example: WAFV2 - CAPTCHA and Challenge configs "{\"type\":\"WAFV2\",\"preProcessRuleGroups\":[{\"ruleGroupArn\":null,\"overrideAction\":{\"type\":\"NONE\"},\"managedRuleGroupIdentifier\":{\"versionEnabled\":null,\"version\":null,\"vendorName\":\"AWS\",\"managedRuleGroupName\":\"AWSManagedRulesAdminProtectionRuleSet\"},\"ruleGroupType\":\"ManagedRuleGroup\",\"excludeRules\":[],\"sampledRequestsEnabled\":true}],\"postProcessRuleGroups\":[],\"defaultAction\":{\"type\":\"ALLOW\"},\"customRequestHandling\":null,\"customResponse\":null,\"overrideCustomerWebACLAssociation\":false,\"loggingConfiguration\":null,\"sampledRequestsEnabledForDefaultActions\":true,\"captchaConfig\":{\"immunityTimeProperty\":{\"immunityTime\":500}},\"challengeConfig\":{\"immunityTimeProperty\":{\"immunityTime\":800}},\"tokenDomains\":[\"google.com\",\"amazon.com\"],\"associationConfig\":{\"requestBody\":{\"CLOUDFRONT\":{\"defaultSizeInspectionLimit\":\"KB_16\"}}}}"
+	//    CAPTCHA and Challenge configs - If you update the policy's values for
+	//    associationConfig, captchaConfig, challengeConfig, or tokenDomains, Firewall
+	//    Manager will overwrite your local web ACLs to contain the new value(s).
+	//    However, if you don't update the policy's associationConfig, captchaConfig,
 	//    challengeConfig, or tokenDomains values, the values in your local web
-	//    ACLs will remain unchanged. For information about CAPTCHA and Challenge
-	//    configs, see CaptchaConfig (https://docs.aws.amazon.com/waf/latest/APIReference/API_CaptchaConfig.html)
+	//    ACLs will remain unchanged. For information about association configs,
+	//    see AssociationConfig (https://docs.aws.amazon.com/waf/latest/APIReference/API_AssociationConfig.html).
+	//    For information about CAPTCHA and Challenge configs, see CaptchaConfig
+	//    (https://docs.aws.amazon.com/waf/latest/APIReference/API_CaptchaConfig.html)
 	//    and ChallengeConfig (https://docs.aws.amazon.com/waf/latest/APIReference/API_ChallengeConfig.html)
+	//    in the WAF API Reference. defaultSizeInspectionLimit - Specifies the maximum
+	//    size of the web request body component that an associated Amazon CloudFront
+	//    distribution should send to WAF for inspection. For more information,
+	//    see DefaultSizeInspectionLimit (https://docs.aws.amazon.com/waf/latest/APIReference/API_RequestBodyAssociatedResourceTypeConfig.html#WAF-Type-RequestBodyAssociatedResourceTypeConfig-DefaultSizeInspectionLimit)
 	//    in the WAF API Reference.
 	//
 	//    * Example: WAFV2 - Firewall Manager support for WAF managed rule group

@@ -26,7 +26,6 @@ func parseTime(layout, value string) *time.Time {
 }
 
 // To get the activity execution metrics for a journey run
-//
 // The following example gets activity execution metrics for a single run of a journey.
 func ExamplePinpoint_GetJourneyRunExecutionActivityMetrics_shared00() {
 	svc := pinpoint.New(session.New())
@@ -70,7 +69,6 @@ func ExamplePinpoint_GetJourneyRunExecutionActivityMetrics_shared00() {
 }
 
 // To get the execution metrics for a journey run
-//
 // The following example gets execution metrics for a single run of a journey.
 func ExamplePinpoint_GetJourneyRunExecutionMetrics_shared00() {
 	svc := pinpoint.New(session.New())
@@ -113,7 +111,6 @@ func ExamplePinpoint_GetJourneyRunExecutionMetrics_shared00() {
 }
 
 // To get the runs of a journey
-//
 // The following example gets the runs of a journey.
 func ExamplePinpoint_GetJourneyRuns_shared00() {
 	svc := pinpoint.New(session.New())

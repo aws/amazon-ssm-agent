@@ -3,6 +3,14 @@
 // Package chime provides the client and types for making API
 // requests to Amazon Chime.
 //
+// Most of these APIs are no longer supported and will not be updated. We recommend
+// using the latest versions in the Amazon Chime SDK API reference (https://docs.aws.amazon.com/chime-sdk/latest/APIReference/welcome.html),
+// in the Amazon Chime SDK.
+//
+// Using the latest versions requires migrating to dedicated namespaces. For
+// more information, refer to Migrating from the Amazon Chime namespace (https://docs.aws.amazon.com/chime-sdk/latest/dg/migrate-from-chm-namespace.html)
+// in the Amazon Chime SDK Developer Guide.
+//
 // The Amazon Chime application programming interface (API) is designed so administrators
 // can perform key tasks, such as creating and managing Amazon Chime accounts,
 // users, and Voice Connectors. This guide provides detailed information about
@@ -15,14 +23,14 @@
 // that includes links to information about using the action with a language-specific
 // AWS SDK or the AWS CLI.
 //
-// Using an AWS SDK
+// # Using an AWS SDK
 //
 // You don't need to write code to calculate a signature for request authentication.
 // The SDK clients authenticate your requests by using access keys that you
 // provide. For more information about AWS SDKs, see the AWS Developer Center
 // (http://aws.amazon.com/developer/).
 //
-// Using the AWS CLI
+// # Using the AWS CLI
 //
 // Use your access keys with the AWS CLI to make API calls. For information
 // about setting up the AWS CLI, see Installing the AWS Command Line Interface
@@ -31,7 +39,7 @@
 // commands, see the Amazon Chime commands (https://docs.aws.amazon.com/cli/latest/reference/chime/index.html)
 // in the AWS CLI Command Reference.
 //
-// Using REST APIs
+// # Using REST APIs
 //
 // If you use REST to make API calls, you must authenticate your request by
 // providing a signature. Amazon Chime supports Signature Version 4. For more
@@ -51,7 +59,7 @@
 // See chime package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/chime/
 //
-// Using the Client
+// # Using the Client
 //
 // To contact Amazon Chime with the SDK use the New function to create
 // a new service client. With that client you can make API requests to the service.

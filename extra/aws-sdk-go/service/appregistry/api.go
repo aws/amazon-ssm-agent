@@ -29,14 +29,13 @@ const opAssociateAttributeGroup = "AssociateAttributeGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateAttributeGroupRequest method.
+//	req, resp := client.AssociateAttributeGroupRequest(params)
 //
-//    // Example sending a request using the AssociateAttributeGroupRequest method.
-//    req, resp := client.AssociateAttributeGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/AssociateAttributeGroup
 func (c *AppRegistry) AssociateAttributeGroupRequest(input *AssociateAttributeGroupInput) (req *request.Request, output *AssociateAttributeGroupOutput) {
@@ -70,21 +69,22 @@ func (c *AppRegistry) AssociateAttributeGroupRequest(input *AssociateAttributeGr
 // API operation AssociateAttributeGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
 //
-//   * ServiceQuotaExceededException
-//   The maximum number of resources per account has been reached.
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
-//   * ConflictException
-//   There was a conflict when processing the request (for example, a resource
-//   with the given name already exists within the account).
+//   - ServiceQuotaExceededException
+//     The maximum number of resources per account has been reached.
+//
+//   - ConflictException
+//     There was a conflict when processing the request (for example, a resource
+//     with the given name already exists within the account).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/AssociateAttributeGroup
 func (c *AppRegistry) AssociateAttributeGroup(input *AssociateAttributeGroupInput) (*AssociateAttributeGroupOutput, error) {
@@ -124,14 +124,13 @@ const opAssociateResource = "AssociateResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateResourceRequest method.
+//	req, resp := client.AssociateResourceRequest(params)
 //
-//    // Example sending a request using the AssociateResourceRequest method.
-//    req, resp := client.AssociateResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/AssociateResource
 func (c *AppRegistry) AssociateResourceRequest(input *AssociateResourceInput) (req *request.Request, output *AssociateResourceOutput) {
@@ -155,6 +154,31 @@ func (c *AppRegistry) AssociateResourceRequest(input *AssociateResourceInput) (r
 // Associates a resource with an application. The resource can be specified
 // by its ARN or name. The application can be specified by ARN, ID, or name.
 //
+// # Minimum permissions
+//
+// You must have the following permissions to associate a resource using the
+// OPTIONS parameter set to APPLY_APPLICATION_TAG.
+//
+//   - tag:GetResources
+//
+//   - tag:TagResources
+//
+// You must also have these additional permissions if you don't use the AWSServiceCatalogAppRegistryFullAccess
+// policy. For more information, see AWSServiceCatalogAppRegistryFullAccess
+// (https://docs.aws.amazon.com/servicecatalog/latest/arguide/full.html) in
+// the AppRegistry Administrator Guide.
+//
+//   - resource-groups:AssociateResource
+//
+//   - cloudformation:UpdateStack
+//
+//   - cloudformation:DescribeStacks
+//
+// In addition, you must have the tagging permission defined by the Amazon Web
+// Services service that creates the resource. For more information, see TagResources
+// (https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_TagResources.html)
+// in the Resource Groups Tagging API Reference.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -163,24 +187,25 @@ func (c *AppRegistry) AssociateResourceRequest(input *AssociateResourceInput) (r
 // API operation AssociateResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceQuotaExceededException
-//   The maximum number of resources per account has been reached.
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
-//   * ConflictException
-//   There was a conflict when processing the request (for example, a resource
-//   with the given name already exists within the account).
+//   - ServiceQuotaExceededException
+//     The maximum number of resources per account has been reached.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ConflictException
+//     There was a conflict when processing the request (for example, a resource
+//     with the given name already exists within the account).
 //
-//   * ThrottlingException
-//   The maximum number of API requests has been exceeded.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - ThrottlingException
+//     The maximum number of API requests has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/AssociateResource
 func (c *AppRegistry) AssociateResource(input *AssociateResourceInput) (*AssociateResourceOutput, error) {
@@ -220,14 +245,13 @@ const opCreateApplication = "CreateApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateApplicationRequest method.
+//	req, resp := client.CreateApplicationRequest(params)
 //
-//    // Example sending a request using the CreateApplicationRequest method.
-//    req, resp := client.CreateApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/CreateApplication
 func (c *AppRegistry) CreateApplicationRequest(input *CreateApplicationInput) (req *request.Request, output *CreateApplicationOutput) {
@@ -259,21 +283,22 @@ func (c *AppRegistry) CreateApplicationRequest(input *CreateApplicationInput) (r
 // API operation CreateApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceQuotaExceededException
-//   The maximum number of resources per account has been reached.
 //
-//   * ConflictException
-//   There was a conflict when processing the request (for example, a resource
-//   with the given name already exists within the account).
+//   - ServiceQuotaExceededException
+//     The maximum number of resources per account has been reached.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ConflictException
+//     There was a conflict when processing the request (for example, a resource
+//     with the given name already exists within the account).
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
-//   * ThrottlingException
-//   The maximum number of API requests has been exceeded.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - ThrottlingException
+//     The maximum number of API requests has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/CreateApplication
 func (c *AppRegistry) CreateApplication(input *CreateApplicationInput) (*CreateApplicationOutput, error) {
@@ -313,14 +338,13 @@ const opCreateAttributeGroup = "CreateAttributeGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAttributeGroupRequest method.
+//	req, resp := client.CreateAttributeGroupRequest(params)
 //
-//    // Example sending a request using the CreateAttributeGroupRequest method.
-//    req, resp := client.CreateAttributeGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/CreateAttributeGroup
 func (c *AppRegistry) CreateAttributeGroupRequest(input *CreateAttributeGroupInput) (req *request.Request, output *CreateAttributeGroupOutput) {
@@ -354,18 +378,19 @@ func (c *AppRegistry) CreateAttributeGroupRequest(input *CreateAttributeGroupInp
 // API operation CreateAttributeGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceQuotaExceededException
-//   The maximum number of resources per account has been reached.
 //
-//   * ConflictException
-//   There was a conflict when processing the request (for example, a resource
-//   with the given name already exists within the account).
+//   - ServiceQuotaExceededException
+//     The maximum number of resources per account has been reached.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ConflictException
+//     There was a conflict when processing the request (for example, a resource
+//     with the given name already exists within the account).
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/CreateAttributeGroup
 func (c *AppRegistry) CreateAttributeGroup(input *CreateAttributeGroupInput) (*CreateAttributeGroupOutput, error) {
@@ -405,14 +430,13 @@ const opDeleteApplication = "DeleteApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApplicationRequest method.
+//	req, resp := client.DeleteApplicationRequest(params)
 //
-//    // Example sending a request using the DeleteApplicationRequest method.
-//    req, resp := client.DeleteApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/DeleteApplication
 func (c *AppRegistry) DeleteApplicationRequest(input *DeleteApplicationInput) (req *request.Request, output *DeleteApplicationOutput) {
@@ -445,14 +469,15 @@ func (c *AppRegistry) DeleteApplicationRequest(input *DeleteApplicationInput) (r
 // API operation DeleteApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/DeleteApplication
 func (c *AppRegistry) DeleteApplication(input *DeleteApplicationInput) (*DeleteApplicationOutput, error) {
@@ -492,14 +517,13 @@ const opDeleteAttributeGroup = "DeleteAttributeGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAttributeGroupRequest method.
+//	req, resp := client.DeleteAttributeGroupRequest(params)
 //
-//    // Example sending a request using the DeleteAttributeGroupRequest method.
-//    req, resp := client.DeleteAttributeGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/DeleteAttributeGroup
 func (c *AppRegistry) DeleteAttributeGroupRequest(input *DeleteAttributeGroupInput) (req *request.Request, output *DeleteAttributeGroupOutput) {
@@ -531,14 +555,15 @@ func (c *AppRegistry) DeleteAttributeGroupRequest(input *DeleteAttributeGroupInp
 // API operation DeleteAttributeGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/DeleteAttributeGroup
 func (c *AppRegistry) DeleteAttributeGroup(input *DeleteAttributeGroupInput) (*DeleteAttributeGroupOutput, error) {
@@ -578,14 +603,13 @@ const opDisassociateAttributeGroup = "DisassociateAttributeGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateAttributeGroupRequest method.
+//	req, resp := client.DisassociateAttributeGroupRequest(params)
 //
-//    // Example sending a request using the DisassociateAttributeGroupRequest method.
-//    req, resp := client.DisassociateAttributeGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/DisassociateAttributeGroup
 func (c *AppRegistry) DisassociateAttributeGroupRequest(input *DisassociateAttributeGroupInput) (req *request.Request, output *DisassociateAttributeGroupOutput) {
@@ -618,14 +642,15 @@ func (c *AppRegistry) DisassociateAttributeGroupRequest(input *DisassociateAttri
 // API operation DisassociateAttributeGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/DisassociateAttributeGroup
 func (c *AppRegistry) DisassociateAttributeGroup(input *DisassociateAttributeGroupInput) (*DisassociateAttributeGroupOutput, error) {
@@ -665,14 +690,13 @@ const opDisassociateResource = "DisassociateResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateResourceRequest method.
+//	req, resp := client.DisassociateResourceRequest(params)
 //
-//    // Example sending a request using the DisassociateResourceRequest method.
-//    req, resp := client.DisassociateResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/DisassociateResource
 func (c *AppRegistry) DisassociateResourceRequest(input *DisassociateResourceInput) (req *request.Request, output *DisassociateResourceOutput) {
@@ -696,6 +720,32 @@ func (c *AppRegistry) DisassociateResourceRequest(input *DisassociateResourceInp
 // Disassociates a resource from application. Both the resource and the application
 // can be specified either by ID or name.
 //
+// # Minimum permissions
+//
+// You must have the following permissions to remove a resource that's been
+// associated with an application using the APPLY_APPLICATION_TAG option for
+// AssociateResource (https://docs.aws.amazon.com/servicecatalog/latest/dg/API_app-registry_AssociateResource.html).
+//
+//   - tag:GetResources
+//
+//   - tag:UntagResources
+//
+// You must also have the following permissions if you don't use the AWSServiceCatalogAppRegistryFullAccess
+// policy. For more information, see AWSServiceCatalogAppRegistryFullAccess
+// (https://docs.aws.amazon.com/servicecatalog/latest/arguide/full.html) in
+// the AppRegistry Administrator Guide.
+//
+//   - resource-groups:DisassociateResource
+//
+//   - cloudformation:UpdateStack
+//
+//   - cloudformation:DescribeStacks
+//
+// In addition, you must have the tagging permission defined by the Amazon Web
+// Services service that creates the resource. For more information, see UntagResources
+// (https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_UntTagResources.html)
+// in the Resource Groups Tagging API Reference.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -704,17 +754,18 @@ func (c *AppRegistry) DisassociateResourceRequest(input *DisassociateResourceInp
 // API operation DisassociateResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
-//   * ThrottlingException
-//   The maximum number of API requests has been exceeded.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - ThrottlingException
+//     The maximum number of API requests has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/DisassociateResource
 func (c *AppRegistry) DisassociateResource(input *DisassociateResourceInput) (*DisassociateResourceOutput, error) {
@@ -754,14 +805,13 @@ const opGetApplication = "GetApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetApplicationRequest method.
+//	req, resp := client.GetApplicationRequest(params)
 //
-//    // Example sending a request using the GetApplicationRequest method.
-//    req, resp := client.GetApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/GetApplication
 func (c *AppRegistry) GetApplicationRequest(input *GetApplicationInput) (req *request.Request, output *GetApplicationOutput) {
@@ -796,18 +846,19 @@ func (c *AppRegistry) GetApplicationRequest(input *GetApplicationInput) (req *re
 // API operation GetApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
 //
-//   * ConflictException
-//   There was a conflict when processing the request (for example, a resource
-//   with the given name already exists within the account).
+//   - InternalServerException
+//     The service is experiencing internal problems.
+//
+//   - ConflictException
+//     There was a conflict when processing the request (for example, a resource
+//     with the given name already exists within the account).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/GetApplication
 func (c *AppRegistry) GetApplication(input *GetApplicationInput) (*GetApplicationOutput, error) {
@@ -847,14 +898,13 @@ const opGetAssociatedResource = "GetAssociatedResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAssociatedResourceRequest method.
+//	req, resp := client.GetAssociatedResourceRequest(params)
 //
-//    // Example sending a request using the GetAssociatedResourceRequest method.
-//    req, resp := client.GetAssociatedResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/GetAssociatedResource
 func (c *AppRegistry) GetAssociatedResourceRequest(input *GetAssociatedResourceInput) (req *request.Request, output *GetAssociatedResourceOutput) {
@@ -885,14 +935,15 @@ func (c *AppRegistry) GetAssociatedResourceRequest(input *GetAssociatedResourceI
 // API operation GetAssociatedResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/GetAssociatedResource
 func (c *AppRegistry) GetAssociatedResource(input *GetAssociatedResourceInput) (*GetAssociatedResourceOutput, error) {
@@ -932,14 +983,13 @@ const opGetAttributeGroup = "GetAttributeGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAttributeGroupRequest method.
+//	req, resp := client.GetAttributeGroupRequest(params)
 //
-//    // Example sending a request using the GetAttributeGroupRequest method.
-//    req, resp := client.GetAttributeGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/GetAttributeGroup
 func (c *AppRegistry) GetAttributeGroupRequest(input *GetAttributeGroupInput) (req *request.Request, output *GetAttributeGroupOutput) {
@@ -971,18 +1021,19 @@ func (c *AppRegistry) GetAttributeGroupRequest(input *GetAttributeGroupInput) (r
 // API operation GetAttributeGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
 //
-//   * ConflictException
-//   There was a conflict when processing the request (for example, a resource
-//   with the given name already exists within the account).
+//   - InternalServerException
+//     The service is experiencing internal problems.
+//
+//   - ConflictException
+//     There was a conflict when processing the request (for example, a resource
+//     with the given name already exists within the account).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/GetAttributeGroup
 func (c *AppRegistry) GetAttributeGroup(input *GetAttributeGroupInput) (*GetAttributeGroupOutput, error) {
@@ -1022,14 +1073,13 @@ const opGetConfiguration = "GetConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetConfigurationRequest method.
+//	req, resp := client.GetConfigurationRequest(params)
 //
-//    // Example sending a request using the GetConfigurationRequest method.
-//    req, resp := client.GetConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/GetConfiguration
 func (c *AppRegistry) GetConfigurationRequest(input *GetConfigurationInput) (req *request.Request, output *GetConfigurationOutput) {
@@ -1060,8 +1110,8 @@ func (c *AppRegistry) GetConfigurationRequest(input *GetConfigurationInput) (req
 // API operation GetConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/GetConfiguration
 func (c *AppRegistry) GetConfiguration(input *GetConfigurationInput) (*GetConfigurationOutput, error) {
@@ -1101,14 +1151,13 @@ const opListApplications = "ListApplications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListApplicationsRequest method.
+//	req, resp := client.ListApplicationsRequest(params)
 //
-//    // Example sending a request using the ListApplicationsRequest method.
-//    req, resp := client.ListApplicationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListApplications
 func (c *AppRegistry) ListApplicationsRequest(input *ListApplicationsInput) (req *request.Request, output *ListApplicationsOutput) {
@@ -1145,11 +1194,12 @@ func (c *AppRegistry) ListApplicationsRequest(input *ListApplicationsInput) (req
 // API operation ListApplications for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The request has invalid or missing parameters.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListApplications
 func (c *AppRegistry) ListApplications(input *ListApplicationsInput) (*ListApplicationsOutput, error) {
@@ -1181,15 +1231,14 @@ func (c *AppRegistry) ListApplicationsWithContext(ctx aws.Context, input *ListAp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListApplications operation.
-//    pageNum := 0
-//    err := client.ListApplicationsPages(params,
-//        func(page *appregistry.ListApplicationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListApplications operation.
+//	pageNum := 0
+//	err := client.ListApplicationsPages(params,
+//	    func(page *appregistry.ListApplicationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *AppRegistry) ListApplicationsPages(input *ListApplicationsInput, fn func(*ListApplicationsOutput, bool) bool) error {
 	return c.ListApplicationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1241,14 +1290,13 @@ const opListAssociatedAttributeGroups = "ListAssociatedAttributeGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAssociatedAttributeGroupsRequest method.
+//	req, resp := client.ListAssociatedAttributeGroupsRequest(params)
 //
-//    // Example sending a request using the ListAssociatedAttributeGroupsRequest method.
-//    req, resp := client.ListAssociatedAttributeGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListAssociatedAttributeGroups
 func (c *AppRegistry) ListAssociatedAttributeGroupsRequest(input *ListAssociatedAttributeGroupsInput) (req *request.Request, output *ListAssociatedAttributeGroupsOutput) {
@@ -1286,14 +1334,15 @@ func (c *AppRegistry) ListAssociatedAttributeGroupsRequest(input *ListAssociated
 // API operation ListAssociatedAttributeGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListAssociatedAttributeGroups
 func (c *AppRegistry) ListAssociatedAttributeGroups(input *ListAssociatedAttributeGroupsInput) (*ListAssociatedAttributeGroupsOutput, error) {
@@ -1325,15 +1374,14 @@ func (c *AppRegistry) ListAssociatedAttributeGroupsWithContext(ctx aws.Context, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAssociatedAttributeGroups operation.
-//    pageNum := 0
-//    err := client.ListAssociatedAttributeGroupsPages(params,
-//        func(page *appregistry.ListAssociatedAttributeGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAssociatedAttributeGroups operation.
+//	pageNum := 0
+//	err := client.ListAssociatedAttributeGroupsPages(params,
+//	    func(page *appregistry.ListAssociatedAttributeGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *AppRegistry) ListAssociatedAttributeGroupsPages(input *ListAssociatedAttributeGroupsInput, fn func(*ListAssociatedAttributeGroupsOutput, bool) bool) error {
 	return c.ListAssociatedAttributeGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1385,14 +1433,13 @@ const opListAssociatedResources = "ListAssociatedResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAssociatedResourcesRequest method.
+//	req, resp := client.ListAssociatedResourcesRequest(params)
 //
-//    // Example sending a request using the ListAssociatedResourcesRequest method.
-//    req, resp := client.ListAssociatedResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListAssociatedResources
 func (c *AppRegistry) ListAssociatedResourcesRequest(input *ListAssociatedResourcesInput) (req *request.Request, output *ListAssociatedResourcesOutput) {
@@ -1435,14 +1482,15 @@ func (c *AppRegistry) ListAssociatedResourcesRequest(input *ListAssociatedResour
 // API operation ListAssociatedResources for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListAssociatedResources
 func (c *AppRegistry) ListAssociatedResources(input *ListAssociatedResourcesInput) (*ListAssociatedResourcesOutput, error) {
@@ -1474,15 +1522,14 @@ func (c *AppRegistry) ListAssociatedResourcesWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAssociatedResources operation.
-//    pageNum := 0
-//    err := client.ListAssociatedResourcesPages(params,
-//        func(page *appregistry.ListAssociatedResourcesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAssociatedResources operation.
+//	pageNum := 0
+//	err := client.ListAssociatedResourcesPages(params,
+//	    func(page *appregistry.ListAssociatedResourcesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *AppRegistry) ListAssociatedResourcesPages(input *ListAssociatedResourcesInput, fn func(*ListAssociatedResourcesOutput, bool) bool) error {
 	return c.ListAssociatedResourcesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1534,14 +1581,13 @@ const opListAttributeGroups = "ListAttributeGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAttributeGroupsRequest method.
+//	req, resp := client.ListAttributeGroupsRequest(params)
 //
-//    // Example sending a request using the ListAttributeGroupsRequest method.
-//    req, resp := client.ListAttributeGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListAttributeGroups
 func (c *AppRegistry) ListAttributeGroupsRequest(input *ListAttributeGroupsInput) (req *request.Request, output *ListAttributeGroupsOutput) {
@@ -1578,11 +1624,12 @@ func (c *AppRegistry) ListAttributeGroupsRequest(input *ListAttributeGroupsInput
 // API operation ListAttributeGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The request has invalid or missing parameters.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListAttributeGroups
 func (c *AppRegistry) ListAttributeGroups(input *ListAttributeGroupsInput) (*ListAttributeGroupsOutput, error) {
@@ -1614,15 +1661,14 @@ func (c *AppRegistry) ListAttributeGroupsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAttributeGroups operation.
-//    pageNum := 0
-//    err := client.ListAttributeGroupsPages(params,
-//        func(page *appregistry.ListAttributeGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAttributeGroups operation.
+//	pageNum := 0
+//	err := client.ListAttributeGroupsPages(params,
+//	    func(page *appregistry.ListAttributeGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *AppRegistry) ListAttributeGroupsPages(input *ListAttributeGroupsInput, fn func(*ListAttributeGroupsOutput, bool) bool) error {
 	return c.ListAttributeGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1674,14 +1720,13 @@ const opListAttributeGroupsForApplication = "ListAttributeGroupsForApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAttributeGroupsForApplicationRequest method.
+//	req, resp := client.ListAttributeGroupsForApplicationRequest(params)
 //
-//    // Example sending a request using the ListAttributeGroupsForApplicationRequest method.
-//    req, resp := client.ListAttributeGroupsForApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListAttributeGroupsForApplication
 func (c *AppRegistry) ListAttributeGroupsForApplicationRequest(input *ListAttributeGroupsForApplicationInput) (req *request.Request, output *ListAttributeGroupsForApplicationOutput) {
@@ -1719,14 +1764,15 @@ func (c *AppRegistry) ListAttributeGroupsForApplicationRequest(input *ListAttrib
 // API operation ListAttributeGroupsForApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListAttributeGroupsForApplication
 func (c *AppRegistry) ListAttributeGroupsForApplication(input *ListAttributeGroupsForApplicationInput) (*ListAttributeGroupsForApplicationOutput, error) {
@@ -1758,15 +1804,14 @@ func (c *AppRegistry) ListAttributeGroupsForApplicationWithContext(ctx aws.Conte
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAttributeGroupsForApplication operation.
-//    pageNum := 0
-//    err := client.ListAttributeGroupsForApplicationPages(params,
-//        func(page *appregistry.ListAttributeGroupsForApplicationOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAttributeGroupsForApplication operation.
+//	pageNum := 0
+//	err := client.ListAttributeGroupsForApplicationPages(params,
+//	    func(page *appregistry.ListAttributeGroupsForApplicationOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *AppRegistry) ListAttributeGroupsForApplicationPages(input *ListAttributeGroupsForApplicationInput, fn func(*ListAttributeGroupsForApplicationOutput, bool) bool) error {
 	return c.ListAttributeGroupsForApplicationPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1818,14 +1863,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListTagsForResource
 func (c *AppRegistry) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1856,14 +1900,15 @@ func (c *AppRegistry) ListTagsForResourceRequest(input *ListTagsForResourceInput
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The request has invalid or missing parameters.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ValidationException
+//     The request has invalid or missing parameters.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/ListTagsForResource
 func (c *AppRegistry) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1903,14 +1948,13 @@ const opPutConfiguration = "PutConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutConfigurationRequest method.
+//	req, resp := client.PutConfigurationRequest(params)
 //
-//    // Example sending a request using the PutConfigurationRequest method.
-//    req, resp := client.PutConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/PutConfiguration
 func (c *AppRegistry) PutConfigurationRequest(input *PutConfigurationInput) (req *request.Request, output *PutConfigurationOutput) {
@@ -1942,15 +1986,16 @@ func (c *AppRegistry) PutConfigurationRequest(input *PutConfigurationInput) (req
 // API operation PutConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   There was a conflict when processing the request (for example, a resource
-//   with the given name already exists within the account).
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ConflictException
+//     There was a conflict when processing the request (for example, a resource
+//     with the given name already exists within the account).
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - InternalServerException
+//     The service is experiencing internal problems.
+//
+//   - ValidationException
+//     The request has invalid or missing parameters.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/PutConfiguration
 func (c *AppRegistry) PutConfiguration(input *PutConfigurationInput) (*PutConfigurationOutput, error) {
@@ -1990,14 +2035,13 @@ const opSyncResource = "SyncResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SyncResourceRequest method.
+//	req, resp := client.SyncResourceRequest(params)
 //
-//    // Example sending a request using the SyncResourceRequest method.
-//    req, resp := client.SyncResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/SyncResource
 func (c *AppRegistry) SyncResourceRequest(input *SyncResourceInput) (req *request.Request, output *SyncResourceOutput) {
@@ -2033,21 +2077,22 @@ func (c *AppRegistry) SyncResourceRequest(input *SyncResourceInput) (req *reques
 // API operation SyncResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ConflictException
-//   There was a conflict when processing the request (for example, a resource
-//   with the given name already exists within the account).
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
-//   * ThrottlingException
-//   The maximum number of API requests has been exceeded.
+//   - ConflictException
+//     There was a conflict when processing the request (for example, a resource
+//     with the given name already exists within the account).
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ThrottlingException
+//     The maximum number of API requests has been exceeded.
+//
+//   - ValidationException
+//     The request has invalid or missing parameters.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/SyncResource
 func (c *AppRegistry) SyncResource(input *SyncResourceInput) (*SyncResourceOutput, error) {
@@ -2087,14 +2132,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/TagResource
 func (c *AppRegistry) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2131,14 +2175,15 @@ func (c *AppRegistry) TagResourceRequest(input *TagResourceInput) (req *request.
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The request has invalid or missing parameters.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ValidationException
+//     The request has invalid or missing parameters.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/TagResource
 func (c *AppRegistry) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2178,14 +2223,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/UntagResource
 func (c *AppRegistry) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2219,14 +2263,15 @@ func (c *AppRegistry) UntagResourceRequest(input *UntagResourceInput) (req *requ
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The request has invalid or missing parameters.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ValidationException
+//     The request has invalid or missing parameters.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/UntagResource
 func (c *AppRegistry) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2266,14 +2311,13 @@ const opUpdateApplication = "UpdateApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateApplicationRequest method.
+//	req, resp := client.UpdateApplicationRequest(params)
 //
-//    // Example sending a request using the UpdateApplicationRequest method.
-//    req, resp := client.UpdateApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/UpdateApplication
 func (c *AppRegistry) UpdateApplicationRequest(input *UpdateApplicationInput) (req *request.Request, output *UpdateApplicationOutput) {
@@ -2304,21 +2348,22 @@ func (c *AppRegistry) UpdateApplicationRequest(input *UpdateApplicationInput) (r
 // API operation UpdateApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ConflictException
-//   There was a conflict when processing the request (for example, a resource
-//   with the given name already exists within the account).
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ConflictException
+//     There was a conflict when processing the request (for example, a resource
+//     with the given name already exists within the account).
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ValidationException
+//     The request has invalid or missing parameters.
 //
-//   * ThrottlingException
-//   The maximum number of API requests has been exceeded.
+//   - InternalServerException
+//     The service is experiencing internal problems.
+//
+//   - ThrottlingException
+//     The maximum number of API requests has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/UpdateApplication
 func (c *AppRegistry) UpdateApplication(input *UpdateApplicationInput) (*UpdateApplicationOutput, error) {
@@ -2358,14 +2403,13 @@ const opUpdateAttributeGroup = "UpdateAttributeGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAttributeGroupRequest method.
+//	req, resp := client.UpdateAttributeGroupRequest(params)
 //
-//    // Example sending a request using the UpdateAttributeGroupRequest method.
-//    req, resp := client.UpdateAttributeGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/UpdateAttributeGroup
 func (c *AppRegistry) UpdateAttributeGroupRequest(input *UpdateAttributeGroupInput) (req *request.Request, output *UpdateAttributeGroupOutput) {
@@ -2396,18 +2440,19 @@ func (c *AppRegistry) UpdateAttributeGroupRequest(input *UpdateAttributeGroupInp
 // API operation UpdateAttributeGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ValidationException
-//   The request has invalid or missing parameters.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ConflictException
-//   There was a conflict when processing the request (for example, a resource
-//   with the given name already exists within the account).
+//   - ValidationException
+//     The request has invalid or missing parameters.
 //
-//   * InternalServerException
-//   The service is experiencing internal problems.
+//   - ConflictException
+//     There was a conflict when processing the request (for example, a resource
+//     with the given name already exists within the account).
+//
+//   - InternalServerException
+//     The service is experiencing internal problems.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWS242AppRegistry-2020-06-24/UpdateAttributeGroup
 func (c *AppRegistry) UpdateAttributeGroup(input *UpdateAttributeGroupInput) (*UpdateAttributeGroupOutput, error) {
@@ -2468,6 +2513,9 @@ func (s *AppRegistryConfiguration) SetTagQueryConfiguration(v *TagQueryConfigura
 type Application struct {
 	_ struct{} `type:"structure"`
 
+	// A key-value pair that identifies an associated resource.
+	ApplicationTag map[string]*string `locationName:"applicationTag" type:"map"`
+
 	// The Amazon resource name (ARN) that specifies the application across services.
 	Arn *string `locationName:"arn" type:"string"`
 
@@ -2508,6 +2556,12 @@ func (s Application) String() string {
 // value will be replaced with "sensitive".
 func (s Application) GoString() string {
 	return s.String()
+}
+
+// SetApplicationTag sets the ApplicationTag field's value.
+func (s *Application) SetApplicationTag(v map[string]*string) *Application {
+	s.ApplicationTag = v
+	return s
 }
 
 // SetArn sets the Arn field's value.
@@ -2631,6 +2685,67 @@ func (s *ApplicationSummary) SetName(v string) *ApplicationSummary {
 	return s
 }
 
+// The result of the application tag that's applied to a resource.
+type ApplicationTagResult struct {
+	_ struct{} `type:"structure"`
+
+	// The application tag is in the process of being applied to a resource, was
+	// successfully applied to a resource, or failed to apply to a resource.
+	ApplicationTagStatus *string `locationName:"applicationTagStatus" type:"string" enum:"ApplicationTagStatus"`
+
+	// The message returned if the call fails.
+	ErrorMessage *string `locationName:"errorMessage" type:"string"`
+
+	// A unique pagination token for each page of results. Make the call again with
+	// the returned token to retrieve the next page of results.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// The resources associated with an application
+	Resources []*ResourcesListItem `locationName:"resources" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ApplicationTagResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ApplicationTagResult) GoString() string {
+	return s.String()
+}
+
+// SetApplicationTagStatus sets the ApplicationTagStatus field's value.
+func (s *ApplicationTagResult) SetApplicationTagStatus(v string) *ApplicationTagResult {
+	s.ApplicationTagStatus = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *ApplicationTagResult) SetErrorMessage(v string) *ApplicationTagResult {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ApplicationTagResult) SetNextToken(v string) *ApplicationTagResult {
+	s.NextToken = &v
+	return s
+}
+
+// SetResources sets the Resources field's value.
+func (s *ApplicationTagResult) SetResources(v []*ResourcesListItem) *ApplicationTagResult {
+	s.Resources = v
+	return s
+}
+
 type AssociateAttributeGroupInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -2741,12 +2856,15 @@ func (s *AssociateAttributeGroupOutput) SetAttributeGroupArn(v string) *Associat
 }
 
 type AssociateResourceInput struct {
-	_ struct{} `type:"structure" nopayload:"true"`
+	_ struct{} `type:"structure"`
 
 	// The name, ID, or ARN of the application.
 	//
 	// Application is a required field
 	Application *string `location:"uri" locationName:"application" min:"1" type:"string" required:"true"`
+
+	// Determines whether an application tag is applied or skipped.
+	Options []*string `locationName:"options" type:"list" enum:"AssociationOption"`
 
 	// The name or ID of the resource of which the application will be associated.
 	//
@@ -2811,6 +2929,12 @@ func (s *AssociateResourceInput) SetApplication(v string) *AssociateResourceInpu
 	return s
 }
 
+// SetOptions sets the Options field's value.
+func (s *AssociateResourceInput) SetOptions(v []*string) *AssociateResourceInput {
+	s.Options = v
+	return s
+}
+
 // SetResource sets the Resource field's value.
 func (s *AssociateResourceInput) SetResource(v string) *AssociateResourceInput {
 	s.Resource = &v
@@ -2829,6 +2953,9 @@ type AssociateResourceOutput struct {
 	// The Amazon resource name (ARN) of the application that was augmented with
 	// attributes.
 	ApplicationArn *string `locationName:"applicationArn" type:"string"`
+
+	// Determines whether an application tag is applied or skipped.
+	Options []*string `locationName:"options" type:"list" enum:"AssociationOption"`
 
 	// The Amazon resource name (ARN) that specifies the resource.
 	ResourceArn *string `locationName:"resourceArn" min:"1" type:"string"`
@@ -2855,6 +2982,12 @@ func (s AssociateResourceOutput) GoString() string {
 // SetApplicationArn sets the ApplicationArn field's value.
 func (s *AssociateResourceOutput) SetApplicationArn(v string) *AssociateResourceOutput {
 	s.ApplicationArn = &v
+	return s
+}
+
+// SetOptions sets the Options field's value.
+func (s *AssociateResourceOutput) SetOptions(v []*string) *AssociateResourceOutput {
+	s.Options = v
 	return s
 }
 
@@ -2972,9 +3105,7 @@ type AttributeGroupDetails struct {
 	// using ListAttributeGroupsForApplication.
 	//
 	// The name of the attribute group.
-	//
-	// Deprecated: This field is deprecated. We recommend not using the field when using ListAttributeGroupsForApplication.
-	Name *string `locationName:"name" min:"1" deprecated:"true" type:"string"`
+	Name *string `locationName:"name" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -3863,6 +3994,9 @@ func (s *GetApplicationInput) SetApplication(v string) *GetApplicationInput {
 type GetApplicationOutput struct {
 	_ struct{} `type:"structure"`
 
+	// A key-value pair that identifies an associated resource.
+	ApplicationTag map[string]*string `locationName:"applicationTag" type:"map"`
+
 	// The Amazon resource name (ARN) that specifies the application across services.
 	Arn *string `locationName:"arn" type:"string"`
 
@@ -3910,6 +4044,12 @@ func (s GetApplicationOutput) String() string {
 // value will be replaced with "sensitive".
 func (s GetApplicationOutput) GoString() string {
 	return s.String()
+}
+
+// SetApplicationTag sets the ApplicationTag field's value.
+func (s *GetApplicationOutput) SetApplicationTag(v map[string]*string) *GetApplicationOutput {
+	s.ApplicationTag = v
+	return s
 }
 
 // SetArn sets the Arn field's value.
@@ -3974,10 +4114,22 @@ type GetAssociatedResourceInput struct {
 	// Application is a required field
 	Application *string `location:"uri" locationName:"application" min:"1" type:"string" required:"true"`
 
+	// The maximum number of results to return. If the parameter is omitted, it
+	// defaults to 25. The value is optional.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// A unique pagination token for each page of results. Make the call again with
+	// the returned token to retrieve the next page of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
+
 	// The name or ID of the resource associated with the application.
 	//
 	// Resource is a required field
 	Resource *string `location:"uri" locationName:"resource" min:"1" type:"string" required:"true"`
+
+	// States whether an application tag is applied, not applied, in the process
+	// of being applied, or skipped.
+	ResourceTagStatus []*string `location:"querystring" locationName:"resourceTagStatus" min:"1" type:"list" enum:"ResourceItemStatus"`
 
 	// The type of resource associated with the application.
 	//
@@ -4012,11 +4164,20 @@ func (s *GetAssociatedResourceInput) Validate() error {
 	if s.Application != nil && len(*s.Application) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Application", 1))
 	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
 	if s.Resource == nil {
 		invalidParams.Add(request.NewErrParamRequired("Resource"))
 	}
 	if s.Resource != nil && len(*s.Resource) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Resource", 1))
+	}
+	if s.ResourceTagStatus != nil && len(s.ResourceTagStatus) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceTagStatus", 1))
 	}
 	if s.ResourceType == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceType"))
@@ -4037,9 +4198,27 @@ func (s *GetAssociatedResourceInput) SetApplication(v string) *GetAssociatedReso
 	return s
 }
 
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetAssociatedResourceInput) SetMaxResults(v int64) *GetAssociatedResourceInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetAssociatedResourceInput) SetNextToken(v string) *GetAssociatedResourceInput {
+	s.NextToken = &v
+	return s
+}
+
 // SetResource sets the Resource field's value.
 func (s *GetAssociatedResourceInput) SetResource(v string) *GetAssociatedResourceInput {
 	s.Resource = &v
+	return s
+}
+
+// SetResourceTagStatus sets the ResourceTagStatus field's value.
+func (s *GetAssociatedResourceInput) SetResourceTagStatus(v []*string) *GetAssociatedResourceInput {
+	s.ResourceTagStatus = v
 	return s
 }
 
@@ -4051,6 +4230,12 @@ func (s *GetAssociatedResourceInput) SetResourceType(v string) *GetAssociatedRes
 
 type GetAssociatedResourceOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The result of the application that's tag applied to a resource.
+	ApplicationTagResult *ApplicationTagResult `locationName:"applicationTagResult" type:"structure"`
+
+	// Determines whether an application tag is applied or skipped.
+	Options []*string `locationName:"options" type:"list" enum:"AssociationOption"`
 
 	// The resource associated with the application.
 	Resource *Resource `locationName:"resource" type:"structure"`
@@ -4072,6 +4257,18 @@ func (s GetAssociatedResourceOutput) String() string {
 // value will be replaced with "sensitive".
 func (s GetAssociatedResourceOutput) GoString() string {
 	return s.String()
+}
+
+// SetApplicationTagResult sets the ApplicationTagResult field's value.
+func (s *GetAssociatedResourceOutput) SetApplicationTagResult(v *ApplicationTagResult) *GetAssociatedResourceOutput {
+	s.ApplicationTagResult = v
+	return s
+}
+
+// SetOptions sets the Options field's value.
+func (s *GetAssociatedResourceOutput) SetOptions(v []*string) *GetAssociatedResourceOutput {
+	s.Options = v
+	return s
 }
 
 // SetResource sets the Resource field's value.
@@ -4295,6 +4492,9 @@ type Integrations struct {
 	_ struct{} `type:"structure"`
 
 	// The information about the resource group integration.
+	ApplicationTagResourceGroup *ResourceGroup `locationName:"applicationTagResourceGroup" type:"structure"`
+
+	// The information about the resource group integration.
 	ResourceGroup *ResourceGroup `locationName:"resourceGroup" type:"structure"`
 }
 
@@ -4314,6 +4514,12 @@ func (s Integrations) String() string {
 // value will be replaced with "sensitive".
 func (s Integrations) GoString() string {
 	return s.String()
+}
+
+// SetApplicationTagResourceGroup sets the ApplicationTagResourceGroup field's value.
+func (s *Integrations) SetApplicationTagResourceGroup(v *ResourceGroup) *Integrations {
+	s.ApplicationTagResourceGroup = v
+	return s
 }
 
 // SetResourceGroup sets the ResourceGroup field's value.
@@ -5075,7 +5281,7 @@ type Resource struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon resource name (ARN) of the resource.
-	Arn *string `locationName:"arn" type:"string"`
+	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// The time the resource was associated with the application.
 	AssociationTime *time.Time `locationName:"associationTime" type:"timestamp" timestampFormat:"iso8601"`
@@ -5234,6 +5440,9 @@ type ResourceInfo struct {
 	// The name of the resource.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
+	// Determines whether an application tag is applied or skipped.
+	Options []*string `locationName:"options" type:"list" enum:"AssociationOption"`
+
 	// The details related to the resource.
 	ResourceDetails *ResourceDetails `locationName:"resourceDetails" type:"structure"`
 
@@ -5268,6 +5477,12 @@ func (s *ResourceInfo) SetArn(v string) *ResourceInfo {
 // SetName sets the Name field's value.
 func (s *ResourceInfo) SetName(v string) *ResourceInfo {
 	s.Name = &v
+	return s
+}
+
+// SetOptions sets the Options field's value.
+func (s *ResourceInfo) SetOptions(v []*string) *ResourceInfo {
+	s.Options = v
 	return s
 }
 
@@ -5377,6 +5592,65 @@ func (s *ResourceNotFoundException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// The resource in a list of resources.
+type ResourcesListItem struct {
+	_ struct{} `type:"structure"`
+
+	// The message returned if the call fails.
+	ErrorMessage *string `locationName:"errorMessage" min:"1" type:"string"`
+
+	// The Amazon resource name (ARN) of the resource.
+	ResourceArn *string `locationName:"resourceArn" min:"1" type:"string"`
+
+	// Provides information about the AppRegistry resource type.
+	ResourceType *string `locationName:"resourceType" type:"string"`
+
+	// The status of the list item.
+	Status *string `locationName:"status" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourcesListItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourcesListItem) GoString() string {
+	return s.String()
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *ResourcesListItem) SetErrorMessage(v string) *ResourcesListItem {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *ResourcesListItem) SetResourceArn(v string) *ResourcesListItem {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *ResourcesListItem) SetResourceType(v string) *ResourcesListItem {
+	s.ResourceType = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ResourcesListItem) SetStatus(v string) *ResourcesListItem {
+	s.Status = &v
+	return s
 }
 
 // The maximum number of resources per account has been reached.
@@ -6121,6 +6395,42 @@ func (s *ValidationException) RequestID() string {
 }
 
 const (
+	// ApplicationTagStatusInProgress is a ApplicationTagStatus enum value
+	ApplicationTagStatusInProgress = "IN_PROGRESS"
+
+	// ApplicationTagStatusSuccess is a ApplicationTagStatus enum value
+	ApplicationTagStatusSuccess = "SUCCESS"
+
+	// ApplicationTagStatusFailure is a ApplicationTagStatus enum value
+	ApplicationTagStatusFailure = "FAILURE"
+)
+
+// ApplicationTagStatus_Values returns all elements of the ApplicationTagStatus enum
+func ApplicationTagStatus_Values() []string {
+	return []string{
+		ApplicationTagStatusInProgress,
+		ApplicationTagStatusSuccess,
+		ApplicationTagStatusFailure,
+	}
+}
+
+const (
+	// AssociationOptionApplyApplicationTag is a AssociationOption enum value
+	AssociationOptionApplyApplicationTag = "APPLY_APPLICATION_TAG"
+
+	// AssociationOptionSkipApplicationTag is a AssociationOption enum value
+	AssociationOptionSkipApplicationTag = "SKIP_APPLICATION_TAG"
+)
+
+// AssociationOption_Values returns all elements of the AssociationOption enum
+func AssociationOption_Values() []string {
+	return []string{
+		AssociationOptionApplyApplicationTag,
+		AssociationOptionSkipApplicationTag,
+	}
+}
+
+const (
 	// ResourceGroupStateCreating is a ResourceGroupState enum value
 	ResourceGroupStateCreating = "CREATING"
 
@@ -6149,6 +6459,30 @@ func ResourceGroupState_Values() []string {
 		ResourceGroupStateUpdating,
 		ResourceGroupStateUpdateComplete,
 		ResourceGroupStateUpdateFailed,
+	}
+}
+
+const (
+	// ResourceItemStatusSuccess is a ResourceItemStatus enum value
+	ResourceItemStatusSuccess = "SUCCESS"
+
+	// ResourceItemStatusFailed is a ResourceItemStatus enum value
+	ResourceItemStatusFailed = "FAILED"
+
+	// ResourceItemStatusInProgress is a ResourceItemStatus enum value
+	ResourceItemStatusInProgress = "IN_PROGRESS"
+
+	// ResourceItemStatusSkipped is a ResourceItemStatus enum value
+	ResourceItemStatusSkipped = "SKIPPED"
+)
+
+// ResourceItemStatus_Values returns all elements of the ResourceItemStatus enum
+func ResourceItemStatus_Values() []string {
+	return []string{
+		ResourceItemStatusSuccess,
+		ResourceItemStatusFailed,
+		ResourceItemStatusInProgress,
+		ResourceItemStatusSkipped,
 	}
 }
 

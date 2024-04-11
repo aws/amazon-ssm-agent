@@ -13,6 +13,189 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
+const opBatchGetSecretValue = "BatchGetSecretValue"
+
+// BatchGetSecretValueRequest generates a "aws/request.Request" representing the
+// client's request for the BatchGetSecretValue operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchGetSecretValue for more information on using the BatchGetSecretValue
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the BatchGetSecretValueRequest method.
+//	req, resp := client.BatchGetSecretValueRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/BatchGetSecretValue
+func (c *SecretsManager) BatchGetSecretValueRequest(input *BatchGetSecretValueInput) (req *request.Request, output *BatchGetSecretValueOutput) {
+	op := &request.Operation{
+		Name:       opBatchGetSecretValue,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &BatchGetSecretValueInput{}
+	}
+
+	output = &BatchGetSecretValueOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchGetSecretValue API operation for AWS Secrets Manager.
+//
+// Retrieves the contents of the encrypted fields SecretString or SecretBinary
+// for up to 20 secrets. To retrieve a single secret, call GetSecretValue.
+//
+// To choose which secrets to retrieve, you can specify a list of secrets by
+// name or ARN, or you can use filters. If Secrets Manager encounters errors
+// such as AccessDeniedException while attempting to retrieve any of the secrets,
+// you can see the errors in Errors in the response.
+//
+// Secrets Manager generates CloudTrail GetSecretValue log entries for each
+// secret you request when you call this action. Do not include sensitive information
+// in request parameters because it might be logged. For more information, see
+// Logging Secrets Manager events with CloudTrail (https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieve-ct-entries.html).
+//
+// Required permissions: secretsmanager:BatchGetSecretValue, and you must have
+// secretsmanager:GetSecretValue for each secret. If you use filters, you must
+// also have secretsmanager:ListSecrets. If the secrets are encrypted using
+// customer-managed keys instead of the Amazon Web Services managed key aws/secretsmanager,
+// then you also need kms:Decrypt permissions for the keys. For more information,
+// see IAM policy actions for Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_iam-permissions.html#reference_iam-permissions_actions)
+// and Authentication and access control in Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Secrets Manager's
+// API operation BatchGetSecretValue for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
+//
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
+//
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
+//
+//     Possible causes:
+//
+//   - The secret is scheduled for deletion.
+//
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
+//
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//
+//   - DecryptionFailure
+//     Secrets Manager can't decrypt the protected secret text using the provided
+//     KMS key.
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
+//
+//   - InvalidNextTokenException
+//     The NextToken value is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/BatchGetSecretValue
+func (c *SecretsManager) BatchGetSecretValue(input *BatchGetSecretValueInput) (*BatchGetSecretValueOutput, error) {
+	req, out := c.BatchGetSecretValueRequest(input)
+	return out, req.Send()
+}
+
+// BatchGetSecretValueWithContext is the same as BatchGetSecretValue with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchGetSecretValue for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SecretsManager) BatchGetSecretValueWithContext(ctx aws.Context, input *BatchGetSecretValueInput, opts ...request.Option) (*BatchGetSecretValueOutput, error) {
+	req, out := c.BatchGetSecretValueRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// BatchGetSecretValuePages iterates over the pages of a BatchGetSecretValue operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See BatchGetSecretValue method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a BatchGetSecretValue operation.
+//	pageNum := 0
+//	err := client.BatchGetSecretValuePages(params,
+//	    func(page *secretsmanager.BatchGetSecretValueOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *SecretsManager) BatchGetSecretValuePages(input *BatchGetSecretValueInput, fn func(*BatchGetSecretValueOutput, bool) bool) error {
+	return c.BatchGetSecretValuePagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// BatchGetSecretValuePagesWithContext same as BatchGetSecretValuePages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SecretsManager) BatchGetSecretValuePagesWithContext(ctx aws.Context, input *BatchGetSecretValueInput, fn func(*BatchGetSecretValueOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *BatchGetSecretValueInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.BatchGetSecretValueRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*BatchGetSecretValueOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opCancelRotateSecret = "CancelRotateSecret"
 
 // CancelRotateSecretRequest generates a "aws/request.Request" representing the
@@ -29,14 +212,13 @@ const opCancelRotateSecret = "CancelRotateSecret"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelRotateSecretRequest method.
+//	req, resp := client.CancelRotateSecretRequest(params)
 //
-//    // Example sending a request using the CancelRotateSecretRequest method.
-//    req, resp := client.CancelRotateSecretRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/CancelRotateSecret
 func (c *SecretsManager) CancelRotateSecretRequest(input *CancelRotateSecretInput) (req *request.Request, output *CancelRotateSecretOutput) {
@@ -87,29 +269,30 @@ func (c *SecretsManager) CancelRotateSecretRequest(input *CancelRotateSecretInpu
 // API operation CancelRotateSecret for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
+//
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/CancelRotateSecret
 func (c *SecretsManager) CancelRotateSecret(input *CancelRotateSecretInput) (*CancelRotateSecretOutput, error) {
@@ -149,14 +332,13 @@ const opCreateSecret = "CreateSecret"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSecretRequest method.
+//	req, resp := client.CreateSecretRequest(params)
 //
-//    // Example sending a request using the CreateSecretRequest method.
-//    req, resp := client.CreateSecretRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/CreateSecret
 func (c *SecretsManager) CreateSecretRequest(input *CreateSecretInput) (req *request.Request, output *CreateSecretOutput) {
@@ -234,50 +416,51 @@ func (c *SecretsManager) CreateSecretRequest(input *CreateSecretInput) (req *req
 // API operation CreateSecret for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * LimitExceededException
-//   The request failed because it would exceed one of the Secrets Manager quotas.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
-//   * EncryptionFailure
-//   Secrets Manager can't encrypt the protected secret text using the provided
-//   KMS key. Check that the KMS key is available, enabled, and not in an invalid
-//   state. For more information, see Key state: Effect on your KMS key (https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html).
+//   - LimitExceededException
+//     The request failed because it would exceed one of the Secrets Manager quotas.
 //
-//   * ResourceExistsException
-//   A resource with the ID you requested already exists.
+//   - EncryptionFailure
+//     Secrets Manager can't encrypt the protected secret text using the provided
+//     KMS key. Check that the KMS key is available, enabled, and not in an invalid
+//     state. For more information, see Key state: Effect on your KMS key (https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html).
 //
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
+//   - ResourceExistsException
+//     A resource with the ID you requested already exists.
 //
-//   * MalformedPolicyDocumentException
-//   The resource policy has syntax errors.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - MalformedPolicyDocumentException
+//     The resource policy has syntax errors.
 //
-//   * PreconditionNotMetException
-//   The request failed because you did not complete all the prerequisite steps.
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
-//   * DecryptionFailure
-//   Secrets Manager can't decrypt the protected secret text using the provided
-//   KMS key.
+//   - PreconditionNotMetException
+//     The request failed because you did not complete all the prerequisite steps.
+//
+//   - DecryptionFailure
+//     Secrets Manager can't decrypt the protected secret text using the provided
+//     KMS key.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/CreateSecret
 func (c *SecretsManager) CreateSecret(input *CreateSecretInput) (*CreateSecretOutput, error) {
@@ -317,14 +500,13 @@ const opDeleteResourcePolicy = "DeleteResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResourcePolicyRequest method.
+//	req, resp := client.DeleteResourcePolicyRequest(params)
 //
-//    // Example sending a request using the DeleteResourcePolicyRequest method.
-//    req, resp := client.DeleteResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/DeleteResourcePolicy
 func (c *SecretsManager) DeleteResourcePolicyRequest(input *DeleteResourcePolicyInput) (req *request.Request, output *DeleteResourcePolicyOutput) {
@@ -365,29 +547,30 @@ func (c *SecretsManager) DeleteResourcePolicyRequest(input *DeleteResourcePolicy
 // API operation DeleteResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/DeleteResourcePolicy
 func (c *SecretsManager) DeleteResourcePolicy(input *DeleteResourcePolicyInput) (*DeleteResourcePolicyOutput, error) {
@@ -427,14 +610,13 @@ const opDeleteSecret = "DeleteSecret"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSecretRequest method.
+//	req, resp := client.DeleteSecretRequest(params)
 //
-//    // Example sending a request using the DeleteSecretRequest method.
-//    req, resp := client.DeleteSecretRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/DeleteSecret
 func (c *SecretsManager) DeleteSecretRequest(input *DeleteSecretInput) (req *request.Request, output *DeleteSecretOutput) {
@@ -504,29 +686,30 @@ func (c *SecretsManager) DeleteSecretRequest(input *DeleteSecretInput) (req *req
 // API operation DeleteSecret for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/DeleteSecret
 func (c *SecretsManager) DeleteSecret(input *DeleteSecretInput) (*DeleteSecretOutput, error) {
@@ -566,14 +749,13 @@ const opDescribeSecret = "DescribeSecret"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeSecretRequest method.
+//	req, resp := client.DescribeSecretRequest(params)
 //
-//    // Example sending a request using the DescribeSecretRequest method.
-//    req, resp := client.DescribeSecretRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/DescribeSecret
 func (c *SecretsManager) DescribeSecretRequest(input *DescribeSecretInput) (req *request.Request, output *DescribeSecretOutput) {
@@ -614,14 +796,15 @@ func (c *SecretsManager) DescribeSecretRequest(input *DescribeSecretInput) (req 
 // API operation DescribeSecret for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - InternalServiceError
+//     An error occurred on the server side.
+//
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/DescribeSecret
 func (c *SecretsManager) DescribeSecret(input *DescribeSecretInput) (*DescribeSecretOutput, error) {
@@ -661,14 +844,13 @@ const opGetRandomPassword = "GetRandomPassword"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRandomPasswordRequest method.
+//	req, resp := client.GetRandomPasswordRequest(params)
 //
-//    // Example sending a request using the GetRandomPasswordRequest method.
-//    req, resp := client.GetRandomPasswordRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/GetRandomPassword
 func (c *SecretsManager) GetRandomPasswordRequest(input *GetRandomPasswordInput) (req *request.Request, output *GetRandomPasswordOutput) {
@@ -691,12 +873,10 @@ func (c *SecretsManager) GetRandomPasswordRequest(input *GetRandomPasswordInput)
 //
 // Generates a random password. We recommend that you specify the maximum length
 // and include every character type that the system you are generating a password
-// for can support.
+// for can support. By default, Secrets Manager uses uppercase and lowercase
+// letters, numbers, and the following characters in passwords: !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~
 //
 // Secrets Manager generates a CloudTrail log entry when you call this action.
-// Do not include sensitive information in request parameters because it might
-// be logged. For more information, see Logging Secrets Manager events with
-// CloudTrail (https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieve-ct-entries.html).
 //
 // Required permissions: secretsmanager:GetRandomPassword. For more information,
 // see IAM policy actions for Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_iam-permissions.html#reference_iam-permissions_actions)
@@ -710,26 +890,27 @@ func (c *SecretsManager) GetRandomPasswordRequest(input *GetRandomPasswordInput)
 // API operation GetRandomPassword for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/GetRandomPassword
 func (c *SecretsManager) GetRandomPassword(input *GetRandomPasswordInput) (*GetRandomPasswordOutput, error) {
@@ -769,14 +950,13 @@ const opGetResourcePolicy = "GetResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResourcePolicyRequest method.
+//	req, resp := client.GetResourcePolicyRequest(params)
 //
-//    // Example sending a request using the GetResourcePolicyRequest method.
-//    req, resp := client.GetResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/GetResourcePolicy
 func (c *SecretsManager) GetResourcePolicyRequest(input *GetResourcePolicyInput) (req *request.Request, output *GetResourcePolicyOutput) {
@@ -818,29 +998,30 @@ func (c *SecretsManager) GetResourcePolicyRequest(input *GetResourcePolicyInput)
 // API operation GetResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/GetResourcePolicy
 func (c *SecretsManager) GetResourcePolicy(input *GetResourcePolicyInput) (*GetResourcePolicyOutput, error) {
@@ -880,14 +1061,13 @@ const opGetSecretValue = "GetSecretValue"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSecretValueRequest method.
+//	req, resp := client.GetSecretValueRequest(params)
 //
-//    // Example sending a request using the GetSecretValueRequest method.
-//    req, resp := client.GetSecretValueRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/GetSecretValue
 func (c *SecretsManager) GetSecretValueRequest(input *GetSecretValueInput) (req *request.Request, output *GetSecretValueOutput) {
@@ -910,6 +1090,8 @@ func (c *SecretsManager) GetSecretValueRequest(input *GetSecretValueInput) (req 
 //
 // Retrieves the contents of the encrypted fields SecretString or SecretBinary
 // from the specified version of a secret, whichever contains content.
+//
+// To retrieve the values for a group of secrets, call BatchGetSecretValue.
 //
 // We recommend that you cache your secret values by using client-side caching.
 // Caching secrets improves speed and reduces your costs. For more information,
@@ -938,33 +1120,34 @@ func (c *SecretsManager) GetSecretValueRequest(input *GetSecretValueInput) (req 
 // API operation GetSecretValue for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * DecryptionFailure
-//   Secrets Manager can't decrypt the protected secret text using the provided
-//   KMS key.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - DecryptionFailure
+//     Secrets Manager can't decrypt the protected secret text using the provided
+//     KMS key.
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/GetSecretValue
 func (c *SecretsManager) GetSecretValue(input *GetSecretValueInput) (*GetSecretValueOutput, error) {
@@ -1004,14 +1187,13 @@ const opListSecretVersionIds = "ListSecretVersionIds"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSecretVersionIdsRequest method.
+//	req, resp := client.ListSecretVersionIdsRequest(params)
 //
-//    // Example sending a request using the ListSecretVersionIdsRequest method.
-//    req, resp := client.ListSecretVersionIdsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/ListSecretVersionIds
 func (c *SecretsManager) ListSecretVersionIdsRequest(input *ListSecretVersionIdsInput) (req *request.Request, output *ListSecretVersionIdsOutput) {
@@ -1061,17 +1243,18 @@ func (c *SecretsManager) ListSecretVersionIdsRequest(input *ListSecretVersionIds
 // API operation ListSecretVersionIds for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The NextToken value is invalid.
 //
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
+//   - InvalidNextTokenException
+//     The NextToken value is invalid.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - InternalServiceError
+//     An error occurred on the server side.
+//
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/ListSecretVersionIds
 func (c *SecretsManager) ListSecretVersionIds(input *ListSecretVersionIdsInput) (*ListSecretVersionIdsOutput, error) {
@@ -1103,15 +1286,14 @@ func (c *SecretsManager) ListSecretVersionIdsWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSecretVersionIds operation.
-//    pageNum := 0
-//    err := client.ListSecretVersionIdsPages(params,
-//        func(page *secretsmanager.ListSecretVersionIdsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSecretVersionIds operation.
+//	pageNum := 0
+//	err := client.ListSecretVersionIdsPages(params,
+//	    func(page *secretsmanager.ListSecretVersionIdsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SecretsManager) ListSecretVersionIdsPages(input *ListSecretVersionIdsInput, fn func(*ListSecretVersionIdsOutput, bool) bool) error {
 	return c.ListSecretVersionIdsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1163,14 +1345,13 @@ const opListSecrets = "ListSecrets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSecretsRequest method.
+//	req, resp := client.ListSecretsRequest(params)
 //
-//    // Example sending a request using the ListSecretsRequest method.
-//    req, resp := client.ListSecretsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/ListSecrets
 func (c *SecretsManager) ListSecretsRequest(input *ListSecretsInput) (req *request.Request, output *ListSecretsOutput) {
@@ -1201,13 +1382,13 @@ func (c *SecretsManager) ListSecretsRequest(input *ListSecretsInput) (req *reque
 // account, not including secrets that are marked for deletion. To see secrets
 // marked for deletion, use the Secrets Manager console.
 //
-// ListSecrets is eventually consistent, however it might not reflect changes
-// from the last five minutes. To get the latest information for a specific
-// secret, use DescribeSecret.
+// All Secrets Manager operations are eventually consistent. ListSecrets might
+// not reflect changes from the last five minutes. You can get more recent information
+// for a specific secret by calling DescribeSecret.
 //
 // To list the versions of a secret, use ListSecretVersionIds.
 //
-// To get the secret value from SecretString or SecretBinary, call GetSecretValue.
+// To retrieve the values for the secrets, call BatchGetSecretValue or GetSecretValue.
 //
 // For information about finding secrets in the console, see Find secrets in
 // Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_search-secret.html).
@@ -1229,14 +1410,30 @@ func (c *SecretsManager) ListSecretsRequest(input *ListSecretsInput) (req *reque
 // API operation ListSecrets for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
 //
-//   * InvalidNextTokenException
-//   The NextToken value is invalid.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
+//
+//     Possible causes:
+//
+//   - The secret is scheduled for deletion.
+//
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
+//
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//
+//   - InvalidNextTokenException
+//     The NextToken value is invalid.
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/ListSecrets
 func (c *SecretsManager) ListSecrets(input *ListSecretsInput) (*ListSecretsOutput, error) {
@@ -1268,15 +1465,14 @@ func (c *SecretsManager) ListSecretsWithContext(ctx aws.Context, input *ListSecr
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSecrets operation.
-//    pageNum := 0
-//    err := client.ListSecretsPages(params,
-//        func(page *secretsmanager.ListSecretsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSecrets operation.
+//	pageNum := 0
+//	err := client.ListSecretsPages(params,
+//	    func(page *secretsmanager.ListSecretsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SecretsManager) ListSecretsPages(input *ListSecretsInput, fn func(*ListSecretsOutput, bool) bool) error {
 	return c.ListSecretsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1328,14 +1524,13 @@ const opPutResourcePolicy = "PutResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutResourcePolicyRequest method.
+//	req, resp := client.PutResourcePolicyRequest(params)
 //
-//    // Example sending a request using the PutResourcePolicyRequest method.
-//    req, resp := client.PutResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/PutResourcePolicy
 func (c *SecretsManager) PutResourcePolicyRequest(input *PutResourcePolicyInput) (req *request.Request, output *PutResourcePolicyOutput) {
@@ -1380,36 +1575,37 @@ func (c *SecretsManager) PutResourcePolicyRequest(input *PutResourcePolicyInput)
 // API operation PutResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * MalformedPolicyDocumentException
-//   The resource policy has syntax errors.
 //
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
+//   - MalformedPolicyDocumentException
+//     The resource policy has syntax errors.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * PublicPolicyException
-//   The BlockPublicPolicy parameter is set to true, and the resource policy did
-//   not prevent broad access to the secret.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//
+//   - PublicPolicyException
+//     The BlockPublicPolicy parameter is set to true, and the resource policy did
+//     not prevent broad access to the secret.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/PutResourcePolicy
 func (c *SecretsManager) PutResourcePolicy(input *PutResourcePolicyInput) (*PutResourcePolicyOutput, error) {
@@ -1449,14 +1645,13 @@ const opPutSecretValue = "PutSecretValue"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutSecretValueRequest method.
+//	req, resp := client.PutSecretValueRequest(params)
 //
-//    // Example sending a request using the PutSecretValueRequest method.
-//    req, resp := client.PutSecretValueRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/PutSecretValue
 func (c *SecretsManager) PutSecretValueRequest(input *PutSecretValueInput) (req *request.Request, output *PutSecretValueOutput) {
@@ -1521,44 +1716,45 @@ func (c *SecretsManager) PutSecretValueRequest(input *PutSecretValueInput) (req 
 // API operation PutSecretValue for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * LimitExceededException
-//   The request failed because it would exceed one of the Secrets Manager quotas.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
-//   * EncryptionFailure
-//   Secrets Manager can't encrypt the protected secret text using the provided
-//   KMS key. Check that the KMS key is available, enabled, and not in an invalid
-//   state. For more information, see Key state: Effect on your KMS key (https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html).
+//   - LimitExceededException
+//     The request failed because it would exceed one of the Secrets Manager quotas.
 //
-//   * ResourceExistsException
-//   A resource with the ID you requested already exists.
+//   - EncryptionFailure
+//     Secrets Manager can't encrypt the protected secret text using the provided
+//     KMS key. Check that the KMS key is available, enabled, and not in an invalid
+//     state. For more information, see Key state: Effect on your KMS key (https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html).
 //
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
+//   - ResourceExistsException
+//     A resource with the ID you requested already exists.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * DecryptionFailure
-//   Secrets Manager can't decrypt the protected secret text using the provided
-//   KMS key.
+//   - InternalServiceError
+//     An error occurred on the server side.
+//
+//   - DecryptionFailure
+//     Secrets Manager can't decrypt the protected secret text using the provided
+//     KMS key.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/PutSecretValue
 func (c *SecretsManager) PutSecretValue(input *PutSecretValueInput) (*PutSecretValueOutput, error) {
@@ -1598,14 +1794,13 @@ const opRemoveRegionsFromReplication = "RemoveRegionsFromReplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveRegionsFromReplicationRequest method.
+//	req, resp := client.RemoveRegionsFromReplicationRequest(params)
 //
-//    // Example sending a request using the RemoveRegionsFromReplicationRequest method.
-//    req, resp := client.RemoveRegionsFromReplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/RemoveRegionsFromReplication
 func (c *SecretsManager) RemoveRegionsFromReplicationRequest(input *RemoveRegionsFromReplicationInput) (req *request.Request, output *RemoveRegionsFromReplicationOutput) {
@@ -1646,29 +1841,30 @@ func (c *SecretsManager) RemoveRegionsFromReplicationRequest(input *RemoveRegion
 // API operation RemoveRegionsFromReplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/RemoveRegionsFromReplication
 func (c *SecretsManager) RemoveRegionsFromReplication(input *RemoveRegionsFromReplicationInput) (*RemoveRegionsFromReplicationOutput, error) {
@@ -1708,14 +1904,13 @@ const opReplicateSecretToRegions = "ReplicateSecretToRegions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ReplicateSecretToRegionsRequest method.
+//	req, resp := client.ReplicateSecretToRegionsRequest(params)
 //
-//    // Example sending a request using the ReplicateSecretToRegionsRequest method.
-//    req, resp := client.ReplicateSecretToRegionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/ReplicateSecretToRegions
 func (c *SecretsManager) ReplicateSecretToRegionsRequest(input *ReplicateSecretToRegionsInput) (req *request.Request, output *ReplicateSecretToRegionsOutput) {
@@ -1743,8 +1938,12 @@ func (c *SecretsManager) ReplicateSecretToRegionsRequest(input *ReplicateSecretT
 // be logged. For more information, see Logging Secrets Manager events with
 // CloudTrail (https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieve-ct-entries.html).
 //
-// Required permissions: secretsmanager:ReplicateSecretToRegions. For more information,
-// see IAM policy actions for Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_iam-permissions.html#reference_iam-permissions_actions)
+// Required permissions: secretsmanager:ReplicateSecretToRegions. If the primary
+// secret is encrypted with a KMS key other than aws/secretsmanager, you also
+// need kms:Decrypt permission to the key. To encrypt the replicated secret
+// with a KMS key other than aws/secretsmanager, you need kms:GenerateDataKey
+// and kms:Encrypt to the key. For more information, see IAM policy actions
+// for Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_iam-permissions.html#reference_iam-permissions_actions)
 // and Authentication and access control in Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1755,29 +1954,30 @@ func (c *SecretsManager) ReplicateSecretToRegionsRequest(input *ReplicateSecretT
 // API operation ReplicateSecretToRegions for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/ReplicateSecretToRegions
 func (c *SecretsManager) ReplicateSecretToRegions(input *ReplicateSecretToRegionsInput) (*ReplicateSecretToRegionsOutput, error) {
@@ -1817,14 +2017,13 @@ const opRestoreSecret = "RestoreSecret"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RestoreSecretRequest method.
+//	req, resp := client.RestoreSecretRequest(params)
 //
-//    // Example sending a request using the RestoreSecretRequest method.
-//    req, resp := client.RestoreSecretRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/RestoreSecret
 func (c *SecretsManager) RestoreSecretRequest(input *RestoreSecretInput) (req *request.Request, output *RestoreSecretOutput) {
@@ -1865,29 +2064,30 @@ func (c *SecretsManager) RestoreSecretRequest(input *RestoreSecretInput) (req *r
 // API operation RestoreSecret for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/RestoreSecret
 func (c *SecretsManager) RestoreSecret(input *RestoreSecretInput) (*RestoreSecretOutput, error) {
@@ -1927,14 +2127,13 @@ const opRotateSecret = "RotateSecret"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RotateSecretRequest method.
+//	req, resp := client.RotateSecretRequest(params)
 //
-//    // Example sending a request using the RotateSecretRequest method.
-//    req, resp := client.RotateSecretRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/RotateSecret
 func (c *SecretsManager) RotateSecretRequest(input *RotateSecretInput) (req *request.Request, output *RotateSecretOutput) {
@@ -1991,29 +2190,30 @@ func (c *SecretsManager) RotateSecretRequest(input *RotateSecretInput) (req *req
 // API operation RotateSecret for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
+//
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/RotateSecret
 func (c *SecretsManager) RotateSecret(input *RotateSecretInput) (*RotateSecretOutput, error) {
@@ -2053,14 +2253,13 @@ const opStopReplicationToReplica = "StopReplicationToReplica"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopReplicationToReplicaRequest method.
+//	req, resp := client.StopReplicationToReplicaRequest(params)
 //
-//    // Example sending a request using the StopReplicationToReplicaRequest method.
-//    req, resp := client.StopReplicationToReplicaRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/StopReplicationToReplica
 func (c *SecretsManager) StopReplicationToReplicaRequest(input *StopReplicationToReplicaInput) (req *request.Request, output *StopReplicationToReplicaOutput) {
@@ -2104,29 +2303,30 @@ func (c *SecretsManager) StopReplicationToReplicaRequest(input *StopReplicationT
 // API operation StopReplicationToReplica for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/StopReplicationToReplica
 func (c *SecretsManager) StopReplicationToReplica(input *StopReplicationToReplicaInput) (*StopReplicationToReplicaOutput, error) {
@@ -2166,14 +2366,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/TagResource
 func (c *SecretsManager) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2199,25 +2398,8 @@ func (c *SecretsManager) TagResourceRequest(input *TagResourceInput) (req *reque
 // part of the secret's metadata. They are not associated with specific versions
 // of the secret. This operation appends tags to the existing list of tags.
 //
-// The following restrictions apply to tags:
-//
-//    * Maximum number of tags per secret: 50
-//
-//    * Maximum key length: 127 Unicode characters in UTF-8
-//
-//    * Maximum value length: 255 Unicode characters in UTF-8
-//
-//    * Tag keys and values are case sensitive.
-//
-//    * Do not use the aws: prefix in your tag names or values because Amazon
-//    Web Services reserves it for Amazon Web Services use. You can't edit or
-//    delete tag names or values with this prefix. Tags with this prefix do
-//    not count against your tags per secret limit.
-//
-//    * If you use your tagging schema across multiple services and resources,
-//    other services might have restrictions on allowed characters. Generally
-//    allowed characters: letters, spaces, and numbers representable in UTF-8,
-//    plus the following special characters: + - = . _ : / @.
+// For tag quotas and naming restrictions, see Service quotas for Tagging (https://docs.aws.amazon.com/general/latest/gr/arg.html#taged-reference-quotas)
+// in the Amazon Web Services General Reference guide.
 //
 // If you use tags as part of your security strategy, then adding or removing
 // a tag can change permissions. If successfully completing this operation would
@@ -2241,29 +2423,30 @@ func (c *SecretsManager) TagResourceRequest(input *TagResourceInput) (req *reque
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/TagResource
 func (c *SecretsManager) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2303,14 +2486,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/UntagResource
 func (c *SecretsManager) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2359,29 +2541,30 @@ func (c *SecretsManager) UntagResourceRequest(input *UntagResourceInput) (req *r
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/UntagResource
 func (c *SecretsManager) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2421,14 +2604,13 @@ const opUpdateSecret = "UpdateSecret"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSecretRequest method.
+//	req, resp := client.UpdateSecretRequest(params)
 //
-//    // Example sending a request using the UpdateSecretRequest method.
-//    req, resp := client.UpdateSecretRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/UpdateSecret
 func (c *SecretsManager) UpdateSecretRequest(input *UpdateSecretInput) (req *request.Request, output *UpdateSecretOutput) {
@@ -2484,9 +2666,11 @@ func (c *SecretsManager) UpdateSecretRequest(input *UpdateSecretInput) (req *req
 // Required permissions: secretsmanager:UpdateSecret. For more information,
 // see IAM policy actions for Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_iam-permissions.html#reference_iam-permissions_actions)
 // and Authentication and access control in Secrets Manager (https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access.html).
-// If you use a customer managed key, you must also have kms:GenerateDataKey
-// and kms:Decrypt permissions on the key. For more information, see Secret
-// encryption and decryption (https://docs.aws.amazon.com/secretsmanager/latest/userguide/security-encryption.html).
+// If you use a customer managed key, you must also have kms:GenerateDataKey,
+// kms:Encrypt, and kms:Decrypt permissions on the key. If you change the KMS
+// key and you don't have kms:Encrypt permission to the new key, Secrets Manager
+// does not re-ecrypt existing secret versions with the new key. For more information,
+// see Secret encryption and decryption (https://docs.aws.amazon.com/secretsmanager/latest/userguide/security-encryption.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2496,50 +2680,51 @@ func (c *SecretsManager) UpdateSecretRequest(input *UpdateSecretInput) (req *req
 // API operation UpdateSecret for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * LimitExceededException
-//   The request failed because it would exceed one of the Secrets Manager quotas.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
-//   * EncryptionFailure
-//   Secrets Manager can't encrypt the protected secret text using the provided
-//   KMS key. Check that the KMS key is available, enabled, and not in an invalid
-//   state. For more information, see Key state: Effect on your KMS key (https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html).
+//   - LimitExceededException
+//     The request failed because it would exceed one of the Secrets Manager quotas.
 //
-//   * ResourceExistsException
-//   A resource with the ID you requested already exists.
+//   - EncryptionFailure
+//     Secrets Manager can't encrypt the protected secret text using the provided
+//     KMS key. Check that the KMS key is available, enabled, and not in an invalid
+//     state. For more information, see Key state: Effect on your KMS key (https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html).
 //
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
+//   - ResourceExistsException
+//     A resource with the ID you requested already exists.
 //
-//   * MalformedPolicyDocumentException
-//   The resource policy has syntax errors.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - MalformedPolicyDocumentException
+//     The resource policy has syntax errors.
 //
-//   * PreconditionNotMetException
-//   The request failed because you did not complete all the prerequisite steps.
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
-//   * DecryptionFailure
-//   Secrets Manager can't decrypt the protected secret text using the provided
-//   KMS key.
+//   - PreconditionNotMetException
+//     The request failed because you did not complete all the prerequisite steps.
+//
+//   - DecryptionFailure
+//     Secrets Manager can't decrypt the protected secret text using the provided
+//     KMS key.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/UpdateSecret
 func (c *SecretsManager) UpdateSecret(input *UpdateSecretInput) (*UpdateSecretOutput, error) {
@@ -2579,14 +2764,13 @@ const opUpdateSecretVersionStage = "UpdateSecretVersionStage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSecretVersionStageRequest method.
+//	req, resp := client.UpdateSecretVersionStageRequest(params)
 //
-//    // Example sending a request using the UpdateSecretVersionStageRequest method.
-//    req, resp := client.UpdateSecretVersionStageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/UpdateSecretVersionStage
 func (c *SecretsManager) UpdateSecretVersionStageRequest(input *UpdateSecretVersionStageInput) (req *request.Request, output *UpdateSecretVersionStageOutput) {
@@ -2645,32 +2829,33 @@ func (c *SecretsManager) UpdateSecretVersionStageRequest(input *UpdateSecretVers
 // API operation UpdateSecretVersionStage for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//   * LimitExceededException
-//   The request failed because it would exceed one of the Secrets Manager quotas.
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - LimitExceededException
+//     The request failed because it would exceed one of the Secrets Manager quotas.
+//
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/UpdateSecretVersionStage
 func (c *SecretsManager) UpdateSecretVersionStage(input *UpdateSecretVersionStageInput) (*UpdateSecretVersionStageOutput, error) {
@@ -2710,14 +2895,13 @@ const opValidateResourcePolicy = "ValidateResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ValidateResourcePolicyRequest method.
+//	req, resp := client.ValidateResourcePolicyRequest(params)
 //
-//    // Example sending a request using the ValidateResourcePolicyRequest method.
-//    req, resp := client.ValidateResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/ValidateResourcePolicy
 func (c *SecretsManager) ValidateResourcePolicyRequest(input *ValidateResourcePolicyInput) (req *request.Request, output *ValidateResourcePolicyOutput) {
@@ -2743,14 +2927,14 @@ func (c *SecretsManager) ValidateResourcePolicyRequest(input *ValidateResourcePo
 //
 // The API performs three checks when validating the policy:
 //
-//    * Sends a call to Zelkova (https://aws.amazon.com/blogs/security/protect-sensitive-data-in-the-cloud-with-automated-reasoning-zelkova/),
-//    an automated reasoning engine, to ensure your resource policy does not
-//    allow broad access to your secret, for example policies that use a wildcard
-//    for the principal.
+//   - Sends a call to Zelkova (https://aws.amazon.com/blogs/security/protect-sensitive-data-in-the-cloud-with-automated-reasoning-zelkova/),
+//     an automated reasoning engine, to ensure your resource policy does not
+//     allow broad access to your secret, for example policies that use a wildcard
+//     for the principal.
 //
-//    * Checks for correct syntax in a policy.
+//   - Checks for correct syntax in a policy.
 //
-//    * Verifies the policy does not lock out a caller.
+//   - Verifies the policy does not lock out a caller.
 //
 // Secrets Manager generates a CloudTrail log entry when you call this action.
 // Do not include sensitive information in request parameters because it might
@@ -2769,32 +2953,33 @@ func (c *SecretsManager) ValidateResourcePolicyRequest(input *ValidateResourcePo
 // API operation ValidateResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * MalformedPolicyDocumentException
-//   The resource policy has syntax errors.
 //
-//   * ResourceNotFoundException
-//   Secrets Manager can't find the resource that you asked for.
+//   - MalformedPolicyDocumentException
+//     The resource policy has syntax errors.
 //
-//   * InvalidParameterException
-//   The parameter name or value is invalid.
+//   - ResourceNotFoundException
+//     Secrets Manager can't find the resource that you asked for.
 //
-//   * InternalServiceError
-//   An error occurred on the server side.
+//   - InvalidParameterException
+//     The parameter name or value is invalid.
 //
-//   * InvalidRequestException
-//   A parameter value is not valid for the current state of the resource.
+//   - InternalServiceError
+//     An error occurred on the server side.
 //
-//   Possible causes:
+//   - InvalidRequestException
+//     A parameter value is not valid for the current state of the resource.
 //
-//      * The secret is scheduled for deletion.
+//     Possible causes:
 //
-//      * You tried to enable rotation on a secret that doesn't already have a
-//      Lambda function ARN configured and you didn't include such an ARN as a
-//      parameter in this call.
+//   - The secret is scheduled for deletion.
 //
-//      * The secret is managed by another service, and you must use that service
-//      to update it. For more information, see Secrets managed by other Amazon
-//      Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
+//
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17/ValidateResourcePolicy
 func (c *SecretsManager) ValidateResourcePolicy(input *ValidateResourcePolicyInput) (*ValidateResourcePolicyOutput, error) {
@@ -2816,6 +3001,209 @@ func (c *SecretsManager) ValidateResourcePolicyWithContext(ctx aws.Context, inpu
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// The error Secrets Manager encountered while retrieving an individual secret
+// as part of BatchGetSecretValue.
+type APIErrorType struct {
+	_ struct{} `type:"structure"`
+
+	// The error Secrets Manager encountered while retrieving an individual secret
+	// as part of BatchGetSecretValue, for example ResourceNotFoundException,InvalidParameterException,
+	// InvalidRequestException, DecryptionFailure, or AccessDeniedException.
+	ErrorCode *string `type:"string"`
+
+	// A message describing the error.
+	Message *string `type:"string"`
+
+	// The ARN or name of the secret.
+	SecretId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s APIErrorType) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s APIErrorType) GoString() string {
+	return s.String()
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *APIErrorType) SetErrorCode(v string) *APIErrorType {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *APIErrorType) SetMessage(v string) *APIErrorType {
+	s.Message = &v
+	return s
+}
+
+// SetSecretId sets the SecretId field's value.
+func (s *APIErrorType) SetSecretId(v string) *APIErrorType {
+	s.SecretId = &v
+	return s
+}
+
+type BatchGetSecretValueInput struct {
+	_ struct{} `type:"structure"`
+
+	// The filters to choose which secrets to retrieve. You must include Filters
+	// or SecretIdList, but not both.
+	Filters []*Filter `type:"list"`
+
+	// The number of results to include in the response.
+	//
+	// If there are more results available, in the response, Secrets Manager includes
+	// NextToken. To get the next results, call BatchGetSecretValue again with the
+	// value from NextToken. To use this parameter, you must also use the Filters
+	// parameter.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A token that indicates where the output should continue from, if a previous
+	// call did not show all results. To get the next results, call BatchGetSecretValue
+	// again with this value.
+	NextToken *string `min:"1" type:"string"`
+
+	// The ARN or names of the secrets to retrieve. You must include Filters or
+	// SecretIdList, but not both.
+	SecretIdList []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetSecretValueInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetSecretValueInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchGetSecretValueInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchGetSecretValueInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.SecretIdList != nil && len(s.SecretIdList) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretIdList", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *BatchGetSecretValueInput) SetFilters(v []*Filter) *BatchGetSecretValueInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *BatchGetSecretValueInput) SetMaxResults(v int64) *BatchGetSecretValueInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *BatchGetSecretValueInput) SetNextToken(v string) *BatchGetSecretValueInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSecretIdList sets the SecretIdList field's value.
+func (s *BatchGetSecretValueInput) SetSecretIdList(v []*string) *BatchGetSecretValueInput {
+	s.SecretIdList = v
+	return s
+}
+
+type BatchGetSecretValueOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of errors Secrets Manager encountered while attempting to retrieve
+	// individual secrets.
+	Errors []*APIErrorType `type:"list"`
+
+	// Secrets Manager includes this value if there's more output available than
+	// what is included in the current response. This can occur even when the response
+	// includes no values at all, such as when you ask for a filtered view of a
+	// long list. To get the next results, call BatchGetSecretValue again with this
+	// value.
+	NextToken *string `min:"1" type:"string"`
+
+	// A list of secret values.
+	SecretValues []*SecretValueEntry `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetSecretValueOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetSecretValueOutput) GoString() string {
+	return s.String()
+}
+
+// SetErrors sets the Errors field's value.
+func (s *BatchGetSecretValueOutput) SetErrors(v []*APIErrorType) *BatchGetSecretValueOutput {
+	s.Errors = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *BatchGetSecretValueOutput) SetNextToken(v string) *BatchGetSecretValueOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSecretValues sets the SecretValues field's value.
+func (s *BatchGetSecretValueOutput) SetSecretValues(v []*SecretValueEntry) *BatchGetSecretValueOutput {
+	s.SecretValues = v
+	return s
 }
 
 type CancelRotateSecretInput struct {
@@ -2936,10 +3324,10 @@ type CreateSecretInput struct {
 	// If you use the Amazon Web Services CLI or one of the Amazon Web Services
 	// SDKs to call this operation, then you can leave this parameter empty. The
 	// CLI or SDK generates a random UUID for you and includes it as the value for
-	// this parameter in the request. If you don't use the SDK and instead generate
-	// a raw HTTP request to the Secrets Manager service endpoint, then you must
-	// generate a ClientRequestToken yourself for the new version and include the
-	// value in the request.
+	// this parameter in the request.
+	//
+	// If you generate a raw HTTP request to the Secrets Manager service endpoint,
+	// then you must generate a ClientRequestToken and include it in the request.
 	//
 	// This value helps ensure idempotency. Secrets Manager uses this value to prevent
 	// the accidental creation of duplicate versions if there are failures and retries
@@ -3048,25 +3436,8 @@ type CreateSecretInput struct {
 	// you should use single quotes to avoid confusion with the double quotes required
 	// in the JSON text.
 	//
-	// The following restrictions apply to tags:
-	//
-	//    * Maximum number of tags per secret: 50
-	//
-	//    * Maximum key length: 127 Unicode characters in UTF-8
-	//
-	//    * Maximum value length: 255 Unicode characters in UTF-8
-	//
-	//    * Tag keys and values are case sensitive.
-	//
-	//    * Do not use the aws: prefix in your tag names or values because Amazon
-	//    Web Services reserves it for Amazon Web Services use. You can't edit or
-	//    delete tag names or values with this prefix. Tags with this prefix do
-	//    not count against your tags per secret limit.
-	//
-	//    * If you use your tagging schema across multiple services and resources,
-	//    other services might have restrictions on allowed characters. Generally
-	//    allowed characters: letters, spaces, and numbers representable in UTF-8,
-	//    plus the following special characters: + - = . _ : / @.
+	// For tag quotas and naming restrictions, see Service quotas for Tagging (https://docs.aws.amazon.com/general/latest/gr/arg.html#taged-reference-quotas)
+	// in the Amazon Web Services General Reference guide.
 	Tags []*Tag `type:"list"`
 }
 
@@ -3429,6 +3800,9 @@ type DeleteSecretInput struct {
 	// deleted. If you delete a secret and then immediately create a secret with
 	// the same name, use appropriate back off and retry logic.
 	//
+	// If you forcibly delete an already deleted or nonexistent secret, the operation
+	// does not return ResourceNotFoundException.
+	//
 	// Use this parameter with caution. This parameter causes the operation to skip
 	// the normal recovery window before the permanent deletion that Secrets Manager
 	// would normally impose with the RecoveryWindowInDays parameter. If you delete
@@ -3643,15 +4017,23 @@ type DescribeSecretOutput struct {
 	LastChangedDate *time.Time `type:"timestamp"`
 
 	// The last date and time that Secrets Manager rotated the secret. If the secret
-	// isn't configured for rotation, Secrets Manager returns null.
+	// isn't configured for rotation or rotation has been disabled, Secrets Manager
+	// returns null.
 	LastRotatedDate *time.Time `type:"timestamp"`
 
 	// The name of the secret.
 	Name *string `min:"1" type:"string"`
 
-	// The next date and time that Secrets Manager will rotate the secret, rounded
-	// to the nearest hour. If the secret isn't configured for rotation, Secrets
-	// Manager returns null.
+	// The next rotation is scheduled to occur on or before this date. If the secret
+	// isn't configured for rotation or rotation has been disabled, Secrets Manager
+	// returns null. If rotation fails, Secrets Manager retries the entire rotation
+	// process multiple times. If rotation is unsuccessful, this date may be in
+	// the past.
+	//
+	// This date represents the latest date that rotation will occur, but it is
+	// not an approximate rotation date. In some cases, for example if you turn
+	// off automatic rotation and then turn it back on, the next rotation may occur
+	// much sooner than this date.
 	NextRotationDate *time.Time `type:"timestamp"`
 
 	// The ID of the service that created this secret. For more information, see
@@ -4337,9 +4719,9 @@ type GetSecretValueOutput struct {
 	Name *string `min:"1" type:"string"`
 
 	// The decrypted secret value, if the secret value was originally provided as
-	// binary data in the form of a byte array. The response parameter represents
-	// the binary data as a base64-encoded (https://tools.ietf.org/html/rfc4648#section-4)
-	// string.
+	// binary data in the form of a byte array. When you retrieve a SecretBinary
+	// using the HTTP API, the Python SDK, or the Amazon Web Services CLI, the value
+	// is Base64-encoded. Otherwise, it is not encoded.
 	//
 	// If the secret was created by using the Secrets Manager console, or if the
 	// secret value was originally provided as a string, then this field is omitted.
@@ -4627,15 +5009,15 @@ func (s *InvalidParameterException) RequestID() string {
 //
 // Possible causes:
 //
-//    * The secret is scheduled for deletion.
+//   - The secret is scheduled for deletion.
 //
-//    * You tried to enable rotation on a secret that doesn't already have a
-//    Lambda function ARN configured and you didn't include such an ARN as a
-//    parameter in this call.
+//   - You tried to enable rotation on a secret that doesn't already have a
+//     Lambda function ARN configured and you didn't include such an ARN as a
+//     parameter in this call.
 //
-//    * The secret is managed by another service, and you must use that service
-//    to update it. For more information, see Secrets managed by other Amazon
-//    Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
+//   - The secret is managed by another service, and you must use that service
+//     to update it. For more information, see Secrets managed by other Amazon
+//     Web Services services (https://docs.aws.amazon.com/secretsmanager/latest/userguide/service-linked-secrets.html).
 type InvalidRequestException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -5261,6 +5643,21 @@ type PutResourcePolicyInput struct {
 	// Specifies whether to block resource-based policies that allow broad access
 	// to the secret, for example those that use a wildcard for the principal. By
 	// default, public policies aren't blocked.
+	//
+	// Resource policy validation and the BlockPublicPolicy parameter help protect
+	// your resources by preventing public access from being granted through the
+	// resource policies that are directly attached to your secrets. In addition
+	// to using these features, carefully inspect the following policies to confirm
+	// that they do not grant public access:
+	//
+	//    * Identity-based policies attached to associated Amazon Web Services principals
+	//    (for example, IAM roles)
+	//
+	//    * Resource-based policies attached to associated Amazon Web Services resources
+	//    (for example, Key Management Service (KMS) keys)
+	//
+	// To review permissions to your secrets, see Determine who has permissions
+	// to your secrets (https://docs.aws.amazon.com/secretsmanager/latest/userguide/determine-acccess_examine-iam-policies.html).
 	BlockPublicPolicy *bool `type:"boolean"`
 
 	// A JSON-formatted string for an Amazon Web Services resource-based policy.
@@ -5382,17 +5779,17 @@ type PutSecretValueInput struct {
 	// A unique identifier for the new version of the secret.
 	//
 	// If you use the Amazon Web Services CLI or one of the Amazon Web Services
-	// SDKs to call this operation, then you can leave this parameter empty because
-	// they generate a random UUID for you. If you don't use the SDK and instead
-	// generate a raw HTTP request to the Secrets Manager service endpoint, then
-	// you must generate a ClientRequestToken yourself for new versions and include
-	// that value in the request.
+	// SDKs to call this operation, then you can leave this parameter empty. The
+	// CLI or SDK generates a random UUID for you and includes it as the value for
+	// this parameter in the request.
+	//
+	// If you generate a raw HTTP request to the Secrets Manager service endpoint,
+	// then you must generate a ClientRequestToken and include it in the request.
 	//
 	// This value helps ensure idempotency. Secrets Manager uses this value to prevent
 	// the accidental creation of duplicate versions if there are failures and retries
-	// during the Lambda rotation function processing. We recommend that you generate
-	// a UUID-type (https://wikipedia.org/wiki/Universally_unique_identifier) value
-	// to ensure uniqueness within the specified secret.
+	// during a rotation. We recommend that you generate a UUID-type (https://wikipedia.org/wiki/Universally_unique_identifier)
+	// value to ensure uniqueness of your versions within the specified secret.
 	//
 	//    * If the ClientRequestToken value isn't already associated with a version
 	//    of the secret then a new version of the secret is created.
@@ -6178,23 +6575,22 @@ func (s *RestoreSecretOutput) SetName(v string) *RestoreSecretOutput {
 type RotateSecretInput struct {
 	_ struct{} `type:"structure"`
 
-	// A unique identifier for the new version of the secret that helps ensure idempotency.
-	// Secrets Manager uses this value to prevent the accidental creation of duplicate
-	// versions if there are failures and retries during rotation. This value becomes
-	// the VersionId of the new version.
+	// A unique identifier for the new version of the secret. You only need to specify
+	// this value if you implement your own retry logic and you want to ensure that
+	// Secrets Manager doesn't attempt to create a secret version twice.
 	//
 	// If you use the Amazon Web Services CLI or one of the Amazon Web Services
-	// SDK to call this operation, then you can leave this parameter empty. The
-	// CLI or SDK generates a random UUID for you and includes that in the request
-	// for this parameter. If you don't use the SDK and instead generate a raw HTTP
-	// request to the Secrets Manager service endpoint, then you must generate a
-	// ClientRequestToken yourself for new versions and include that value in the
-	// request.
+	// SDKs to call this operation, then you can leave this parameter empty. The
+	// CLI or SDK generates a random UUID for you and includes it as the value for
+	// this parameter in the request.
 	//
-	// You only need to specify this value if you implement your own retry logic
-	// and you want to ensure that Secrets Manager doesn't attempt to create a secret
-	// version twice. We recommend that you generate a UUID-type (https://wikipedia.org/wiki/Universally_unique_identifier)
-	// value to ensure uniqueness within the specified secret.
+	// If you generate a raw HTTP request to the Secrets Manager service endpoint,
+	// then you must generate a ClientRequestToken and include it in the request.
+	//
+	// This value helps ensure idempotency. Secrets Manager uses this value to prevent
+	// the accidental creation of duplicate versions if there are failures and retries
+	// during a rotation. We recommend that you generate a UUID-type (https://wikipedia.org/wiki/Universally_unique_identifier)
+	// value to ensure uniqueness of your versions within the specified secret.
 	ClientRequestToken *string `min:"32" type:"string" idempotencyToken:"true"`
 
 	// Specifies whether to rotate the secret immediately or wait until the next
@@ -6496,15 +6892,12 @@ type SecretListEntry struct {
 	// successfully completed. This value is null if the secret hasn't ever rotated.
 	LastRotatedDate *time.Time `type:"timestamp"`
 
-	// The friendly name of the secret. You can use forward slashes in the name
-	// to represent a path hierarchy. For example, /prod/databases/dbserver1 could
-	// represent the secret for a server named dbserver1 in the folder databases
-	// in the folder prod.
+	// The friendly name of the secret.
 	Name *string `min:"1" type:"string"`
 
-	// The next date and time that Secrets Manager will attempt to rotate the secret,
-	// rounded to the nearest hour. This value is null if the secret is not set
-	// up for rotation.
+	// The next rotation is scheduled to occur on or before this date. If the secret
+	// isn't configured for rotation or rotation has been disabled, Secrets Manager
+	// returns null.
 	NextRotationDate *time.Time `type:"timestamp"`
 
 	// Returns the name of the service that created the secret.
@@ -6655,6 +7048,107 @@ func (s *SecretListEntry) SetSecretVersionsToStages(v map[string][]*string) *Sec
 // SetTags sets the Tags field's value.
 func (s *SecretListEntry) SetTags(v []*Tag) *SecretListEntry {
 	s.Tags = v
+	return s
+}
+
+// A structure that contains the secret value and other details for a secret.
+type SecretValueEntry struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the secret.
+	ARN *string `min:"20" type:"string"`
+
+	// The date the secret was created.
+	CreatedDate *time.Time `type:"timestamp"`
+
+	// The friendly name of the secret.
+	Name *string `min:"1" type:"string"`
+
+	// The decrypted secret value, if the secret value was originally provided as
+	// binary data in the form of a byte array. The parameter represents the binary
+	// data as a base64-encoded (https://tools.ietf.org/html/rfc4648#section-4)
+	// string.
+	//
+	// SecretBinary is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SecretValueEntry's
+	// String and GoString methods.
+	//
+	// SecretBinary is automatically base64 encoded/decoded by the SDK.
+	SecretBinary []byte `min:"1" type:"blob" sensitive:"true"`
+
+	// The decrypted secret value, if the secret value was originally provided as
+	// a string or through the Secrets Manager console.
+	//
+	// SecretString is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by SecretValueEntry's
+	// String and GoString methods.
+	SecretString *string `min:"1" type:"string" sensitive:"true"`
+
+	// The unique version identifier of this version of the secret.
+	VersionId *string `min:"32" type:"string"`
+
+	// A list of all of the staging labels currently attached to this version of
+	// the secret.
+	VersionStages []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecretValueEntry) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecretValueEntry) GoString() string {
+	return s.String()
+}
+
+// SetARN sets the ARN field's value.
+func (s *SecretValueEntry) SetARN(v string) *SecretValueEntry {
+	s.ARN = &v
+	return s
+}
+
+// SetCreatedDate sets the CreatedDate field's value.
+func (s *SecretValueEntry) SetCreatedDate(v time.Time) *SecretValueEntry {
+	s.CreatedDate = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *SecretValueEntry) SetName(v string) *SecretValueEntry {
+	s.Name = &v
+	return s
+}
+
+// SetSecretBinary sets the SecretBinary field's value.
+func (s *SecretValueEntry) SetSecretBinary(v []byte) *SecretValueEntry {
+	s.SecretBinary = v
+	return s
+}
+
+// SetSecretString sets the SecretString field's value.
+func (s *SecretValueEntry) SetSecretString(v string) *SecretValueEntry {
+	s.SecretString = &v
+	return s
+}
+
+// SetVersionId sets the VersionId field's value.
+func (s *SecretValueEntry) SetVersionId(v string) *SecretValueEntry {
+	s.VersionId = &v
+	return s
+}
+
+// SetVersionStages sets the VersionStages field's value.
+func (s *SecretValueEntry) SetVersionStages(v []*string) *SecretValueEntry {
+	s.VersionStages = v
 	return s
 }
 
@@ -7074,12 +7568,15 @@ type UpdateSecretInput struct {
 	// If you use the Amazon Web Services CLI or one of the Amazon Web Services
 	// SDKs to call this operation, then you can leave this parameter empty. The
 	// CLI or SDK generates a random UUID for you and includes it as the value for
-	// this parameter in the request. If you don't use the SDK and instead generate
-	// a raw HTTP request to the Secrets Manager service endpoint, then you must
-	// generate a ClientRequestToken yourself for the new version and include the
-	// value in the request.
+	// this parameter in the request.
 	//
-	// This value becomes the VersionId of the new version.
+	// If you generate a raw HTTP request to the Secrets Manager service endpoint,
+	// then you must generate a ClientRequestToken and include it in the request.
+	//
+	// This value helps ensure idempotency. Secrets Manager uses this value to prevent
+	// the accidental creation of duplicate versions if there are failures and retries
+	// during a rotation. We recommend that you generate a UUID-type (https://wikipedia.org/wiki/Universally_unique_identifier)
+	// value to ensure uniqueness of your versions within the specified secret.
 	ClientRequestToken *string `min:"32" type:"string" idempotencyToken:"true"`
 
 	// The description of the secret.
@@ -7087,8 +7584,10 @@ type UpdateSecretInput struct {
 
 	// The ARN, key ID, or alias of the KMS key that Secrets Manager uses to encrypt
 	// new secret versions as well as any existing versions with the staging labels
-	// AWSCURRENT, AWSPENDING, or AWSPREVIOUS. For more information about versions
-	// and staging labels, see Concepts: Version (https://docs.aws.amazon.com/secretsmanager/latest/userguide/getting-started.html#term_version).
+	// AWSCURRENT, AWSPENDING, or AWSPREVIOUS. If you don't have kms:Encrypt permission
+	// to the new key, Secrets Manager does not re-ecrypt existing secret versions
+	// with the new key. For more information about versions and staging labels,
+	// see Concepts: Version (https://docs.aws.amazon.com/secretsmanager/latest/userguide/getting-started.html#term_version).
 	//
 	// A key alias is always prefixed by alias/, for example alias/aws/secretsmanager.
 	// For more information, see About aliases (https://docs.aws.amazon.com/kms/latest/developerguide/alias-about.html).

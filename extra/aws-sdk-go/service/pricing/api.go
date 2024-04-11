@@ -28,14 +28,13 @@ const opDescribeServices = "DescribeServices"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeServicesRequest method.
+//	req, resp := client.DescribeServicesRequest(params)
 //
-//    // Example sending a request using the DescribeServicesRequest method.
-//    req, resp := client.DescribeServicesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pricing-2017-10-15/DescribeServices
 func (c *Pricing) DescribeServicesRequest(input *DescribeServicesInput) (req *request.Request, output *DescribeServicesOutput) {
@@ -77,21 +76,25 @@ func (c *Pricing) DescribeServicesRequest(input *DescribeServicesInput) (req *re
 // API operation DescribeServices for usage and error information.
 //
 // Returned Error Types:
-//   * InternalErrorException
-//   An error on the server occurred during the processing of your request. Try
-//   again later.
 //
-//   * InvalidParameterException
-//   One or more parameters had an invalid value.
+//   - InvalidParameterException
+//     One or more parameters had an invalid value.
 //
-//   * NotFoundException
-//   The requested resource can't be found.
+//   - InvalidNextTokenException
+//     The pagination token is invalid. Try again without a pagination token.
 //
-//   * InvalidNextTokenException
-//   The pagination token is invalid. Try again without a pagination token.
+//   - NotFoundException
+//     The requested resource can't be found.
 //
-//   * ExpiredNextTokenException
-//   The pagination token expired. Try again without a pagination token.
+//   - InternalErrorException
+//     An error on the server occurred during the processing of your request. Try
+//     again later.
+//
+//   - ThrottlingException
+//     You've made too many requests exceeding service quotas.
+//
+//   - ExpiredNextTokenException
+//     The pagination token expired. Try again without a pagination token.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pricing-2017-10-15/DescribeServices
 func (c *Pricing) DescribeServices(input *DescribeServicesInput) (*DescribeServicesOutput, error) {
@@ -123,15 +126,14 @@ func (c *Pricing) DescribeServicesWithContext(ctx aws.Context, input *DescribeSe
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeServices operation.
-//    pageNum := 0
-//    err := client.DescribeServicesPages(params,
-//        func(page *pricing.DescribeServicesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeServices operation.
+//	pageNum := 0
+//	err := client.DescribeServicesPages(params,
+//	    func(page *pricing.DescribeServicesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Pricing) DescribeServicesPages(input *DescribeServicesInput, fn func(*DescribeServicesOutput, bool) bool) error {
 	return c.DescribeServicesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -183,14 +185,13 @@ const opGetAttributeValues = "GetAttributeValues"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAttributeValuesRequest method.
+//	req, resp := client.GetAttributeValuesRequest(params)
 //
-//    // Example sending a request using the GetAttributeValuesRequest method.
-//    req, resp := client.GetAttributeValuesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pricing-2017-10-15/GetAttributeValues
 func (c *Pricing) GetAttributeValuesRequest(input *GetAttributeValuesInput) (req *request.Request, output *GetAttributeValuesOutput) {
@@ -230,21 +231,25 @@ func (c *Pricing) GetAttributeValuesRequest(input *GetAttributeValuesInput) (req
 // API operation GetAttributeValues for usage and error information.
 //
 // Returned Error Types:
-//   * InternalErrorException
-//   An error on the server occurred during the processing of your request. Try
-//   again later.
 //
-//   * InvalidParameterException
-//   One or more parameters had an invalid value.
+//   - InvalidParameterException
+//     One or more parameters had an invalid value.
 //
-//   * NotFoundException
-//   The requested resource can't be found.
+//   - InvalidNextTokenException
+//     The pagination token is invalid. Try again without a pagination token.
 //
-//   * InvalidNextTokenException
-//   The pagination token is invalid. Try again without a pagination token.
+//   - NotFoundException
+//     The requested resource can't be found.
 //
-//   * ExpiredNextTokenException
-//   The pagination token expired. Try again without a pagination token.
+//   - InternalErrorException
+//     An error on the server occurred during the processing of your request. Try
+//     again later.
+//
+//   - ThrottlingException
+//     You've made too many requests exceeding service quotas.
+//
+//   - ExpiredNextTokenException
+//     The pagination token expired. Try again without a pagination token.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pricing-2017-10-15/GetAttributeValues
 func (c *Pricing) GetAttributeValues(input *GetAttributeValuesInput) (*GetAttributeValuesOutput, error) {
@@ -276,15 +281,14 @@ func (c *Pricing) GetAttributeValuesWithContext(ctx aws.Context, input *GetAttri
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetAttributeValues operation.
-//    pageNum := 0
-//    err := client.GetAttributeValuesPages(params,
-//        func(page *pricing.GetAttributeValuesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetAttributeValues operation.
+//	pageNum := 0
+//	err := client.GetAttributeValuesPages(params,
+//	    func(page *pricing.GetAttributeValuesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Pricing) GetAttributeValuesPages(input *GetAttributeValuesInput, fn func(*GetAttributeValuesOutput, bool) bool) error {
 	return c.GetAttributeValuesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -336,14 +340,13 @@ const opGetPriceListFileUrl = "GetPriceListFileUrl"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPriceListFileUrlRequest method.
+//	req, resp := client.GetPriceListFileUrlRequest(params)
 //
-//    // Example sending a request using the GetPriceListFileUrlRequest method.
-//    req, resp := client.GetPriceListFileUrlRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pricing-2017-10-15/GetPriceListFileUrl
 func (c *Pricing) GetPriceListFileUrlRequest(input *GetPriceListFileUrlInput) (req *request.Request, output *GetPriceListFileUrlOutput) {
@@ -364,10 +367,10 @@ func (c *Pricing) GetPriceListFileUrlRequest(input *GetPriceListFileUrlInput) (r
 
 // GetPriceListFileUrl API operation for AWS Price List Service.
 //
-//  This feature is in preview release and is subject to change. Your use of
-//  Amazon Web Services Price List API is subject to the Beta Service Participation
-//  terms of the Amazon Web Services Service Terms (https://aws.amazon.com/service-terms/)
-//  (Section 1.10).
+//	This feature is in preview release and is subject to change. Your use of
+//	Amazon Web Services Price List API is subject to the Beta Service Participation
+//	terms of the Amazon Web Services Service Terms (https://aws.amazon.com/service-terms/)
+//	(Section 1.10).
 //
 // This returns the URL that you can retrieve your Price List file from. This
 // URL is based on the PriceListArn and FileFormat that you retrieve from the
@@ -382,18 +385,25 @@ func (c *Pricing) GetPriceListFileUrlRequest(input *GetPriceListFileUrlInput) (r
 // API operation GetPriceListFileUrl for usage and error information.
 //
 // Returned Error Types:
-//   * InternalErrorException
-//   An error on the server occurred during the processing of your request. Try
-//   again later.
 //
-//   * InvalidParameterException
-//   One or more parameters had an invalid value.
+//   - InvalidParameterException
+//     One or more parameters had an invalid value.
 //
-//   * NotFoundException
-//   The requested resource can't be found.
+//   - NotFoundException
+//     The requested resource can't be found.
 //
-//   * AccessDeniedException
-//   General authentication failure. The request wasn't signed correctly.
+//   - AccessDeniedException
+//     General authentication failure. The request wasn't signed correctly.
+//
+//   - InternalErrorException
+//     An error on the server occurred during the processing of your request. Try
+//     again later.
+//
+//   - ThrottlingException
+//     You've made too many requests exceeding service quotas.
+//
+//   - ResourceNotFoundException
+//     The requested resource can't be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pricing-2017-10-15/GetPriceListFileUrl
 func (c *Pricing) GetPriceListFileUrl(input *GetPriceListFileUrlInput) (*GetPriceListFileUrlOutput, error) {
@@ -433,14 +443,13 @@ const opGetProducts = "GetProducts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetProductsRequest method.
+//	req, resp := client.GetProductsRequest(params)
 //
-//    // Example sending a request using the GetProductsRequest method.
-//    req, resp := client.GetProductsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pricing-2017-10-15/GetProducts
 func (c *Pricing) GetProductsRequest(input *GetProductsInput) (req *request.Request, output *GetProductsOutput) {
@@ -477,21 +486,25 @@ func (c *Pricing) GetProductsRequest(input *GetProductsInput) (req *request.Requ
 // API operation GetProducts for usage and error information.
 //
 // Returned Error Types:
-//   * InternalErrorException
-//   An error on the server occurred during the processing of your request. Try
-//   again later.
 //
-//   * InvalidParameterException
-//   One or more parameters had an invalid value.
+//   - InvalidParameterException
+//     One or more parameters had an invalid value.
 //
-//   * NotFoundException
-//   The requested resource can't be found.
+//   - InvalidNextTokenException
+//     The pagination token is invalid. Try again without a pagination token.
 //
-//   * InvalidNextTokenException
-//   The pagination token is invalid. Try again without a pagination token.
+//   - NotFoundException
+//     The requested resource can't be found.
 //
-//   * ExpiredNextTokenException
-//   The pagination token expired. Try again without a pagination token.
+//   - InternalErrorException
+//     An error on the server occurred during the processing of your request. Try
+//     again later.
+//
+//   - ThrottlingException
+//     You've made too many requests exceeding service quotas.
+//
+//   - ExpiredNextTokenException
+//     The pagination token expired. Try again without a pagination token.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pricing-2017-10-15/GetProducts
 func (c *Pricing) GetProducts(input *GetProductsInput) (*GetProductsOutput, error) {
@@ -523,15 +536,14 @@ func (c *Pricing) GetProductsWithContext(ctx aws.Context, input *GetProductsInpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetProducts operation.
-//    pageNum := 0
-//    err := client.GetProductsPages(params,
-//        func(page *pricing.GetProductsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetProducts operation.
+//	pageNum := 0
+//	err := client.GetProductsPages(params,
+//	    func(page *pricing.GetProductsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Pricing) GetProductsPages(input *GetProductsInput, fn func(*GetProductsOutput, bool) bool) error {
 	return c.GetProductsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -583,14 +595,13 @@ const opListPriceLists = "ListPriceLists"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPriceListsRequest method.
+//	req, resp := client.ListPriceListsRequest(params)
 //
-//    // Example sending a request using the ListPriceListsRequest method.
-//    req, resp := client.ListPriceListsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pricing-2017-10-15/ListPriceLists
 func (c *Pricing) ListPriceListsRequest(input *ListPriceListsInput) (req *request.Request, output *ListPriceListsOutput) {
@@ -617,10 +628,10 @@ func (c *Pricing) ListPriceListsRequest(input *ListPriceListsInput) (req *reques
 
 // ListPriceLists API operation for AWS Price List Service.
 //
-//  This feature is in preview release and is subject to change. Your use of
-//  Amazon Web Services Price List API is subject to the Beta Service Participation
-//  terms of the Amazon Web Services Service Terms (https://aws.amazon.com/service-terms/)
-//  (Section 1.10).
+//	This feature is in preview release and is subject to change. Your use of
+//	Amazon Web Services Price List API is subject to the Beta Service Participation
+//	terms of the Amazon Web Services Service Terms (https://aws.amazon.com/service-terms/)
+//	(Section 1.10).
 //
 // This returns a list of Price List references that the requester if authorized
 // to view, given a ServiceCode, CurrencyCode, and an EffectiveDate. Use without
@@ -639,24 +650,31 @@ func (c *Pricing) ListPriceListsRequest(input *ListPriceListsInput) (req *reques
 // API operation ListPriceLists for usage and error information.
 //
 // Returned Error Types:
-//   * InternalErrorException
-//   An error on the server occurred during the processing of your request. Try
-//   again later.
 //
-//   * InvalidParameterException
-//   One or more parameters had an invalid value.
+//   - InvalidParameterException
+//     One or more parameters had an invalid value.
 //
-//   * NotFoundException
-//   The requested resource can't be found.
+//   - InvalidNextTokenException
+//     The pagination token is invalid. Try again without a pagination token.
 //
-//   * InvalidNextTokenException
-//   The pagination token is invalid. Try again without a pagination token.
+//   - NotFoundException
+//     The requested resource can't be found.
 //
-//   * ExpiredNextTokenException
-//   The pagination token expired. Try again without a pagination token.
+//   - AccessDeniedException
+//     General authentication failure. The request wasn't signed correctly.
 //
-//   * AccessDeniedException
-//   General authentication failure. The request wasn't signed correctly.
+//   - InternalErrorException
+//     An error on the server occurred during the processing of your request. Try
+//     again later.
+//
+//   - ThrottlingException
+//     You've made too many requests exceeding service quotas.
+//
+//   - ResourceNotFoundException
+//     The requested resource can't be found.
+//
+//   - ExpiredNextTokenException
+//     The pagination token expired. Try again without a pagination token.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pricing-2017-10-15/ListPriceLists
 func (c *Pricing) ListPriceLists(input *ListPriceListsInput) (*ListPriceListsOutput, error) {
@@ -688,15 +706,14 @@ func (c *Pricing) ListPriceListsWithContext(ctx aws.Context, input *ListPriceLis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPriceLists operation.
-//    pageNum := 0
-//    err := client.ListPriceListsPages(params,
-//        func(page *pricing.ListPriceListsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPriceLists operation.
+//	pageNum := 0
+//	err := client.ListPriceListsPages(params,
+//	    func(page *pricing.ListPriceListsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Pricing) ListPriceListsPages(input *ListPriceListsInput, fn func(*ListPriceListsOutput, bool) bool) error {
 	return c.ListPriceListsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1711,7 +1728,9 @@ type ListPriceListsInput struct {
 	// and Reserved Instance (RI) pricing, use the DescribeServices (https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_pricing_DescribeServices.html#awscostmanagement-pricing_DescribeServices-request-FormatVersion)
 	// API.
 	//
-	// To retrieve the Compute Savings Plan price lists, use ComputeSavingsPlans.
+	// To retrieve the Reserved Instance and Compute Savings Plan price lists, use
+	// ComputeSavingsPlans.
+	//
 	// To retrieve Machine Learning Savings Plans price lists, use MachineLearningSavingsPlans.
 	//
 	// ServiceCode is a required field
@@ -1904,10 +1923,10 @@ func (s *NotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-//  This feature is in preview release and is subject to change. Your use of
-//  Amazon Web Services Price List API is subject to the Beta Service Participation
-//  terms of the Amazon Web Services Service Terms (https://aws.amazon.com/service-terms/)
-//  (Section 1.10).
+//	This feature is in preview release and is subject to change. Your use of
+//	Amazon Web Services Price List API is subject to the Beta Service Participation
+//	terms of the Amazon Web Services Service Terms (https://aws.amazon.com/service-terms/)
+//	(Section 1.10).
 //
 // This is the type of price list references that match your request.
 type PriceList struct {
@@ -1978,6 +1997,70 @@ func (s *PriceList) SetRegionCode(v string) *PriceList {
 	return s
 }
 
+// The requested resource can't be found.
+type ResourceNotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceNotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResourceNotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourceNotFoundException(v protocol.ResponseMetadata) error {
+	return &ResourceNotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourceNotFoundException) Code() string {
+	return "ResourceNotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *ResourceNotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourceNotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourceNotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourceNotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourceNotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The metadata for a service, such as the service code and available attribute
 // names.
 type Service struct {
@@ -2020,6 +2103,70 @@ func (s *Service) SetAttributeNames(v []*string) *Service {
 func (s *Service) SetServiceCode(v string) *Service {
 	s.ServiceCode = &v
 	return s
+}
+
+// You've made too many requests exceeding service quotas.
+type ThrottlingException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThrottlingException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThrottlingException) GoString() string {
+	return s.String()
+}
+
+func newErrorThrottlingException(v protocol.ResponseMetadata) error {
+	return &ThrottlingException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ThrottlingException) Code() string {
+	return "ThrottlingException"
+}
+
+// Message returns the exception's message.
+func (s *ThrottlingException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ThrottlingException) OrigErr() error {
+	return nil
+}
+
+func (s *ThrottlingException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ThrottlingException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ThrottlingException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 const (

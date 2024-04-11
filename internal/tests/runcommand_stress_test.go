@@ -50,7 +50,7 @@ type AgentStressTestSuite struct {
 	context context.T
 	suite.Suite
 	ssmAgent   agent.ISSMAgent
-	mdsSdkMock *mdssdkmock.SSMMDSAPI
+	mdsSdkMock *mdssdkmock.SsmmdsAPI
 	log        log.T
 }
 

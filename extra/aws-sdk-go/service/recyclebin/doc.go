@@ -17,7 +17,7 @@
 // you use any other resource of that type in your account. If the retention
 // period expires and the resource is not restored, the resource is permanently
 // deleted from the Recycle Bin and is no longer available for recovery. For
-// more information about Recycle Bin, see Recycle Bin (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-recycle-bin.html)
+// more information about Recycle Bin, see Recycle Bin (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recycle-bin.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/rbin-2021-06-15 for more information on this service.
@@ -25,7 +25,7 @@
 // See recyclebin package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/recyclebin/
 //
-// Using the Client
+// # Using the Client
 //
 // To contact Amazon Recycle Bin with the SDK use the New function to create
 // a new service client. With that client you can make API requests to the service.

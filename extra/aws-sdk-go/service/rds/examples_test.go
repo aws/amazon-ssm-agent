@@ -26,7 +26,6 @@ func parseTime(layout, value string) *time.Time {
 }
 
 // To associate an AWS Identity and Access Management (IAM) role with a DB cluster
-//
 // The following example associates a role with a DB cluster.
 func ExampleRDS_AddRoleToDBCluster_shared00() {
 	svc := rds.New(session.New())
@@ -62,7 +61,6 @@ func ExampleRDS_AddRoleToDBCluster_shared00() {
 }
 
 // To associate an AWS Identity and Access Management (IAM) role with a DB instance
-//
 // The following example adds the role to a DB instance named test-instance.
 func ExampleRDS_AddRoleToDBInstance_shared00() {
 	svc := rds.New(session.New())
@@ -99,7 +97,6 @@ func ExampleRDS_AddRoleToDBInstance_shared00() {
 }
 
 // To add a source identifier to a subscription
-//
 // The following example adds another source identifier to an existing subscription.
 func ExampleRDS_AddSourceIdentifierToSubscription_shared00() {
 	svc := rds.New(session.New())
@@ -131,7 +128,6 @@ func ExampleRDS_AddSourceIdentifierToSubscription_shared00() {
 }
 
 // To add tags to a resource
-//
 // This example adds a tag to an option group.
 func ExampleRDS_AddTagsToResource_shared00() {
 	svc := rds.New(session.New())
@@ -161,6 +157,12 @@ func ExampleRDS_AddTagsToResource_shared00() {
 				fmt.Println(rds.ErrCodeDBProxyTargetGroupNotFoundFault, aerr.Error())
 			case rds.ErrCodeBlueGreenDeploymentNotFoundFault:
 				fmt.Println(rds.ErrCodeBlueGreenDeploymentNotFoundFault, aerr.Error())
+			case rds.ErrCodeIntegrationNotFoundFault:
+				fmt.Println(rds.ErrCodeIntegrationNotFoundFault, aerr.Error())
+			case rds.ErrCodeTenantDatabaseNotFoundFault:
+				fmt.Println(rds.ErrCodeTenantDatabaseNotFoundFault, aerr.Error())
+			case rds.ErrCodeDBSnapshotTenantDatabaseNotFoundFault:
+				fmt.Println(rds.ErrCodeDBSnapshotTenantDatabaseNotFoundFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -176,7 +178,6 @@ func ExampleRDS_AddTagsToResource_shared00() {
 }
 
 // To apply pending maintenance actions
-//
 // The following example applies the pending maintenance actions for a DB cluster.
 func ExampleRDS_ApplyPendingMaintenanceAction_shared00() {
 	svc := rds.New(session.New())
@@ -211,7 +212,6 @@ func ExampleRDS_ApplyPendingMaintenanceAction_shared00() {
 }
 
 // To authorize DB security group integress
-//
 // This example authorizes access to the specified security group by the specified CIDR
 // block.
 func ExampleRDS_AuthorizeDBSecurityGroupIngress_shared00() {
@@ -248,7 +248,6 @@ func ExampleRDS_AuthorizeDBSecurityGroupIngress_shared00() {
 }
 
 // To cancel a snapshot export to Amazon S3
-//
 // The following example cancels an export task in progress that is exporting a snapshot
 // to Amazon S3.
 func ExampleRDS_CancelExportTask_shared00() {
@@ -280,7 +279,6 @@ func ExampleRDS_CancelExportTask_shared00() {
 }
 
 // To copy a DB cluster parameter group
-//
 // This example copies a DB cluster parameter group.
 func ExampleRDS_CopyDBClusterParameterGroup_shared00() {
 	svc := rds.New(session.New())
@@ -315,7 +313,6 @@ func ExampleRDS_CopyDBClusterParameterGroup_shared00() {
 }
 
 // To copy a DB cluster snapshot
-//
 // The following example creates a copy of a DB cluster snapshot, including its tags.
 func ExampleRDS_CopyDBClusterSnapshot_shared00() {
 	svc := rds.New(session.New())
@@ -356,7 +353,6 @@ func ExampleRDS_CopyDBClusterSnapshot_shared00() {
 }
 
 // To copy a DB parameter group
-//
 // The following example makes a copy of a DB parameter group.
 func ExampleRDS_CopyDBParameterGroup_shared00() {
 	svc := rds.New(session.New())
@@ -391,7 +387,6 @@ func ExampleRDS_CopyDBParameterGroup_shared00() {
 }
 
 // To copy a DB snapshot
-//
 // The following example creates a copy of a DB snapshot.
 func ExampleRDS_CopyDBSnapshot_shared00() {
 	svc := rds.New(session.New())
@@ -431,7 +426,6 @@ func ExampleRDS_CopyDBSnapshot_shared00() {
 }
 
 // To copy an option group
-//
 // The following example makes a copy of an option group.
 func ExampleRDS_CopyOptionGroup_shared00() {
 	svc := rds.New(session.New())
@@ -466,7 +460,6 @@ func ExampleRDS_CopyOptionGroup_shared00() {
 }
 
 // To create a blue/green deployment for an RDS for MySQL DB instance
-//
 // The following example creates a blue/green deployment for a MySQL DB instance.
 func ExampleRDS_CreateBlueGreenDeployment_shared00() {
 	svc := rds.New(session.New())
@@ -518,7 +511,6 @@ func ExampleRDS_CreateBlueGreenDeployment_shared00() {
 }
 
 // To create a blue/green deployment for an Aurora MySQL DB cluster
-//
 // The following example creates a blue/green deployment for an Aurora MySQL DB cluster.
 func ExampleRDS_CreateBlueGreenDeployment_shared01() {
 	svc := rds.New(session.New())
@@ -571,7 +563,6 @@ func ExampleRDS_CreateBlueGreenDeployment_shared01() {
 }
 
 // To create a MySQL 5.7-compatible DB cluster
-//
 // The following example creates a MySQL 5.7-compatible Aurora DB cluster.
 func ExampleRDS_CreateDBCluster_shared00() {
 	svc := rds.New(session.New())
@@ -593,6 +584,8 @@ func ExampleRDS_CreateDBCluster_shared00() {
 			switch aerr.Code() {
 			case rds.ErrCodeDBClusterAlreadyExistsFault:
 				fmt.Println(rds.ErrCodeDBClusterAlreadyExistsFault, aerr.Error())
+			case rds.ErrCodeInsufficientDBInstanceCapacityFault:
+				fmt.Println(rds.ErrCodeInsufficientDBInstanceCapacityFault, aerr.Error())
 			case rds.ErrCodeInsufficientStorageClusterCapacityFault:
 				fmt.Println(rds.ErrCodeInsufficientStorageClusterCapacityFault, aerr.Error())
 			case rds.ErrCodeDBClusterQuotaExceededFault:
@@ -605,6 +598,8 @@ func ExampleRDS_CreateDBCluster_shared00() {
 				fmt.Println(rds.ErrCodeInvalidVPCNetworkStateFault, aerr.Error())
 			case rds.ErrCodeInvalidDBClusterStateFault:
 				fmt.Println(rds.ErrCodeInvalidDBClusterStateFault, aerr.Error())
+			case rds.ErrCodeInvalidDBSubnetGroupFault:
+				fmt.Println(rds.ErrCodeInvalidDBSubnetGroupFault, aerr.Error())
 			case rds.ErrCodeInvalidDBSubnetGroupStateFault:
 				fmt.Println(rds.ErrCodeInvalidDBSubnetGroupStateFault, aerr.Error())
 			case rds.ErrCodeInvalidSubnet:
@@ -627,6 +622,8 @@ func ExampleRDS_CreateDBCluster_shared00() {
 				fmt.Println(rds.ErrCodeInvalidGlobalClusterStateFault, aerr.Error())
 			case rds.ErrCodeDomainNotFoundFault:
 				fmt.Println(rds.ErrCodeDomainNotFoundFault, aerr.Error())
+			case rds.ErrCodeOptionGroupNotFoundFault:
+				fmt.Println(rds.ErrCodeOptionGroupNotFoundFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -642,7 +639,6 @@ func ExampleRDS_CreateDBCluster_shared00() {
 }
 
 // To create a PostgreSQL-compatible DB cluster
-//
 // The following example creates a PostgreSQL-compatible Aurora DB cluster.
 func ExampleRDS_CreateDBCluster_shared01() {
 	svc := rds.New(session.New())
@@ -663,6 +659,8 @@ func ExampleRDS_CreateDBCluster_shared01() {
 			switch aerr.Code() {
 			case rds.ErrCodeDBClusterAlreadyExistsFault:
 				fmt.Println(rds.ErrCodeDBClusterAlreadyExistsFault, aerr.Error())
+			case rds.ErrCodeInsufficientDBInstanceCapacityFault:
+				fmt.Println(rds.ErrCodeInsufficientDBInstanceCapacityFault, aerr.Error())
 			case rds.ErrCodeInsufficientStorageClusterCapacityFault:
 				fmt.Println(rds.ErrCodeInsufficientStorageClusterCapacityFault, aerr.Error())
 			case rds.ErrCodeDBClusterQuotaExceededFault:
@@ -675,6 +673,8 @@ func ExampleRDS_CreateDBCluster_shared01() {
 				fmt.Println(rds.ErrCodeInvalidVPCNetworkStateFault, aerr.Error())
 			case rds.ErrCodeInvalidDBClusterStateFault:
 				fmt.Println(rds.ErrCodeInvalidDBClusterStateFault, aerr.Error())
+			case rds.ErrCodeInvalidDBSubnetGroupFault:
+				fmt.Println(rds.ErrCodeInvalidDBSubnetGroupFault, aerr.Error())
 			case rds.ErrCodeInvalidDBSubnetGroupStateFault:
 				fmt.Println(rds.ErrCodeInvalidDBSubnetGroupStateFault, aerr.Error())
 			case rds.ErrCodeInvalidSubnet:
@@ -697,6 +697,8 @@ func ExampleRDS_CreateDBCluster_shared01() {
 				fmt.Println(rds.ErrCodeInvalidGlobalClusterStateFault, aerr.Error())
 			case rds.ErrCodeDomainNotFoundFault:
 				fmt.Println(rds.ErrCodeDomainNotFoundFault, aerr.Error())
+			case rds.ErrCodeOptionGroupNotFoundFault:
+				fmt.Println(rds.ErrCodeOptionGroupNotFoundFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -712,7 +714,6 @@ func ExampleRDS_CreateDBCluster_shared01() {
 }
 
 // To create a custom DB cluster endpoint
-//
 // The following example creates a custom DB cluster endpoint and associate it with
 // the specified Aurora DB cluster.
 func ExampleRDS_CreateDBClusterEndpoint_shared00() {
@@ -758,7 +759,6 @@ func ExampleRDS_CreateDBClusterEndpoint_shared00() {
 }
 
 // To create a DB cluster parameter group
-//
 // The following example creates a DB cluster parameter group.
 func ExampleRDS_CreateDBClusterParameterGroup_shared00() {
 	svc := rds.New(session.New())
@@ -791,7 +791,6 @@ func ExampleRDS_CreateDBClusterParameterGroup_shared00() {
 }
 
 // To create a DB cluster snapshot
-//
 // The following example creates a DB cluster snapshot.
 func ExampleRDS_CreateDBClusterSnapshot_shared00() {
 	svc := rds.New(session.New())
@@ -829,7 +828,6 @@ func ExampleRDS_CreateDBClusterSnapshot_shared00() {
 }
 
 // To create a DB instance
-//
 // The following example uses the required options to launch a new DB instance.
 func ExampleRDS_CreateDBInstance_shared00() {
 	svc := rds.New(session.New())
@@ -888,6 +886,8 @@ func ExampleRDS_CreateDBInstance_shared00() {
 				fmt.Println(rds.ErrCodeNetworkTypeNotSupported, aerr.Error())
 			case rds.ErrCodeCertificateNotFoundFault:
 				fmt.Println(rds.ErrCodeCertificateNotFoundFault, aerr.Error())
+			case rds.ErrCodeTenantDatabaseQuotaExceededFault:
+				fmt.Println(rds.ErrCodeTenantDatabaseQuotaExceededFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -903,7 +903,6 @@ func ExampleRDS_CreateDBInstance_shared00() {
 }
 
 // To create a DB instance read replica
-//
 // This example creates a read replica of an existing DB instance named test-instance.
 // The read replica is named test-instance-repl.
 func ExampleRDS_CreateDBInstanceReadReplica_shared00() {
@@ -961,6 +960,10 @@ func ExampleRDS_CreateDBInstanceReadReplica_shared00() {
 				fmt.Println(rds.ErrCodeDomainNotFoundFault, aerr.Error())
 			case rds.ErrCodeNetworkTypeNotSupported:
 				fmt.Println(rds.ErrCodeNetworkTypeNotSupported, aerr.Error())
+			case rds.ErrCodeTenantDatabaseQuotaExceededFault:
+				fmt.Println(rds.ErrCodeTenantDatabaseQuotaExceededFault, aerr.Error())
+			case rds.ErrCodeCertificateNotFoundFault:
+				fmt.Println(rds.ErrCodeCertificateNotFoundFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -976,7 +979,6 @@ func ExampleRDS_CreateDBInstanceReadReplica_shared00() {
 }
 
 // To create a DB parameter group
-//
 // The following example creates a DB parameter group.
 func ExampleRDS_CreateDBParameterGroup_shared00() {
 	svc := rds.New(session.New())
@@ -1009,7 +1011,6 @@ func ExampleRDS_CreateDBParameterGroup_shared00() {
 }
 
 // To create a DB security group.
-//
 // This example creates a DB security group.
 func ExampleRDS_CreateDBSecurityGroup_shared00() {
 	svc := rds.New(session.New())
@@ -1043,7 +1044,6 @@ func ExampleRDS_CreateDBSecurityGroup_shared00() {
 }
 
 // To create a DB snapshot
-//
 // The following example creates a DB snapshot.
 func ExampleRDS_CreateDBSnapshot_shared00() {
 	svc := rds.New(session.New())
@@ -1079,7 +1079,6 @@ func ExampleRDS_CreateDBSnapshot_shared00() {
 }
 
 // To create a DB subnet group
-//
 // The following example creates a DB subnet group called mysubnetgroup using existing
 // subnets.
 func ExampleRDS_CreateDBSubnetGroup_shared00() {
@@ -1123,7 +1122,6 @@ func ExampleRDS_CreateDBSubnetGroup_shared00() {
 }
 
 // To create an event subscription
-//
 // The following example creates a subscription for backup and recovery events for DB
 // instances in the current AWS account. Notifications are sent to an Amazon Simple
 // Notification Service topic.
@@ -1172,7 +1170,6 @@ func ExampleRDS_CreateEventSubscription_shared00() {
 }
 
 // To create a global DB cluster
-//
 // The following example creates a new Aurora MySQL-compatible global DB cluster.
 func ExampleRDS_CreateGlobalCluster_shared00() {
 	svc := rds.New(session.New())
@@ -1207,8 +1204,47 @@ func ExampleRDS_CreateGlobalCluster_shared00() {
 	fmt.Println(result)
 }
 
+// To create a zero-ETL integration
+// The following example creates a zero-ETL integration with Amazon Redshift.
+func ExampleRDS_CreateIntegration_shared00() {
+	svc := rds.New(session.New())
+	input := &rds.CreateIntegrationInput{
+		IntegrationName: aws.String("my-integration"),
+		SourceArn:       aws.String("arn:aws:rds:us-east-1:123456789012:cluster:my-cluster"),
+		TargetArn:       aws.String("arn:aws:redshift-serverless:us-east-1:123456789012:namespace/62c70612-0302-4db7-8414-b5e3e049f0d8"),
+	}
+
+	result, err := svc.CreateIntegration(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case rds.ErrCodeDBClusterNotFoundFault:
+				fmt.Println(rds.ErrCodeDBClusterNotFoundFault, aerr.Error())
+			case rds.ErrCodeDBInstanceNotFoundFault:
+				fmt.Println(rds.ErrCodeDBInstanceNotFoundFault, aerr.Error())
+			case rds.ErrCodeIntegrationAlreadyExistsFault:
+				fmt.Println(rds.ErrCodeIntegrationAlreadyExistsFault, aerr.Error())
+			case rds.ErrCodeIntegrationQuotaExceededFault:
+				fmt.Println(rds.ErrCodeIntegrationQuotaExceededFault, aerr.Error())
+			case rds.ErrCodeKMSKeyNotAccessibleFault:
+				fmt.Println(rds.ErrCodeKMSKeyNotAccessibleFault, aerr.Error())
+			case rds.ErrCodeIntegrationConflictOperationFault:
+				fmt.Println(rds.ErrCodeIntegrationConflictOperationFault, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To Create an Amazon RDS option group
-//
 // The following example creates a new Amazon RDS option group for Oracle MySQL version
 // 8,0 named MyOptionGroup.
 func ExampleRDS_CreateOptionGroup_shared00() {
@@ -1243,7 +1279,6 @@ func ExampleRDS_CreateOptionGroup_shared00() {
 }
 
 // To delete resources in green environment for an RDS for MySQL DB instance
-//
 // The following example deletes the resources in a green environment for an RDS for
 // MySQL DB instance.
 func ExampleRDS_DeleteBlueGreenDeployment_shared00() {
@@ -1276,7 +1311,6 @@ func ExampleRDS_DeleteBlueGreenDeployment_shared00() {
 }
 
 // To delete resources in green environment for an Aurora MySQL DB cluster
-//
 // The following example deletes the resources in a green environment for an Aurora
 // MySQL DB cluster.
 func ExampleRDS_DeleteBlueGreenDeployment_shared01() {
@@ -1309,7 +1343,6 @@ func ExampleRDS_DeleteBlueGreenDeployment_shared01() {
 }
 
 // To delete a DB cluster
-//
 // The following example deletes the DB cluster named mycluster and takes a final snapshot
 // named mycluster-final-snapshot. The status of the DB cluster is available while the
 // snapshot is being taken.
@@ -1335,6 +1368,8 @@ func ExampleRDS_DeleteDBCluster_shared00() {
 				fmt.Println(rds.ErrCodeSnapshotQuotaExceededFault, aerr.Error())
 			case rds.ErrCodeInvalidDBClusterSnapshotStateFault:
 				fmt.Println(rds.ErrCodeInvalidDBClusterSnapshotStateFault, aerr.Error())
+			case rds.ErrCodeDBClusterAutomatedBackupQuotaExceededFault:
+				fmt.Println(rds.ErrCodeDBClusterAutomatedBackupQuotaExceededFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1350,7 +1385,6 @@ func ExampleRDS_DeleteDBCluster_shared00() {
 }
 
 // To delete a custom DB cluster endpoint
-//
 // The following example deletes the specified custom DB cluster endpoint.
 func ExampleRDS_DeleteDBClusterEndpoint_shared00() {
 	svc := rds.New(session.New())
@@ -1383,7 +1417,6 @@ func ExampleRDS_DeleteDBClusterEndpoint_shared00() {
 }
 
 // To delete a DB cluster parameter group
-//
 // The following example deletes the specified DB cluster parameter group.
 func ExampleRDS_DeleteDBClusterParameterGroup_shared00() {
 	svc := rds.New(session.New())
@@ -1445,7 +1478,6 @@ func ExampleRDS_DeleteDBClusterSnapshot_shared00() {
 }
 
 // To delete a DB instance
-//
 // The following example deletes the specified DB instance after creating a final DB
 // snapshot named test-instance-final-snap.
 func ExampleRDS_DeleteDBInstance_shared00() {
@@ -1487,7 +1519,6 @@ func ExampleRDS_DeleteDBInstance_shared00() {
 }
 
 // To delete a replicated automated backup from a Region
-//
 // The following example deletes the automated backup with the specified Amazon Resource
 // Name (ARN).
 func ExampleRDS_DeleteDBInstanceAutomatedBackup_shared00() {
@@ -1519,7 +1550,6 @@ func ExampleRDS_DeleteDBInstanceAutomatedBackup_shared00() {
 }
 
 // To delete a DB parameter group
-//
 // The following example deletes a DB parameter group.
 func ExampleRDS_DeleteDBParameterGroup_shared00() {
 	svc := rds.New(session.New())
@@ -1550,7 +1580,6 @@ func ExampleRDS_DeleteDBParameterGroup_shared00() {
 }
 
 // To delete a DB security group
-//
 // The following example deletes a DB security group.
 func ExampleRDS_DeleteDBSecurityGroup_shared00() {
 	svc := rds.New(session.New())
@@ -1581,7 +1610,6 @@ func ExampleRDS_DeleteDBSecurityGroup_shared00() {
 }
 
 // To delete a DB snapshot
-//
 // The following example deletes the specified DB snapshot.
 func ExampleRDS_DeleteDBSnapshot_shared00() {
 	svc := rds.New(session.New())
@@ -1612,7 +1640,6 @@ func ExampleRDS_DeleteDBSnapshot_shared00() {
 }
 
 // To delete a DB subnet group
-//
 // The following example deletes the DB subnet group called mysubnetgroup.
 func ExampleRDS_DeleteDBSubnetGroup_shared00() {
 	svc := rds.New(session.New())
@@ -1645,7 +1672,6 @@ func ExampleRDS_DeleteDBSubnetGroup_shared00() {
 }
 
 // To delete an event subscription
-//
 // The following example deletes the specified event subscription.
 func ExampleRDS_DeleteEventSubscription_shared00() {
 	svc := rds.New(session.New())
@@ -1676,7 +1702,6 @@ func ExampleRDS_DeleteEventSubscription_shared00() {
 }
 
 // To delete a global DB cluster
-//
 // The following example deletes an Aurora MySQL-compatible global DB cluster.
 func ExampleRDS_DeleteGlobalCluster_shared00() {
 	svc := rds.New(session.New())
@@ -1706,8 +1731,39 @@ func ExampleRDS_DeleteGlobalCluster_shared00() {
 	fmt.Println(result)
 }
 
+// To delete a zero-ETL integration
+// The following example deletes a zero-ETL integration with Amazon Redshift.
+func ExampleRDS_DeleteIntegration_shared00() {
+	svc := rds.New(session.New())
+	input := &rds.DeleteIntegrationInput{
+		IntegrationIdentifier: aws.String("5b9f3d79-7392-4a3e-896c-58eaa1b53231"),
+	}
+
+	result, err := svc.DeleteIntegration(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case rds.ErrCodeIntegrationNotFoundFault:
+				fmt.Println(rds.ErrCodeIntegrationNotFoundFault, aerr.Error())
+			case rds.ErrCodeIntegrationConflictOperationFault:
+				fmt.Println(rds.ErrCodeIntegrationConflictOperationFault, aerr.Error())
+			case rds.ErrCodeInvalidIntegrationStateFault:
+				fmt.Println(rds.ErrCodeInvalidIntegrationStateFault, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To delete an option group
-//
 // The following example deletes the specified option group.
 func ExampleRDS_DeleteOptionGroup_shared00() {
 	svc := rds.New(session.New())
@@ -1738,7 +1794,6 @@ func ExampleRDS_DeleteOptionGroup_shared00() {
 }
 
 // To describe account attributes
-//
 // The following example retrieves the attributes for the current AWS account.
 func ExampleRDS_DescribeAccountAttributes_shared00() {
 	svc := rds.New(session.New())
@@ -1763,7 +1818,6 @@ func ExampleRDS_DescribeAccountAttributes_shared00() {
 }
 
 // To describe a blue/green deployment of an RDS DB instance after creation completes
-//
 // The following example retrieves the details of a blue/green deployment after creation
 // completes.
 func ExampleRDS_DescribeBlueGreenDeployments_shared00() {
@@ -1793,7 +1847,6 @@ func ExampleRDS_DescribeBlueGreenDeployments_shared00() {
 }
 
 // To describe a blue/green deployment for an Aurora MySQL DB cluster
-//
 // The following example retrieves the details of a blue/green deployment.
 func ExampleRDS_DescribeBlueGreenDeployments_shared01() {
 	svc := rds.New(session.New())
@@ -1822,7 +1875,6 @@ func ExampleRDS_DescribeBlueGreenDeployments_shared01() {
 }
 
 // To describe a blue/green deployment for an Aurora MySQL cluster after switchover
-//
 // The following example retrieves the details about a blue/green deployment after the
 // green environment is promoted to be the production environment.
 func ExampleRDS_DescribeBlueGreenDeployments_shared02() {
@@ -1852,7 +1904,6 @@ func ExampleRDS_DescribeBlueGreenDeployments_shared02() {
 }
 
 // To describe certificates
-//
 // The following example retrieves the details of the certificate associated with the
 // user's default region.
 func ExampleRDS_DescribeCertificates_shared00() {
@@ -1880,7 +1931,6 @@ func ExampleRDS_DescribeCertificates_shared00() {
 }
 
 // To describe backtracks for a DB cluster
-//
 // The following example retrieves details about the specified DB cluster.
 func ExampleRDS_DescribeDBClusterBacktracks_shared00() {
 	svc := rds.New(session.New())
@@ -1911,7 +1961,6 @@ func ExampleRDS_DescribeDBClusterBacktracks_shared00() {
 }
 
 // To describe DB cluster endpoints
-//
 // The following example retrieves details for your DB cluster endpoints. The most common
 // kinds of Aurora clusters have two endpoints. One endpoint has type WRITER. You can
 // use this endpoint for all SQL statements. The other endpoint has type READER. You
@@ -1941,7 +1990,6 @@ func ExampleRDS_DescribeDBClusterEndpoints_shared00() {
 }
 
 // To describe DB cluster endpoints of a single DB cluster
-//
 // The following example retrieves details for the DB cluster endpoints of a single
 // specified DB cluster. Aurora Serverless clusters have only a single endpoint with
 // a type of WRITER.
@@ -1972,7 +2020,6 @@ func ExampleRDS_DescribeDBClusterEndpoints_shared01() {
 }
 
 // To describe DB cluster parameter groups
-//
 // The following example retrieves details for your DB cluster parameter groups.
 func ExampleRDS_DescribeDBClusterParameterGroups_shared00() {
 	svc := rds.New(session.New())
@@ -1999,7 +2046,6 @@ func ExampleRDS_DescribeDBClusterParameterGroups_shared00() {
 }
 
 // To describe the parameters in a DB cluster parameter group
-//
 // The following example retrieves details about the parameters in a DB cluster parameter
 // group.
 func ExampleRDS_DescribeDBClusterParameters_shared00() {
@@ -2029,7 +2075,6 @@ func ExampleRDS_DescribeDBClusterParameters_shared00() {
 }
 
 // To describe the attribute names and values for a DB cluster snapshot
-//
 // The following example retrieves details of the attribute names and values for the
 // specified DB cluster snapshot.
 func ExampleRDS_DescribeDBClusterSnapshotAttributes_shared00() {
@@ -2059,7 +2104,6 @@ func ExampleRDS_DescribeDBClusterSnapshotAttributes_shared00() {
 }
 
 // To describe a DB cluster snapshot for a DB cluster
-//
 // The following example retrieves the details for the DB cluster snapshots for the
 // specified DB cluster.
 func ExampleRDS_DescribeDBClusterSnapshots_shared00() {
@@ -2089,7 +2133,6 @@ func ExampleRDS_DescribeDBClusterSnapshots_shared00() {
 }
 
 // To describe a DB cluster
-//
 // The following example retrieves the details of the specified DB cluster.
 func ExampleRDS_DescribeDBClusters_shared00() {
 	svc := rds.New(session.New())
@@ -2118,7 +2161,6 @@ func ExampleRDS_DescribeDBClusters_shared00() {
 }
 
 // To describe the DB engine versions for the MySQL DB engine
-//
 // The following example displays details about each of the DB engine versions for the
 // specified DB engine.
 func ExampleRDS_DescribeDBEngineVersions_shared00() {
@@ -2146,7 +2188,6 @@ func ExampleRDS_DescribeDBEngineVersions_shared00() {
 }
 
 // To describe the automated backups for a DB instance
-//
 // The following example displays details about the automated backups for the specified
 // DB instance. The details include replicated automated backups in other AWS Regions.
 func ExampleRDS_DescribeDBInstanceAutomatedBackups_shared00() {
@@ -2176,7 +2217,6 @@ func ExampleRDS_DescribeDBInstanceAutomatedBackups_shared00() {
 }
 
 // To describe a DB instance
-//
 // The following example retrieves details about the specified DB instance.
 func ExampleRDS_DescribeDBInstances_shared00() {
 	svc := rds.New(session.New())
@@ -2205,7 +2245,6 @@ func ExampleRDS_DescribeDBInstances_shared00() {
 }
 
 // To describe the log files for a DB instance
-//
 // The following example retrieves details about the log files for the specified DB
 // instance.
 func ExampleRDS_DescribeDBLogFiles_shared00() {
@@ -2235,7 +2274,6 @@ func ExampleRDS_DescribeDBLogFiles_shared00() {
 }
 
 // To describe your DB parameter groups
-//
 // The following example retrieves details about your DB parameter groups.
 func ExampleRDS_DescribeDBParameterGroups_shared00() {
 	svc := rds.New(session.New())
@@ -2262,7 +2300,6 @@ func ExampleRDS_DescribeDBParameterGroups_shared00() {
 }
 
 // To describe the parameters in a DB parameter group
-//
 // The following example retrieves the details of the specified DB parameter group.
 func ExampleRDS_DescribeDBParameters_shared00() {
 	svc := rds.New(session.New())
@@ -2291,7 +2328,6 @@ func ExampleRDS_DescribeDBParameters_shared00() {
 }
 
 // To list DB security group settings
-//
 // This example lists settings for the specified security group.
 func ExampleRDS_DescribeDBSecurityGroups_shared00() {
 	svc := rds.New(session.New())
@@ -2320,7 +2356,6 @@ func ExampleRDS_DescribeDBSecurityGroups_shared00() {
 }
 
 // To describe the attribute names and values for a DB snapshot
-//
 // The following example describes the attribute names and values for a DB snapshot.
 func ExampleRDS_DescribeDBSnapshotAttributes_shared00() {
 	svc := rds.New(session.New())
@@ -2349,7 +2384,6 @@ func ExampleRDS_DescribeDBSnapshotAttributes_shared00() {
 }
 
 // To describe a DB snapshot for a DB instance
-//
 // The following example retrieves the details of a DB snapshot for a DB instance.
 func ExampleRDS_DescribeDBSnapshots_shared00() {
 	svc := rds.New(session.New())
@@ -2378,7 +2412,6 @@ func ExampleRDS_DescribeDBSnapshots_shared00() {
 }
 
 // To describe a DB subnet group
-//
 // The following example retrieves the details of the specified DB subnet group.
 func ExampleRDS_DescribeDBSubnetGroups_shared00() {
 	svc := rds.New(session.New())
@@ -2463,7 +2496,6 @@ func ExampleRDS_DescribeEngineDefaultParameters_shared00() {
 }
 
 // To describe event categories
-//
 // The following example retrieves details about the event categories for all available
 // event sources.
 func ExampleRDS_DescribeEventCategories_shared00() {
@@ -2491,7 +2523,6 @@ func ExampleRDS_DescribeEventCategories_shared00() {
 }
 
 // To describe event subscriptions
-//
 // This example describes all of the Amazon RDS event subscriptions for the current
 // AWS account.
 func ExampleRDS_DescribeEventSubscriptions_shared00() {
@@ -2519,7 +2550,6 @@ func ExampleRDS_DescribeEventSubscriptions_shared00() {
 }
 
 // To describe events
-//
 // The following retrieves details for the events that have occurred for the specified
 // DB instance.
 func ExampleRDS_DescribeEvents_shared00() {
@@ -2548,7 +2578,6 @@ func ExampleRDS_DescribeEvents_shared00() {
 }
 
 // To describe snapshot export tasks
-//
 // The following example returns information about snapshot exports to Amazon S3.
 func ExampleRDS_DescribeExportTasks_shared00() {
 	svc := rds.New(session.New())
@@ -2575,7 +2604,6 @@ func ExampleRDS_DescribeExportTasks_shared00() {
 }
 
 // To describe global DB clusters
-//
 // The following example lists Aurora global DB clusters in the current AWS Region.
 func ExampleRDS_DescribeGlobalClusters_shared00() {
 	svc := rds.New(session.New())
@@ -2601,8 +2629,36 @@ func ExampleRDS_DescribeGlobalClusters_shared00() {
 	fmt.Println(result)
 }
 
+// To describe a zero-ETL integration
+// The following example retrieves information about a zero-ETL integration with Amazon
+// Redshift.
+func ExampleRDS_DescribeIntegrations_shared00() {
+	svc := rds.New(session.New())
+	input := &rds.DescribeIntegrationsInput{
+		IntegrationIdentifier: aws.String("5b9f3d79-7392-4a3e-896c-58eaa1b53231"),
+	}
+
+	result, err := svc.DescribeIntegrations(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case rds.ErrCodeIntegrationNotFoundFault:
+				fmt.Println(rds.ErrCodeIntegrationNotFoundFault, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To describe all available options
-//
 // The following example lists the options for an RDS for MySQL version 8.0 DB instance.
 func ExampleRDS_DescribeOptionGroupOptions_shared00() {
 	svc := rds.New(session.New())
@@ -2630,7 +2686,6 @@ func ExampleRDS_DescribeOptionGroupOptions_shared00() {
 }
 
 // To describe the available option groups
-//
 // The following example lists the options groups for an Oracle Database 19c instance.
 func ExampleRDS_DescribeOptionGroups_shared00() {
 	svc := rds.New(session.New())
@@ -2660,7 +2715,6 @@ func ExampleRDS_DescribeOptionGroups_shared00() {
 }
 
 // To describe orderable DB instance options
-//
 // The following example retrieves details about the orderable options for a DB instances
 // running the MySQL DB engine.
 func ExampleRDS_DescribeOrderableDBInstanceOptions_shared00() {
@@ -2688,7 +2742,6 @@ func ExampleRDS_DescribeOrderableDBInstanceOptions_shared00() {
 }
 
 // To list resources with at least one pending maintenance action
-//
 // The following example lists the pending maintenace action for a DB instance.
 func ExampleRDS_DescribePendingMaintenanceActions_shared00() {
 	svc := rds.New(session.New())
@@ -2715,7 +2768,6 @@ func ExampleRDS_DescribePendingMaintenanceActions_shared00() {
 }
 
 // To describe reserved DB instances
-//
 // The following example retrieves details about any reserved DB instances in the current
 // AWS account.
 func ExampleRDS_DescribeReservedDBInstances_shared00() {
@@ -2743,7 +2795,6 @@ func ExampleRDS_DescribeReservedDBInstances_shared00() {
 }
 
 // To describe reserved DB instance offerings
-//
 // The following example retrieves details about reserved DB instance options for RDS
 // for Oracle.
 func ExampleRDS_DescribeReservedDBInstancesOfferings_shared00() {
@@ -2773,7 +2824,6 @@ func ExampleRDS_DescribeReservedDBInstancesOfferings_shared00() {
 }
 
 // To describe source Regions
-//
 // The following example retrieves details about all source AWS Regions where the current
 // AWS Region can create a read replica, copy a DB snapshot from, or replicate automated
 // backups from. It also shows that automated backups can be replicated only from US
@@ -2803,7 +2853,6 @@ func ExampleRDS_DescribeSourceRegions_shared00() {
 }
 
 // To describe valid modifications for a DB instance
-//
 // The following example retrieves details about the valid modifications for the specified
 // DB instance.
 func ExampleRDS_DescribeValidDBInstanceModifications_shared00() {
@@ -2835,7 +2884,6 @@ func ExampleRDS_DescribeValidDBInstanceModifications_shared00() {
 }
 
 // To download a DB log file
-//
 // The following example downloads only the latest part of your log file.
 func ExampleRDS_DownloadDBLogFilePortion_shared00() {
 	svc := rds.New(session.New())
@@ -2867,7 +2915,6 @@ func ExampleRDS_DownloadDBLogFilePortion_shared00() {
 }
 
 // To perform a failover for a DB cluster
-//
 // This example performs a failover for the specified DB cluster to the specified DB
 // instance.
 func ExampleRDS_FailoverDBCluster_shared00() {
@@ -2902,7 +2949,6 @@ func ExampleRDS_FailoverDBCluster_shared00() {
 }
 
 // To list tags on an Amazon RDS resource
-//
 // The following example lists all tags on a DB instance.
 func ExampleRDS_ListTagsForResource_shared00() {
 	svc := rds.New(session.New())
@@ -2926,6 +2972,12 @@ func ExampleRDS_ListTagsForResource_shared00() {
 				fmt.Println(rds.ErrCodeDBProxyTargetGroupNotFoundFault, aerr.Error())
 			case rds.ErrCodeBlueGreenDeploymentNotFoundFault:
 				fmt.Println(rds.ErrCodeBlueGreenDeploymentNotFoundFault, aerr.Error())
+			case rds.ErrCodeIntegrationNotFoundFault:
+				fmt.Println(rds.ErrCodeIntegrationNotFoundFault, aerr.Error())
+			case rds.ErrCodeTenantDatabaseNotFoundFault:
+				fmt.Println(rds.ErrCodeTenantDatabaseNotFoundFault, aerr.Error())
+			case rds.ErrCodeDBSnapshotTenantDatabaseNotFoundFault:
+				fmt.Println(rds.ErrCodeDBSnapshotTenantDatabaseNotFoundFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -2941,7 +2993,6 @@ func ExampleRDS_ListTagsForResource_shared00() {
 }
 
 // To temporarily override the system-default SSL/TLS certificate for new DB instances
-//
 // The following example temporarily overrides the system-default SSL/TLS certificate
 // for new DB instances.
 func ExampleRDS_ModifyCertificates_shared00() {
@@ -2971,7 +3022,6 @@ func ExampleRDS_ModifyCertificates_shared00() {
 }
 
 // To scale the capacity of an Aurora Serverless DB cluster
-//
 // The following example scales the capacity of an Aurora Serverless DB cluster to 8.
 func ExampleRDS_ModifyCurrentDBClusterCapacity_shared00() {
 	svc := rds.New(session.New())
@@ -3005,7 +3055,6 @@ func ExampleRDS_ModifyCurrentDBClusterCapacity_shared00() {
 }
 
 // To modify a DB cluster
-//
 // The following example changes the master user password for the DB cluster named cluster-2
 // and sets the backup retention period to 14 days. The ApplyImmediately parameter causes
 // the changes to be made immediately, instead of waiting until the next maintenance
@@ -3049,6 +3098,10 @@ func ExampleRDS_ModifyDBCluster_shared00() {
 				fmt.Println(rds.ErrCodeDBInstanceAlreadyExistsFault, aerr.Error())
 			case rds.ErrCodeDomainNotFoundFault:
 				fmt.Println(rds.ErrCodeDomainNotFoundFault, aerr.Error())
+			case rds.ErrCodeStorageTypeNotAvailableFault:
+				fmt.Println(rds.ErrCodeStorageTypeNotAvailableFault, aerr.Error())
+			case rds.ErrCodeOptionGroupNotFoundFault:
+				fmt.Println(rds.ErrCodeOptionGroupNotFoundFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -3064,7 +3117,6 @@ func ExampleRDS_ModifyDBCluster_shared00() {
 }
 
 // To modify a custom DB cluster endpoint
-//
 // The following example modifies the specified custom DB cluster endpoint.
 func ExampleRDS_ModifyDBClusterEndpoint_shared00() {
 	svc := rds.New(session.New())
@@ -3106,7 +3158,6 @@ func ExampleRDS_ModifyDBClusterEndpoint_shared00() {
 }
 
 // To modify parameters in a DB cluster parameter group
-//
 // The following example modifies the values of parameters in a DB cluster parameter
 // group.
 func ExampleRDS_ModifyDBClusterParameterGroup_shared00() {
@@ -3150,7 +3201,6 @@ func ExampleRDS_ModifyDBClusterParameterGroup_shared00() {
 }
 
 // To modify a DB cluster snapshot attribute
-//
 // The following example makes changes to the specified DB cluster snapshot attribute.
 func ExampleRDS_ModifyDBClusterSnapshotAttribute_shared00() {
 	svc := rds.New(session.New())
@@ -3187,7 +3237,6 @@ func ExampleRDS_ModifyDBClusterSnapshotAttribute_shared00() {
 }
 
 // To modify a DB instance
-//
 // The following example associates an option group and a parameter group with a compatible
 // Microsoft SQL Server DB instance. The ApplyImmediately parameter causes the option
 // and parameter groups to be associated immediately, instead of waiting until the next
@@ -3245,6 +3294,8 @@ func ExampleRDS_ModifyDBInstance_shared00() {
 				fmt.Println(rds.ErrCodeInvalidDBClusterStateFault, aerr.Error())
 			case rds.ErrCodeNetworkTypeNotSupported:
 				fmt.Println(rds.ErrCodeNetworkTypeNotSupported, aerr.Error())
+			case rds.ErrCodeTenantDatabaseQuotaExceededFault:
+				fmt.Println(rds.ErrCodeTenantDatabaseQuotaExceededFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -3260,7 +3311,6 @@ func ExampleRDS_ModifyDBInstance_shared00() {
 }
 
 // To modify a DB parameter group
-//
 // The following example changes the value of the clr enabled parameter in a DB parameter
 // group. The value of the ApplyMethod parameter causes the DB parameter group to be
 // modified immediately, instead of waiting until the next maintenance window.
@@ -3300,7 +3350,6 @@ func ExampleRDS_ModifyDBParameterGroup_shared00() {
 }
 
 // To modify a DB snapshot
-//
 // The following example upgrades a PostgeSQL 10.6 snapshot named db5-snapshot-upg-test
 // to PostgreSQL 11.7. The new DB engine version is shown after the snapshot has finished
 // upgrading and its status is available.
@@ -3332,7 +3381,6 @@ func ExampleRDS_ModifyDBSnapshot_shared00() {
 }
 
 // To allow two AWS accounts to restore a DB snapshot
-//
 // The following example grants permission to two AWS accounts, with the identifiers
 // 111122223333 and 444455556666, to restore the DB snapshot named mydbsnapshot.
 func ExampleRDS_ModifyDBSnapshotAttribute_shared00() {
@@ -3371,7 +3419,6 @@ func ExampleRDS_ModifyDBSnapshotAttribute_shared00() {
 }
 
 // To prevent an AWS account from restoring a DB snapshot
-//
 // The following example removes permission from the AWS account with the identifier
 // 444455556666 to restore the DB snapshot named mydbsnapshot.
 func ExampleRDS_ModifyDBSnapshotAttribute_shared01() {
@@ -3409,7 +3456,6 @@ func ExampleRDS_ModifyDBSnapshotAttribute_shared01() {
 }
 
 // To modify a DB subnet group
-//
 // The following example adds a subnet with the ID subnet-08e41f9e230222222 to the DB
 // subnet group named mysubnetgroup. To keep the existing subnets in the subnet group,
 // include their IDs as values in the --subnet-ids option. Make sure to have subnets
@@ -3456,7 +3502,6 @@ func ExampleRDS_ModifyDBSubnetGroup_shared00() {
 }
 
 // To modify an event subscription
-//
 // The following example turns off the specified event subscription, so that it no longer
 // publishes notifications to the specified Amazon Simple Notification Service topic.
 func ExampleRDS_ModifyEventSubscription_shared00() {
@@ -3497,7 +3542,6 @@ func ExampleRDS_ModifyEventSubscription_shared00() {
 }
 
 // To modify a global database cluster
-//
 // The following example enables deletion protection for an Aurora MySQL-based global
 // database cluster.
 func ExampleRDS_ModifyGlobalCluster_shared00() {
@@ -3533,8 +3577,40 @@ func ExampleRDS_ModifyGlobalCluster_shared00() {
 	fmt.Println(result)
 }
 
+// To modify a zero-ETL integration
+// The following example modifies the name of an existing zero-ETL integration.
+func ExampleRDS_ModifyIntegration_shared00() {
+	svc := rds.New(session.New())
+	input := &rds.ModifyIntegrationInput{
+		IntegrationIdentifier: aws.String("a1b2c3d4-5678-90ab-cdef-EXAMPLE11111"),
+		IntegrationName:       aws.String("my-renamed-integration"),
+	}
+
+	result, err := svc.ModifyIntegration(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case rds.ErrCodeIntegrationNotFoundFault:
+				fmt.Println(rds.ErrCodeIntegrationNotFoundFault, aerr.Error())
+			case rds.ErrCodeInvalidIntegrationStateFault:
+				fmt.Println(rds.ErrCodeInvalidIntegrationStateFault, aerr.Error())
+			case rds.ErrCodeIntegrationConflictOperationFault:
+				fmt.Println(rds.ErrCodeIntegrationConflictOperationFault, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To modify an option group
-//
 // The following example adds an option to an option group.
 func ExampleRDS_ModifyOptionGroup_shared00() {
 	svc := rds.New(session.New())
@@ -3574,7 +3650,6 @@ func ExampleRDS_ModifyOptionGroup_shared00() {
 }
 
 // To promote a read replica
-//
 // The following example promotes the specified read replica to become a standalone
 // DB instance.
 func ExampleRDS_PromoteReadReplica_shared00() {
@@ -3606,7 +3681,6 @@ func ExampleRDS_PromoteReadReplica_shared00() {
 }
 
 // To purchase a reserved DB instance
-//
 // The following example shows how to buy the reserved DB instance offering from the
 // previous example.
 func ExampleRDS_PurchaseReservedDBInstancesOffering_shared00() {
@@ -3641,7 +3715,6 @@ func ExampleRDS_PurchaseReservedDBInstancesOffering_shared00() {
 }
 
 // To reboot a DB instance
-//
 // The following example starts a reboot of the specified DB instance.
 func ExampleRDS_RebootDBInstance_shared00() {
 	svc := rds.New(session.New())
@@ -3672,7 +3745,6 @@ func ExampleRDS_RebootDBInstance_shared00() {
 }
 
 // To detach an Aurora secondary cluster from an Aurora global database cluster
-//
 // The following example detaches an Aurora secondary cluster from an Aurora global
 // database cluster. The cluster changes from being read-only to a standalone cluster
 // with read-write capability.
@@ -3708,7 +3780,6 @@ func ExampleRDS_RemoveFromGlobalCluster_shared00() {
 }
 
 // To disassociate an Identity and Access Management (IAM) role from a DB cluster
-//
 // The following example removes a role from a DB cluster.
 func ExampleRDS_RemoveRoleFromDBCluster_shared00() {
 	svc := rds.New(session.New())
@@ -3742,7 +3813,6 @@ func ExampleRDS_RemoveRoleFromDBCluster_shared00() {
 }
 
 // To remove a source identifier from a subscription
-//
 // The following example removes the specified source identifier from an existing subscription.
 func ExampleRDS_RemoveSourceIdentifierFromSubscription_shared00() {
 	svc := rds.New(session.New())
@@ -3774,7 +3844,6 @@ func ExampleRDS_RemoveSourceIdentifierFromSubscription_shared00() {
 }
 
 // To remove tags from a resource
-//
 // The following example removes tags from a resource.
 func ExampleRDS_RemoveTagsFromResource_shared00() {
 	svc := rds.New(session.New())
@@ -3802,6 +3871,12 @@ func ExampleRDS_RemoveTagsFromResource_shared00() {
 				fmt.Println(rds.ErrCodeDBProxyTargetGroupNotFoundFault, aerr.Error())
 			case rds.ErrCodeBlueGreenDeploymentNotFoundFault:
 				fmt.Println(rds.ErrCodeBlueGreenDeploymentNotFoundFault, aerr.Error())
+			case rds.ErrCodeIntegrationNotFoundFault:
+				fmt.Println(rds.ErrCodeIntegrationNotFoundFault, aerr.Error())
+			case rds.ErrCodeTenantDatabaseNotFoundFault:
+				fmt.Println(rds.ErrCodeTenantDatabaseNotFoundFault, aerr.Error())
+			case rds.ErrCodeDBSnapshotTenantDatabaseNotFoundFault:
+				fmt.Println(rds.ErrCodeDBSnapshotTenantDatabaseNotFoundFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -3817,7 +3892,6 @@ func ExampleRDS_RemoveTagsFromResource_shared00() {
 }
 
 // To reset all parameters to their default values
-//
 // The following example resets all parameter values in a customer-created DB cluster
 // parameter group to their default values.
 func ExampleRDS_ResetDBClusterParameterGroup_shared00() {
@@ -3850,7 +3924,6 @@ func ExampleRDS_ResetDBClusterParameterGroup_shared00() {
 }
 
 // To reset all parameters to their default values
-//
 // The following example resets all parameter values in a customer-created DB parameter
 // group to their default values.
 func ExampleRDS_ResetDBParameterGroup_shared00() {
@@ -3883,7 +3956,6 @@ func ExampleRDS_ResetDBParameterGroup_shared00() {
 }
 
 // To restore an Amazon Aurora DB cluster from Amazon S3
-//
 // The following example restores an Amazon Aurora MySQL version 5.7-compatible DB cluster
 // from a MySQL 5.7 DB backup file in Amazon S3.
 func ExampleRDS_RestoreDBClusterFromS3_shared00() {
@@ -3932,6 +4004,8 @@ func ExampleRDS_RestoreDBClusterFromS3_shared00() {
 				fmt.Println(rds.ErrCodeDomainNotFoundFault, aerr.Error())
 			case rds.ErrCodeInsufficientStorageClusterCapacityFault:
 				fmt.Println(rds.ErrCodeInsufficientStorageClusterCapacityFault, aerr.Error())
+			case rds.ErrCodeStorageTypeNotSupportedFault:
+				fmt.Println(rds.ErrCodeStorageTypeNotSupportedFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -3947,7 +4021,6 @@ func ExampleRDS_RestoreDBClusterFromS3_shared00() {
 }
 
 // To restore a DB cluster from a snapshot
-//
 // The following example restores an Aurora PostgreSQL DB cluster compatible with PostgreSQL
 // version 10.7 from a DB cluster snapshot named test-instance-snapshot.
 func ExampleRDS_RestoreDBClusterFromSnapshot_shared00() {
@@ -3985,6 +4058,8 @@ func ExampleRDS_RestoreDBClusterFromSnapshot_shared00() {
 				fmt.Println(rds.ErrCodeInvalidDBClusterSnapshotStateFault, aerr.Error())
 			case rds.ErrCodeInvalidVPCNetworkStateFault:
 				fmt.Println(rds.ErrCodeInvalidVPCNetworkStateFault, aerr.Error())
+			case rds.ErrCodeDBSubnetGroupDoesNotCoverEnoughAZs:
+				fmt.Println(rds.ErrCodeDBSubnetGroupDoesNotCoverEnoughAZs, aerr.Error())
 			case rds.ErrCodeInvalidRestoreFault:
 				fmt.Println(rds.ErrCodeInvalidRestoreFault, aerr.Error())
 			case rds.ErrCodeInvalidSubnet:
@@ -3999,6 +4074,8 @@ func ExampleRDS_RestoreDBClusterFromSnapshot_shared00() {
 				fmt.Println(rds.ErrCodeDBClusterParameterGroupNotFoundFault, aerr.Error())
 			case rds.ErrCodeInvalidDBInstanceStateFault:
 				fmt.Println(rds.ErrCodeInvalidDBInstanceStateFault, aerr.Error())
+			case rds.ErrCodeInsufficientDBInstanceCapacityFault:
+				fmt.Println(rds.ErrCodeInsufficientDBInstanceCapacityFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -4014,7 +4091,6 @@ func ExampleRDS_RestoreDBClusterFromSnapshot_shared00() {
 }
 
 // To restore a DB cluster to a specified time
-//
 // The following example restores the DB cluster named database-4 to the latest possible
 // time. Using copy-on-write as the restore type restores the new DB cluster as a clone
 // of the source DB cluster.
@@ -4067,6 +4143,10 @@ func ExampleRDS_RestoreDBClusterToPointInTime_shared00() {
 				fmt.Println(rds.ErrCodeDomainNotFoundFault, aerr.Error())
 			case rds.ErrCodeDBClusterParameterGroupNotFoundFault:
 				fmt.Println(rds.ErrCodeDBClusterParameterGroupNotFoundFault, aerr.Error())
+			case rds.ErrCodeDBClusterAutomatedBackupNotFoundFault:
+				fmt.Println(rds.ErrCodeDBClusterAutomatedBackupNotFoundFault, aerr.Error())
+			case rds.ErrCodeInsufficientDBInstanceCapacityFault:
+				fmt.Println(rds.ErrCodeInsufficientDBInstanceCapacityFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -4082,7 +4162,6 @@ func ExampleRDS_RestoreDBClusterToPointInTime_shared00() {
 }
 
 // To restore a DB instance from a DB snapshot
-//
 // The following example creates a new DB instance named db7-new-instance with the db.t3.small
 // DB instance class from the specified DB snapshot. The source DB instance from which
 // the snapshot was taken uses a deprecated DB instance class, so you can't upgrade
@@ -4143,6 +4222,10 @@ func ExampleRDS_RestoreDBInstanceFromDBSnapshot_shared00() {
 				fmt.Println(rds.ErrCodeNetworkTypeNotSupported, aerr.Error())
 			case rds.ErrCodeDBClusterSnapshotNotFoundFault:
 				fmt.Println(rds.ErrCodeDBClusterSnapshotNotFoundFault, aerr.Error())
+			case rds.ErrCodeCertificateNotFoundFault:
+				fmt.Println(rds.ErrCodeCertificateNotFoundFault, aerr.Error())
+			case rds.ErrCodeTenantDatabaseQuotaExceededFault:
+				fmt.Println(rds.ErrCodeTenantDatabaseQuotaExceededFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -4158,7 +4241,6 @@ func ExampleRDS_RestoreDBInstanceFromDBSnapshot_shared00() {
 }
 
 // To restore a DB instance to a point in time
-//
 // The following example restores test-instance to a new DB instance named restored-test-instance,
 // as of the specified time.
 func ExampleRDS_RestoreDBInstanceToPointInTime_shared00() {
@@ -4219,6 +4301,10 @@ func ExampleRDS_RestoreDBInstanceToPointInTime_shared00() {
 				fmt.Println(rds.ErrCodeDBInstanceAutomatedBackupNotFoundFault, aerr.Error())
 			case rds.ErrCodeNetworkTypeNotSupported:
 				fmt.Println(rds.ErrCodeNetworkTypeNotSupported, aerr.Error())
+			case rds.ErrCodeTenantDatabaseQuotaExceededFault:
+				fmt.Println(rds.ErrCodeTenantDatabaseQuotaExceededFault, aerr.Error())
+			case rds.ErrCodeCertificateNotFoundFault:
+				fmt.Println(rds.ErrCodeCertificateNotFoundFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -4234,7 +4320,6 @@ func ExampleRDS_RestoreDBInstanceToPointInTime_shared00() {
 }
 
 // To revoke ingress for a DB security group
-//
 // This example revokes ingress for the specified CIDR block associated with the specified
 // DB security group.
 func ExampleRDS_RevokeDBSecurityGroupIngress_shared00() {
@@ -4269,7 +4354,6 @@ func ExampleRDS_RevokeDBSecurityGroupIngress_shared00() {
 }
 
 // To start a database activity stream
-//
 // The following example starts an asynchronous activity stream to monitor an Aurora
 // cluster named my-pg-cluster.
 func ExampleRDS_StartActivityStream_shared00() {
@@ -4312,7 +4396,6 @@ func ExampleRDS_StartActivityStream_shared00() {
 }
 
 // To start a DB cluster
-//
 // The following example starts a DB cluster and its DB instances.
 func ExampleRDS_StartDBCluster_shared00() {
 	svc := rds.New(session.New())
@@ -4345,7 +4428,6 @@ func ExampleRDS_StartDBCluster_shared00() {
 }
 
 // To start a DB instance
-//
 // The following example starts the specified DB instance.
 func ExampleRDS_StartDBInstance_shared00() {
 	svc := rds.New(session.New())
@@ -4394,7 +4476,6 @@ func ExampleRDS_StartDBInstance_shared00() {
 }
 
 // To enable cross-Region automated backups
-//
 // The following example replicates automated backups from a DB instance in the US East
 // (N. Virginia) Region. The backup retention period is 14 days.
 func ExampleRDS_StartDBInstanceAutomatedBackupsReplication_shared00() {
@@ -4433,7 +4514,6 @@ func ExampleRDS_StartDBInstanceAutomatedBackupsReplication_shared00() {
 }
 
 // To export a snapshot to Amazon S3
-//
 // The following example exports a DB snapshot named db5-snapshot-test to the Amazon
 // S3 bucket named mybucket.
 func ExampleRDS_StartExportTask_shared00() {
@@ -4485,7 +4565,6 @@ func ExampleRDS_StartExportTask_shared00() {
 }
 
 // To stop a database activity stream
-//
 // The following example stops an activity stream in an Aurora cluster named my-pg-cluster.
 func ExampleRDS_StopActivityStream_shared00() {
 	svc := rds.New(session.New())
@@ -4523,7 +4602,6 @@ func ExampleRDS_StopActivityStream_shared00() {
 }
 
 // To stop a DB cluster
-//
 // The following example stops a DB cluster and its DB instances.
 func ExampleRDS_StopDBCluster_shared00() {
 	svc := rds.New(session.New())
@@ -4556,7 +4634,6 @@ func ExampleRDS_StopDBCluster_shared00() {
 }
 
 // To stop a DB instance
-//
 // The following example stops the specified DB instance.
 func ExampleRDS_StopDBInstance_shared00() {
 	svc := rds.New(session.New())
@@ -4593,7 +4670,6 @@ func ExampleRDS_StopDBInstance_shared00() {
 }
 
 // To stop replicating automated backups
-//
 // The following example ends replication of automated backups. Replicated backups are
 // retained according to the set backup retention period.
 func ExampleRDS_StopDBInstanceAutomatedBackupsReplication_shared00() {
@@ -4625,7 +4701,6 @@ func ExampleRDS_StopDBInstanceAutomatedBackupsReplication_shared00() {
 }
 
 // To switch a blue/green deployment for an RDS DB instance
-//
 // The following example promotes the specified green environment as the new production
 // environment.
 func ExampleRDS_SwitchoverBlueGreenDeployment_shared00() {
@@ -4658,7 +4733,6 @@ func ExampleRDS_SwitchoverBlueGreenDeployment_shared00() {
 }
 
 // To promote a blue/green deployment for an Aurora MySQL DB cluster
-//
 // The following example promotes the specified green environment as the new production
 // environment.
 func ExampleRDS_SwitchoverBlueGreenDeployment_shared01() {

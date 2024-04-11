@@ -4,6 +4,7 @@ package appsync
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
@@ -28,14 +29,13 @@ const opAssociateApi = "AssociateApi"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateApiRequest method.
+//	req, resp := client.AssociateApiRequest(params)
 //
-//    // Example sending a request using the AssociateApiRequest method.
-//    req, resp := client.AssociateApiRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/AssociateApi
 func (c *AppSync) AssociateApiRequest(input *AssociateApiInput) (req *request.Request, output *AssociateApiOutput) {
@@ -66,19 +66,20 @@ func (c *AppSync) AssociateApiRequest(input *AssociateApiInput) (req *request.Re
 // API operation AssociateApi for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/AssociateApi
 func (c *AppSync) AssociateApi(input *AssociateApiInput) (*AssociateApiOutput, error) {
@@ -102,6 +103,202 @@ func (c *AppSync) AssociateApiWithContext(ctx aws.Context, input *AssociateApiIn
 	return out, req.Send()
 }
 
+const opAssociateMergedGraphqlApi = "AssociateMergedGraphqlApi"
+
+// AssociateMergedGraphqlApiRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateMergedGraphqlApi operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateMergedGraphqlApi for more information on using the AssociateMergedGraphqlApi
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the AssociateMergedGraphqlApiRequest method.
+//	req, resp := client.AssociateMergedGraphqlApiRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/AssociateMergedGraphqlApi
+func (c *AppSync) AssociateMergedGraphqlApiRequest(input *AssociateMergedGraphqlApiInput) (req *request.Request, output *AssociateMergedGraphqlApiOutput) {
+	op := &request.Operation{
+		Name:       opAssociateMergedGraphqlApi,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/sourceApis/{sourceApiIdentifier}/mergedApiAssociations",
+	}
+
+	if input == nil {
+		input = &AssociateMergedGraphqlApiInput{}
+	}
+
+	output = &AssociateMergedGraphqlApiOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// AssociateMergedGraphqlApi API operation for AWS AppSync.
+//
+// Creates an association between a Merged API and source API using the source
+// API's identifier.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation AssociateMergedGraphqlApi for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - LimitExceededException
+//     The request exceeded a limit. Try your request again.
+//
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/AssociateMergedGraphqlApi
+func (c *AppSync) AssociateMergedGraphqlApi(input *AssociateMergedGraphqlApiInput) (*AssociateMergedGraphqlApiOutput, error) {
+	req, out := c.AssociateMergedGraphqlApiRequest(input)
+	return out, req.Send()
+}
+
+// AssociateMergedGraphqlApiWithContext is the same as AssociateMergedGraphqlApi with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateMergedGraphqlApi for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) AssociateMergedGraphqlApiWithContext(ctx aws.Context, input *AssociateMergedGraphqlApiInput, opts ...request.Option) (*AssociateMergedGraphqlApiOutput, error) {
+	req, out := c.AssociateMergedGraphqlApiRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opAssociateSourceGraphqlApi = "AssociateSourceGraphqlApi"
+
+// AssociateSourceGraphqlApiRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateSourceGraphqlApi operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateSourceGraphqlApi for more information on using the AssociateSourceGraphqlApi
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the AssociateSourceGraphqlApiRequest method.
+//	req, resp := client.AssociateSourceGraphqlApiRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/AssociateSourceGraphqlApi
+func (c *AppSync) AssociateSourceGraphqlApiRequest(input *AssociateSourceGraphqlApiInput) (req *request.Request, output *AssociateSourceGraphqlApiOutput) {
+	op := &request.Operation{
+		Name:       opAssociateSourceGraphqlApi,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/mergedApis/{mergedApiIdentifier}/sourceApiAssociations",
+	}
+
+	if input == nil {
+		input = &AssociateSourceGraphqlApiInput{}
+	}
+
+	output = &AssociateSourceGraphqlApiOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// AssociateSourceGraphqlApi API operation for AWS AppSync.
+//
+// Creates an association between a Merged API and source API using the Merged
+// API's identifier.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation AssociateSourceGraphqlApi for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - LimitExceededException
+//     The request exceeded a limit. Try your request again.
+//
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/AssociateSourceGraphqlApi
+func (c *AppSync) AssociateSourceGraphqlApi(input *AssociateSourceGraphqlApiInput) (*AssociateSourceGraphqlApiOutput, error) {
+	req, out := c.AssociateSourceGraphqlApiRequest(input)
+	return out, req.Send()
+}
+
+// AssociateSourceGraphqlApiWithContext is the same as AssociateSourceGraphqlApi with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateSourceGraphqlApi for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) AssociateSourceGraphqlApiWithContext(ctx aws.Context, input *AssociateSourceGraphqlApiInput, opts ...request.Option) (*AssociateSourceGraphqlApiOutput, error) {
+	req, out := c.AssociateSourceGraphqlApiRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateApiCache = "CreateApiCache"
 
 // CreateApiCacheRequest generates a "aws/request.Request" representing the
@@ -118,14 +315,13 @@ const opCreateApiCache = "CreateApiCache"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateApiCacheRequest method.
+//	req, resp := client.CreateApiCacheRequest(params)
 //
-//    // Example sending a request using the CreateApiCacheRequest method.
-//    req, resp := client.CreateApiCacheRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateApiCache
 func (c *AppSync) CreateApiCacheRequest(input *CreateApiCacheInput) (req *request.Request, output *CreateApiCacheOutput) {
@@ -156,23 +352,24 @@ func (c *AppSync) CreateApiCacheRequest(input *CreateApiCacheInput) (req *reques
 // API operation CreateApiCache for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateApiCache
 func (c *AppSync) CreateApiCache(input *CreateApiCacheInput) (*CreateApiCacheOutput, error) {
@@ -212,14 +409,13 @@ const opCreateApiKey = "CreateApiKey"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateApiKeyRequest method.
+//	req, resp := client.CreateApiKeyRequest(params)
 //
-//    // Example sending a request using the CreateApiKeyRequest method.
-//    req, resp := client.CreateApiKeyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateApiKey
 func (c *AppSync) CreateApiKeyRequest(input *CreateApiKeyInput) (req *request.Request, output *CreateApiKeyOutput) {
@@ -250,32 +446,33 @@ func (c *AppSync) CreateApiKeyRequest(input *CreateApiKeyInput) (req *request.Re
 // API operation CreateApiKey for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * LimitExceededException
-//   The request exceeded a limit. Try your request again.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - LimitExceededException
+//     The request exceeded a limit. Try your request again.
 //
-//   * LimitExceededException
-//   The request exceeded a limit. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - LimitExceededException
+//     The request exceeded a limit. Try your request again.
 //
-//   * ApiKeyLimitExceededException
-//   The API key exceeded a limit. Try your request again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
-//   * ApiKeyValidityOutOfBoundsException
-//   The API key expiration must be set to a value between 1 and 365 days from
-//   creation (for CreateApiKey) or from update (for UpdateApiKey).
+//   - ApiKeyLimitExceededException
+//     The API key exceeded a limit. Try your request again.
+//
+//   - ApiKeyValidityOutOfBoundsException
+//     The API key expiration must be set to a value between 1 and 365 days from
+//     creation (for CreateApiKey) or from update (for UpdateApiKey).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateApiKey
 func (c *AppSync) CreateApiKey(input *CreateApiKeyInput) (*CreateApiKeyOutput, error) {
@@ -315,14 +512,13 @@ const opCreateDataSource = "CreateDataSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDataSourceRequest method.
+//	req, resp := client.CreateDataSourceRequest(params)
 //
-//    // Example sending a request using the CreateDataSourceRequest method.
-//    req, resp := client.CreateDataSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateDataSource
 func (c *AppSync) CreateDataSourceRequest(input *CreateDataSourceInput) (req *request.Request, output *CreateDataSourceOutput) {
@@ -353,23 +549,24 @@ func (c *AppSync) CreateDataSourceRequest(input *CreateDataSourceInput) (req *re
 // API operation CreateDataSource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateDataSource
 func (c *AppSync) CreateDataSource(input *CreateDataSourceInput) (*CreateDataSourceOutput, error) {
@@ -409,14 +606,13 @@ const opCreateDomainName = "CreateDomainName"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDomainNameRequest method.
+//	req, resp := client.CreateDomainNameRequest(params)
 //
-//    // Example sending a request using the CreateDomainNameRequest method.
-//    req, resp := client.CreateDomainNameRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateDomainName
 func (c *AppSync) CreateDomainNameRequest(input *CreateDomainNameInput) (req *request.Request, output *CreateDomainNameOutput) {
@@ -447,15 +643,16 @@ func (c *AppSync) CreateDomainNameRequest(input *CreateDomainNameInput) (req *re
 // API operation CreateDomainName for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateDomainName
 func (c *AppSync) CreateDomainName(input *CreateDomainNameInput) (*CreateDomainNameOutput, error) {
@@ -495,14 +692,13 @@ const opCreateFunction = "CreateFunction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFunctionRequest method.
+//	req, resp := client.CreateFunctionRequest(params)
 //
-//    // Example sending a request using the CreateFunctionRequest method.
-//    req, resp := client.CreateFunctionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateFunction
 func (c *AppSync) CreateFunctionRequest(input *CreateFunctionInput) (req *request.Request, output *CreateFunctionOutput) {
@@ -536,19 +732,24 @@ func (c *AppSync) CreateFunctionRequest(input *CreateFunctionInput) (req *reques
 // API operation CreateFunction for usage and error information.
 //
 // Returned Error Types:
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateFunction
 func (c *AppSync) CreateFunction(input *CreateFunctionInput) (*CreateFunctionOutput, error) {
@@ -588,14 +789,13 @@ const opCreateGraphqlApi = "CreateGraphqlApi"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateGraphqlApiRequest method.
+//	req, resp := client.CreateGraphqlApiRequest(params)
 //
-//    // Example sending a request using the CreateGraphqlApiRequest method.
-//    req, resp := client.CreateGraphqlApiRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateGraphqlApi
 func (c *AppSync) CreateGraphqlApiRequest(input *CreateGraphqlApiInput) (req *request.Request, output *CreateGraphqlApiOutput) {
@@ -626,25 +826,26 @@ func (c *AppSync) CreateGraphqlApiRequest(input *CreateGraphqlApiInput) (req *re
 // API operation CreateGraphqlApi for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * LimitExceededException
-//   The request exceeded a limit. Try your request again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - LimitExceededException
+//     The request exceeded a limit. Try your request again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * ApiLimitExceededException
-//   The GraphQL API exceeded a limit. Try your request again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - ApiLimitExceededException
+//     The GraphQL API exceeded a limit. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateGraphqlApi
 func (c *AppSync) CreateGraphqlApi(input *CreateGraphqlApiInput) (*CreateGraphqlApiOutput, error) {
@@ -684,14 +885,13 @@ const opCreateResolver = "CreateResolver"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateResolverRequest method.
+//	req, resp := client.CreateResolverRequest(params)
 //
-//    // Example sending a request using the CreateResolverRequest method.
-//    req, resp := client.CreateResolverRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateResolver
 func (c *AppSync) CreateResolverRequest(input *CreateResolverInput) (req *request.Request, output *CreateResolverOutput) {
@@ -725,23 +925,24 @@ func (c *AppSync) CreateResolverRequest(input *CreateResolverInput) (req *reques
 // API operation CreateResolver for usage and error information.
 //
 // Returned Error Types:
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateResolver
 func (c *AppSync) CreateResolver(input *CreateResolverInput) (*CreateResolverOutput, error) {
@@ -781,14 +982,13 @@ const opCreateType = "CreateType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateTypeRequest method.
+//	req, resp := client.CreateTypeRequest(params)
 //
-//    // Example sending a request using the CreateTypeRequest method.
-//    req, resp := client.CreateTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateType
 func (c *AppSync) CreateTypeRequest(input *CreateTypeInput) (req *request.Request, output *CreateTypeOutput) {
@@ -819,23 +1019,24 @@ func (c *AppSync) CreateTypeRequest(input *CreateTypeInput) (req *request.Reques
 // API operation CreateType for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateType
 func (c *AppSync) CreateType(input *CreateTypeInput) (*CreateTypeOutput, error) {
@@ -875,14 +1076,13 @@ const opDeleteApiCache = "DeleteApiCache"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApiCacheRequest method.
+//	req, resp := client.DeleteApiCacheRequest(params)
 //
-//    // Example sending a request using the DeleteApiCacheRequest method.
-//    req, resp := client.DeleteApiCacheRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteApiCache
 func (c *AppSync) DeleteApiCacheRequest(input *DeleteApiCacheInput) (req *request.Request, output *DeleteApiCacheOutput) {
@@ -914,23 +1114,24 @@ func (c *AppSync) DeleteApiCacheRequest(input *DeleteApiCacheInput) (req *reques
 // API operation DeleteApiCache for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteApiCache
 func (c *AppSync) DeleteApiCache(input *DeleteApiCacheInput) (*DeleteApiCacheOutput, error) {
@@ -970,14 +1171,13 @@ const opDeleteApiKey = "DeleteApiKey"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApiKeyRequest method.
+//	req, resp := client.DeleteApiKeyRequest(params)
 //
-//    // Example sending a request using the DeleteApiKeyRequest method.
-//    req, resp := client.DeleteApiKeyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteApiKey
 func (c *AppSync) DeleteApiKeyRequest(input *DeleteApiKeyInput) (req *request.Request, output *DeleteApiKeyOutput) {
@@ -1009,19 +1209,20 @@ func (c *AppSync) DeleteApiKeyRequest(input *DeleteApiKeyInput) (req *request.Re
 // API operation DeleteApiKey for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteApiKey
 func (c *AppSync) DeleteApiKey(input *DeleteApiKeyInput) (*DeleteApiKeyOutput, error) {
@@ -1061,14 +1262,13 @@ const opDeleteDataSource = "DeleteDataSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDataSourceRequest method.
+//	req, resp := client.DeleteDataSourceRequest(params)
 //
-//    // Example sending a request using the DeleteDataSourceRequest method.
-//    req, resp := client.DeleteDataSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteDataSource
 func (c *AppSync) DeleteDataSourceRequest(input *DeleteDataSourceInput) (req *request.Request, output *DeleteDataSourceOutput) {
@@ -1100,23 +1300,24 @@ func (c *AppSync) DeleteDataSourceRequest(input *DeleteDataSourceInput) (req *re
 // API operation DeleteDataSource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteDataSource
 func (c *AppSync) DeleteDataSource(input *DeleteDataSourceInput) (*DeleteDataSourceOutput, error) {
@@ -1156,14 +1357,13 @@ const opDeleteDomainName = "DeleteDomainName"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDomainNameRequest method.
+//	req, resp := client.DeleteDomainNameRequest(params)
 //
-//    // Example sending a request using the DeleteDomainNameRequest method.
-//    req, resp := client.DeleteDomainNameRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteDomainName
 func (c *AppSync) DeleteDomainNameRequest(input *DeleteDomainNameInput) (req *request.Request, output *DeleteDomainNameOutput) {
@@ -1195,23 +1395,24 @@ func (c *AppSync) DeleteDomainNameRequest(input *DeleteDomainNameInput) (req *re
 // API operation DeleteDomainName for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteDomainName
 func (c *AppSync) DeleteDomainName(input *DeleteDomainNameInput) (*DeleteDomainNameOutput, error) {
@@ -1251,14 +1452,13 @@ const opDeleteFunction = "DeleteFunction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFunctionRequest method.
+//	req, resp := client.DeleteFunctionRequest(params)
 //
-//    // Example sending a request using the DeleteFunctionRequest method.
-//    req, resp := client.DeleteFunctionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteFunction
 func (c *AppSync) DeleteFunctionRequest(input *DeleteFunctionInput) (req *request.Request, output *DeleteFunctionOutput) {
@@ -1290,19 +1490,24 @@ func (c *AppSync) DeleteFunctionRequest(input *DeleteFunctionInput) (req *reques
 // API operation DeleteFunction for usage and error information.
 //
 // Returned Error Types:
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteFunction
 func (c *AppSync) DeleteFunction(input *DeleteFunctionInput) (*DeleteFunctionOutput, error) {
@@ -1342,14 +1547,13 @@ const opDeleteGraphqlApi = "DeleteGraphqlApi"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteGraphqlApiRequest method.
+//	req, resp := client.DeleteGraphqlApiRequest(params)
 //
-//    // Example sending a request using the DeleteGraphqlApiRequest method.
-//    req, resp := client.DeleteGraphqlApiRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteGraphqlApi
 func (c *AppSync) DeleteGraphqlApiRequest(input *DeleteGraphqlApiInput) (req *request.Request, output *DeleteGraphqlApiOutput) {
@@ -1381,26 +1585,27 @@ func (c *AppSync) DeleteGraphqlApiRequest(input *DeleteGraphqlApiInput) (req *re
 // API operation DeleteGraphqlApi for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteGraphqlApi
 func (c *AppSync) DeleteGraphqlApi(input *DeleteGraphqlApiInput) (*DeleteGraphqlApiOutput, error) {
@@ -1440,14 +1645,13 @@ const opDeleteResolver = "DeleteResolver"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResolverRequest method.
+//	req, resp := client.DeleteResolverRequest(params)
 //
-//    // Example sending a request using the DeleteResolverRequest method.
-//    req, resp := client.DeleteResolverRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteResolver
 func (c *AppSync) DeleteResolverRequest(input *DeleteResolverInput) (req *request.Request, output *DeleteResolverOutput) {
@@ -1479,23 +1683,24 @@ func (c *AppSync) DeleteResolverRequest(input *DeleteResolverInput) (req *reques
 // API operation DeleteResolver for usage and error information.
 //
 // Returned Error Types:
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteResolver
 func (c *AppSync) DeleteResolver(input *DeleteResolverInput) (*DeleteResolverOutput, error) {
@@ -1535,14 +1740,13 @@ const opDeleteType = "DeleteType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteTypeRequest method.
+//	req, resp := client.DeleteTypeRequest(params)
 //
-//    // Example sending a request using the DeleteTypeRequest method.
-//    req, resp := client.DeleteTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteType
 func (c *AppSync) DeleteTypeRequest(input *DeleteTypeInput) (req *request.Request, output *DeleteTypeOutput) {
@@ -1574,23 +1778,24 @@ func (c *AppSync) DeleteTypeRequest(input *DeleteTypeInput) (req *request.Reques
 // API operation DeleteType for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteType
 func (c *AppSync) DeleteType(input *DeleteTypeInput) (*DeleteTypeOutput, error) {
@@ -1630,14 +1835,13 @@ const opDisassociateApi = "DisassociateApi"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateApiRequest method.
+//	req, resp := client.DisassociateApiRequest(params)
 //
-//    // Example sending a request using the DisassociateApiRequest method.
-//    req, resp := client.DisassociateApiRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DisassociateApi
 func (c *AppSync) DisassociateApiRequest(input *DisassociateApiInput) (req *request.Request, output *DisassociateApiOutput) {
@@ -1669,23 +1873,24 @@ func (c *AppSync) DisassociateApiRequest(input *DisassociateApiInput) (req *requ
 // API operation DisassociateApi for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DisassociateApi
 func (c *AppSync) DisassociateApi(input *DisassociateApiInput) (*DisassociateApiOutput, error) {
@@ -1709,6 +1914,196 @@ func (c *AppSync) DisassociateApiWithContext(ctx aws.Context, input *Disassociat
 	return out, req.Send()
 }
 
+const opDisassociateMergedGraphqlApi = "DisassociateMergedGraphqlApi"
+
+// DisassociateMergedGraphqlApiRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateMergedGraphqlApi operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateMergedGraphqlApi for more information on using the DisassociateMergedGraphqlApi
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DisassociateMergedGraphqlApiRequest method.
+//	req, resp := client.DisassociateMergedGraphqlApiRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DisassociateMergedGraphqlApi
+func (c *AppSync) DisassociateMergedGraphqlApiRequest(input *DisassociateMergedGraphqlApiInput) (req *request.Request, output *DisassociateMergedGraphqlApiOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateMergedGraphqlApi,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v1/sourceApis/{sourceApiIdentifier}/mergedApiAssociations/{associationId}",
+	}
+
+	if input == nil {
+		input = &DisassociateMergedGraphqlApiInput{}
+	}
+
+	output = &DisassociateMergedGraphqlApiOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DisassociateMergedGraphqlApi API operation for AWS AppSync.
+//
+// Deletes an association between a Merged API and source API using the source
+// API's identifier and the association ID.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation DisassociateMergedGraphqlApi for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DisassociateMergedGraphqlApi
+func (c *AppSync) DisassociateMergedGraphqlApi(input *DisassociateMergedGraphqlApiInput) (*DisassociateMergedGraphqlApiOutput, error) {
+	req, out := c.DisassociateMergedGraphqlApiRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateMergedGraphqlApiWithContext is the same as DisassociateMergedGraphqlApi with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateMergedGraphqlApi for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) DisassociateMergedGraphqlApiWithContext(ctx aws.Context, input *DisassociateMergedGraphqlApiInput, opts ...request.Option) (*DisassociateMergedGraphqlApiOutput, error) {
+	req, out := c.DisassociateMergedGraphqlApiRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDisassociateSourceGraphqlApi = "DisassociateSourceGraphqlApi"
+
+// DisassociateSourceGraphqlApiRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateSourceGraphqlApi operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateSourceGraphqlApi for more information on using the DisassociateSourceGraphqlApi
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DisassociateSourceGraphqlApiRequest method.
+//	req, resp := client.DisassociateSourceGraphqlApiRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DisassociateSourceGraphqlApi
+func (c *AppSync) DisassociateSourceGraphqlApiRequest(input *DisassociateSourceGraphqlApiInput) (req *request.Request, output *DisassociateSourceGraphqlApiOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateSourceGraphqlApi,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v1/mergedApis/{mergedApiIdentifier}/sourceApiAssociations/{associationId}",
+	}
+
+	if input == nil {
+		input = &DisassociateSourceGraphqlApiInput{}
+	}
+
+	output = &DisassociateSourceGraphqlApiOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DisassociateSourceGraphqlApi API operation for AWS AppSync.
+//
+// Deletes an association between a Merged API and source API using the Merged
+// API's identifier and the association ID.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation DisassociateSourceGraphqlApi for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DisassociateSourceGraphqlApi
+func (c *AppSync) DisassociateSourceGraphqlApi(input *DisassociateSourceGraphqlApiInput) (*DisassociateSourceGraphqlApiOutput, error) {
+	req, out := c.DisassociateSourceGraphqlApiRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateSourceGraphqlApiWithContext is the same as DisassociateSourceGraphqlApi with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateSourceGraphqlApi for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) DisassociateSourceGraphqlApiWithContext(ctx aws.Context, input *DisassociateSourceGraphqlApiInput, opts ...request.Option) (*DisassociateSourceGraphqlApiOutput, error) {
+	req, out := c.DisassociateSourceGraphqlApiRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opEvaluateCode = "EvaluateCode"
 
 // EvaluateCodeRequest generates a "aws/request.Request" representing the
@@ -1725,14 +2120,13 @@ const opEvaluateCode = "EvaluateCode"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EvaluateCodeRequest method.
+//	req, resp := client.EvaluateCodeRequest(params)
 //
-//    // Example sending a request using the EvaluateCodeRequest method.
-//    req, resp := client.EvaluateCodeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/EvaluateCode
 func (c *AppSync) EvaluateCodeRequest(input *EvaluateCodeInput) (req *request.Request, output *EvaluateCodeOutput) {
@@ -1769,15 +2163,16 @@ func (c *AppSync) EvaluateCodeRequest(input *EvaluateCodeInput) (req *request.Re
 // API operation EvaluateCode for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/EvaluateCode
 func (c *AppSync) EvaluateCode(input *EvaluateCodeInput) (*EvaluateCodeOutput, error) {
@@ -1817,14 +2212,13 @@ const opEvaluateMappingTemplate = "EvaluateMappingTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EvaluateMappingTemplateRequest method.
+//	req, resp := client.EvaluateMappingTemplateRequest(params)
 //
-//    // Example sending a request using the EvaluateMappingTemplateRequest method.
-//    req, resp := client.EvaluateMappingTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/EvaluateMappingTemplate
 func (c *AppSync) EvaluateMappingTemplateRequest(input *EvaluateMappingTemplateInput) (req *request.Request, output *EvaluateMappingTemplateOutput) {
@@ -1863,15 +2257,16 @@ func (c *AppSync) EvaluateMappingTemplateRequest(input *EvaluateMappingTemplateI
 // API operation EvaluateMappingTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/EvaluateMappingTemplate
 func (c *AppSync) EvaluateMappingTemplate(input *EvaluateMappingTemplateInput) (*EvaluateMappingTemplateOutput, error) {
@@ -1911,14 +2306,13 @@ const opFlushApiCache = "FlushApiCache"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the FlushApiCacheRequest method.
+//	req, resp := client.FlushApiCacheRequest(params)
 //
-//    // Example sending a request using the FlushApiCacheRequest method.
-//    req, resp := client.FlushApiCacheRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/FlushApiCache
 func (c *AppSync) FlushApiCacheRequest(input *FlushApiCacheInput) (req *request.Request, output *FlushApiCacheOutput) {
@@ -1950,23 +2344,24 @@ func (c *AppSync) FlushApiCacheRequest(input *FlushApiCacheInput) (req *request.
 // API operation FlushApiCache for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/FlushApiCache
 func (c *AppSync) FlushApiCache(input *FlushApiCacheInput) (*FlushApiCacheOutput, error) {
@@ -2006,14 +2401,13 @@ const opGetApiAssociation = "GetApiAssociation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetApiAssociationRequest method.
+//	req, resp := client.GetApiAssociationRequest(params)
 //
-//    // Example sending a request using the GetApiAssociationRequest method.
-//    req, resp := client.GetApiAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetApiAssociation
 func (c *AppSync) GetApiAssociationRequest(input *GetApiAssociationInput) (req *request.Request, output *GetApiAssociationOutput) {
@@ -2044,19 +2438,20 @@ func (c *AppSync) GetApiAssociationRequest(input *GetApiAssociationInput) (req *
 // API operation GetApiAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetApiAssociation
 func (c *AppSync) GetApiAssociation(input *GetApiAssociationInput) (*GetApiAssociationOutput, error) {
@@ -2096,14 +2491,13 @@ const opGetApiCache = "GetApiCache"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetApiCacheRequest method.
+//	req, resp := client.GetApiCacheRequest(params)
 //
-//    // Example sending a request using the GetApiCacheRequest method.
-//    req, resp := client.GetApiCacheRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetApiCache
 func (c *AppSync) GetApiCacheRequest(input *GetApiCacheInput) (req *request.Request, output *GetApiCacheOutput) {
@@ -2134,23 +2528,24 @@ func (c *AppSync) GetApiCacheRequest(input *GetApiCacheInput) (req *request.Requ
 // API operation GetApiCache for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetApiCache
 func (c *AppSync) GetApiCache(input *GetApiCacheInput) (*GetApiCacheOutput, error) {
@@ -2190,14 +2585,13 @@ const opGetDataSource = "GetDataSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDataSourceRequest method.
+//	req, resp := client.GetDataSourceRequest(params)
 //
-//    // Example sending a request using the GetDataSourceRequest method.
-//    req, resp := client.GetDataSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetDataSource
 func (c *AppSync) GetDataSourceRequest(input *GetDataSourceInput) (req *request.Request, output *GetDataSourceOutput) {
@@ -2228,23 +2622,24 @@ func (c *AppSync) GetDataSourceRequest(input *GetDataSourceInput) (req *request.
 // API operation GetDataSource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetDataSource
 func (c *AppSync) GetDataSource(input *GetDataSourceInput) (*GetDataSourceOutput, error) {
@@ -2268,6 +2663,95 @@ func (c *AppSync) GetDataSourceWithContext(ctx aws.Context, input *GetDataSource
 	return out, req.Send()
 }
 
+const opGetDataSourceIntrospection = "GetDataSourceIntrospection"
+
+// GetDataSourceIntrospectionRequest generates a "aws/request.Request" representing the
+// client's request for the GetDataSourceIntrospection operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetDataSourceIntrospection for more information on using the GetDataSourceIntrospection
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetDataSourceIntrospectionRequest method.
+//	req, resp := client.GetDataSourceIntrospectionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetDataSourceIntrospection
+func (c *AppSync) GetDataSourceIntrospectionRequest(input *GetDataSourceIntrospectionInput) (req *request.Request, output *GetDataSourceIntrospectionOutput) {
+	op := &request.Operation{
+		Name:       opGetDataSourceIntrospection,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/datasources/introspections/{introspectionId}",
+	}
+
+	if input == nil {
+		input = &GetDataSourceIntrospectionInput{}
+	}
+
+	output = &GetDataSourceIntrospectionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetDataSourceIntrospection API operation for AWS AppSync.
+//
+// Retrieves the record of an existing introspection. If the retrieval is successful,
+// the result of the instrospection will also be returned. If the retrieval
+// fails the operation, an error message will be returned instead.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation GetDataSourceIntrospection for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetDataSourceIntrospection
+func (c *AppSync) GetDataSourceIntrospection(input *GetDataSourceIntrospectionInput) (*GetDataSourceIntrospectionOutput, error) {
+	req, out := c.GetDataSourceIntrospectionRequest(input)
+	return out, req.Send()
+}
+
+// GetDataSourceIntrospectionWithContext is the same as GetDataSourceIntrospection with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetDataSourceIntrospection for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) GetDataSourceIntrospectionWithContext(ctx aws.Context, input *GetDataSourceIntrospectionInput, opts ...request.Option) (*GetDataSourceIntrospectionOutput, error) {
+	req, out := c.GetDataSourceIntrospectionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetDomainName = "GetDomainName"
 
 // GetDomainNameRequest generates a "aws/request.Request" representing the
@@ -2284,14 +2768,13 @@ const opGetDomainName = "GetDomainName"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDomainNameRequest method.
+//	req, resp := client.GetDomainNameRequest(params)
 //
-//    // Example sending a request using the GetDomainNameRequest method.
-//    req, resp := client.GetDomainNameRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetDomainName
 func (c *AppSync) GetDomainNameRequest(input *GetDomainNameInput) (req *request.Request, output *GetDomainNameOutput) {
@@ -2322,19 +2805,20 @@ func (c *AppSync) GetDomainNameRequest(input *GetDomainNameInput) (req *request.
 // API operation GetDomainName for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetDomainName
 func (c *AppSync) GetDomainName(input *GetDomainNameInput) (*GetDomainNameOutput, error) {
@@ -2374,14 +2858,13 @@ const opGetFunction = "GetFunction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFunctionRequest method.
+//	req, resp := client.GetFunctionRequest(params)
 //
-//    // Example sending a request using the GetFunctionRequest method.
-//    req, resp := client.GetFunctionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetFunction
 func (c *AppSync) GetFunctionRequest(input *GetFunctionInput) (req *request.Request, output *GetFunctionOutput) {
@@ -2412,16 +2895,17 @@ func (c *AppSync) GetFunctionRequest(input *GetFunctionInput) (req *request.Requ
 // API operation GetFunction for usage and error information.
 //
 // Returned Error Types:
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetFunction
 func (c *AppSync) GetFunction(input *GetFunctionInput) (*GetFunctionOutput, error) {
@@ -2461,14 +2945,13 @@ const opGetGraphqlApi = "GetGraphqlApi"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetGraphqlApiRequest method.
+//	req, resp := client.GetGraphqlApiRequest(params)
 //
-//    // Example sending a request using the GetGraphqlApiRequest method.
-//    req, resp := client.GetGraphqlApiRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetGraphqlApi
 func (c *AppSync) GetGraphqlApiRequest(input *GetGraphqlApiInput) (req *request.Request, output *GetGraphqlApiOutput) {
@@ -2499,22 +2982,23 @@ func (c *AppSync) GetGraphqlApiRequest(input *GetGraphqlApiInput) (req *request.
 // API operation GetGraphqlApi for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetGraphqlApi
 func (c *AppSync) GetGraphqlApi(input *GetGraphqlApiInput) (*GetGraphqlApiOutput, error) {
@@ -2538,6 +3022,100 @@ func (c *AppSync) GetGraphqlApiWithContext(ctx aws.Context, input *GetGraphqlApi
 	return out, req.Send()
 }
 
+const opGetGraphqlApiEnvironmentVariables = "GetGraphqlApiEnvironmentVariables"
+
+// GetGraphqlApiEnvironmentVariablesRequest generates a "aws/request.Request" representing the
+// client's request for the GetGraphqlApiEnvironmentVariables operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetGraphqlApiEnvironmentVariables for more information on using the GetGraphqlApiEnvironmentVariables
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetGraphqlApiEnvironmentVariablesRequest method.
+//	req, resp := client.GetGraphqlApiEnvironmentVariablesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetGraphqlApiEnvironmentVariables
+func (c *AppSync) GetGraphqlApiEnvironmentVariablesRequest(input *GetGraphqlApiEnvironmentVariablesInput) (req *request.Request, output *GetGraphqlApiEnvironmentVariablesOutput) {
+	op := &request.Operation{
+		Name:       opGetGraphqlApiEnvironmentVariables,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/apis/{apiId}/environmentVariables",
+	}
+
+	if input == nil {
+		input = &GetGraphqlApiEnvironmentVariablesInput{}
+	}
+
+	output = &GetGraphqlApiEnvironmentVariablesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetGraphqlApiEnvironmentVariables API operation for AWS AppSync.
+//
+// Retrieves the list of environmental variable key-value pairs associated with
+// an API by its ID value.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation GetGraphqlApiEnvironmentVariables for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetGraphqlApiEnvironmentVariables
+func (c *AppSync) GetGraphqlApiEnvironmentVariables(input *GetGraphqlApiEnvironmentVariablesInput) (*GetGraphqlApiEnvironmentVariablesOutput, error) {
+	req, out := c.GetGraphqlApiEnvironmentVariablesRequest(input)
+	return out, req.Send()
+}
+
+// GetGraphqlApiEnvironmentVariablesWithContext is the same as GetGraphqlApiEnvironmentVariables with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetGraphqlApiEnvironmentVariables for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) GetGraphqlApiEnvironmentVariablesWithContext(ctx aws.Context, input *GetGraphqlApiEnvironmentVariablesInput, opts ...request.Option) (*GetGraphqlApiEnvironmentVariablesOutput, error) {
+	req, out := c.GetGraphqlApiEnvironmentVariablesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetIntrospectionSchema = "GetIntrospectionSchema"
 
 // GetIntrospectionSchemaRequest generates a "aws/request.Request" representing the
@@ -2554,14 +3132,13 @@ const opGetIntrospectionSchema = "GetIntrospectionSchema"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetIntrospectionSchemaRequest method.
+//	req, resp := client.GetIntrospectionSchemaRequest(params)
 //
-//    // Example sending a request using the GetIntrospectionSchemaRequest method.
-//    req, resp := client.GetIntrospectionSchemaRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetIntrospectionSchema
 func (c *AppSync) GetIntrospectionSchemaRequest(input *GetIntrospectionSchemaInput) (req *request.Request, output *GetIntrospectionSchemaOutput) {
@@ -2592,18 +3169,19 @@ func (c *AppSync) GetIntrospectionSchemaRequest(input *GetIntrospectionSchemaInp
 // API operation GetIntrospectionSchema for usage and error information.
 //
 // Returned Error Types:
-//   * GraphQLSchemaException
-//   The GraphQL schema is not valid.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - GraphQLSchemaException
+//     The GraphQL schema is not valid.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetIntrospectionSchema
 func (c *AppSync) GetIntrospectionSchema(input *GetIntrospectionSchemaInput) (*GetIntrospectionSchemaOutput, error) {
@@ -2643,14 +3221,13 @@ const opGetResolver = "GetResolver"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResolverRequest method.
+//	req, resp := client.GetResolverRequest(params)
 //
-//    // Example sending a request using the GetResolverRequest method.
-//    req, resp := client.GetResolverRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetResolver
 func (c *AppSync) GetResolverRequest(input *GetResolverInput) (req *request.Request, output *GetResolverOutput) {
@@ -2681,16 +3258,17 @@ func (c *AppSync) GetResolverRequest(input *GetResolverInput) (req *request.Requ
 // API operation GetResolver for usage and error information.
 //
 // Returned Error Types:
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetResolver
 func (c *AppSync) GetResolver(input *GetResolverInput) (*GetResolverOutput, error) {
@@ -2730,14 +3308,13 @@ const opGetSchemaCreationStatus = "GetSchemaCreationStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSchemaCreationStatusRequest method.
+//	req, resp := client.GetSchemaCreationStatusRequest(params)
 //
-//    // Example sending a request using the GetSchemaCreationStatusRequest method.
-//    req, resp := client.GetSchemaCreationStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetSchemaCreationStatus
 func (c *AppSync) GetSchemaCreationStatusRequest(input *GetSchemaCreationStatusInput) (req *request.Request, output *GetSchemaCreationStatusOutput) {
@@ -2768,19 +3345,20 @@ func (c *AppSync) GetSchemaCreationStatusRequest(input *GetSchemaCreationStatusI
 // API operation GetSchemaCreationStatus for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetSchemaCreationStatus
 func (c *AppSync) GetSchemaCreationStatus(input *GetSchemaCreationStatusInput) (*GetSchemaCreationStatusOutput, error) {
@@ -2804,6 +3382,96 @@ func (c *AppSync) GetSchemaCreationStatusWithContext(ctx aws.Context, input *Get
 	return out, req.Send()
 }
 
+const opGetSourceApiAssociation = "GetSourceApiAssociation"
+
+// GetSourceApiAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the GetSourceApiAssociation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSourceApiAssociation for more information on using the GetSourceApiAssociation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetSourceApiAssociationRequest method.
+//	req, resp := client.GetSourceApiAssociationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetSourceApiAssociation
+func (c *AppSync) GetSourceApiAssociationRequest(input *GetSourceApiAssociationInput) (req *request.Request, output *GetSourceApiAssociationOutput) {
+	op := &request.Operation{
+		Name:       opGetSourceApiAssociation,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/mergedApis/{mergedApiIdentifier}/sourceApiAssociations/{associationId}",
+	}
+
+	if input == nil {
+		input = &GetSourceApiAssociationInput{}
+	}
+
+	output = &GetSourceApiAssociationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSourceApiAssociation API operation for AWS AppSync.
+//
+// Retrieves a SourceApiAssociation object.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation GetSourceApiAssociation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetSourceApiAssociation
+func (c *AppSync) GetSourceApiAssociation(input *GetSourceApiAssociationInput) (*GetSourceApiAssociationOutput, error) {
+	req, out := c.GetSourceApiAssociationRequest(input)
+	return out, req.Send()
+}
+
+// GetSourceApiAssociationWithContext is the same as GetSourceApiAssociation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSourceApiAssociation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) GetSourceApiAssociationWithContext(ctx aws.Context, input *GetSourceApiAssociationInput, opts ...request.Option) (*GetSourceApiAssociationOutput, error) {
+	req, out := c.GetSourceApiAssociationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetType = "GetType"
 
 // GetTypeRequest generates a "aws/request.Request" representing the
@@ -2820,14 +3488,13 @@ const opGetType = "GetType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTypeRequest method.
+//	req, resp := client.GetTypeRequest(params)
 //
-//    // Example sending a request using the GetTypeRequest method.
-//    req, resp := client.GetTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetType
 func (c *AppSync) GetTypeRequest(input *GetTypeInput) (req *request.Request, output *GetTypeOutput) {
@@ -2858,23 +3525,24 @@ func (c *AppSync) GetTypeRequest(input *GetTypeInput) (req *request.Request, out
 // API operation GetType for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetType
 func (c *AppSync) GetType(input *GetTypeInput) (*GetTypeOutput, error) {
@@ -2914,14 +3582,13 @@ const opListApiKeys = "ListApiKeys"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListApiKeysRequest method.
+//	req, resp := client.ListApiKeysRequest(params)
 //
-//    // Example sending a request using the ListApiKeysRequest method.
-//    req, resp := client.ListApiKeysRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListApiKeys
 func (c *AppSync) ListApiKeysRequest(input *ListApiKeysInput) (req *request.Request, output *ListApiKeysOutput) {
@@ -2957,19 +3624,20 @@ func (c *AppSync) ListApiKeysRequest(input *ListApiKeysInput) (req *request.Requ
 // API operation ListApiKeys for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListApiKeys
 func (c *AppSync) ListApiKeys(input *ListApiKeysInput) (*ListApiKeysOutput, error) {
@@ -3009,14 +3677,13 @@ const opListDataSources = "ListDataSources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDataSourcesRequest method.
+//	req, resp := client.ListDataSourcesRequest(params)
 //
-//    // Example sending a request using the ListDataSourcesRequest method.
-//    req, resp := client.ListDataSourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListDataSources
 func (c *AppSync) ListDataSourcesRequest(input *ListDataSourcesInput) (req *request.Request, output *ListDataSourcesOutput) {
@@ -3047,19 +3714,20 @@ func (c *AppSync) ListDataSourcesRequest(input *ListDataSourcesInput) (req *requ
 // API operation ListDataSources for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListDataSources
 func (c *AppSync) ListDataSources(input *ListDataSourcesInput) (*ListDataSourcesOutput, error) {
@@ -3099,14 +3767,13 @@ const opListDomainNames = "ListDomainNames"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDomainNamesRequest method.
+//	req, resp := client.ListDomainNamesRequest(params)
 //
-//    // Example sending a request using the ListDomainNamesRequest method.
-//    req, resp := client.ListDomainNamesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListDomainNames
 func (c *AppSync) ListDomainNamesRequest(input *ListDomainNamesInput) (req *request.Request, output *ListDomainNamesOutput) {
@@ -3137,15 +3804,16 @@ func (c *AppSync) ListDomainNamesRequest(input *ListDomainNamesInput) (req *requ
 // API operation ListDomainNames for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListDomainNames
 func (c *AppSync) ListDomainNames(input *ListDomainNamesInput) (*ListDomainNamesOutput, error) {
@@ -3185,14 +3853,13 @@ const opListFunctions = "ListFunctions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFunctionsRequest method.
+//	req, resp := client.ListFunctionsRequest(params)
 //
-//    // Example sending a request using the ListFunctionsRequest method.
-//    req, resp := client.ListFunctionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListFunctions
 func (c *AppSync) ListFunctionsRequest(input *ListFunctionsInput) (req *request.Request, output *ListFunctionsOutput) {
@@ -3223,19 +3890,20 @@ func (c *AppSync) ListFunctionsRequest(input *ListFunctionsInput) (req *request.
 // API operation ListFunctions for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListFunctions
 func (c *AppSync) ListFunctions(input *ListFunctionsInput) (*ListFunctionsOutput, error) {
@@ -3275,14 +3943,13 @@ const opListGraphqlApis = "ListGraphqlApis"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListGraphqlApisRequest method.
+//	req, resp := client.ListGraphqlApisRequest(params)
 //
-//    // Example sending a request using the ListGraphqlApisRequest method.
-//    req, resp := client.ListGraphqlApisRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListGraphqlApis
 func (c *AppSync) ListGraphqlApisRequest(input *ListGraphqlApisInput) (req *request.Request, output *ListGraphqlApisOutput) {
@@ -3313,15 +3980,16 @@ func (c *AppSync) ListGraphqlApisRequest(input *ListGraphqlApisInput) (req *requ
 // API operation ListGraphqlApis for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListGraphqlApis
 func (c *AppSync) ListGraphqlApis(input *ListGraphqlApisInput) (*ListGraphqlApisOutput, error) {
@@ -3361,14 +4029,13 @@ const opListResolvers = "ListResolvers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResolversRequest method.
+//	req, resp := client.ListResolversRequest(params)
 //
-//    // Example sending a request using the ListResolversRequest method.
-//    req, resp := client.ListResolversRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListResolvers
 func (c *AppSync) ListResolversRequest(input *ListResolversInput) (req *request.Request, output *ListResolversOutput) {
@@ -3399,19 +4066,20 @@ func (c *AppSync) ListResolversRequest(input *ListResolversInput) (req *request.
 // API operation ListResolvers for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListResolvers
 func (c *AppSync) ListResolvers(input *ListResolversInput) (*ListResolversOutput, error) {
@@ -3451,14 +4119,13 @@ const opListResolversByFunction = "ListResolversByFunction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResolversByFunctionRequest method.
+//	req, resp := client.ListResolversByFunctionRequest(params)
 //
-//    // Example sending a request using the ListResolversByFunctionRequest method.
-//    req, resp := client.ListResolversByFunctionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListResolversByFunction
 func (c *AppSync) ListResolversByFunctionRequest(input *ListResolversByFunctionInput) (req *request.Request, output *ListResolversByFunctionOutput) {
@@ -3489,19 +4156,20 @@ func (c *AppSync) ListResolversByFunctionRequest(input *ListResolversByFunctionI
 // API operation ListResolversByFunction for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListResolversByFunction
 func (c *AppSync) ListResolversByFunction(input *ListResolversByFunctionInput) (*ListResolversByFunctionOutput, error) {
@@ -3525,6 +4193,96 @@ func (c *AppSync) ListResolversByFunctionWithContext(ctx aws.Context, input *Lis
 	return out, req.Send()
 }
 
+const opListSourceApiAssociations = "ListSourceApiAssociations"
+
+// ListSourceApiAssociationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListSourceApiAssociations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSourceApiAssociations for more information on using the ListSourceApiAssociations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListSourceApiAssociationsRequest method.
+//	req, resp := client.ListSourceApiAssociationsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListSourceApiAssociations
+func (c *AppSync) ListSourceApiAssociationsRequest(input *ListSourceApiAssociationsInput) (req *request.Request, output *ListSourceApiAssociationsOutput) {
+	op := &request.Operation{
+		Name:       opListSourceApiAssociations,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/apis/{apiId}/sourceApiAssociations",
+	}
+
+	if input == nil {
+		input = &ListSourceApiAssociationsInput{}
+	}
+
+	output = &ListSourceApiAssociationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSourceApiAssociations API operation for AWS AppSync.
+//
+// Lists the SourceApiAssociationSummary data.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation ListSourceApiAssociations for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListSourceApiAssociations
+func (c *AppSync) ListSourceApiAssociations(input *ListSourceApiAssociationsInput) (*ListSourceApiAssociationsOutput, error) {
+	req, out := c.ListSourceApiAssociationsRequest(input)
+	return out, req.Send()
+}
+
+// ListSourceApiAssociationsWithContext is the same as ListSourceApiAssociations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSourceApiAssociations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) ListSourceApiAssociationsWithContext(ctx aws.Context, input *ListSourceApiAssociationsInput, opts ...request.Option) (*ListSourceApiAssociationsOutput, error) {
+	req, out := c.ListSourceApiAssociationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
@@ -3541,14 +4299,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListTagsForResource
 func (c *AppSync) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -3579,25 +4336,26 @@ func (c *AppSync) ListTagsForResourceRequest(input *ListTagsForResourceInput) (r
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * LimitExceededException
-//   The request exceeded a limit. Try your request again.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - LimitExceededException
+//     The request exceeded a limit. Try your request again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListTagsForResource
 func (c *AppSync) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -3637,14 +4395,13 @@ const opListTypes = "ListTypes"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTypesRequest method.
+//	req, resp := client.ListTypesRequest(params)
 //
-//    // Example sending a request using the ListTypesRequest method.
-//    req, resp := client.ListTypesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListTypes
 func (c *AppSync) ListTypesRequest(input *ListTypesInput) (req *request.Request, output *ListTypesOutput) {
@@ -3675,23 +4432,24 @@ func (c *AppSync) ListTypesRequest(input *ListTypesInput) (req *request.Request,
 // API operation ListTypes for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListTypes
 func (c *AppSync) ListTypes(input *ListTypesInput) (*ListTypesOutput, error) {
@@ -3715,6 +4473,323 @@ func (c *AppSync) ListTypesWithContext(ctx aws.Context, input *ListTypesInput, o
 	return out, req.Send()
 }
 
+const opListTypesByAssociation = "ListTypesByAssociation"
+
+// ListTypesByAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the ListTypesByAssociation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTypesByAssociation for more information on using the ListTypesByAssociation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListTypesByAssociationRequest method.
+//	req, resp := client.ListTypesByAssociationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListTypesByAssociation
+func (c *AppSync) ListTypesByAssociationRequest(input *ListTypesByAssociationInput) (req *request.Request, output *ListTypesByAssociationOutput) {
+	op := &request.Operation{
+		Name:       opListTypesByAssociation,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/mergedApis/{mergedApiIdentifier}/sourceApiAssociations/{associationId}/types",
+	}
+
+	if input == nil {
+		input = &ListTypesByAssociationInput{}
+	}
+
+	output = &ListTypesByAssociationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTypesByAssociation API operation for AWS AppSync.
+//
+// Lists Type objects by the source API association ID.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation ListTypesByAssociation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListTypesByAssociation
+func (c *AppSync) ListTypesByAssociation(input *ListTypesByAssociationInput) (*ListTypesByAssociationOutput, error) {
+	req, out := c.ListTypesByAssociationRequest(input)
+	return out, req.Send()
+}
+
+// ListTypesByAssociationWithContext is the same as ListTypesByAssociation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTypesByAssociation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) ListTypesByAssociationWithContext(ctx aws.Context, input *ListTypesByAssociationInput, opts ...request.Option) (*ListTypesByAssociationOutput, error) {
+	req, out := c.ListTypesByAssociationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutGraphqlApiEnvironmentVariables = "PutGraphqlApiEnvironmentVariables"
+
+// PutGraphqlApiEnvironmentVariablesRequest generates a "aws/request.Request" representing the
+// client's request for the PutGraphqlApiEnvironmentVariables operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutGraphqlApiEnvironmentVariables for more information on using the PutGraphqlApiEnvironmentVariables
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the PutGraphqlApiEnvironmentVariablesRequest method.
+//	req, resp := client.PutGraphqlApiEnvironmentVariablesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/PutGraphqlApiEnvironmentVariables
+func (c *AppSync) PutGraphqlApiEnvironmentVariablesRequest(input *PutGraphqlApiEnvironmentVariablesInput) (req *request.Request, output *PutGraphqlApiEnvironmentVariablesOutput) {
+	op := &request.Operation{
+		Name:       opPutGraphqlApiEnvironmentVariables,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v1/apis/{apiId}/environmentVariables",
+	}
+
+	if input == nil {
+		input = &PutGraphqlApiEnvironmentVariablesInput{}
+	}
+
+	output = &PutGraphqlApiEnvironmentVariablesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutGraphqlApiEnvironmentVariables API operation for AWS AppSync.
+//
+// Creates a list of environmental variables in an API by its ID value.
+//
+// When creating an environmental variable, it must follow the constraints below:
+//
+//   - Both JavaScript and VTL templates support environmental variables.
+//
+//   - Environmental variables are not evaluated before function invocation.
+//
+//   - Environmental variables only support string values.
+//
+//   - Any defined value in an environmental variable is considered a string
+//     literal and not expanded.
+//
+//   - Variable evaluations should ideally be performed in the function code.
+//
+// When creating an environmental variable key-value pair, it must follow the
+// additional constraints below:
+//
+//   - Keys must begin with a letter.
+//
+//   - Keys must be at least two characters long.
+//
+//   - Keys can only contain letters, numbers, and the underscore character
+//     (_).
+//
+//   - Values can be up to 512 characters long.
+//
+//   - You can configure up to 50 key-value pairs in a GraphQL API.
+//
+// You can create a list of environmental variables by adding it to the environmentVariables
+// payload as a list in the format {"key1":"value1","key2":"value2", …}. Note
+// that each call of the PutGraphqlApiEnvironmentVariables action will result
+// in the overwriting of the existing environmental variable list of that API.
+// This means the existing environmental variables will be lost. To avoid this,
+// you must include all existing and new environmental variables in the list
+// each time you call this action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation PutGraphqlApiEnvironmentVariables for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/PutGraphqlApiEnvironmentVariables
+func (c *AppSync) PutGraphqlApiEnvironmentVariables(input *PutGraphqlApiEnvironmentVariablesInput) (*PutGraphqlApiEnvironmentVariablesOutput, error) {
+	req, out := c.PutGraphqlApiEnvironmentVariablesRequest(input)
+	return out, req.Send()
+}
+
+// PutGraphqlApiEnvironmentVariablesWithContext is the same as PutGraphqlApiEnvironmentVariables with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutGraphqlApiEnvironmentVariables for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) PutGraphqlApiEnvironmentVariablesWithContext(ctx aws.Context, input *PutGraphqlApiEnvironmentVariablesInput, opts ...request.Option) (*PutGraphqlApiEnvironmentVariablesOutput, error) {
+	req, out := c.PutGraphqlApiEnvironmentVariablesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartDataSourceIntrospection = "StartDataSourceIntrospection"
+
+// StartDataSourceIntrospectionRequest generates a "aws/request.Request" representing the
+// client's request for the StartDataSourceIntrospection operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartDataSourceIntrospection for more information on using the StartDataSourceIntrospection
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StartDataSourceIntrospectionRequest method.
+//	req, resp := client.StartDataSourceIntrospectionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/StartDataSourceIntrospection
+func (c *AppSync) StartDataSourceIntrospectionRequest(input *StartDataSourceIntrospectionInput) (req *request.Request, output *StartDataSourceIntrospectionOutput) {
+	op := &request.Operation{
+		Name:       opStartDataSourceIntrospection,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/datasources/introspections",
+	}
+
+	if input == nil {
+		input = &StartDataSourceIntrospectionInput{}
+	}
+
+	output = &StartDataSourceIntrospectionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartDataSourceIntrospection API operation for AWS AppSync.
+//
+// Creates a new introspection. Returns the introspectionId of the new introspection
+// after its creation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation StartDataSourceIntrospection for usage and error information.
+//
+// Returned Error Types:
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/StartDataSourceIntrospection
+func (c *AppSync) StartDataSourceIntrospection(input *StartDataSourceIntrospectionInput) (*StartDataSourceIntrospectionOutput, error) {
+	req, out := c.StartDataSourceIntrospectionRequest(input)
+	return out, req.Send()
+}
+
+// StartDataSourceIntrospectionWithContext is the same as StartDataSourceIntrospection with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartDataSourceIntrospection for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) StartDataSourceIntrospectionWithContext(ctx aws.Context, input *StartDataSourceIntrospectionInput, opts ...request.Option) (*StartDataSourceIntrospectionOutput, error) {
+	req, out := c.StartDataSourceIntrospectionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartSchemaCreation = "StartSchemaCreation"
 
 // StartSchemaCreationRequest generates a "aws/request.Request" representing the
@@ -3731,14 +4806,13 @@ const opStartSchemaCreation = "StartSchemaCreation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartSchemaCreationRequest method.
+//	req, resp := client.StartSchemaCreationRequest(params)
 //
-//    // Example sending a request using the StartSchemaCreationRequest method.
-//    req, resp := client.StartSchemaCreationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/StartSchemaCreation
 func (c *AppSync) StartSchemaCreationRequest(input *StartSchemaCreationInput) (req *request.Request, output *StartSchemaCreationOutput) {
@@ -3771,23 +4845,24 @@ func (c *AppSync) StartSchemaCreationRequest(input *StartSchemaCreationInput) (r
 // API operation StartSchemaCreation for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/StartSchemaCreation
 func (c *AppSync) StartSchemaCreation(input *StartSchemaCreationInput) (*StartSchemaCreationOutput, error) {
@@ -3811,6 +4886,101 @@ func (c *AppSync) StartSchemaCreationWithContext(ctx aws.Context, input *StartSc
 	return out, req.Send()
 }
 
+const opStartSchemaMerge = "StartSchemaMerge"
+
+// StartSchemaMergeRequest generates a "aws/request.Request" representing the
+// client's request for the StartSchemaMerge operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartSchemaMerge for more information on using the StartSchemaMerge
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StartSchemaMergeRequest method.
+//	req, resp := client.StartSchemaMergeRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/StartSchemaMerge
+func (c *AppSync) StartSchemaMergeRequest(input *StartSchemaMergeInput) (req *request.Request, output *StartSchemaMergeOutput) {
+	op := &request.Operation{
+		Name:       opStartSchemaMerge,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/mergedApis/{mergedApiIdentifier}/sourceApiAssociations/{associationId}/merge",
+	}
+
+	if input == nil {
+		input = &StartSchemaMergeInput{}
+	}
+
+	output = &StartSchemaMergeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartSchemaMerge API operation for AWS AppSync.
+//
+// Initiates a merge operation. Returns a status that shows the result of the
+// merge operation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation StartSchemaMerge for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/StartSchemaMerge
+func (c *AppSync) StartSchemaMerge(input *StartSchemaMergeInput) (*StartSchemaMergeOutput, error) {
+	req, out := c.StartSchemaMergeRequest(input)
+	return out, req.Send()
+}
+
+// StartSchemaMergeWithContext is the same as StartSchemaMerge with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartSchemaMerge for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) StartSchemaMergeWithContext(ctx aws.Context, input *StartSchemaMergeInput, opts ...request.Option) (*StartSchemaMergeOutput, error) {
+	req, out := c.StartSchemaMergeRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opTagResource = "TagResource"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
@@ -3827,14 +4997,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/TagResource
 func (c *AppSync) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -3866,25 +5035,26 @@ func (c *AppSync) TagResourceRequest(input *TagResourceInput) (req *request.Requ
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * LimitExceededException
-//   The request exceeded a limit. Try your request again.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - LimitExceededException
+//     The request exceeded a limit. Try your request again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/TagResource
 func (c *AppSync) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -3924,14 +5094,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UntagResource
 func (c *AppSync) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -3963,25 +5132,26 @@ func (c *AppSync) UntagResourceRequest(input *UntagResourceInput) (req *request.
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * LimitExceededException
-//   The request exceeded a limit. Try your request again.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - LimitExceededException
+//     The request exceeded a limit. Try your request again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UntagResource
 func (c *AppSync) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -4021,14 +5191,13 @@ const opUpdateApiCache = "UpdateApiCache"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateApiCacheRequest method.
+//	req, resp := client.UpdateApiCacheRequest(params)
 //
-//    // Example sending a request using the UpdateApiCacheRequest method.
-//    req, resp := client.UpdateApiCacheRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateApiCache
 func (c *AppSync) UpdateApiCacheRequest(input *UpdateApiCacheInput) (req *request.Request, output *UpdateApiCacheOutput) {
@@ -4059,23 +5228,24 @@ func (c *AppSync) UpdateApiCacheRequest(input *UpdateApiCacheInput) (req *reques
 // API operation UpdateApiCache for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateApiCache
 func (c *AppSync) UpdateApiCache(input *UpdateApiCacheInput) (*UpdateApiCacheOutput, error) {
@@ -4115,14 +5285,13 @@ const opUpdateApiKey = "UpdateApiKey"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateApiKeyRequest method.
+//	req, resp := client.UpdateApiKeyRequest(params)
 //
-//    // Example sending a request using the UpdateApiKeyRequest method.
-//    req, resp := client.UpdateApiKeyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateApiKey
 func (c *AppSync) UpdateApiKeyRequest(input *UpdateApiKeyInput) (req *request.Request, output *UpdateApiKeyOutput) {
@@ -4153,26 +5322,27 @@ func (c *AppSync) UpdateApiKeyRequest(input *UpdateApiKeyInput) (req *request.Re
 // API operation UpdateApiKey for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * LimitExceededException
-//   The request exceeded a limit. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - LimitExceededException
+//     The request exceeded a limit. Try your request again.
 //
-//   * ApiKeyValidityOutOfBoundsException
-//   The API key expiration must be set to a value between 1 and 365 days from
-//   creation (for CreateApiKey) or from update (for UpdateApiKey).
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - ApiKeyValidityOutOfBoundsException
+//     The API key expiration must be set to a value between 1 and 365 days from
+//     creation (for CreateApiKey) or from update (for UpdateApiKey).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateApiKey
 func (c *AppSync) UpdateApiKey(input *UpdateApiKeyInput) (*UpdateApiKeyOutput, error) {
@@ -4212,14 +5382,13 @@ const opUpdateDataSource = "UpdateDataSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDataSourceRequest method.
+//	req, resp := client.UpdateDataSourceRequest(params)
 //
-//    // Example sending a request using the UpdateDataSourceRequest method.
-//    req, resp := client.UpdateDataSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateDataSource
 func (c *AppSync) UpdateDataSourceRequest(input *UpdateDataSourceInput) (req *request.Request, output *UpdateDataSourceOutput) {
@@ -4250,23 +5419,24 @@ func (c *AppSync) UpdateDataSourceRequest(input *UpdateDataSourceInput) (req *re
 // API operation UpdateDataSource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateDataSource
 func (c *AppSync) UpdateDataSource(input *UpdateDataSourceInput) (*UpdateDataSourceOutput, error) {
@@ -4306,14 +5476,13 @@ const opUpdateDomainName = "UpdateDomainName"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDomainNameRequest method.
+//	req, resp := client.UpdateDomainNameRequest(params)
 //
-//    // Example sending a request using the UpdateDomainNameRequest method.
-//    req, resp := client.UpdateDomainNameRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateDomainName
 func (c *AppSync) UpdateDomainNameRequest(input *UpdateDomainNameInput) (req *request.Request, output *UpdateDomainNameOutput) {
@@ -4344,23 +5513,24 @@ func (c *AppSync) UpdateDomainNameRequest(input *UpdateDomainNameInput) (req *re
 // API operation UpdateDomainName for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateDomainName
 func (c *AppSync) UpdateDomainName(input *UpdateDomainNameInput) (*UpdateDomainNameOutput, error) {
@@ -4400,14 +5570,13 @@ const opUpdateFunction = "UpdateFunction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFunctionRequest method.
+//	req, resp := client.UpdateFunctionRequest(params)
 //
-//    // Example sending a request using the UpdateFunctionRequest method.
-//    req, resp := client.UpdateFunctionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateFunction
 func (c *AppSync) UpdateFunctionRequest(input *UpdateFunctionInput) (req *request.Request, output *UpdateFunctionOutput) {
@@ -4438,19 +5607,24 @@ func (c *AppSync) UpdateFunctionRequest(input *UpdateFunctionInput) (req *reques
 // API operation UpdateFunction for usage and error information.
 //
 // Returned Error Types:
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateFunction
 func (c *AppSync) UpdateFunction(input *UpdateFunctionInput) (*UpdateFunctionOutput, error) {
@@ -4490,14 +5664,13 @@ const opUpdateGraphqlApi = "UpdateGraphqlApi"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateGraphqlApiRequest method.
+//	req, resp := client.UpdateGraphqlApiRequest(params)
 //
-//    // Example sending a request using the UpdateGraphqlApiRequest method.
-//    req, resp := client.UpdateGraphqlApiRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateGraphqlApi
 func (c *AppSync) UpdateGraphqlApiRequest(input *UpdateGraphqlApiInput) (req *request.Request, output *UpdateGraphqlApiOutput) {
@@ -4528,26 +5701,27 @@ func (c *AppSync) UpdateGraphqlApiRequest(input *UpdateGraphqlApiInput) (req *re
 // API operation UpdateGraphqlApi for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * AccessDeniedException
-//   You don't have access to perform this operation on this resource.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - AccessDeniedException
+//     You don't have access to perform this operation on this resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateGraphqlApi
 func (c *AppSync) UpdateGraphqlApi(input *UpdateGraphqlApiInput) (*UpdateGraphqlApiOutput, error) {
@@ -4587,14 +5761,13 @@ const opUpdateResolver = "UpdateResolver"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateResolverRequest method.
+//	req, resp := client.UpdateResolverRequest(params)
 //
-//    // Example sending a request using the UpdateResolverRequest method.
-//    req, resp := client.UpdateResolverRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateResolver
 func (c *AppSync) UpdateResolverRequest(input *UpdateResolverInput) (req *request.Request, output *UpdateResolverOutput) {
@@ -4625,23 +5798,24 @@ func (c *AppSync) UpdateResolverRequest(input *UpdateResolverInput) (req *reques
 // API operation UpdateResolver for usage and error information.
 //
 // Returned Error Types:
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
 //
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateResolver
 func (c *AppSync) UpdateResolver(input *UpdateResolverInput) (*UpdateResolverOutput, error) {
@@ -4665,6 +5839,100 @@ func (c *AppSync) UpdateResolverWithContext(ctx aws.Context, input *UpdateResolv
 	return out, req.Send()
 }
 
+const opUpdateSourceApiAssociation = "UpdateSourceApiAssociation"
+
+// UpdateSourceApiAssociationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateSourceApiAssociation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateSourceApiAssociation for more information on using the UpdateSourceApiAssociation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateSourceApiAssociationRequest method.
+//	req, resp := client.UpdateSourceApiAssociationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateSourceApiAssociation
+func (c *AppSync) UpdateSourceApiAssociationRequest(input *UpdateSourceApiAssociationInput) (req *request.Request, output *UpdateSourceApiAssociationOutput) {
+	op := &request.Operation{
+		Name:       opUpdateSourceApiAssociation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/mergedApis/{mergedApiIdentifier}/sourceApiAssociations/{associationId}",
+	}
+
+	if input == nil {
+		input = &UpdateSourceApiAssociationInput{}
+	}
+
+	output = &UpdateSourceApiAssociationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateSourceApiAssociation API operation for AWS AppSync.
+//
+// Updates some of the configuration choices of a particular source API association.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation UpdateSourceApiAssociation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
+//
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
+//
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateSourceApiAssociation
+func (c *AppSync) UpdateSourceApiAssociation(input *UpdateSourceApiAssociationInput) (*UpdateSourceApiAssociationOutput, error) {
+	req, out := c.UpdateSourceApiAssociationRequest(input)
+	return out, req.Send()
+}
+
+// UpdateSourceApiAssociationWithContext is the same as UpdateSourceApiAssociation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateSourceApiAssociation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) UpdateSourceApiAssociationWithContext(ctx aws.Context, input *UpdateSourceApiAssociationInput, opts ...request.Option) (*UpdateSourceApiAssociationOutput, error) {
+	req, out := c.UpdateSourceApiAssociationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateType = "UpdateType"
 
 // UpdateTypeRequest generates a "aws/request.Request" representing the
@@ -4681,14 +5949,13 @@ const opUpdateType = "UpdateType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateTypeRequest method.
+//	req, resp := client.UpdateTypeRequest(params)
 //
-//    // Example sending a request using the UpdateTypeRequest method.
-//    req, resp := client.UpdateTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateType
 func (c *AppSync) UpdateTypeRequest(input *UpdateTypeInput) (req *request.Request, output *UpdateTypeOutput) {
@@ -4719,23 +5986,24 @@ func (c *AppSync) UpdateTypeRequest(input *UpdateTypeInput) (req *request.Reques
 // API operation UpdateType for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and then try again.
 //
-//   * ConcurrentModificationException
-//   Another modification is in progress at this time and it must complete before
-//   you can make your change.
+//   - BadRequestException
+//     The request is not well formed. For example, a value is invalid or a required
+//     field is missing. Check the field values, and then try again.
 //
-//   * NotFoundException
-//   The resource specified in the request was not found. Check the resource,
-//   and then try again.
+//   - ConcurrentModificationException
+//     Another modification is in progress at this time and it must complete before
+//     you can make your change.
 //
-//   * UnauthorizedException
-//   You aren't authorized to perform this operation.
+//   - NotFoundException
+//     The resource specified in the request was not found. Check the resource,
+//     and then try again.
 //
-//   * InternalFailureException
-//   An internal AppSync error occurred. Try your request again.
+//   - UnauthorizedException
+//     You aren't authorized to perform this operation.
+//
+//   - InternalFailureException
+//     An internal AppSync error occurred. Try your request again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateType
 func (c *AppSync) UpdateType(input *UpdateTypeInput) (*UpdateTypeOutput, error) {
@@ -4990,6 +6258,20 @@ type ApiCache struct {
 	// At-rest encryption flag for cache. You cannot update this setting after creation.
 	AtRestEncryptionEnabled *bool `locationName:"atRestEncryptionEnabled" type:"boolean"`
 
+	// Controls how cache health metrics will be emitted to CloudWatch. Cache health
+	// metrics include:
+	//
+	//    * NetworkBandwidthOutAllowanceExceeded: The network packets dropped because
+	//    the throughput exceeded the aggregated bandwidth limit. This is useful
+	//    for diagnosing bottlenecks in a cache configuration.
+	//
+	//    * EngineCPUUtilization: The CPU utilization (percentage) allocated to
+	//    the Redis process. This is useful for diagnosing bottlenecks in a cache
+	//    configuration.
+	//
+	// Metrics will be recorded by API ID. You can set the value to ENABLED or DISABLED.
+	HealthMetricsConfig *string `locationName:"healthMetricsConfig" type:"string" enum:"CacheHealthMetricsConfig"`
+
 	// The cache instance status.
 	//
 	//    * AVAILABLE: The instance is available for use.
@@ -5082,6 +6364,12 @@ func (s *ApiCache) SetAtRestEncryptionEnabled(v bool) *ApiCache {
 	return s
 }
 
+// SetHealthMetricsConfig sets the HealthMetricsConfig field's value.
+func (s *ApiCache) SetHealthMetricsConfig(v string) *ApiCache {
+	s.HealthMetricsConfig = &v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *ApiCache) SetStatus(v string) *ApiCache {
 	s.Status = &v
@@ -5116,40 +6404,40 @@ func (s *ApiCache) SetType(v string) *ApiCache {
 // ceased to be valid after February 21, 2018, and they should no longer be
 // used.
 //
-//    * ListApiKeys returns the expiration time in milliseconds.
+//   - ListApiKeys returns the expiration time in milliseconds.
 //
-//    * CreateApiKey returns the expiration time in milliseconds.
+//   - CreateApiKey returns the expiration time in milliseconds.
 //
-//    * UpdateApiKey is not available for this key version.
+//   - UpdateApiKey is not available for this key version.
 //
-//    * DeleteApiKey deletes the item from the table.
+//   - DeleteApiKey deletes the item from the table.
 //
-//    * Expiration is stored in DynamoDB as milliseconds. This results in a
-//    bug where keys are not automatically deleted because DynamoDB expects
-//    the TTL to be stored in seconds. As a one-time action, we deleted these
-//    keys from the table on February 21, 2018.
+//   - Expiration is stored in DynamoDB as milliseconds. This results in a
+//     bug where keys are not automatically deleted because DynamoDB expects
+//     the TTL to be stored in seconds. As a one-time action, we deleted these
+//     keys from the table on February 21, 2018.
 //
 // da2: We introduced this version in February 2018 when AppSync added support
 // to extend key expiration.
 //
-//    * ListApiKeys returns the expiration time and deletion time in seconds.
+//   - ListApiKeys returns the expiration time and deletion time in seconds.
 //
-//    * CreateApiKey returns the expiration time and deletion time in seconds
-//    and accepts a user-provided expiration time in seconds.
+//   - CreateApiKey returns the expiration time and deletion time in seconds
+//     and accepts a user-provided expiration time in seconds.
 //
-//    * UpdateApiKey returns the expiration time and and deletion time in seconds
-//    and accepts a user-provided expiration time in seconds. Expired API keys
-//    are kept for 60 days after the expiration time. You can update the key
-//    expiration time as long as the key isn't deleted.
+//   - UpdateApiKey returns the expiration time and and deletion time in seconds
+//     and accepts a user-provided expiration time in seconds. Expired API keys
+//     are kept for 60 days after the expiration time. You can update the key
+//     expiration time as long as the key isn't deleted.
 //
-//    * DeleteApiKey deletes the item from the table.
+//   - DeleteApiKey deletes the item from the table.
 //
-//    * Expiration is stored in DynamoDB as seconds. After the expiration time,
-//    using the key to authenticate will fail. However, you can reinstate the
-//    key before deletion.
+//   - Expiration is stored in DynamoDB as seconds. After the expiration time,
+//     using the key to authenticate will fail. However, you can reinstate the
+//     key before deletion.
 //
-//    * Deletion is stored in DynamoDB as seconds. The key is deleted after
-//    deletion time.
+//   - Deletion is stored in DynamoDB as seconds. The key is deleted after
+//     deletion time.
 type ApiKey struct {
 	_ struct{} `type:"structure"`
 
@@ -5559,6 +6847,246 @@ func (s AssociateApiOutput) GoString() string {
 // SetApiAssociation sets the ApiAssociation field's value.
 func (s *AssociateApiOutput) SetApiAssociation(v *ApiAssociation) *AssociateApiOutput {
 	s.ApiAssociation = v
+	return s
+}
+
+type AssociateMergedGraphqlApiInput struct {
+	_ struct{} `type:"structure"`
+
+	// The description field.
+	Description *string `locationName:"description" type:"string"`
+
+	// The identifier of the AppSync Merged API. This is generated by the AppSync
+	// service. In most cases, Merged APIs (especially in your account) only require
+	// the API ID value or ARN of the merged API. However, Merged APIs in other
+	// accounts (cross-account use cases) strictly require the full resource ARN
+	// of the merged API.
+	//
+	// MergedApiIdentifier is a required field
+	MergedApiIdentifier *string `locationName:"mergedApiIdentifier" type:"string" required:"true"`
+
+	// The SourceApiAssociationConfig object data.
+	SourceApiAssociationConfig *SourceApiAssociationConfig `locationName:"sourceApiAssociationConfig" type:"structure"`
+
+	// The identifier of the AppSync Source API. This is generated by the AppSync
+	// service. In most cases, source APIs (especially in your account) only require
+	// the API ID value or ARN of the source API. However, source APIs from other
+	// accounts (cross-account use cases) strictly require the full resource ARN
+	// of the source API.
+	//
+	// SourceApiIdentifier is a required field
+	SourceApiIdentifier *string `location:"uri" locationName:"sourceApiIdentifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateMergedGraphqlApiInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateMergedGraphqlApiInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateMergedGraphqlApiInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateMergedGraphqlApiInput"}
+	if s.MergedApiIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MergedApiIdentifier"))
+	}
+	if s.SourceApiIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceApiIdentifier"))
+	}
+	if s.SourceApiIdentifier != nil && len(*s.SourceApiIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceApiIdentifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *AssociateMergedGraphqlApiInput) SetDescription(v string) *AssociateMergedGraphqlApiInput {
+	s.Description = &v
+	return s
+}
+
+// SetMergedApiIdentifier sets the MergedApiIdentifier field's value.
+func (s *AssociateMergedGraphqlApiInput) SetMergedApiIdentifier(v string) *AssociateMergedGraphqlApiInput {
+	s.MergedApiIdentifier = &v
+	return s
+}
+
+// SetSourceApiAssociationConfig sets the SourceApiAssociationConfig field's value.
+func (s *AssociateMergedGraphqlApiInput) SetSourceApiAssociationConfig(v *SourceApiAssociationConfig) *AssociateMergedGraphqlApiInput {
+	s.SourceApiAssociationConfig = v
+	return s
+}
+
+// SetSourceApiIdentifier sets the SourceApiIdentifier field's value.
+func (s *AssociateMergedGraphqlApiInput) SetSourceApiIdentifier(v string) *AssociateMergedGraphqlApiInput {
+	s.SourceApiIdentifier = &v
+	return s
+}
+
+type AssociateMergedGraphqlApiOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The SourceApiAssociation object data.
+	SourceApiAssociation *SourceApiAssociation `locationName:"sourceApiAssociation" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateMergedGraphqlApiOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateMergedGraphqlApiOutput) GoString() string {
+	return s.String()
+}
+
+// SetSourceApiAssociation sets the SourceApiAssociation field's value.
+func (s *AssociateMergedGraphqlApiOutput) SetSourceApiAssociation(v *SourceApiAssociation) *AssociateMergedGraphqlApiOutput {
+	s.SourceApiAssociation = v
+	return s
+}
+
+type AssociateSourceGraphqlApiInput struct {
+	_ struct{} `type:"structure"`
+
+	// The description field.
+	Description *string `locationName:"description" type:"string"`
+
+	// The identifier of the AppSync Merged API. This is generated by the AppSync
+	// service. In most cases, Merged APIs (especially in your account) only require
+	// the API ID value or ARN of the merged API. However, Merged APIs in other
+	// accounts (cross-account use cases) strictly require the full resource ARN
+	// of the merged API.
+	//
+	// MergedApiIdentifier is a required field
+	MergedApiIdentifier *string `location:"uri" locationName:"mergedApiIdentifier" type:"string" required:"true"`
+
+	// The SourceApiAssociationConfig object data.
+	SourceApiAssociationConfig *SourceApiAssociationConfig `locationName:"sourceApiAssociationConfig" type:"structure"`
+
+	// The identifier of the AppSync Source API. This is generated by the AppSync
+	// service. In most cases, source APIs (especially in your account) only require
+	// the API ID value or ARN of the source API. However, source APIs from other
+	// accounts (cross-account use cases) strictly require the full resource ARN
+	// of the source API.
+	//
+	// SourceApiIdentifier is a required field
+	SourceApiIdentifier *string `locationName:"sourceApiIdentifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateSourceGraphqlApiInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateSourceGraphqlApiInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateSourceGraphqlApiInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateSourceGraphqlApiInput"}
+	if s.MergedApiIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MergedApiIdentifier"))
+	}
+	if s.MergedApiIdentifier != nil && len(*s.MergedApiIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MergedApiIdentifier", 1))
+	}
+	if s.SourceApiIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceApiIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *AssociateSourceGraphqlApiInput) SetDescription(v string) *AssociateSourceGraphqlApiInput {
+	s.Description = &v
+	return s
+}
+
+// SetMergedApiIdentifier sets the MergedApiIdentifier field's value.
+func (s *AssociateSourceGraphqlApiInput) SetMergedApiIdentifier(v string) *AssociateSourceGraphqlApiInput {
+	s.MergedApiIdentifier = &v
+	return s
+}
+
+// SetSourceApiAssociationConfig sets the SourceApiAssociationConfig field's value.
+func (s *AssociateSourceGraphqlApiInput) SetSourceApiAssociationConfig(v *SourceApiAssociationConfig) *AssociateSourceGraphqlApiInput {
+	s.SourceApiAssociationConfig = v
+	return s
+}
+
+// SetSourceApiIdentifier sets the SourceApiIdentifier field's value.
+func (s *AssociateSourceGraphqlApiInput) SetSourceApiIdentifier(v string) *AssociateSourceGraphqlApiInput {
+	s.SourceApiIdentifier = &v
+	return s
+}
+
+type AssociateSourceGraphqlApiOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The SourceApiAssociation object data.
+	SourceApiAssociation *SourceApiAssociation `locationName:"sourceApiAssociation" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateSourceGraphqlApiOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateSourceGraphqlApiOutput) GoString() string {
+	return s.String()
+}
+
+// SetSourceApiAssociation sets the SourceApiAssociation field's value.
+func (s *AssociateSourceGraphqlApiOutput) SetSourceApiAssociation(v *SourceApiAssociation) *AssociateSourceGraphqlApiOutput {
+	s.SourceApiAssociation = v
 	return s
 }
 
@@ -6090,6 +7618,20 @@ type CreateApiCacheInput struct {
 	// At-rest encryption flag for cache. You cannot update this setting after creation.
 	AtRestEncryptionEnabled *bool `locationName:"atRestEncryptionEnabled" type:"boolean"`
 
+	// Controls how cache health metrics will be emitted to CloudWatch. Cache health
+	// metrics include:
+	//
+	//    * NetworkBandwidthOutAllowanceExceeded: The network packets dropped because
+	//    the throughput exceeded the aggregated bandwidth limit. This is useful
+	//    for diagnosing bottlenecks in a cache configuration.
+	//
+	//    * EngineCPUUtilization: The CPU utilization (percentage) allocated to
+	//    the Redis process. This is useful for diagnosing bottlenecks in a cache
+	//    configuration.
+	//
+	// Metrics will be recorded by API ID. You can set the value to ENABLED or DISABLED.
+	HealthMetricsConfig *string `locationName:"healthMetricsConfig" type:"string" enum:"CacheHealthMetricsConfig"`
+
 	// Transit encryption flag when connecting to cache. You cannot update this
 	// setting after creation.
 	TransitEncryptionEnabled *bool `locationName:"transitEncryptionEnabled" type:"boolean"`
@@ -6201,6 +7743,12 @@ func (s *CreateApiCacheInput) SetApiId(v string) *CreateApiCacheInput {
 // SetAtRestEncryptionEnabled sets the AtRestEncryptionEnabled field's value.
 func (s *CreateApiCacheInput) SetAtRestEncryptionEnabled(v bool) *CreateApiCacheInput {
 	s.AtRestEncryptionEnabled = &v
+	return s
+}
+
+// SetHealthMetricsConfig sets the HealthMetricsConfig field's value.
+func (s *CreateApiCacheInput) SetHealthMetricsConfig(v string) *CreateApiCacheInput {
+	s.HealthMetricsConfig = &v
 	return s
 }
 
@@ -6385,6 +7933,15 @@ type CreateDataSourceInput struct {
 	// Lambda settings.
 	LambdaConfig *LambdaDataSourceConfig `locationName:"lambdaConfig" type:"structure"`
 
+	// Enables or disables enhanced data source metrics for specified data sources.
+	// Note that metricsConfig won't be used unless the dataSourceLevelMetricsBehavior
+	// value is set to PER_DATA_SOURCE_METRICS. If the dataSourceLevelMetricsBehavior
+	// is set to FULL_REQUEST_DATA_SOURCE_METRICS instead, metricsConfig will be
+	// ignored. However, you can still set its value.
+	//
+	// metricsConfig can be ENABLED or DISABLED.
+	MetricsConfig *string `locationName:"metricsConfig" type:"string" enum:"DataSourceLevelMetricsConfig"`
+
 	// A user-supplied name for the DataSource.
 	//
 	// Name is a required field
@@ -6519,6 +8076,12 @@ func (s *CreateDataSourceInput) SetHttpConfig(v *HttpDataSourceConfig) *CreateDa
 // SetLambdaConfig sets the LambdaConfig field's value.
 func (s *CreateDataSourceInput) SetLambdaConfig(v *LambdaDataSourceConfig) *CreateDataSourceInput {
 	s.LambdaConfig = v
+	return s
+}
+
+// SetMetricsConfig sets the MetricsConfig field's value.
+func (s *CreateDataSourceInput) SetMetricsConfig(v string) *CreateDataSourceInput {
+	s.MetricsConfig = &v
 	return s
 }
 
@@ -6907,17 +8470,38 @@ type CreateGraphqlApiInput struct {
 	// A list of additional authentication providers for the GraphqlApi API.
 	AdditionalAuthenticationProviders []*AdditionalAuthenticationProvider `locationName:"additionalAuthenticationProviders" type:"list"`
 
+	// The value that indicates whether the GraphQL API is a standard API (GRAPHQL)
+	// or merged API (MERGED).
+	ApiType *string `locationName:"apiType" type:"string" enum:"GraphQLApiType"`
+
 	// The authentication type: API key, Identity and Access Management (IAM), OpenID
 	// Connect (OIDC), Amazon Cognito user pools, or Lambda.
 	//
 	// AuthenticationType is a required field
 	AuthenticationType *string `locationName:"authenticationType" type:"string" required:"true" enum:"AuthenticationType"`
 
+	// The enhancedMetricsConfig object.
+	EnhancedMetricsConfig *EnhancedMetricsConfig `locationName:"enhancedMetricsConfig" type:"structure"`
+
+	// Sets the value of the GraphQL API to enable (ENABLED) or disable (DISABLED)
+	// introspection. If no value is provided, the introspection configuration will
+	// be set to ENABLED by default. This field will produce an error if the operation
+	// attempts to use the introspection feature while this field is disabled.
+	//
+	// For more information about introspection, see GraphQL introspection (https://graphql.org/learn/introspection/).
+	IntrospectionConfig *string `locationName:"introspectionConfig" type:"string" enum:"GraphQLApiIntrospectionConfig"`
+
 	// Configuration for Lambda function authorization.
 	LambdaAuthorizerConfig *LambdaAuthorizerConfig `locationName:"lambdaAuthorizerConfig" type:"structure"`
 
 	// The Amazon CloudWatch Logs configuration.
 	LogConfig *LogConfig `locationName:"logConfig" type:"structure"`
+
+	// The Identity and Access Management service role ARN for a merged API. The
+	// AppSync service assumes this role on behalf of the Merged API to validate
+	// access to source APIs at runtime and to prompt the AUTO_MERGE to update the
+	// merged API endpoint with the source API changes automatically.
+	MergedApiExecutionRoleArn *string `locationName:"mergedApiExecutionRoleArn" type:"string"`
 
 	// A user-supplied name for the GraphqlApi.
 	//
@@ -6926,6 +8510,28 @@ type CreateGraphqlApiInput struct {
 
 	// The OIDC configuration.
 	OpenIDConnectConfig *OpenIDConnectConfig `locationName:"openIDConnectConfig" type:"structure"`
+
+	// The owner contact information for an API resource.
+	//
+	// This field accepts any string input with a length of 0 - 256 characters.
+	OwnerContact *string `locationName:"ownerContact" type:"string"`
+
+	// The maximum depth a query can have in a single request. Depth refers to the
+	// amount of nested levels allowed in the body of query. The default value is
+	// 0 (or unspecified), which indicates there's no depth limit. If you set a
+	// limit, it can be between 1 and 75 nested levels. This field will produce
+	// a limit error if the operation falls out of bounds.
+	//
+	// Note that fields can still be set to nullable or non-nullable. If a non-nullable
+	// field produces an error, the error will be thrown upwards to the first nullable
+	// field available.
+	QueryDepthLimit *int64 `locationName:"queryDepthLimit" type:"integer"`
+
+	// The maximum number of resolvers that can be invoked in a single request.
+	// The default value is 0 (or unspecified), which will set the limit to 10000.
+	// When specified, the limit value can be between 1 and 10000. This field will
+	// produce a limit error if the operation falls out of bounds.
+	ResolverCountLimit *int64 `locationName:"resolverCountLimit" type:"integer"`
 
 	// A TagMap object.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
@@ -6982,6 +8588,11 @@ func (s *CreateGraphqlApiInput) Validate() error {
 			}
 		}
 	}
+	if s.EnhancedMetricsConfig != nil {
+		if err := s.EnhancedMetricsConfig.Validate(); err != nil {
+			invalidParams.AddNested("EnhancedMetricsConfig", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.LambdaAuthorizerConfig != nil {
 		if err := s.LambdaAuthorizerConfig.Validate(); err != nil {
 			invalidParams.AddNested("LambdaAuthorizerConfig", err.(request.ErrInvalidParams))
@@ -7015,9 +8626,27 @@ func (s *CreateGraphqlApiInput) SetAdditionalAuthenticationProviders(v []*Additi
 	return s
 }
 
+// SetApiType sets the ApiType field's value.
+func (s *CreateGraphqlApiInput) SetApiType(v string) *CreateGraphqlApiInput {
+	s.ApiType = &v
+	return s
+}
+
 // SetAuthenticationType sets the AuthenticationType field's value.
 func (s *CreateGraphqlApiInput) SetAuthenticationType(v string) *CreateGraphqlApiInput {
 	s.AuthenticationType = &v
+	return s
+}
+
+// SetEnhancedMetricsConfig sets the EnhancedMetricsConfig field's value.
+func (s *CreateGraphqlApiInput) SetEnhancedMetricsConfig(v *EnhancedMetricsConfig) *CreateGraphqlApiInput {
+	s.EnhancedMetricsConfig = v
+	return s
+}
+
+// SetIntrospectionConfig sets the IntrospectionConfig field's value.
+func (s *CreateGraphqlApiInput) SetIntrospectionConfig(v string) *CreateGraphqlApiInput {
+	s.IntrospectionConfig = &v
 	return s
 }
 
@@ -7033,6 +8662,12 @@ func (s *CreateGraphqlApiInput) SetLogConfig(v *LogConfig) *CreateGraphqlApiInpu
 	return s
 }
 
+// SetMergedApiExecutionRoleArn sets the MergedApiExecutionRoleArn field's value.
+func (s *CreateGraphqlApiInput) SetMergedApiExecutionRoleArn(v string) *CreateGraphqlApiInput {
+	s.MergedApiExecutionRoleArn = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *CreateGraphqlApiInput) SetName(v string) *CreateGraphqlApiInput {
 	s.Name = &v
@@ -7042,6 +8677,24 @@ func (s *CreateGraphqlApiInput) SetName(v string) *CreateGraphqlApiInput {
 // SetOpenIDConnectConfig sets the OpenIDConnectConfig field's value.
 func (s *CreateGraphqlApiInput) SetOpenIDConnectConfig(v *OpenIDConnectConfig) *CreateGraphqlApiInput {
 	s.OpenIDConnectConfig = v
+	return s
+}
+
+// SetOwnerContact sets the OwnerContact field's value.
+func (s *CreateGraphqlApiInput) SetOwnerContact(v string) *CreateGraphqlApiInput {
+	s.OwnerContact = &v
+	return s
+}
+
+// SetQueryDepthLimit sets the QueryDepthLimit field's value.
+func (s *CreateGraphqlApiInput) SetQueryDepthLimit(v int64) *CreateGraphqlApiInput {
+	s.QueryDepthLimit = &v
+	return s
+}
+
+// SetResolverCountLimit sets the ResolverCountLimit field's value.
+func (s *CreateGraphqlApiInput) SetResolverCountLimit(v int64) *CreateGraphqlApiInput {
+	s.ResolverCountLimit = &v
 	return s
 }
 
@@ -7136,6 +8789,15 @@ type CreateResolverInput struct {
 
 	// The maximum batching size for a resolver.
 	MaxBatchSize *int64 `locationName:"maxBatchSize" type:"integer"`
+
+	// Enables or disables enhanced resolver metrics for specified resolvers. Note
+	// that metricsConfig won't be used unless the resolverLevelMetricsBehavior
+	// value is set to PER_RESOLVER_METRICS. If the resolverLevelMetricsBehavior
+	// is set to FULL_REQUEST_RESOLVER_METRICS instead, metricsConfig will be ignored.
+	// However, you can still set its value.
+	//
+	// metricsConfig can be ENABLED or DISABLED.
+	MetricsConfig *string `locationName:"metricsConfig" type:"string" enum:"ResolverLevelMetricsConfig"`
 
 	// The PipelineConfig.
 	PipelineConfig *PipelineConfig `locationName:"pipelineConfig" type:"structure"`
@@ -7276,6 +8938,12 @@ func (s *CreateResolverInput) SetKind(v string) *CreateResolverInput {
 // SetMaxBatchSize sets the MaxBatchSize field's value.
 func (s *CreateResolverInput) SetMaxBatchSize(v int64) *CreateResolverInput {
 	s.MaxBatchSize = &v
+	return s
+}
+
+// SetMetricsConfig sets the MetricsConfig field's value.
+func (s *CreateResolverInput) SetMetricsConfig(v string) *CreateResolverInput {
+	s.MetricsConfig = &v
 	return s
 }
 
@@ -7481,6 +9149,15 @@ type DataSource struct {
 	// Lambda settings.
 	LambdaConfig *LambdaDataSourceConfig `locationName:"lambdaConfig" type:"structure"`
 
+	// Enables or disables enhanced data source metrics for specified data sources.
+	// Note that metricsConfig won't be used unless the dataSourceLevelMetricsBehavior
+	// value is set to PER_DATA_SOURCE_METRICS. If the dataSourceLevelMetricsBehavior
+	// is set to FULL_REQUEST_DATA_SOURCE_METRICS instead, metricsConfig will be
+	// ignored. However, you can still set its value.
+	//
+	// metricsConfig can be ENABLED or DISABLED.
+	MetricsConfig *string `locationName:"metricsConfig" type:"string" enum:"DataSourceLevelMetricsConfig"`
+
 	// The name of the data source.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
@@ -7580,6 +9257,12 @@ func (s *DataSource) SetLambdaConfig(v *LambdaDataSourceConfig) *DataSource {
 	return s
 }
 
+// SetMetricsConfig sets the MetricsConfig field's value.
+func (s *DataSource) SetMetricsConfig(v string) *DataSource {
+	s.MetricsConfig = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *DataSource) SetName(v string) *DataSource {
 	s.Name = &v
@@ -7607,6 +9290,288 @@ func (s *DataSource) SetServiceRoleArn(v string) *DataSource {
 // SetType sets the Type field's value.
 func (s *DataSource) SetType(v string) *DataSource {
 	s.Type = &v
+	return s
+}
+
+// Contains the introspected data that was retrieved from the data source.
+type DataSourceIntrospectionModel struct {
+	_ struct{} `type:"structure"`
+
+	// The DataSourceIntrospectionModelField object data.
+	Fields []*DataSourceIntrospectionModelField `locationName:"fields" type:"list"`
+
+	// The array of DataSourceIntrospectionModelIndex objects.
+	Indexes []*DataSourceIntrospectionModelIndex `locationName:"indexes" type:"list"`
+
+	// The name of the model. For example, this could be the name of a single table
+	// in a database.
+	Name *string `locationName:"name" type:"string"`
+
+	// The primary key stored as a DataSourceIntrospectionModelIndex object.
+	PrimaryKey *DataSourceIntrospectionModelIndex `locationName:"primaryKey" type:"structure"`
+
+	// Contains the output of the SDL that was generated from the introspected types.
+	// This is controlled by the includeModelsSDL parameter of the GetDataSourceIntrospection
+	// operation.
+	Sdl *string `locationName:"sdl" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceIntrospectionModel) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceIntrospectionModel) GoString() string {
+	return s.String()
+}
+
+// SetFields sets the Fields field's value.
+func (s *DataSourceIntrospectionModel) SetFields(v []*DataSourceIntrospectionModelField) *DataSourceIntrospectionModel {
+	s.Fields = v
+	return s
+}
+
+// SetIndexes sets the Indexes field's value.
+func (s *DataSourceIntrospectionModel) SetIndexes(v []*DataSourceIntrospectionModelIndex) *DataSourceIntrospectionModel {
+	s.Indexes = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DataSourceIntrospectionModel) SetName(v string) *DataSourceIntrospectionModel {
+	s.Name = &v
+	return s
+}
+
+// SetPrimaryKey sets the PrimaryKey field's value.
+func (s *DataSourceIntrospectionModel) SetPrimaryKey(v *DataSourceIntrospectionModelIndex) *DataSourceIntrospectionModel {
+	s.PrimaryKey = v
+	return s
+}
+
+// SetSdl sets the Sdl field's value.
+func (s *DataSourceIntrospectionModel) SetSdl(v string) *DataSourceIntrospectionModel {
+	s.Sdl = &v
+	return s
+}
+
+// Represents the fields that were retrieved from the introspected data.
+type DataSourceIntrospectionModelField struct {
+	_ struct{} `type:"structure"`
+
+	// The length value of the introspected field.
+	Length *int64 `locationName:"length" type:"long"`
+
+	// The name of the field that was retrieved from the introspected data.
+	Name *string `locationName:"name" type:"string"`
+
+	// The DataSourceIntrospectionModelFieldType object data.
+	Type *DataSourceIntrospectionModelFieldType `locationName:"type" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceIntrospectionModelField) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceIntrospectionModelField) GoString() string {
+	return s.String()
+}
+
+// SetLength sets the Length field's value.
+func (s *DataSourceIntrospectionModelField) SetLength(v int64) *DataSourceIntrospectionModelField {
+	s.Length = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DataSourceIntrospectionModelField) SetName(v string) *DataSourceIntrospectionModelField {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *DataSourceIntrospectionModelField) SetType(v *DataSourceIntrospectionModelFieldType) *DataSourceIntrospectionModelField {
+	s.Type = v
+	return s
+}
+
+// Represents the type data for each field retrieved from the introspection.
+type DataSourceIntrospectionModelFieldType struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the classification of data. For example, this could be set to values
+	// like Scalar or NonNull to indicate a fundamental property of the field.
+	//
+	// Valid values include:
+	//
+	//    * Scalar: Indicates the value is a primitive type (scalar).
+	//
+	//    * NonNull: Indicates the field cannot be null.
+	//
+	//    * List: Indicates the field contains a list.
+	Kind *string `locationName:"kind" type:"string"`
+
+	// The name of the data type that represents the field. For example, String
+	// is a valid name value.
+	Name *string `locationName:"name" type:"string"`
+
+	// The DataSourceIntrospectionModelFieldType object data. The type is only present
+	// if DataSourceIntrospectionModelFieldType.kind is set to NonNull or List.
+	//
+	// The type typically contains its own kind and name fields to represent the
+	// actual type data. For instance, type could contain a kind value of Scalar
+	// with a name value of String. The values Scalar and String will be collectively
+	// stored in the values field.
+	Type *DataSourceIntrospectionModelFieldType `locationName:"type" type:"structure"`
+
+	// The values of the type field. This field represents the AppSync data type
+	// equivalent of the introspected field.
+	Values []*string `locationName:"values" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceIntrospectionModelFieldType) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceIntrospectionModelFieldType) GoString() string {
+	return s.String()
+}
+
+// SetKind sets the Kind field's value.
+func (s *DataSourceIntrospectionModelFieldType) SetKind(v string) *DataSourceIntrospectionModelFieldType {
+	s.Kind = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DataSourceIntrospectionModelFieldType) SetName(v string) *DataSourceIntrospectionModelFieldType {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *DataSourceIntrospectionModelFieldType) SetType(v *DataSourceIntrospectionModelFieldType) *DataSourceIntrospectionModelFieldType {
+	s.Type = v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *DataSourceIntrospectionModelFieldType) SetValues(v []*string) *DataSourceIntrospectionModelFieldType {
+	s.Values = v
+	return s
+}
+
+// The index that was retrieved from the introspected data.
+type DataSourceIntrospectionModelIndex struct {
+	_ struct{} `type:"structure"`
+
+	// The fields of the index.
+	Fields []*string `locationName:"fields" type:"list"`
+
+	// The name of the index.
+	Name *string `locationName:"name" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceIntrospectionModelIndex) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceIntrospectionModelIndex) GoString() string {
+	return s.String()
+}
+
+// SetFields sets the Fields field's value.
+func (s *DataSourceIntrospectionModelIndex) SetFields(v []*string) *DataSourceIntrospectionModelIndex {
+	s.Fields = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DataSourceIntrospectionModelIndex) SetName(v string) *DataSourceIntrospectionModelIndex {
+	s.Name = &v
+	return s
+}
+
+// Represents the output of a DataSourceIntrospectionResult. This is the populated
+// result of a GetDataSourceIntrospection operation.
+type DataSourceIntrospectionResult struct {
+	_ struct{} `type:"structure"`
+
+	// The array of DataSourceIntrospectionModel objects.
+	Models []*DataSourceIntrospectionModel `locationName:"models" type:"list"`
+
+	// Determines the number of types to be returned in a single response before
+	// paginating. This value is typically taken from nextToken value from the previous
+	// response.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceIntrospectionResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataSourceIntrospectionResult) GoString() string {
+	return s.String()
+}
+
+// SetModels sets the Models field's value.
+func (s *DataSourceIntrospectionResult) SetModels(v []*DataSourceIntrospectionModel) *DataSourceIntrospectionResult {
+	s.Models = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DataSourceIntrospectionResult) SetNextToken(v string) *DataSourceIntrospectionResult {
+	s.NextToken = &v
 	return s
 }
 
@@ -8404,6 +10369,208 @@ func (s DisassociateApiOutput) GoString() string {
 	return s.String()
 }
 
+type DisassociateMergedGraphqlApiInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID generated by the AppSync service for the source API association.
+	//
+	// AssociationId is a required field
+	AssociationId *string `location:"uri" locationName:"associationId" type:"string" required:"true"`
+
+	// The identifier of the AppSync Source API. This is generated by the AppSync
+	// service. In most cases, source APIs (especially in your account) only require
+	// the API ID value or ARN of the source API. However, source APIs from other
+	// accounts (cross-account use cases) strictly require the full resource ARN
+	// of the source API.
+	//
+	// SourceApiIdentifier is a required field
+	SourceApiIdentifier *string `location:"uri" locationName:"sourceApiIdentifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateMergedGraphqlApiInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateMergedGraphqlApiInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateMergedGraphqlApiInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateMergedGraphqlApiInput"}
+	if s.AssociationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssociationId"))
+	}
+	if s.AssociationId != nil && len(*s.AssociationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AssociationId", 1))
+	}
+	if s.SourceApiIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceApiIdentifier"))
+	}
+	if s.SourceApiIdentifier != nil && len(*s.SourceApiIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceApiIdentifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssociationId sets the AssociationId field's value.
+func (s *DisassociateMergedGraphqlApiInput) SetAssociationId(v string) *DisassociateMergedGraphqlApiInput {
+	s.AssociationId = &v
+	return s
+}
+
+// SetSourceApiIdentifier sets the SourceApiIdentifier field's value.
+func (s *DisassociateMergedGraphqlApiInput) SetSourceApiIdentifier(v string) *DisassociateMergedGraphqlApiInput {
+	s.SourceApiIdentifier = &v
+	return s
+}
+
+type DisassociateMergedGraphqlApiOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The state of the source API association.
+	SourceApiAssociationStatus *string `locationName:"sourceApiAssociationStatus" type:"string" enum:"SourceApiAssociationStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateMergedGraphqlApiOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateMergedGraphqlApiOutput) GoString() string {
+	return s.String()
+}
+
+// SetSourceApiAssociationStatus sets the SourceApiAssociationStatus field's value.
+func (s *DisassociateMergedGraphqlApiOutput) SetSourceApiAssociationStatus(v string) *DisassociateMergedGraphqlApiOutput {
+	s.SourceApiAssociationStatus = &v
+	return s
+}
+
+type DisassociateSourceGraphqlApiInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID generated by the AppSync service for the source API association.
+	//
+	// AssociationId is a required field
+	AssociationId *string `location:"uri" locationName:"associationId" type:"string" required:"true"`
+
+	// The identifier of the AppSync Merged API. This is generated by the AppSync
+	// service. In most cases, Merged APIs (especially in your account) only require
+	// the API ID value or ARN of the merged API. However, Merged APIs in other
+	// accounts (cross-account use cases) strictly require the full resource ARN
+	// of the merged API.
+	//
+	// MergedApiIdentifier is a required field
+	MergedApiIdentifier *string `location:"uri" locationName:"mergedApiIdentifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateSourceGraphqlApiInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateSourceGraphqlApiInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateSourceGraphqlApiInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateSourceGraphqlApiInput"}
+	if s.AssociationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssociationId"))
+	}
+	if s.AssociationId != nil && len(*s.AssociationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AssociationId", 1))
+	}
+	if s.MergedApiIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MergedApiIdentifier"))
+	}
+	if s.MergedApiIdentifier != nil && len(*s.MergedApiIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MergedApiIdentifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssociationId sets the AssociationId field's value.
+func (s *DisassociateSourceGraphqlApiInput) SetAssociationId(v string) *DisassociateSourceGraphqlApiInput {
+	s.AssociationId = &v
+	return s
+}
+
+// SetMergedApiIdentifier sets the MergedApiIdentifier field's value.
+func (s *DisassociateSourceGraphqlApiInput) SetMergedApiIdentifier(v string) *DisassociateSourceGraphqlApiInput {
+	s.MergedApiIdentifier = &v
+	return s
+}
+
+type DisassociateSourceGraphqlApiOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The state of the source API association.
+	SourceApiAssociationStatus *string `locationName:"sourceApiAssociationStatus" type:"string" enum:"SourceApiAssociationStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateSourceGraphqlApiOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateSourceGraphqlApiOutput) GoString() string {
+	return s.String()
+}
+
+// SetSourceApiAssociationStatus sets the SourceApiAssociationStatus field's value.
+func (s *DisassociateSourceGraphqlApiOutput) SetSourceApiAssociationStatus(v string) *DisassociateSourceGraphqlApiOutput {
+	s.SourceApiAssociationStatus = &v
+	return s
+}
+
 // Describes a configuration for a custom domain.
 type DomainNameConfig struct {
 	_ struct{} `type:"structure"`
@@ -8624,6 +10791,189 @@ func (s *ElasticsearchDataSourceConfig) SetAwsRegion(v string) *ElasticsearchDat
 // SetEndpoint sets the Endpoint field's value.
 func (s *ElasticsearchDataSourceConfig) SetEndpoint(v string) *ElasticsearchDataSourceConfig {
 	s.Endpoint = &v
+	return s
+}
+
+// Enables and controls the enhanced metrics feature. Enhanced metrics emit
+// granular data on API usage and performance such as AppSync request and error
+// counts, latency, and cache hits/misses. All enhanced metric data is sent
+// to your CloudWatch account, and you can configure the types of data that
+// will be sent.
+//
+// Enhanced metrics can be configured at the resolver, data source, and operation
+// levels. EnhancedMetricsConfig contains three required parameters, each controlling
+// one of these categories:
+//
+// resolverLevelMetricsBehavior: Controls how resolver metrics will be emitted
+// to CloudWatch. Resolver metrics include:
+//
+//   - GraphQL errors: The number of GraphQL errors that occurred.
+//
+//   - Requests: The number of invocations that occurred during a request.
+//
+//   - Latency: The time to complete a resolver invocation.
+//
+//   - Cache hits: The number of cache hits during a request.
+//
+//   - Cache misses: The number of cache misses during a request.
+//
+// These metrics can be emitted to CloudWatch per resolver or for all resolvers
+// in the request. Metrics will be recorded by API ID and resolver name. resolverLevelMetricsBehavior
+// accepts one of these values at a time:
+//
+//   - FULL_REQUEST_RESOLVER_METRICS: Records and emits metric data for all
+//     resolvers in the request.
+//
+//   - PER_RESOLVER_METRICS: Records and emits metric data for resolvers that
+//     have the metricsConfig value set to ENABLED.
+//
+// dataSourceLevelMetricsBehavior: Controls how data source metrics will be
+// emitted to CloudWatch. Data source metrics include:
+//
+//   - Requests: The number of invocations that occured during a request.
+//
+//   - Latency: The time to complete a data source invocation.
+//
+//   - Errors: The number of errors that occurred during a data source invocation.
+//
+// These metrics can be emitted to CloudWatch per data source or for all data
+// sources in the request. Metrics will be recorded by API ID and data source
+// name. dataSourceLevelMetricsBehavior accepts one of these values at a time:
+//
+//   - FULL_REQUEST_DATA_SOURCE_METRICS: Records and emits metric data for
+//     all data sources in the request.
+//
+//   - PER_DATA_SOURCE_METRICS: Records and emits metric data for data sources
+//     that have the metricsConfig value set to ENABLED.
+//
+// operationLevelMetricsConfig: Controls how operation metrics will be emitted
+// to CloudWatch. Operation metrics include:
+//
+//   - Requests: The number of times a specified GraphQL operation was called.
+//
+//   - GraphQL errors: The number of GraphQL errors that occurred during a
+//     specified GraphQL operation.
+//
+// Metrics will be recorded by API ID and operation name. You can set the value
+// to ENABLED or DISABLED.
+type EnhancedMetricsConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Controls how data source metrics will be emitted to CloudWatch. Data source
+	// metrics include:
+	//
+	//    * Requests: The number of invocations that occured during a request.
+	//
+	//    * Latency: The time to complete a data source invocation.
+	//
+	//    * Errors: The number of errors that occurred during a data source invocation.
+	//
+	// These metrics can be emitted to CloudWatch per data source or for all data
+	// sources in the request. Metrics will be recorded by API ID and data source
+	// name. dataSourceLevelMetricsBehavior accepts one of these values at a time:
+	//
+	//    * FULL_REQUEST_DATA_SOURCE_METRICS: Records and emits metric data for
+	//    all data sources in the request.
+	//
+	//    * PER_DATA_SOURCE_METRICS: Records and emits metric data for data sources
+	//    that have the metricsConfig value set to ENABLED.
+	//
+	// DataSourceLevelMetricsBehavior is a required field
+	DataSourceLevelMetricsBehavior *string `locationName:"dataSourceLevelMetricsBehavior" type:"string" required:"true" enum:"DataSourceLevelMetricsBehavior"`
+
+	// Controls how operation metrics will be emitted to CloudWatch. Operation metrics
+	// include:
+	//
+	//    * Requests: The number of times a specified GraphQL operation was called.
+	//
+	//    * GraphQL errors: The number of GraphQL errors that occurred during a
+	//    specified GraphQL operation.
+	//
+	// Metrics will be recorded by API ID and operation name. You can set the value
+	// to ENABLED or DISABLED.
+	//
+	// OperationLevelMetricsConfig is a required field
+	OperationLevelMetricsConfig *string `locationName:"operationLevelMetricsConfig" type:"string" required:"true" enum:"OperationLevelMetricsConfig"`
+
+	// Controls how resolver metrics will be emitted to CloudWatch. Resolver metrics
+	// include:
+	//
+	//    * GraphQL errors: The number of GraphQL errors that occurred.
+	//
+	//    * Requests: The number of invocations that occurred during a request.
+	//
+	//    * Latency: The time to complete a resolver invocation.
+	//
+	//    * Cache hits: The number of cache hits during a request.
+	//
+	//    * Cache misses: The number of cache misses during a request.
+	//
+	// These metrics can be emitted to CloudWatch per resolver or for all resolvers
+	// in the request. Metrics will be recorded by API ID and resolver name. resolverLevelMetricsBehavior
+	// accepts one of these values at a time:
+	//
+	//    * FULL_REQUEST_RESOLVER_METRICS: Records and emits metric data for all
+	//    resolvers in the request.
+	//
+	//    * PER_RESOLVER_METRICS: Records and emits metric data for resolvers that
+	//    have the metricsConfig value set to ENABLED.
+	//
+	// ResolverLevelMetricsBehavior is a required field
+	ResolverLevelMetricsBehavior *string `locationName:"resolverLevelMetricsBehavior" type:"string" required:"true" enum:"ResolverLevelMetricsBehavior"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnhancedMetricsConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnhancedMetricsConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EnhancedMetricsConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EnhancedMetricsConfig"}
+	if s.DataSourceLevelMetricsBehavior == nil {
+		invalidParams.Add(request.NewErrParamRequired("DataSourceLevelMetricsBehavior"))
+	}
+	if s.OperationLevelMetricsConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("OperationLevelMetricsConfig"))
+	}
+	if s.ResolverLevelMetricsBehavior == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResolverLevelMetricsBehavior"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceLevelMetricsBehavior sets the DataSourceLevelMetricsBehavior field's value.
+func (s *EnhancedMetricsConfig) SetDataSourceLevelMetricsBehavior(v string) *EnhancedMetricsConfig {
+	s.DataSourceLevelMetricsBehavior = &v
+	return s
+}
+
+// SetOperationLevelMetricsConfig sets the OperationLevelMetricsConfig field's value.
+func (s *EnhancedMetricsConfig) SetOperationLevelMetricsConfig(v string) *EnhancedMetricsConfig {
+	s.OperationLevelMetricsConfig = &v
+	return s
+}
+
+// SetResolverLevelMetricsBehavior sets the ResolverLevelMetricsBehavior field's value.
+func (s *EnhancedMetricsConfig) SetResolverLevelMetricsBehavior(v string) *EnhancedMetricsConfig {
+	s.ResolverLevelMetricsBehavior = &v
 	return s
 }
 
@@ -9457,6 +11807,157 @@ func (s *GetDataSourceInput) SetName(v string) *GetDataSourceInput {
 	return s
 }
 
+type GetDataSourceIntrospectionInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A boolean flag that determines whether SDL should be generated for introspected
+	// types or not. If set to true, each model will contain an sdl property that
+	// contains the SDL for that type. The SDL only contains the type data and no
+	// additional metadata or directives.
+	IncludeModelsSDL *bool `location:"querystring" locationName:"includeModelsSDL" type:"boolean"`
+
+	// The introspection ID. Each introspection contains a unique ID that can be
+	// used to reference the instrospection record.
+	//
+	// IntrospectionId is a required field
+	IntrospectionId *string `location:"uri" locationName:"introspectionId" type:"string" required:"true"`
+
+	// The maximum number of introspected types that will be returned in a single
+	// response.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
+
+	// Determines the number of types to be returned in a single response before
+	// paginating. This value is typically taken from nextToken value from the previous
+	// response.
+	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDataSourceIntrospectionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDataSourceIntrospectionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetDataSourceIntrospectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetDataSourceIntrospectionInput"}
+	if s.IntrospectionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IntrospectionId"))
+	}
+	if s.IntrospectionId != nil && len(*s.IntrospectionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IntrospectionId", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIncludeModelsSDL sets the IncludeModelsSDL field's value.
+func (s *GetDataSourceIntrospectionInput) SetIncludeModelsSDL(v bool) *GetDataSourceIntrospectionInput {
+	s.IncludeModelsSDL = &v
+	return s
+}
+
+// SetIntrospectionId sets the IntrospectionId field's value.
+func (s *GetDataSourceIntrospectionInput) SetIntrospectionId(v string) *GetDataSourceIntrospectionInput {
+	s.IntrospectionId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetDataSourceIntrospectionInput) SetMaxResults(v int64) *GetDataSourceIntrospectionInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetDataSourceIntrospectionInput) SetNextToken(v string) *GetDataSourceIntrospectionInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetDataSourceIntrospectionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The introspection ID. Each introspection contains a unique ID that can be
+	// used to reference the instrospection record.
+	IntrospectionId *string `locationName:"introspectionId" type:"string"`
+
+	// The DataSourceIntrospectionResult object data.
+	IntrospectionResult *DataSourceIntrospectionResult `locationName:"introspectionResult" type:"structure"`
+
+	// The status of the introspection during retrieval. By default, when a new
+	// instrospection is being retrieved, the status will be set to PROCESSING.
+	// Once the operation has been completed, the status will change to SUCCESS
+	// or FAILED depending on how the data was parsed. A FAILED operation will return
+	// an error and its details as an introspectionStatusDetail.
+	IntrospectionStatus *string `locationName:"introspectionStatus" type:"string" enum:"DataSourceIntrospectionStatus"`
+
+	// The error detail field. When a FAILED introspectionStatus is returned, the
+	// introspectionStatusDetail will also return the exact error that was generated
+	// during the operation.
+	IntrospectionStatusDetail *string `locationName:"introspectionStatusDetail" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDataSourceIntrospectionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetDataSourceIntrospectionOutput) GoString() string {
+	return s.String()
+}
+
+// SetIntrospectionId sets the IntrospectionId field's value.
+func (s *GetDataSourceIntrospectionOutput) SetIntrospectionId(v string) *GetDataSourceIntrospectionOutput {
+	s.IntrospectionId = &v
+	return s
+}
+
+// SetIntrospectionResult sets the IntrospectionResult field's value.
+func (s *GetDataSourceIntrospectionOutput) SetIntrospectionResult(v *DataSourceIntrospectionResult) *GetDataSourceIntrospectionOutput {
+	s.IntrospectionResult = v
+	return s
+}
+
+// SetIntrospectionStatus sets the IntrospectionStatus field's value.
+func (s *GetDataSourceIntrospectionOutput) SetIntrospectionStatus(v string) *GetDataSourceIntrospectionOutput {
+	s.IntrospectionStatus = &v
+	return s
+}
+
+// SetIntrospectionStatusDetail sets the IntrospectionStatusDetail field's value.
+func (s *GetDataSourceIntrospectionOutput) SetIntrospectionStatusDetail(v string) *GetDataSourceIntrospectionOutput {
+	s.IntrospectionStatusDetail = &v
+	return s
+}
+
 type GetDataSourceOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -9662,6 +12163,87 @@ func (s GetFunctionOutput) GoString() string {
 // SetFunctionConfiguration sets the FunctionConfiguration field's value.
 func (s *GetFunctionOutput) SetFunctionConfiguration(v *FunctionConfiguration) *GetFunctionOutput {
 	s.FunctionConfiguration = v
+	return s
+}
+
+type GetGraphqlApiEnvironmentVariablesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID of the API from which the environmental variable list will be retrieved.
+	//
+	// ApiId is a required field
+	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGraphqlApiEnvironmentVariablesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGraphqlApiEnvironmentVariablesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetGraphqlApiEnvironmentVariablesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetGraphqlApiEnvironmentVariablesInput"}
+	if s.ApiId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApiId sets the ApiId field's value.
+func (s *GetGraphqlApiEnvironmentVariablesInput) SetApiId(v string) *GetGraphqlApiEnvironmentVariablesInput {
+	s.ApiId = &v
+	return s
+}
+
+type GetGraphqlApiEnvironmentVariablesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The payload containing each environmental variable in the "key" : "value"
+	// format.
+	EnvironmentVariables map[string]*string `locationName:"environmentVariables" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGraphqlApiEnvironmentVariablesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetGraphqlApiEnvironmentVariablesOutput) GoString() string {
+	return s.String()
+}
+
+// SetEnvironmentVariables sets the EnvironmentVariables field's value.
+func (s *GetGraphqlApiEnvironmentVariablesOutput) SetEnvironmentVariables(v map[string]*string) *GetGraphqlApiEnvironmentVariablesOutput {
+	s.EnvironmentVariables = v
 	return s
 }
 
@@ -10054,6 +12636,107 @@ func (s *GetSchemaCreationStatusOutput) SetStatus(v string) *GetSchemaCreationSt
 	return s
 }
 
+type GetSourceApiAssociationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID generated by the AppSync service for the source API association.
+	//
+	// AssociationId is a required field
+	AssociationId *string `location:"uri" locationName:"associationId" type:"string" required:"true"`
+
+	// The identifier of the AppSync Merged API. This is generated by the AppSync
+	// service. In most cases, Merged APIs (especially in your account) only require
+	// the API ID value or ARN of the merged API. However, Merged APIs in other
+	// accounts (cross-account use cases) strictly require the full resource ARN
+	// of the merged API.
+	//
+	// MergedApiIdentifier is a required field
+	MergedApiIdentifier *string `location:"uri" locationName:"mergedApiIdentifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSourceApiAssociationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSourceApiAssociationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSourceApiAssociationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetSourceApiAssociationInput"}
+	if s.AssociationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssociationId"))
+	}
+	if s.AssociationId != nil && len(*s.AssociationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AssociationId", 1))
+	}
+	if s.MergedApiIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MergedApiIdentifier"))
+	}
+	if s.MergedApiIdentifier != nil && len(*s.MergedApiIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MergedApiIdentifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssociationId sets the AssociationId field's value.
+func (s *GetSourceApiAssociationInput) SetAssociationId(v string) *GetSourceApiAssociationInput {
+	s.AssociationId = &v
+	return s
+}
+
+// SetMergedApiIdentifier sets the MergedApiIdentifier field's value.
+func (s *GetSourceApiAssociationInput) SetMergedApiIdentifier(v string) *GetSourceApiAssociationInput {
+	s.MergedApiIdentifier = &v
+	return s
+}
+
+type GetSourceApiAssociationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The SourceApiAssociation object data.
+	SourceApiAssociation *SourceApiAssociation `locationName:"sourceApiAssociation" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSourceApiAssociationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSourceApiAssociationOutput) GoString() string {
+	return s.String()
+}
+
+// SetSourceApiAssociation sets the SourceApiAssociation field's value.
+func (s *GetSourceApiAssociationOutput) SetSourceApiAssociation(v *SourceApiAssociation) *GetSourceApiAssociationOutput {
+	s.SourceApiAssociation = v
+	return s
+}
+
 type GetTypeInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -10239,6 +12922,10 @@ type GraphqlApi struct {
 	// The API ID.
 	ApiId *string `locationName:"apiId" type:"string"`
 
+	// The value that indicates whether the GraphQL API is a standard API (GRAPHQL)
+	// or merged API (MERGED).
+	ApiType *string `locationName:"apiType" type:"string" enum:"GraphQLApiType"`
+
 	// The Amazon Resource Name (ARN).
 	Arn *string `locationName:"arn" type:"string"`
 
@@ -10248,17 +12935,59 @@ type GraphqlApi struct {
 	// The DNS records for the API.
 	Dns map[string]*string `locationName:"dns" type:"map"`
 
+	// The enhancedMetricsConfig object.
+	EnhancedMetricsConfig *EnhancedMetricsConfig `locationName:"enhancedMetricsConfig" type:"structure"`
+
+	// Sets the value of the GraphQL API to enable (ENABLED) or disable (DISABLED)
+	// introspection. If no value is provided, the introspection configuration will
+	// be set to ENABLED by default. This field will produce an error if the operation
+	// attempts to use the introspection feature while this field is disabled.
+	//
+	// For more information about introspection, see GraphQL introspection (https://graphql.org/learn/introspection/).
+	IntrospectionConfig *string `locationName:"introspectionConfig" type:"string" enum:"GraphQLApiIntrospectionConfig"`
+
 	// Configuration for Lambda function authorization.
 	LambdaAuthorizerConfig *LambdaAuthorizerConfig `locationName:"lambdaAuthorizerConfig" type:"structure"`
 
 	// The Amazon CloudWatch Logs configuration.
 	LogConfig *LogConfig `locationName:"logConfig" type:"structure"`
 
+	// The Identity and Access Management service role ARN for a merged API. The
+	// AppSync service assumes this role on behalf of the Merged API to validate
+	// access to source APIs at runtime and to prompt the AUTO_MERGE to update the
+	// merged API endpoint with the source API changes automatically.
+	MergedApiExecutionRoleArn *string `locationName:"mergedApiExecutionRoleArn" type:"string"`
+
 	// The API name.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
 	// The OpenID Connect configuration.
 	OpenIDConnectConfig *OpenIDConnectConfig `locationName:"openIDConnectConfig" type:"structure"`
+
+	// The account owner of the GraphQL API.
+	Owner *string `locationName:"owner" type:"string"`
+
+	// The owner contact information for an API resource.
+	//
+	// This field accepts any string input with a length of 0 - 256 characters.
+	OwnerContact *string `locationName:"ownerContact" type:"string"`
+
+	// The maximum depth a query can have in a single request. Depth refers to the
+	// amount of nested levels allowed in the body of query. The default value is
+	// 0 (or unspecified), which indicates there's no depth limit. If you set a
+	// limit, it can be between 1 and 75 nested levels. This field will produce
+	// a limit error if the operation falls out of bounds.
+	//
+	// Note that fields can still be set to nullable or non-nullable. If a non-nullable
+	// field produces an error, the error will be thrown upwards to the first nullable
+	// field available.
+	QueryDepthLimit *int64 `locationName:"queryDepthLimit" type:"integer"`
+
+	// The maximum number of resolvers that can be invoked in a single request.
+	// The default value is 0 (or unspecified), which will set the limit to 10000.
+	// When specified, the limit value can be between 1 and 10000. This field will
+	// produce a limit error if the operation falls out of bounds.
+	ResolverCountLimit *int64 `locationName:"resolverCountLimit" type:"integer"`
 
 	// The tags.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
@@ -10312,6 +13041,12 @@ func (s *GraphqlApi) SetApiId(v string) *GraphqlApi {
 	return s
 }
 
+// SetApiType sets the ApiType field's value.
+func (s *GraphqlApi) SetApiType(v string) *GraphqlApi {
+	s.ApiType = &v
+	return s
+}
+
 // SetArn sets the Arn field's value.
 func (s *GraphqlApi) SetArn(v string) *GraphqlApi {
 	s.Arn = &v
@@ -10330,6 +13065,18 @@ func (s *GraphqlApi) SetDns(v map[string]*string) *GraphqlApi {
 	return s
 }
 
+// SetEnhancedMetricsConfig sets the EnhancedMetricsConfig field's value.
+func (s *GraphqlApi) SetEnhancedMetricsConfig(v *EnhancedMetricsConfig) *GraphqlApi {
+	s.EnhancedMetricsConfig = v
+	return s
+}
+
+// SetIntrospectionConfig sets the IntrospectionConfig field's value.
+func (s *GraphqlApi) SetIntrospectionConfig(v string) *GraphqlApi {
+	s.IntrospectionConfig = &v
+	return s
+}
+
 // SetLambdaAuthorizerConfig sets the LambdaAuthorizerConfig field's value.
 func (s *GraphqlApi) SetLambdaAuthorizerConfig(v *LambdaAuthorizerConfig) *GraphqlApi {
 	s.LambdaAuthorizerConfig = v
@@ -10342,6 +13089,12 @@ func (s *GraphqlApi) SetLogConfig(v *LogConfig) *GraphqlApi {
 	return s
 }
 
+// SetMergedApiExecutionRoleArn sets the MergedApiExecutionRoleArn field's value.
+func (s *GraphqlApi) SetMergedApiExecutionRoleArn(v string) *GraphqlApi {
+	s.MergedApiExecutionRoleArn = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *GraphqlApi) SetName(v string) *GraphqlApi {
 	s.Name = &v
@@ -10351,6 +13104,30 @@ func (s *GraphqlApi) SetName(v string) *GraphqlApi {
 // SetOpenIDConnectConfig sets the OpenIDConnectConfig field's value.
 func (s *GraphqlApi) SetOpenIDConnectConfig(v *OpenIDConnectConfig) *GraphqlApi {
 	s.OpenIDConnectConfig = v
+	return s
+}
+
+// SetOwner sets the Owner field's value.
+func (s *GraphqlApi) SetOwner(v string) *GraphqlApi {
+	s.Owner = &v
+	return s
+}
+
+// SetOwnerContact sets the OwnerContact field's value.
+func (s *GraphqlApi) SetOwnerContact(v string) *GraphqlApi {
+	s.OwnerContact = &v
+	return s
+}
+
+// SetQueryDepthLimit sets the QueryDepthLimit field's value.
+func (s *GraphqlApi) SetQueryDepthLimit(v int64) *GraphqlApi {
+	s.QueryDepthLimit = &v
+	return s
+}
+
+// SetResolverCountLimit sets the ResolverCountLimit field's value.
+func (s *GraphqlApi) SetResolverCountLimit(v int64) *GraphqlApi {
+	s.ResolverCountLimit = &v
 	return s
 }
 
@@ -10968,7 +13745,8 @@ type ListDomainNamesInput struct {
 	// The maximum number of results that you want the request to return.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
 
-	// The API token.
+	// An identifier that was returned from the previous call to this operation,
+	// which you can use to return the next set of items in the list.
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 }
 
@@ -11021,7 +13799,8 @@ type ListDomainNamesOutput struct {
 	// Lists configurations for multiple domain names.
 	DomainNameConfigs []*DomainNameConfig `locationName:"domainNameConfigs" type:"list"`
 
-	// The API token.
+	// An identifier that was returned from the previous call to this operation,
+	// which you can use to return the next set of items in the list.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
@@ -11170,12 +13949,19 @@ func (s *ListFunctionsOutput) SetNextToken(v string) *ListFunctionsOutput {
 type ListGraphqlApisInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
+	// The value that indicates whether the GraphQL API is a standard API (GRAPHQL)
+	// or merged API (MERGED).
+	ApiType *string `location:"querystring" locationName:"apiType" type:"string" enum:"GraphQLApiType"`
+
 	// The maximum number of results that you want the request to return.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
 
 	// An identifier that was returned from the previous call to this operation,
 	// which you can use to return the next set of items in the list.
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
+
+	// The account owner of the GraphQL API.
+	Owner *string `location:"querystring" locationName:"owner" type:"string" enum:"Ownership"`
 }
 
 // String returns the string representation.
@@ -11209,6 +13995,12 @@ func (s *ListGraphqlApisInput) Validate() error {
 	return nil
 }
 
+// SetApiType sets the ApiType field's value.
+func (s *ListGraphqlApisInput) SetApiType(v string) *ListGraphqlApisInput {
+	s.ApiType = &v
+	return s
+}
+
 // SetMaxResults sets the MaxResults field's value.
 func (s *ListGraphqlApisInput) SetMaxResults(v int64) *ListGraphqlApisInput {
 	s.MaxResults = &v
@@ -11218,6 +14010,12 @@ func (s *ListGraphqlApisInput) SetMaxResults(v int64) *ListGraphqlApisInput {
 // SetNextToken sets the NextToken field's value.
 func (s *ListGraphqlApisInput) SetNextToken(v string) *ListGraphqlApisInput {
 	s.NextToken = &v
+	return s
+}
+
+// SetOwner sets the Owner field's value.
+func (s *ListGraphqlApisInput) SetOwner(v string) *ListGraphqlApisInput {
+	s.Owner = &v
 	return s
 }
 
@@ -11519,6 +14317,118 @@ func (s *ListResolversOutput) SetResolvers(v []*Resolver) *ListResolversOutput {
 	return s
 }
 
+type ListSourceApiAssociationsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The API ID.
+	//
+	// ApiId is a required field
+	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
+
+	// The maximum number of results that you want the request to return.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
+
+	// An identifier that was returned from the previous call to this operation,
+	// which you can use to return the next set of items in the list.
+	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSourceApiAssociationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSourceApiAssociationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSourceApiAssociationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSourceApiAssociationsInput"}
+	if s.ApiId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApiId sets the ApiId field's value.
+func (s *ListSourceApiAssociationsInput) SetApiId(v string) *ListSourceApiAssociationsInput {
+	s.ApiId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSourceApiAssociationsInput) SetMaxResults(v int64) *ListSourceApiAssociationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSourceApiAssociationsInput) SetNextToken(v string) *ListSourceApiAssociationsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListSourceApiAssociationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An identifier that was returned from the previous call to this operation,
+	// which you can use to return the next set of items in the list.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// The SourceApiAssociationSummary object data.
+	SourceApiAssociationSummaries []*SourceApiAssociationSummary `locationName:"sourceApiAssociationSummaries" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSourceApiAssociationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSourceApiAssociationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSourceApiAssociationsOutput) SetNextToken(v string) *ListSourceApiAssociationsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSourceApiAssociationSummaries sets the SourceApiAssociationSummaries field's value.
+func (s *ListSourceApiAssociationsOutput) SetSourceApiAssociationSummaries(v []*SourceApiAssociationSummary) *ListSourceApiAssociationsOutput {
+	s.SourceApiAssociationSummaries = v
+	return s
+}
+
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -11596,6 +14506,153 @@ func (s ListTagsForResourceOutput) GoString() string {
 // SetTags sets the Tags field's value.
 func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForResourceOutput {
 	s.Tags = v
+	return s
+}
+
+type ListTypesByAssociationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID generated by the AppSync service for the source API association.
+	//
+	// AssociationId is a required field
+	AssociationId *string `location:"uri" locationName:"associationId" type:"string" required:"true"`
+
+	// The format type.
+	//
+	// Format is a required field
+	Format *string `location:"querystring" locationName:"format" type:"string" required:"true" enum:"TypeDefinitionFormat"`
+
+	// The maximum number of results that you want the request to return.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
+
+	// The identifier of the AppSync Merged API. This is generated by the AppSync
+	// service. In most cases, Merged APIs (especially in your account) only require
+	// the API ID value or ARN of the merged API. However, Merged APIs in other
+	// accounts (cross-account use cases) strictly require the full resource ARN
+	// of the merged API.
+	//
+	// MergedApiIdentifier is a required field
+	MergedApiIdentifier *string `location:"uri" locationName:"mergedApiIdentifier" type:"string" required:"true"`
+
+	// An identifier that was returned from the previous call to this operation,
+	// which you can use to return the next set of items in the list.
+	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTypesByAssociationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTypesByAssociationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTypesByAssociationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTypesByAssociationInput"}
+	if s.AssociationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssociationId"))
+	}
+	if s.AssociationId != nil && len(*s.AssociationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AssociationId", 1))
+	}
+	if s.Format == nil {
+		invalidParams.Add(request.NewErrParamRequired("Format"))
+	}
+	if s.MergedApiIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MergedApiIdentifier"))
+	}
+	if s.MergedApiIdentifier != nil && len(*s.MergedApiIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MergedApiIdentifier", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssociationId sets the AssociationId field's value.
+func (s *ListTypesByAssociationInput) SetAssociationId(v string) *ListTypesByAssociationInput {
+	s.AssociationId = &v
+	return s
+}
+
+// SetFormat sets the Format field's value.
+func (s *ListTypesByAssociationInput) SetFormat(v string) *ListTypesByAssociationInput {
+	s.Format = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListTypesByAssociationInput) SetMaxResults(v int64) *ListTypesByAssociationInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetMergedApiIdentifier sets the MergedApiIdentifier field's value.
+func (s *ListTypesByAssociationInput) SetMergedApiIdentifier(v string) *ListTypesByAssociationInput {
+	s.MergedApiIdentifier = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTypesByAssociationInput) SetNextToken(v string) *ListTypesByAssociationInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListTypesByAssociationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An identifier that was returned from the previous call to this operation,
+	// which you can use to return the next set of items in the list.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// The Type objects.
+	Types []*Type `locationName:"types" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTypesByAssociationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTypesByAssociationOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTypesByAssociationOutput) SetNextToken(v string) *ListTypesByAssociationOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTypes sets the Types field's value.
+func (s *ListTypesByAssociationOutput) SetTypes(v []*Type) *ListTypesByAssociationOutput {
+	s.Types = v
 	return s
 }
 
@@ -12043,6 +15100,211 @@ func (s *PipelineConfig) SetFunctions(v []*string) *PipelineConfig {
 	return s
 }
 
+type PutGraphqlApiEnvironmentVariablesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the API to which the environmental variable list will be written.
+	//
+	// ApiId is a required field
+	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
+
+	// The list of environmental variables to add to the API.
+	//
+	// When creating an environmental variable key-value pair, it must follow the
+	// additional constraints below:
+	//
+	//    * Keys must begin with a letter.
+	//
+	//    * Keys must be at least two characters long.
+	//
+	//    * Keys can only contain letters, numbers, and the underscore character
+	//    (_).
+	//
+	//    * Values can be up to 512 characters long.
+	//
+	//    * You can configure up to 50 key-value pairs in a GraphQL API.
+	//
+	// You can create a list of environmental variables by adding it to the environmentVariables
+	// payload as a list in the format {"key1":"value1","key2":"value2", …}. Note
+	// that each call of the PutGraphqlApiEnvironmentVariables action will result
+	// in the overwriting of the existing environmental variable list of that API.
+	// This means the existing environmental variables will be lost. To avoid this,
+	// you must include all existing and new environmental variables in the list
+	// each time you call this action.
+	//
+	// EnvironmentVariables is a required field
+	EnvironmentVariables map[string]*string `locationName:"environmentVariables" type:"map" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutGraphqlApiEnvironmentVariablesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutGraphqlApiEnvironmentVariablesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutGraphqlApiEnvironmentVariablesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutGraphqlApiEnvironmentVariablesInput"}
+	if s.ApiId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
+	if s.EnvironmentVariables == nil {
+		invalidParams.Add(request.NewErrParamRequired("EnvironmentVariables"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApiId sets the ApiId field's value.
+func (s *PutGraphqlApiEnvironmentVariablesInput) SetApiId(v string) *PutGraphqlApiEnvironmentVariablesInput {
+	s.ApiId = &v
+	return s
+}
+
+// SetEnvironmentVariables sets the EnvironmentVariables field's value.
+func (s *PutGraphqlApiEnvironmentVariablesInput) SetEnvironmentVariables(v map[string]*string) *PutGraphqlApiEnvironmentVariablesInput {
+	s.EnvironmentVariables = v
+	return s
+}
+
+type PutGraphqlApiEnvironmentVariablesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The payload containing each environmental variable in the "key" : "value"
+	// format.
+	EnvironmentVariables map[string]*string `locationName:"environmentVariables" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutGraphqlApiEnvironmentVariablesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutGraphqlApiEnvironmentVariablesOutput) GoString() string {
+	return s.String()
+}
+
+// SetEnvironmentVariables sets the EnvironmentVariables field's value.
+func (s *PutGraphqlApiEnvironmentVariablesOutput) SetEnvironmentVariables(v map[string]*string) *PutGraphqlApiEnvironmentVariablesOutput {
+	s.EnvironmentVariables = v
+	return s
+}
+
+// Contains the metadata required to introspect the RDS cluster.
+type RdsDataApiConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database in the cluster.
+	//
+	// DatabaseName is a required field
+	DatabaseName *string `locationName:"databaseName" min:"1" type:"string" required:"true"`
+
+	// The resource ARN of the RDS cluster.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `locationName:"resourceArn" min:"20" type:"string" required:"true"`
+
+	// The secret's ARN that was obtained from Secrets Manager. A secret consists
+	// of secret information, the secret value, plus metadata about the secret.
+	// A secret value can be a string or binary. It typically includes the ARN,
+	// secret name and description, policies, tags, encryption key from the Key
+	// Management Service, and key rotation data.
+	//
+	// SecretArn is a required field
+	SecretArn *string `locationName:"secretArn" min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RdsDataApiConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RdsDataApiConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RdsDataApiConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RdsDataApiConfig"}
+	if s.DatabaseName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DatabaseName"))
+	}
+	if s.DatabaseName != nil && len(*s.DatabaseName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DatabaseName", 1))
+	}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 20))
+	}
+	if s.SecretArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretArn"))
+	}
+	if s.SecretArn != nil && len(*s.SecretArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabaseName sets the DatabaseName field's value.
+func (s *RdsDataApiConfig) SetDatabaseName(v string) *RdsDataApiConfig {
+	s.DatabaseName = &v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *RdsDataApiConfig) SetResourceArn(v string) *RdsDataApiConfig {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *RdsDataApiConfig) SetSecretArn(v string) *RdsDataApiConfig {
+	s.SecretArn = &v
+	return s
+}
+
 // The Amazon Relational Database Service (Amazon RDS) HTTP endpoint configuration.
 type RdsHttpEndpointConfig struct {
 	_ struct{} `type:"structure"`
@@ -12187,6 +15449,15 @@ type Resolver struct {
 	// The maximum batching size for a resolver.
 	MaxBatchSize *int64 `locationName:"maxBatchSize" type:"integer"`
 
+	// Enables or disables enhanced resolver metrics for specified resolvers. Note
+	// that metricsConfig won't be used unless the resolverLevelMetricsBehavior
+	// value is set to PER_RESOLVER_METRICS. If the resolverLevelMetricsBehavior
+	// is set to FULL_REQUEST_RESOLVER_METRICS instead, metricsConfig will be ignored.
+	// However, you can still set its value.
+	//
+	// metricsConfig can be ENABLED or DISABLED.
+	MetricsConfig *string `locationName:"metricsConfig" type:"string" enum:"ResolverLevelMetricsConfig"`
+
 	// The PipelineConfig.
 	PipelineConfig *PipelineConfig `locationName:"pipelineConfig" type:"structure"`
 
@@ -12266,6 +15537,12 @@ func (s *Resolver) SetMaxBatchSize(v int64) *Resolver {
 	return s
 }
 
+// SetMetricsConfig sets the MetricsConfig field's value.
+func (s *Resolver) SetMetricsConfig(v string) *Resolver {
+	s.MetricsConfig = &v
+	return s
+}
+
 // SetPipelineConfig sets the PipelineConfig field's value.
 func (s *Resolver) SetPipelineConfig(v *PipelineConfig) *Resolver {
 	s.PipelineConfig = v
@@ -12305,6 +15582,367 @@ func (s *Resolver) SetSyncConfig(v *SyncConfig) *Resolver {
 // SetTypeName sets the TypeName field's value.
 func (s *Resolver) SetTypeName(v string) *Resolver {
 	s.TypeName = &v
+	return s
+}
+
+// Describes the configuration of a source API. A source API is a GraphQL API
+// that is linked to a merged API. There can be multiple source APIs attached
+// to each merged API. When linked to a merged API, the source API's schema,
+// data sources, and resolvers will be combined with other linked source API
+// data to form a new, singular API.
+//
+// Source APIs can originate from your account or from other accounts via Amazon
+// Web Services Resource Access Manager. For more information about sharing
+// resources from other accounts, see What is Amazon Web Services Resource Access
+// Manager? (https://docs.aws.amazon.com/ram/latest/userguide/what-is.html)
+// in the Amazon Web Services Resource Access Manager guide.
+type SourceApiAssociation struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the source API association.
+	AssociationArn *string `locationName:"associationArn" type:"string"`
+
+	// The ID generated by the AppSync service for the source API association.
+	AssociationId *string `locationName:"associationId" type:"string"`
+
+	// The description field.
+	Description *string `locationName:"description" type:"string"`
+
+	// The datetime value of the last successful merge of the source API association.
+	// The result will be in UTC format and your local time zone.
+	LastSuccessfulMergeDate *time.Time `locationName:"lastSuccessfulMergeDate" type:"timestamp"`
+
+	// The Amazon Resource Name (ARN) of the AppSync Merged API.
+	MergedApiArn *string `locationName:"mergedApiArn" type:"string"`
+
+	// The ID of the AppSync Merged API.
+	MergedApiId *string `locationName:"mergedApiId" type:"string"`
+
+	// The Amazon Resource Name (ARN) of the AppSync source API.
+	SourceApiArn *string `locationName:"sourceApiArn" type:"string"`
+
+	// The SourceApiAssociationConfig object data.
+	SourceApiAssociationConfig *SourceApiAssociationConfig `locationName:"sourceApiAssociationConfig" type:"structure"`
+
+	// The state of the source API association.
+	SourceApiAssociationStatus *string `locationName:"sourceApiAssociationStatus" type:"string" enum:"SourceApiAssociationStatus"`
+
+	// The detailed message related to the current state of the source API association.
+	SourceApiAssociationStatusDetail *string `locationName:"sourceApiAssociationStatusDetail" type:"string"`
+
+	// The ID of the AppSync source API.
+	SourceApiId *string `locationName:"sourceApiId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceApiAssociation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceApiAssociation) GoString() string {
+	return s.String()
+}
+
+// SetAssociationArn sets the AssociationArn field's value.
+func (s *SourceApiAssociation) SetAssociationArn(v string) *SourceApiAssociation {
+	s.AssociationArn = &v
+	return s
+}
+
+// SetAssociationId sets the AssociationId field's value.
+func (s *SourceApiAssociation) SetAssociationId(v string) *SourceApiAssociation {
+	s.AssociationId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *SourceApiAssociation) SetDescription(v string) *SourceApiAssociation {
+	s.Description = &v
+	return s
+}
+
+// SetLastSuccessfulMergeDate sets the LastSuccessfulMergeDate field's value.
+func (s *SourceApiAssociation) SetLastSuccessfulMergeDate(v time.Time) *SourceApiAssociation {
+	s.LastSuccessfulMergeDate = &v
+	return s
+}
+
+// SetMergedApiArn sets the MergedApiArn field's value.
+func (s *SourceApiAssociation) SetMergedApiArn(v string) *SourceApiAssociation {
+	s.MergedApiArn = &v
+	return s
+}
+
+// SetMergedApiId sets the MergedApiId field's value.
+func (s *SourceApiAssociation) SetMergedApiId(v string) *SourceApiAssociation {
+	s.MergedApiId = &v
+	return s
+}
+
+// SetSourceApiArn sets the SourceApiArn field's value.
+func (s *SourceApiAssociation) SetSourceApiArn(v string) *SourceApiAssociation {
+	s.SourceApiArn = &v
+	return s
+}
+
+// SetSourceApiAssociationConfig sets the SourceApiAssociationConfig field's value.
+func (s *SourceApiAssociation) SetSourceApiAssociationConfig(v *SourceApiAssociationConfig) *SourceApiAssociation {
+	s.SourceApiAssociationConfig = v
+	return s
+}
+
+// SetSourceApiAssociationStatus sets the SourceApiAssociationStatus field's value.
+func (s *SourceApiAssociation) SetSourceApiAssociationStatus(v string) *SourceApiAssociation {
+	s.SourceApiAssociationStatus = &v
+	return s
+}
+
+// SetSourceApiAssociationStatusDetail sets the SourceApiAssociationStatusDetail field's value.
+func (s *SourceApiAssociation) SetSourceApiAssociationStatusDetail(v string) *SourceApiAssociation {
+	s.SourceApiAssociationStatusDetail = &v
+	return s
+}
+
+// SetSourceApiId sets the SourceApiId field's value.
+func (s *SourceApiAssociation) SetSourceApiId(v string) *SourceApiAssociation {
+	s.SourceApiId = &v
+	return s
+}
+
+// Describes properties used to specify configurations related to a source API.
+type SourceApiAssociationConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The property that indicates which merging option is enabled in the source
+	// API association.
+	//
+	// Valid merge types are MANUAL_MERGE (default) and AUTO_MERGE. Manual merges
+	// are the default behavior and require the user to trigger any changes from
+	// the source APIs to the merged API manually. Auto merges subscribe the merged
+	// API to the changes performed on the source APIs so that any change in the
+	// source APIs are also made to the merged API. Auto merges use MergedApiExecutionRoleArn
+	// to perform merge operations.
+	MergeType *string `locationName:"mergeType" type:"string" enum:"MergeType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceApiAssociationConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceApiAssociationConfig) GoString() string {
+	return s.String()
+}
+
+// SetMergeType sets the MergeType field's value.
+func (s *SourceApiAssociationConfig) SetMergeType(v string) *SourceApiAssociationConfig {
+	s.MergeType = &v
+	return s
+}
+
+// Describes the ARNs and IDs of associations, Merged APIs, and source APIs.
+type SourceApiAssociationSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the source API association.
+	AssociationArn *string `locationName:"associationArn" type:"string"`
+
+	// The ID generated by the AppSync service for the source API association.
+	AssociationId *string `locationName:"associationId" type:"string"`
+
+	// The description field.
+	Description *string `locationName:"description" type:"string"`
+
+	// The Amazon Resource Name (ARN) of the AppSync Merged API.
+	MergedApiArn *string `locationName:"mergedApiArn" type:"string"`
+
+	// The ID of the AppSync Merged API.
+	MergedApiId *string `locationName:"mergedApiId" type:"string"`
+
+	// The Amazon Resource Name (ARN) of the AppSync Source API.
+	SourceApiArn *string `locationName:"sourceApiArn" type:"string"`
+
+	// The ID of the AppSync source API.
+	SourceApiId *string `locationName:"sourceApiId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceApiAssociationSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceApiAssociationSummary) GoString() string {
+	return s.String()
+}
+
+// SetAssociationArn sets the AssociationArn field's value.
+func (s *SourceApiAssociationSummary) SetAssociationArn(v string) *SourceApiAssociationSummary {
+	s.AssociationArn = &v
+	return s
+}
+
+// SetAssociationId sets the AssociationId field's value.
+func (s *SourceApiAssociationSummary) SetAssociationId(v string) *SourceApiAssociationSummary {
+	s.AssociationId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *SourceApiAssociationSummary) SetDescription(v string) *SourceApiAssociationSummary {
+	s.Description = &v
+	return s
+}
+
+// SetMergedApiArn sets the MergedApiArn field's value.
+func (s *SourceApiAssociationSummary) SetMergedApiArn(v string) *SourceApiAssociationSummary {
+	s.MergedApiArn = &v
+	return s
+}
+
+// SetMergedApiId sets the MergedApiId field's value.
+func (s *SourceApiAssociationSummary) SetMergedApiId(v string) *SourceApiAssociationSummary {
+	s.MergedApiId = &v
+	return s
+}
+
+// SetSourceApiArn sets the SourceApiArn field's value.
+func (s *SourceApiAssociationSummary) SetSourceApiArn(v string) *SourceApiAssociationSummary {
+	s.SourceApiArn = &v
+	return s
+}
+
+// SetSourceApiId sets the SourceApiId field's value.
+func (s *SourceApiAssociationSummary) SetSourceApiId(v string) *SourceApiAssociationSummary {
+	s.SourceApiId = &v
+	return s
+}
+
+type StartDataSourceIntrospectionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The rdsDataApiConfig object data.
+	RdsDataApiConfig *RdsDataApiConfig `locationName:"rdsDataApiConfig" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartDataSourceIntrospectionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartDataSourceIntrospectionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartDataSourceIntrospectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartDataSourceIntrospectionInput"}
+	if s.RdsDataApiConfig != nil {
+		if err := s.RdsDataApiConfig.Validate(); err != nil {
+			invalidParams.AddNested("RdsDataApiConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRdsDataApiConfig sets the RdsDataApiConfig field's value.
+func (s *StartDataSourceIntrospectionInput) SetRdsDataApiConfig(v *RdsDataApiConfig) *StartDataSourceIntrospectionInput {
+	s.RdsDataApiConfig = v
+	return s
+}
+
+type StartDataSourceIntrospectionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The introspection ID. Each introspection contains a unique ID that can be
+	// used to reference the instrospection record.
+	IntrospectionId *string `locationName:"introspectionId" type:"string"`
+
+	// The status of the introspection during creation. By default, when a new instrospection
+	// has been created, the status will be set to PROCESSING. Once the operation
+	// has been completed, the status will change to SUCCESS or FAILED depending
+	// on how the data was parsed. A FAILED operation will return an error and its
+	// details as an introspectionStatusDetail.
+	IntrospectionStatus *string `locationName:"introspectionStatus" type:"string" enum:"DataSourceIntrospectionStatus"`
+
+	// The error detail field. When a FAILED introspectionStatus is returned, the
+	// introspectionStatusDetail will also return the exact error that was generated
+	// during the operation.
+	IntrospectionStatusDetail *string `locationName:"introspectionStatusDetail" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartDataSourceIntrospectionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartDataSourceIntrospectionOutput) GoString() string {
+	return s.String()
+}
+
+// SetIntrospectionId sets the IntrospectionId field's value.
+func (s *StartDataSourceIntrospectionOutput) SetIntrospectionId(v string) *StartDataSourceIntrospectionOutput {
+	s.IntrospectionId = &v
+	return s
+}
+
+// SetIntrospectionStatus sets the IntrospectionStatus field's value.
+func (s *StartDataSourceIntrospectionOutput) SetIntrospectionStatus(v string) *StartDataSourceIntrospectionOutput {
+	s.IntrospectionStatus = &v
+	return s
+}
+
+// SetIntrospectionStatusDetail sets the IntrospectionStatusDetail field's value.
+func (s *StartDataSourceIntrospectionOutput) SetIntrospectionStatusDetail(v string) *StartDataSourceIntrospectionOutput {
+	s.IntrospectionStatusDetail = &v
 	return s
 }
 
@@ -12401,6 +16039,107 @@ func (s StartSchemaCreationOutput) GoString() string {
 // SetStatus sets the Status field's value.
 func (s *StartSchemaCreationOutput) SetStatus(v string) *StartSchemaCreationOutput {
 	s.Status = &v
+	return s
+}
+
+type StartSchemaMergeInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID generated by the AppSync service for the source API association.
+	//
+	// AssociationId is a required field
+	AssociationId *string `location:"uri" locationName:"associationId" type:"string" required:"true"`
+
+	// The identifier of the AppSync Merged API. This is generated by the AppSync
+	// service. In most cases, Merged APIs (especially in your account) only require
+	// the API ID value or ARN of the merged API. However, Merged APIs in other
+	// accounts (cross-account use cases) strictly require the full resource ARN
+	// of the merged API.
+	//
+	// MergedApiIdentifier is a required field
+	MergedApiIdentifier *string `location:"uri" locationName:"mergedApiIdentifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartSchemaMergeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartSchemaMergeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartSchemaMergeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartSchemaMergeInput"}
+	if s.AssociationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssociationId"))
+	}
+	if s.AssociationId != nil && len(*s.AssociationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AssociationId", 1))
+	}
+	if s.MergedApiIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MergedApiIdentifier"))
+	}
+	if s.MergedApiIdentifier != nil && len(*s.MergedApiIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MergedApiIdentifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssociationId sets the AssociationId field's value.
+func (s *StartSchemaMergeInput) SetAssociationId(v string) *StartSchemaMergeInput {
+	s.AssociationId = &v
+	return s
+}
+
+// SetMergedApiIdentifier sets the MergedApiIdentifier field's value.
+func (s *StartSchemaMergeInput) SetMergedApiIdentifier(v string) *StartSchemaMergeInput {
+	s.MergedApiIdentifier = &v
+	return s
+}
+
+type StartSchemaMergeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The state of the source API association.
+	SourceApiAssociationStatus *string `locationName:"sourceApiAssociationStatus" type:"string" enum:"SourceApiAssociationStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartSchemaMergeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartSchemaMergeOutput) GoString() string {
+	return s.String()
+}
+
+// SetSourceApiAssociationStatus sets the SourceApiAssociationStatus field's value.
+func (s *StartSchemaMergeOutput) SetSourceApiAssociationStatus(v string) *StartSchemaMergeOutput {
+	s.SourceApiAssociationStatus = &v
 	return s
 }
 
@@ -12795,6 +16534,20 @@ type UpdateApiCacheInput struct {
 	// ApiId is a required field
 	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
 
+	// Controls how cache health metrics will be emitted to CloudWatch. Cache health
+	// metrics include:
+	//
+	//    * NetworkBandwidthOutAllowanceExceeded: The network packets dropped because
+	//    the throughput exceeded the aggregated bandwidth limit. This is useful
+	//    for diagnosing bottlenecks in a cache configuration.
+	//
+	//    * EngineCPUUtilization: The CPU utilization (percentage) allocated to
+	//    the Redis process. This is useful for diagnosing bottlenecks in a cache
+	//    configuration.
+	//
+	// Metrics will be recorded by API ID. You can set the value to ENABLED or DISABLED.
+	HealthMetricsConfig *string `locationName:"healthMetricsConfig" type:"string" enum:"CacheHealthMetricsConfig"`
+
 	// TTL in seconds for cache entries.
 	//
 	// Valid values are 1–3,600 seconds.
@@ -12896,6 +16649,12 @@ func (s *UpdateApiCacheInput) SetApiCachingBehavior(v string) *UpdateApiCacheInp
 // SetApiId sets the ApiId field's value.
 func (s *UpdateApiCacheInput) SetApiId(v string) *UpdateApiCacheInput {
 	s.ApiId = &v
+	return s
+}
+
+// SetHealthMetricsConfig sets the HealthMetricsConfig field's value.
+func (s *UpdateApiCacheInput) SetHealthMetricsConfig(v string) *UpdateApiCacheInput {
+	s.HealthMetricsConfig = &v
 	return s
 }
 
@@ -13089,6 +16848,15 @@ type UpdateDataSourceInput struct {
 	// The new Lambda configuration.
 	LambdaConfig *LambdaDataSourceConfig `locationName:"lambdaConfig" type:"structure"`
 
+	// Enables or disables enhanced data source metrics for specified data sources.
+	// Note that metricsConfig won't be used unless the dataSourceLevelMetricsBehavior
+	// value is set to PER_DATA_SOURCE_METRICS. If the dataSourceLevelMetricsBehavior
+	// is set to FULL_REQUEST_DATA_SOURCE_METRICS instead, metricsConfig will be
+	// ignored. However, you can still set its value.
+	//
+	// metricsConfig can be ENABLED or DISABLED.
+	MetricsConfig *string `locationName:"metricsConfig" type:"string" enum:"DataSourceLevelMetricsConfig"`
+
 	// The new name for the data source.
 	//
 	// Name is a required field
@@ -13221,6 +16989,12 @@ func (s *UpdateDataSourceInput) SetHttpConfig(v *HttpDataSourceConfig) *UpdateDa
 // SetLambdaConfig sets the LambdaConfig field's value.
 func (s *UpdateDataSourceInput) SetLambdaConfig(v *LambdaDataSourceConfig) *UpdateDataSourceInput {
 	s.LambdaConfig = v
+	return s
+}
+
+// SetMetricsConfig sets the MetricsConfig field's value.
+func (s *UpdateDataSourceInput) SetMetricsConfig(v string) *UpdateDataSourceInput {
+	s.MetricsConfig = &v
 	return s
 }
 
@@ -13615,11 +17389,28 @@ type UpdateGraphqlApiInput struct {
 	// The new authentication type for the GraphqlApi object.
 	AuthenticationType *string `locationName:"authenticationType" type:"string" enum:"AuthenticationType"`
 
+	// The enhancedMetricsConfig object.
+	EnhancedMetricsConfig *EnhancedMetricsConfig `locationName:"enhancedMetricsConfig" type:"structure"`
+
+	// Sets the value of the GraphQL API to enable (ENABLED) or disable (DISABLED)
+	// introspection. If no value is provided, the introspection configuration will
+	// be set to ENABLED by default. This field will produce an error if the operation
+	// attempts to use the introspection feature while this field is disabled.
+	//
+	// For more information about introspection, see GraphQL introspection (https://graphql.org/learn/introspection/).
+	IntrospectionConfig *string `locationName:"introspectionConfig" type:"string" enum:"GraphQLApiIntrospectionConfig"`
+
 	// Configuration for Lambda function authorization.
 	LambdaAuthorizerConfig *LambdaAuthorizerConfig `locationName:"lambdaAuthorizerConfig" type:"structure"`
 
 	// The Amazon CloudWatch Logs configuration for the GraphqlApi object.
 	LogConfig *LogConfig `locationName:"logConfig" type:"structure"`
+
+	// The Identity and Access Management service role ARN for a merged API. The
+	// AppSync service assumes this role on behalf of the Merged API to validate
+	// access to source APIs at runtime and to prompt the AUTO_MERGE to update the
+	// merged API endpoint with the source API changes automatically.
+	MergedApiExecutionRoleArn *string `locationName:"mergedApiExecutionRoleArn" type:"string"`
 
 	// The new name for the GraphqlApi object.
 	//
@@ -13628,6 +17419,28 @@ type UpdateGraphqlApiInput struct {
 
 	// The OpenID Connect configuration for the GraphqlApi object.
 	OpenIDConnectConfig *OpenIDConnectConfig `locationName:"openIDConnectConfig" type:"structure"`
+
+	// The owner contact information for an API resource.
+	//
+	// This field accepts any string input with a length of 0 - 256 characters.
+	OwnerContact *string `locationName:"ownerContact" type:"string"`
+
+	// The maximum depth a query can have in a single request. Depth refers to the
+	// amount of nested levels allowed in the body of query. The default value is
+	// 0 (or unspecified), which indicates there's no depth limit. If you set a
+	// limit, it can be between 1 and 75 nested levels. This field will produce
+	// a limit error if the operation falls out of bounds.
+	//
+	// Note that fields can still be set to nullable or non-nullable. If a non-nullable
+	// field produces an error, the error will be thrown upwards to the first nullable
+	// field available.
+	QueryDepthLimit *int64 `locationName:"queryDepthLimit" type:"integer"`
+
+	// The maximum number of resolvers that can be invoked in a single request.
+	// The default value is 0 (or unspecified), which will set the limit to 10000.
+	// When specified, the limit value can be between 1 and 10000. This field will
+	// produce a limit error if the operation falls out of bounds.
+	ResolverCountLimit *int64 `locationName:"resolverCountLimit" type:"integer"`
 
 	// The new Amazon Cognito user pool configuration for the ~GraphqlApi object.
 	UserPoolConfig *UserPoolConfig `locationName:"userPoolConfig" type:"structure"`
@@ -13676,6 +17489,11 @@ func (s *UpdateGraphqlApiInput) Validate() error {
 			}
 		}
 	}
+	if s.EnhancedMetricsConfig != nil {
+		if err := s.EnhancedMetricsConfig.Validate(); err != nil {
+			invalidParams.AddNested("EnhancedMetricsConfig", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.LambdaAuthorizerConfig != nil {
 		if err := s.LambdaAuthorizerConfig.Validate(); err != nil {
 			invalidParams.AddNested("LambdaAuthorizerConfig", err.(request.ErrInvalidParams))
@@ -13721,6 +17539,18 @@ func (s *UpdateGraphqlApiInput) SetAuthenticationType(v string) *UpdateGraphqlAp
 	return s
 }
 
+// SetEnhancedMetricsConfig sets the EnhancedMetricsConfig field's value.
+func (s *UpdateGraphqlApiInput) SetEnhancedMetricsConfig(v *EnhancedMetricsConfig) *UpdateGraphqlApiInput {
+	s.EnhancedMetricsConfig = v
+	return s
+}
+
+// SetIntrospectionConfig sets the IntrospectionConfig field's value.
+func (s *UpdateGraphqlApiInput) SetIntrospectionConfig(v string) *UpdateGraphqlApiInput {
+	s.IntrospectionConfig = &v
+	return s
+}
+
 // SetLambdaAuthorizerConfig sets the LambdaAuthorizerConfig field's value.
 func (s *UpdateGraphqlApiInput) SetLambdaAuthorizerConfig(v *LambdaAuthorizerConfig) *UpdateGraphqlApiInput {
 	s.LambdaAuthorizerConfig = v
@@ -13733,6 +17563,12 @@ func (s *UpdateGraphqlApiInput) SetLogConfig(v *LogConfig) *UpdateGraphqlApiInpu
 	return s
 }
 
+// SetMergedApiExecutionRoleArn sets the MergedApiExecutionRoleArn field's value.
+func (s *UpdateGraphqlApiInput) SetMergedApiExecutionRoleArn(v string) *UpdateGraphqlApiInput {
+	s.MergedApiExecutionRoleArn = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *UpdateGraphqlApiInput) SetName(v string) *UpdateGraphqlApiInput {
 	s.Name = &v
@@ -13742,6 +17578,24 @@ func (s *UpdateGraphqlApiInput) SetName(v string) *UpdateGraphqlApiInput {
 // SetOpenIDConnectConfig sets the OpenIDConnectConfig field's value.
 func (s *UpdateGraphqlApiInput) SetOpenIDConnectConfig(v *OpenIDConnectConfig) *UpdateGraphqlApiInput {
 	s.OpenIDConnectConfig = v
+	return s
+}
+
+// SetOwnerContact sets the OwnerContact field's value.
+func (s *UpdateGraphqlApiInput) SetOwnerContact(v string) *UpdateGraphqlApiInput {
+	s.OwnerContact = &v
+	return s
+}
+
+// SetQueryDepthLimit sets the QueryDepthLimit field's value.
+func (s *UpdateGraphqlApiInput) SetQueryDepthLimit(v int64) *UpdateGraphqlApiInput {
+	s.QueryDepthLimit = &v
+	return s
+}
+
+// SetResolverCountLimit sets the ResolverCountLimit field's value.
+func (s *UpdateGraphqlApiInput) SetResolverCountLimit(v int64) *UpdateGraphqlApiInput {
+	s.ResolverCountLimit = &v
 	return s
 }
 
@@ -13824,6 +17678,15 @@ type UpdateResolverInput struct {
 
 	// The maximum batching size for a resolver.
 	MaxBatchSize *int64 `locationName:"maxBatchSize" type:"integer"`
+
+	// Enables or disables enhanced resolver metrics for specified resolvers. Note
+	// that metricsConfig won't be used unless the resolverLevelMetricsBehavior
+	// value is set to PER_RESOLVER_METRICS. If the resolverLevelMetricsBehavior
+	// is set to FULL_REQUEST_RESOLVER_METRICS instead, metricsConfig will be ignored.
+	// However, you can still set its value.
+	//
+	// metricsConfig can be ENABLED or DISABLED.
+	MetricsConfig *string `locationName:"metricsConfig" type:"string" enum:"ResolverLevelMetricsConfig"`
 
 	// The PipelineConfig.
 	PipelineConfig *PipelineConfig `locationName:"pipelineConfig" type:"structure"`
@@ -13967,6 +17830,12 @@ func (s *UpdateResolverInput) SetMaxBatchSize(v int64) *UpdateResolverInput {
 	return s
 }
 
+// SetMetricsConfig sets the MetricsConfig field's value.
+func (s *UpdateResolverInput) SetMetricsConfig(v string) *UpdateResolverInput {
+	s.MetricsConfig = &v
+	return s
+}
+
 // SetPipelineConfig sets the PipelineConfig field's value.
 func (s *UpdateResolverInput) SetPipelineConfig(v *PipelineConfig) *UpdateResolverInput {
 	s.PipelineConfig = v
@@ -14031,6 +17900,125 @@ func (s UpdateResolverOutput) GoString() string {
 // SetResolver sets the Resolver field's value.
 func (s *UpdateResolverOutput) SetResolver(v *Resolver) *UpdateResolverOutput {
 	s.Resolver = v
+	return s
+}
+
+type UpdateSourceApiAssociationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID generated by the AppSync service for the source API association.
+	//
+	// AssociationId is a required field
+	AssociationId *string `location:"uri" locationName:"associationId" type:"string" required:"true"`
+
+	// The description field.
+	Description *string `locationName:"description" type:"string"`
+
+	// The identifier of the AppSync Merged API. This is generated by the AppSync
+	// service. In most cases, Merged APIs (especially in your account) only require
+	// the API ID value or ARN of the merged API. However, Merged APIs in other
+	// accounts (cross-account use cases) strictly require the full resource ARN
+	// of the merged API.
+	//
+	// MergedApiIdentifier is a required field
+	MergedApiIdentifier *string `location:"uri" locationName:"mergedApiIdentifier" type:"string" required:"true"`
+
+	// The SourceApiAssociationConfig object data.
+	SourceApiAssociationConfig *SourceApiAssociationConfig `locationName:"sourceApiAssociationConfig" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceApiAssociationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceApiAssociationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateSourceApiAssociationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateSourceApiAssociationInput"}
+	if s.AssociationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssociationId"))
+	}
+	if s.AssociationId != nil && len(*s.AssociationId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AssociationId", 1))
+	}
+	if s.MergedApiIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("MergedApiIdentifier"))
+	}
+	if s.MergedApiIdentifier != nil && len(*s.MergedApiIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MergedApiIdentifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssociationId sets the AssociationId field's value.
+func (s *UpdateSourceApiAssociationInput) SetAssociationId(v string) *UpdateSourceApiAssociationInput {
+	s.AssociationId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateSourceApiAssociationInput) SetDescription(v string) *UpdateSourceApiAssociationInput {
+	s.Description = &v
+	return s
+}
+
+// SetMergedApiIdentifier sets the MergedApiIdentifier field's value.
+func (s *UpdateSourceApiAssociationInput) SetMergedApiIdentifier(v string) *UpdateSourceApiAssociationInput {
+	s.MergedApiIdentifier = &v
+	return s
+}
+
+// SetSourceApiAssociationConfig sets the SourceApiAssociationConfig field's value.
+func (s *UpdateSourceApiAssociationInput) SetSourceApiAssociationConfig(v *SourceApiAssociationConfig) *UpdateSourceApiAssociationInput {
+	s.SourceApiAssociationConfig = v
+	return s
+}
+
+type UpdateSourceApiAssociationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The SourceApiAssociation object data.
+	SourceApiAssociation *SourceApiAssociation `locationName:"sourceApiAssociation" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceApiAssociationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceApiAssociationOutput) GoString() string {
+	return s.String()
+}
+
+// SetSourceApiAssociation sets the SourceApiAssociation field's value.
+func (s *UpdateSourceApiAssociationOutput) SetSourceApiAssociation(v *SourceApiAssociation) *UpdateSourceApiAssociationOutput {
+	s.SourceApiAssociation = v
 	return s
 }
 
@@ -14428,6 +18416,22 @@ func BadRequestReason_Values() []string {
 }
 
 const (
+	// CacheHealthMetricsConfigEnabled is a CacheHealthMetricsConfig enum value
+	CacheHealthMetricsConfigEnabled = "ENABLED"
+
+	// CacheHealthMetricsConfigDisabled is a CacheHealthMetricsConfig enum value
+	CacheHealthMetricsConfigDisabled = "DISABLED"
+)
+
+// CacheHealthMetricsConfig_Values returns all elements of the CacheHealthMetricsConfig enum
+func CacheHealthMetricsConfig_Values() []string {
+	return []string{
+		CacheHealthMetricsConfigEnabled,
+		CacheHealthMetricsConfigDisabled,
+	}
+}
+
+const (
 	// ConflictDetectionTypeVersion is a ConflictDetectionType enum value
 	ConflictDetectionTypeVersion = "VERSION"
 
@@ -14464,6 +18468,58 @@ func ConflictHandlerType_Values() []string {
 		ConflictHandlerTypeLambda,
 		ConflictHandlerTypeAutomerge,
 		ConflictHandlerTypeNone,
+	}
+}
+
+const (
+	// DataSourceIntrospectionStatusProcessing is a DataSourceIntrospectionStatus enum value
+	DataSourceIntrospectionStatusProcessing = "PROCESSING"
+
+	// DataSourceIntrospectionStatusFailed is a DataSourceIntrospectionStatus enum value
+	DataSourceIntrospectionStatusFailed = "FAILED"
+
+	// DataSourceIntrospectionStatusSuccess is a DataSourceIntrospectionStatus enum value
+	DataSourceIntrospectionStatusSuccess = "SUCCESS"
+)
+
+// DataSourceIntrospectionStatus_Values returns all elements of the DataSourceIntrospectionStatus enum
+func DataSourceIntrospectionStatus_Values() []string {
+	return []string{
+		DataSourceIntrospectionStatusProcessing,
+		DataSourceIntrospectionStatusFailed,
+		DataSourceIntrospectionStatusSuccess,
+	}
+}
+
+const (
+	// DataSourceLevelMetricsBehaviorFullRequestDataSourceMetrics is a DataSourceLevelMetricsBehavior enum value
+	DataSourceLevelMetricsBehaviorFullRequestDataSourceMetrics = "FULL_REQUEST_DATA_SOURCE_METRICS"
+
+	// DataSourceLevelMetricsBehaviorPerDataSourceMetrics is a DataSourceLevelMetricsBehavior enum value
+	DataSourceLevelMetricsBehaviorPerDataSourceMetrics = "PER_DATA_SOURCE_METRICS"
+)
+
+// DataSourceLevelMetricsBehavior_Values returns all elements of the DataSourceLevelMetricsBehavior enum
+func DataSourceLevelMetricsBehavior_Values() []string {
+	return []string{
+		DataSourceLevelMetricsBehaviorFullRequestDataSourceMetrics,
+		DataSourceLevelMetricsBehaviorPerDataSourceMetrics,
+	}
+}
+
+const (
+	// DataSourceLevelMetricsConfigEnabled is a DataSourceLevelMetricsConfig enum value
+	DataSourceLevelMetricsConfigEnabled = "ENABLED"
+
+	// DataSourceLevelMetricsConfigDisabled is a DataSourceLevelMetricsConfig enum value
+	DataSourceLevelMetricsConfigDisabled = "DISABLED"
+)
+
+// DataSourceLevelMetricsConfig_Values returns all elements of the DataSourceLevelMetricsConfig enum
+func DataSourceLevelMetricsConfig_Values() []string {
+	return []string{
+		DataSourceLevelMetricsConfigEnabled,
+		DataSourceLevelMetricsConfigDisabled,
 	}
 }
 
@@ -14544,6 +18600,38 @@ func FieldLogLevel_Values() []string {
 }
 
 const (
+	// GraphQLApiIntrospectionConfigEnabled is a GraphQLApiIntrospectionConfig enum value
+	GraphQLApiIntrospectionConfigEnabled = "ENABLED"
+
+	// GraphQLApiIntrospectionConfigDisabled is a GraphQLApiIntrospectionConfig enum value
+	GraphQLApiIntrospectionConfigDisabled = "DISABLED"
+)
+
+// GraphQLApiIntrospectionConfig_Values returns all elements of the GraphQLApiIntrospectionConfig enum
+func GraphQLApiIntrospectionConfig_Values() []string {
+	return []string{
+		GraphQLApiIntrospectionConfigEnabled,
+		GraphQLApiIntrospectionConfigDisabled,
+	}
+}
+
+const (
+	// GraphQLApiTypeGraphql is a GraphQLApiType enum value
+	GraphQLApiTypeGraphql = "GRAPHQL"
+
+	// GraphQLApiTypeMerged is a GraphQLApiType enum value
+	GraphQLApiTypeMerged = "MERGED"
+)
+
+// GraphQLApiType_Values returns all elements of the GraphQLApiType enum
+func GraphQLApiType_Values() []string {
+	return []string{
+		GraphQLApiTypeGraphql,
+		GraphQLApiTypeMerged,
+	}
+}
+
+const (
 	// GraphQLApiVisibilityGlobal is a GraphQLApiVisibility enum value
 	GraphQLApiVisibilityGlobal = "GLOBAL"
 
@@ -14560,6 +18648,38 @@ func GraphQLApiVisibility_Values() []string {
 }
 
 const (
+	// MergeTypeManualMerge is a MergeType enum value
+	MergeTypeManualMerge = "MANUAL_MERGE"
+
+	// MergeTypeAutoMerge is a MergeType enum value
+	MergeTypeAutoMerge = "AUTO_MERGE"
+)
+
+// MergeType_Values returns all elements of the MergeType enum
+func MergeType_Values() []string {
+	return []string{
+		MergeTypeManualMerge,
+		MergeTypeAutoMerge,
+	}
+}
+
+const (
+	// OperationLevelMetricsConfigEnabled is a OperationLevelMetricsConfig enum value
+	OperationLevelMetricsConfigEnabled = "ENABLED"
+
+	// OperationLevelMetricsConfigDisabled is a OperationLevelMetricsConfig enum value
+	OperationLevelMetricsConfigDisabled = "DISABLED"
+)
+
+// OperationLevelMetricsConfig_Values returns all elements of the OperationLevelMetricsConfig enum
+func OperationLevelMetricsConfig_Values() []string {
+	return []string{
+		OperationLevelMetricsConfigEnabled,
+		OperationLevelMetricsConfigDisabled,
+	}
+}
+
+const (
 	// OutputTypeSdl is a OutputType enum value
 	OutputTypeSdl = "SDL"
 
@@ -14572,6 +18692,22 @@ func OutputType_Values() []string {
 	return []string{
 		OutputTypeSdl,
 		OutputTypeJson,
+	}
+}
+
+const (
+	// OwnershipCurrentAccount is a Ownership enum value
+	OwnershipCurrentAccount = "CURRENT_ACCOUNT"
+
+	// OwnershipOtherAccounts is a Ownership enum value
+	OwnershipOtherAccounts = "OTHER_ACCOUNTS"
+)
+
+// Ownership_Values returns all elements of the Ownership enum
+func Ownership_Values() []string {
+	return []string{
+		OwnershipCurrentAccount,
+		OwnershipOtherAccounts,
 	}
 }
 
@@ -14600,6 +18736,38 @@ func ResolverKind_Values() []string {
 	return []string{
 		ResolverKindUnit,
 		ResolverKindPipeline,
+	}
+}
+
+const (
+	// ResolverLevelMetricsBehaviorFullRequestResolverMetrics is a ResolverLevelMetricsBehavior enum value
+	ResolverLevelMetricsBehaviorFullRequestResolverMetrics = "FULL_REQUEST_RESOLVER_METRICS"
+
+	// ResolverLevelMetricsBehaviorPerResolverMetrics is a ResolverLevelMetricsBehavior enum value
+	ResolverLevelMetricsBehaviorPerResolverMetrics = "PER_RESOLVER_METRICS"
+)
+
+// ResolverLevelMetricsBehavior_Values returns all elements of the ResolverLevelMetricsBehavior enum
+func ResolverLevelMetricsBehavior_Values() []string {
+	return []string{
+		ResolverLevelMetricsBehaviorFullRequestResolverMetrics,
+		ResolverLevelMetricsBehaviorPerResolverMetrics,
+	}
+}
+
+const (
+	// ResolverLevelMetricsConfigEnabled is a ResolverLevelMetricsConfig enum value
+	ResolverLevelMetricsConfigEnabled = "ENABLED"
+
+	// ResolverLevelMetricsConfigDisabled is a ResolverLevelMetricsConfig enum value
+	ResolverLevelMetricsConfigDisabled = "DISABLED"
+)
+
+// ResolverLevelMetricsConfig_Values returns all elements of the ResolverLevelMetricsConfig enum
+func ResolverLevelMetricsConfig_Values() []string {
+	return []string{
+		ResolverLevelMetricsConfigEnabled,
+		ResolverLevelMetricsConfigDisabled,
 	}
 }
 
@@ -14644,6 +18812,46 @@ func SchemaStatus_Values() []string {
 		SchemaStatusFailed,
 		SchemaStatusSuccess,
 		SchemaStatusNotApplicable,
+	}
+}
+
+const (
+	// SourceApiAssociationStatusMergeScheduled is a SourceApiAssociationStatus enum value
+	SourceApiAssociationStatusMergeScheduled = "MERGE_SCHEDULED"
+
+	// SourceApiAssociationStatusMergeFailed is a SourceApiAssociationStatus enum value
+	SourceApiAssociationStatusMergeFailed = "MERGE_FAILED"
+
+	// SourceApiAssociationStatusMergeSuccess is a SourceApiAssociationStatus enum value
+	SourceApiAssociationStatusMergeSuccess = "MERGE_SUCCESS"
+
+	// SourceApiAssociationStatusMergeInProgress is a SourceApiAssociationStatus enum value
+	SourceApiAssociationStatusMergeInProgress = "MERGE_IN_PROGRESS"
+
+	// SourceApiAssociationStatusAutoMergeScheduleFailed is a SourceApiAssociationStatus enum value
+	SourceApiAssociationStatusAutoMergeScheduleFailed = "AUTO_MERGE_SCHEDULE_FAILED"
+
+	// SourceApiAssociationStatusDeletionScheduled is a SourceApiAssociationStatus enum value
+	SourceApiAssociationStatusDeletionScheduled = "DELETION_SCHEDULED"
+
+	// SourceApiAssociationStatusDeletionInProgress is a SourceApiAssociationStatus enum value
+	SourceApiAssociationStatusDeletionInProgress = "DELETION_IN_PROGRESS"
+
+	// SourceApiAssociationStatusDeletionFailed is a SourceApiAssociationStatus enum value
+	SourceApiAssociationStatusDeletionFailed = "DELETION_FAILED"
+)
+
+// SourceApiAssociationStatus_Values returns all elements of the SourceApiAssociationStatus enum
+func SourceApiAssociationStatus_Values() []string {
+	return []string{
+		SourceApiAssociationStatusMergeScheduled,
+		SourceApiAssociationStatusMergeFailed,
+		SourceApiAssociationStatusMergeSuccess,
+		SourceApiAssociationStatusMergeInProgress,
+		SourceApiAssociationStatusAutoMergeScheduleFailed,
+		SourceApiAssociationStatusDeletionScheduled,
+		SourceApiAssociationStatusDeletionInProgress,
+		SourceApiAssociationStatusDeletionFailed,
 	}
 }
 

@@ -29,14 +29,13 @@ const opCreateProfile = "CreateProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProfileRequest method.
+//	req, resp := client.CreateProfileRequest(params)
 //
-//    // Example sending a request using the CreateProfileRequest method.
-//    req, resp := client.CreateProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/CreateProfile
 func (c *RolesAnywhere) CreateProfileRequest(input *CreateProfileInput) (req *request.Request, output *CreateProfileOutput) {
@@ -57,9 +56,8 @@ func (c *RolesAnywhere) CreateProfileRequest(input *CreateProfileInput) (req *re
 
 // CreateProfile API operation for IAM Roles Anywhere.
 //
-// Creates a profile. A profile is configuration resource to list the roles
-// that RolesAnywhere service is trusted to assume. In addition, by applying
-// a profile you can intersect permissions with IAM managed policies.
+// Creates a profile, a list of the roles that Roles Anywhere service is trusted
+// to assume. You use profiles to intersect permissions with IAM managed policies.
 //
 // Required permissions: rolesanywhere:CreateProfile.
 //
@@ -71,11 +69,12 @@ func (c *RolesAnywhere) CreateProfileRequest(input *CreateProfileInput) (req *re
 // API operation CreateProfile for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ValidationException
+//     Validation exception error.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/CreateProfile
 func (c *RolesAnywhere) CreateProfile(input *CreateProfileInput) (*CreateProfileOutput, error) {
@@ -115,14 +114,13 @@ const opCreateTrustAnchor = "CreateTrustAnchor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateTrustAnchorRequest method.
+//	req, resp := client.CreateTrustAnchorRequest(params)
 //
-//    // Example sending a request using the CreateTrustAnchorRequest method.
-//    req, resp := client.CreateTrustAnchorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/CreateTrustAnchor
 func (c *RolesAnywhere) CreateTrustAnchorRequest(input *CreateTrustAnchorInput) (req *request.Request, output *CreateTrustAnchorOutput) {
@@ -143,13 +141,12 @@ func (c *RolesAnywhere) CreateTrustAnchorRequest(input *CreateTrustAnchorInput) 
 
 // CreateTrustAnchor API operation for IAM Roles Anywhere.
 //
-// Creates a trust anchor. You establish trust between IAM Roles Anywhere and
-// your certificate authority (CA) by configuring a trust anchor. A Trust Anchor
-// is defined either as a reference to a AWS Certificate Manager Private Certificate
-// Authority (ACM PCA), or by uploading a Certificate Authority (CA) certificate.
-// Your AWS workloads can authenticate with the trust anchor using certificates
-// issued by the trusted Certificate Authority (CA) in exchange for temporary
-// AWS credentials.
+// Creates a trust anchor to establish trust between IAM Roles Anywhere and
+// your certificate authority (CA). You can define a trust anchor as a reference
+// to an Private Certificate Authority (Private CA) or by uploading a CA certificate.
+// Your Amazon Web Services workloads can authenticate with the trust anchor
+// using certificates issued by the CA in exchange for temporary Amazon Web
+// Services credentials.
 //
 // Required permissions: rolesanywhere:CreateTrustAnchor.
 //
@@ -161,11 +158,12 @@ func (c *RolesAnywhere) CreateTrustAnchorRequest(input *CreateTrustAnchorInput) 
 // API operation CreateTrustAnchor for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ValidationException
+//     Validation exception error.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/CreateTrustAnchor
 func (c *RolesAnywhere) CreateTrustAnchor(input *CreateTrustAnchorInput) (*CreateTrustAnchorOutput, error) {
@@ -205,14 +203,13 @@ const opDeleteCrl = "DeleteCrl"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCrlRequest method.
+//	req, resp := client.DeleteCrlRequest(params)
 //
-//    // Example sending a request using the DeleteCrlRequest method.
-//    req, resp := client.DeleteCrlRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DeleteCrl
 func (c *RolesAnywhere) DeleteCrlRequest(input *DeleteCrlInput) (req *request.Request, output *DeleteCrlOutput) {
@@ -245,11 +242,12 @@ func (c *RolesAnywhere) DeleteCrlRequest(input *DeleteCrlInput) (req *request.Re
 // API operation DeleteCrl for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DeleteCrl
 func (c *RolesAnywhere) DeleteCrl(input *DeleteCrlInput) (*DeleteCrlOutput, error) {
@@ -289,14 +287,13 @@ const opDeleteProfile = "DeleteProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProfileRequest method.
+//	req, resp := client.DeleteProfileRequest(params)
 //
-//    // Example sending a request using the DeleteProfileRequest method.
-//    req, resp := client.DeleteProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DeleteProfile
 func (c *RolesAnywhere) DeleteProfileRequest(input *DeleteProfileInput) (req *request.Request, output *DeleteProfileOutput) {
@@ -329,11 +326,12 @@ func (c *RolesAnywhere) DeleteProfileRequest(input *DeleteProfileInput) (req *re
 // API operation DeleteProfile for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DeleteProfile
 func (c *RolesAnywhere) DeleteProfile(input *DeleteProfileInput) (*DeleteProfileOutput, error) {
@@ -373,14 +371,13 @@ const opDeleteTrustAnchor = "DeleteTrustAnchor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteTrustAnchorRequest method.
+//	req, resp := client.DeleteTrustAnchorRequest(params)
 //
-//    // Example sending a request using the DeleteTrustAnchorRequest method.
-//    req, resp := client.DeleteTrustAnchorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DeleteTrustAnchor
 func (c *RolesAnywhere) DeleteTrustAnchorRequest(input *DeleteTrustAnchorInput) (req *request.Request, output *DeleteTrustAnchorOutput) {
@@ -413,11 +410,12 @@ func (c *RolesAnywhere) DeleteTrustAnchorRequest(input *DeleteTrustAnchorInput) 
 // API operation DeleteTrustAnchor for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DeleteTrustAnchor
 func (c *RolesAnywhere) DeleteTrustAnchor(input *DeleteTrustAnchorInput) (*DeleteTrustAnchorOutput, error) {
@@ -457,14 +455,13 @@ const opDisableCrl = "DisableCrl"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisableCrlRequest method.
+//	req, resp := client.DisableCrlRequest(params)
 //
-//    // Example sending a request using the DisableCrlRequest method.
-//    req, resp := client.DisableCrlRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DisableCrl
 func (c *RolesAnywhere) DisableCrlRequest(input *DisableCrlInput) (req *request.Request, output *DisableCrlOutput) {
@@ -497,11 +494,12 @@ func (c *RolesAnywhere) DisableCrlRequest(input *DisableCrlInput) (req *request.
 // API operation DisableCrl for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DisableCrl
 func (c *RolesAnywhere) DisableCrl(input *DisableCrlInput) (*DisableCrlOutput, error) {
@@ -541,14 +539,13 @@ const opDisableProfile = "DisableProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisableProfileRequest method.
+//	req, resp := client.DisableProfileRequest(params)
 //
-//    // Example sending a request using the DisableProfileRequest method.
-//    req, resp := client.DisableProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DisableProfile
 func (c *RolesAnywhere) DisableProfileRequest(input *DisableProfileInput) (req *request.Request, output *DisableProfileOutput) {
@@ -569,8 +566,8 @@ func (c *RolesAnywhere) DisableProfileRequest(input *DisableProfileInput) (req *
 
 // DisableProfile API operation for IAM Roles Anywhere.
 //
-// Disables a profile. When disabled, CreateSession (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-// requests with this profile fail.
+// Disables a profile. When disabled, temporary credential requests with this
+// profile fail.
 //
 // Required permissions: rolesanywhere:DisableProfile.
 //
@@ -582,11 +579,12 @@ func (c *RolesAnywhere) DisableProfileRequest(input *DisableProfileInput) (req *
 // API operation DisableProfile for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DisableProfile
 func (c *RolesAnywhere) DisableProfile(input *DisableProfileInput) (*DisableProfileOutput, error) {
@@ -626,14 +624,13 @@ const opDisableTrustAnchor = "DisableTrustAnchor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisableTrustAnchorRequest method.
+//	req, resp := client.DisableTrustAnchorRequest(params)
 //
-//    // Example sending a request using the DisableTrustAnchorRequest method.
-//    req, resp := client.DisableTrustAnchorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DisableTrustAnchor
 func (c *RolesAnywhere) DisableTrustAnchorRequest(input *DisableTrustAnchorInput) (req *request.Request, output *DisableTrustAnchorOutput) {
@@ -654,8 +651,8 @@ func (c *RolesAnywhere) DisableTrustAnchorRequest(input *DisableTrustAnchorInput
 
 // DisableTrustAnchor API operation for IAM Roles Anywhere.
 //
-// Disables a trust anchor. When disabled, CreateSession (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-// requests specifying this trust anchor are unauthorized.
+// Disables a trust anchor. When disabled, temporary credential requests specifying
+// this trust anchor are unauthorized.
 //
 // Required permissions: rolesanywhere:DisableTrustAnchor.
 //
@@ -667,11 +664,12 @@ func (c *RolesAnywhere) DisableTrustAnchorRequest(input *DisableTrustAnchorInput
 // API operation DisableTrustAnchor for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/DisableTrustAnchor
 func (c *RolesAnywhere) DisableTrustAnchor(input *DisableTrustAnchorInput) (*DisableTrustAnchorOutput, error) {
@@ -711,14 +709,13 @@ const opEnableCrl = "EnableCrl"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EnableCrlRequest method.
+//	req, resp := client.EnableCrlRequest(params)
 //
-//    // Example sending a request using the EnableCrlRequest method.
-//    req, resp := client.EnableCrlRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/EnableCrl
 func (c *RolesAnywhere) EnableCrlRequest(input *EnableCrlInput) (req *request.Request, output *EnableCrlOutput) {
@@ -752,11 +749,12 @@ func (c *RolesAnywhere) EnableCrlRequest(input *EnableCrlInput) (req *request.Re
 // API operation EnableCrl for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/EnableCrl
 func (c *RolesAnywhere) EnableCrl(input *EnableCrlInput) (*EnableCrlOutput, error) {
@@ -796,14 +794,13 @@ const opEnableProfile = "EnableProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EnableProfileRequest method.
+//	req, resp := client.EnableProfileRequest(params)
 //
-//    // Example sending a request using the EnableProfileRequest method.
-//    req, resp := client.EnableProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/EnableProfile
 func (c *RolesAnywhere) EnableProfileRequest(input *EnableProfileInput) (req *request.Request, output *EnableProfileOutput) {
@@ -824,8 +821,7 @@ func (c *RolesAnywhere) EnableProfileRequest(input *EnableProfileInput) (req *re
 
 // EnableProfile API operation for IAM Roles Anywhere.
 //
-// Enables the roles in a profile to receive session credentials in CreateSession
-// (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html).
+// Enables temporary credential requests for a profile.
 //
 // Required permissions: rolesanywhere:EnableProfile.
 //
@@ -837,11 +833,12 @@ func (c *RolesAnywhere) EnableProfileRequest(input *EnableProfileInput) (req *re
 // API operation EnableProfile for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/EnableProfile
 func (c *RolesAnywhere) EnableProfile(input *EnableProfileInput) (*EnableProfileOutput, error) {
@@ -881,14 +878,13 @@ const opEnableTrustAnchor = "EnableTrustAnchor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EnableTrustAnchorRequest method.
+//	req, resp := client.EnableTrustAnchorRequest(params)
 //
-//    // Example sending a request using the EnableTrustAnchorRequest method.
-//    req, resp := client.EnableTrustAnchorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/EnableTrustAnchor
 func (c *RolesAnywhere) EnableTrustAnchorRequest(input *EnableTrustAnchorInput) (req *request.Request, output *EnableTrustAnchorOutput) {
@@ -922,11 +918,12 @@ func (c *RolesAnywhere) EnableTrustAnchorRequest(input *EnableTrustAnchorInput) 
 // API operation EnableTrustAnchor for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/EnableTrustAnchor
 func (c *RolesAnywhere) EnableTrustAnchor(input *EnableTrustAnchorInput) (*EnableTrustAnchorOutput, error) {
@@ -966,14 +963,13 @@ const opGetCrl = "GetCrl"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetCrlRequest method.
+//	req, resp := client.GetCrlRequest(params)
 //
-//    // Example sending a request using the GetCrlRequest method.
-//    req, resp := client.GetCrlRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/GetCrl
 func (c *RolesAnywhere) GetCrlRequest(input *GetCrlInput) (req *request.Request, output *GetCrlOutput) {
@@ -1006,8 +1002,8 @@ func (c *RolesAnywhere) GetCrlRequest(input *GetCrlInput) (req *request.Request,
 // API operation GetCrl for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
+//   - ResourceNotFoundException
+//     The resource could not be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/GetCrl
 func (c *RolesAnywhere) GetCrl(input *GetCrlInput) (*GetCrlOutput, error) {
@@ -1047,14 +1043,13 @@ const opGetProfile = "GetProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetProfileRequest method.
+//	req, resp := client.GetProfileRequest(params)
 //
-//    // Example sending a request using the GetProfileRequest method.
-//    req, resp := client.GetProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/GetProfile
 func (c *RolesAnywhere) GetProfileRequest(input *GetProfileInput) (req *request.Request, output *GetProfileOutput) {
@@ -1087,11 +1082,12 @@ func (c *RolesAnywhere) GetProfileRequest(input *GetProfileInput) (req *request.
 // API operation GetProfile for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/GetProfile
 func (c *RolesAnywhere) GetProfile(input *GetProfileInput) (*GetProfileOutput, error) {
@@ -1131,14 +1127,13 @@ const opGetSubject = "GetSubject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSubjectRequest method.
+//	req, resp := client.GetSubjectRequest(params)
 //
-//    // Example sending a request using the GetSubjectRequest method.
-//    req, resp := client.GetSubjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/GetSubject
 func (c *RolesAnywhere) GetSubjectRequest(input *GetSubjectInput) (req *request.Request, output *GetSubjectOutput) {
@@ -1159,10 +1154,10 @@ func (c *RolesAnywhere) GetSubjectRequest(input *GetSubjectInput) (req *request.
 
 // GetSubject API operation for IAM Roles Anywhere.
 //
-// Gets a Subject. A Subject associates a certificate identity with authentication
-// attempts by CreateSession. The Subject resources stores audit information
-// such as status of the last authentication attempt, the certificate data used
-// in the attempt, and the last time the associated identity attempted authentication.
+// Gets a subject, which associates a certificate identity with authentication
+// attempts. The subject stores auditing information such as the status of the
+// last authentication attempt, the certificate data used in the attempt, and
+// the last time the associated identity attempted authentication.
 //
 // Required permissions: rolesanywhere:GetSubject.
 //
@@ -1174,11 +1169,12 @@ func (c *RolesAnywhere) GetSubjectRequest(input *GetSubjectInput) (req *request.
 // API operation GetSubject for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource could not be found.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/GetSubject
 func (c *RolesAnywhere) GetSubject(input *GetSubjectInput) (*GetSubjectOutput, error) {
@@ -1218,14 +1214,13 @@ const opGetTrustAnchor = "GetTrustAnchor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTrustAnchorRequest method.
+//	req, resp := client.GetTrustAnchorRequest(params)
 //
-//    // Example sending a request using the GetTrustAnchorRequest method.
-//    req, resp := client.GetTrustAnchorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/GetTrustAnchor
 func (c *RolesAnywhere) GetTrustAnchorRequest(input *GetTrustAnchorInput) (req *request.Request, output *GetTrustAnchorOutput) {
@@ -1258,14 +1253,15 @@ func (c *RolesAnywhere) GetTrustAnchorRequest(input *GetTrustAnchorInput) (req *
 // API operation GetTrustAnchor for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * ResourceNotFoundException
-//   The resource could not be found.
+//   - ValidationException
+//     Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/GetTrustAnchor
 func (c *RolesAnywhere) GetTrustAnchor(input *GetTrustAnchorInput) (*GetTrustAnchorOutput, error) {
@@ -1305,14 +1301,13 @@ const opImportCrl = "ImportCrl"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ImportCrlRequest method.
+//	req, resp := client.ImportCrlRequest(params)
 //
-//    // Example sending a request using the ImportCrlRequest method.
-//    req, resp := client.ImportCrlRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ImportCrl
 func (c *RolesAnywhere) ImportCrlRequest(input *ImportCrlInput) (req *request.Request, output *ImportCrlOutput) {
@@ -1333,9 +1328,10 @@ func (c *RolesAnywhere) ImportCrlRequest(input *ImportCrlInput) (req *request.Re
 
 // ImportCrl API operation for IAM Roles Anywhere.
 //
-// Imports the certificate revocation list (CRL). CRl is a list of certificates
-// that have been revoked by the issuing certificate Authority (CA). IAM Roles
-// Anywhere validates against the crl list before issuing credentials.
+// Imports the certificate revocation list (CRL). A CRL is a list of certificates
+// that have been revoked by the issuing certificate Authority (CA).In order
+// to be properly imported, a CRL must be in PEM format. IAM Roles Anywhere
+// validates against the CRL before issuing credentials.
 //
 // Required permissions: rolesanywhere:ImportCrl.
 //
@@ -1347,11 +1343,12 @@ func (c *RolesAnywhere) ImportCrlRequest(input *ImportCrlInput) (req *request.Re
 // API operation ImportCrl for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ValidationException
+//     Validation exception error.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ImportCrl
 func (c *RolesAnywhere) ImportCrl(input *ImportCrlInput) (*ImportCrlOutput, error) {
@@ -1391,14 +1388,13 @@ const opListCrls = "ListCrls"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCrlsRequest method.
+//	req, resp := client.ListCrlsRequest(params)
 //
-//    // Example sending a request using the ListCrlsRequest method.
-//    req, resp := client.ListCrlsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ListCrls
 func (c *RolesAnywhere) ListCrlsRequest(input *ListCrlsInput) (req *request.Request, output *ListCrlsOutput) {
@@ -1425,7 +1421,8 @@ func (c *RolesAnywhere) ListCrlsRequest(input *ListCrlsInput) (req *request.Requ
 
 // ListCrls API operation for IAM Roles Anywhere.
 //
-// Lists all Crls in the authenticated account and Amazon Web Services Region.
+// Lists all certificate revocation lists (CRL) in the authenticated account
+// and Amazon Web Services Region.
 //
 // Required permissions: rolesanywhere:ListCrls.
 //
@@ -1437,11 +1434,12 @@ func (c *RolesAnywhere) ListCrlsRequest(input *ListCrlsInput) (req *request.Requ
 // API operation ListCrls for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ValidationException
+//     Validation exception error.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ListCrls
 func (c *RolesAnywhere) ListCrls(input *ListCrlsInput) (*ListCrlsOutput, error) {
@@ -1473,15 +1471,14 @@ func (c *RolesAnywhere) ListCrlsWithContext(ctx aws.Context, input *ListCrlsInpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCrls operation.
-//    pageNum := 0
-//    err := client.ListCrlsPages(params,
-//        func(page *rolesanywhere.ListCrlsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCrls operation.
+//	pageNum := 0
+//	err := client.ListCrlsPages(params,
+//	    func(page *rolesanywhere.ListCrlsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *RolesAnywhere) ListCrlsPages(input *ListCrlsInput, fn func(*ListCrlsOutput, bool) bool) error {
 	return c.ListCrlsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1533,14 +1530,13 @@ const opListProfiles = "ListProfiles"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProfilesRequest method.
+//	req, resp := client.ListProfilesRequest(params)
 //
-//    // Example sending a request using the ListProfilesRequest method.
-//    req, resp := client.ListProfilesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ListProfiles
 func (c *RolesAnywhere) ListProfilesRequest(input *ListProfilesInput) (req *request.Request, output *ListProfilesOutput) {
@@ -1579,11 +1575,12 @@ func (c *RolesAnywhere) ListProfilesRequest(input *ListProfilesInput) (req *requ
 // API operation ListProfiles for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ValidationException
+//     Validation exception error.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ListProfiles
 func (c *RolesAnywhere) ListProfiles(input *ListProfilesInput) (*ListProfilesOutput, error) {
@@ -1615,15 +1612,14 @@ func (c *RolesAnywhere) ListProfilesWithContext(ctx aws.Context, input *ListProf
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListProfiles operation.
-//    pageNum := 0
-//    err := client.ListProfilesPages(params,
-//        func(page *rolesanywhere.ListProfilesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListProfiles operation.
+//	pageNum := 0
+//	err := client.ListProfilesPages(params,
+//	    func(page *rolesanywhere.ListProfilesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *RolesAnywhere) ListProfilesPages(input *ListProfilesInput, fn func(*ListProfilesOutput, bool) bool) error {
 	return c.ListProfilesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1675,14 +1671,13 @@ const opListSubjects = "ListSubjects"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSubjectsRequest method.
+//	req, resp := client.ListSubjectsRequest(params)
 //
-//    // Example sending a request using the ListSubjectsRequest method.
-//    req, resp := client.ListSubjectsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ListSubjects
 func (c *RolesAnywhere) ListSubjectsRequest(input *ListSubjectsInput) (req *request.Request, output *ListSubjectsOutput) {
@@ -1721,11 +1716,12 @@ func (c *RolesAnywhere) ListSubjectsRequest(input *ListSubjectsInput) (req *requ
 // API operation ListSubjects for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ValidationException
+//     Validation exception error.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ListSubjects
 func (c *RolesAnywhere) ListSubjects(input *ListSubjectsInput) (*ListSubjectsOutput, error) {
@@ -1757,15 +1753,14 @@ func (c *RolesAnywhere) ListSubjectsWithContext(ctx aws.Context, input *ListSubj
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSubjects operation.
-//    pageNum := 0
-//    err := client.ListSubjectsPages(params,
-//        func(page *rolesanywhere.ListSubjectsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSubjects operation.
+//	pageNum := 0
+//	err := client.ListSubjectsPages(params,
+//	    func(page *rolesanywhere.ListSubjectsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *RolesAnywhere) ListSubjectsPages(input *ListSubjectsInput, fn func(*ListSubjectsOutput, bool) bool) error {
 	return c.ListSubjectsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1817,14 +1812,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ListTagsForResource
 func (c *RolesAnywhere) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1857,14 +1851,15 @@ func (c *RolesAnywhere) ListTagsForResourceRequest(input *ListTagsForResourceInp
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * ResourceNotFoundException
-//   The resource could not be found.
+//   - ValidationException
+//     Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ListTagsForResource
 func (c *RolesAnywhere) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1904,14 +1899,13 @@ const opListTrustAnchors = "ListTrustAnchors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTrustAnchorsRequest method.
+//	req, resp := client.ListTrustAnchorsRequest(params)
 //
-//    // Example sending a request using the ListTrustAnchorsRequest method.
-//    req, resp := client.ListTrustAnchorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ListTrustAnchors
 func (c *RolesAnywhere) ListTrustAnchorsRequest(input *ListTrustAnchorsInput) (req *request.Request, output *ListTrustAnchorsOutput) {
@@ -1951,11 +1945,12 @@ func (c *RolesAnywhere) ListTrustAnchorsRequest(input *ListTrustAnchorsInput) (r
 // API operation ListTrustAnchors for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ValidationException
+//     Validation exception error.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ListTrustAnchors
 func (c *RolesAnywhere) ListTrustAnchors(input *ListTrustAnchorsInput) (*ListTrustAnchorsOutput, error) {
@@ -1987,15 +1982,14 @@ func (c *RolesAnywhere) ListTrustAnchorsWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTrustAnchors operation.
-//    pageNum := 0
-//    err := client.ListTrustAnchorsPages(params,
-//        func(page *rolesanywhere.ListTrustAnchorsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTrustAnchors operation.
+//	pageNum := 0
+//	err := client.ListTrustAnchorsPages(params,
+//	    func(page *rolesanywhere.ListTrustAnchorsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *RolesAnywhere) ListTrustAnchorsPages(input *ListTrustAnchorsInput, fn func(*ListTrustAnchorsOutput, bool) bool) error {
 	return c.ListTrustAnchorsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2031,6 +2025,183 @@ func (c *RolesAnywhere) ListTrustAnchorsPagesWithContext(ctx aws.Context, input 
 	return p.Err()
 }
 
+const opPutNotificationSettings = "PutNotificationSettings"
+
+// PutNotificationSettingsRequest generates a "aws/request.Request" representing the
+// client's request for the PutNotificationSettings operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutNotificationSettings for more information on using the PutNotificationSettings
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the PutNotificationSettingsRequest method.
+//	req, resp := client.PutNotificationSettingsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/PutNotificationSettings
+func (c *RolesAnywhere) PutNotificationSettingsRequest(input *PutNotificationSettingsInput) (req *request.Request, output *PutNotificationSettingsOutput) {
+	op := &request.Operation{
+		Name:       opPutNotificationSettings,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/put-notifications-settings",
+	}
+
+	if input == nil {
+		input = &PutNotificationSettingsInput{}
+	}
+
+	output = &PutNotificationSettingsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutNotificationSettings API operation for IAM Roles Anywhere.
+//
+// Attaches a list of notification settings to a trust anchor.
+//
+// A notification setting includes information such as event name, threshold,
+// status of the notification setting, and the channel to notify.
+//
+// Required permissions: rolesanywhere:PutNotificationSettings.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for IAM Roles Anywhere's
+// API operation PutNotificationSettings for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     Validation exception error.
+//
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/PutNotificationSettings
+func (c *RolesAnywhere) PutNotificationSettings(input *PutNotificationSettingsInput) (*PutNotificationSettingsOutput, error) {
+	req, out := c.PutNotificationSettingsRequest(input)
+	return out, req.Send()
+}
+
+// PutNotificationSettingsWithContext is the same as PutNotificationSettings with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutNotificationSettings for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RolesAnywhere) PutNotificationSettingsWithContext(ctx aws.Context, input *PutNotificationSettingsInput, opts ...request.Option) (*PutNotificationSettingsOutput, error) {
+	req, out := c.PutNotificationSettingsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opResetNotificationSettings = "ResetNotificationSettings"
+
+// ResetNotificationSettingsRequest generates a "aws/request.Request" representing the
+// client's request for the ResetNotificationSettings operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ResetNotificationSettings for more information on using the ResetNotificationSettings
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ResetNotificationSettingsRequest method.
+//	req, resp := client.ResetNotificationSettingsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ResetNotificationSettings
+func (c *RolesAnywhere) ResetNotificationSettingsRequest(input *ResetNotificationSettingsInput) (req *request.Request, output *ResetNotificationSettingsOutput) {
+	op := &request.Operation{
+		Name:       opResetNotificationSettings,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/reset-notifications-settings",
+	}
+
+	if input == nil {
+		input = &ResetNotificationSettingsInput{}
+	}
+
+	output = &ResetNotificationSettingsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ResetNotificationSettings API operation for IAM Roles Anywhere.
+//
+// Resets the custom notification setting to IAM Roles Anywhere default setting.
+//
+// Required permissions: rolesanywhere:ResetNotificationSettings.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for IAM Roles Anywhere's
+// API operation ResetNotificationSettings for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     Validation exception error.
+//
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/ResetNotificationSettings
+func (c *RolesAnywhere) ResetNotificationSettings(input *ResetNotificationSettingsInput) (*ResetNotificationSettingsOutput, error) {
+	req, out := c.ResetNotificationSettingsRequest(input)
+	return out, req.Send()
+}
+
+// ResetNotificationSettingsWithContext is the same as ResetNotificationSettings with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ResetNotificationSettings for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RolesAnywhere) ResetNotificationSettingsWithContext(ctx aws.Context, input *ResetNotificationSettingsInput, opts ...request.Option) (*ResetNotificationSettingsOutput, error) {
+	req, out := c.ResetNotificationSettingsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opTagResource = "TagResource"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
@@ -2047,14 +2218,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/TagResource
 func (c *RolesAnywhere) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2088,17 +2258,18 @@ func (c *RolesAnywhere) TagResourceRequest(input *TagResourceInput) (req *reques
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * ResourceNotFoundException
-//   The resource could not be found.
+//   - ValidationException
+//     Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
 //
-//   * TooManyTagsException
-//   Too many tags.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - TooManyTagsException
+//     Too many tags.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/TagResource
 func (c *RolesAnywhere) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2138,14 +2309,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/UntagResource
 func (c *RolesAnywhere) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2179,14 +2349,15 @@ func (c *RolesAnywhere) UntagResourceRequest(input *UntagResourceInput) (req *re
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * ResourceNotFoundException
-//   The resource could not be found.
+//   - ValidationException
+//     Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/UntagResource
 func (c *RolesAnywhere) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2226,14 +2397,13 @@ const opUpdateCrl = "UpdateCrl"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateCrlRequest method.
+//	req, resp := client.UpdateCrlRequest(params)
 //
-//    // Example sending a request using the UpdateCrlRequest method.
-//    req, resp := client.UpdateCrlRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/UpdateCrl
 func (c *RolesAnywhere) UpdateCrlRequest(input *UpdateCrlInput) (req *request.Request, output *UpdateCrlOutput) {
@@ -2254,9 +2424,9 @@ func (c *RolesAnywhere) UpdateCrlRequest(input *UpdateCrlInput) (req *request.Re
 
 // UpdateCrl API operation for IAM Roles Anywhere.
 //
-// Updates the certificate revocation list (CRL). CRl is a list of certificates
-// that have been revoked by the issuing certificate Authority (CA). IAM Roles
-// Anywhere validates against the crl list before issuing credentials.
+// Updates the certificate revocation list (CRL). A CRL is a list of certificates
+// that have been revoked by the issuing certificate authority (CA). IAM Roles
+// Anywhere validates against the CRL before issuing credentials.
 //
 // Required permissions: rolesanywhere:UpdateCrl.
 //
@@ -2268,14 +2438,15 @@ func (c *RolesAnywhere) UpdateCrlRequest(input *UpdateCrlInput) (req *request.Re
 // API operation UpdateCrl for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * ResourceNotFoundException
-//   The resource could not be found.
+//   - ValidationException
+//     Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/UpdateCrl
 func (c *RolesAnywhere) UpdateCrl(input *UpdateCrlInput) (*UpdateCrlOutput, error) {
@@ -2315,14 +2486,13 @@ const opUpdateProfile = "UpdateProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProfileRequest method.
+//	req, resp := client.UpdateProfileRequest(params)
 //
-//    // Example sending a request using the UpdateProfileRequest method.
-//    req, resp := client.UpdateProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/UpdateProfile
 func (c *RolesAnywhere) UpdateProfileRequest(input *UpdateProfileInput) (req *request.Request, output *UpdateProfileOutput) {
@@ -2343,9 +2513,9 @@ func (c *RolesAnywhere) UpdateProfileRequest(input *UpdateProfileInput) (req *re
 
 // UpdateProfile API operation for IAM Roles Anywhere.
 //
-// Updates the profile. A profile is configuration resource to list the roles
-// that RolesAnywhere service is trusted to assume. In addition, by applying
-// a profile you can scope-down permissions with IAM managed policies.
+// Updates a profile, a list of the roles that IAM Roles Anywhere service is
+// trusted to assume. You use profiles to intersect permissions with IAM managed
+// policies.
 //
 // Required permissions: rolesanywhere:UpdateProfile.
 //
@@ -2357,14 +2527,15 @@ func (c *RolesAnywhere) UpdateProfileRequest(input *UpdateProfileInput) (req *re
 // API operation UpdateProfile for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * ResourceNotFoundException
-//   The resource could not be found.
+//   - ValidationException
+//     Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/UpdateProfile
 func (c *RolesAnywhere) UpdateProfile(input *UpdateProfileInput) (*UpdateProfileOutput, error) {
@@ -2404,14 +2575,13 @@ const opUpdateTrustAnchor = "UpdateTrustAnchor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateTrustAnchorRequest method.
+//	req, resp := client.UpdateTrustAnchorRequest(params)
 //
-//    // Example sending a request using the UpdateTrustAnchorRequest method.
-//    req, resp := client.UpdateTrustAnchorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/UpdateTrustAnchor
 func (c *RolesAnywhere) UpdateTrustAnchorRequest(input *UpdateTrustAnchorInput) (req *request.Request, output *UpdateTrustAnchorOutput) {
@@ -2432,13 +2602,12 @@ func (c *RolesAnywhere) UpdateTrustAnchorRequest(input *UpdateTrustAnchorInput) 
 
 // UpdateTrustAnchor API operation for IAM Roles Anywhere.
 //
-// Updates the trust anchor.You establish trust between IAM Roles Anywhere and
-// your certificate authority (CA) by configuring a trust anchor. A Trust Anchor
-// is defined either as a reference to a AWS Certificate Manager Private Certificate
-// Authority (ACM PCA), or by uploading a Certificate Authority (CA) certificate.
-// Your AWS workloads can authenticate with the trust anchor using certificates
-// issued by the trusted Certificate Authority (CA) in exchange for temporary
-// AWS credentials.
+// Updates a trust anchor. You establish trust between IAM Roles Anywhere and
+// your certificate authority (CA) by configuring a trust anchor. You can define
+// a trust anchor as a reference to an Private Certificate Authority (Private
+// CA) or by uploading a CA certificate. Your Amazon Web Services workloads
+// can authenticate with the trust anchor using certificates issued by the CA
+// in exchange for temporary Amazon Web Services credentials.
 //
 // Required permissions: rolesanywhere:UpdateTrustAnchor.
 //
@@ -2450,14 +2619,15 @@ func (c *RolesAnywhere) UpdateTrustAnchorRequest(input *UpdateTrustAnchorInput) 
 // API operation UpdateTrustAnchor for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validation exception error.
 //
-//   * ResourceNotFoundException
-//   The resource could not be found.
+//   - ValidationException
+//     Validation exception error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The resource could not be found.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rolesanywhere-2018-05-10/UpdateTrustAnchor
 func (c *RolesAnywhere) UpdateTrustAnchor(input *UpdateTrustAnchorInput) (*UpdateTrustAnchorOutput, error) {
@@ -2548,7 +2718,10 @@ func (s *AccessDeniedException) RequestID() string {
 type CreateProfileInput struct {
 	_ struct{} `type:"structure"`
 
-	// The number of seconds the vended session credentials are valid for.
+	// Used to determine how long sessions vended using this profile are valid for.
+	// See the Expiration section of the CreateSession API documentation (https://docs.aws.amazon.com/rolesanywhere/latest/userguide/authentication-create-session.html#credentials-object)
+	// page for more details. In requests, if this value is not provided, the default
+	// value will be 3600.
 	DurationSeconds *int64 `locationName:"durationSeconds" min:"900" type:"integer"`
 
 	// Specifies whether the profile is enabled.
@@ -2562,12 +2735,12 @@ type CreateProfileInput struct {
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
-	// Specifies whether instance properties are required in CreateSession (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
+	// Specifies whether instance properties are required in temporary credential
 	// requests with this profile.
 	RequireInstanceProperties *bool `locationName:"requireInstanceProperties" type:"boolean"`
 
-	// A list of IAM roles that this profile can assume in a CreateSession (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-	// operation.
+	// A list of IAM roles that this profile can assume in a temporary credential
+	// request.
 	//
 	// RoleArns is a required field
 	RoleArns []*string `locationName:"roleArns" type:"list" required:"true"`
@@ -2720,6 +2893,9 @@ type CreateTrustAnchorInput struct {
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
+	// A list of notification settings to be associated to the trust anchor.
+	NotificationSettings []*NotificationSetting `locationName:"notificationSettings" type:"list"`
+
 	// The trust anchor type and its related certificate data.
 	//
 	// Source is a required field
@@ -2759,6 +2935,21 @@ func (s *CreateTrustAnchorInput) Validate() error {
 	if s.Source == nil {
 		invalidParams.Add(request.NewErrParamRequired("Source"))
 	}
+	if s.NotificationSettings != nil {
+		for i, v := range s.NotificationSettings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "NotificationSettings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Source != nil {
+		if err := s.Source.Validate(); err != nil {
+			invalidParams.AddNested("Source", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
 			if v == nil {
@@ -2785,6 +2976,12 @@ func (s *CreateTrustAnchorInput) SetEnabled(v bool) *CreateTrustAnchorInput {
 // SetName sets the Name field's value.
 func (s *CreateTrustAnchorInput) SetName(v string) *CreateTrustAnchorInput {
 	s.Name = &v
+	return s
+}
+
+// SetNotificationSettings sets the NotificationSettings field's value.
+func (s *CreateTrustAnchorInput) SetNotificationSettings(v []*NotificationSetting) *CreateTrustAnchorInput {
+	s.NotificationSettings = v
 	return s
 }
 
@@ -2833,24 +3030,22 @@ func (s *CreateTrustAnchorOutput) SetTrustAnchor(v *TrustAnchorDetail) *CreateTr
 	return s
 }
 
-// A record of a presented X509 credential to CreateSession (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html).
+// A record of a presented X509 credential from a temporary credential request.
 type CredentialSummary struct {
 	_ struct{} `type:"structure"`
 
 	// Indicates whether the credential is enabled.
 	Enabled *bool `locationName:"enabled" type:"boolean"`
 
-	// Indicates whether the CreateSession (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-	// operation was successful.
+	// Indicates whether the temporary credential request was successful.
 	Failed *bool `locationName:"failed" type:"boolean"`
 
 	// The fully qualified domain name of the issuing certificate for the presented
 	// end-entity certificate.
 	Issuer *string `locationName:"issuer" type:"string"`
 
-	// The ISO-8601 time stamp of when the certificate was last used in a CreateSession
-	// (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-	// operation.
+	// The ISO-8601 time stamp of when the certificate was last used in a temporary
+	// credential request.
 	SeenAt *time.Time `locationName:"seenAt" type:"timestamp" timestampFormat:"iso8601"`
 
 	// The serial number of the certificate.
@@ -4077,7 +4272,7 @@ func (s *GetTrustAnchorOutput) SetTrustAnchor(v *TrustAnchorDetail) *GetTrustAnc
 type ImportCrlInput struct {
 	_ struct{} `type:"structure"`
 
-	// The x509 v3 specified certificate revocation list
+	// The x509 v3 specified certificate revocation list (CRL).
 	// CrlData is automatically base64 encoded/decoded by the SDK.
 	//
 	// CrlData is a required field
@@ -4226,16 +4421,14 @@ func (s *ImportCrlOutput) SetCrl(v *CrlDetail) *ImportCrlOutput {
 type InstanceProperty struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether the CreateSession (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-	// operation was successful.
+	// Indicates whether the temporary credential request was successful.
 	Failed *bool `locationName:"failed" type:"boolean"`
 
 	// A list of instanceProperty objects.
 	Properties map[string]*string `locationName:"properties" type:"map"`
 
-	// The ISO-8601 time stamp of when the certificate was last used in a CreateSession
-	// (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-	// operation.
+	// The ISO-8601 time stamp of when the certificate was last used in a temporary
+	// credential request.
 	SeenAt *time.Time `locationName:"seenAt" type:"timestamp" timestampFormat:"iso8601"`
 }
 
@@ -4279,7 +4472,7 @@ type ListCrlsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
 	// A token that indicates where the output should continue from, if a previous
-	// operation did not show all results. To get the next results, call the operation
+	// request did not show all results. To get the next results, make the request
 	// again with this value.
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 
@@ -4337,7 +4530,7 @@ type ListCrlsOutput struct {
 	Crls []*CrlDetail `locationName:"crls" type:"list"`
 
 	// A token that indicates where the output should continue from, if a previous
-	// operation did not show all results. To get the next results, call the operation
+	// request did not show all results. To get the next results, make the request
 	// again with this value.
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
@@ -4376,7 +4569,7 @@ type ListProfilesInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
 	// A token that indicates where the output should continue from, if a previous
-	// operation did not show all results. To get the next results, call the operation
+	// request did not show all results. To get the next results, make the request
 	// again with this value.
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 
@@ -4431,7 +4624,7 @@ type ListProfilesOutput struct {
 	_ struct{} `type:"structure"`
 
 	// A token that indicates where the output should continue from, if a previous
-	// operation did not show all results. To get the next results, call the operation
+	// request did not show all results. To get the next results, make the request
 	// again with this value.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
@@ -4473,7 +4666,7 @@ type ListSubjectsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
 	// A token that indicates where the output should continue from, if a previous
-	// operation did not show all results. To get the next results, call the operation
+	// request did not show all results. To get the next results, make the request
 	// again with this value.
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 
@@ -4528,7 +4721,7 @@ type ListSubjectsOutput struct {
 	_ struct{} `type:"structure"`
 
 	// A token that indicates where the output should continue from, if a previous
-	// operation did not show all results. To get the next results, call the operation
+	// request did not show all results. To get the next results, make the request
 	// again with this value.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
@@ -4650,7 +4843,7 @@ type ListTrustAnchorsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
 	// A token that indicates where the output should continue from, if a previous
-	// operation did not show all results. To get the next results, call the operation
+	// request did not show all results. To get the next results, make the request
 	// again with this value.
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 
@@ -4705,7 +4898,7 @@ type ListTrustAnchorsOutput struct {
 	_ struct{} `type:"structure"`
 
 	// A token that indicates where the output should continue from, if a previous
-	// operation did not show all results. To get the next results, call the operation
+	// request did not show all results. To get the next results, make the request
 	// again with this value.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
@@ -4743,6 +4936,233 @@ func (s *ListTrustAnchorsOutput) SetTrustAnchors(v []*TrustAnchorDetail) *ListTr
 	return s
 }
 
+// Customizable notification settings that will be applied to notification events.
+// IAM Roles Anywhere consumes these settings while notifying across multiple
+// channels - CloudWatch metrics, EventBridge, and Health Dashboard.
+type NotificationSetting struct {
+	_ struct{} `type:"structure"`
+
+	// The specified channel of notification. IAM Roles Anywhere uses CloudWatch
+	// metrics, EventBridge, and Health Dashboard to notify for an event.
+	//
+	// In the absence of a specific channel, IAM Roles Anywhere applies this setting
+	// to 'ALL' channels.
+	Channel *string `locationName:"channel" type:"string" enum:"NotificationChannel"`
+
+	// Indicates whether the notification setting is enabled.
+	//
+	// Enabled is a required field
+	Enabled *bool `locationName:"enabled" type:"boolean" required:"true"`
+
+	// The event to which this notification setting is applied.
+	//
+	// Event is a required field
+	Event *string `locationName:"event" type:"string" required:"true" enum:"NotificationEvent"`
+
+	// The number of days before a notification event. This value is required for
+	// a notification setting that is enabled.
+	Threshold *int64 `locationName:"threshold" min:"1" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotificationSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotificationSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NotificationSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NotificationSetting"}
+	if s.Enabled == nil {
+		invalidParams.Add(request.NewErrParamRequired("Enabled"))
+	}
+	if s.Event == nil {
+		invalidParams.Add(request.NewErrParamRequired("Event"))
+	}
+	if s.Threshold != nil && *s.Threshold < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Threshold", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannel sets the Channel field's value.
+func (s *NotificationSetting) SetChannel(v string) *NotificationSetting {
+	s.Channel = &v
+	return s
+}
+
+// SetEnabled sets the Enabled field's value.
+func (s *NotificationSetting) SetEnabled(v bool) *NotificationSetting {
+	s.Enabled = &v
+	return s
+}
+
+// SetEvent sets the Event field's value.
+func (s *NotificationSetting) SetEvent(v string) *NotificationSetting {
+	s.Event = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *NotificationSetting) SetThreshold(v int64) *NotificationSetting {
+	s.Threshold = &v
+	return s
+}
+
+// The state of a notification setting.
+//
+// A notification setting includes information such as event name, threshold,
+// status of the notification setting, and the channel to notify.
+type NotificationSettingDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The specified channel of notification. IAM Roles Anywhere uses CloudWatch
+	// metrics, EventBridge, and Health Dashboard to notify for an event.
+	//
+	// In the absence of a specific channel, IAM Roles Anywhere applies this setting
+	// to 'ALL' channels.
+	Channel *string `locationName:"channel" type:"string" enum:"NotificationChannel"`
+
+	// The principal that configured the notification setting. For default settings
+	// configured by IAM Roles Anywhere, the value is rolesanywhere.amazonaws.com,
+	// and for customized notifications settings, it is the respective account ID.
+	ConfiguredBy *string `locationName:"configuredBy" min:"1" type:"string"`
+
+	// Indicates whether the notification setting is enabled.
+	//
+	// Enabled is a required field
+	Enabled *bool `locationName:"enabled" type:"boolean" required:"true"`
+
+	// The event to which this notification setting is applied.
+	//
+	// Event is a required field
+	Event *string `locationName:"event" type:"string" required:"true" enum:"NotificationEvent"`
+
+	// The number of days before a notification event.
+	Threshold *int64 `locationName:"threshold" min:"1" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotificationSettingDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotificationSettingDetail) GoString() string {
+	return s.String()
+}
+
+// SetChannel sets the Channel field's value.
+func (s *NotificationSettingDetail) SetChannel(v string) *NotificationSettingDetail {
+	s.Channel = &v
+	return s
+}
+
+// SetConfiguredBy sets the ConfiguredBy field's value.
+func (s *NotificationSettingDetail) SetConfiguredBy(v string) *NotificationSettingDetail {
+	s.ConfiguredBy = &v
+	return s
+}
+
+// SetEnabled sets the Enabled field's value.
+func (s *NotificationSettingDetail) SetEnabled(v bool) *NotificationSettingDetail {
+	s.Enabled = &v
+	return s
+}
+
+// SetEvent sets the Event field's value.
+func (s *NotificationSettingDetail) SetEvent(v string) *NotificationSettingDetail {
+	s.Event = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *NotificationSettingDetail) SetThreshold(v int64) *NotificationSettingDetail {
+	s.Threshold = &v
+	return s
+}
+
+// A notification setting key to reset. A notification setting key includes
+// the event and the channel.
+type NotificationSettingKey struct {
+	_ struct{} `type:"structure"`
+
+	// The specified channel of notification.
+	Channel *string `locationName:"channel" type:"string" enum:"NotificationChannel"`
+
+	// The notification setting event to reset.
+	//
+	// Event is a required field
+	Event *string `locationName:"event" type:"string" required:"true" enum:"NotificationEvent"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotificationSettingKey) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotificationSettingKey) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NotificationSettingKey) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NotificationSettingKey"}
+	if s.Event == nil {
+		invalidParams.Add(request.NewErrParamRequired("Event"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannel sets the Channel field's value.
+func (s *NotificationSettingKey) SetChannel(v string) *NotificationSettingKey {
+	s.Channel = &v
+	return s
+}
+
+// SetEvent sets the Event field's value.
+func (s *NotificationSettingKey) SetEvent(v string) *NotificationSettingKey {
+	s.Event = &v
+	return s
+}
+
 // The state of the profile after a read or write operation.
 type ProfileDetail struct {
 	_ struct{} `type:"structure"`
@@ -4753,7 +5173,10 @@ type ProfileDetail struct {
 	// The Amazon Web Services account that created the profile.
 	CreatedBy *string `locationName:"createdBy" type:"string"`
 
-	// The number of seconds the vended session credentials are valid for.
+	// Used to determine how long sessions vended using this profile are valid for.
+	// See the Expiration section of the CreateSession API documentation (https://docs.aws.amazon.com/rolesanywhere/latest/userguide/authentication-create-session.html#credentials-object)
+	// page for more details. In requests, if this value is not provided, the default
+	// value will be 3600.
 	DurationSeconds *int64 `locationName:"durationSeconds" type:"integer"`
 
 	// Indicates whether the profile is enabled.
@@ -4771,12 +5194,12 @@ type ProfileDetail struct {
 	// The unique identifier of the profile.
 	ProfileId *string `locationName:"profileId" min:"36" type:"string"`
 
-	// Specifies whether instance properties are required in CreateSession (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
+	// Specifies whether instance properties are required in temporary credential
 	// requests with this profile.
 	RequireInstanceProperties *bool `locationName:"requireInstanceProperties" type:"boolean"`
 
-	// A list of IAM roles that this profile can assume in a CreateSession (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-	// operation.
+	// A list of IAM roles that this profile can assume in a temporary credential
+	// request.
 	RoleArns []*string `locationName:"roleArns" type:"list"`
 
 	// A session policy that applies to the trust boundary of the vended session
@@ -4877,6 +5300,219 @@ func (s *ProfileDetail) SetUpdatedAt(v time.Time) *ProfileDetail {
 	return s
 }
 
+type PutNotificationSettingsInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of notification settings to be associated to the trust anchor.
+	//
+	// NotificationSettings is a required field
+	NotificationSettings []*NotificationSetting `locationName:"notificationSettings" type:"list" required:"true"`
+
+	// The unique identifier of the trust anchor.
+	//
+	// TrustAnchorId is a required field
+	TrustAnchorId *string `locationName:"trustAnchorId" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutNotificationSettingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutNotificationSettingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutNotificationSettingsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutNotificationSettingsInput"}
+	if s.NotificationSettings == nil {
+		invalidParams.Add(request.NewErrParamRequired("NotificationSettings"))
+	}
+	if s.TrustAnchorId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TrustAnchorId"))
+	}
+	if s.TrustAnchorId != nil && len(*s.TrustAnchorId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("TrustAnchorId", 36))
+	}
+	if s.NotificationSettings != nil {
+		for i, v := range s.NotificationSettings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "NotificationSettings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNotificationSettings sets the NotificationSettings field's value.
+func (s *PutNotificationSettingsInput) SetNotificationSettings(v []*NotificationSetting) *PutNotificationSettingsInput {
+	s.NotificationSettings = v
+	return s
+}
+
+// SetTrustAnchorId sets the TrustAnchorId field's value.
+func (s *PutNotificationSettingsInput) SetTrustAnchorId(v string) *PutNotificationSettingsInput {
+	s.TrustAnchorId = &v
+	return s
+}
+
+type PutNotificationSettingsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The state of the trust anchor after a read or write operation.
+	//
+	// TrustAnchor is a required field
+	TrustAnchor *TrustAnchorDetail `locationName:"trustAnchor" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutNotificationSettingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutNotificationSettingsOutput) GoString() string {
+	return s.String()
+}
+
+// SetTrustAnchor sets the TrustAnchor field's value.
+func (s *PutNotificationSettingsOutput) SetTrustAnchor(v *TrustAnchorDetail) *PutNotificationSettingsOutput {
+	s.TrustAnchor = v
+	return s
+}
+
+type ResetNotificationSettingsInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of notification setting keys to reset. A notification setting key
+	// includes the event and the channel.
+	//
+	// NotificationSettingKeys is a required field
+	NotificationSettingKeys []*NotificationSettingKey `locationName:"notificationSettingKeys" type:"list" required:"true"`
+
+	// The unique identifier of the trust anchor.
+	//
+	// TrustAnchorId is a required field
+	TrustAnchorId *string `locationName:"trustAnchorId" min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResetNotificationSettingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResetNotificationSettingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ResetNotificationSettingsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ResetNotificationSettingsInput"}
+	if s.NotificationSettingKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("NotificationSettingKeys"))
+	}
+	if s.TrustAnchorId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TrustAnchorId"))
+	}
+	if s.TrustAnchorId != nil && len(*s.TrustAnchorId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("TrustAnchorId", 36))
+	}
+	if s.NotificationSettingKeys != nil {
+		for i, v := range s.NotificationSettingKeys {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "NotificationSettingKeys", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNotificationSettingKeys sets the NotificationSettingKeys field's value.
+func (s *ResetNotificationSettingsInput) SetNotificationSettingKeys(v []*NotificationSettingKey) *ResetNotificationSettingsInput {
+	s.NotificationSettingKeys = v
+	return s
+}
+
+// SetTrustAnchorId sets the TrustAnchorId field's value.
+func (s *ResetNotificationSettingsInput) SetTrustAnchorId(v string) *ResetNotificationSettingsInput {
+	s.TrustAnchorId = &v
+	return s
+}
+
+type ResetNotificationSettingsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The state of the trust anchor after a read or write operation.
+	//
+	// TrustAnchor is a required field
+	TrustAnchor *TrustAnchorDetail `locationName:"trustAnchor" type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResetNotificationSettingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResetNotificationSettingsOutput) GoString() string {
+	return s.String()
+}
+
+// SetTrustAnchor sets the TrustAnchor field's value.
+func (s *ResetNotificationSettingsOutput) SetTrustAnchor(v *TrustAnchorDetail) *ResetNotificationSettingsOutput {
+	s.TrustAnchor = v
+	return s
+}
+
 // The resource could not be found.
 type ResourceNotFoundException struct {
 	_            struct{}                  `type:"structure"`
@@ -4970,6 +5606,21 @@ func (s Source) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Source) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Source"}
+	if s.SourceData != nil {
+		if err := s.SourceData.Validate(); err != nil {
+			invalidParams.AddNested("SourceData", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetSourceData sets the SourceData field's value.
 func (s *Source) SetSourceData(v *SourceData) *Source {
 	s.SourceData = v
@@ -4986,14 +5637,14 @@ func (s *Source) SetSourceType(v string) *Source {
 type SourceData struct {
 	_ struct{} `type:"structure"`
 
-	// The root certificate of the Certificate Manager Private Certificate Authority
-	// specified by this ARN is used in trust validation for CreateSession (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-	// operations. Included for trust anchors of type AWS_ACM_PCA.
+	// The root certificate of the Private Certificate Authority specified by this
+	// ARN is used in trust validation for temporary credential requests. Included
+	// for trust anchors of type AWS_ACM_PCA.
 	AcmPcaArn *string `locationName:"acmPcaArn" type:"string"`
 
 	// The PEM-encoded data for the certificate anchor. Included for trust anchors
 	// of type CERTIFICATE_BUNDLE.
-	X509CertificateData *string `locationName:"x509CertificateData" type:"string"`
+	X509CertificateData *string `locationName:"x509CertificateData" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -5012,6 +5663,19 @@ func (s SourceData) String() string {
 // value will be replaced with "sensitive".
 func (s SourceData) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SourceData) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SourceData"}
+	if s.X509CertificateData != nil && len(*s.X509CertificateData) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("X509CertificateData", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetAcmPcaArn sets the AcmPcaArn field's value.
@@ -5034,7 +5698,7 @@ type SubjectDetail struct {
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
 
 	// The temporary session credentials vended at the last authenticating call
-	// with this Subject.
+	// with this subject.
 	Credentials []*CredentialSummary `locationName:"credentials" type:"list"`
 
 	// The enabled status of the subject.
@@ -5043,7 +5707,7 @@ type SubjectDetail struct {
 	// The specified instance properties associated with the request.
 	InstanceProperties []*InstanceProperty `locationName:"instanceProperties" type:"list"`
 
-	// The ISO-8601 timestamp of the last time this Subject requested temporary
+	// The ISO-8601 timestamp of the last time this subject requested temporary
 	// session credentials.
 	LastSeenAt *time.Time `locationName:"lastSeenAt" type:"timestamp" timestampFormat:"iso8601"`
 
@@ -5132,22 +5796,19 @@ func (s *SubjectDetail) SetX509Subject(v string) *SubjectDetail {
 	return s
 }
 
-// A summary representation of Subject resources returned in read operations;
-// primarily ListSubjects.
+// A summary representation of subjects.
 type SubjectSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The ISO-8601 time stamp of when the certificate was first used in a CreateSession
-	// (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-	// operation.
+	// The ISO-8601 time stamp of when the certificate was first used in a temporary
+	// credential request.
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
 
-	// The enabled status of the Subject.
+	// The enabled status of the subject.
 	Enabled *bool `locationName:"enabled" type:"boolean"`
 
-	// The ISO-8601 time stamp of when the certificate was last used in a CreateSession
-	// (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-	// operation.
+	// The ISO-8601 time stamp of when the certificate was last used in a temporary
+	// credential request.
 	LastSeenAt *time.Time `locationName:"lastSeenAt" type:"timestamp" timestampFormat:"iso8601"`
 
 	// The ARN of the resource.
@@ -5467,6 +6128,9 @@ type TrustAnchorDetail struct {
 	// The name of the trust anchor.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
+	// A list of notification settings to be associated to the trust anchor.
+	NotificationSettings []*NotificationSettingDetail `locationName:"notificationSettings" type:"list"`
+
 	// The trust anchor type and its related certificate data.
 	Source *Source `locationName:"source" type:"structure"`
 
@@ -5513,6 +6177,12 @@ func (s *TrustAnchorDetail) SetEnabled(v bool) *TrustAnchorDetail {
 // SetName sets the Name field's value.
 func (s *TrustAnchorDetail) SetName(v string) *TrustAnchorDetail {
 	s.Name = &v
+	return s
+}
+
+// SetNotificationSettings sets the NotificationSettings field's value.
+func (s *TrustAnchorDetail) SetNotificationSettings(v []*NotificationSettingDetail) *TrustAnchorDetail {
+	s.NotificationSettings = v
 	return s
 }
 
@@ -5628,7 +6298,7 @@ func (s UntagResourceOutput) GoString() string {
 type UpdateCrlInput struct {
 	_ struct{} `type:"structure"`
 
-	// The x509 v3 specified certificate revocation list
+	// The x509 v3 specified certificate revocation list (CRL).
 	// CrlData is automatically base64 encoded/decoded by the SDK.
 	CrlData []byte `locationName:"crlData" min:"1" type:"blob"`
 
@@ -5736,7 +6406,10 @@ func (s *UpdateCrlOutput) SetCrl(v *CrlDetail) *UpdateCrlOutput {
 type UpdateProfileInput struct {
 	_ struct{} `type:"structure"`
 
-	// The number of seconds the vended session credentials are valid for.
+	// Used to determine how long sessions vended using this profile are valid for.
+	// See the Expiration section of the CreateSession API documentation (https://docs.aws.amazon.com/rolesanywhere/latest/userguide/authentication-create-session.html#credentials-object)
+	// page for more details. In requests, if this value is not provided, the default
+	// value will be 3600.
 	DurationSeconds *int64 `locationName:"durationSeconds" min:"900" type:"integer"`
 
 	// A list of managed policy ARNs that apply to the vended session credentials.
@@ -5750,8 +6423,8 @@ type UpdateProfileInput struct {
 	// ProfileId is a required field
 	ProfileId *string `location:"uri" locationName:"profileId" min:"36" type:"string" required:"true"`
 
-	// A list of IAM roles that this profile can assume in a CreateSession (https://docs.aws.amazon.com/rolesanywhere/latest/APIReference/API_CreateSession.html)
-	// operation.
+	// A list of IAM roles that this profile can assume in a temporary credential
+	// request.
 	RoleArns []*string `locationName:"roleArns" type:"list"`
 
 	// A session policy that applies to the trust boundary of the vended session
@@ -5914,6 +6587,11 @@ func (s *UpdateTrustAnchorInput) Validate() error {
 	if s.TrustAnchorId != nil && len(*s.TrustAnchorId) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("TrustAnchorId", 36))
 	}
+	if s.Source != nil {
+		if err := s.Source.Validate(); err != nil {
+			invalidParams.AddNested("Source", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6034,6 +6712,34 @@ func (s *ValidationException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ValidationException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+const (
+	// NotificationChannelAll is a NotificationChannel enum value
+	NotificationChannelAll = "ALL"
+)
+
+// NotificationChannel_Values returns all elements of the NotificationChannel enum
+func NotificationChannel_Values() []string {
+	return []string{
+		NotificationChannelAll,
+	}
+}
+
+const (
+	// NotificationEventCaCertificateExpiry is a NotificationEvent enum value
+	NotificationEventCaCertificateExpiry = "CA_CERTIFICATE_EXPIRY"
+
+	// NotificationEventEndEntityCertificateExpiry is a NotificationEvent enum value
+	NotificationEventEndEntityCertificateExpiry = "END_ENTITY_CERTIFICATE_EXPIRY"
+)
+
+// NotificationEvent_Values returns all elements of the NotificationEvent enum
+func NotificationEvent_Values() []string {
+	return []string{
+		NotificationEventCaCertificateExpiry,
+		NotificationEventEndEntityCertificateExpiry,
+	}
 }
 
 const (

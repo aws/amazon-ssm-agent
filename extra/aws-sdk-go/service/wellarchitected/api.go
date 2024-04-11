@@ -29,14 +29,13 @@ const opAssociateLenses = "AssociateLenses"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateLensesRequest method.
+//	req, resp := client.AssociateLensesRequest(params)
 //
-//    // Example sending a request using the AssociateLensesRequest method.
-//    req, resp := client.AssociateLensesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/AssociateLenses
 func (c *WellArchitected) AssociateLensesRequest(input *AssociateLensesInput) (req *request.Request, output *AssociateLensesOutput) {
@@ -63,7 +62,7 @@ func (c *WellArchitected) AssociateLensesRequest(input *AssociateLensesInput) (r
 // Up to 10 lenses can be associated with a workload in a single API operation.
 // A maximum of 20 lenses can be associated with a workload.
 //
-// Disclaimer
+// # Disclaimer
 //
 // By accessing and/or applying custom lenses created by another Amazon Web
 // Services user or account, you acknowledge that custom lenses created by other
@@ -78,23 +77,24 @@ func (c *WellArchitected) AssociateLensesRequest(input *AssociateLensesInput) (r
 // API operation AssociateLenses for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/AssociateLenses
 func (c *WellArchitected) AssociateLenses(input *AssociateLensesInput) (*AssociateLensesOutput, error) {
@@ -118,6 +118,101 @@ func (c *WellArchitected) AssociateLensesWithContext(ctx aws.Context, input *Ass
 	return out, req.Send()
 }
 
+const opAssociateProfiles = "AssociateProfiles"
+
+// AssociateProfilesRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateProfiles operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateProfiles for more information on using the AssociateProfiles
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the AssociateProfilesRequest method.
+//	req, resp := client.AssociateProfilesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/AssociateProfiles
+func (c *WellArchitected) AssociateProfilesRequest(input *AssociateProfilesInput) (req *request.Request, output *AssociateProfilesOutput) {
+	op := &request.Operation{
+		Name:       opAssociateProfiles,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/workloads/{WorkloadId}/associateProfiles",
+	}
+
+	if input == nil {
+		input = &AssociateProfilesInput{}
+	}
+
+	output = &AssociateProfilesOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// AssociateProfiles API operation for AWS Well-Architected Tool.
+//
+// Associate a profile with a workload.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation AssociateProfiles for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/AssociateProfiles
+func (c *WellArchitected) AssociateProfiles(input *AssociateProfilesInput) (*AssociateProfilesOutput, error) {
+	req, out := c.AssociateProfilesRequest(input)
+	return out, req.Send()
+}
+
+// AssociateProfilesWithContext is the same as AssociateProfiles with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateProfiles for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) AssociateProfilesWithContext(ctx aws.Context, input *AssociateProfilesInput, opts ...request.Option) (*AssociateProfilesOutput, error) {
+	req, out := c.AssociateProfilesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateLensShare = "CreateLensShare"
 
 // CreateLensShareRequest generates a "aws/request.Request" representing the
@@ -134,14 +229,13 @@ const opCreateLensShare = "CreateLensShare"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateLensShareRequest method.
+//	req, resp := client.CreateLensShareRequest(params)
 //
-//    // Example sending a request using the CreateLensShareRequest method.
-//    req, resp := client.CreateLensShareRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateLensShare
 func (c *WellArchitected) CreateLensShareRequest(input *CreateLensShareInput) (req *request.Request, output *CreateLensShareOutput) {
@@ -177,7 +271,7 @@ func (c *WellArchitected) CreateLensShareRequest(input *CreateLensShareInput) (r
 // For more information, see Sharing a custom lens (https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-sharing.html)
 // in the Well-Architected Tool User Guide.
 //
-// Disclaimer
+// # Disclaimer
 //
 // By sharing your custom lenses with other Amazon Web Services accounts, you
 // acknowledge that Amazon Web Services will make your custom lenses available
@@ -193,26 +287,27 @@ func (c *WellArchitected) CreateLensShareRequest(input *CreateLensShareInput) (r
 // API operation CreateLensShare for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ServiceQuotaExceededException
-//   The user has reached their resource quota.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ServiceQuotaExceededException
+//     The user has reached their resource quota.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateLensShare
 func (c *WellArchitected) CreateLensShare(input *CreateLensShareInput) (*CreateLensShareOutput, error) {
@@ -252,14 +347,13 @@ const opCreateLensVersion = "CreateLensVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateLensVersionRequest method.
+//	req, resp := client.CreateLensVersionRequest(params)
 //
-//    // Example sending a request using the CreateLensVersionRequest method.
-//    req, resp := client.CreateLensVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateLensVersion
 func (c *WellArchitected) CreateLensVersionRequest(input *CreateLensVersionInput) (req *request.Request, output *CreateLensVersionOutput) {
@@ -298,26 +392,27 @@ func (c *WellArchitected) CreateLensVersionRequest(input *CreateLensVersionInput
 // API operation CreateLensVersion for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ServiceQuotaExceededException
-//   The user has reached their resource quota.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ServiceQuotaExceededException
+//     The user has reached their resource quota.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateLensVersion
 func (c *WellArchitected) CreateLensVersion(input *CreateLensVersionInput) (*CreateLensVersionOutput, error) {
@@ -357,14 +452,13 @@ const opCreateMilestone = "CreateMilestone"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateMilestoneRequest method.
+//	req, resp := client.CreateMilestoneRequest(params)
 //
-//    // Example sending a request using the CreateMilestoneRequest method.
-//    req, resp := client.CreateMilestoneRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateMilestone
 func (c *WellArchitected) CreateMilestoneRequest(input *CreateMilestoneInput) (req *request.Request, output *CreateMilestoneOutput) {
@@ -395,26 +489,27 @@ func (c *WellArchitected) CreateMilestoneRequest(input *CreateMilestoneInput) (r
 // API operation CreateMilestone for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ServiceQuotaExceededException
-//   The user has reached their resource quota.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ServiceQuotaExceededException
+//     The user has reached their resource quota.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateMilestone
 func (c *WellArchitected) CreateMilestone(input *CreateMilestoneInput) (*CreateMilestoneOutput, error) {
@@ -438,6 +533,416 @@ func (c *WellArchitected) CreateMilestoneWithContext(ctx aws.Context, input *Cre
 	return out, req.Send()
 }
 
+const opCreateProfile = "CreateProfile"
+
+// CreateProfileRequest generates a "aws/request.Request" representing the
+// client's request for the CreateProfile operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateProfile for more information on using the CreateProfile
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateProfileRequest method.
+//	req, resp := client.CreateProfileRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateProfile
+func (c *WellArchitected) CreateProfileRequest(input *CreateProfileInput) (req *request.Request, output *CreateProfileOutput) {
+	op := &request.Operation{
+		Name:       opCreateProfile,
+		HTTPMethod: "POST",
+		HTTPPath:   "/profiles",
+	}
+
+	if input == nil {
+		input = &CreateProfileInput{}
+	}
+
+	output = &CreateProfileOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateProfile API operation for AWS Well-Architected Tool.
+//
+// Create a profile.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation CreateProfile for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - ServiceQuotaExceededException
+//     The user has reached their resource quota.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateProfile
+func (c *WellArchitected) CreateProfile(input *CreateProfileInput) (*CreateProfileOutput, error) {
+	req, out := c.CreateProfileRequest(input)
+	return out, req.Send()
+}
+
+// CreateProfileWithContext is the same as CreateProfile with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateProfile for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) CreateProfileWithContext(ctx aws.Context, input *CreateProfileInput, opts ...request.Option) (*CreateProfileOutput, error) {
+	req, out := c.CreateProfileRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateProfileShare = "CreateProfileShare"
+
+// CreateProfileShareRequest generates a "aws/request.Request" representing the
+// client's request for the CreateProfileShare operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateProfileShare for more information on using the CreateProfileShare
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateProfileShareRequest method.
+//	req, resp := client.CreateProfileShareRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateProfileShare
+func (c *WellArchitected) CreateProfileShareRequest(input *CreateProfileShareInput) (req *request.Request, output *CreateProfileShareOutput) {
+	op := &request.Operation{
+		Name:       opCreateProfileShare,
+		HTTPMethod: "POST",
+		HTTPPath:   "/profiles/{ProfileArn}/shares",
+	}
+
+	if input == nil {
+		input = &CreateProfileShareInput{}
+	}
+
+	output = &CreateProfileShareOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateProfileShare API operation for AWS Well-Architected Tool.
+//
+// Create a profile share.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation CreateProfileShare for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ServiceQuotaExceededException
+//     The user has reached their resource quota.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateProfileShare
+func (c *WellArchitected) CreateProfileShare(input *CreateProfileShareInput) (*CreateProfileShareOutput, error) {
+	req, out := c.CreateProfileShareRequest(input)
+	return out, req.Send()
+}
+
+// CreateProfileShareWithContext is the same as CreateProfileShare with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateProfileShare for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) CreateProfileShareWithContext(ctx aws.Context, input *CreateProfileShareInput, opts ...request.Option) (*CreateProfileShareOutput, error) {
+	req, out := c.CreateProfileShareRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateReviewTemplate = "CreateReviewTemplate"
+
+// CreateReviewTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the CreateReviewTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateReviewTemplate for more information on using the CreateReviewTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateReviewTemplateRequest method.
+//	req, resp := client.CreateReviewTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateReviewTemplate
+func (c *WellArchitected) CreateReviewTemplateRequest(input *CreateReviewTemplateInput) (req *request.Request, output *CreateReviewTemplateOutput) {
+	op := &request.Operation{
+		Name:       opCreateReviewTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/reviewTemplates",
+	}
+
+	if input == nil {
+		input = &CreateReviewTemplateInput{}
+	}
+
+	output = &CreateReviewTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateReviewTemplate API operation for AWS Well-Architected Tool.
+//
+// Create a review template.
+//
+// # Disclaimer
+//
+// Do not include or gather personal identifiable information (PII) of end users
+// or other identifiable individuals in or via your review templates. If your
+// review template or those shared with you and used in your account do include
+// or collect PII you are responsible for: ensuring that the included PII is
+// processed in accordance with applicable law, providing adequate privacy notices,
+// and obtaining necessary consents for processing such data.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation CreateReviewTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - ServiceQuotaExceededException
+//     The user has reached their resource quota.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateReviewTemplate
+func (c *WellArchitected) CreateReviewTemplate(input *CreateReviewTemplateInput) (*CreateReviewTemplateOutput, error) {
+	req, out := c.CreateReviewTemplateRequest(input)
+	return out, req.Send()
+}
+
+// CreateReviewTemplateWithContext is the same as CreateReviewTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateReviewTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) CreateReviewTemplateWithContext(ctx aws.Context, input *CreateReviewTemplateInput, opts ...request.Option) (*CreateReviewTemplateOutput, error) {
+	req, out := c.CreateReviewTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateTemplateShare = "CreateTemplateShare"
+
+// CreateTemplateShareRequest generates a "aws/request.Request" representing the
+// client's request for the CreateTemplateShare operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateTemplateShare for more information on using the CreateTemplateShare
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateTemplateShareRequest method.
+//	req, resp := client.CreateTemplateShareRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateTemplateShare
+func (c *WellArchitected) CreateTemplateShareRequest(input *CreateTemplateShareInput) (req *request.Request, output *CreateTemplateShareOutput) {
+	op := &request.Operation{
+		Name:       opCreateTemplateShare,
+		HTTPMethod: "POST",
+		HTTPPath:   "/templates/shares/{TemplateArn}",
+	}
+
+	if input == nil {
+		input = &CreateTemplateShareInput{}
+	}
+
+	output = &CreateTemplateShareOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateTemplateShare API operation for AWS Well-Architected Tool.
+//
+// Create a review template share.
+//
+// The owner of a review template can share it with other Amazon Web Services
+// accounts, users, an organization, and organizational units (OUs) in the same
+// Amazon Web Services Region.
+//
+// Shared access to a review template is not removed until the review template
+// share invitation is deleted.
+//
+// If you share a review template with an organization or OU, all accounts in
+// the organization or OU are granted access to the review template.
+//
+// # Disclaimer
+//
+// By sharing your review template with other Amazon Web Services accounts,
+// you acknowledge that Amazon Web Services will make your review template available
+// to those other accounts.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation CreateTemplateShare for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ServiceQuotaExceededException
+//     The user has reached their resource quota.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateTemplateShare
+func (c *WellArchitected) CreateTemplateShare(input *CreateTemplateShareInput) (*CreateTemplateShareOutput, error) {
+	req, out := c.CreateTemplateShareRequest(input)
+	return out, req.Send()
+}
+
+// CreateTemplateShareWithContext is the same as CreateTemplateShare with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateTemplateShare for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) CreateTemplateShareWithContext(ctx aws.Context, input *CreateTemplateShareInput, opts ...request.Option) (*CreateTemplateShareOutput, error) {
+	req, out := c.CreateTemplateShareRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateWorkload = "CreateWorkload"
 
 // CreateWorkloadRequest generates a "aws/request.Request" representing the
@@ -454,14 +959,13 @@ const opCreateWorkload = "CreateWorkload"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWorkloadRequest method.
+//	req, resp := client.CreateWorkloadRequest(params)
 //
-//    // Example sending a request using the CreateWorkloadRequest method.
-//    req, resp := client.CreateWorkloadRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateWorkload
 func (c *WellArchitected) CreateWorkloadRequest(input *CreateWorkloadInput) (req *request.Request, output *CreateWorkloadOutput) {
@@ -497,6 +1001,17 @@ func (c *WellArchitected) CreateWorkloadRequest(input *CreateWorkloadInput) (req
 // You also must specify ReviewOwner, even though the parameter is listed as
 // not being required in the following section.
 //
+// When creating a workload using a review template, you must have the following
+// IAM permissions:
+//
+//   - wellarchitected:GetReviewTemplate
+//
+//   - wellarchitected:GetReviewTemplateAnswer
+//
+//   - wellarchitected:ListReviewTemplateAnswers
+//
+//   - wellarchitected:GetReviewTemplateLensReview
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -505,26 +1020,27 @@ func (c *WellArchitected) CreateWorkloadRequest(input *CreateWorkloadInput) (req
 // API operation CreateWorkload for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ServiceQuotaExceededException
-//   The user has reached their resource quota.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ServiceQuotaExceededException
+//     The user has reached their resource quota.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateWorkload
 func (c *WellArchitected) CreateWorkload(input *CreateWorkloadInput) (*CreateWorkloadOutput, error) {
@@ -564,14 +1080,13 @@ const opCreateWorkloadShare = "CreateWorkloadShare"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWorkloadShareRequest method.
+//	req, resp := client.CreateWorkloadShareRequest(params)
 //
-//    // Example sending a request using the CreateWorkloadShareRequest method.
-//    req, resp := client.CreateWorkloadShareRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateWorkloadShare
 func (c *WellArchitected) CreateWorkloadShareRequest(input *CreateWorkloadShareInput) (req *request.Request, output *CreateWorkloadShareOutput) {
@@ -612,26 +1127,27 @@ func (c *WellArchitected) CreateWorkloadShareRequest(input *CreateWorkloadShareI
 // API operation CreateWorkloadShare for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ServiceQuotaExceededException
-//   The user has reached their resource quota.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ServiceQuotaExceededException
+//     The user has reached their resource quota.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/CreateWorkloadShare
 func (c *WellArchitected) CreateWorkloadShare(input *CreateWorkloadShareInput) (*CreateWorkloadShareOutput, error) {
@@ -671,14 +1187,13 @@ const opDeleteLens = "DeleteLens"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteLensRequest method.
+//	req, resp := client.DeleteLensRequest(params)
 //
-//    // Example sending a request using the DeleteLensRequest method.
-//    req, resp := client.DeleteLensRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteLens
 func (c *WellArchitected) DeleteLensRequest(input *DeleteLensInput) (req *request.Request, output *DeleteLensOutput) {
@@ -706,7 +1221,7 @@ func (c *WellArchitected) DeleteLensRequest(input *DeleteLensInput) (req *reques
 // Web Services accounts and users that you shared the lens with can continue
 // to use it, but they will no longer be able to apply it to new workloads.
 //
-// Disclaimer
+// # Disclaimer
 //
 // By sharing your custom lenses with other Amazon Web Services accounts, you
 // acknowledge that Amazon Web Services will make your custom lenses available
@@ -722,23 +1237,24 @@ func (c *WellArchitected) DeleteLensRequest(input *DeleteLensInput) (req *reques
 // API operation DeleteLens for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteLens
 func (c *WellArchitected) DeleteLens(input *DeleteLensInput) (*DeleteLensOutput, error) {
@@ -778,14 +1294,13 @@ const opDeleteLensShare = "DeleteLensShare"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteLensShareRequest method.
+//	req, resp := client.DeleteLensShareRequest(params)
 //
-//    // Example sending a request using the DeleteLensShareRequest method.
-//    req, resp := client.DeleteLensShareRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteLensShare
 func (c *WellArchitected) DeleteLensShareRequest(input *DeleteLensShareInput) (req *request.Request, output *DeleteLensShareOutput) {
@@ -813,7 +1328,7 @@ func (c *WellArchitected) DeleteLensShareRequest(input *DeleteLensShareInput) (r
 // and organizational units (OUs) that you shared the lens with can continue
 // to use it, but they will no longer be able to apply it to new workloads.
 //
-// Disclaimer
+// # Disclaimer
 //
 // By sharing your custom lenses with other Amazon Web Services accounts, you
 // acknowledge that Amazon Web Services will make your custom lenses available
@@ -829,23 +1344,24 @@ func (c *WellArchitected) DeleteLensShareRequest(input *DeleteLensShareInput) (r
 // API operation DeleteLensShare for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteLensShare
 func (c *WellArchitected) DeleteLensShare(input *DeleteLensShareInput) (*DeleteLensShareOutput, error) {
@@ -869,6 +1385,404 @@ func (c *WellArchitected) DeleteLensShareWithContext(ctx aws.Context, input *Del
 	return out, req.Send()
 }
 
+const opDeleteProfile = "DeleteProfile"
+
+// DeleteProfileRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteProfile operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteProfile for more information on using the DeleteProfile
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteProfileRequest method.
+//	req, resp := client.DeleteProfileRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteProfile
+func (c *WellArchitected) DeleteProfileRequest(input *DeleteProfileInput) (req *request.Request, output *DeleteProfileOutput) {
+	op := &request.Operation{
+		Name:       opDeleteProfile,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/profiles/{ProfileArn}",
+	}
+
+	if input == nil {
+		input = &DeleteProfileInput{}
+	}
+
+	output = &DeleteProfileOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteProfile API operation for AWS Well-Architected Tool.
+//
+// Delete a profile.
+//
+// # Disclaimer
+//
+// By sharing your profile with other Amazon Web Services accounts, you acknowledge
+// that Amazon Web Services will make your profile available to those other
+// accounts. Those other accounts may continue to access and use your shared
+// profile even if you delete the profile from your own Amazon Web Services
+// account or terminate your Amazon Web Services account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation DeleteProfile for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteProfile
+func (c *WellArchitected) DeleteProfile(input *DeleteProfileInput) (*DeleteProfileOutput, error) {
+	req, out := c.DeleteProfileRequest(input)
+	return out, req.Send()
+}
+
+// DeleteProfileWithContext is the same as DeleteProfile with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteProfile for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) DeleteProfileWithContext(ctx aws.Context, input *DeleteProfileInput, opts ...request.Option) (*DeleteProfileOutput, error) {
+	req, out := c.DeleteProfileRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteProfileShare = "DeleteProfileShare"
+
+// DeleteProfileShareRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteProfileShare operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteProfileShare for more information on using the DeleteProfileShare
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteProfileShareRequest method.
+//	req, resp := client.DeleteProfileShareRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteProfileShare
+func (c *WellArchitected) DeleteProfileShareRequest(input *DeleteProfileShareInput) (req *request.Request, output *DeleteProfileShareOutput) {
+	op := &request.Operation{
+		Name:       opDeleteProfileShare,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/profiles/{ProfileArn}/shares/{ShareId}",
+	}
+
+	if input == nil {
+		input = &DeleteProfileShareInput{}
+	}
+
+	output = &DeleteProfileShareOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteProfileShare API operation for AWS Well-Architected Tool.
+//
+// Delete a profile share.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation DeleteProfileShare for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteProfileShare
+func (c *WellArchitected) DeleteProfileShare(input *DeleteProfileShareInput) (*DeleteProfileShareOutput, error) {
+	req, out := c.DeleteProfileShareRequest(input)
+	return out, req.Send()
+}
+
+// DeleteProfileShareWithContext is the same as DeleteProfileShare with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteProfileShare for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) DeleteProfileShareWithContext(ctx aws.Context, input *DeleteProfileShareInput, opts ...request.Option) (*DeleteProfileShareOutput, error) {
+	req, out := c.DeleteProfileShareRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteReviewTemplate = "DeleteReviewTemplate"
+
+// DeleteReviewTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteReviewTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteReviewTemplate for more information on using the DeleteReviewTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteReviewTemplateRequest method.
+//	req, resp := client.DeleteReviewTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteReviewTemplate
+func (c *WellArchitected) DeleteReviewTemplateRequest(input *DeleteReviewTemplateInput) (req *request.Request, output *DeleteReviewTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDeleteReviewTemplate,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/reviewTemplates/{TemplateArn}",
+	}
+
+	if input == nil {
+		input = &DeleteReviewTemplateInput{}
+	}
+
+	output = &DeleteReviewTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteReviewTemplate API operation for AWS Well-Architected Tool.
+//
+// Delete a review template.
+//
+// Only the owner of a review template can delete it.
+//
+// After the review template is deleted, Amazon Web Services accounts, users,
+// organizations, and organizational units (OUs) that you shared the review
+// template with will no longer be able to apply it to new workloads.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation DeleteReviewTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteReviewTemplate
+func (c *WellArchitected) DeleteReviewTemplate(input *DeleteReviewTemplateInput) (*DeleteReviewTemplateOutput, error) {
+	req, out := c.DeleteReviewTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DeleteReviewTemplateWithContext is the same as DeleteReviewTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteReviewTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) DeleteReviewTemplateWithContext(ctx aws.Context, input *DeleteReviewTemplateInput, opts ...request.Option) (*DeleteReviewTemplateOutput, error) {
+	req, out := c.DeleteReviewTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteTemplateShare = "DeleteTemplateShare"
+
+// DeleteTemplateShareRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteTemplateShare operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteTemplateShare for more information on using the DeleteTemplateShare
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteTemplateShareRequest method.
+//	req, resp := client.DeleteTemplateShareRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteTemplateShare
+func (c *WellArchitected) DeleteTemplateShareRequest(input *DeleteTemplateShareInput) (req *request.Request, output *DeleteTemplateShareOutput) {
+	op := &request.Operation{
+		Name:       opDeleteTemplateShare,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/templates/shares/{TemplateArn}/{ShareId}",
+	}
+
+	if input == nil {
+		input = &DeleteTemplateShareInput{}
+	}
+
+	output = &DeleteTemplateShareOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteTemplateShare API operation for AWS Well-Architected Tool.
+//
+// Delete a review template share.
+//
+// After the review template share is deleted, Amazon Web Services accounts,
+// users, organizations, and organizational units (OUs) that you shared the
+// review template with will no longer be able to apply it to new workloads.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation DeleteTemplateShare for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteTemplateShare
+func (c *WellArchitected) DeleteTemplateShare(input *DeleteTemplateShareInput) (*DeleteTemplateShareOutput, error) {
+	req, out := c.DeleteTemplateShareRequest(input)
+	return out, req.Send()
+}
+
+// DeleteTemplateShareWithContext is the same as DeleteTemplateShare with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteTemplateShare for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) DeleteTemplateShareWithContext(ctx aws.Context, input *DeleteTemplateShareInput, opts ...request.Option) (*DeleteTemplateShareOutput, error) {
+	req, out := c.DeleteTemplateShareRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteWorkload = "DeleteWorkload"
 
 // DeleteWorkloadRequest generates a "aws/request.Request" representing the
@@ -885,14 +1799,13 @@ const opDeleteWorkload = "DeleteWorkload"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWorkloadRequest method.
+//	req, resp := client.DeleteWorkloadRequest(params)
 //
-//    // Example sending a request using the DeleteWorkloadRequest method.
-//    req, resp := client.DeleteWorkloadRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteWorkload
 func (c *WellArchitected) DeleteWorkloadRequest(input *DeleteWorkloadInput) (req *request.Request, output *DeleteWorkloadOutput) {
@@ -924,23 +1837,24 @@ func (c *WellArchitected) DeleteWorkloadRequest(input *DeleteWorkloadInput) (req
 // API operation DeleteWorkload for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteWorkload
 func (c *WellArchitected) DeleteWorkload(input *DeleteWorkloadInput) (*DeleteWorkloadOutput, error) {
@@ -980,14 +1894,13 @@ const opDeleteWorkloadShare = "DeleteWorkloadShare"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWorkloadShareRequest method.
+//	req, resp := client.DeleteWorkloadShareRequest(params)
 //
-//    // Example sending a request using the DeleteWorkloadShareRequest method.
-//    req, resp := client.DeleteWorkloadShareRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteWorkloadShare
 func (c *WellArchitected) DeleteWorkloadShareRequest(input *DeleteWorkloadShareInput) (req *request.Request, output *DeleteWorkloadShareOutput) {
@@ -1019,23 +1932,24 @@ func (c *WellArchitected) DeleteWorkloadShareRequest(input *DeleteWorkloadShareI
 // API operation DeleteWorkloadShare for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DeleteWorkloadShare
 func (c *WellArchitected) DeleteWorkloadShare(input *DeleteWorkloadShareInput) (*DeleteWorkloadShareOutput, error) {
@@ -1075,14 +1989,13 @@ const opDisassociateLenses = "DisassociateLenses"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateLensesRequest method.
+//	req, resp := client.DisassociateLensesRequest(params)
 //
-//    // Example sending a request using the DisassociateLensesRequest method.
-//    req, resp := client.DisassociateLensesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DisassociateLenses
 func (c *WellArchitected) DisassociateLensesRequest(input *DisassociateLensesInput) (req *request.Request, output *DisassociateLensesOutput) {
@@ -1119,23 +2032,24 @@ func (c *WellArchitected) DisassociateLensesRequest(input *DisassociateLensesInp
 // API operation DisassociateLenses for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DisassociateLenses
 func (c *WellArchitected) DisassociateLenses(input *DisassociateLensesInput) (*DisassociateLensesOutput, error) {
@@ -1159,6 +2073,101 @@ func (c *WellArchitected) DisassociateLensesWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
+const opDisassociateProfiles = "DisassociateProfiles"
+
+// DisassociateProfilesRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateProfiles operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateProfiles for more information on using the DisassociateProfiles
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DisassociateProfilesRequest method.
+//	req, resp := client.DisassociateProfilesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DisassociateProfiles
+func (c *WellArchitected) DisassociateProfilesRequest(input *DisassociateProfilesInput) (req *request.Request, output *DisassociateProfilesOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateProfiles,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/workloads/{WorkloadId}/disassociateProfiles",
+	}
+
+	if input == nil {
+		input = &DisassociateProfilesInput{}
+	}
+
+	output = &DisassociateProfilesOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DisassociateProfiles API operation for AWS Well-Architected Tool.
+//
+// Disassociate a profile from a workload.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation DisassociateProfiles for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/DisassociateProfiles
+func (c *WellArchitected) DisassociateProfiles(input *DisassociateProfilesInput) (*DisassociateProfilesOutput, error) {
+	req, out := c.DisassociateProfilesRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateProfilesWithContext is the same as DisassociateProfiles with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateProfiles for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) DisassociateProfilesWithContext(ctx aws.Context, input *DisassociateProfilesInput, opts ...request.Option) (*DisassociateProfilesOutput, error) {
+	req, out := c.DisassociateProfilesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opExportLens = "ExportLens"
 
 // ExportLensRequest generates a "aws/request.Request" representing the
@@ -1175,14 +2184,13 @@ const opExportLens = "ExportLens"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ExportLensRequest method.
+//	req, resp := client.ExportLensRequest(params)
 //
-//    // Example sending a request using the ExportLensRequest method.
-//    req, resp := client.ExportLensRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ExportLens
 func (c *WellArchitected) ExportLensRequest(input *ExportLensInput) (req *request.Request, output *ExportLensOutput) {
@@ -1212,7 +2220,7 @@ func (c *WellArchitected) ExportLensRequest(input *ExportLensInput) (req *reques
 // (https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html)
 // in the Well-Architected Tool User Guide.
 //
-// Disclaimer
+// # Disclaimer
 //
 // Do not include or gather personal identifiable information (PII) of end users
 // or other identifiable individuals in or via your custom lenses. If your custom
@@ -1229,20 +2237,21 @@ func (c *WellArchitected) ExportLensRequest(input *ExportLensInput) (req *reques
 // API operation ExportLens for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ExportLens
 func (c *WellArchitected) ExportLens(input *ExportLensInput) (*ExportLensOutput, error) {
@@ -1282,14 +2291,13 @@ const opGetAnswer = "GetAnswer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAnswerRequest method.
+//	req, resp := client.GetAnswerRequest(params)
 //
-//    // Example sending a request using the GetAnswerRequest method.
-//    req, resp := client.GetAnswerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetAnswer
 func (c *WellArchitected) GetAnswerRequest(input *GetAnswerInput) (req *request.Request, output *GetAnswerOutput) {
@@ -1320,20 +2328,21 @@ func (c *WellArchitected) GetAnswerRequest(input *GetAnswerInput) (req *request.
 // API operation GetAnswer for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetAnswer
 func (c *WellArchitected) GetAnswer(input *GetAnswerInput) (*GetAnswerOutput, error) {
@@ -1373,14 +2382,13 @@ const opGetConsolidatedReport = "GetConsolidatedReport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetConsolidatedReportRequest method.
+//	req, resp := client.GetConsolidatedReportRequest(params)
 //
-//    // Example sending a request using the GetConsolidatedReportRequest method.
-//    req, resp := client.GetConsolidatedReportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetConsolidatedReport
 func (c *WellArchitected) GetConsolidatedReportRequest(input *GetConsolidatedReportInput) (req *request.Request, output *GetConsolidatedReportOutput) {
@@ -1420,20 +2428,21 @@ func (c *WellArchitected) GetConsolidatedReportRequest(input *GetConsolidatedRep
 // API operation GetConsolidatedReport for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetConsolidatedReport
 func (c *WellArchitected) GetConsolidatedReport(input *GetConsolidatedReportInput) (*GetConsolidatedReportOutput, error) {
@@ -1465,15 +2474,14 @@ func (c *WellArchitected) GetConsolidatedReportWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetConsolidatedReport operation.
-//    pageNum := 0
-//    err := client.GetConsolidatedReportPages(params,
-//        func(page *wellarchitected.GetConsolidatedReportOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetConsolidatedReport operation.
+//	pageNum := 0
+//	err := client.GetConsolidatedReportPages(params,
+//	    func(page *wellarchitected.GetConsolidatedReportOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) GetConsolidatedReportPages(input *GetConsolidatedReportInput, fn func(*GetConsolidatedReportOutput, bool) bool) error {
 	return c.GetConsolidatedReportPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1525,14 +2533,13 @@ const opGetLens = "GetLens"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLensRequest method.
+//	req, resp := client.GetLensRequest(params)
 //
-//    // Example sending a request using the GetLensRequest method.
-//    req, resp := client.GetLensRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetLens
 func (c *WellArchitected) GetLensRequest(input *GetLensInput) (req *request.Request, output *GetLensOutput) {
@@ -1563,20 +2570,21 @@ func (c *WellArchitected) GetLensRequest(input *GetLensInput) (req *request.Requ
 // API operation GetLens for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetLens
 func (c *WellArchitected) GetLens(input *GetLensInput) (*GetLensOutput, error) {
@@ -1616,14 +2624,13 @@ const opGetLensReview = "GetLensReview"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLensReviewRequest method.
+//	req, resp := client.GetLensReviewRequest(params)
 //
-//    // Example sending a request using the GetLensReviewRequest method.
-//    req, resp := client.GetLensReviewRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetLensReview
 func (c *WellArchitected) GetLensReviewRequest(input *GetLensReviewInput) (req *request.Request, output *GetLensReviewOutput) {
@@ -1654,20 +2661,21 @@ func (c *WellArchitected) GetLensReviewRequest(input *GetLensReviewInput) (req *
 // API operation GetLensReview for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetLensReview
 func (c *WellArchitected) GetLensReview(input *GetLensReviewInput) (*GetLensReviewOutput, error) {
@@ -1707,14 +2715,13 @@ const opGetLensReviewReport = "GetLensReviewReport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLensReviewReportRequest method.
+//	req, resp := client.GetLensReviewReportRequest(params)
 //
-//    // Example sending a request using the GetLensReviewReportRequest method.
-//    req, resp := client.GetLensReviewReportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetLensReviewReport
 func (c *WellArchitected) GetLensReviewReportRequest(input *GetLensReviewReportInput) (req *request.Request, output *GetLensReviewReportOutput) {
@@ -1745,20 +2752,21 @@ func (c *WellArchitected) GetLensReviewReportRequest(input *GetLensReviewReportI
 // API operation GetLensReviewReport for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetLensReviewReport
 func (c *WellArchitected) GetLensReviewReport(input *GetLensReviewReportInput) (*GetLensReviewReportOutput, error) {
@@ -1798,14 +2806,13 @@ const opGetLensVersionDifference = "GetLensVersionDifference"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLensVersionDifferenceRequest method.
+//	req, resp := client.GetLensVersionDifferenceRequest(params)
 //
-//    // Example sending a request using the GetLensVersionDifferenceRequest method.
-//    req, resp := client.GetLensVersionDifferenceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetLensVersionDifference
 func (c *WellArchitected) GetLensVersionDifferenceRequest(input *GetLensVersionDifferenceInput) (req *request.Request, output *GetLensVersionDifferenceOutput) {
@@ -1836,20 +2843,21 @@ func (c *WellArchitected) GetLensVersionDifferenceRequest(input *GetLensVersionD
 // API operation GetLensVersionDifference for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetLensVersionDifference
 func (c *WellArchitected) GetLensVersionDifference(input *GetLensVersionDifferenceInput) (*GetLensVersionDifferenceOutput, error) {
@@ -1889,14 +2897,13 @@ const opGetMilestone = "GetMilestone"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMilestoneRequest method.
+//	req, resp := client.GetMilestoneRequest(params)
 //
-//    // Example sending a request using the GetMilestoneRequest method.
-//    req, resp := client.GetMilestoneRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetMilestone
 func (c *WellArchitected) GetMilestoneRequest(input *GetMilestoneInput) (req *request.Request, output *GetMilestoneOutput) {
@@ -1927,20 +2934,21 @@ func (c *WellArchitected) GetMilestoneRequest(input *GetMilestoneInput) (req *re
 // API operation GetMilestone for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetMilestone
 func (c *WellArchitected) GetMilestone(input *GetMilestoneInput) (*GetMilestoneOutput, error) {
@@ -1964,6 +2972,461 @@ func (c *WellArchitected) GetMilestoneWithContext(ctx aws.Context, input *GetMil
 	return out, req.Send()
 }
 
+const opGetProfile = "GetProfile"
+
+// GetProfileRequest generates a "aws/request.Request" representing the
+// client's request for the GetProfile operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetProfile for more information on using the GetProfile
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetProfileRequest method.
+//	req, resp := client.GetProfileRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetProfile
+func (c *WellArchitected) GetProfileRequest(input *GetProfileInput) (req *request.Request, output *GetProfileOutput) {
+	op := &request.Operation{
+		Name:       opGetProfile,
+		HTTPMethod: "GET",
+		HTTPPath:   "/profiles/{ProfileArn}",
+	}
+
+	if input == nil {
+		input = &GetProfileInput{}
+	}
+
+	output = &GetProfileOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetProfile API operation for AWS Well-Architected Tool.
+//
+// Get profile information.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation GetProfile for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetProfile
+func (c *WellArchitected) GetProfile(input *GetProfileInput) (*GetProfileOutput, error) {
+	req, out := c.GetProfileRequest(input)
+	return out, req.Send()
+}
+
+// GetProfileWithContext is the same as GetProfile with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetProfile for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) GetProfileWithContext(ctx aws.Context, input *GetProfileInput, opts ...request.Option) (*GetProfileOutput, error) {
+	req, out := c.GetProfileRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetProfileTemplate = "GetProfileTemplate"
+
+// GetProfileTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GetProfileTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetProfileTemplate for more information on using the GetProfileTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetProfileTemplateRequest method.
+//	req, resp := client.GetProfileTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetProfileTemplate
+func (c *WellArchitected) GetProfileTemplateRequest(input *GetProfileTemplateInput) (req *request.Request, output *GetProfileTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGetProfileTemplate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/profileTemplate",
+	}
+
+	if input == nil {
+		input = &GetProfileTemplateInput{}
+	}
+
+	output = &GetProfileTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetProfileTemplate API operation for AWS Well-Architected Tool.
+//
+// Get profile template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation GetProfileTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetProfileTemplate
+func (c *WellArchitected) GetProfileTemplate(input *GetProfileTemplateInput) (*GetProfileTemplateOutput, error) {
+	req, out := c.GetProfileTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GetProfileTemplateWithContext is the same as GetProfileTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetProfileTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) GetProfileTemplateWithContext(ctx aws.Context, input *GetProfileTemplateInput, opts ...request.Option) (*GetProfileTemplateOutput, error) {
+	req, out := c.GetProfileTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetReviewTemplate = "GetReviewTemplate"
+
+// GetReviewTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GetReviewTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetReviewTemplate for more information on using the GetReviewTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetReviewTemplateRequest method.
+//	req, resp := client.GetReviewTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetReviewTemplate
+func (c *WellArchitected) GetReviewTemplateRequest(input *GetReviewTemplateInput) (req *request.Request, output *GetReviewTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGetReviewTemplate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/reviewTemplates/{TemplateArn}",
+	}
+
+	if input == nil {
+		input = &GetReviewTemplateInput{}
+	}
+
+	output = &GetReviewTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetReviewTemplate API operation for AWS Well-Architected Tool.
+//
+// Get review template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation GetReviewTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetReviewTemplate
+func (c *WellArchitected) GetReviewTemplate(input *GetReviewTemplateInput) (*GetReviewTemplateOutput, error) {
+	req, out := c.GetReviewTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GetReviewTemplateWithContext is the same as GetReviewTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetReviewTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) GetReviewTemplateWithContext(ctx aws.Context, input *GetReviewTemplateInput, opts ...request.Option) (*GetReviewTemplateOutput, error) {
+	req, out := c.GetReviewTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetReviewTemplateAnswer = "GetReviewTemplateAnswer"
+
+// GetReviewTemplateAnswerRequest generates a "aws/request.Request" representing the
+// client's request for the GetReviewTemplateAnswer operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetReviewTemplateAnswer for more information on using the GetReviewTemplateAnswer
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetReviewTemplateAnswerRequest method.
+//	req, resp := client.GetReviewTemplateAnswerRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetReviewTemplateAnswer
+func (c *WellArchitected) GetReviewTemplateAnswerRequest(input *GetReviewTemplateAnswerInput) (req *request.Request, output *GetReviewTemplateAnswerOutput) {
+	op := &request.Operation{
+		Name:       opGetReviewTemplateAnswer,
+		HTTPMethod: "GET",
+		HTTPPath:   "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}/answers/{QuestionId}",
+	}
+
+	if input == nil {
+		input = &GetReviewTemplateAnswerInput{}
+	}
+
+	output = &GetReviewTemplateAnswerOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetReviewTemplateAnswer API operation for AWS Well-Architected Tool.
+//
+// Get review template answer.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation GetReviewTemplateAnswer for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetReviewTemplateAnswer
+func (c *WellArchitected) GetReviewTemplateAnswer(input *GetReviewTemplateAnswerInput) (*GetReviewTemplateAnswerOutput, error) {
+	req, out := c.GetReviewTemplateAnswerRequest(input)
+	return out, req.Send()
+}
+
+// GetReviewTemplateAnswerWithContext is the same as GetReviewTemplateAnswer with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetReviewTemplateAnswer for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) GetReviewTemplateAnswerWithContext(ctx aws.Context, input *GetReviewTemplateAnswerInput, opts ...request.Option) (*GetReviewTemplateAnswerOutput, error) {
+	req, out := c.GetReviewTemplateAnswerRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetReviewTemplateLensReview = "GetReviewTemplateLensReview"
+
+// GetReviewTemplateLensReviewRequest generates a "aws/request.Request" representing the
+// client's request for the GetReviewTemplateLensReview operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetReviewTemplateLensReview for more information on using the GetReviewTemplateLensReview
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetReviewTemplateLensReviewRequest method.
+//	req, resp := client.GetReviewTemplateLensReviewRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetReviewTemplateLensReview
+func (c *WellArchitected) GetReviewTemplateLensReviewRequest(input *GetReviewTemplateLensReviewInput) (req *request.Request, output *GetReviewTemplateLensReviewOutput) {
+	op := &request.Operation{
+		Name:       opGetReviewTemplateLensReview,
+		HTTPMethod: "GET",
+		HTTPPath:   "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}",
+	}
+
+	if input == nil {
+		input = &GetReviewTemplateLensReviewInput{}
+	}
+
+	output = &GetReviewTemplateLensReviewOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetReviewTemplateLensReview API operation for AWS Well-Architected Tool.
+//
+// Get a lens review associated with a review template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation GetReviewTemplateLensReview for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetReviewTemplateLensReview
+func (c *WellArchitected) GetReviewTemplateLensReview(input *GetReviewTemplateLensReviewInput) (*GetReviewTemplateLensReviewOutput, error) {
+	req, out := c.GetReviewTemplateLensReviewRequest(input)
+	return out, req.Send()
+}
+
+// GetReviewTemplateLensReviewWithContext is the same as GetReviewTemplateLensReview with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetReviewTemplateLensReview for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) GetReviewTemplateLensReviewWithContext(ctx aws.Context, input *GetReviewTemplateLensReviewInput, opts ...request.Option) (*GetReviewTemplateLensReviewOutput, error) {
+	req, out := c.GetReviewTemplateLensReviewRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetWorkload = "GetWorkload"
 
 // GetWorkloadRequest generates a "aws/request.Request" representing the
@@ -1980,14 +3443,13 @@ const opGetWorkload = "GetWorkload"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetWorkloadRequest method.
+//	req, resp := client.GetWorkloadRequest(params)
 //
-//    // Example sending a request using the GetWorkloadRequest method.
-//    req, resp := client.GetWorkloadRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetWorkload
 func (c *WellArchitected) GetWorkloadRequest(input *GetWorkloadInput) (req *request.Request, output *GetWorkloadOutput) {
@@ -2018,20 +3480,21 @@ func (c *WellArchitected) GetWorkloadRequest(input *GetWorkloadInput) (req *requ
 // API operation GetWorkload for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/GetWorkload
 func (c *WellArchitected) GetWorkload(input *GetWorkloadInput) (*GetWorkloadOutput, error) {
@@ -2071,14 +3534,13 @@ const opImportLens = "ImportLens"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ImportLensRequest method.
+//	req, resp := client.ImportLensRequest(params)
 //
-//    // Example sending a request using the ImportLensRequest method.
-//    req, resp := client.ImportLensRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ImportLens
 func (c *WellArchitected) ImportLensRequest(input *ImportLensInput) (req *request.Request, output *ImportLensOutput) {
@@ -2114,7 +3576,7 @@ func (c *WellArchitected) ImportLensRequest(input *ImportLensInput) (req *reques
 //
 // A custom lens cannot exceed 500 KB in size.
 //
-// Disclaimer
+// # Disclaimer
 //
 // Do not include or gather personal identifiable information (PII) of end users
 // or other identifiable individuals in or via your custom lenses. If your custom
@@ -2131,26 +3593,27 @@ func (c *WellArchitected) ImportLensRequest(input *ImportLensInput) (req *reques
 // API operation ImportLens for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * ServiceQuotaExceededException
-//   The user has reached their resource quota.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ServiceQuotaExceededException
+//     The user has reached their resource quota.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ImportLens
 func (c *WellArchitected) ImportLens(input *ImportLensInput) (*ImportLensOutput, error) {
@@ -2190,14 +3653,13 @@ const opListAnswers = "ListAnswers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAnswersRequest method.
+//	req, resp := client.ListAnswersRequest(params)
 //
-//    // Example sending a request using the ListAnswersRequest method.
-//    req, resp := client.ListAnswersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListAnswers
 func (c *WellArchitected) ListAnswersRequest(input *ListAnswersInput) (req *request.Request, output *ListAnswersOutput) {
@@ -2234,20 +3696,21 @@ func (c *WellArchitected) ListAnswersRequest(input *ListAnswersInput) (req *requ
 // API operation ListAnswers for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListAnswers
 func (c *WellArchitected) ListAnswers(input *ListAnswersInput) (*ListAnswersOutput, error) {
@@ -2279,15 +3742,14 @@ func (c *WellArchitected) ListAnswersWithContext(ctx aws.Context, input *ListAns
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAnswers operation.
-//    pageNum := 0
-//    err := client.ListAnswersPages(params,
-//        func(page *wellarchitected.ListAnswersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAnswers operation.
+//	pageNum := 0
+//	err := client.ListAnswersPages(params,
+//	    func(page *wellarchitected.ListAnswersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListAnswersPages(input *ListAnswersInput, fn func(*ListAnswersOutput, bool) bool) error {
 	return c.ListAnswersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2339,14 +3801,13 @@ const opListCheckDetails = "ListCheckDetails"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCheckDetailsRequest method.
+//	req, resp := client.ListCheckDetailsRequest(params)
 //
-//    // Example sending a request using the ListCheckDetailsRequest method.
-//    req, resp := client.ListCheckDetailsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListCheckDetails
 func (c *WellArchitected) ListCheckDetailsRequest(input *ListCheckDetailsInput) (req *request.Request, output *ListCheckDetailsOutput) {
@@ -2383,20 +3844,21 @@ func (c *WellArchitected) ListCheckDetailsRequest(input *ListCheckDetailsInput) 
 // API operation ListCheckDetails for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListCheckDetails
 func (c *WellArchitected) ListCheckDetails(input *ListCheckDetailsInput) (*ListCheckDetailsOutput, error) {
@@ -2428,15 +3890,14 @@ func (c *WellArchitected) ListCheckDetailsWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCheckDetails operation.
-//    pageNum := 0
-//    err := client.ListCheckDetailsPages(params,
-//        func(page *wellarchitected.ListCheckDetailsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCheckDetails operation.
+//	pageNum := 0
+//	err := client.ListCheckDetailsPages(params,
+//	    func(page *wellarchitected.ListCheckDetailsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListCheckDetailsPages(input *ListCheckDetailsInput, fn func(*ListCheckDetailsOutput, bool) bool) error {
 	return c.ListCheckDetailsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2488,14 +3949,13 @@ const opListCheckSummaries = "ListCheckSummaries"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCheckSummariesRequest method.
+//	req, resp := client.ListCheckSummariesRequest(params)
 //
-//    // Example sending a request using the ListCheckSummariesRequest method.
-//    req, resp := client.ListCheckSummariesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListCheckSummaries
 func (c *WellArchitected) ListCheckSummariesRequest(input *ListCheckSummariesInput) (req *request.Request, output *ListCheckSummariesOutput) {
@@ -2533,20 +3993,21 @@ func (c *WellArchitected) ListCheckSummariesRequest(input *ListCheckSummariesInp
 // API operation ListCheckSummaries for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListCheckSummaries
 func (c *WellArchitected) ListCheckSummaries(input *ListCheckSummariesInput) (*ListCheckSummariesOutput, error) {
@@ -2578,15 +4039,14 @@ func (c *WellArchitected) ListCheckSummariesWithContext(ctx aws.Context, input *
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCheckSummaries operation.
-//    pageNum := 0
-//    err := client.ListCheckSummariesPages(params,
-//        func(page *wellarchitected.ListCheckSummariesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCheckSummaries operation.
+//	pageNum := 0
+//	err := client.ListCheckSummariesPages(params,
+//	    func(page *wellarchitected.ListCheckSummariesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListCheckSummariesPages(input *ListCheckSummariesInput, fn func(*ListCheckSummariesOutput, bool) bool) error {
 	return c.ListCheckSummariesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2638,14 +4098,13 @@ const opListLensReviewImprovements = "ListLensReviewImprovements"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLensReviewImprovementsRequest method.
+//	req, resp := client.ListLensReviewImprovementsRequest(params)
 //
-//    // Example sending a request using the ListLensReviewImprovementsRequest method.
-//    req, resp := client.ListLensReviewImprovementsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListLensReviewImprovements
 func (c *WellArchitected) ListLensReviewImprovementsRequest(input *ListLensReviewImprovementsInput) (req *request.Request, output *ListLensReviewImprovementsOutput) {
@@ -2682,20 +4141,21 @@ func (c *WellArchitected) ListLensReviewImprovementsRequest(input *ListLensRevie
 // API operation ListLensReviewImprovements for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListLensReviewImprovements
 func (c *WellArchitected) ListLensReviewImprovements(input *ListLensReviewImprovementsInput) (*ListLensReviewImprovementsOutput, error) {
@@ -2727,15 +4187,14 @@ func (c *WellArchitected) ListLensReviewImprovementsWithContext(ctx aws.Context,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLensReviewImprovements operation.
-//    pageNum := 0
-//    err := client.ListLensReviewImprovementsPages(params,
-//        func(page *wellarchitected.ListLensReviewImprovementsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLensReviewImprovements operation.
+//	pageNum := 0
+//	err := client.ListLensReviewImprovementsPages(params,
+//	    func(page *wellarchitected.ListLensReviewImprovementsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListLensReviewImprovementsPages(input *ListLensReviewImprovementsInput, fn func(*ListLensReviewImprovementsOutput, bool) bool) error {
 	return c.ListLensReviewImprovementsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2787,14 +4246,13 @@ const opListLensReviews = "ListLensReviews"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLensReviewsRequest method.
+//	req, resp := client.ListLensReviewsRequest(params)
 //
-//    // Example sending a request using the ListLensReviewsRequest method.
-//    req, resp := client.ListLensReviewsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListLensReviews
 func (c *WellArchitected) ListLensReviewsRequest(input *ListLensReviewsInput) (req *request.Request, output *ListLensReviewsOutput) {
@@ -2831,20 +4289,21 @@ func (c *WellArchitected) ListLensReviewsRequest(input *ListLensReviewsInput) (r
 // API operation ListLensReviews for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListLensReviews
 func (c *WellArchitected) ListLensReviews(input *ListLensReviewsInput) (*ListLensReviewsOutput, error) {
@@ -2876,15 +4335,14 @@ func (c *WellArchitected) ListLensReviewsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLensReviews operation.
-//    pageNum := 0
-//    err := client.ListLensReviewsPages(params,
-//        func(page *wellarchitected.ListLensReviewsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLensReviews operation.
+//	pageNum := 0
+//	err := client.ListLensReviewsPages(params,
+//	    func(page *wellarchitected.ListLensReviewsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListLensReviewsPages(input *ListLensReviewsInput, fn func(*ListLensReviewsOutput, bool) bool) error {
 	return c.ListLensReviewsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2936,14 +4394,13 @@ const opListLensShares = "ListLensShares"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLensSharesRequest method.
+//	req, resp := client.ListLensSharesRequest(params)
 //
-//    // Example sending a request using the ListLensSharesRequest method.
-//    req, resp := client.ListLensSharesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListLensShares
 func (c *WellArchitected) ListLensSharesRequest(input *ListLensSharesInput) (req *request.Request, output *ListLensSharesOutput) {
@@ -2980,20 +4437,21 @@ func (c *WellArchitected) ListLensSharesRequest(input *ListLensSharesInput) (req
 // API operation ListLensShares for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListLensShares
 func (c *WellArchitected) ListLensShares(input *ListLensSharesInput) (*ListLensSharesOutput, error) {
@@ -3025,15 +4483,14 @@ func (c *WellArchitected) ListLensSharesWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLensShares operation.
-//    pageNum := 0
-//    err := client.ListLensSharesPages(params,
-//        func(page *wellarchitected.ListLensSharesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLensShares operation.
+//	pageNum := 0
+//	err := client.ListLensSharesPages(params,
+//	    func(page *wellarchitected.ListLensSharesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListLensSharesPages(input *ListLensSharesInput, fn func(*ListLensSharesOutput, bool) bool) error {
 	return c.ListLensSharesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3085,14 +4542,13 @@ const opListLenses = "ListLenses"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLensesRequest method.
+//	req, resp := client.ListLensesRequest(params)
 //
-//    // Example sending a request using the ListLensesRequest method.
-//    req, resp := client.ListLensesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListLenses
 func (c *WellArchitected) ListLensesRequest(input *ListLensesInput) (req *request.Request, output *ListLensesOutput) {
@@ -3129,17 +4585,18 @@ func (c *WellArchitected) ListLensesRequest(input *ListLensesInput) (req *reques
 // API operation ListLenses for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListLenses
 func (c *WellArchitected) ListLenses(input *ListLensesInput) (*ListLensesOutput, error) {
@@ -3171,15 +4628,14 @@ func (c *WellArchitected) ListLensesWithContext(ctx aws.Context, input *ListLens
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLenses operation.
-//    pageNum := 0
-//    err := client.ListLensesPages(params,
-//        func(page *wellarchitected.ListLensesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLenses operation.
+//	pageNum := 0
+//	err := client.ListLensesPages(params,
+//	    func(page *wellarchitected.ListLensesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListLensesPages(input *ListLensesInput, fn func(*ListLensesOutput, bool) bool) error {
 	return c.ListLensesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3231,14 +4687,13 @@ const opListMilestones = "ListMilestones"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMilestonesRequest method.
+//	req, resp := client.ListMilestonesRequest(params)
 //
-//    // Example sending a request using the ListMilestonesRequest method.
-//    req, resp := client.ListMilestonesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListMilestones
 func (c *WellArchitected) ListMilestonesRequest(input *ListMilestonesInput) (req *request.Request, output *ListMilestonesOutput) {
@@ -3275,20 +4730,21 @@ func (c *WellArchitected) ListMilestonesRequest(input *ListMilestonesInput) (req
 // API operation ListMilestones for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListMilestones
 func (c *WellArchitected) ListMilestones(input *ListMilestonesInput) (*ListMilestonesOutput, error) {
@@ -3320,15 +4776,14 @@ func (c *WellArchitected) ListMilestonesWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMilestones operation.
-//    pageNum := 0
-//    err := client.ListMilestonesPages(params,
-//        func(page *wellarchitected.ListMilestonesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMilestones operation.
+//	pageNum := 0
+//	err := client.ListMilestonesPages(params,
+//	    func(page *wellarchitected.ListMilestonesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListMilestonesPages(input *ListMilestonesInput, fn func(*ListMilestonesOutput, bool) bool) error {
 	return c.ListMilestonesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3380,14 +4835,13 @@ const opListNotifications = "ListNotifications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListNotificationsRequest method.
+//	req, resp := client.ListNotificationsRequest(params)
 //
-//    // Example sending a request using the ListNotificationsRequest method.
-//    req, resp := client.ListNotificationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListNotifications
 func (c *WellArchitected) ListNotificationsRequest(input *ListNotificationsInput) (req *request.Request, output *ListNotificationsOutput) {
@@ -3424,17 +4878,18 @@ func (c *WellArchitected) ListNotificationsRequest(input *ListNotificationsInput
 // API operation ListNotifications for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListNotifications
 func (c *WellArchitected) ListNotifications(input *ListNotificationsInput) (*ListNotificationsOutput, error) {
@@ -3466,15 +4921,14 @@ func (c *WellArchitected) ListNotificationsWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListNotifications operation.
-//    pageNum := 0
-//    err := client.ListNotificationsPages(params,
-//        func(page *wellarchitected.ListNotificationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListNotifications operation.
+//	pageNum := 0
+//	err := client.ListNotificationsPages(params,
+//	    func(page *wellarchitected.ListNotificationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListNotificationsPages(input *ListNotificationsInput, fn func(*ListNotificationsOutput, bool) bool) error {
 	return c.ListNotificationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3510,6 +4964,737 @@ func (c *WellArchitected) ListNotificationsPagesWithContext(ctx aws.Context, inp
 	return p.Err()
 }
 
+const opListProfileNotifications = "ListProfileNotifications"
+
+// ListProfileNotificationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListProfileNotifications operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListProfileNotifications for more information on using the ListProfileNotifications
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListProfileNotificationsRequest method.
+//	req, resp := client.ListProfileNotificationsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListProfileNotifications
+func (c *WellArchitected) ListProfileNotificationsRequest(input *ListProfileNotificationsInput) (req *request.Request, output *ListProfileNotificationsOutput) {
+	op := &request.Operation{
+		Name:       opListProfileNotifications,
+		HTTPMethod: "GET",
+		HTTPPath:   "/profileNotifications/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListProfileNotificationsInput{}
+	}
+
+	output = &ListProfileNotificationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListProfileNotifications API operation for AWS Well-Architected Tool.
+//
+// List profile notifications.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation ListProfileNotifications for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListProfileNotifications
+func (c *WellArchitected) ListProfileNotifications(input *ListProfileNotificationsInput) (*ListProfileNotificationsOutput, error) {
+	req, out := c.ListProfileNotificationsRequest(input)
+	return out, req.Send()
+}
+
+// ListProfileNotificationsWithContext is the same as ListProfileNotifications with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListProfileNotifications for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListProfileNotificationsWithContext(ctx aws.Context, input *ListProfileNotificationsInput, opts ...request.Option) (*ListProfileNotificationsOutput, error) {
+	req, out := c.ListProfileNotificationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListProfileNotificationsPages iterates over the pages of a ListProfileNotifications operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListProfileNotifications method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListProfileNotifications operation.
+//	pageNum := 0
+//	err := client.ListProfileNotificationsPages(params,
+//	    func(page *wellarchitected.ListProfileNotificationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *WellArchitected) ListProfileNotificationsPages(input *ListProfileNotificationsInput, fn func(*ListProfileNotificationsOutput, bool) bool) error {
+	return c.ListProfileNotificationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListProfileNotificationsPagesWithContext same as ListProfileNotificationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListProfileNotificationsPagesWithContext(ctx aws.Context, input *ListProfileNotificationsInput, fn func(*ListProfileNotificationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListProfileNotificationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListProfileNotificationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListProfileNotificationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListProfileShares = "ListProfileShares"
+
+// ListProfileSharesRequest generates a "aws/request.Request" representing the
+// client's request for the ListProfileShares operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListProfileShares for more information on using the ListProfileShares
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListProfileSharesRequest method.
+//	req, resp := client.ListProfileSharesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListProfileShares
+func (c *WellArchitected) ListProfileSharesRequest(input *ListProfileSharesInput) (req *request.Request, output *ListProfileSharesOutput) {
+	op := &request.Operation{
+		Name:       opListProfileShares,
+		HTTPMethod: "GET",
+		HTTPPath:   "/profiles/{ProfileArn}/shares",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListProfileSharesInput{}
+	}
+
+	output = &ListProfileSharesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListProfileShares API operation for AWS Well-Architected Tool.
+//
+// List profile shares.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation ListProfileShares for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListProfileShares
+func (c *WellArchitected) ListProfileShares(input *ListProfileSharesInput) (*ListProfileSharesOutput, error) {
+	req, out := c.ListProfileSharesRequest(input)
+	return out, req.Send()
+}
+
+// ListProfileSharesWithContext is the same as ListProfileShares with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListProfileShares for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListProfileSharesWithContext(ctx aws.Context, input *ListProfileSharesInput, opts ...request.Option) (*ListProfileSharesOutput, error) {
+	req, out := c.ListProfileSharesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListProfileSharesPages iterates over the pages of a ListProfileShares operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListProfileShares method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListProfileShares operation.
+//	pageNum := 0
+//	err := client.ListProfileSharesPages(params,
+//	    func(page *wellarchitected.ListProfileSharesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *WellArchitected) ListProfileSharesPages(input *ListProfileSharesInput, fn func(*ListProfileSharesOutput, bool) bool) error {
+	return c.ListProfileSharesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListProfileSharesPagesWithContext same as ListProfileSharesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListProfileSharesPagesWithContext(ctx aws.Context, input *ListProfileSharesInput, fn func(*ListProfileSharesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListProfileSharesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListProfileSharesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListProfileSharesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListProfiles = "ListProfiles"
+
+// ListProfilesRequest generates a "aws/request.Request" representing the
+// client's request for the ListProfiles operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListProfiles for more information on using the ListProfiles
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListProfilesRequest method.
+//	req, resp := client.ListProfilesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListProfiles
+func (c *WellArchitected) ListProfilesRequest(input *ListProfilesInput) (req *request.Request, output *ListProfilesOutput) {
+	op := &request.Operation{
+		Name:       opListProfiles,
+		HTTPMethod: "GET",
+		HTTPPath:   "/profileSummaries",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListProfilesInput{}
+	}
+
+	output = &ListProfilesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListProfiles API operation for AWS Well-Architected Tool.
+//
+// List profiles.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation ListProfiles for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListProfiles
+func (c *WellArchitected) ListProfiles(input *ListProfilesInput) (*ListProfilesOutput, error) {
+	req, out := c.ListProfilesRequest(input)
+	return out, req.Send()
+}
+
+// ListProfilesWithContext is the same as ListProfiles with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListProfiles for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListProfilesWithContext(ctx aws.Context, input *ListProfilesInput, opts ...request.Option) (*ListProfilesOutput, error) {
+	req, out := c.ListProfilesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListProfilesPages iterates over the pages of a ListProfiles operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListProfiles method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListProfiles operation.
+//	pageNum := 0
+//	err := client.ListProfilesPages(params,
+//	    func(page *wellarchitected.ListProfilesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *WellArchitected) ListProfilesPages(input *ListProfilesInput, fn func(*ListProfilesOutput, bool) bool) error {
+	return c.ListProfilesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListProfilesPagesWithContext same as ListProfilesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListProfilesPagesWithContext(ctx aws.Context, input *ListProfilesInput, fn func(*ListProfilesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListProfilesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListProfilesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListProfilesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListReviewTemplateAnswers = "ListReviewTemplateAnswers"
+
+// ListReviewTemplateAnswersRequest generates a "aws/request.Request" representing the
+// client's request for the ListReviewTemplateAnswers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListReviewTemplateAnswers for more information on using the ListReviewTemplateAnswers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListReviewTemplateAnswersRequest method.
+//	req, resp := client.ListReviewTemplateAnswersRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListReviewTemplateAnswers
+func (c *WellArchitected) ListReviewTemplateAnswersRequest(input *ListReviewTemplateAnswersInput) (req *request.Request, output *ListReviewTemplateAnswersOutput) {
+	op := &request.Operation{
+		Name:       opListReviewTemplateAnswers,
+		HTTPMethod: "GET",
+		HTTPPath:   "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}/answers",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListReviewTemplateAnswersInput{}
+	}
+
+	output = &ListReviewTemplateAnswersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListReviewTemplateAnswers API operation for AWS Well-Architected Tool.
+//
+// List the answers of a review template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation ListReviewTemplateAnswers for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListReviewTemplateAnswers
+func (c *WellArchitected) ListReviewTemplateAnswers(input *ListReviewTemplateAnswersInput) (*ListReviewTemplateAnswersOutput, error) {
+	req, out := c.ListReviewTemplateAnswersRequest(input)
+	return out, req.Send()
+}
+
+// ListReviewTemplateAnswersWithContext is the same as ListReviewTemplateAnswers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListReviewTemplateAnswers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListReviewTemplateAnswersWithContext(ctx aws.Context, input *ListReviewTemplateAnswersInput, opts ...request.Option) (*ListReviewTemplateAnswersOutput, error) {
+	req, out := c.ListReviewTemplateAnswersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListReviewTemplateAnswersPages iterates over the pages of a ListReviewTemplateAnswers operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListReviewTemplateAnswers method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListReviewTemplateAnswers operation.
+//	pageNum := 0
+//	err := client.ListReviewTemplateAnswersPages(params,
+//	    func(page *wellarchitected.ListReviewTemplateAnswersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *WellArchitected) ListReviewTemplateAnswersPages(input *ListReviewTemplateAnswersInput, fn func(*ListReviewTemplateAnswersOutput, bool) bool) error {
+	return c.ListReviewTemplateAnswersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListReviewTemplateAnswersPagesWithContext same as ListReviewTemplateAnswersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListReviewTemplateAnswersPagesWithContext(ctx aws.Context, input *ListReviewTemplateAnswersInput, fn func(*ListReviewTemplateAnswersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListReviewTemplateAnswersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListReviewTemplateAnswersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListReviewTemplateAnswersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListReviewTemplates = "ListReviewTemplates"
+
+// ListReviewTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListReviewTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListReviewTemplates for more information on using the ListReviewTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListReviewTemplatesRequest method.
+//	req, resp := client.ListReviewTemplatesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListReviewTemplates
+func (c *WellArchitected) ListReviewTemplatesRequest(input *ListReviewTemplatesInput) (req *request.Request, output *ListReviewTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opListReviewTemplates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/reviewTemplates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListReviewTemplatesInput{}
+	}
+
+	output = &ListReviewTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListReviewTemplates API operation for AWS Well-Architected Tool.
+//
+// List review templates.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation ListReviewTemplates for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListReviewTemplates
+func (c *WellArchitected) ListReviewTemplates(input *ListReviewTemplatesInput) (*ListReviewTemplatesOutput, error) {
+	req, out := c.ListReviewTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// ListReviewTemplatesWithContext is the same as ListReviewTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListReviewTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListReviewTemplatesWithContext(ctx aws.Context, input *ListReviewTemplatesInput, opts ...request.Option) (*ListReviewTemplatesOutput, error) {
+	req, out := c.ListReviewTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListReviewTemplatesPages iterates over the pages of a ListReviewTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListReviewTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListReviewTemplates operation.
+//	pageNum := 0
+//	err := client.ListReviewTemplatesPages(params,
+//	    func(page *wellarchitected.ListReviewTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *WellArchitected) ListReviewTemplatesPages(input *ListReviewTemplatesInput, fn func(*ListReviewTemplatesOutput, bool) bool) error {
+	return c.ListReviewTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListReviewTemplatesPagesWithContext same as ListReviewTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListReviewTemplatesPagesWithContext(ctx aws.Context, input *ListReviewTemplatesInput, fn func(*ListReviewTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListReviewTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListReviewTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListReviewTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListShareInvitations = "ListShareInvitations"
 
 // ListShareInvitationsRequest generates a "aws/request.Request" representing the
@@ -3526,14 +5711,13 @@ const opListShareInvitations = "ListShareInvitations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListShareInvitationsRequest method.
+//	req, resp := client.ListShareInvitationsRequest(params)
 //
-//    // Example sending a request using the ListShareInvitationsRequest method.
-//    req, resp := client.ListShareInvitationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListShareInvitations
 func (c *WellArchitected) ListShareInvitationsRequest(input *ListShareInvitationsInput) (req *request.Request, output *ListShareInvitationsOutput) {
@@ -3560,7 +5744,10 @@ func (c *WellArchitected) ListShareInvitationsRequest(input *ListShareInvitation
 
 // ListShareInvitations API operation for AWS Well-Architected Tool.
 //
-// List the workload invitations.
+// List the share invitations.
+//
+// WorkloadNamePrefix, LensNamePrefix, ProfileNamePrefix, and TemplateNamePrefix
+// are mutually exclusive. Use the parameter that matches your ShareResourceType.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3570,17 +5757,18 @@ func (c *WellArchitected) ListShareInvitationsRequest(input *ListShareInvitation
 // API operation ListShareInvitations for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListShareInvitations
 func (c *WellArchitected) ListShareInvitations(input *ListShareInvitationsInput) (*ListShareInvitationsOutput, error) {
@@ -3612,15 +5800,14 @@ func (c *WellArchitected) ListShareInvitationsWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListShareInvitations operation.
-//    pageNum := 0
-//    err := client.ListShareInvitationsPages(params,
-//        func(page *wellarchitected.ListShareInvitationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListShareInvitations operation.
+//	pageNum := 0
+//	err := client.ListShareInvitationsPages(params,
+//	    func(page *wellarchitected.ListShareInvitationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListShareInvitationsPages(input *ListShareInvitationsInput, fn func(*ListShareInvitationsOutput, bool) bool) error {
 	return c.ListShareInvitationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3672,14 +5859,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListTagsForResource
 func (c *WellArchitected) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -3702,7 +5888,8 @@ func (c *WellArchitected) ListTagsForResourceRequest(input *ListTagsForResourceI
 //
 // List the tags for a resource.
 //
-// The WorkloadArn parameter can be either a workload ARN or a custom lens ARN.
+// The WorkloadArn parameter can be a workload ARN, a custom lens ARN, a profile
+// ARN, or review template ARN.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3712,11 +5899,12 @@ func (c *WellArchitected) ListTagsForResourceRequest(input *ListTagsForResourceI
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListTagsForResource
 func (c *WellArchitected) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -3740,6 +5928,154 @@ func (c *WellArchitected) ListTagsForResourceWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opListTemplateShares = "ListTemplateShares"
+
+// ListTemplateSharesRequest generates a "aws/request.Request" representing the
+// client's request for the ListTemplateShares operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTemplateShares for more information on using the ListTemplateShares
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListTemplateSharesRequest method.
+//	req, resp := client.ListTemplateSharesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListTemplateShares
+func (c *WellArchitected) ListTemplateSharesRequest(input *ListTemplateSharesInput) (req *request.Request, output *ListTemplateSharesOutput) {
+	op := &request.Operation{
+		Name:       opListTemplateShares,
+		HTTPMethod: "GET",
+		HTTPPath:   "/templates/shares/{TemplateArn}",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListTemplateSharesInput{}
+	}
+
+	output = &ListTemplateSharesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTemplateShares API operation for AWS Well-Architected Tool.
+//
+// List review template shares.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation ListTemplateShares for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListTemplateShares
+func (c *WellArchitected) ListTemplateShares(input *ListTemplateSharesInput) (*ListTemplateSharesOutput, error) {
+	req, out := c.ListTemplateSharesRequest(input)
+	return out, req.Send()
+}
+
+// ListTemplateSharesWithContext is the same as ListTemplateShares with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTemplateShares for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListTemplateSharesWithContext(ctx aws.Context, input *ListTemplateSharesInput, opts ...request.Option) (*ListTemplateSharesOutput, error) {
+	req, out := c.ListTemplateSharesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListTemplateSharesPages iterates over the pages of a ListTemplateShares operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListTemplateShares method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListTemplateShares operation.
+//	pageNum := 0
+//	err := client.ListTemplateSharesPages(params,
+//	    func(page *wellarchitected.ListTemplateSharesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *WellArchitected) ListTemplateSharesPages(input *ListTemplateSharesInput, fn func(*ListTemplateSharesOutput, bool) bool) error {
+	return c.ListTemplateSharesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListTemplateSharesPagesWithContext same as ListTemplateSharesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) ListTemplateSharesPagesWithContext(ctx aws.Context, input *ListTemplateSharesInput, fn func(*ListTemplateSharesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListTemplateSharesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListTemplateSharesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListTemplateSharesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListWorkloadShares = "ListWorkloadShares"
 
 // ListWorkloadSharesRequest generates a "aws/request.Request" representing the
@@ -3756,14 +6092,13 @@ const opListWorkloadShares = "ListWorkloadShares"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWorkloadSharesRequest method.
+//	req, resp := client.ListWorkloadSharesRequest(params)
 //
-//    // Example sending a request using the ListWorkloadSharesRequest method.
-//    req, resp := client.ListWorkloadSharesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListWorkloadShares
 func (c *WellArchitected) ListWorkloadSharesRequest(input *ListWorkloadSharesInput) (req *request.Request, output *ListWorkloadSharesOutput) {
@@ -3800,20 +6135,21 @@ func (c *WellArchitected) ListWorkloadSharesRequest(input *ListWorkloadSharesInp
 // API operation ListWorkloadShares for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListWorkloadShares
 func (c *WellArchitected) ListWorkloadShares(input *ListWorkloadSharesInput) (*ListWorkloadSharesOutput, error) {
@@ -3845,15 +6181,14 @@ func (c *WellArchitected) ListWorkloadSharesWithContext(ctx aws.Context, input *
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWorkloadShares operation.
-//    pageNum := 0
-//    err := client.ListWorkloadSharesPages(params,
-//        func(page *wellarchitected.ListWorkloadSharesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWorkloadShares operation.
+//	pageNum := 0
+//	err := client.ListWorkloadSharesPages(params,
+//	    func(page *wellarchitected.ListWorkloadSharesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListWorkloadSharesPages(input *ListWorkloadSharesInput, fn func(*ListWorkloadSharesOutput, bool) bool) error {
 	return c.ListWorkloadSharesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3905,14 +6240,13 @@ const opListWorkloads = "ListWorkloads"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWorkloadsRequest method.
+//	req, resp := client.ListWorkloadsRequest(params)
 //
-//    // Example sending a request using the ListWorkloadsRequest method.
-//    req, resp := client.ListWorkloadsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListWorkloads
 func (c *WellArchitected) ListWorkloadsRequest(input *ListWorkloadsInput) (req *request.Request, output *ListWorkloadsOutput) {
@@ -3949,17 +6283,18 @@ func (c *WellArchitected) ListWorkloadsRequest(input *ListWorkloadsInput) (req *
 // API operation ListWorkloads for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/ListWorkloads
 func (c *WellArchitected) ListWorkloads(input *ListWorkloadsInput) (*ListWorkloadsOutput, error) {
@@ -3991,15 +6326,14 @@ func (c *WellArchitected) ListWorkloadsWithContext(ctx aws.Context, input *ListW
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWorkloads operation.
-//    pageNum := 0
-//    err := client.ListWorkloadsPages(params,
-//        func(page *wellarchitected.ListWorkloadsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWorkloads operation.
+//	pageNum := 0
+//	err := client.ListWorkloadsPages(params,
+//	    func(page *wellarchitected.ListWorkloadsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WellArchitected) ListWorkloadsPages(input *ListWorkloadsInput, fn func(*ListWorkloadsOutput, bool) bool) error {
 	return c.ListWorkloadsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4051,14 +6385,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/TagResource
 func (c *WellArchitected) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -4082,7 +6415,8 @@ func (c *WellArchitected) TagResourceRequest(input *TagResourceInput) (req *requ
 //
 // Adds one or more tags to the specified resource.
 //
-// The WorkloadArn parameter can be either a workload ARN or a custom lens ARN.
+// The WorkloadArn parameter can be a workload ARN, a custom lens ARN, a profile
+// ARN, or review template ARN.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4092,11 +6426,12 @@ func (c *WellArchitected) TagResourceRequest(input *TagResourceInput) (req *requ
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/TagResource
 func (c *WellArchitected) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -4136,14 +6471,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UntagResource
 func (c *WellArchitected) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -4167,7 +6501,8 @@ func (c *WellArchitected) UntagResourceRequest(input *UntagResourceInput) (req *
 //
 // Deletes specified tags from a resource.
 //
-// The WorkloadArn parameter can be either a workload ARN or a custom lens ARN.
+// The WorkloadArn parameter can be a workload ARN, a custom lens ARN, a profile
+// ARN, or review template ARN.
 //
 // To specify multiple tags, use separate tagKeys parameters, for example:
 //
@@ -4181,11 +6516,12 @@ func (c *WellArchitected) UntagResourceRequest(input *UntagResourceInput) (req *
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UntagResource
 func (c *WellArchitected) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -4225,14 +6561,13 @@ const opUpdateAnswer = "UpdateAnswer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAnswerRequest method.
+//	req, resp := client.UpdateAnswerRequest(params)
 //
-//    // Example sending a request using the UpdateAnswerRequest method.
-//    req, resp := client.UpdateAnswerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateAnswer
 func (c *WellArchitected) UpdateAnswerRequest(input *UpdateAnswerInput) (req *request.Request, output *UpdateAnswerOutput) {
@@ -4263,23 +6598,24 @@ func (c *WellArchitected) UpdateAnswerRequest(input *UpdateAnswerInput) (req *re
 // API operation UpdateAnswer for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateAnswer
 func (c *WellArchitected) UpdateAnswer(input *UpdateAnswerInput) (*UpdateAnswerOutput, error) {
@@ -4319,14 +6655,13 @@ const opUpdateGlobalSettings = "UpdateGlobalSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateGlobalSettingsRequest method.
+//	req, resp := client.UpdateGlobalSettingsRequest(params)
 //
-//    // Example sending a request using the UpdateGlobalSettingsRequest method.
-//    req, resp := client.UpdateGlobalSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateGlobalSettings
 func (c *WellArchitected) UpdateGlobalSettingsRequest(input *UpdateGlobalSettingsInput) (req *request.Request, output *UpdateGlobalSettingsOutput) {
@@ -4359,20 +6694,21 @@ func (c *WellArchitected) UpdateGlobalSettingsRequest(input *UpdateGlobalSetting
 // API operation UpdateGlobalSettings for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateGlobalSettings
 func (c *WellArchitected) UpdateGlobalSettings(input *UpdateGlobalSettingsInput) (*UpdateGlobalSettingsOutput, error) {
@@ -4412,14 +6748,13 @@ const opUpdateLensReview = "UpdateLensReview"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateLensReviewRequest method.
+//	req, resp := client.UpdateLensReviewRequest(params)
 //
-//    // Example sending a request using the UpdateLensReviewRequest method.
-//    req, resp := client.UpdateLensReviewRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateLensReview
 func (c *WellArchitected) UpdateLensReviewRequest(input *UpdateLensReviewInput) (req *request.Request, output *UpdateLensReviewOutput) {
@@ -4450,23 +6785,24 @@ func (c *WellArchitected) UpdateLensReviewRequest(input *UpdateLensReviewInput) 
 // API operation UpdateLensReview for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateLensReview
 func (c *WellArchitected) UpdateLensReview(input *UpdateLensReviewInput) (*UpdateLensReviewOutput, error) {
@@ -4490,6 +6826,382 @@ func (c *WellArchitected) UpdateLensReviewWithContext(ctx aws.Context, input *Up
 	return out, req.Send()
 }
 
+const opUpdateProfile = "UpdateProfile"
+
+// UpdateProfileRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateProfile operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateProfile for more information on using the UpdateProfile
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateProfileRequest method.
+//	req, resp := client.UpdateProfileRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateProfile
+func (c *WellArchitected) UpdateProfileRequest(input *UpdateProfileInput) (req *request.Request, output *UpdateProfileOutput) {
+	op := &request.Operation{
+		Name:       opUpdateProfile,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/profiles/{ProfileArn}",
+	}
+
+	if input == nil {
+		input = &UpdateProfileInput{}
+	}
+
+	output = &UpdateProfileOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateProfile API operation for AWS Well-Architected Tool.
+//
+// Update a profile.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation UpdateProfile for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateProfile
+func (c *WellArchitected) UpdateProfile(input *UpdateProfileInput) (*UpdateProfileOutput, error) {
+	req, out := c.UpdateProfileRequest(input)
+	return out, req.Send()
+}
+
+// UpdateProfileWithContext is the same as UpdateProfile with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateProfile for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) UpdateProfileWithContext(ctx aws.Context, input *UpdateProfileInput, opts ...request.Option) (*UpdateProfileOutput, error) {
+	req, out := c.UpdateProfileRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateReviewTemplate = "UpdateReviewTemplate"
+
+// UpdateReviewTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateReviewTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateReviewTemplate for more information on using the UpdateReviewTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateReviewTemplateRequest method.
+//	req, resp := client.UpdateReviewTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateReviewTemplate
+func (c *WellArchitected) UpdateReviewTemplateRequest(input *UpdateReviewTemplateInput) (req *request.Request, output *UpdateReviewTemplateOutput) {
+	op := &request.Operation{
+		Name:       opUpdateReviewTemplate,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/reviewTemplates/{TemplateArn}",
+	}
+
+	if input == nil {
+		input = &UpdateReviewTemplateInput{}
+	}
+
+	output = &UpdateReviewTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateReviewTemplate API operation for AWS Well-Architected Tool.
+//
+// Update a review template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation UpdateReviewTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateReviewTemplate
+func (c *WellArchitected) UpdateReviewTemplate(input *UpdateReviewTemplateInput) (*UpdateReviewTemplateOutput, error) {
+	req, out := c.UpdateReviewTemplateRequest(input)
+	return out, req.Send()
+}
+
+// UpdateReviewTemplateWithContext is the same as UpdateReviewTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateReviewTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) UpdateReviewTemplateWithContext(ctx aws.Context, input *UpdateReviewTemplateInput, opts ...request.Option) (*UpdateReviewTemplateOutput, error) {
+	req, out := c.UpdateReviewTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateReviewTemplateAnswer = "UpdateReviewTemplateAnswer"
+
+// UpdateReviewTemplateAnswerRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateReviewTemplateAnswer operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateReviewTemplateAnswer for more information on using the UpdateReviewTemplateAnswer
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateReviewTemplateAnswerRequest method.
+//	req, resp := client.UpdateReviewTemplateAnswerRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateReviewTemplateAnswer
+func (c *WellArchitected) UpdateReviewTemplateAnswerRequest(input *UpdateReviewTemplateAnswerInput) (req *request.Request, output *UpdateReviewTemplateAnswerOutput) {
+	op := &request.Operation{
+		Name:       opUpdateReviewTemplateAnswer,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}/answers/{QuestionId}",
+	}
+
+	if input == nil {
+		input = &UpdateReviewTemplateAnswerInput{}
+	}
+
+	output = &UpdateReviewTemplateAnswerOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateReviewTemplateAnswer API operation for AWS Well-Architected Tool.
+//
+// Update a review template answer.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation UpdateReviewTemplateAnswer for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateReviewTemplateAnswer
+func (c *WellArchitected) UpdateReviewTemplateAnswer(input *UpdateReviewTemplateAnswerInput) (*UpdateReviewTemplateAnswerOutput, error) {
+	req, out := c.UpdateReviewTemplateAnswerRequest(input)
+	return out, req.Send()
+}
+
+// UpdateReviewTemplateAnswerWithContext is the same as UpdateReviewTemplateAnswer with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateReviewTemplateAnswer for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) UpdateReviewTemplateAnswerWithContext(ctx aws.Context, input *UpdateReviewTemplateAnswerInput, opts ...request.Option) (*UpdateReviewTemplateAnswerOutput, error) {
+	req, out := c.UpdateReviewTemplateAnswerRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateReviewTemplateLensReview = "UpdateReviewTemplateLensReview"
+
+// UpdateReviewTemplateLensReviewRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateReviewTemplateLensReview operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateReviewTemplateLensReview for more information on using the UpdateReviewTemplateLensReview
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateReviewTemplateLensReviewRequest method.
+//	req, resp := client.UpdateReviewTemplateLensReviewRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateReviewTemplateLensReview
+func (c *WellArchitected) UpdateReviewTemplateLensReviewRequest(input *UpdateReviewTemplateLensReviewInput) (req *request.Request, output *UpdateReviewTemplateLensReviewOutput) {
+	op := &request.Operation{
+		Name:       opUpdateReviewTemplateLensReview,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}",
+	}
+
+	if input == nil {
+		input = &UpdateReviewTemplateLensReviewInput{}
+	}
+
+	output = &UpdateReviewTemplateLensReviewOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateReviewTemplateLensReview API operation for AWS Well-Architected Tool.
+//
+// Update a lens review associated with a review template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation UpdateReviewTemplateLensReview for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateReviewTemplateLensReview
+func (c *WellArchitected) UpdateReviewTemplateLensReview(input *UpdateReviewTemplateLensReviewInput) (*UpdateReviewTemplateLensReviewOutput, error) {
+	req, out := c.UpdateReviewTemplateLensReviewRequest(input)
+	return out, req.Send()
+}
+
+// UpdateReviewTemplateLensReviewWithContext is the same as UpdateReviewTemplateLensReview with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateReviewTemplateLensReview for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) UpdateReviewTemplateLensReviewWithContext(ctx aws.Context, input *UpdateReviewTemplateLensReviewInput, opts ...request.Option) (*UpdateReviewTemplateLensReviewOutput, error) {
+	req, out := c.UpdateReviewTemplateLensReviewRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateShareInvitation = "UpdateShareInvitation"
 
 // UpdateShareInvitationRequest generates a "aws/request.Request" representing the
@@ -4506,14 +7218,13 @@ const opUpdateShareInvitation = "UpdateShareInvitation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateShareInvitationRequest method.
+//	req, resp := client.UpdateShareInvitationRequest(params)
 //
-//    // Example sending a request using the UpdateShareInvitationRequest method.
-//    req, resp := client.UpdateShareInvitationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateShareInvitation
 func (c *WellArchitected) UpdateShareInvitationRequest(input *UpdateShareInvitationInput) (req *request.Request, output *UpdateShareInvitationOutput) {
@@ -4547,23 +7258,24 @@ func (c *WellArchitected) UpdateShareInvitationRequest(input *UpdateShareInvitat
 // API operation UpdateShareInvitation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateShareInvitation
 func (c *WellArchitected) UpdateShareInvitation(input *UpdateShareInvitationInput) (*UpdateShareInvitationOutput, error) {
@@ -4603,14 +7315,13 @@ const opUpdateWorkload = "UpdateWorkload"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateWorkloadRequest method.
+//	req, resp := client.UpdateWorkloadRequest(params)
 //
-//    // Example sending a request using the UpdateWorkloadRequest method.
-//    req, resp := client.UpdateWorkloadRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateWorkload
 func (c *WellArchitected) UpdateWorkloadRequest(input *UpdateWorkloadInput) (req *request.Request, output *UpdateWorkloadOutput) {
@@ -4641,23 +7352,24 @@ func (c *WellArchitected) UpdateWorkloadRequest(input *UpdateWorkloadInput) (req
 // API operation UpdateWorkload for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateWorkload
 func (c *WellArchitected) UpdateWorkload(input *UpdateWorkloadInput) (*UpdateWorkloadOutput, error) {
@@ -4697,14 +7409,13 @@ const opUpdateWorkloadShare = "UpdateWorkloadShare"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateWorkloadShareRequest method.
+//	req, resp := client.UpdateWorkloadShareRequest(params)
 //
-//    // Example sending a request using the UpdateWorkloadShareRequest method.
-//    req, resp := client.UpdateWorkloadShareRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateWorkloadShare
 func (c *WellArchitected) UpdateWorkloadShareRequest(input *UpdateWorkloadShareInput) (req *request.Request, output *UpdateWorkloadShareOutput) {
@@ -4735,23 +7446,24 @@ func (c *WellArchitected) UpdateWorkloadShareRequest(input *UpdateWorkloadShareI
 // API operation UpdateWorkloadShare for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpdateWorkloadShare
 func (c *WellArchitected) UpdateWorkloadShare(input *UpdateWorkloadShareInput) (*UpdateWorkloadShareOutput, error) {
@@ -4791,14 +7503,13 @@ const opUpgradeLensReview = "UpgradeLensReview"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpgradeLensReviewRequest method.
+//	req, resp := client.UpgradeLensReviewRequest(params)
 //
-//    // Example sending a request using the UpgradeLensReviewRequest method.
-//    req, resp := client.UpgradeLensReviewRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpgradeLensReview
 func (c *WellArchitected) UpgradeLensReviewRequest(input *UpgradeLensReviewInput) (req *request.Request, output *UpgradeLensReviewOutput) {
@@ -4830,23 +7541,24 @@ func (c *WellArchitected) UpgradeLensReviewRequest(input *UpgradeLensReviewInput
 // API operation UpgradeLensReview for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The user input is not valid.
 //
-//   * ResourceNotFoundException
-//   The requested resource was not found.
+//   - ValidationException
+//     The user input is not valid.
 //
-//   * ConflictException
-//   The resource has already been processed, was deleted, or is too large.
+//   - ResourceNotFoundException
+//     The requested resource was not found.
 //
-//   * InternalServerException
-//   There is a problem with the Well-Architected Tool API service.
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
 //
-//   * AccessDeniedException
-//   User does not have sufficient access to perform this action.
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
 //
-//   * ThrottlingException
-//   Request was denied due to request throttling.
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpgradeLensReview
 func (c *WellArchitected) UpgradeLensReview(input *UpgradeLensReviewInput) (*UpgradeLensReviewOutput, error) {
@@ -4865,6 +7577,196 @@ func (c *WellArchitected) UpgradeLensReview(input *UpgradeLensReviewInput) (*Upg
 // for more information on using Contexts.
 func (c *WellArchitected) UpgradeLensReviewWithContext(ctx aws.Context, input *UpgradeLensReviewInput, opts ...request.Option) (*UpgradeLensReviewOutput, error) {
 	req, out := c.UpgradeLensReviewRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpgradeProfileVersion = "UpgradeProfileVersion"
+
+// UpgradeProfileVersionRequest generates a "aws/request.Request" representing the
+// client's request for the UpgradeProfileVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpgradeProfileVersion for more information on using the UpgradeProfileVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpgradeProfileVersionRequest method.
+//	req, resp := client.UpgradeProfileVersionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpgradeProfileVersion
+func (c *WellArchitected) UpgradeProfileVersionRequest(input *UpgradeProfileVersionInput) (req *request.Request, output *UpgradeProfileVersionOutput) {
+	op := &request.Operation{
+		Name:       opUpgradeProfileVersion,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/workloads/{WorkloadId}/profiles/{ProfileArn}/upgrade",
+	}
+
+	if input == nil {
+		input = &UpgradeProfileVersionInput{}
+	}
+
+	output = &UpgradeProfileVersionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpgradeProfileVersion API operation for AWS Well-Architected Tool.
+//
+// Upgrade a profile.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation UpgradeProfileVersion for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpgradeProfileVersion
+func (c *WellArchitected) UpgradeProfileVersion(input *UpgradeProfileVersionInput) (*UpgradeProfileVersionOutput, error) {
+	req, out := c.UpgradeProfileVersionRequest(input)
+	return out, req.Send()
+}
+
+// UpgradeProfileVersionWithContext is the same as UpgradeProfileVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpgradeProfileVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) UpgradeProfileVersionWithContext(ctx aws.Context, input *UpgradeProfileVersionInput, opts ...request.Option) (*UpgradeProfileVersionOutput, error) {
+	req, out := c.UpgradeProfileVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpgradeReviewTemplateLensReview = "UpgradeReviewTemplateLensReview"
+
+// UpgradeReviewTemplateLensReviewRequest generates a "aws/request.Request" representing the
+// client's request for the UpgradeReviewTemplateLensReview operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpgradeReviewTemplateLensReview for more information on using the UpgradeReviewTemplateLensReview
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpgradeReviewTemplateLensReviewRequest method.
+//	req, resp := client.UpgradeReviewTemplateLensReviewRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpgradeReviewTemplateLensReview
+func (c *WellArchitected) UpgradeReviewTemplateLensReviewRequest(input *UpgradeReviewTemplateLensReviewInput) (req *request.Request, output *UpgradeReviewTemplateLensReviewOutput) {
+	op := &request.Operation{
+		Name:       opUpgradeReviewTemplateLensReview,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/reviewTemplates/{TemplateArn}/lensReviews/{LensAlias}/upgrade",
+	}
+
+	if input == nil {
+		input = &UpgradeReviewTemplateLensReviewInput{}
+	}
+
+	output = &UpgradeReviewTemplateLensReviewOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpgradeReviewTemplateLensReview API operation for AWS Well-Architected Tool.
+//
+// Upgrade the lens review of a review template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Well-Architected Tool's
+// API operation UpgradeReviewTemplateLensReview for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ValidationException
+//     The user input is not valid.
+//
+//   - ResourceNotFoundException
+//     The requested resource was not found.
+//
+//   - ConflictException
+//     The resource has already been processed, was deleted, or is too large.
+//
+//   - InternalServerException
+//     There is a problem with the Well-Architected Tool API service.
+//
+//   - AccessDeniedException
+//     User does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     Request was denied due to request throttling.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/wellarchitected-2020-03-31/UpgradeReviewTemplateLensReview
+func (c *WellArchitected) UpgradeReviewTemplateLensReview(input *UpgradeReviewTemplateLensReviewInput) (*UpgradeReviewTemplateLensReviewOutput, error) {
+	req, out := c.UpgradeReviewTemplateLensReviewRequest(input)
+	return out, req.Send()
+}
+
+// UpgradeReviewTemplateLensReviewWithContext is the same as UpgradeReviewTemplateLensReview with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpgradeReviewTemplateLensReview for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WellArchitected) UpgradeReviewTemplateLensReviewWithContext(ctx aws.Context, input *UpgradeReviewTemplateLensReviewInput, opts ...request.Option) (*UpgradeReviewTemplateLensReviewOutput, error) {
+	req, out := c.UpgradeReviewTemplateLensReviewRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -5015,6 +7917,9 @@ type Answer struct {
 	IsApplicable *bool `type:"boolean"`
 
 	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
 	Notes *string `type:"string"`
 
 	// The ID used to identify a pillar, for example, security.
@@ -5169,6 +8074,9 @@ type AnswerSummary struct {
 	// The title of the question.
 	QuestionTitle *string `min:"1" type:"string"`
 
+	// The type of the question.
+	QuestionType *string `type:"string" enum:"QuestionType"`
+
 	// The reason why a choice is non-applicable to a question in your workload.
 	Reason *string `type:"string" enum:"AnswerReason"`
 
@@ -5235,6 +8143,12 @@ func (s *AnswerSummary) SetQuestionTitle(v string) *AnswerSummary {
 	return s
 }
 
+// SetQuestionType sets the QuestionType field's value.
+func (s *AnswerSummary) SetQuestionType(v string) *AnswerSummary {
+	s.QuestionType = &v
+	return s
+}
+
 // SetReason sets the Reason field's value.
 func (s *AnswerSummary) SetReason(v string) *AnswerSummary {
 	s.Reason = &v
@@ -5269,7 +8183,7 @@ type AssociateLensesInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -5302,8 +8216,8 @@ func (s *AssociateLensesInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5343,6 +8257,95 @@ func (s AssociateLensesOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s AssociateLensesOutput) GoString() string {
+	return s.String()
+}
+
+type AssociateProfilesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of profile ARNs to associate with the workload.
+	//
+	// ProfileArns is a required field
+	ProfileArns []*string `min:"1" type:"list" required:"true"`
+
+	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
+	// Region.
+	//
+	// WorkloadId is a required field
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateProfilesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateProfilesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateProfilesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateProfilesInput"}
+	if s.ProfileArns == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileArns"))
+	}
+	if s.ProfileArns != nil && len(s.ProfileArns) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileArns", 1))
+	}
+	if s.WorkloadId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
+	}
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetProfileArns sets the ProfileArns field's value.
+func (s *AssociateProfilesInput) SetProfileArns(v []*string) *AssociateProfilesInput {
+	s.ProfileArns = v
+	return s
+}
+
+// SetWorkloadId sets the WorkloadId field's value.
+func (s *AssociateProfilesInput) SetWorkloadId(v string) *AssociateProfilesInput {
+	s.WorkloadId = &v
+	return s
+}
+
+type AssociateProfilesOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateProfilesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociateProfilesOutput) GoString() string {
 	return s.String()
 }
 
@@ -5394,7 +8397,7 @@ type CheckDetail struct {
 	_ struct{} `type:"structure"`
 
 	// An Amazon Web Services account ID.
-	AccountId *string `type:"string"`
+	AccountId *string `min:"12" type:"string"`
 
 	// The ID of a choice.
 	ChoiceId *string `min:"1" type:"string"`
@@ -6111,7 +9114,7 @@ type ConsolidatedReportMetric struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 
 	// The name of the workload.
 	//
@@ -6201,7 +9204,7 @@ type CreateLensShareInput struct {
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
 	// using the Amazon Web Services SDK or the CLI, you must provide this token
 	// or the request will fail.
-	ClientRequestToken *string `type:"string" idempotencyToken:"true"`
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
 	// The alias of the lens.
 	//
@@ -6217,8 +9220,8 @@ type CreateLensShareInput struct {
 	// LensAlias is a required field
 	LensAlias *string `location:"uri" locationName:"LensAlias" min:"1" type:"string" required:"true"`
 
-	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
-	// unit (OU) ID with which the workload is shared.
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the workload, lens, profile, or review template is shared.
 	//
 	// SharedWith is a required field
 	SharedWith *string `min:"12" type:"string" required:"true"`
@@ -6245,6 +9248,9 @@ func (s CreateLensShareInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateLensShareInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateLensShareInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
 	if s.LensAlias == nil {
 		invalidParams.Add(request.NewErrParamRequired("LensAlias"))
 	}
@@ -6285,7 +9291,7 @@ func (s *CreateLensShareInput) SetSharedWith(v string) *CreateLensShareInput {
 type CreateLensShareOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID associated with the workload share.
+	// The ID associated with the share.
 	ShareId *string `type:"string"`
 }
 
@@ -6328,7 +9334,7 @@ type CreateLensVersionInput struct {
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
 	// using the Amazon Web Services SDK or the CLI, you must provide this token
 	// or the request will fail.
-	ClientRequestToken *string `type:"string" idempotencyToken:"true"`
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
 	// Set to true if this new major lens version.
 	IsMajorVersion *bool `type:"boolean"`
@@ -6374,6 +9380,9 @@ func (s CreateLensVersionInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateLensVersionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateLensVersionInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
 	if s.LensAlias == nil {
 		invalidParams.Add(request.NewErrParamRequired("LensAlias"))
 	}
@@ -6473,7 +9482,7 @@ type CreateMilestoneInput struct {
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
 	// using the Amazon Web Services SDK or the CLI, you must provide this token
 	// or the request will fail.
-	ClientRequestToken *string `type:"string" idempotencyToken:"true"`
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
 	// The name of the milestone in a workload.
 	//
@@ -6486,7 +9495,7 @@ type CreateMilestoneInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -6510,6 +9519,9 @@ func (s CreateMilestoneInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateMilestoneInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateMilestoneInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
 	if s.MilestoneName == nil {
 		invalidParams.Add(request.NewErrParamRequired("MilestoneName"))
 	}
@@ -6519,8 +9531,8 @@ func (s *CreateMilestoneInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -6558,7 +9570,7 @@ type CreateMilestoneOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -6591,6 +9603,589 @@ func (s *CreateMilestoneOutput) SetWorkloadId(v string) *CreateMilestoneOutput {
 	return s
 }
 
+type CreateProfileInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique case-sensitive string used to ensure that this request is idempotent
+	// (executes only once).
+	//
+	// You should not reuse the same token for other requests. If you retry a request
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
+	//
+	// This token is listed as required, however, if you do not specify it, the
+	// Amazon Web Services SDKs automatically generate one for you. If you are not
+	// using the Amazon Web Services SDK or the CLI, you must provide this token
+	// or the request will fail.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The profile description.
+	//
+	// ProfileDescription is a required field
+	ProfileDescription *string `min:"3" type:"string" required:"true"`
+
+	// Name of the profile.
+	//
+	// ProfileName is a required field
+	ProfileName *string `min:"3" type:"string" required:"true"`
+
+	// The profile questions.
+	//
+	// ProfileQuestions is a required field
+	ProfileQuestions []*ProfileQuestionUpdate `type:"list" required:"true"`
+
+	// The tags assigned to the profile.
+	Tags map[string]*string `min:"1" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateProfileInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateProfileInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.ProfileDescription == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileDescription"))
+	}
+	if s.ProfileDescription != nil && len(*s.ProfileDescription) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileDescription", 3))
+	}
+	if s.ProfileName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileName"))
+	}
+	if s.ProfileName != nil && len(*s.ProfileName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileName", 3))
+	}
+	if s.ProfileQuestions == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileQuestions"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.ProfileQuestions != nil {
+		for i, v := range s.ProfileQuestions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ProfileQuestions", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateProfileInput) SetClientRequestToken(v string) *CreateProfileInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetProfileDescription sets the ProfileDescription field's value.
+func (s *CreateProfileInput) SetProfileDescription(v string) *CreateProfileInput {
+	s.ProfileDescription = &v
+	return s
+}
+
+// SetProfileName sets the ProfileName field's value.
+func (s *CreateProfileInput) SetProfileName(v string) *CreateProfileInput {
+	s.ProfileName = &v
+	return s
+}
+
+// SetProfileQuestions sets the ProfileQuestions field's value.
+func (s *CreateProfileInput) SetProfileQuestions(v []*ProfileQuestionUpdate) *CreateProfileInput {
+	s.ProfileQuestions = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateProfileInput) SetTags(v map[string]*string) *CreateProfileInput {
+	s.Tags = v
+	return s
+}
+
+type CreateProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The profile ARN.
+	ProfileArn *string `type:"string"`
+
+	// Version of the profile.
+	ProfileVersion *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *CreateProfileOutput) SetProfileArn(v string) *CreateProfileOutput {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetProfileVersion sets the ProfileVersion field's value.
+func (s *CreateProfileOutput) SetProfileVersion(v string) *CreateProfileOutput {
+	s.ProfileVersion = &v
+	return s
+}
+
+type CreateProfileShareInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique case-sensitive string used to ensure that this request is idempotent
+	// (executes only once).
+	//
+	// You should not reuse the same token for other requests. If you retry a request
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
+	//
+	// This token is listed as required, however, if you do not specify it, the
+	// Amazon Web Services SDKs automatically generate one for you. If you are not
+	// using the Amazon Web Services SDK or the CLI, you must provide this token
+	// or the request will fail.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The profile ARN.
+	//
+	// ProfileArn is a required field
+	ProfileArn *string `location:"uri" locationName:"ProfileArn" type:"string" required:"true"`
+
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the workload, lens, profile, or review template is shared.
+	//
+	// SharedWith is a required field
+	SharedWith *string `min:"12" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateProfileShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateProfileShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateProfileShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateProfileShareInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.ProfileArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileArn"))
+	}
+	if s.ProfileArn != nil && len(*s.ProfileArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileArn", 1))
+	}
+	if s.SharedWith == nil {
+		invalidParams.Add(request.NewErrParamRequired("SharedWith"))
+	}
+	if s.SharedWith != nil && len(*s.SharedWith) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("SharedWith", 12))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateProfileShareInput) SetClientRequestToken(v string) *CreateProfileShareInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *CreateProfileShareInput) SetProfileArn(v string) *CreateProfileShareInput {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetSharedWith sets the SharedWith field's value.
+func (s *CreateProfileShareInput) SetSharedWith(v string) *CreateProfileShareInput {
+	s.SharedWith = &v
+	return s
+}
+
+type CreateProfileShareOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The profile ARN.
+	ProfileArn *string `type:"string"`
+
+	// The ID associated with the share.
+	ShareId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateProfileShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateProfileShareOutput) GoString() string {
+	return s.String()
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *CreateProfileShareOutput) SetProfileArn(v string) *CreateProfileShareOutput {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetShareId sets the ShareId field's value.
+func (s *CreateProfileShareOutput) SetShareId(v string) *CreateProfileShareOutput {
+	s.ShareId = &v
+	return s
+}
+
+type CreateReviewTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique case-sensitive string used to ensure that this request is idempotent
+	// (executes only once).
+	//
+	// You should not reuse the same token for other requests. If you retry a request
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
+	//
+	// This token is listed as required, however, if you do not specify it, the
+	// Amazon Web Services SDKs automatically generate one for you. If you are not
+	// using the Amazon Web Services SDK or the CLI, you must provide this token
+	// or the request will fail.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The review template description.
+	//
+	// Description is a required field
+	Description *string `min:"3" type:"string" required:"true"`
+
+	// Lenses applied to the review template.
+	//
+	// Lenses is a required field
+	Lenses []*string `type:"list" required:"true"`
+
+	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
+	Notes *string `type:"string"`
+
+	// The tags assigned to the review template.
+	Tags map[string]*string `min:"1" type:"map"`
+
+	// Name of the review template.
+	//
+	// TemplateName is a required field
+	TemplateName *string `min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateReviewTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateReviewTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateReviewTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateReviewTemplateInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.Description == nil {
+		invalidParams.Add(request.NewErrParamRequired("Description"))
+	}
+	if s.Description != nil && len(*s.Description) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 3))
+	}
+	if s.Lenses == nil {
+		invalidParams.Add(request.NewErrParamRequired("Lenses"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateReviewTemplateInput) SetClientRequestToken(v string) *CreateReviewTemplateInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateReviewTemplateInput) SetDescription(v string) *CreateReviewTemplateInput {
+	s.Description = &v
+	return s
+}
+
+// SetLenses sets the Lenses field's value.
+func (s *CreateReviewTemplateInput) SetLenses(v []*string) *CreateReviewTemplateInput {
+	s.Lenses = v
+	return s
+}
+
+// SetNotes sets the Notes field's value.
+func (s *CreateReviewTemplateInput) SetNotes(v string) *CreateReviewTemplateInput {
+	s.Notes = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateReviewTemplateInput) SetTags(v map[string]*string) *CreateReviewTemplateInput {
+	s.Tags = v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *CreateReviewTemplateInput) SetTemplateName(v string) *CreateReviewTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+type CreateReviewTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The review template ARN.
+	TemplateArn *string `min:"50" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateReviewTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateReviewTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *CreateReviewTemplateOutput) SetTemplateArn(v string) *CreateReviewTemplateOutput {
+	s.TemplateArn = &v
+	return s
+}
+
+type CreateTemplateShareInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique case-sensitive string used to ensure that this request is idempotent
+	// (executes only once).
+	//
+	// You should not reuse the same token for other requests. If you retry a request
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
+	//
+	// This token is listed as required, however, if you do not specify it, the
+	// Amazon Web Services SDKs automatically generate one for you. If you are not
+	// using the Amazon Web Services SDK or the CLI, you must provide this token
+	// or the request will fail.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the workload, lens, profile, or review template is shared.
+	//
+	// SharedWith is a required field
+	SharedWith *string `min:"12" type:"string" required:"true"`
+
+	// The review template ARN.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTemplateShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTemplateShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateTemplateShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateTemplateShareInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.SharedWith == nil {
+		invalidParams.Add(request.NewErrParamRequired("SharedWith"))
+	}
+	if s.SharedWith != nil && len(*s.SharedWith) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("SharedWith", 12))
+	}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateTemplateShareInput) SetClientRequestToken(v string) *CreateTemplateShareInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetSharedWith sets the SharedWith field's value.
+func (s *CreateTemplateShareInput) SetSharedWith(v string) *CreateTemplateShareInput {
+	s.SharedWith = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *CreateTemplateShareInput) SetTemplateArn(v string) *CreateTemplateShareInput {
+	s.TemplateArn = &v
+	return s
+}
+
+type CreateTemplateShareOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID associated with the share.
+	ShareId *string `type:"string"`
+
+	// The review template ARN.
+	TemplateArn *string `min:"50" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTemplateShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateTemplateShareOutput) GoString() string {
+	return s.String()
+}
+
+// SetShareId sets the ShareId field's value.
+func (s *CreateTemplateShareOutput) SetShareId(v string) *CreateTemplateShareOutput {
+	s.ShareId = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *CreateTemplateShareOutput) SetTemplateArn(v string) *CreateTemplateShareOutput {
+	s.TemplateArn = &v
+	return s
+}
+
 // Input for workload creation.
 type CreateWorkloadInput struct {
 	_ struct{} `type:"structure"`
@@ -6620,7 +10215,7 @@ type CreateWorkloadInput struct {
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
 	// using the Amazon Web Services SDK or the CLI, you must provide this token
 	// or the request will fail.
-	ClientRequestToken *string `type:"string" idempotencyToken:"true"`
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
 	// The description for the workload.
 	//
@@ -6700,6 +10295,9 @@ type CreateWorkloadInput struct {
 	// The list of lenses associated with the workload. Each lens is identified
 	// by its LensSummary$LensAlias.
 	//
+	// If a review template that specifies lenses is applied to the workload, those
+	// lenses are applied to the workload in addition to these lenses.
+	//
 	// Lenses is a required field
 	Lenses []*string `type:"list" required:"true"`
 
@@ -6707,15 +10305,24 @@ type CreateWorkloadInput struct {
 	NonAwsRegions []*string `type:"list"`
 
 	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
 	Notes *string `type:"string"`
 
 	// The priorities of the pillars, which are used to order items in the improvement
 	// plan. Each pillar is represented by its PillarReviewSummary$PillarId.
 	PillarPriorities []*string `type:"list"`
 
+	// The list of profile ARNs associated with the workload.
+	ProfileArns []*string `type:"list"`
+
 	// The review owner of the workload. The name, email address, or identifier
 	// for the primary group or individual that owns the workload review process.
 	ReviewOwner *string `min:"3" type:"string"`
+
+	// The list of review template ARNs to associate with the workload.
+	ReviewTemplateArns []*string `type:"list"`
 
 	// The tags to be associated with the workload.
 	Tags map[string]*string `min:"1" type:"map"`
@@ -6750,6 +10357,9 @@ func (s CreateWorkloadInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateWorkloadInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateWorkloadInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
 	if s.Description == nil {
 		invalidParams.Add(request.NewErrParamRequired("Description"))
 	}
@@ -6865,9 +10475,21 @@ func (s *CreateWorkloadInput) SetPillarPriorities(v []*string) *CreateWorkloadIn
 	return s
 }
 
+// SetProfileArns sets the ProfileArns field's value.
+func (s *CreateWorkloadInput) SetProfileArns(v []*string) *CreateWorkloadInput {
+	s.ProfileArns = v
+	return s
+}
+
 // SetReviewOwner sets the ReviewOwner field's value.
 func (s *CreateWorkloadInput) SetReviewOwner(v string) *CreateWorkloadInput {
 	s.ReviewOwner = &v
+	return s
+}
+
+// SetReviewTemplateArns sets the ReviewTemplateArns field's value.
+func (s *CreateWorkloadInput) SetReviewTemplateArns(v []*string) *CreateWorkloadInput {
+	s.ReviewTemplateArns = v
 	return s
 }
 
@@ -6892,7 +10514,7 @@ type CreateWorkloadOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -6941,15 +10563,15 @@ type CreateWorkloadShareInput struct {
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
 	// using the Amazon Web Services SDK or the CLI, you must provide this token
 	// or the request will fail.
-	ClientRequestToken *string `type:"string" idempotencyToken:"true"`
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
-	// Permission granted on a workload share.
+	// Permission granted on a share request.
 	//
 	// PermissionType is a required field
 	PermissionType *string `type:"string" required:"true" enum:"PermissionType"`
 
-	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
-	// unit (OU) ID with which the workload is shared.
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the workload, lens, profile, or review template is shared.
 	//
 	// SharedWith is a required field
 	SharedWith *string `min:"12" type:"string" required:"true"`
@@ -6958,7 +10580,7 @@ type CreateWorkloadShareInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -6982,6 +10604,9 @@ func (s CreateWorkloadShareInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateWorkloadShareInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateWorkloadShareInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
 	if s.PermissionType == nil {
 		invalidParams.Add(request.NewErrParamRequired("PermissionType"))
 	}
@@ -6994,8 +10619,8 @@ func (s *CreateWorkloadShareInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7032,12 +10657,12 @@ func (s *CreateWorkloadShareInput) SetWorkloadId(v string) *CreateWorkloadShareI
 type CreateWorkloadShareOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID associated with the workload share.
+	// The ID associated with the share.
 	ShareId *string `type:"string"`
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -7085,7 +10710,7 @@ type DeleteLensInput struct {
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
 	// using the Amazon Web Services SDK or the CLI, you must provide this token
 	// or the request will fail.
-	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" type:"string" idempotencyToken:"true"`
+	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
 
 	// The alias of the lens.
 	//
@@ -7128,6 +10753,9 @@ func (s DeleteLensInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DeleteLensInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteLensInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
 	if s.LensAlias == nil {
 		invalidParams.Add(request.NewErrParamRequired("LensAlias"))
 	}
@@ -7199,7 +10827,7 @@ type DeleteLensShareInput struct {
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
 	// using the Amazon Web Services SDK or the CLI, you must provide this token
 	// or the request will fail.
-	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" type:"string" idempotencyToken:"true"`
+	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
 
 	// The alias of the lens.
 	//
@@ -7215,7 +10843,7 @@ type DeleteLensShareInput struct {
 	// LensAlias is a required field
 	LensAlias *string `location:"uri" locationName:"LensAlias" min:"1" type:"string" required:"true"`
 
-	// The ID associated with the workload share.
+	// The ID associated with the share.
 	//
 	// ShareId is a required field
 	ShareId *string `location:"uri" locationName:"ShareId" type:"string" required:"true"`
@@ -7242,6 +10870,9 @@ func (s DeleteLensShareInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DeleteLensShareInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteLensShareInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
 	if s.LensAlias == nil {
 		invalidParams.Add(request.NewErrParamRequired("LensAlias"))
 	}
@@ -7301,6 +10932,416 @@ func (s DeleteLensShareOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteProfileInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique case-sensitive string used to ensure that this request is idempotent
+	// (executes only once).
+	//
+	// You should not reuse the same token for other requests. If you retry a request
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
+	//
+	// This token is listed as required, however, if you do not specify it, the
+	// Amazon Web Services SDKs automatically generate one for you. If you are not
+	// using the Amazon Web Services SDK or the CLI, you must provide this token
+	// or the request will fail.
+	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The profile ARN.
+	//
+	// ProfileArn is a required field
+	ProfileArn *string `location:"uri" locationName:"ProfileArn" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteProfileInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteProfileInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.ProfileArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileArn"))
+	}
+	if s.ProfileArn != nil && len(*s.ProfileArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DeleteProfileInput) SetClientRequestToken(v string) *DeleteProfileInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *DeleteProfileInput) SetProfileArn(v string) *DeleteProfileInput {
+	s.ProfileArn = &v
+	return s
+}
+
+type DeleteProfileOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteProfileOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteProfileShareInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique case-sensitive string used to ensure that this request is idempotent
+	// (executes only once).
+	//
+	// You should not reuse the same token for other requests. If you retry a request
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
+	//
+	// This token is listed as required, however, if you do not specify it, the
+	// Amazon Web Services SDKs automatically generate one for you. If you are not
+	// using the Amazon Web Services SDK or the CLI, you must provide this token
+	// or the request will fail.
+	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The profile ARN.
+	//
+	// ProfileArn is a required field
+	ProfileArn *string `location:"uri" locationName:"ProfileArn" type:"string" required:"true"`
+
+	// The ID associated with the share.
+	//
+	// ShareId is a required field
+	ShareId *string `location:"uri" locationName:"ShareId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteProfileShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteProfileShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteProfileShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteProfileShareInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.ProfileArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileArn"))
+	}
+	if s.ProfileArn != nil && len(*s.ProfileArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileArn", 1))
+	}
+	if s.ShareId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ShareId"))
+	}
+	if s.ShareId != nil && len(*s.ShareId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ShareId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DeleteProfileShareInput) SetClientRequestToken(v string) *DeleteProfileShareInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *DeleteProfileShareInput) SetProfileArn(v string) *DeleteProfileShareInput {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetShareId sets the ShareId field's value.
+func (s *DeleteProfileShareInput) SetShareId(v string) *DeleteProfileShareInput {
+	s.ShareId = &v
+	return s
+}
+
+type DeleteProfileShareOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteProfileShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteProfileShareOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteReviewTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique case-sensitive string used to ensure that this request is idempotent
+	// (executes only once).
+	//
+	// You should not reuse the same token for other requests. If you retry a request
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
+	//
+	// This token is listed as required, however, if you do not specify it, the
+	// Amazon Web Services SDKs automatically generate one for you. If you are not
+	// using the Amazon Web Services SDK or the CLI, you must provide this token
+	// or the request will fail.
+	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The review template ARN.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteReviewTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteReviewTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteReviewTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteReviewTemplateInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DeleteReviewTemplateInput) SetClientRequestToken(v string) *DeleteReviewTemplateInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *DeleteReviewTemplateInput) SetTemplateArn(v string) *DeleteReviewTemplateInput {
+	s.TemplateArn = &v
+	return s
+}
+
+type DeleteReviewTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteReviewTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteReviewTemplateOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteTemplateShareInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique case-sensitive string used to ensure that this request is idempotent
+	// (executes only once).
+	//
+	// You should not reuse the same token for other requests. If you retry a request
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
+	//
+	// This token is listed as required, however, if you do not specify it, the
+	// Amazon Web Services SDKs automatically generate one for you. If you are not
+	// using the Amazon Web Services SDK or the CLI, you must provide this token
+	// or the request will fail.
+	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The ID associated with the share.
+	//
+	// ShareId is a required field
+	ShareId *string `location:"uri" locationName:"ShareId" type:"string" required:"true"`
+
+	// The review template ARN.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTemplateShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTemplateShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteTemplateShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteTemplateShareInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.ShareId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ShareId"))
+	}
+	if s.ShareId != nil && len(*s.ShareId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ShareId", 1))
+	}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DeleteTemplateShareInput) SetClientRequestToken(v string) *DeleteTemplateShareInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetShareId sets the ShareId field's value.
+func (s *DeleteTemplateShareInput) SetShareId(v string) *DeleteTemplateShareInput {
+	s.ShareId = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *DeleteTemplateShareInput) SetTemplateArn(v string) *DeleteTemplateShareInput {
+	s.TemplateArn = &v
+	return s
+}
+
+type DeleteTemplateShareOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTemplateShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteTemplateShareOutput) GoString() string {
+	return s.String()
+}
+
 // Input for workload deletion.
 type DeleteWorkloadInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
@@ -7317,13 +11358,13 @@ type DeleteWorkloadInput struct {
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
 	// using the Amazon Web Services SDK or the CLI, you must provide this token
 	// or the request will fail.
-	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" type:"string" idempotencyToken:"true"`
+	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -7347,11 +11388,14 @@ func (s DeleteWorkloadInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DeleteWorkloadInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteWorkloadInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7410,9 +11454,9 @@ type DeleteWorkloadShareInput struct {
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
 	// using the Amazon Web Services SDK or the CLI, you must provide this token
 	// or the request will fail.
-	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" type:"string" idempotencyToken:"true"`
+	ClientRequestToken *string `location:"querystring" locationName:"ClientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The ID associated with the workload share.
+	// The ID associated with the share.
 	//
 	// ShareId is a required field
 	ShareId *string `location:"uri" locationName:"ShareId" type:"string" required:"true"`
@@ -7421,7 +11465,7 @@ type DeleteWorkloadShareInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -7445,6 +11489,9 @@ func (s DeleteWorkloadShareInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DeleteWorkloadShareInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteWorkloadShareInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
 	if s.ShareId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ShareId"))
 	}
@@ -7454,8 +11501,8 @@ func (s *DeleteWorkloadShareInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7520,7 +11567,7 @@ type DisassociateLensesInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -7553,8 +11600,8 @@ func (s *DisassociateLensesInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7594,6 +11641,95 @@ func (s DisassociateLensesOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s DisassociateLensesOutput) GoString() string {
+	return s.String()
+}
+
+type DisassociateProfilesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of profile ARNs to disassociate from the workload.
+	//
+	// ProfileArns is a required field
+	ProfileArns []*string `min:"1" type:"list" required:"true"`
+
+	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
+	// Region.
+	//
+	// WorkloadId is a required field
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateProfilesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateProfilesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateProfilesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateProfilesInput"}
+	if s.ProfileArns == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileArns"))
+	}
+	if s.ProfileArns != nil && len(s.ProfileArns) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileArns", 1))
+	}
+	if s.WorkloadId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
+	}
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetProfileArns sets the ProfileArns field's value.
+func (s *DisassociateProfilesInput) SetProfileArns(v []*string) *DisassociateProfilesInput {
+	s.ProfileArns = v
+	return s
+}
+
+// SetWorkloadId sets the WorkloadId field's value.
+func (s *DisassociateProfilesInput) SetWorkloadId(v string) *DisassociateProfilesInput {
+	s.WorkloadId = &v
+	return s
+}
+
+type DisassociateProfilesOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateProfilesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisassociateProfilesOutput) GoString() string {
 	return s.String()
 }
 
@@ -7730,7 +11866,7 @@ type GetAnswerInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -7772,8 +11908,8 @@ func (s *GetAnswerInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7835,7 +11971,7 @@ type GetAnswerOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -8147,7 +12283,7 @@ type GetLensReviewInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -8183,8 +12319,8 @@ func (s *GetLensReviewInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8225,7 +12361,7 @@ type GetLensReviewOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -8291,7 +12427,7 @@ type GetLensReviewReportInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -8327,8 +12463,8 @@ func (s *GetLensReviewReportInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8369,7 +12505,7 @@ type GetLensReviewReportOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -8590,7 +12726,7 @@ type GetMilestoneInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -8623,8 +12759,8 @@ func (s *GetMilestoneInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8654,7 +12790,7 @@ type GetMilestoneOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -8687,6 +12823,496 @@ func (s *GetMilestoneOutput) SetWorkloadId(v string) *GetMilestoneOutput {
 	return s
 }
 
+type GetProfileInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The profile ARN.
+	//
+	// ProfileArn is a required field
+	ProfileArn *string `location:"uri" locationName:"ProfileArn" type:"string" required:"true"`
+
+	// The profile version.
+	ProfileVersion *string `location:"querystring" locationName:"ProfileVersion" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetProfileInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetProfileInput"}
+	if s.ProfileArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileArn"))
+	}
+	if s.ProfileArn != nil && len(*s.ProfileArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileArn", 1))
+	}
+	if s.ProfileVersion != nil && len(*s.ProfileVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileVersion", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *GetProfileInput) SetProfileArn(v string) *GetProfileInput {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetProfileVersion sets the ProfileVersion field's value.
+func (s *GetProfileInput) SetProfileVersion(v string) *GetProfileInput {
+	s.ProfileVersion = &v
+	return s
+}
+
+type GetProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The profile.
+	Profile *Profile `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SetProfile sets the Profile field's value.
+func (s *GetProfileOutput) SetProfile(v *Profile) *GetProfileOutput {
+	s.Profile = v
+	return s
+}
+
+type GetProfileTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetProfileTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetProfileTemplateInput) GoString() string {
+	return s.String()
+}
+
+type GetProfileTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The profile template.
+	ProfileTemplate *ProfileTemplate `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetProfileTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetProfileTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetProfileTemplate sets the ProfileTemplate field's value.
+func (s *GetProfileTemplateOutput) SetProfileTemplate(v *ProfileTemplate) *GetProfileTemplateOutput {
+	s.ProfileTemplate = v
+	return s
+}
+
+type GetReviewTemplateAnswerInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The alias of the lens.
+	//
+	// For Amazon Web Services official lenses, this is either the lens alias, such
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
+	//
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
+	//
+	// Each lens is identified by its LensSummary$LensAlias.
+	//
+	// LensAlias is a required field
+	LensAlias *string `location:"uri" locationName:"LensAlias" min:"1" type:"string" required:"true"`
+
+	// The ID of the question.
+	//
+	// QuestionId is a required field
+	QuestionId *string `location:"uri" locationName:"QuestionId" min:"1" type:"string" required:"true"`
+
+	// The review template ARN.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateAnswerInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateAnswerInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetReviewTemplateAnswerInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetReviewTemplateAnswerInput"}
+	if s.LensAlias == nil {
+		invalidParams.Add(request.NewErrParamRequired("LensAlias"))
+	}
+	if s.LensAlias != nil && len(*s.LensAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LensAlias", 1))
+	}
+	if s.QuestionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("QuestionId"))
+	}
+	if s.QuestionId != nil && len(*s.QuestionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QuestionId", 1))
+	}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLensAlias sets the LensAlias field's value.
+func (s *GetReviewTemplateAnswerInput) SetLensAlias(v string) *GetReviewTemplateAnswerInput {
+	s.LensAlias = &v
+	return s
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *GetReviewTemplateAnswerInput) SetQuestionId(v string) *GetReviewTemplateAnswerInput {
+	s.QuestionId = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *GetReviewTemplateAnswerInput) SetTemplateArn(v string) *GetReviewTemplateAnswerInput {
+	s.TemplateArn = &v
+	return s
+}
+
+type GetReviewTemplateAnswerOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An answer of the question.
+	Answer *ReviewTemplateAnswer `type:"structure"`
+
+	// The alias of the lens.
+	//
+	// For Amazon Web Services official lenses, this is either the lens alias, such
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
+	//
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
+	//
+	// Each lens is identified by its LensSummary$LensAlias.
+	LensAlias *string `min:"1" type:"string"`
+
+	// The review template ARN.
+	TemplateArn *string `min:"50" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateAnswerOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateAnswerOutput) GoString() string {
+	return s.String()
+}
+
+// SetAnswer sets the Answer field's value.
+func (s *GetReviewTemplateAnswerOutput) SetAnswer(v *ReviewTemplateAnswer) *GetReviewTemplateAnswerOutput {
+	s.Answer = v
+	return s
+}
+
+// SetLensAlias sets the LensAlias field's value.
+func (s *GetReviewTemplateAnswerOutput) SetLensAlias(v string) *GetReviewTemplateAnswerOutput {
+	s.LensAlias = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *GetReviewTemplateAnswerOutput) SetTemplateArn(v string) *GetReviewTemplateAnswerOutput {
+	s.TemplateArn = &v
+	return s
+}
+
+type GetReviewTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The review template ARN.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetReviewTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetReviewTemplateInput"}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *GetReviewTemplateInput) SetTemplateArn(v string) *GetReviewTemplateInput {
+	s.TemplateArn = &v
+	return s
+}
+
+type GetReviewTemplateLensReviewInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The alias of the lens.
+	//
+	// For Amazon Web Services official lenses, this is either the lens alias, such
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
+	//
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
+	//
+	// Each lens is identified by its LensSummary$LensAlias.
+	//
+	// LensAlias is a required field
+	LensAlias *string `location:"uri" locationName:"LensAlias" min:"1" type:"string" required:"true"`
+
+	// The review template ARN.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateLensReviewInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateLensReviewInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetReviewTemplateLensReviewInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetReviewTemplateLensReviewInput"}
+	if s.LensAlias == nil {
+		invalidParams.Add(request.NewErrParamRequired("LensAlias"))
+	}
+	if s.LensAlias != nil && len(*s.LensAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LensAlias", 1))
+	}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLensAlias sets the LensAlias field's value.
+func (s *GetReviewTemplateLensReviewInput) SetLensAlias(v string) *GetReviewTemplateLensReviewInput {
+	s.LensAlias = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *GetReviewTemplateLensReviewInput) SetTemplateArn(v string) *GetReviewTemplateLensReviewInput {
+	s.TemplateArn = &v
+	return s
+}
+
+type GetReviewTemplateLensReviewOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A lens review of a question.
+	LensReview *ReviewTemplateLensReview `type:"structure"`
+
+	// The review template ARN.
+	TemplateArn *string `min:"50" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateLensReviewOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateLensReviewOutput) GoString() string {
+	return s.String()
+}
+
+// SetLensReview sets the LensReview field's value.
+func (s *GetReviewTemplateLensReviewOutput) SetLensReview(v *ReviewTemplateLensReview) *GetReviewTemplateLensReviewOutput {
+	s.LensReview = v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *GetReviewTemplateLensReviewOutput) SetTemplateArn(v string) *GetReviewTemplateLensReviewOutput {
+	s.TemplateArn = &v
+	return s
+}
+
+type GetReviewTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The review template.
+	ReviewTemplate *ReviewTemplate `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetReviewTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetReviewTemplate sets the ReviewTemplate field's value.
+func (s *GetReviewTemplateOutput) SetReviewTemplate(v *ReviewTemplate) *GetReviewTemplateOutput {
+	s.ReviewTemplate = v
+	return s
+}
+
 // Input to get a workload.
 type GetWorkloadInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
@@ -8695,7 +13321,7 @@ type GetWorkloadInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -8722,8 +13348,8 @@ func (s *GetWorkloadInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8785,7 +13411,7 @@ type ImportLensInput struct {
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
 	// using the Amazon Web Services SDK or the CLI, you must provide this token
 	// or the request will fail.
-	ClientRequestToken *string `type:"string" idempotencyToken:"true"`
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
 	// The JSON representation of a lens.
 	//
@@ -8829,6 +13455,9 @@ func (s ImportLensInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ImportLensInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ImportLensInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
 	if s.JSONString == nil {
 		invalidParams.Add(request.NewErrParamRequired("JSONString"))
 	}
@@ -9229,10 +13858,19 @@ type LensReview struct {
 	NextToken *string `type:"string"`
 
 	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
 	Notes *string `type:"string"`
 
 	// List of pillar review summaries of lens review in a workload.
 	PillarReviewSummaries []*PillarReviewSummary `type:"list"`
+
+	// A map from risk names to the count of how many questions have that rating.
+	PrioritizedRiskCounts map[string]*int64 `type:"map"`
+
+	// The profiles associated with the workload.
+	Profiles []*WorkloadProfile `type:"list"`
 
 	// A map from risk names to the count of how many questions have that rating.
 	RiskCounts map[string]*int64 `type:"map"`
@@ -9304,6 +13942,18 @@ func (s *LensReview) SetNotes(v string) *LensReview {
 // SetPillarReviewSummaries sets the PillarReviewSummaries field's value.
 func (s *LensReview) SetPillarReviewSummaries(v []*PillarReviewSummary) *LensReview {
 	s.PillarReviewSummaries = v
+	return s
+}
+
+// SetPrioritizedRiskCounts sets the PrioritizedRiskCounts field's value.
+func (s *LensReview) SetPrioritizedRiskCounts(v map[string]*int64) *LensReview {
+	s.PrioritizedRiskCounts = v
+	return s
+}
+
+// SetProfiles sets the Profiles field's value.
+func (s *LensReview) SetProfiles(v []*WorkloadProfile) *LensReview {
+	s.Profiles = v
 	return s
 }
 
@@ -9411,6 +14061,12 @@ type LensReviewSummary struct {
 	LensVersion *string `min:"1" type:"string"`
 
 	// A map from risk names to the count of how many questions have that rating.
+	PrioritizedRiskCounts map[string]*int64 `type:"map"`
+
+	// The profiles associated with the workload.
+	Profiles []*WorkloadProfile `type:"list"`
+
+	// A map from risk names to the count of how many questions have that rating.
 	RiskCounts map[string]*int64 `type:"map"`
 
 	// The date and time recorded.
@@ -9465,6 +14121,18 @@ func (s *LensReviewSummary) SetLensVersion(v string) *LensReviewSummary {
 	return s
 }
 
+// SetPrioritizedRiskCounts sets the PrioritizedRiskCounts field's value.
+func (s *LensReviewSummary) SetPrioritizedRiskCounts(v map[string]*int64) *LensReviewSummary {
+	s.PrioritizedRiskCounts = v
+	return s
+}
+
+// SetProfiles sets the Profiles field's value.
+func (s *LensReviewSummary) SetProfiles(v []*WorkloadProfile) *LensReviewSummary {
+	s.Profiles = v
+	return s
+}
+
 // SetRiskCounts sets the RiskCounts field's value.
 func (s *LensReviewSummary) SetRiskCounts(v map[string]*int64) *LensReviewSummary {
 	s.RiskCounts = v
@@ -9481,14 +14149,14 @@ func (s *LensReviewSummary) SetUpdatedAt(v time.Time) *LensReviewSummary {
 type LensShareSummary struct {
 	_ struct{} `type:"structure"`
 
-	// The ID associated with the workload share.
+	// The ID associated with the share.
 	ShareId *string `type:"string"`
 
-	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
-	// unit (OU) ID with which the workload is shared.
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the workload, lens, profile, or review template is shared.
 	SharedWith *string `min:"12" type:"string"`
 
-	// The status of a workload share.
+	// The status of the share request.
 	Status *string `type:"string" enum:"ShareStatus"`
 
 	// Optional message to compliment the Status field.
@@ -9575,7 +14243,7 @@ type LensSummary struct {
 	LensVersion *string `min:"1" type:"string"`
 
 	// An Amazon Web Services account ID.
-	Owner *string `type:"string"`
+	Owner *string `min:"12" type:"string"`
 
 	// The date and time recorded.
 	UpdatedAt *time.Time `type:"timestamp"`
@@ -9684,9 +14352,18 @@ type LensUpgradeSummary struct {
 	// The ARN for the lens.
 	LensArn *string `type:"string"`
 
+	// ResourceArn of the lens being upgraded
+	ResourceArn *string `min:"50" type:"string"`
+
+	// The name of the workload.
+	//
+	// The name must be unique within an account within an Amazon Web Services Region.
+	// Spaces and capitalization are ignored when checking for uniqueness.
+	ResourceName *string `min:"3" type:"string"`
+
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 
 	// The name of the workload.
 	//
@@ -9737,6 +14414,18 @@ func (s *LensUpgradeSummary) SetLensArn(v string) *LensUpgradeSummary {
 	return s
 }
 
+// SetResourceArn sets the ResourceArn field's value.
+func (s *LensUpgradeSummary) SetResourceArn(v string) *LensUpgradeSummary {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetResourceName sets the ResourceName field's value.
+func (s *LensUpgradeSummary) SetResourceName(v string) *LensUpgradeSummary {
+	s.ResourceName = &v
+	return s
+}
+
 // SetWorkloadId sets the WorkloadId field's value.
 func (s *LensUpgradeSummary) SetWorkloadId(v string) *LensUpgradeSummary {
 	s.WorkloadId = &v
@@ -9783,11 +14472,14 @@ type ListAnswersInput struct {
 	// A pillar is identified by its PillarReviewSummary$PillarId.
 	PillarId *string `location:"querystring" locationName:"PillarId" min:"1" type:"string"`
 
+	// The priority of the question.
+	QuestionPriority *string `location:"querystring" locationName:"QuestionPriority" type:"string" enum:"QuestionPriority"`
+
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -9829,8 +14521,8 @@ func (s *ListAnswersInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -9866,6 +14558,12 @@ func (s *ListAnswersInput) SetNextToken(v string) *ListAnswersInput {
 // SetPillarId sets the PillarId field's value.
 func (s *ListAnswersInput) SetPillarId(v string) *ListAnswersInput {
 	s.PillarId = &v
+	return s
+}
+
+// SetQuestionPriority sets the QuestionPriority field's value.
+func (s *ListAnswersInput) SetQuestionPriority(v string) *ListAnswersInput {
+	s.QuestionPriority = &v
 	return s
 }
 
@@ -9907,7 +14605,7 @@ type ListAnswersOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -9999,7 +14697,7 @@ type ListCheckDetailsInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -10050,8 +14748,8 @@ func (s *ListCheckDetailsInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -10178,7 +14876,7 @@ type ListCheckSummariesInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -10229,8 +14927,8 @@ func (s *ListCheckSummariesInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -10355,11 +15053,14 @@ type ListLensReviewImprovementsInput struct {
 	// A pillar is identified by its PillarReviewSummary$PillarId.
 	PillarId *string `location:"querystring" locationName:"PillarId" min:"1" type:"string"`
 
+	// The priority of the question.
+	QuestionPriority *string `location:"querystring" locationName:"QuestionPriority" type:"string" enum:"QuestionPriority"`
+
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -10401,8 +15102,8 @@ func (s *ListLensReviewImprovementsInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -10438,6 +15139,12 @@ func (s *ListLensReviewImprovementsInput) SetNextToken(v string) *ListLensReview
 // SetPillarId sets the PillarId field's value.
 func (s *ListLensReviewImprovementsInput) SetPillarId(v string) *ListLensReviewImprovementsInput {
 	s.PillarId = &v
+	return s
+}
+
+// SetQuestionPriority sets the QuestionPriority field's value.
+func (s *ListLensReviewImprovementsInput) SetQuestionPriority(v string) *ListLensReviewImprovementsInput {
+	s.QuestionPriority = &v
 	return s
 }
 
@@ -10479,7 +15186,7 @@ type ListLensReviewImprovementsOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -10555,7 +15262,7 @@ type ListLensReviewsInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -10588,8 +15295,8 @@ func (s *ListLensReviewsInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -10639,7 +15346,7 @@ type ListLensReviewsOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -10707,11 +15414,11 @@ type ListLensSharesInput struct {
 	// The token to use to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 
-	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
-	// unit (OU) ID with which the lens is shared.
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the lens is shared.
 	SharedWithPrefix *string `location:"querystring" locationName:"SharedWithPrefix" type:"string"`
 
-	// The status of a workload share.
+	// The status of the share request.
 	Status *string `location:"querystring" locationName:"Status" type:"string" enum:"ShareStatus"`
 }
 
@@ -10961,7 +15668,7 @@ type ListMilestonesInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -10991,8 +15698,8 @@ func (s *ListMilestonesInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -11031,7 +15738,7 @@ type ListMilestonesOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -11079,9 +15786,14 @@ type ListNotificationsInput struct {
 	// The token to use to retrieve the next set of results.
 	NextToken *string `type:"string"`
 
+	// The ARN for the related resource for the notification.
+	//
+	// Only one of WorkloadID or ResourceARN should be specified.
+	ResourceArn *string `min:"50" type:"string"`
+
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -11108,6 +15820,12 @@ func (s *ListNotificationsInput) Validate() error {
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 50))
+	}
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -11124,6 +15842,12 @@ func (s *ListNotificationsInput) SetMaxResults(v int64) *ListNotificationsInput 
 // SetNextToken sets the NextToken field's value.
 func (s *ListNotificationsInput) SetNextToken(v string) *ListNotificationsInput {
 	s.NextToken = &v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *ListNotificationsInput) SetResourceArn(v string) *ListNotificationsInput {
+	s.ResourceArn = &v
 	return s
 }
 
@@ -11173,6 +15897,623 @@ func (s *ListNotificationsOutput) SetNotificationSummaries(v []*NotificationSumm
 	return s
 }
 
+type ListProfileNotificationsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of results to return for this request.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
+	// Region.
+	WorkloadId *string `location:"querystring" locationName:"WorkloadId" min:"32" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfileNotificationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfileNotificationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListProfileNotificationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListProfileNotificationsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListProfileNotificationsInput) SetMaxResults(v int64) *ListProfileNotificationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListProfileNotificationsInput) SetNextToken(v string) *ListProfileNotificationsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetWorkloadId sets the WorkloadId field's value.
+func (s *ListProfileNotificationsInput) SetWorkloadId(v string) *ListProfileNotificationsInput {
+	s.WorkloadId = &v
+	return s
+}
+
+type ListProfileNotificationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+
+	// Notification summaries.
+	NotificationSummaries []*ProfileNotificationSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfileNotificationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfileNotificationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListProfileNotificationsOutput) SetNextToken(v string) *ListProfileNotificationsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetNotificationSummaries sets the NotificationSummaries field's value.
+func (s *ListProfileNotificationsOutput) SetNotificationSummaries(v []*ProfileNotificationSummary) *ListProfileNotificationsOutput {
+	s.NotificationSummaries = v
+	return s
+}
+
+type ListProfileSharesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of results to return for this request.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// The profile ARN.
+	//
+	// ProfileArn is a required field
+	ProfileArn *string `location:"uri" locationName:"ProfileArn" type:"string" required:"true"`
+
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the profile is shared.
+	SharedWithPrefix *string `location:"querystring" locationName:"SharedWithPrefix" type:"string"`
+
+	// The status of the share request.
+	Status *string `location:"querystring" locationName:"Status" type:"string" enum:"ShareStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfileSharesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfileSharesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListProfileSharesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListProfileSharesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.ProfileArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileArn"))
+	}
+	if s.ProfileArn != nil && len(*s.ProfileArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListProfileSharesInput) SetMaxResults(v int64) *ListProfileSharesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListProfileSharesInput) SetNextToken(v string) *ListProfileSharesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *ListProfileSharesInput) SetProfileArn(v string) *ListProfileSharesInput {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetSharedWithPrefix sets the SharedWithPrefix field's value.
+func (s *ListProfileSharesInput) SetSharedWithPrefix(v string) *ListProfileSharesInput {
+	s.SharedWithPrefix = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ListProfileSharesInput) SetStatus(v string) *ListProfileSharesInput {
+	s.Status = &v
+	return s
+}
+
+type ListProfileSharesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+
+	// Profile share summaries.
+	ProfileShareSummaries []*ProfileShareSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfileSharesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfileSharesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListProfileSharesOutput) SetNextToken(v string) *ListProfileSharesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetProfileShareSummaries sets the ProfileShareSummaries field's value.
+func (s *ListProfileSharesOutput) SetProfileShareSummaries(v []*ProfileShareSummary) *ListProfileSharesOutput {
+	s.ProfileShareSummaries = v
+	return s
+}
+
+type ListProfilesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of results to return for this request.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// An optional string added to the beginning of each profile name returned in
+	// the results.
+	ProfileNamePrefix *string `location:"querystring" locationName:"ProfileNamePrefix" type:"string"`
+
+	// Profile owner type.
+	ProfileOwnerType *string `location:"querystring" locationName:"ProfileOwnerType" type:"string" enum:"ProfileOwnerType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfilesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfilesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListProfilesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListProfilesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListProfilesInput) SetMaxResults(v int64) *ListProfilesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListProfilesInput) SetNextToken(v string) *ListProfilesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetProfileNamePrefix sets the ProfileNamePrefix field's value.
+func (s *ListProfilesInput) SetProfileNamePrefix(v string) *ListProfilesInput {
+	s.ProfileNamePrefix = &v
+	return s
+}
+
+// SetProfileOwnerType sets the ProfileOwnerType field's value.
+func (s *ListProfilesInput) SetProfileOwnerType(v string) *ListProfilesInput {
+	s.ProfileOwnerType = &v
+	return s
+}
+
+type ListProfilesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+
+	// Profile summaries.
+	ProfileSummaries []*ProfileSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfilesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProfilesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListProfilesOutput) SetNextToken(v string) *ListProfilesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetProfileSummaries sets the ProfileSummaries field's value.
+func (s *ListProfilesOutput) SetProfileSummaries(v []*ProfileSummary) *ListProfilesOutput {
+	s.ProfileSummaries = v
+	return s
+}
+
+type ListReviewTemplateAnswersInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The alias of the lens.
+	//
+	// For Amazon Web Services official lenses, this is either the lens alias, such
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
+	//
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
+	//
+	// Each lens is identified by its LensSummary$LensAlias.
+	//
+	// LensAlias is a required field
+	LensAlias *string `location:"uri" locationName:"LensAlias" min:"1" type:"string" required:"true"`
+
+	// The maximum number of results to return for this request.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// The ID used to identify a pillar, for example, security.
+	//
+	// A pillar is identified by its PillarReviewSummary$PillarId.
+	PillarId *string `location:"querystring" locationName:"PillarId" min:"1" type:"string"`
+
+	// The ARN of the review template.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReviewTemplateAnswersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReviewTemplateAnswersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListReviewTemplateAnswersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListReviewTemplateAnswersInput"}
+	if s.LensAlias == nil {
+		invalidParams.Add(request.NewErrParamRequired("LensAlias"))
+	}
+	if s.LensAlias != nil && len(*s.LensAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LensAlias", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.PillarId != nil && len(*s.PillarId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PillarId", 1))
+	}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLensAlias sets the LensAlias field's value.
+func (s *ListReviewTemplateAnswersInput) SetLensAlias(v string) *ListReviewTemplateAnswersInput {
+	s.LensAlias = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListReviewTemplateAnswersInput) SetMaxResults(v int64) *ListReviewTemplateAnswersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReviewTemplateAnswersInput) SetNextToken(v string) *ListReviewTemplateAnswersInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPillarId sets the PillarId field's value.
+func (s *ListReviewTemplateAnswersInput) SetPillarId(v string) *ListReviewTemplateAnswersInput {
+	s.PillarId = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *ListReviewTemplateAnswersInput) SetTemplateArn(v string) *ListReviewTemplateAnswersInput {
+	s.TemplateArn = &v
+	return s
+}
+
+type ListReviewTemplateAnswersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// List of answer summaries of a lens review in a review template.
+	AnswerSummaries []*ReviewTemplateAnswerSummary `type:"list"`
+
+	// The alias of the lens.
+	//
+	// For Amazon Web Services official lenses, this is either the lens alias, such
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
+	//
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
+	//
+	// Each lens is identified by its LensSummary$LensAlias.
+	LensAlias *string `min:"1" type:"string"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+
+	// The ARN of the review template.
+	TemplateArn *string `min:"50" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReviewTemplateAnswersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReviewTemplateAnswersOutput) GoString() string {
+	return s.String()
+}
+
+// SetAnswerSummaries sets the AnswerSummaries field's value.
+func (s *ListReviewTemplateAnswersOutput) SetAnswerSummaries(v []*ReviewTemplateAnswerSummary) *ListReviewTemplateAnswersOutput {
+	s.AnswerSummaries = v
+	return s
+}
+
+// SetLensAlias sets the LensAlias field's value.
+func (s *ListReviewTemplateAnswersOutput) SetLensAlias(v string) *ListReviewTemplateAnswersOutput {
+	s.LensAlias = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReviewTemplateAnswersOutput) SetNextToken(v string) *ListReviewTemplateAnswersOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *ListReviewTemplateAnswersOutput) SetTemplateArn(v string) *ListReviewTemplateAnswersOutput {
+	s.TemplateArn = &v
+	return s
+}
+
+type ListReviewTemplatesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of results to return for this request.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReviewTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReviewTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListReviewTemplatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListReviewTemplatesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListReviewTemplatesInput) SetMaxResults(v int64) *ListReviewTemplatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReviewTemplatesInput) SetNextToken(v string) *ListReviewTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListReviewTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+
+	// List of review templates.
+	ReviewTemplates []*ReviewTemplateSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReviewTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReviewTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReviewTemplatesOutput) SetNextToken(v string) *ListReviewTemplatesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetReviewTemplates sets the ReviewTemplates field's value.
+func (s *ListReviewTemplatesOutput) SetReviewTemplates(v []*ReviewTemplateSummary) *ListReviewTemplatesOutput {
+	s.ReviewTemplates = v
+	return s
+}
+
 // Input for List Share Invitations
 type ListShareInvitationsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
@@ -11187,8 +16528,16 @@ type ListShareInvitationsInput struct {
 	// The token to use to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 
+	// An optional string added to the beginning of each profile name returned in
+	// the results.
+	ProfileNamePrefix *string `location:"querystring" locationName:"ProfileNamePrefix" type:"string"`
+
 	// The type of share invitations to be returned.
 	ShareResourceType *string `location:"querystring" locationName:"ShareResourceType" type:"string" enum:"ShareResourceType"`
+
+	// An optional string added to the beginning of each review template name returned
+	// in the results.
+	TemplateNamePrefix *string `location:"querystring" locationName:"TemplateNamePrefix" type:"string"`
 
 	// An optional string added to the beginning of each workload name returned
 	// in the results.
@@ -11244,9 +16593,21 @@ func (s *ListShareInvitationsInput) SetNextToken(v string) *ListShareInvitations
 	return s
 }
 
+// SetProfileNamePrefix sets the ProfileNamePrefix field's value.
+func (s *ListShareInvitationsInput) SetProfileNamePrefix(v string) *ListShareInvitationsInput {
+	s.ProfileNamePrefix = &v
+	return s
+}
+
 // SetShareResourceType sets the ShareResourceType field's value.
 func (s *ListShareInvitationsInput) SetShareResourceType(v string) *ListShareInvitationsInput {
 	s.ShareResourceType = &v
+	return s
+}
+
+// SetTemplateNamePrefix sets the TemplateNamePrefix field's value.
+func (s *ListShareInvitationsInput) SetTemplateNamePrefix(v string) *ListShareInvitationsInput {
+	s.TemplateNamePrefix = &v
 	return s
 }
 
@@ -11377,6 +16738,144 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 	return s
 }
 
+type ListTemplateSharesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of results to return for this request.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the profile is shared.
+	SharedWithPrefix *string `location:"querystring" locationName:"SharedWithPrefix" type:"string"`
+
+	// The status of the share request.
+	Status *string `location:"querystring" locationName:"Status" type:"string" enum:"ShareStatus"`
+
+	// The review template ARN.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTemplateSharesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTemplateSharesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTemplateSharesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTemplateSharesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListTemplateSharesInput) SetMaxResults(v int64) *ListTemplateSharesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTemplateSharesInput) SetNextToken(v string) *ListTemplateSharesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSharedWithPrefix sets the SharedWithPrefix field's value.
+func (s *ListTemplateSharesInput) SetSharedWithPrefix(v string) *ListTemplateSharesInput {
+	s.SharedWithPrefix = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ListTemplateSharesInput) SetStatus(v string) *ListTemplateSharesInput {
+	s.Status = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *ListTemplateSharesInput) SetTemplateArn(v string) *ListTemplateSharesInput {
+	s.TemplateArn = &v
+	return s
+}
+
+type ListTemplateSharesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+
+	// The review template ARN.
+	TemplateArn *string `min:"50" type:"string"`
+
+	// A review template share summary return object.
+	TemplateShareSummaries []*TemplateShareSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTemplateSharesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListTemplateSharesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTemplateSharesOutput) SetNextToken(v string) *ListTemplateSharesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *ListTemplateSharesOutput) SetTemplateArn(v string) *ListTemplateSharesOutput {
+	s.TemplateArn = &v
+	return s
+}
+
+// SetTemplateShareSummaries sets the TemplateShareSummaries field's value.
+func (s *ListTemplateSharesOutput) SetTemplateShareSummaries(v []*TemplateShareSummary) *ListTemplateSharesOutput {
+	s.TemplateShareSummaries = v
+	return s
+}
+
 // Input for List Workload Share
 type ListWorkloadSharesInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
@@ -11387,18 +16886,18 @@ type ListWorkloadSharesInput struct {
 	// The token to use to retrieve the next set of results.
 	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 
-	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
-	// unit (OU) ID with which the workload is shared.
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the workload is shared.
 	SharedWithPrefix *string `location:"querystring" locationName:"SharedWithPrefix" type:"string"`
 
-	// The status of a workload share.
+	// The status of the share request.
 	Status *string `location:"querystring" locationName:"Status" type:"string" enum:"ShareStatus"`
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -11428,8 +16927,8 @@ func (s *ListWorkloadSharesInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -11477,7 +16976,7 @@ type ListWorkloadSharesOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 
 	// A list of workload share summaries.
 	WorkloadShareSummaries []*WorkloadShareSummary `type:"list"`
@@ -11909,6 +17408,9 @@ type PillarReviewSummary struct {
 	_ struct{} `type:"structure"`
 
 	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
 	Notes *string `type:"string"`
 
 	// The ID used to identify a pillar, for example, security.
@@ -11918,6 +17420,9 @@ type PillarReviewSummary struct {
 
 	// The name of the pillar.
 	PillarName *string `min:"1" type:"string"`
+
+	// A map from risk names to the count of how many questions have that rating.
+	PrioritizedRiskCounts map[string]*int64 `type:"map"`
 
 	// A map from risk names to the count of how many questions have that rating.
 	RiskCounts map[string]*int64 `type:"map"`
@@ -11959,9 +17464,740 @@ func (s *PillarReviewSummary) SetPillarName(v string) *PillarReviewSummary {
 	return s
 }
 
+// SetPrioritizedRiskCounts sets the PrioritizedRiskCounts field's value.
+func (s *PillarReviewSummary) SetPrioritizedRiskCounts(v map[string]*int64) *PillarReviewSummary {
+	s.PrioritizedRiskCounts = v
+	return s
+}
+
 // SetRiskCounts sets the RiskCounts field's value.
 func (s *PillarReviewSummary) SetRiskCounts(v map[string]*int64) *PillarReviewSummary {
 	s.RiskCounts = v
+	return s
+}
+
+// A profile.
+type Profile struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time recorded.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// An Amazon Web Services account ID.
+	Owner *string `min:"12" type:"string"`
+
+	// The profile ARN.
+	ProfileArn *string `type:"string"`
+
+	// The profile description.
+	ProfileDescription *string `min:"3" type:"string"`
+
+	// The profile name.
+	ProfileName *string `min:"3" type:"string"`
+
+	// Profile questions.
+	ProfileQuestions []*ProfileQuestion `type:"list"`
+
+	// The profile version.
+	ProfileVersion *string `min:"1" type:"string"`
+
+	// The ID assigned to the share invitation.
+	ShareInvitationId *string `type:"string"`
+
+	// The tags assigned to the profile.
+	Tags map[string]*string `min:"1" type:"map"`
+
+	// The date and time recorded.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Profile) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Profile) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *Profile) SetCreatedAt(v time.Time) *Profile {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetOwner sets the Owner field's value.
+func (s *Profile) SetOwner(v string) *Profile {
+	s.Owner = &v
+	return s
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *Profile) SetProfileArn(v string) *Profile {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetProfileDescription sets the ProfileDescription field's value.
+func (s *Profile) SetProfileDescription(v string) *Profile {
+	s.ProfileDescription = &v
+	return s
+}
+
+// SetProfileName sets the ProfileName field's value.
+func (s *Profile) SetProfileName(v string) *Profile {
+	s.ProfileName = &v
+	return s
+}
+
+// SetProfileQuestions sets the ProfileQuestions field's value.
+func (s *Profile) SetProfileQuestions(v []*ProfileQuestion) *Profile {
+	s.ProfileQuestions = v
+	return s
+}
+
+// SetProfileVersion sets the ProfileVersion field's value.
+func (s *Profile) SetProfileVersion(v string) *Profile {
+	s.ProfileVersion = &v
+	return s
+}
+
+// SetShareInvitationId sets the ShareInvitationId field's value.
+func (s *Profile) SetShareInvitationId(v string) *Profile {
+	s.ShareInvitationId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Profile) SetTags(v map[string]*string) *Profile {
+	s.Tags = v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *Profile) SetUpdatedAt(v time.Time) *Profile {
+	s.UpdatedAt = &v
+	return s
+}
+
+// The profile choice.
+type ProfileChoice struct {
+	_ struct{} `type:"structure"`
+
+	// The description of a choice.
+	ChoiceDescription *string `min:"1" type:"string"`
+
+	// The ID of a choice.
+	ChoiceId *string `min:"1" type:"string"`
+
+	// The title of a choice.
+	ChoiceTitle *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileChoice) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileChoice) GoString() string {
+	return s.String()
+}
+
+// SetChoiceDescription sets the ChoiceDescription field's value.
+func (s *ProfileChoice) SetChoiceDescription(v string) *ProfileChoice {
+	s.ChoiceDescription = &v
+	return s
+}
+
+// SetChoiceId sets the ChoiceId field's value.
+func (s *ProfileChoice) SetChoiceId(v string) *ProfileChoice {
+	s.ChoiceId = &v
+	return s
+}
+
+// SetChoiceTitle sets the ChoiceTitle field's value.
+func (s *ProfileChoice) SetChoiceTitle(v string) *ProfileChoice {
+	s.ChoiceTitle = &v
+	return s
+}
+
+// The profile notification summary.
+type ProfileNotificationSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The current profile version.
+	CurrentProfileVersion *string `min:"1" type:"string"`
+
+	// The latest profile version.
+	LatestProfileVersion *string `min:"1" type:"string"`
+
+	// The profile ARN.
+	ProfileArn *string `type:"string"`
+
+	// The profile name.
+	ProfileName *string `min:"3" type:"string"`
+
+	// Type of notification.
+	Type *string `type:"string" enum:"ProfileNotificationType"`
+
+	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
+	// Region.
+	WorkloadId *string `min:"32" type:"string"`
+
+	// The name of the workload.
+	//
+	// The name must be unique within an account within an Amazon Web Services Region.
+	// Spaces and capitalization are ignored when checking for uniqueness.
+	WorkloadName *string `min:"3" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileNotificationSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileNotificationSummary) GoString() string {
+	return s.String()
+}
+
+// SetCurrentProfileVersion sets the CurrentProfileVersion field's value.
+func (s *ProfileNotificationSummary) SetCurrentProfileVersion(v string) *ProfileNotificationSummary {
+	s.CurrentProfileVersion = &v
+	return s
+}
+
+// SetLatestProfileVersion sets the LatestProfileVersion field's value.
+func (s *ProfileNotificationSummary) SetLatestProfileVersion(v string) *ProfileNotificationSummary {
+	s.LatestProfileVersion = &v
+	return s
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *ProfileNotificationSummary) SetProfileArn(v string) *ProfileNotificationSummary {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetProfileName sets the ProfileName field's value.
+func (s *ProfileNotificationSummary) SetProfileName(v string) *ProfileNotificationSummary {
+	s.ProfileName = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ProfileNotificationSummary) SetType(v string) *ProfileNotificationSummary {
+	s.Type = &v
+	return s
+}
+
+// SetWorkloadId sets the WorkloadId field's value.
+func (s *ProfileNotificationSummary) SetWorkloadId(v string) *ProfileNotificationSummary {
+	s.WorkloadId = &v
+	return s
+}
+
+// SetWorkloadName sets the WorkloadName field's value.
+func (s *ProfileNotificationSummary) SetWorkloadName(v string) *ProfileNotificationSummary {
+	s.WorkloadName = &v
+	return s
+}
+
+// A profile question.
+type ProfileQuestion struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of selected choices.
+	MaxSelectedChoices *int64 `type:"integer"`
+
+	// The minimum number of selected choices.
+	MinSelectedChoices *int64 `type:"integer"`
+
+	// The question choices.
+	QuestionChoices []*ProfileChoice `type:"list"`
+
+	// The description of the question.
+	QuestionDescription *string `min:"1" type:"string"`
+
+	// The ID of the question.
+	QuestionId *string `min:"1" type:"string"`
+
+	// The title of the question.
+	QuestionTitle *string `min:"1" type:"string"`
+
+	// The selected choices.
+	SelectedChoiceIds []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileQuestion) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileQuestion) GoString() string {
+	return s.String()
+}
+
+// SetMaxSelectedChoices sets the MaxSelectedChoices field's value.
+func (s *ProfileQuestion) SetMaxSelectedChoices(v int64) *ProfileQuestion {
+	s.MaxSelectedChoices = &v
+	return s
+}
+
+// SetMinSelectedChoices sets the MinSelectedChoices field's value.
+func (s *ProfileQuestion) SetMinSelectedChoices(v int64) *ProfileQuestion {
+	s.MinSelectedChoices = &v
+	return s
+}
+
+// SetQuestionChoices sets the QuestionChoices field's value.
+func (s *ProfileQuestion) SetQuestionChoices(v []*ProfileChoice) *ProfileQuestion {
+	s.QuestionChoices = v
+	return s
+}
+
+// SetQuestionDescription sets the QuestionDescription field's value.
+func (s *ProfileQuestion) SetQuestionDescription(v string) *ProfileQuestion {
+	s.QuestionDescription = &v
+	return s
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *ProfileQuestion) SetQuestionId(v string) *ProfileQuestion {
+	s.QuestionId = &v
+	return s
+}
+
+// SetQuestionTitle sets the QuestionTitle field's value.
+func (s *ProfileQuestion) SetQuestionTitle(v string) *ProfileQuestion {
+	s.QuestionTitle = &v
+	return s
+}
+
+// SetSelectedChoiceIds sets the SelectedChoiceIds field's value.
+func (s *ProfileQuestion) SetSelectedChoiceIds(v []*string) *ProfileQuestion {
+	s.SelectedChoiceIds = v
+	return s
+}
+
+// An update to a profile question.
+type ProfileQuestionUpdate struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the question.
+	QuestionId *string `min:"1" type:"string"`
+
+	// The selected choices.
+	SelectedChoiceIds []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileQuestionUpdate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileQuestionUpdate) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ProfileQuestionUpdate) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ProfileQuestionUpdate"}
+	if s.QuestionId != nil && len(*s.QuestionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QuestionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *ProfileQuestionUpdate) SetQuestionId(v string) *ProfileQuestionUpdate {
+	s.QuestionId = &v
+	return s
+}
+
+// SetSelectedChoiceIds sets the SelectedChoiceIds field's value.
+func (s *ProfileQuestionUpdate) SetSelectedChoiceIds(v []*string) *ProfileQuestionUpdate {
+	s.SelectedChoiceIds = v
+	return s
+}
+
+// Summary of a profile share.
+type ProfileShareSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The ID associated with the share.
+	ShareId *string `type:"string"`
+
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the workload, lens, profile, or review template is shared.
+	SharedWith *string `min:"12" type:"string"`
+
+	// The status of the share request.
+	Status *string `type:"string" enum:"ShareStatus"`
+
+	// Profile share invitation status message.
+	StatusMessage *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileShareSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileShareSummary) GoString() string {
+	return s.String()
+}
+
+// SetShareId sets the ShareId field's value.
+func (s *ProfileShareSummary) SetShareId(v string) *ProfileShareSummary {
+	s.ShareId = &v
+	return s
+}
+
+// SetSharedWith sets the SharedWith field's value.
+func (s *ProfileShareSummary) SetSharedWith(v string) *ProfileShareSummary {
+	s.SharedWith = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ProfileShareSummary) SetStatus(v string) *ProfileShareSummary {
+	s.Status = &v
+	return s
+}
+
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *ProfileShareSummary) SetStatusMessage(v string) *ProfileShareSummary {
+	s.StatusMessage = &v
+	return s
+}
+
+// Summary of a profile.
+type ProfileSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time recorded.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// An Amazon Web Services account ID.
+	Owner *string `min:"12" type:"string"`
+
+	// The profile ARN.
+	ProfileArn *string `type:"string"`
+
+	// The profile description.
+	ProfileDescription *string `min:"3" type:"string"`
+
+	// The profile name.
+	ProfileName *string `min:"3" type:"string"`
+
+	// The profile version.
+	ProfileVersion *string `min:"1" type:"string"`
+
+	// The date and time recorded.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ProfileSummary) SetCreatedAt(v time.Time) *ProfileSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetOwner sets the Owner field's value.
+func (s *ProfileSummary) SetOwner(v string) *ProfileSummary {
+	s.Owner = &v
+	return s
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *ProfileSummary) SetProfileArn(v string) *ProfileSummary {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetProfileDescription sets the ProfileDescription field's value.
+func (s *ProfileSummary) SetProfileDescription(v string) *ProfileSummary {
+	s.ProfileDescription = &v
+	return s
+}
+
+// SetProfileName sets the ProfileName field's value.
+func (s *ProfileSummary) SetProfileName(v string) *ProfileSummary {
+	s.ProfileName = &v
+	return s
+}
+
+// SetProfileVersion sets the ProfileVersion field's value.
+func (s *ProfileSummary) SetProfileVersion(v string) *ProfileSummary {
+	s.ProfileVersion = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *ProfileSummary) SetUpdatedAt(v time.Time) *ProfileSummary {
+	s.UpdatedAt = &v
+	return s
+}
+
+// The profile template.
+type ProfileTemplate struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time recorded.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The name of the profile template.
+	TemplateName *string `min:"3" type:"string"`
+
+	// Profile template questions.
+	TemplateQuestions []*ProfileTemplateQuestion `type:"list"`
+
+	// The date and time recorded.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileTemplate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileTemplate) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ProfileTemplate) SetCreatedAt(v time.Time) *ProfileTemplate {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *ProfileTemplate) SetTemplateName(v string) *ProfileTemplate {
+	s.TemplateName = &v
+	return s
+}
+
+// SetTemplateQuestions sets the TemplateQuestions field's value.
+func (s *ProfileTemplate) SetTemplateQuestions(v []*ProfileTemplateQuestion) *ProfileTemplate {
+	s.TemplateQuestions = v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *ProfileTemplate) SetUpdatedAt(v time.Time) *ProfileTemplate {
+	s.UpdatedAt = &v
+	return s
+}
+
+// A profile template choice.
+type ProfileTemplateChoice struct {
+	_ struct{} `type:"structure"`
+
+	// The description of a choice.
+	ChoiceDescription *string `min:"1" type:"string"`
+
+	// The ID of a choice.
+	ChoiceId *string `min:"1" type:"string"`
+
+	// The title of a choice.
+	ChoiceTitle *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileTemplateChoice) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileTemplateChoice) GoString() string {
+	return s.String()
+}
+
+// SetChoiceDescription sets the ChoiceDescription field's value.
+func (s *ProfileTemplateChoice) SetChoiceDescription(v string) *ProfileTemplateChoice {
+	s.ChoiceDescription = &v
+	return s
+}
+
+// SetChoiceId sets the ChoiceId field's value.
+func (s *ProfileTemplateChoice) SetChoiceId(v string) *ProfileTemplateChoice {
+	s.ChoiceId = &v
+	return s
+}
+
+// SetChoiceTitle sets the ChoiceTitle field's value.
+func (s *ProfileTemplateChoice) SetChoiceTitle(v string) *ProfileTemplateChoice {
+	s.ChoiceTitle = &v
+	return s
+}
+
+// A profile template question.
+type ProfileTemplateQuestion struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of choices selected.
+	MaxSelectedChoices *int64 `type:"integer"`
+
+	// The minimum number of choices selected.
+	MinSelectedChoices *int64 `type:"integer"`
+
+	// The question choices.
+	QuestionChoices []*ProfileTemplateChoice `type:"list"`
+
+	// The description of the question.
+	QuestionDescription *string `min:"1" type:"string"`
+
+	// The ID of the question.
+	QuestionId *string `min:"1" type:"string"`
+
+	// The title of the question.
+	QuestionTitle *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileTemplateQuestion) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProfileTemplateQuestion) GoString() string {
+	return s.String()
+}
+
+// SetMaxSelectedChoices sets the MaxSelectedChoices field's value.
+func (s *ProfileTemplateQuestion) SetMaxSelectedChoices(v int64) *ProfileTemplateQuestion {
+	s.MaxSelectedChoices = &v
+	return s
+}
+
+// SetMinSelectedChoices sets the MinSelectedChoices field's value.
+func (s *ProfileTemplateQuestion) SetMinSelectedChoices(v int64) *ProfileTemplateQuestion {
+	s.MinSelectedChoices = &v
+	return s
+}
+
+// SetQuestionChoices sets the QuestionChoices field's value.
+func (s *ProfileTemplateQuestion) SetQuestionChoices(v []*ProfileTemplateChoice) *ProfileTemplateQuestion {
+	s.QuestionChoices = v
+	return s
+}
+
+// SetQuestionDescription sets the QuestionDescription field's value.
+func (s *ProfileTemplateQuestion) SetQuestionDescription(v string) *ProfileTemplateQuestion {
+	s.QuestionDescription = &v
+	return s
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *ProfileTemplateQuestion) SetQuestionId(v string) *ProfileTemplateQuestion {
+	s.QuestionId = &v
+	return s
+}
+
+// SetQuestionTitle sets the QuestionTitle field's value.
+func (s *ProfileTemplateQuestion) SetQuestionTitle(v string) *ProfileTemplateQuestion {
+	s.QuestionTitle = &v
 	return s
 }
 
@@ -12141,6 +18377,694 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// A review template.
+type ReviewTemplate struct {
+	_ struct{} `type:"structure"`
+
+	// The review template description.
+	Description *string `min:"3" type:"string"`
+
+	// The lenses applied to the review template.
+	Lenses []*string `type:"list"`
+
+	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
+	Notes *string `type:"string"`
+
+	// An Amazon Web Services account ID.
+	Owner *string `min:"12" type:"string"`
+
+	// A count of how many total questions are answered and unanswered in the review
+	// template.
+	QuestionCounts map[string]*int64 `type:"map"`
+
+	// The ID assigned to the template share invitation.
+	ShareInvitationId *string `type:"string"`
+
+	// The tags assigned to the review template.
+	Tags map[string]*string `min:"1" type:"map"`
+
+	// The review template ARN.
+	TemplateArn *string `min:"50" type:"string"`
+
+	// The name of the review template.
+	TemplateName *string `min:"3" type:"string"`
+
+	// The latest status of a review template.
+	UpdateStatus *string `type:"string" enum:"ReviewTemplateUpdateStatus"`
+
+	// The date and time recorded.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplate) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *ReviewTemplate) SetDescription(v string) *ReviewTemplate {
+	s.Description = &v
+	return s
+}
+
+// SetLenses sets the Lenses field's value.
+func (s *ReviewTemplate) SetLenses(v []*string) *ReviewTemplate {
+	s.Lenses = v
+	return s
+}
+
+// SetNotes sets the Notes field's value.
+func (s *ReviewTemplate) SetNotes(v string) *ReviewTemplate {
+	s.Notes = &v
+	return s
+}
+
+// SetOwner sets the Owner field's value.
+func (s *ReviewTemplate) SetOwner(v string) *ReviewTemplate {
+	s.Owner = &v
+	return s
+}
+
+// SetQuestionCounts sets the QuestionCounts field's value.
+func (s *ReviewTemplate) SetQuestionCounts(v map[string]*int64) *ReviewTemplate {
+	s.QuestionCounts = v
+	return s
+}
+
+// SetShareInvitationId sets the ShareInvitationId field's value.
+func (s *ReviewTemplate) SetShareInvitationId(v string) *ReviewTemplate {
+	s.ShareInvitationId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ReviewTemplate) SetTags(v map[string]*string) *ReviewTemplate {
+	s.Tags = v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *ReviewTemplate) SetTemplateArn(v string) *ReviewTemplate {
+	s.TemplateArn = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *ReviewTemplate) SetTemplateName(v string) *ReviewTemplate {
+	s.TemplateName = &v
+	return s
+}
+
+// SetUpdateStatus sets the UpdateStatus field's value.
+func (s *ReviewTemplate) SetUpdateStatus(v string) *ReviewTemplate {
+	s.UpdateStatus = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *ReviewTemplate) SetUpdatedAt(v time.Time) *ReviewTemplate {
+	s.UpdatedAt = &v
+	return s
+}
+
+// An answer of the question.
+type ReviewTemplateAnswer struct {
+	_ struct{} `type:"structure"`
+
+	// The status of whether or not this question has been answered.
+	AnswerStatus *string `type:"string" enum:"ReviewTemplateAnswerStatus"`
+
+	// A list of selected choices to a question in your review template.
+	ChoiceAnswers []*ChoiceAnswer `type:"list"`
+
+	// List of choices available for a question.
+	Choices []*Choice `type:"list"`
+
+	// The helpful resource text to be displayed for a custom lens.
+	//
+	// This field does not apply to Amazon Web Services official lenses.
+	HelpfulResourceDisplayText *string `min:"1" type:"string"`
+
+	// The helpful resource URL.
+	//
+	// For Amazon Web Services official lenses, this is the helpful resource URL
+	// for a question or choice.
+	//
+	// For custom lenses, this is the helpful resource URL for a question and is
+	// only provided if HelpfulResourceDisplayText was specified for the question.
+	HelpfulResourceUrl *string `min:"1" type:"string"`
+
+	// The improvement plan URL for a question in an Amazon Web Services official
+	// lenses.
+	//
+	// This value is only available if the question has been answered.
+	//
+	// This value does not apply to custom lenses.
+	ImprovementPlanUrl *string `min:"1" type:"string"`
+
+	// Defines whether this question is applicable to a lens review.
+	IsApplicable *bool `type:"boolean"`
+
+	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
+	Notes *string `type:"string"`
+
+	// The ID used to identify a pillar, for example, security.
+	//
+	// A pillar is identified by its PillarReviewSummary$PillarId.
+	PillarId *string `min:"1" type:"string"`
+
+	// The description of the question.
+	QuestionDescription *string `min:"1" type:"string"`
+
+	// The ID of the question.
+	QuestionId *string `min:"1" type:"string"`
+
+	// The title of the question.
+	QuestionTitle *string `min:"1" type:"string"`
+
+	// The reason why the question is not applicable to your review template.
+	Reason *string `type:"string" enum:"AnswerReason"`
+
+	// List of selected choice IDs in a question answer.
+	//
+	// The values entered replace the previously selected choices.
+	SelectedChoices []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplateAnswer) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplateAnswer) GoString() string {
+	return s.String()
+}
+
+// SetAnswerStatus sets the AnswerStatus field's value.
+func (s *ReviewTemplateAnswer) SetAnswerStatus(v string) *ReviewTemplateAnswer {
+	s.AnswerStatus = &v
+	return s
+}
+
+// SetChoiceAnswers sets the ChoiceAnswers field's value.
+func (s *ReviewTemplateAnswer) SetChoiceAnswers(v []*ChoiceAnswer) *ReviewTemplateAnswer {
+	s.ChoiceAnswers = v
+	return s
+}
+
+// SetChoices sets the Choices field's value.
+func (s *ReviewTemplateAnswer) SetChoices(v []*Choice) *ReviewTemplateAnswer {
+	s.Choices = v
+	return s
+}
+
+// SetHelpfulResourceDisplayText sets the HelpfulResourceDisplayText field's value.
+func (s *ReviewTemplateAnswer) SetHelpfulResourceDisplayText(v string) *ReviewTemplateAnswer {
+	s.HelpfulResourceDisplayText = &v
+	return s
+}
+
+// SetHelpfulResourceUrl sets the HelpfulResourceUrl field's value.
+func (s *ReviewTemplateAnswer) SetHelpfulResourceUrl(v string) *ReviewTemplateAnswer {
+	s.HelpfulResourceUrl = &v
+	return s
+}
+
+// SetImprovementPlanUrl sets the ImprovementPlanUrl field's value.
+func (s *ReviewTemplateAnswer) SetImprovementPlanUrl(v string) *ReviewTemplateAnswer {
+	s.ImprovementPlanUrl = &v
+	return s
+}
+
+// SetIsApplicable sets the IsApplicable field's value.
+func (s *ReviewTemplateAnswer) SetIsApplicable(v bool) *ReviewTemplateAnswer {
+	s.IsApplicable = &v
+	return s
+}
+
+// SetNotes sets the Notes field's value.
+func (s *ReviewTemplateAnswer) SetNotes(v string) *ReviewTemplateAnswer {
+	s.Notes = &v
+	return s
+}
+
+// SetPillarId sets the PillarId field's value.
+func (s *ReviewTemplateAnswer) SetPillarId(v string) *ReviewTemplateAnswer {
+	s.PillarId = &v
+	return s
+}
+
+// SetQuestionDescription sets the QuestionDescription field's value.
+func (s *ReviewTemplateAnswer) SetQuestionDescription(v string) *ReviewTemplateAnswer {
+	s.QuestionDescription = &v
+	return s
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *ReviewTemplateAnswer) SetQuestionId(v string) *ReviewTemplateAnswer {
+	s.QuestionId = &v
+	return s
+}
+
+// SetQuestionTitle sets the QuestionTitle field's value.
+func (s *ReviewTemplateAnswer) SetQuestionTitle(v string) *ReviewTemplateAnswer {
+	s.QuestionTitle = &v
+	return s
+}
+
+// SetReason sets the Reason field's value.
+func (s *ReviewTemplateAnswer) SetReason(v string) *ReviewTemplateAnswer {
+	s.Reason = &v
+	return s
+}
+
+// SetSelectedChoices sets the SelectedChoices field's value.
+func (s *ReviewTemplateAnswer) SetSelectedChoices(v []*string) *ReviewTemplateAnswer {
+	s.SelectedChoices = v
+	return s
+}
+
+// The summary of review template answers.
+type ReviewTemplateAnswerSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The status of whether or not this question has been answered.
+	AnswerStatus *string `type:"string" enum:"ReviewTemplateAnswerStatus"`
+
+	// A list of selected choices to a question in the review template.
+	ChoiceAnswerSummaries []*ChoiceAnswerSummary `type:"list"`
+
+	// List of choices available for a question.
+	Choices []*Choice `type:"list"`
+
+	// Defines whether this question is applicable to a lens review.
+	IsApplicable *bool `type:"boolean"`
+
+	// The ID used to identify a pillar, for example, security.
+	//
+	// A pillar is identified by its PillarReviewSummary$PillarId.
+	PillarId *string `min:"1" type:"string"`
+
+	// The ID of the question.
+	QuestionId *string `min:"1" type:"string"`
+
+	// The title of the question.
+	QuestionTitle *string `min:"1" type:"string"`
+
+	// The type of question.
+	QuestionType *string `type:"string" enum:"QuestionType"`
+
+	// The reason why a choice is not-applicable to a question in the review template.
+	Reason *string `type:"string" enum:"AnswerReason"`
+
+	// List of selected choice IDs in a question answer.
+	//
+	// The values entered replace the previously selected choices.
+	SelectedChoices []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplateAnswerSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplateAnswerSummary) GoString() string {
+	return s.String()
+}
+
+// SetAnswerStatus sets the AnswerStatus field's value.
+func (s *ReviewTemplateAnswerSummary) SetAnswerStatus(v string) *ReviewTemplateAnswerSummary {
+	s.AnswerStatus = &v
+	return s
+}
+
+// SetChoiceAnswerSummaries sets the ChoiceAnswerSummaries field's value.
+func (s *ReviewTemplateAnswerSummary) SetChoiceAnswerSummaries(v []*ChoiceAnswerSummary) *ReviewTemplateAnswerSummary {
+	s.ChoiceAnswerSummaries = v
+	return s
+}
+
+// SetChoices sets the Choices field's value.
+func (s *ReviewTemplateAnswerSummary) SetChoices(v []*Choice) *ReviewTemplateAnswerSummary {
+	s.Choices = v
+	return s
+}
+
+// SetIsApplicable sets the IsApplicable field's value.
+func (s *ReviewTemplateAnswerSummary) SetIsApplicable(v bool) *ReviewTemplateAnswerSummary {
+	s.IsApplicable = &v
+	return s
+}
+
+// SetPillarId sets the PillarId field's value.
+func (s *ReviewTemplateAnswerSummary) SetPillarId(v string) *ReviewTemplateAnswerSummary {
+	s.PillarId = &v
+	return s
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *ReviewTemplateAnswerSummary) SetQuestionId(v string) *ReviewTemplateAnswerSummary {
+	s.QuestionId = &v
+	return s
+}
+
+// SetQuestionTitle sets the QuestionTitle field's value.
+func (s *ReviewTemplateAnswerSummary) SetQuestionTitle(v string) *ReviewTemplateAnswerSummary {
+	s.QuestionTitle = &v
+	return s
+}
+
+// SetQuestionType sets the QuestionType field's value.
+func (s *ReviewTemplateAnswerSummary) SetQuestionType(v string) *ReviewTemplateAnswerSummary {
+	s.QuestionType = &v
+	return s
+}
+
+// SetReason sets the Reason field's value.
+func (s *ReviewTemplateAnswerSummary) SetReason(v string) *ReviewTemplateAnswerSummary {
+	s.Reason = &v
+	return s
+}
+
+// SetSelectedChoices sets the SelectedChoices field's value.
+func (s *ReviewTemplateAnswerSummary) SetSelectedChoices(v []*string) *ReviewTemplateAnswerSummary {
+	s.SelectedChoices = v
+	return s
+}
+
+// The lens review of a review template.
+type ReviewTemplateLensReview struct {
+	_ struct{} `type:"structure"`
+
+	// The alias of the lens.
+	//
+	// For Amazon Web Services official lenses, this is either the lens alias, such
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
+	//
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
+	//
+	// Each lens is identified by its LensSummary$LensAlias.
+	LensAlias *string `min:"1" type:"string"`
+
+	// The lens ARN.
+	LensArn *string `type:"string"`
+
+	// The full name of the lens.
+	LensName *string `min:"1" type:"string"`
+
+	// The status of the lens.
+	LensStatus *string `type:"string" enum:"LensStatus"`
+
+	// The version of the lens.
+	LensVersion *string `min:"1" type:"string"`
+
+	// The token to use to retrieve the next set of results.
+	NextToken *string `type:"string"`
+
+	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
+	Notes *string `type:"string"`
+
+	// Pillar review summaries of a lens review.
+	PillarReviewSummaries []*ReviewTemplatePillarReviewSummary `type:"list"`
+
+	// A count of how many questions are answered and unanswered in the lens review.
+	QuestionCounts map[string]*int64 `type:"map"`
+
+	// The date and time recorded.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplateLensReview) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplateLensReview) GoString() string {
+	return s.String()
+}
+
+// SetLensAlias sets the LensAlias field's value.
+func (s *ReviewTemplateLensReview) SetLensAlias(v string) *ReviewTemplateLensReview {
+	s.LensAlias = &v
+	return s
+}
+
+// SetLensArn sets the LensArn field's value.
+func (s *ReviewTemplateLensReview) SetLensArn(v string) *ReviewTemplateLensReview {
+	s.LensArn = &v
+	return s
+}
+
+// SetLensName sets the LensName field's value.
+func (s *ReviewTemplateLensReview) SetLensName(v string) *ReviewTemplateLensReview {
+	s.LensName = &v
+	return s
+}
+
+// SetLensStatus sets the LensStatus field's value.
+func (s *ReviewTemplateLensReview) SetLensStatus(v string) *ReviewTemplateLensReview {
+	s.LensStatus = &v
+	return s
+}
+
+// SetLensVersion sets the LensVersion field's value.
+func (s *ReviewTemplateLensReview) SetLensVersion(v string) *ReviewTemplateLensReview {
+	s.LensVersion = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ReviewTemplateLensReview) SetNextToken(v string) *ReviewTemplateLensReview {
+	s.NextToken = &v
+	return s
+}
+
+// SetNotes sets the Notes field's value.
+func (s *ReviewTemplateLensReview) SetNotes(v string) *ReviewTemplateLensReview {
+	s.Notes = &v
+	return s
+}
+
+// SetPillarReviewSummaries sets the PillarReviewSummaries field's value.
+func (s *ReviewTemplateLensReview) SetPillarReviewSummaries(v []*ReviewTemplatePillarReviewSummary) *ReviewTemplateLensReview {
+	s.PillarReviewSummaries = v
+	return s
+}
+
+// SetQuestionCounts sets the QuestionCounts field's value.
+func (s *ReviewTemplateLensReview) SetQuestionCounts(v map[string]*int64) *ReviewTemplateLensReview {
+	s.QuestionCounts = v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *ReviewTemplateLensReview) SetUpdatedAt(v time.Time) *ReviewTemplateLensReview {
+	s.UpdatedAt = &v
+	return s
+}
+
+// Summary of a review template.
+type ReviewTemplatePillarReviewSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
+	Notes *string `type:"string"`
+
+	// The ID used to identify a pillar, for example, security.
+	//
+	// A pillar is identified by its PillarReviewSummary$PillarId.
+	PillarId *string `min:"1" type:"string"`
+
+	// The name of the pillar.
+	PillarName *string `min:"1" type:"string"`
+
+	// A count of how many questions are answered and unanswered in the requested
+	// pillar of the lens review.
+	QuestionCounts map[string]*int64 `type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplatePillarReviewSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplatePillarReviewSummary) GoString() string {
+	return s.String()
+}
+
+// SetNotes sets the Notes field's value.
+func (s *ReviewTemplatePillarReviewSummary) SetNotes(v string) *ReviewTemplatePillarReviewSummary {
+	s.Notes = &v
+	return s
+}
+
+// SetPillarId sets the PillarId field's value.
+func (s *ReviewTemplatePillarReviewSummary) SetPillarId(v string) *ReviewTemplatePillarReviewSummary {
+	s.PillarId = &v
+	return s
+}
+
+// SetPillarName sets the PillarName field's value.
+func (s *ReviewTemplatePillarReviewSummary) SetPillarName(v string) *ReviewTemplatePillarReviewSummary {
+	s.PillarName = &v
+	return s
+}
+
+// SetQuestionCounts sets the QuestionCounts field's value.
+func (s *ReviewTemplatePillarReviewSummary) SetQuestionCounts(v map[string]*int64) *ReviewTemplatePillarReviewSummary {
+	s.QuestionCounts = v
+	return s
+}
+
+// Summary of a review template.
+type ReviewTemplateSummary struct {
+	_ struct{} `type:"structure"`
+
+	// Description of the review template.
+	Description *string `min:"3" type:"string"`
+
+	// Lenses associated with the review template.
+	Lenses []*string `type:"list"`
+
+	// An Amazon Web Services account ID.
+	Owner *string `min:"12" type:"string"`
+
+	// The review template ARN.
+	TemplateArn *string `min:"50" type:"string"`
+
+	// The name of the review template.
+	TemplateName *string `min:"3" type:"string"`
+
+	// The latest status of a review template.
+	UpdateStatus *string `type:"string" enum:"ReviewTemplateUpdateStatus"`
+
+	// The date and time recorded.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplateSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReviewTemplateSummary) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *ReviewTemplateSummary) SetDescription(v string) *ReviewTemplateSummary {
+	s.Description = &v
+	return s
+}
+
+// SetLenses sets the Lenses field's value.
+func (s *ReviewTemplateSummary) SetLenses(v []*string) *ReviewTemplateSummary {
+	s.Lenses = v
+	return s
+}
+
+// SetOwner sets the Owner field's value.
+func (s *ReviewTemplateSummary) SetOwner(v string) *ReviewTemplateSummary {
+	s.Owner = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *ReviewTemplateSummary) SetTemplateArn(v string) *ReviewTemplateSummary {
+	s.TemplateArn = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *ReviewTemplateSummary) SetTemplateName(v string) *ReviewTemplateSummary {
+	s.TemplateName = &v
+	return s
+}
+
+// SetUpdateStatus sets the UpdateStatus field's value.
+func (s *ReviewTemplateSummary) SetUpdateStatus(v string) *ReviewTemplateSummary {
+	s.UpdateStatus = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *ReviewTemplateSummary) SetUpdatedAt(v time.Time) *ReviewTemplateSummary {
+	s.UpdatedAt = &v
+	return s
+}
+
 // The user has reached their resource quota.
 type ServiceQuotaExceededException struct {
 	_            struct{}                  `type:"structure"`
@@ -12241,15 +19165,21 @@ type ShareInvitation struct {
 	// The ARN for the lens.
 	LensArn *string `type:"string"`
 
+	// The profile ARN.
+	ProfileArn *string `type:"string"`
+
 	// The ID assigned to the share invitation.
 	ShareInvitationId *string `type:"string"`
 
 	// The resource type of the share invitation.
 	ShareResourceType *string `type:"string" enum:"ShareResourceType"`
 
+	// The review template ARN.
+	TemplateArn *string `min:"50" type:"string"`
+
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -12282,6 +19212,12 @@ func (s *ShareInvitation) SetLensArn(v string) *ShareInvitation {
 	return s
 }
 
+// SetProfileArn sets the ProfileArn field's value.
+func (s *ShareInvitation) SetProfileArn(v string) *ShareInvitation {
+	s.ProfileArn = &v
+	return s
+}
+
 // SetShareInvitationId sets the ShareInvitationId field's value.
 func (s *ShareInvitation) SetShareInvitationId(v string) *ShareInvitation {
 	s.ShareInvitationId = &v
@@ -12291,6 +19227,12 @@ func (s *ShareInvitation) SetShareInvitationId(v string) *ShareInvitation {
 // SetShareResourceType sets the ShareResourceType field's value.
 func (s *ShareInvitation) SetShareResourceType(v string) *ShareInvitation {
 	s.ShareResourceType = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *ShareInvitation) SetTemplateArn(v string) *ShareInvitation {
+	s.TemplateArn = &v
 	return s
 }
 
@@ -12310,8 +19252,14 @@ type ShareInvitationSummary struct {
 	// The full name of the lens.
 	LensName *string `min:"1" type:"string"`
 
-	// Permission granted on a workload share.
+	// Permission granted on a share request.
 	PermissionType *string `type:"string" enum:"PermissionType"`
+
+	// The profile ARN.
+	ProfileArn *string `type:"string"`
+
+	// The profile name.
+	ProfileName *string `min:"3" type:"string"`
 
 	// The ID assigned to the share invitation.
 	ShareInvitationId *string `type:"string"`
@@ -12320,15 +19268,21 @@ type ShareInvitationSummary struct {
 	ShareResourceType *string `type:"string" enum:"ShareResourceType"`
 
 	// An Amazon Web Services account ID.
-	SharedBy *string `type:"string"`
+	SharedBy *string `min:"12" type:"string"`
 
-	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
-	// unit (OU) ID with which the workload is shared.
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the workload, lens, profile, or review template is shared.
 	SharedWith *string `min:"12" type:"string"`
+
+	// The review template ARN.
+	TemplateArn *string `min:"50" type:"string"`
+
+	// The name of the review template.
+	TemplateName *string `min:"3" type:"string"`
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 
 	// The name of the workload.
 	//
@@ -12373,6 +19327,18 @@ func (s *ShareInvitationSummary) SetPermissionType(v string) *ShareInvitationSum
 	return s
 }
 
+// SetProfileArn sets the ProfileArn field's value.
+func (s *ShareInvitationSummary) SetProfileArn(v string) *ShareInvitationSummary {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetProfileName sets the ProfileName field's value.
+func (s *ShareInvitationSummary) SetProfileName(v string) *ShareInvitationSummary {
+	s.ProfileName = &v
+	return s
+}
+
 // SetShareInvitationId sets the ShareInvitationId field's value.
 func (s *ShareInvitationSummary) SetShareInvitationId(v string) *ShareInvitationSummary {
 	s.ShareInvitationId = &v
@@ -12394,6 +19360,18 @@ func (s *ShareInvitationSummary) SetSharedBy(v string) *ShareInvitationSummary {
 // SetSharedWith sets the SharedWith field's value.
 func (s *ShareInvitationSummary) SetSharedWith(v string) *ShareInvitationSummary {
 	s.SharedWith = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *ShareInvitationSummary) SetTemplateArn(v string) *ShareInvitationSummary {
+	s.TemplateArn = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *ShareInvitationSummary) SetTemplateName(v string) *ShareInvitationSummary {
+	s.TemplateName = &v
 	return s
 }
 
@@ -12495,6 +19473,66 @@ func (s TagResourceOutput) String() string {
 // value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
+}
+
+// Summary of a review template share.
+type TemplateShareSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The ID associated with the share.
+	ShareId *string `type:"string"`
+
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the workload, lens, profile, or review template is shared.
+	SharedWith *string `min:"12" type:"string"`
+
+	// The status of the share request.
+	Status *string `type:"string" enum:"ShareStatus"`
+
+	// Review template share invitation status message.
+	StatusMessage *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TemplateShareSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TemplateShareSummary) GoString() string {
+	return s.String()
+}
+
+// SetShareId sets the ShareId field's value.
+func (s *TemplateShareSummary) SetShareId(v string) *TemplateShareSummary {
+	s.ShareId = &v
+	return s
+}
+
+// SetSharedWith sets the SharedWith field's value.
+func (s *TemplateShareSummary) SetSharedWith(v string) *TemplateShareSummary {
+	s.SharedWith = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *TemplateShareSummary) SetStatus(v string) *TemplateShareSummary {
+	s.Status = &v
+	return s
+}
+
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *TemplateShareSummary) SetStatusMessage(v string) *TemplateShareSummary {
+	s.StatusMessage = &v
+	return s
 }
 
 // Request was denied due to request throttling.
@@ -12683,6 +19721,9 @@ type UpdateAnswerInput struct {
 	LensAlias *string `location:"uri" locationName:"LensAlias" min:"1" type:"string" required:"true"`
 
 	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
 	Notes *string `type:"string"`
 
 	// The ID of the question.
@@ -12702,7 +19743,7 @@ type UpdateAnswerInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -12741,8 +19782,8 @@ func (s *UpdateAnswerInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 	if s.ChoiceUpdates != nil {
 		for i, v := range s.ChoiceUpdates {
@@ -12833,7 +19874,7 @@ type UpdateAnswerOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -12959,16 +20000,22 @@ type UpdateLensReviewInput struct {
 	LensAlias *string `location:"uri" locationName:"LensAlias" min:"1" type:"string" required:"true"`
 
 	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
 	LensNotes *string `type:"string"`
 
 	// List of pillar notes of a lens review in a workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
 	PillarNotes map[string]*string `type:"map"`
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -13001,8 +20048,8 @@ func (s *UpdateLensReviewInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -13044,7 +20091,7 @@ type UpdateLensReviewOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 }
 
 // String returns the string representation.
@@ -13074,6 +20121,607 @@ func (s *UpdateLensReviewOutput) SetLensReview(v *LensReview) *UpdateLensReviewO
 // SetWorkloadId sets the WorkloadId field's value.
 func (s *UpdateLensReviewOutput) SetWorkloadId(v string) *UpdateLensReviewOutput {
 	s.WorkloadId = &v
+	return s
+}
+
+type UpdateProfileInput struct {
+	_ struct{} `type:"structure"`
+
+	// The profile ARN.
+	//
+	// ProfileArn is a required field
+	ProfileArn *string `location:"uri" locationName:"ProfileArn" type:"string" required:"true"`
+
+	// The profile description.
+	ProfileDescription *string `min:"3" type:"string"`
+
+	// Profile questions.
+	ProfileQuestions []*ProfileQuestionUpdate `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateProfileInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateProfileInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateProfileInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateProfileInput"}
+	if s.ProfileArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileArn"))
+	}
+	if s.ProfileArn != nil && len(*s.ProfileArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileArn", 1))
+	}
+	if s.ProfileDescription != nil && len(*s.ProfileDescription) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileDescription", 3))
+	}
+	if s.ProfileQuestions != nil {
+		for i, v := range s.ProfileQuestions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ProfileQuestions", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *UpdateProfileInput) SetProfileArn(v string) *UpdateProfileInput {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetProfileDescription sets the ProfileDescription field's value.
+func (s *UpdateProfileInput) SetProfileDescription(v string) *UpdateProfileInput {
+	s.ProfileDescription = &v
+	return s
+}
+
+// SetProfileQuestions sets the ProfileQuestions field's value.
+func (s *UpdateProfileInput) SetProfileQuestions(v []*ProfileQuestionUpdate) *UpdateProfileInput {
+	s.ProfileQuestions = v
+	return s
+}
+
+type UpdateProfileOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The profile.
+	Profile *Profile `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateProfileOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateProfileOutput) GoString() string {
+	return s.String()
+}
+
+// SetProfile sets the Profile field's value.
+func (s *UpdateProfileOutput) SetProfile(v *Profile) *UpdateProfileOutput {
+	s.Profile = v
+	return s
+}
+
+type UpdateReviewTemplateAnswerInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of choices to be updated.
+	ChoiceUpdates map[string]*ChoiceUpdate `type:"map"`
+
+	// Defines whether this question is applicable to a lens review.
+	IsApplicable *bool `type:"boolean"`
+
+	// The alias of the lens.
+	//
+	// For Amazon Web Services official lenses, this is either the lens alias, such
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
+	//
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
+	//
+	// Each lens is identified by its LensSummary$LensAlias.
+	//
+	// LensAlias is a required field
+	LensAlias *string `location:"uri" locationName:"LensAlias" min:"1" type:"string" required:"true"`
+
+	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
+	Notes *string `type:"string"`
+
+	// The ID of the question.
+	//
+	// QuestionId is a required field
+	QuestionId *string `location:"uri" locationName:"QuestionId" min:"1" type:"string" required:"true"`
+
+	// The update reason.
+	Reason *string `type:"string" enum:"AnswerReason"`
+
+	// List of selected choice IDs in a question answer.
+	//
+	// The values entered replace the previously selected choices.
+	SelectedChoices []*string `type:"list"`
+
+	// The review template ARN.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateAnswerInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateAnswerInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateReviewTemplateAnswerInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateReviewTemplateAnswerInput"}
+	if s.LensAlias == nil {
+		invalidParams.Add(request.NewErrParamRequired("LensAlias"))
+	}
+	if s.LensAlias != nil && len(*s.LensAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LensAlias", 1))
+	}
+	if s.QuestionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("QuestionId"))
+	}
+	if s.QuestionId != nil && len(*s.QuestionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QuestionId", 1))
+	}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+	if s.ChoiceUpdates != nil {
+		for i, v := range s.ChoiceUpdates {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ChoiceUpdates", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChoiceUpdates sets the ChoiceUpdates field's value.
+func (s *UpdateReviewTemplateAnswerInput) SetChoiceUpdates(v map[string]*ChoiceUpdate) *UpdateReviewTemplateAnswerInput {
+	s.ChoiceUpdates = v
+	return s
+}
+
+// SetIsApplicable sets the IsApplicable field's value.
+func (s *UpdateReviewTemplateAnswerInput) SetIsApplicable(v bool) *UpdateReviewTemplateAnswerInput {
+	s.IsApplicable = &v
+	return s
+}
+
+// SetLensAlias sets the LensAlias field's value.
+func (s *UpdateReviewTemplateAnswerInput) SetLensAlias(v string) *UpdateReviewTemplateAnswerInput {
+	s.LensAlias = &v
+	return s
+}
+
+// SetNotes sets the Notes field's value.
+func (s *UpdateReviewTemplateAnswerInput) SetNotes(v string) *UpdateReviewTemplateAnswerInput {
+	s.Notes = &v
+	return s
+}
+
+// SetQuestionId sets the QuestionId field's value.
+func (s *UpdateReviewTemplateAnswerInput) SetQuestionId(v string) *UpdateReviewTemplateAnswerInput {
+	s.QuestionId = &v
+	return s
+}
+
+// SetReason sets the Reason field's value.
+func (s *UpdateReviewTemplateAnswerInput) SetReason(v string) *UpdateReviewTemplateAnswerInput {
+	s.Reason = &v
+	return s
+}
+
+// SetSelectedChoices sets the SelectedChoices field's value.
+func (s *UpdateReviewTemplateAnswerInput) SetSelectedChoices(v []*string) *UpdateReviewTemplateAnswerInput {
+	s.SelectedChoices = v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *UpdateReviewTemplateAnswerInput) SetTemplateArn(v string) *UpdateReviewTemplateAnswerInput {
+	s.TemplateArn = &v
+	return s
+}
+
+type UpdateReviewTemplateAnswerOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An answer of the question.
+	Answer *ReviewTemplateAnswer `type:"structure"`
+
+	// The alias of the lens.
+	//
+	// For Amazon Web Services official lenses, this is either the lens alias, such
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
+	//
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
+	//
+	// Each lens is identified by its LensSummary$LensAlias.
+	LensAlias *string `min:"1" type:"string"`
+
+	// The review template ARN.
+	TemplateArn *string `min:"50" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateAnswerOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateAnswerOutput) GoString() string {
+	return s.String()
+}
+
+// SetAnswer sets the Answer field's value.
+func (s *UpdateReviewTemplateAnswerOutput) SetAnswer(v *ReviewTemplateAnswer) *UpdateReviewTemplateAnswerOutput {
+	s.Answer = v
+	return s
+}
+
+// SetLensAlias sets the LensAlias field's value.
+func (s *UpdateReviewTemplateAnswerOutput) SetLensAlias(v string) *UpdateReviewTemplateAnswerOutput {
+	s.LensAlias = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *UpdateReviewTemplateAnswerOutput) SetTemplateArn(v string) *UpdateReviewTemplateAnswerOutput {
+	s.TemplateArn = &v
+	return s
+}
+
+type UpdateReviewTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The review template description.
+	Description *string `min:"3" type:"string"`
+
+	// A list of lens aliases or ARNs to apply to the review template.
+	LensesToAssociate []*string `min:"1" type:"list"`
+
+	// A list of lens aliases or ARNs to unapply to the review template. The wellarchitected
+	// lens cannot be unapplied.
+	LensesToDisassociate []*string `min:"1" type:"list"`
+
+	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
+	Notes *string `type:"string"`
+
+	// The review template ARN.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+
+	// The review template name.
+	TemplateName *string `min:"3" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateReviewTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateReviewTemplateInput"}
+	if s.Description != nil && len(*s.Description) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 3))
+	}
+	if s.LensesToAssociate != nil && len(s.LensesToAssociate) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LensesToAssociate", 1))
+	}
+	if s.LensesToDisassociate != nil && len(s.LensesToDisassociate) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LensesToDisassociate", 1))
+	}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateReviewTemplateInput) SetDescription(v string) *UpdateReviewTemplateInput {
+	s.Description = &v
+	return s
+}
+
+// SetLensesToAssociate sets the LensesToAssociate field's value.
+func (s *UpdateReviewTemplateInput) SetLensesToAssociate(v []*string) *UpdateReviewTemplateInput {
+	s.LensesToAssociate = v
+	return s
+}
+
+// SetLensesToDisassociate sets the LensesToDisassociate field's value.
+func (s *UpdateReviewTemplateInput) SetLensesToDisassociate(v []*string) *UpdateReviewTemplateInput {
+	s.LensesToDisassociate = v
+	return s
+}
+
+// SetNotes sets the Notes field's value.
+func (s *UpdateReviewTemplateInput) SetNotes(v string) *UpdateReviewTemplateInput {
+	s.Notes = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *UpdateReviewTemplateInput) SetTemplateArn(v string) *UpdateReviewTemplateInput {
+	s.TemplateArn = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *UpdateReviewTemplateInput) SetTemplateName(v string) *UpdateReviewTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+type UpdateReviewTemplateLensReviewInput struct {
+	_ struct{} `type:"structure"`
+
+	// The alias of the lens.
+	//
+	// For Amazon Web Services official lenses, this is either the lens alias, such
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
+	//
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
+	//
+	// Each lens is identified by its LensSummary$LensAlias.
+	//
+	// LensAlias is a required field
+	LensAlias *string `location:"uri" locationName:"LensAlias" min:"1" type:"string" required:"true"`
+
+	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
+	LensNotes *string `type:"string"`
+
+	// List of pillar notes of a lens review in a workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
+	PillarNotes map[string]*string `type:"map"`
+
+	// The review template ARN.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateLensReviewInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateLensReviewInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateReviewTemplateLensReviewInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateReviewTemplateLensReviewInput"}
+	if s.LensAlias == nil {
+		invalidParams.Add(request.NewErrParamRequired("LensAlias"))
+	}
+	if s.LensAlias != nil && len(*s.LensAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LensAlias", 1))
+	}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLensAlias sets the LensAlias field's value.
+func (s *UpdateReviewTemplateLensReviewInput) SetLensAlias(v string) *UpdateReviewTemplateLensReviewInput {
+	s.LensAlias = &v
+	return s
+}
+
+// SetLensNotes sets the LensNotes field's value.
+func (s *UpdateReviewTemplateLensReviewInput) SetLensNotes(v string) *UpdateReviewTemplateLensReviewInput {
+	s.LensNotes = &v
+	return s
+}
+
+// SetPillarNotes sets the PillarNotes field's value.
+func (s *UpdateReviewTemplateLensReviewInput) SetPillarNotes(v map[string]*string) *UpdateReviewTemplateLensReviewInput {
+	s.PillarNotes = v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *UpdateReviewTemplateLensReviewInput) SetTemplateArn(v string) *UpdateReviewTemplateLensReviewInput {
+	s.TemplateArn = &v
+	return s
+}
+
+type UpdateReviewTemplateLensReviewOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A lens review of a question.
+	LensReview *ReviewTemplateLensReview `type:"structure"`
+
+	// The review template ARN.
+	TemplateArn *string `min:"50" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateLensReviewOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateLensReviewOutput) GoString() string {
+	return s.String()
+}
+
+// SetLensReview sets the LensReview field's value.
+func (s *UpdateReviewTemplateLensReviewOutput) SetLensReview(v *ReviewTemplateLensReview) *UpdateReviewTemplateLensReviewOutput {
+	s.LensReview = v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *UpdateReviewTemplateLensReviewOutput) SetTemplateArn(v string) *UpdateReviewTemplateLensReviewOutput {
+	s.TemplateArn = &v
+	return s
+}
+
+type UpdateReviewTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A review template.
+	ReviewTemplate *ReviewTemplate `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateReviewTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetReviewTemplate sets the ReviewTemplate field's value.
+func (s *UpdateReviewTemplateOutput) SetReviewTemplate(v *ReviewTemplate) *UpdateReviewTemplateOutput {
+	s.ReviewTemplate = v
 	return s
 }
 
@@ -13274,6 +20922,9 @@ type UpdateWorkloadInput struct {
 	NonAwsRegions []*string `type:"list"`
 
 	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
 	Notes *string `type:"string"`
 
 	// The priorities of the pillars, which are used to order items in the improvement
@@ -13288,7 +20939,7 @@ type UpdateWorkloadInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 
 	// The name of the workload.
 	//
@@ -13327,8 +20978,8 @@ func (s *UpdateWorkloadInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 	if s.WorkloadName != nil && len(*s.WorkloadName) < 3 {
 		invalidParams.Add(request.NewErrParamMinLen("WorkloadName", 3))
@@ -13478,12 +21129,12 @@ func (s *UpdateWorkloadOutput) SetWorkload(v *Workload) *UpdateWorkloadOutput {
 type UpdateWorkloadShareInput struct {
 	_ struct{} `type:"structure"`
 
-	// Permission granted on a workload share.
+	// Permission granted on a share request.
 	//
 	// PermissionType is a required field
 	PermissionType *string `type:"string" required:"true" enum:"PermissionType"`
 
-	// The ID associated with the workload share.
+	// The ID associated with the share.
 	//
 	// ShareId is a required field
 	ShareId *string `location:"uri" locationName:"ShareId" type:"string" required:"true"`
@@ -13492,7 +21143,7 @@ type UpdateWorkloadShareInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -13528,8 +21179,8 @@ func (s *UpdateWorkloadShareInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -13562,7 +21213,7 @@ type UpdateWorkloadShareOutput struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 
 	// A workload share return object.
 	WorkloadShare *WorkloadShare `type:"structure"`
@@ -13613,7 +21264,7 @@ type UpgradeLensReviewInput struct {
 	// Amazon Web Services SDKs automatically generate one for you. If you are not
 	// using the Amazon Web Services SDK or the CLI, you must provide this token
 	// or the request will fail.
-	ClientRequestToken *string `type:"string"`
+	ClientRequestToken *string `min:"1" type:"string"`
 
 	// The alias of the lens.
 	//
@@ -13640,7 +21291,7 @@ type UpgradeLensReviewInput struct {
 	// Region.
 	//
 	// WorkloadId is a required field
-	WorkloadId *string `location:"uri" locationName:"WorkloadId" type:"string" required:"true"`
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -13664,6 +21315,9 @@ func (s UpgradeLensReviewInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpgradeLensReviewInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpgradeLensReviewInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
 	if s.LensAlias == nil {
 		invalidParams.Add(request.NewErrParamRequired("LensAlias"))
 	}
@@ -13679,8 +21333,8 @@ func (s *UpgradeLensReviewInput) Validate() error {
 	if s.WorkloadId == nil {
 		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
 	}
-	if s.WorkloadId != nil && len(*s.WorkloadId) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 1))
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -13732,6 +21386,252 @@ func (s UpgradeLensReviewOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s UpgradeLensReviewOutput) GoString() string {
+	return s.String()
+}
+
+type UpgradeProfileVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique case-sensitive string used to ensure that this request is idempotent
+	// (executes only once).
+	//
+	// You should not reuse the same token for other requests. If you retry a request
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
+	//
+	// This token is listed as required, however, if you do not specify it, the
+	// Amazon Web Services SDKs automatically generate one for you. If you are not
+	// using the Amazon Web Services SDK or the CLI, you must provide this token
+	// or the request will fail.
+	ClientRequestToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The name of the milestone in a workload.
+	//
+	// Milestone names must be unique within a workload.
+	MilestoneName *string `min:"3" type:"string"`
+
+	// The profile ARN.
+	//
+	// ProfileArn is a required field
+	ProfileArn *string `location:"uri" locationName:"ProfileArn" type:"string" required:"true"`
+
+	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
+	// Region.
+	//
+	// WorkloadId is a required field
+	WorkloadId *string `location:"uri" locationName:"WorkloadId" min:"32" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpgradeProfileVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpgradeProfileVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpgradeProfileVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpgradeProfileVersionInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.MilestoneName != nil && len(*s.MilestoneName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("MilestoneName", 3))
+	}
+	if s.ProfileArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProfileArn"))
+	}
+	if s.ProfileArn != nil && len(*s.ProfileArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProfileArn", 1))
+	}
+	if s.WorkloadId == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkloadId"))
+	}
+	if s.WorkloadId != nil && len(*s.WorkloadId) < 32 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkloadId", 32))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *UpgradeProfileVersionInput) SetClientRequestToken(v string) *UpgradeProfileVersionInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetMilestoneName sets the MilestoneName field's value.
+func (s *UpgradeProfileVersionInput) SetMilestoneName(v string) *UpgradeProfileVersionInput {
+	s.MilestoneName = &v
+	return s
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *UpgradeProfileVersionInput) SetProfileArn(v string) *UpgradeProfileVersionInput {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetWorkloadId sets the WorkloadId field's value.
+func (s *UpgradeProfileVersionInput) SetWorkloadId(v string) *UpgradeProfileVersionInput {
+	s.WorkloadId = &v
+	return s
+}
+
+type UpgradeProfileVersionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpgradeProfileVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpgradeProfileVersionOutput) GoString() string {
+	return s.String()
+}
+
+type UpgradeReviewTemplateLensReviewInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique case-sensitive string used to ensure that this request is idempotent
+	// (executes only once).
+	//
+	// You should not reuse the same token for other requests. If you retry a request
+	// with the same client request token and the same parameters after the original
+	// request has completed successfully, the result of the original request is
+	// returned.
+	//
+	// This token is listed as required, however, if you do not specify it, the
+	// Amazon Web Services SDKs automatically generate one for you. If you are not
+	// using the Amazon Web Services SDK or the CLI, you must provide this token
+	// or the request will fail.
+	ClientRequestToken *string `min:"1" type:"string"`
+
+	// The alias of the lens.
+	//
+	// For Amazon Web Services official lenses, this is either the lens alias, such
+	// as serverless, or the lens ARN, such as arn:aws:wellarchitected:us-east-1::lens/serverless.
+	// Note that some operations (such as ExportLens and CreateLensShare) are not
+	// permitted on Amazon Web Services official lenses.
+	//
+	// For custom lenses, this is the lens ARN, such as arn:aws:wellarchitected:us-west-2:123456789012:lens/0123456789abcdef01234567890abcdef.
+	//
+	// Each lens is identified by its LensSummary$LensAlias.
+	//
+	// LensAlias is a required field
+	LensAlias *string `location:"uri" locationName:"LensAlias" min:"1" type:"string" required:"true"`
+
+	// The ARN of the review template.
+	//
+	// TemplateArn is a required field
+	TemplateArn *string `location:"uri" locationName:"TemplateArn" min:"50" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpgradeReviewTemplateLensReviewInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpgradeReviewTemplateLensReviewInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpgradeReviewTemplateLensReviewInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpgradeReviewTemplateLensReviewInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.LensAlias == nil {
+		invalidParams.Add(request.NewErrParamRequired("LensAlias"))
+	}
+	if s.LensAlias != nil && len(*s.LensAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LensAlias", 1))
+	}
+	if s.TemplateArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateArn"))
+	}
+	if s.TemplateArn != nil && len(*s.TemplateArn) < 50 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateArn", 50))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *UpgradeReviewTemplateLensReviewInput) SetClientRequestToken(v string) *UpgradeReviewTemplateLensReviewInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetLensAlias sets the LensAlias field's value.
+func (s *UpgradeReviewTemplateLensReviewInput) SetLensAlias(v string) *UpgradeReviewTemplateLensReviewInput {
+	s.LensAlias = &v
+	return s
+}
+
+// SetTemplateArn sets the TemplateArn field's value.
+func (s *UpgradeReviewTemplateLensReviewInput) SetTemplateArn(v string) *UpgradeReviewTemplateLensReviewInput {
+	s.TemplateArn = &v
+	return s
+}
+
+type UpgradeReviewTemplateLensReviewOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpgradeReviewTemplateLensReviewOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpgradeReviewTemplateLensReviewOutput) GoString() string {
 	return s.String()
 }
 
@@ -13984,20 +21884,32 @@ type Workload struct {
 
 	// The list of lenses associated with the workload. Each lens is identified
 	// by its LensSummary$LensAlias.
+	//
+	// If a review template that specifies lenses is applied to the workload, those
+	// lenses are applied to the workload in addition to these lenses.
 	Lenses []*string `type:"list"`
 
 	// The list of non-Amazon Web Services Regions associated with the workload.
 	NonAwsRegions []*string `type:"list"`
 
 	// The notes associated with the workload.
+	//
+	// For a review template, these are the notes that will be associated with the
+	// workload when the template is applied.
 	Notes *string `type:"string"`
 
 	// An Amazon Web Services account ID.
-	Owner *string `type:"string"`
+	Owner *string `min:"12" type:"string"`
 
 	// The priorities of the pillars, which are used to order items in the improvement
 	// plan. Each pillar is represented by its PillarReviewSummary$PillarId.
 	PillarPriorities []*string `type:"list"`
+
+	// A map from risk names to the count of how many questions have that rating.
+	PrioritizedRiskCounts map[string]*int64 `type:"map"`
+
+	// Profile associated with a workload.
+	Profiles []*WorkloadProfile `type:"list"`
 
 	// The review owner of the workload. The name, email address, or identifier
 	// for the primary group or individual that owns the workload review process.
@@ -14023,7 +21935,7 @@ type Workload struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 
 	// The name of the workload.
 	//
@@ -14146,6 +22058,18 @@ func (s *Workload) SetPillarPriorities(v []*string) *Workload {
 	return s
 }
 
+// SetPrioritizedRiskCounts sets the PrioritizedRiskCounts field's value.
+func (s *Workload) SetPrioritizedRiskCounts(v map[string]*int64) *Workload {
+	s.PrioritizedRiskCounts = v
+	return s
+}
+
+// SetProfiles sets the Profiles field's value.
+func (s *Workload) SetProfiles(v []*WorkloadProfile) *Workload {
+	s.Profiles = v
+	return s
+}
+
 // SetReviewOwner sets the ReviewOwner field's value.
 func (s *Workload) SetReviewOwner(v string) *Workload {
 	s.ReviewOwner = &v
@@ -14243,29 +22167,70 @@ func (s *WorkloadDiscoveryConfig) SetWorkloadResourceDefinition(v []*string) *Wo
 	return s
 }
 
+// The profile associated with a workload.
+type WorkloadProfile struct {
+	_ struct{} `type:"structure"`
+
+	// The profile ARN.
+	ProfileArn *string `type:"string"`
+
+	// The profile version.
+	ProfileVersion *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkloadProfile) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s WorkloadProfile) GoString() string {
+	return s.String()
+}
+
+// SetProfileArn sets the ProfileArn field's value.
+func (s *WorkloadProfile) SetProfileArn(v string) *WorkloadProfile {
+	s.ProfileArn = &v
+	return s
+}
+
+// SetProfileVersion sets the ProfileVersion field's value.
+func (s *WorkloadProfile) SetProfileVersion(v string) *WorkloadProfile {
+	s.ProfileVersion = &v
+	return s
+}
+
 // A workload share return object.
 type WorkloadShare struct {
 	_ struct{} `type:"structure"`
 
-	// Permission granted on a workload share.
+	// Permission granted on a share request.
 	PermissionType *string `type:"string" enum:"PermissionType"`
 
-	// The ID associated with the workload share.
+	// The ID associated with the share.
 	ShareId *string `type:"string"`
 
 	// An Amazon Web Services account ID.
-	SharedBy *string `type:"string"`
+	SharedBy *string `min:"12" type:"string"`
 
-	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
-	// unit (OU) ID with which the workload is shared.
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the workload, lens, profile, or review template is shared.
 	SharedWith *string `min:"12" type:"string"`
 
-	// The status of a workload share.
+	// The status of the share request.
 	Status *string `type:"string" enum:"ShareStatus"`
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 
 	// The name of the workload.
 	//
@@ -14338,17 +22303,17 @@ func (s *WorkloadShare) SetWorkloadName(v string) *WorkloadShare {
 type WorkloadShareSummary struct {
 	_ struct{} `type:"structure"`
 
-	// Permission granted on a workload share.
+	// Permission granted on a share request.
 	PermissionType *string `type:"string" enum:"PermissionType"`
 
-	// The ID associated with the workload share.
+	// The ID associated with the share.
 	ShareId *string `type:"string"`
 
-	// The Amazon Web Services account ID, IAM role, organization ID, or organizational
-	// unit (OU) ID with which the workload is shared.
+	// The Amazon Web Services account ID, organization ID, or organizational unit
+	// (OU) ID with which the workload, lens, profile, or review template is shared.
 	SharedWith *string `min:"12" type:"string"`
 
-	// The status of a workload share.
+	// The status of the share request.
 	Status *string `type:"string" enum:"ShareStatus"`
 
 	// Optional message to compliment the Status field.
@@ -14412,10 +22377,19 @@ type WorkloadSummary struct {
 
 	// The list of lenses associated with the workload. Each lens is identified
 	// by its LensSummary$LensAlias.
+	//
+	// If a review template that specifies lenses is applied to the workload, those
+	// lenses are applied to the workload in addition to these lenses.
 	Lenses []*string `type:"list"`
 
 	// An Amazon Web Services account ID.
-	Owner *string `type:"string"`
+	Owner *string `min:"12" type:"string"`
+
+	// A map from risk names to the count of how many questions have that rating.
+	PrioritizedRiskCounts map[string]*int64 `type:"map"`
+
+	// Profile associated with a workload.
+	Profiles []*WorkloadProfile `type:"list"`
 
 	// A map from risk names to the count of how many questions have that rating.
 	RiskCounts map[string]*int64 `type:"map"`
@@ -14428,7 +22402,7 @@ type WorkloadSummary struct {
 
 	// The ID assigned to the workload. This ID is unique within an Amazon Web Services
 	// Region.
-	WorkloadId *string `type:"string"`
+	WorkloadId *string `min:"32" type:"string"`
 
 	// The name of the workload.
 	//
@@ -14470,6 +22444,18 @@ func (s *WorkloadSummary) SetLenses(v []*string) *WorkloadSummary {
 // SetOwner sets the Owner field's value.
 func (s *WorkloadSummary) SetOwner(v string) *WorkloadSummary {
 	s.Owner = &v
+	return s
+}
+
+// SetPrioritizedRiskCounts sets the PrioritizedRiskCounts field's value.
+func (s *WorkloadSummary) SetPrioritizedRiskCounts(v map[string]*int64) *WorkloadSummary {
+	s.PrioritizedRiskCounts = v
+	return s
+}
+
+// SetProfiles sets the Profiles field's value.
+func (s *WorkloadSummary) SetProfiles(v []*WorkloadProfile) *WorkloadSummary {
+	s.Profiles = v
 	return s
 }
 
@@ -14843,7 +22829,7 @@ func OrganizationSharingStatus_Values() []string {
 	}
 }
 
-// Permission granted on a workload share.
+// Permission granted on a share request.
 const (
 	// PermissionTypeReadonly is a PermissionType enum value
 	PermissionTypeReadonly = "READONLY"
@@ -14861,6 +22847,86 @@ func PermissionType_Values() []string {
 }
 
 const (
+	// ProfileNotificationTypeProfileAnswersUpdated is a ProfileNotificationType enum value
+	ProfileNotificationTypeProfileAnswersUpdated = "PROFILE_ANSWERS_UPDATED"
+
+	// ProfileNotificationTypeProfileDeleted is a ProfileNotificationType enum value
+	ProfileNotificationTypeProfileDeleted = "PROFILE_DELETED"
+)
+
+// ProfileNotificationType_Values returns all elements of the ProfileNotificationType enum
+func ProfileNotificationType_Values() []string {
+	return []string{
+		ProfileNotificationTypeProfileAnswersUpdated,
+		ProfileNotificationTypeProfileDeleted,
+	}
+}
+
+const (
+	// ProfileOwnerTypeSelf is a ProfileOwnerType enum value
+	ProfileOwnerTypeSelf = "SELF"
+
+	// ProfileOwnerTypeShared is a ProfileOwnerType enum value
+	ProfileOwnerTypeShared = "SHARED"
+)
+
+// ProfileOwnerType_Values returns all elements of the ProfileOwnerType enum
+func ProfileOwnerType_Values() []string {
+	return []string{
+		ProfileOwnerTypeSelf,
+		ProfileOwnerTypeShared,
+	}
+}
+
+const (
+	// QuestionUnanswered is a Question enum value
+	QuestionUnanswered = "UNANSWERED"
+
+	// QuestionAnswered is a Question enum value
+	QuestionAnswered = "ANSWERED"
+)
+
+// Question_Values returns all elements of the Question enum
+func Question_Values() []string {
+	return []string{
+		QuestionUnanswered,
+		QuestionAnswered,
+	}
+}
+
+const (
+	// QuestionPriorityPrioritized is a QuestionPriority enum value
+	QuestionPriorityPrioritized = "PRIORITIZED"
+
+	// QuestionPriorityNone is a QuestionPriority enum value
+	QuestionPriorityNone = "NONE"
+)
+
+// QuestionPriority_Values returns all elements of the QuestionPriority enum
+func QuestionPriority_Values() []string {
+	return []string{
+		QuestionPriorityPrioritized,
+		QuestionPriorityNone,
+	}
+}
+
+const (
+	// QuestionTypePrioritized is a QuestionType enum value
+	QuestionTypePrioritized = "PRIORITIZED"
+
+	// QuestionTypeNonPrioritized is a QuestionType enum value
+	QuestionTypeNonPrioritized = "NON_PRIORITIZED"
+)
+
+// QuestionType_Values returns all elements of the QuestionType enum
+func QuestionType_Values() []string {
+	return []string{
+		QuestionTypePrioritized,
+		QuestionTypeNonPrioritized,
+	}
+}
+
+const (
 	// ReportFormatPdf is a ReportFormat enum value
 	ReportFormatPdf = "PDF"
 
@@ -14873,6 +22939,38 @@ func ReportFormat_Values() []string {
 	return []string{
 		ReportFormatPdf,
 		ReportFormatJson,
+	}
+}
+
+const (
+	// ReviewTemplateAnswerStatusUnanswered is a ReviewTemplateAnswerStatus enum value
+	ReviewTemplateAnswerStatusUnanswered = "UNANSWERED"
+
+	// ReviewTemplateAnswerStatusAnswered is a ReviewTemplateAnswerStatus enum value
+	ReviewTemplateAnswerStatusAnswered = "ANSWERED"
+)
+
+// ReviewTemplateAnswerStatus_Values returns all elements of the ReviewTemplateAnswerStatus enum
+func ReviewTemplateAnswerStatus_Values() []string {
+	return []string{
+		ReviewTemplateAnswerStatusUnanswered,
+		ReviewTemplateAnswerStatusAnswered,
+	}
+}
+
+const (
+	// ReviewTemplateUpdateStatusCurrent is a ReviewTemplateUpdateStatus enum value
+	ReviewTemplateUpdateStatusCurrent = "CURRENT"
+
+	// ReviewTemplateUpdateStatusLensNotCurrent is a ReviewTemplateUpdateStatus enum value
+	ReviewTemplateUpdateStatusLensNotCurrent = "LENS_NOT_CURRENT"
+)
+
+// ReviewTemplateUpdateStatus_Values returns all elements of the ReviewTemplateUpdateStatus enum
+func ReviewTemplateUpdateStatus_Values() []string {
+	return []string{
+		ReviewTemplateUpdateStatusCurrent,
+		ReviewTemplateUpdateStatusLensNotCurrent,
 	}
 }
 
@@ -14928,6 +23026,12 @@ const (
 
 	// ShareResourceTypeLens is a ShareResourceType enum value
 	ShareResourceTypeLens = "LENS"
+
+	// ShareResourceTypeProfile is a ShareResourceType enum value
+	ShareResourceTypeProfile = "PROFILE"
+
+	// ShareResourceTypeTemplate is a ShareResourceType enum value
+	ShareResourceTypeTemplate = "TEMPLATE"
 )
 
 // ShareResourceType_Values returns all elements of the ShareResourceType enum
@@ -14935,10 +23039,12 @@ func ShareResourceType_Values() []string {
 	return []string{
 		ShareResourceTypeWorkload,
 		ShareResourceTypeLens,
+		ShareResourceTypeProfile,
+		ShareResourceTypeTemplate,
 	}
 }
 
-// The status of a workload share.
+// The status of the share request.
 const (
 	// ShareStatusAccepted is a ShareStatus enum value
 	ShareStatusAccepted = "ACCEPTED"

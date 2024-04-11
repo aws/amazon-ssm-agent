@@ -29,14 +29,13 @@ const opGetApplicationComponentDetails = "GetApplicationComponentDetails"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetApplicationComponentDetailsRequest method.
+//	req, resp := client.GetApplicationComponentDetailsRequest(params)
 //
-//    // Example sending a request using the GetApplicationComponentDetailsRequest method.
-//    req, resp := client.GetApplicationComponentDetailsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetApplicationComponentDetails
 func (c *MigrationHubStrategyRecommendations) GetApplicationComponentDetailsRequest(input *GetApplicationComponentDetailsInput) (req *request.Request, output *GetApplicationComponentDetailsOutput) {
@@ -67,14 +66,15 @@ func (c *MigrationHubStrategyRecommendations) GetApplicationComponentDetailsRequ
 // API operation GetApplicationComponentDetails for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified ID in the request is not found.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The specified ID in the request is not found.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetApplicationComponentDetails
 func (c *MigrationHubStrategyRecommendations) GetApplicationComponentDetails(input *GetApplicationComponentDetailsInput) (*GetApplicationComponentDetailsOutput, error) {
@@ -114,14 +114,13 @@ const opGetApplicationComponentStrategies = "GetApplicationComponentStrategies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetApplicationComponentStrategiesRequest method.
+//	req, resp := client.GetApplicationComponentStrategiesRequest(params)
 //
-//    // Example sending a request using the GetApplicationComponentStrategiesRequest method.
-//    req, resp := client.GetApplicationComponentStrategiesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetApplicationComponentStrategies
 func (c *MigrationHubStrategyRecommendations) GetApplicationComponentStrategiesRequest(input *GetApplicationComponentStrategiesInput) (req *request.Request, output *GetApplicationComponentStrategiesOutput) {
@@ -153,14 +152,15 @@ func (c *MigrationHubStrategyRecommendations) GetApplicationComponentStrategiesR
 // API operation GetApplicationComponentStrategies for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified ID in the request is not found.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The specified ID in the request is not found.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetApplicationComponentStrategies
 func (c *MigrationHubStrategyRecommendations) GetApplicationComponentStrategies(input *GetApplicationComponentStrategiesInput) (*GetApplicationComponentStrategiesOutput, error) {
@@ -200,14 +200,13 @@ const opGetAssessment = "GetAssessment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAssessmentRequest method.
+//	req, resp := client.GetAssessmentRequest(params)
 //
-//    // Example sending a request using the GetAssessmentRequest method.
-//    req, resp := client.GetAssessmentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetAssessment
 func (c *MigrationHubStrategyRecommendations) GetAssessmentRequest(input *GetAssessmentInput) (req *request.Request, output *GetAssessmentOutput) {
@@ -238,18 +237,19 @@ func (c *MigrationHubStrategyRecommendations) GetAssessmentRequest(input *GetAss
 // API operation GetAssessment for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified ID in the request is not found.
 //
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
+//   - ResourceNotFoundException
+//     The specified ID in the request is not found.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetAssessment
 func (c *MigrationHubStrategyRecommendations) GetAssessment(input *GetAssessmentInput) (*GetAssessmentOutput, error) {
@@ -289,14 +289,13 @@ const opGetImportFileTask = "GetImportFileTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetImportFileTaskRequest method.
+//	req, resp := client.GetImportFileTaskRequest(params)
 //
-//    // Example sending a request using the GetImportFileTaskRequest method.
-//    req, resp := client.GetImportFileTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetImportFileTask
 func (c *MigrationHubStrategyRecommendations) GetImportFileTaskRequest(input *GetImportFileTaskInput) (req *request.Request, output *GetImportFileTaskOutput) {
@@ -327,21 +326,22 @@ func (c *MigrationHubStrategyRecommendations) GetImportFileTaskRequest(input *Ge
 // API operation GetImportFileTask for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified ID in the request is not found.
 //
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
+//   - ResourceNotFoundException
+//     The specified ID in the request is not found.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetImportFileTask
 func (c *MigrationHubStrategyRecommendations) GetImportFileTask(input *GetImportFileTaskInput) (*GetImportFileTaskOutput, error) {
@@ -381,14 +381,13 @@ const opGetLatestAssessmentId = "GetLatestAssessmentId"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLatestAssessmentIdRequest method.
+//	req, resp := client.GetLatestAssessmentIdRequest(params)
 //
-//    // Example sending a request using the GetLatestAssessmentIdRequest method.
-//    req, resp := client.GetLatestAssessmentIdRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetLatestAssessmentId
 func (c *MigrationHubStrategyRecommendations) GetLatestAssessmentIdRequest(input *GetLatestAssessmentIdInput) (req *request.Request, output *GetLatestAssessmentIdOutput) {
@@ -419,18 +418,19 @@ func (c *MigrationHubStrategyRecommendations) GetLatestAssessmentIdRequest(input
 // API operation GetLatestAssessmentId for usage and error information.
 //
 // Returned Error Types:
-//   * DependencyException
-//   Dependency encountered an error.
 //
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
+//   - DependencyException
+//     Dependency encountered an error.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetLatestAssessmentId
 func (c *MigrationHubStrategyRecommendations) GetLatestAssessmentId(input *GetLatestAssessmentIdInput) (*GetLatestAssessmentIdOutput, error) {
@@ -470,14 +470,13 @@ const opGetPortfolioPreferences = "GetPortfolioPreferences"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPortfolioPreferencesRequest method.
+//	req, resp := client.GetPortfolioPreferencesRequest(params)
 //
-//    // Example sending a request using the GetPortfolioPreferencesRequest method.
-//    req, resp := client.GetPortfolioPreferencesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetPortfolioPreferences
 func (c *MigrationHubStrategyRecommendations) GetPortfolioPreferencesRequest(input *GetPortfolioPreferencesInput) (req *request.Request, output *GetPortfolioPreferencesOutput) {
@@ -508,18 +507,19 @@ func (c *MigrationHubStrategyRecommendations) GetPortfolioPreferencesRequest(inp
 // API operation GetPortfolioPreferences for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified ID in the request is not found.
 //
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
+//   - ResourceNotFoundException
+//     The specified ID in the request is not found.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetPortfolioPreferences
 func (c *MigrationHubStrategyRecommendations) GetPortfolioPreferences(input *GetPortfolioPreferencesInput) (*GetPortfolioPreferencesOutput, error) {
@@ -559,14 +559,13 @@ const opGetPortfolioSummary = "GetPortfolioSummary"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPortfolioSummaryRequest method.
+//	req, resp := client.GetPortfolioSummaryRequest(params)
 //
-//    // Example sending a request using the GetPortfolioSummaryRequest method.
-//    req, resp := client.GetPortfolioSummaryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetPortfolioSummary
 func (c *MigrationHubStrategyRecommendations) GetPortfolioSummaryRequest(input *GetPortfolioSummaryInput) (req *request.Request, output *GetPortfolioSummaryOutput) {
@@ -598,15 +597,16 @@ func (c *MigrationHubStrategyRecommendations) GetPortfolioSummaryRequest(input *
 // API operation GetPortfolioSummary for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetPortfolioSummary
 func (c *MigrationHubStrategyRecommendations) GetPortfolioSummary(input *GetPortfolioSummaryInput) (*GetPortfolioSummaryOutput, error) {
@@ -646,14 +646,13 @@ const opGetRecommendationReportDetails = "GetRecommendationReportDetails"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRecommendationReportDetailsRequest method.
+//	req, resp := client.GetRecommendationReportDetailsRequest(params)
 //
-//    // Example sending a request using the GetRecommendationReportDetailsRequest method.
-//    req, resp := client.GetRecommendationReportDetailsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetRecommendationReportDetails
 func (c *MigrationHubStrategyRecommendations) GetRecommendationReportDetailsRequest(input *GetRecommendationReportDetailsInput) (req *request.Request, output *GetRecommendationReportDetailsOutput) {
@@ -684,21 +683,22 @@ func (c *MigrationHubStrategyRecommendations) GetRecommendationReportDetailsRequ
 // API operation GetRecommendationReportDetails for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified ID in the request is not found.
 //
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
+//   - ResourceNotFoundException
+//     The specified ID in the request is not found.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetRecommendationReportDetails
 func (c *MigrationHubStrategyRecommendations) GetRecommendationReportDetails(input *GetRecommendationReportDetailsInput) (*GetRecommendationReportDetailsOutput, error) {
@@ -738,14 +738,13 @@ const opGetServerDetails = "GetServerDetails"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetServerDetailsRequest method.
+//	req, resp := client.GetServerDetailsRequest(params)
 //
-//    // Example sending a request using the GetServerDetailsRequest method.
-//    req, resp := client.GetServerDetailsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetServerDetails
 func (c *MigrationHubStrategyRecommendations) GetServerDetailsRequest(input *GetServerDetailsInput) (req *request.Request, output *GetServerDetailsOutput) {
@@ -782,21 +781,22 @@ func (c *MigrationHubStrategyRecommendations) GetServerDetailsRequest(input *Get
 // API operation GetServerDetails for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified ID in the request is not found.
 //
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
+//   - ResourceNotFoundException
+//     The specified ID in the request is not found.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetServerDetails
 func (c *MigrationHubStrategyRecommendations) GetServerDetails(input *GetServerDetailsInput) (*GetServerDetailsOutput, error) {
@@ -828,15 +828,14 @@ func (c *MigrationHubStrategyRecommendations) GetServerDetailsWithContext(ctx aw
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetServerDetails operation.
-//    pageNum := 0
-//    err := client.GetServerDetailsPages(params,
-//        func(page *migrationhubstrategyrecommendations.GetServerDetailsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetServerDetails operation.
+//	pageNum := 0
+//	err := client.GetServerDetailsPages(params,
+//	    func(page *migrationhubstrategyrecommendations.GetServerDetailsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubStrategyRecommendations) GetServerDetailsPages(input *GetServerDetailsInput, fn func(*GetServerDetailsOutput, bool) bool) error {
 	return c.GetServerDetailsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -888,14 +887,13 @@ const opGetServerStrategies = "GetServerStrategies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetServerStrategiesRequest method.
+//	req, resp := client.GetServerStrategiesRequest(params)
 //
-//    // Example sending a request using the GetServerStrategiesRequest method.
-//    req, resp := client.GetServerStrategiesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetServerStrategies
 func (c *MigrationHubStrategyRecommendations) GetServerStrategiesRequest(input *GetServerStrategiesInput) (req *request.Request, output *GetServerStrategiesOutput) {
@@ -926,21 +924,22 @@ func (c *MigrationHubStrategyRecommendations) GetServerStrategiesRequest(input *
 // API operation GetServerStrategies for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified ID in the request is not found.
 //
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
+//   - ResourceNotFoundException
+//     The specified ID in the request is not found.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/GetServerStrategies
 func (c *MigrationHubStrategyRecommendations) GetServerStrategies(input *GetServerStrategiesInput) (*GetServerStrategiesOutput, error) {
@@ -964,6 +963,153 @@ func (c *MigrationHubStrategyRecommendations) GetServerStrategiesWithContext(ctx
 	return out, req.Send()
 }
 
+const opListAnalyzableServers = "ListAnalyzableServers"
+
+// ListAnalyzableServersRequest generates a "aws/request.Request" representing the
+// client's request for the ListAnalyzableServers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAnalyzableServers for more information on using the ListAnalyzableServers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListAnalyzableServersRequest method.
+//	req, resp := client.ListAnalyzableServersRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/ListAnalyzableServers
+func (c *MigrationHubStrategyRecommendations) ListAnalyzableServersRequest(input *ListAnalyzableServersInput) (req *request.Request, output *ListAnalyzableServersOutput) {
+	op := &request.Operation{
+		Name:       opListAnalyzableServers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/list-analyzable-servers",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAnalyzableServersInput{}
+	}
+
+	output = &ListAnalyzableServersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListAnalyzableServers API operation for Migration Hub Strategy Recommendations.
+//
+// Retrieves a list of all the servers fetched from customer vCenter using Strategy
+// Recommendation Collector.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Migration Hub Strategy Recommendations's
+// API operation ListAnalyzableServers for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/ListAnalyzableServers
+func (c *MigrationHubStrategyRecommendations) ListAnalyzableServers(input *ListAnalyzableServersInput) (*ListAnalyzableServersOutput, error) {
+	req, out := c.ListAnalyzableServersRequest(input)
+	return out, req.Send()
+}
+
+// ListAnalyzableServersWithContext is the same as ListAnalyzableServers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAnalyzableServers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MigrationHubStrategyRecommendations) ListAnalyzableServersWithContext(ctx aws.Context, input *ListAnalyzableServersInput, opts ...request.Option) (*ListAnalyzableServersOutput, error) {
+	req, out := c.ListAnalyzableServersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAnalyzableServersPages iterates over the pages of a ListAnalyzableServers operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAnalyzableServers method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListAnalyzableServers operation.
+//	pageNum := 0
+//	err := client.ListAnalyzableServersPages(params,
+//	    func(page *migrationhubstrategyrecommendations.ListAnalyzableServersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *MigrationHubStrategyRecommendations) ListAnalyzableServersPages(input *ListAnalyzableServersInput, fn func(*ListAnalyzableServersOutput, bool) bool) error {
+	return c.ListAnalyzableServersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAnalyzableServersPagesWithContext same as ListAnalyzableServersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MigrationHubStrategyRecommendations) ListAnalyzableServersPagesWithContext(ctx aws.Context, input *ListAnalyzableServersInput, fn func(*ListAnalyzableServersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAnalyzableServersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAnalyzableServersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAnalyzableServersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListApplicationComponents = "ListApplicationComponents"
 
 // ListApplicationComponentsRequest generates a "aws/request.Request" representing the
@@ -980,14 +1126,13 @@ const opListApplicationComponents = "ListApplicationComponents"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListApplicationComponentsRequest method.
+//	req, resp := client.ListApplicationComponentsRequest(params)
 //
-//    // Example sending a request using the ListApplicationComponentsRequest method.
-//    req, resp := client.ListApplicationComponentsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/ListApplicationComponents
 func (c *MigrationHubStrategyRecommendations) ListApplicationComponentsRequest(input *ListApplicationComponentsInput) (req *request.Request, output *ListApplicationComponentsOutput) {
@@ -1024,18 +1169,19 @@ func (c *MigrationHubStrategyRecommendations) ListApplicationComponentsRequest(i
 // API operation ListApplicationComponents for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
 //
-//   * ServiceLinkedRoleLockClientException
-//   Exception to indicate that the service-linked role (SLR) is locked.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ServiceLinkedRoleLockClientException
+//     Exception to indicate that the service-linked role (SLR) is locked.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/ListApplicationComponents
 func (c *MigrationHubStrategyRecommendations) ListApplicationComponents(input *ListApplicationComponentsInput) (*ListApplicationComponentsOutput, error) {
@@ -1067,15 +1213,14 @@ func (c *MigrationHubStrategyRecommendations) ListApplicationComponentsWithConte
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListApplicationComponents operation.
-//    pageNum := 0
-//    err := client.ListApplicationComponentsPages(params,
-//        func(page *migrationhubstrategyrecommendations.ListApplicationComponentsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListApplicationComponents operation.
+//	pageNum := 0
+//	err := client.ListApplicationComponentsPages(params,
+//	    func(page *migrationhubstrategyrecommendations.ListApplicationComponentsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubStrategyRecommendations) ListApplicationComponentsPages(input *ListApplicationComponentsInput, fn func(*ListApplicationComponentsOutput, bool) bool) error {
 	return c.ListApplicationComponentsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1127,14 +1272,13 @@ const opListCollectors = "ListCollectors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCollectorsRequest method.
+//	req, resp := client.ListCollectorsRequest(params)
 //
-//    // Example sending a request using the ListCollectorsRequest method.
-//    req, resp := client.ListCollectorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/ListCollectors
 func (c *MigrationHubStrategyRecommendations) ListCollectorsRequest(input *ListCollectorsInput) (req *request.Request, output *ListCollectorsOutput) {
@@ -1171,18 +1315,19 @@ func (c *MigrationHubStrategyRecommendations) ListCollectorsRequest(input *ListC
 // API operation ListCollectors for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/ListCollectors
 func (c *MigrationHubStrategyRecommendations) ListCollectors(input *ListCollectorsInput) (*ListCollectorsOutput, error) {
@@ -1214,15 +1359,14 @@ func (c *MigrationHubStrategyRecommendations) ListCollectorsWithContext(ctx aws.
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCollectors operation.
-//    pageNum := 0
-//    err := client.ListCollectorsPages(params,
-//        func(page *migrationhubstrategyrecommendations.ListCollectorsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCollectors operation.
+//	pageNum := 0
+//	err := client.ListCollectorsPages(params,
+//	    func(page *migrationhubstrategyrecommendations.ListCollectorsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubStrategyRecommendations) ListCollectorsPages(input *ListCollectorsInput, fn func(*ListCollectorsOutput, bool) bool) error {
 	return c.ListCollectorsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1274,14 +1418,13 @@ const opListImportFileTask = "ListImportFileTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListImportFileTaskRequest method.
+//	req, resp := client.ListImportFileTaskRequest(params)
 //
-//    // Example sending a request using the ListImportFileTaskRequest method.
-//    req, resp := client.ListImportFileTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/ListImportFileTask
 func (c *MigrationHubStrategyRecommendations) ListImportFileTaskRequest(input *ListImportFileTaskInput) (req *request.Request, output *ListImportFileTaskOutput) {
@@ -1318,18 +1461,19 @@ func (c *MigrationHubStrategyRecommendations) ListImportFileTaskRequest(input *L
 // API operation ListImportFileTask for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/ListImportFileTask
 func (c *MigrationHubStrategyRecommendations) ListImportFileTask(input *ListImportFileTaskInput) (*ListImportFileTaskOutput, error) {
@@ -1361,15 +1505,14 @@ func (c *MigrationHubStrategyRecommendations) ListImportFileTaskWithContext(ctx 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListImportFileTask operation.
-//    pageNum := 0
-//    err := client.ListImportFileTaskPages(params,
-//        func(page *migrationhubstrategyrecommendations.ListImportFileTaskOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListImportFileTask operation.
+//	pageNum := 0
+//	err := client.ListImportFileTaskPages(params,
+//	    func(page *migrationhubstrategyrecommendations.ListImportFileTaskOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubStrategyRecommendations) ListImportFileTaskPages(input *ListImportFileTaskInput, fn func(*ListImportFileTaskOutput, bool) bool) error {
 	return c.ListImportFileTaskPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1421,14 +1564,13 @@ const opListServers = "ListServers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListServersRequest method.
+//	req, resp := client.ListServersRequest(params)
 //
-//    // Example sending a request using the ListServersRequest method.
-//    req, resp := client.ListServersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/ListServers
 func (c *MigrationHubStrategyRecommendations) ListServersRequest(input *ListServersInput) (req *request.Request, output *ListServersOutput) {
@@ -1465,18 +1607,19 @@ func (c *MigrationHubStrategyRecommendations) ListServersRequest(input *ListServ
 // API operation ListServers for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/ListServers
 func (c *MigrationHubStrategyRecommendations) ListServers(input *ListServersInput) (*ListServersOutput, error) {
@@ -1508,15 +1651,14 @@ func (c *MigrationHubStrategyRecommendations) ListServersWithContext(ctx aws.Con
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListServers operation.
-//    pageNum := 0
-//    err := client.ListServersPages(params,
-//        func(page *migrationhubstrategyrecommendations.ListServersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListServers operation.
+//	pageNum := 0
+//	err := client.ListServersPages(params,
+//	    func(page *migrationhubstrategyrecommendations.ListServersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MigrationHubStrategyRecommendations) ListServersPages(input *ListServersInput, fn func(*ListServersOutput, bool) bool) error {
 	return c.ListServersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1568,14 +1710,13 @@ const opPutPortfolioPreferences = "PutPortfolioPreferences"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutPortfolioPreferencesRequest method.
+//	req, resp := client.PutPortfolioPreferencesRequest(params)
 //
-//    // Example sending a request using the PutPortfolioPreferencesRequest method.
-//    req, resp := client.PutPortfolioPreferencesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/PutPortfolioPreferences
 func (c *MigrationHubStrategyRecommendations) PutPortfolioPreferencesRequest(input *PutPortfolioPreferencesInput) (req *request.Request, output *PutPortfolioPreferencesOutput) {
@@ -1607,22 +1748,23 @@ func (c *MigrationHubStrategyRecommendations) PutPortfolioPreferencesRequest(inp
 // API operation PutPortfolioPreferences for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   Exception to indicate that there is an ongoing task when a new task is created.
-//   Return when once the existing tasks are complete.
+//   - ValidationException
+//     The request body isn't valid.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ConflictException
+//     Exception to indicate that there is an ongoing task when a new task is created.
+//     Return when once the existing tasks are complete.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/PutPortfolioPreferences
 func (c *MigrationHubStrategyRecommendations) PutPortfolioPreferences(input *PutPortfolioPreferencesInput) (*PutPortfolioPreferencesOutput, error) {
@@ -1662,14 +1804,13 @@ const opStartAssessment = "StartAssessment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartAssessmentRequest method.
+//	req, resp := client.StartAssessmentRequest(params)
 //
-//    // Example sending a request using the StartAssessmentRequest method.
-//    req, resp := client.StartAssessmentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/StartAssessment
 func (c *MigrationHubStrategyRecommendations) StartAssessmentRequest(input *StartAssessmentInput) (req *request.Request, output *StartAssessmentOutput) {
@@ -1700,19 +1841,20 @@ func (c *MigrationHubStrategyRecommendations) StartAssessmentRequest(input *Star
 // API operation StartAssessment for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ServiceQuotaExceededException
-//   The AWS account has reached its quota of imports. Contact AWS Support to
-//   increase the quota for this account.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ServiceQuotaExceededException
+//     The AWS account has reached its quota of imports. Contact AWS Support to
+//     increase the quota for this account.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/StartAssessment
 func (c *MigrationHubStrategyRecommendations) StartAssessment(input *StartAssessmentInput) (*StartAssessmentOutput, error) {
@@ -1752,14 +1894,13 @@ const opStartImportFileTask = "StartImportFileTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartImportFileTaskRequest method.
+//	req, resp := client.StartImportFileTaskRequest(params)
 //
-//    // Example sending a request using the StartImportFileTaskRequest method.
-//    req, resp := client.StartImportFileTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/StartImportFileTask
 func (c *MigrationHubStrategyRecommendations) StartImportFileTaskRequest(input *StartImportFileTaskInput) (req *request.Request, output *StartImportFileTaskOutput) {
@@ -1790,22 +1931,23 @@ func (c *MigrationHubStrategyRecommendations) StartImportFileTaskRequest(input *
 // API operation StartImportFileTask for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ServiceQuotaExceededException
-//   The AWS account has reached its quota of imports. Contact AWS Support to
-//   increase the quota for this account.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ServiceQuotaExceededException
+//     The AWS account has reached its quota of imports. Contact AWS Support to
+//     increase the quota for this account.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/StartImportFileTask
 func (c *MigrationHubStrategyRecommendations) StartImportFileTask(input *StartImportFileTaskInput) (*StartImportFileTaskOutput, error) {
@@ -1845,14 +1987,13 @@ const opStartRecommendationReportGeneration = "StartRecommendationReportGenerati
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartRecommendationReportGenerationRequest method.
+//	req, resp := client.StartRecommendationReportGenerationRequest(params)
 //
-//    // Example sending a request using the StartRecommendationReportGenerationRequest method.
-//    req, resp := client.StartRecommendationReportGenerationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/StartRecommendationReportGeneration
 func (c *MigrationHubStrategyRecommendations) StartRecommendationReportGenerationRequest(input *StartRecommendationReportGenerationInput) (req *request.Request, output *StartRecommendationReportGenerationOutput) {
@@ -1883,22 +2024,23 @@ func (c *MigrationHubStrategyRecommendations) StartRecommendationReportGeneratio
 // API operation StartRecommendationReportGeneration for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   Exception to indicate that there is an ongoing task when a new task is created.
-//   Return when once the existing tasks are complete.
+//   - ValidationException
+//     The request body isn't valid.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ConflictException
+//     Exception to indicate that there is an ongoing task when a new task is created.
+//     Return when once the existing tasks are complete.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/StartRecommendationReportGeneration
 func (c *MigrationHubStrategyRecommendations) StartRecommendationReportGeneration(input *StartRecommendationReportGenerationInput) (*StartRecommendationReportGenerationOutput, error) {
@@ -1938,14 +2080,13 @@ const opStopAssessment = "StopAssessment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopAssessmentRequest method.
+//	req, resp := client.StopAssessmentRequest(params)
 //
-//    // Example sending a request using the StopAssessmentRequest method.
-//    req, resp := client.StopAssessmentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/StopAssessment
 func (c *MigrationHubStrategyRecommendations) StopAssessmentRequest(input *StopAssessmentInput) (req *request.Request, output *StopAssessmentOutput) {
@@ -1977,18 +2118,19 @@ func (c *MigrationHubStrategyRecommendations) StopAssessmentRequest(input *StopA
 // API operation StopAssessment for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The user does not have permission to perform the action. Check the AWS Identity
-//   and Access Management (IAM) policy associated with this user.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     The user does not have permission to perform the action. Check the AWS Identity
+//     and Access Management (IAM) policy associated with this user.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/StopAssessment
 func (c *MigrationHubStrategyRecommendations) StopAssessment(input *StopAssessmentInput) (*StopAssessmentOutput, error) {
@@ -2028,14 +2170,13 @@ const opUpdateApplicationComponentConfig = "UpdateApplicationComponentConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateApplicationComponentConfigRequest method.
+//	req, resp := client.UpdateApplicationComponentConfigRequest(params)
 //
-//    // Example sending a request using the UpdateApplicationComponentConfigRequest method.
-//    req, resp := client.UpdateApplicationComponentConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/UpdateApplicationComponentConfig
 func (c *MigrationHubStrategyRecommendations) UpdateApplicationComponentConfigRequest(input *UpdateApplicationComponentConfigInput) (req *request.Request, output *UpdateApplicationComponentConfigOutput) {
@@ -2067,17 +2208,18 @@ func (c *MigrationHubStrategyRecommendations) UpdateApplicationComponentConfigRe
 // API operation UpdateApplicationComponentConfig for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified ID in the request is not found.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The specified ID in the request is not found.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/UpdateApplicationComponentConfig
 func (c *MigrationHubStrategyRecommendations) UpdateApplicationComponentConfig(input *UpdateApplicationComponentConfigInput) (*UpdateApplicationComponentConfigOutput, error) {
@@ -2117,14 +2259,13 @@ const opUpdateServerConfig = "UpdateServerConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateServerConfigRequest method.
+//	req, resp := client.UpdateServerConfigRequest(params)
 //
-//    // Example sending a request using the UpdateServerConfigRequest method.
-//    req, resp := client.UpdateServerConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/UpdateServerConfig
 func (c *MigrationHubStrategyRecommendations) UpdateServerConfigRequest(input *UpdateServerConfigInput) (req *request.Request, output *UpdateServerConfigOutput) {
@@ -2156,17 +2297,18 @@ func (c *MigrationHubStrategyRecommendations) UpdateServerConfigRequest(input *U
 // API operation UpdateServerConfig for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified ID in the request is not found.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The specified ID in the request is not found.
 //
-//   * ValidationException
-//   The request body isn't valid.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * InternalServerException
-//   The server experienced an internal error. Try again.
+//   - ValidationException
+//     The request body isn't valid.
+//
+//   - InternalServerException
+//     The server experienced an internal error. Try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/migrationhubstrategy-2020-02-19/UpdateServerConfig
 func (c *MigrationHubStrategyRecommendations) UpdateServerConfig(input *UpdateServerConfigInput) (*UpdateServerConfigOutput, error) {
@@ -2293,6 +2435,65 @@ func (s *AnalysisStatusUnion) SetRuntimeAnalysisStatus(v string) *AnalysisStatus
 // SetSrcCodeOrDbAnalysisStatus sets the SrcCodeOrDbAnalysisStatus field's value.
 func (s *AnalysisStatusUnion) SetSrcCodeOrDbAnalysisStatus(v string) *AnalysisStatusUnion {
 	s.SrcCodeOrDbAnalysisStatus = &v
+	return s
+}
+
+// Summary information about an analyzable server.
+type AnalyzableServerSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The host name of the analyzable server.
+	Hostname *string `locationName:"hostname" type:"string"`
+
+	// The ip address of the analyzable server.
+	IpAddress *string `locationName:"ipAddress" type:"string"`
+
+	// The data source of the analyzable server.
+	Source *string `locationName:"source" type:"string"`
+
+	// The virtual machine id of the analyzable server.
+	VmId *string `locationName:"vmId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalyzableServerSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnalyzableServerSummary) GoString() string {
+	return s.String()
+}
+
+// SetHostname sets the Hostname field's value.
+func (s *AnalyzableServerSummary) SetHostname(v string) *AnalyzableServerSummary {
+	s.Hostname = &v
+	return s
+}
+
+// SetIpAddress sets the IpAddress field's value.
+func (s *AnalyzableServerSummary) SetIpAddress(v string) *AnalyzableServerSummary {
+	s.IpAddress = &v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *AnalyzableServerSummary) SetSource(v string) *AnalyzableServerSummary {
+	s.Source = &v
+	return s
+}
+
+// SetVmId sets the VmId field's value.
+func (s *AnalyzableServerSummary) SetVmId(v string) *AnalyzableServerSummary {
+	s.VmId = &v
 	return s
 }
 
@@ -5112,6 +5313,102 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Represents input for ListAnalyzableServers operation.
+type ListAnalyzableServersInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of items to include in the response. The maximum value
+	// is 100.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// The token from a previous call that you use to retrieve the next set of results.
+	// For example, if a previous call to this action returned 100 items, but you
+	// set maxResults to 10. You'll receive a set of 10 results along with a token.
+	// You then use the returned token to retrieve the next set of 10.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// Specifies whether to sort by ascending (ASC) or descending (DESC) order.
+	Sort *string `locationName:"sort" type:"string" enum:"SortOrder"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnalyzableServersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnalyzableServersInput) GoString() string {
+	return s.String()
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAnalyzableServersInput) SetMaxResults(v int64) *ListAnalyzableServersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAnalyzableServersInput) SetNextToken(v string) *ListAnalyzableServersInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSort sets the Sort field's value.
+func (s *ListAnalyzableServersInput) SetSort(v string) *ListAnalyzableServersInput {
+	s.Sort = &v
+	return s
+}
+
+// Represents output for ListAnalyzableServers operation.
+type ListAnalyzableServersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of analyzable servers with summary information about each server.
+	AnalyzableServers []*AnalyzableServerSummary `locationName:"analyzableServers" type:"list"`
+
+	// The token you use to retrieve the next set of results, or null if there are
+	// no more results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnalyzableServersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnalyzableServersOutput) GoString() string {
+	return s.String()
+}
+
+// SetAnalyzableServers sets the AnalyzableServers field's value.
+func (s *ListAnalyzableServersOutput) SetAnalyzableServers(v []*AnalyzableServerSummary) *ListAnalyzableServersOutput {
+	s.AnalyzableServers = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAnalyzableServersOutput) SetNextToken(v string) *ListAnalyzableServersOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListApplicationComponentsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6980,6 +7277,9 @@ func (s *SourceCodeRepository) SetVersionControlType(v string) *SourceCodeReposi
 type StartAssessmentInput struct {
 	_ struct{} `type:"structure"`
 
+	// The data source type of an assessment to be started.
+	AssessmentDataSourceType *string `locationName:"assessmentDataSourceType" type:"string" enum:"AssessmentDataSourceType"`
+
 	// List of criteria for assessment.
 	AssessmentTargets []*AssessmentTarget `locationName:"assessmentTargets" type:"list"`
 
@@ -7028,6 +7328,12 @@ func (s *StartAssessmentInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAssessmentDataSourceType sets the AssessmentDataSourceType field's value.
+func (s *StartAssessmentInput) SetAssessmentDataSourceType(v string) *StartAssessmentInput {
+	s.AssessmentDataSourceType = &v
+	return s
 }
 
 // SetAssessmentTargets sets the AssessmentTargets field's value.
@@ -8236,6 +8542,26 @@ func ApplicationMode_Values() []string {
 }
 
 const (
+	// AssessmentDataSourceTypeStrategyRecommendationsApplicationDataCollector is a AssessmentDataSourceType enum value
+	AssessmentDataSourceTypeStrategyRecommendationsApplicationDataCollector = "StrategyRecommendationsApplicationDataCollector"
+
+	// AssessmentDataSourceTypeManualImport is a AssessmentDataSourceType enum value
+	AssessmentDataSourceTypeManualImport = "ManualImport"
+
+	// AssessmentDataSourceTypeApplicationDiscoveryService is a AssessmentDataSourceType enum value
+	AssessmentDataSourceTypeApplicationDiscoveryService = "ApplicationDiscoveryService"
+)
+
+// AssessmentDataSourceType_Values returns all elements of the AssessmentDataSourceType enum
+func AssessmentDataSourceType_Values() []string {
+	return []string{
+		AssessmentDataSourceTypeStrategyRecommendationsApplicationDataCollector,
+		AssessmentDataSourceTypeManualImport,
+		AssessmentDataSourceTypeApplicationDiscoveryService,
+	}
+}
+
+const (
 	// AssessmentStatusInProgress is a AssessmentStatus enum value
 	AssessmentStatusInProgress = "IN_PROGRESS"
 
@@ -8364,6 +8690,9 @@ const (
 
 	// DataSourceTypeImport is a DataSourceType enum value
 	DataSourceTypeImport = "Import"
+
+	// DataSourceTypeStrategyRecommendationsApplicationDataCollector is a DataSourceType enum value
+	DataSourceTypeStrategyRecommendationsApplicationDataCollector = "StrategyRecommendationsApplicationDataCollector"
 )
 
 // DataSourceType_Values returns all elements of the DataSourceType enum
@@ -8372,6 +8701,7 @@ func DataSourceType_Values() []string {
 		DataSourceTypeApplicationDiscoveryService,
 		DataSourceTypeMpa,
 		DataSourceTypeImport,
+		DataSourceTypeStrategyRecommendationsApplicationDataCollector,
 	}
 }
 

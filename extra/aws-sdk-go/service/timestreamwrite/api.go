@@ -32,14 +32,13 @@ const opCreateBatchLoadTask = "CreateBatchLoadTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateBatchLoadTaskRequest method.
+//	req, resp := client.CreateBatchLoadTaskRequest(params)
 //
-//    // Example sending a request using the CreateBatchLoadTaskRequest method.
-//    req, resp := client.CreateBatchLoadTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/CreateBatchLoadTask
 func (c *TimestreamWrite) CreateBatchLoadTaskRequest(input *CreateBatchLoadTaskInput) (req *request.Request, output *CreateBatchLoadTaskOutput) {
@@ -87,9 +86,9 @@ func (c *TimestreamWrite) CreateBatchLoadTaskRequest(input *CreateBatchLoadTaskI
 // from a CSV source in an S3 location and writes to a Timestream table. A mapping
 // from source to target is defined in a batch load task. Errors and events
 // are written to a report at an S3 location. For the report, if the KMS key
-// is not specified, the batch load task will be encrypted with a Timestream
-// managed KMS key located in your account. For more information, see Amazon
-// Web Services managed keys (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk).
+// is not specified, the report will be encrypted with an S3 managed key when
+// SSE_S3 is the option. Otherwise an error is thrown. For more information,
+// see Amazon Web Services managed keys (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk).
 // Service quotas apply (https://docs.aws.amazon.com/timestream/latest/developerguide/ts-limits.html).
 // For details, see code sample (https://docs.aws.amazon.com/timestream/latest/developerguide/code-samples.create-batch-load.html).
 //
@@ -101,33 +100,34 @@ func (c *TimestreamWrite) CreateBatchLoadTaskRequest(input *CreateBatchLoadTaskI
 // API operation CreateBatchLoadTask for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
 //
-//   * ConflictException
-//   Timestream was unable to process this request because it contains resource
-//   that already exists.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
+//   - ConflictException
+//     Timestream was unable to process this request because it contains resource
+//     that already exists.
 //
-//   * ServiceQuotaExceededException
-//   The instance quota of resource exceeded for this account.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - ServiceQuotaExceededException
+//     The instance quota of resource exceeded for this account.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/CreateBatchLoadTask
 func (c *TimestreamWrite) CreateBatchLoadTask(input *CreateBatchLoadTaskInput) (*CreateBatchLoadTaskOutput, error) {
@@ -167,14 +167,13 @@ const opCreateDatabase = "CreateDatabase"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDatabaseRequest method.
+//	req, resp := client.CreateDatabaseRequest(params)
 //
-//    // Example sending a request using the CreateDatabaseRequest method.
-//    req, resp := client.CreateDatabaseRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/CreateDatabase
 func (c *TimestreamWrite) CreateDatabaseRequest(input *CreateDatabaseInput) (req *request.Request, output *CreateDatabaseOutput) {
@@ -232,32 +231,33 @@ func (c *TimestreamWrite) CreateDatabaseRequest(input *CreateDatabaseInput) (req
 // API operation CreateDatabase for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Timestream was unable to process this request because it contains resource
-//   that already exists.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ConflictException
+//     Timestream was unable to process this request because it contains resource
+//     that already exists.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * ServiceQuotaExceededException
-//   The instance quota of resource exceeded for this account.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - ServiceQuotaExceededException
+//     The instance quota of resource exceeded for this account.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/CreateDatabase
 func (c *TimestreamWrite) CreateDatabase(input *CreateDatabaseInput) (*CreateDatabaseOutput, error) {
@@ -297,14 +297,13 @@ const opCreateTable = "CreateTable"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateTableRequest method.
+//	req, resp := client.CreateTableRequest(params)
 //
-//    // Example sending a request using the CreateTableRequest method.
-//    req, resp := client.CreateTableRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/CreateTable
 func (c *TimestreamWrite) CreateTableRequest(input *CreateTableInput) (req *request.Request, output *CreateTableOutput) {
@@ -365,36 +364,37 @@ func (c *TimestreamWrite) CreateTableRequest(input *CreateTableInput) (req *requ
 // API operation CreateTable for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Timestream was unable to process this request because it contains resource
-//   that already exists.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ConflictException
+//     Timestream was unable to process this request because it contains resource
+//     that already exists.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   The instance quota of resource exceeded for this account.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - ServiceQuotaExceededException
+//     The instance quota of resource exceeded for this account.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/CreateTable
 func (c *TimestreamWrite) CreateTable(input *CreateTableInput) (*CreateTableOutput, error) {
@@ -434,14 +434,13 @@ const opDeleteDatabase = "DeleteDatabase"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDatabaseRequest method.
+//	req, resp := client.DeleteDatabaseRequest(params)
 //
-//    // Example sending a request using the DeleteDatabaseRequest method.
-//    req, resp := client.DeleteDatabaseRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DeleteDatabase
 func (c *TimestreamWrite) DeleteDatabaseRequest(input *DeleteDatabaseInput) (req *request.Request, output *DeleteDatabaseOutput) {
@@ -506,26 +505,27 @@ func (c *TimestreamWrite) DeleteDatabaseRequest(input *DeleteDatabaseInput) (req
 // API operation DeleteDatabase for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
 //
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DeleteDatabase
 func (c *TimestreamWrite) DeleteDatabase(input *DeleteDatabaseInput) (*DeleteDatabaseOutput, error) {
@@ -565,14 +565,13 @@ const opDeleteTable = "DeleteTable"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteTableRequest method.
+//	req, resp := client.DeleteTableRequest(params)
 //
-//    // Example sending a request using the DeleteTableRequest method.
-//    req, resp := client.DeleteTableRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DeleteTable
 func (c *TimestreamWrite) DeleteTableRequest(input *DeleteTableInput) (req *request.Request, output *DeleteTableOutput) {
@@ -635,26 +634,27 @@ func (c *TimestreamWrite) DeleteTableRequest(input *DeleteTableInput) (req *requ
 // API operation DeleteTable for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DeleteTable
 func (c *TimestreamWrite) DeleteTable(input *DeleteTableInput) (*DeleteTableOutput, error) {
@@ -694,14 +694,13 @@ const opDescribeBatchLoadTask = "DescribeBatchLoadTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeBatchLoadTaskRequest method.
+//	req, resp := client.DescribeBatchLoadTaskRequest(params)
 //
-//    // Example sending a request using the DescribeBatchLoadTaskRequest method.
-//    req, resp := client.DescribeBatchLoadTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DescribeBatchLoadTask
 func (c *TimestreamWrite) DescribeBatchLoadTaskRequest(input *DescribeBatchLoadTaskInput) (req *request.Request, output *DescribeBatchLoadTaskOutput) {
@@ -758,23 +757,24 @@ func (c *TimestreamWrite) DescribeBatchLoadTaskRequest(input *DescribeBatchLoadT
 // API operation DescribeBatchLoadTask for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DescribeBatchLoadTask
 func (c *TimestreamWrite) DescribeBatchLoadTask(input *DescribeBatchLoadTaskInput) (*DescribeBatchLoadTaskOutput, error) {
@@ -814,14 +814,13 @@ const opDescribeDatabase = "DescribeDatabase"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeDatabaseRequest method.
+//	req, resp := client.DescribeDatabaseRequest(params)
 //
-//    // Example sending a request using the DescribeDatabaseRequest method.
-//    req, resp := client.DescribeDatabaseRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DescribeDatabase
 func (c *TimestreamWrite) DescribeDatabaseRequest(input *DescribeDatabaseInput) (req *request.Request, output *DescribeDatabaseOutput) {
@@ -879,26 +878,27 @@ func (c *TimestreamWrite) DescribeDatabaseRequest(input *DescribeDatabaseInput) 
 // API operation DescribeDatabase for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
 //
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DescribeDatabase
 func (c *TimestreamWrite) DescribeDatabase(input *DescribeDatabaseInput) (*DescribeDatabaseOutput, error) {
@@ -938,14 +938,13 @@ const opDescribeEndpoints = "DescribeEndpoints"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeEndpointsRequest method.
+//	req, resp := client.DescribeEndpointsRequest(params)
 //
-//    // Example sending a request using the DescribeEndpointsRequest method.
-//    req, resp := client.DescribeEndpointsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DescribeEndpoints
 func (c *TimestreamWrite) DescribeEndpointsRequest(input *DescribeEndpointsInput) (req *request.Request, output *DescribeEndpointsOutput) {
@@ -973,13 +972,13 @@ func (c *TimestreamWrite) DescribeEndpointsRequest(input *DescribeEndpointsInput
 // architecture, including the management and mapping of the service endpoints,
 // we don't recommend that you use this API operation unless:
 //
-//    * You are using VPC endpoints (Amazon Web Services PrivateLink) with Timestream
-//    (https://docs.aws.amazon.com/timestream/latest/developerguide/VPCEndpoints)
+//   - You are using VPC endpoints (Amazon Web Services PrivateLink) with Timestream
+//     (https://docs.aws.amazon.com/timestream/latest/developerguide/VPCEndpoints)
 //
-//    * Your application uses a programming language that does not yet have
-//    SDK support
+//   - Your application uses a programming language that does not yet have
+//     SDK support
 //
-//    * You require better control over the client-side implementation
+//   - You require better control over the client-side implementation
 //
 // For detailed information on how and when to use and implement DescribeEndpoints,
 // see The Endpoint Discovery Pattern (https://docs.aws.amazon.com/timestream/latest/developerguide/Using.API.html#Using-API.endpoint-discovery).
@@ -992,16 +991,17 @@ func (c *TimestreamWrite) DescribeEndpointsRequest(input *DescribeEndpointsInput
 // API operation DescribeEndpoints for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - ValidationException
+//     An invalid or malformed request.
+//
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DescribeEndpoints
 func (c *TimestreamWrite) DescribeEndpoints(input *DescribeEndpointsInput) (*DescribeEndpointsOutput, error) {
@@ -1113,14 +1113,13 @@ const opDescribeTable = "DescribeTable"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeTableRequest method.
+//	req, resp := client.DescribeTableRequest(params)
 //
-//    // Example sending a request using the DescribeTableRequest method.
-//    req, resp := client.DescribeTableRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DescribeTable
 func (c *TimestreamWrite) DescribeTableRequest(input *DescribeTableInput) (req *request.Request, output *DescribeTableOutput) {
@@ -1178,26 +1177,27 @@ func (c *TimestreamWrite) DescribeTableRequest(input *DescribeTableInput) (req *
 // API operation DescribeTable for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
 //
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/DescribeTable
 func (c *TimestreamWrite) DescribeTable(input *DescribeTableInput) (*DescribeTableOutput, error) {
@@ -1237,14 +1237,13 @@ const opListBatchLoadTasks = "ListBatchLoadTasks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBatchLoadTasksRequest method.
+//	req, resp := client.ListBatchLoadTasksRequest(params)
 //
-//    // Example sending a request using the ListBatchLoadTasksRequest method.
-//    req, resp := client.ListBatchLoadTasksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/ListBatchLoadTasks
 func (c *TimestreamWrite) ListBatchLoadTasksRequest(input *ListBatchLoadTasksInput) (req *request.Request, output *ListBatchLoadTasksOutput) {
@@ -1306,22 +1305,23 @@ func (c *TimestreamWrite) ListBatchLoadTasksRequest(input *ListBatchLoadTasksInp
 // API operation ListBatchLoadTasks for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - ValidationException
+//     An invalid or malformed request.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/ListBatchLoadTasks
 func (c *TimestreamWrite) ListBatchLoadTasks(input *ListBatchLoadTasksInput) (*ListBatchLoadTasksOutput, error) {
@@ -1353,15 +1353,14 @@ func (c *TimestreamWrite) ListBatchLoadTasksWithContext(ctx aws.Context, input *
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBatchLoadTasks operation.
-//    pageNum := 0
-//    err := client.ListBatchLoadTasksPages(params,
-//        func(page *timestreamwrite.ListBatchLoadTasksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBatchLoadTasks operation.
+//	pageNum := 0
+//	err := client.ListBatchLoadTasksPages(params,
+//	    func(page *timestreamwrite.ListBatchLoadTasksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *TimestreamWrite) ListBatchLoadTasksPages(input *ListBatchLoadTasksInput, fn func(*ListBatchLoadTasksOutput, bool) bool) error {
 	return c.ListBatchLoadTasksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1413,14 +1412,13 @@ const opListDatabases = "ListDatabases"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDatabasesRequest method.
+//	req, resp := client.ListDatabasesRequest(params)
 //
-//    // Example sending a request using the ListDatabasesRequest method.
-//    req, resp := client.ListDatabasesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/ListDatabases
 func (c *TimestreamWrite) ListDatabasesRequest(input *ListDatabasesInput) (req *request.Request, output *ListDatabasesOutput) {
@@ -1482,22 +1480,23 @@ func (c *TimestreamWrite) ListDatabasesRequest(input *ListDatabasesInput) (req *
 // API operation ListDatabases for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/ListDatabases
 func (c *TimestreamWrite) ListDatabases(input *ListDatabasesInput) (*ListDatabasesOutput, error) {
@@ -1529,15 +1528,14 @@ func (c *TimestreamWrite) ListDatabasesWithContext(ctx aws.Context, input *ListD
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDatabases operation.
-//    pageNum := 0
-//    err := client.ListDatabasesPages(params,
-//        func(page *timestreamwrite.ListDatabasesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDatabases operation.
+//	pageNum := 0
+//	err := client.ListDatabasesPages(params,
+//	    func(page *timestreamwrite.ListDatabasesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *TimestreamWrite) ListDatabasesPages(input *ListDatabasesInput, fn func(*ListDatabasesOutput, bool) bool) error {
 	return c.ListDatabasesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1589,14 +1587,13 @@ const opListTables = "ListTables"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTablesRequest method.
+//	req, resp := client.ListTablesRequest(params)
 //
-//    // Example sending a request using the ListTablesRequest method.
-//    req, resp := client.ListTablesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/ListTables
 func (c *TimestreamWrite) ListTablesRequest(input *ListTablesInput) (req *request.Request, output *ListTablesOutput) {
@@ -1658,26 +1655,27 @@ func (c *TimestreamWrite) ListTablesRequest(input *ListTablesInput) (req *reques
 // API operation ListTables for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/ListTables
 func (c *TimestreamWrite) ListTables(input *ListTablesInput) (*ListTablesOutput, error) {
@@ -1709,15 +1707,14 @@ func (c *TimestreamWrite) ListTablesWithContext(ctx aws.Context, input *ListTabl
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTables operation.
-//    pageNum := 0
-//    err := client.ListTablesPages(params,
-//        func(page *timestreamwrite.ListTablesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTables operation.
+//	pageNum := 0
+//	err := client.ListTablesPages(params,
+//	    func(page *timestreamwrite.ListTablesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *TimestreamWrite) ListTablesPages(input *ListTablesInput, fn func(*ListTablesOutput, bool) bool) error {
 	return c.ListTablesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1769,14 +1766,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/ListTagsForResource
 func (c *TimestreamWrite) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1830,19 +1826,20 @@ func (c *TimestreamWrite) ListTagsForResourceRequest(input *ListTagsForResourceI
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - ValidationException
+//     An invalid or malformed request.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/ListTagsForResource
 func (c *TimestreamWrite) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1882,14 +1879,13 @@ const opResumeBatchLoadTask = "ResumeBatchLoadTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ResumeBatchLoadTaskRequest method.
+//	req, resp := client.ResumeBatchLoadTaskRequest(params)
 //
-//    // Example sending a request using the ResumeBatchLoadTaskRequest method.
-//    req, resp := client.ResumeBatchLoadTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/ResumeBatchLoadTask
 func (c *TimestreamWrite) ResumeBatchLoadTaskRequest(input *ResumeBatchLoadTaskInput) (req *request.Request, output *ResumeBatchLoadTaskOutput) {
@@ -1942,26 +1938,27 @@ func (c *TimestreamWrite) ResumeBatchLoadTaskRequest(input *ResumeBatchLoadTaskI
 // API operation ResumeBatchLoadTask for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
 //
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/ResumeBatchLoadTask
 func (c *TimestreamWrite) ResumeBatchLoadTask(input *ResumeBatchLoadTaskInput) (*ResumeBatchLoadTaskOutput, error) {
@@ -2001,14 +1998,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/TagResource
 func (c *TimestreamWrite) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2065,22 +2061,23 @@ func (c *TimestreamWrite) TagResourceRequest(input *TagResourceInput) (req *requ
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
 //
-//   * ServiceQuotaExceededException
-//   The instance quota of resource exceeded for this account.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - ServiceQuotaExceededException
+//     The instance quota of resource exceeded for this account.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - ValidationException
+//     An invalid or malformed request.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/TagResource
 func (c *TimestreamWrite) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2120,14 +2117,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/UntagResource
 func (c *TimestreamWrite) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2182,22 +2178,23 @@ func (c *TimestreamWrite) UntagResourceRequest(input *UntagResourceInput) (req *
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An invalid or malformed request.
 //
-//   * ServiceQuotaExceededException
-//   The instance quota of resource exceeded for this account.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - ServiceQuotaExceededException
+//     The instance quota of resource exceeded for this account.
 //
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/UntagResource
 func (c *TimestreamWrite) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2237,14 +2234,13 @@ const opUpdateDatabase = "UpdateDatabase"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDatabaseRequest method.
+//	req, resp := client.UpdateDatabaseRequest(params)
 //
-//    // Example sending a request using the UpdateDatabaseRequest method.
-//    req, resp := client.UpdateDatabaseRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/UpdateDatabase
 func (c *TimestreamWrite) UpdateDatabaseRequest(input *UpdateDatabaseInput) (req *request.Request, output *UpdateDatabaseOutput) {
@@ -2304,29 +2300,30 @@ func (c *TimestreamWrite) UpdateDatabaseRequest(input *UpdateDatabaseInput) (req
 // API operation UpdateDatabase for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An invalid or malformed request.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   The instance quota of resource exceeded for this account.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - ServiceQuotaExceededException
+//     The instance quota of resource exceeded for this account.
 //
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/UpdateDatabase
 func (c *TimestreamWrite) UpdateDatabase(input *UpdateDatabaseInput) (*UpdateDatabaseOutput, error) {
@@ -2366,14 +2363,13 @@ const opUpdateTable = "UpdateTable"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateTableRequest method.
+//	req, resp := client.UpdateTableRequest(params)
 //
-//    // Example sending a request using the UpdateTableRequest method.
-//    req, resp := client.UpdateTableRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/UpdateTable
 func (c *TimestreamWrite) UpdateTableRequest(input *UpdateTableInput) (req *request.Request, output *UpdateTableOutput) {
@@ -2436,26 +2432,27 @@ func (c *TimestreamWrite) UpdateTableRequest(input *UpdateTableInput) (req *requ
 // API operation UpdateTable for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/UpdateTable
 func (c *TimestreamWrite) UpdateTable(input *UpdateTableInput) (*UpdateTableOutput, error) {
@@ -2495,14 +2492,13 @@ const opWriteRecords = "WriteRecords"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the WriteRecordsRequest method.
+//	req, resp := client.WriteRecordsRequest(params)
 //
-//    // Example sending a request using the WriteRecordsRequest method.
-//    req, resp := client.WriteRecordsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/WriteRecords
 func (c *TimestreamWrite) WriteRecordsRequest(input *WriteRecordsInput) (req *request.Request, output *WriteRecordsOutput) {
@@ -2562,7 +2558,7 @@ func (c *TimestreamWrite) WriteRecordsRequest(input *WriteRecordsInput) (req *re
 // See code sample (https://docs.aws.amazon.com/timestream/latest/developerguide/code-samples.write.html)
 // for details.
 //
-// Upserts
+// # Upserts
 //
 // You can use the Version parameter in a WriteRecords request to update data
 // points. Timestream tracks a version number with each record. Version defaults
@@ -2598,47 +2594,48 @@ func (c *TimestreamWrite) WriteRecordsRequest(input *WriteRecordsInput) (req *re
 // API operation WriteRecords for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Timestream was unable to fully process this request because of an internal
-//   server error.
 //
-//   * ThrottlingException
-//   Too many requests were made by a user and they exceeded the service quotas.
-//   The request was throttled.
+//   - InternalServerException
+//     Timestream was unable to fully process this request because of an internal
+//     server error.
 //
-//   * ValidationException
-//   An invalid or malformed request.
+//   - ThrottlingException
+//     Too many requests were made by a user and they exceeded the service quotas.
+//     The request was throttled.
 //
-//   * ResourceNotFoundException
-//   The operation tried to access a nonexistent resource. The resource might
-//   not be specified correctly, or its status might not be ACTIVE.
+//   - ValidationException
+//     An invalid or malformed request.
 //
-//   * AccessDeniedException
-//   You are not authorized to perform this action.
+//   - ResourceNotFoundException
+//     The operation tried to access a nonexistent resource. The resource might
+//     not be specified correctly, or its status might not be ACTIVE.
 //
-//   * RejectedRecordsException
-//   WriteRecords would throw this exception in the following cases:
+//   - AccessDeniedException
+//     You are not authorized to perform this action.
 //
-//      * Records with duplicate data where there are multiple records with the
-//      same dimensions, timestamps, and measure names but: Measure values are
-//      different Version is not present in the request or the value of version
-//      in the new record is equal to or lower than the existing value In this
-//      case, if Timestream rejects data, the ExistingVersion field in the RejectedRecords
-//      response will indicate the current record’s version. To force an update,
-//      you can resend the request with a version for the record set to a value
-//      greater than the ExistingVersion.
+//   - RejectedRecordsException
+//     WriteRecords would throw this exception in the following cases:
 //
-//      * Records with timestamps that lie outside the retention duration of the
-//      memory store.
+//   - Records with duplicate data where there are multiple records with the
+//     same dimensions, timestamps, and measure names but: Measure values are
+//     different Version is not present in the request or the value of version
+//     in the new record is equal to or lower than the existing value In this
+//     case, if Timestream rejects data, the ExistingVersion field in the RejectedRecords
+//     response will indicate the current record’s version. To force an update,
+//     you can resend the request with a version for the record set to a value
+//     greater than the ExistingVersion.
 //
-//      * Records with dimensions or measures that exceed the Timestream defined
-//      limits.
+//   - Records with timestamps that lie outside the retention duration of the
+//     memory store.
 //
-//   For more information, see Quotas (https://docs.aws.amazon.com/timestream/latest/developerguide/ts-limits.html)
-//   in the Amazon Timestream Developer Guide.
+//   - Records with dimensions or measures that exceed the Timestream defined
+//     limits.
 //
-//   * InvalidEndpointException
-//   The requested endpoint was not valid.
+//     For more information, see Quotas (https://docs.aws.amazon.com/timestream/latest/developerguide/ts-limits.html)
+//     in the Amazon Timestream Developer Guide.
+//
+//   - InvalidEndpointException
+//     The requested endpoint was not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/timestream-write-2018-11-01/WriteRecords
 func (c *TimestreamWrite) WriteRecords(input *WriteRecordsInput) (*WriteRecordsOutput, error) {
@@ -3376,6 +3373,9 @@ type CreateTableInput struct {
 	// store and the magnetic store.
 	RetentionProperties *RetentionProperties `type:"structure"`
 
+	// The schema of the table.
+	Schema *Schema `type:"structure"`
+
 	// The name of the Timestream table.
 	//
 	// TableName is a required field
@@ -3422,6 +3422,11 @@ func (s *CreateTableInput) Validate() error {
 			invalidParams.AddNested("RetentionProperties", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.Schema != nil {
+		if err := s.Schema.Validate(); err != nil {
+			invalidParams.AddNested("Schema", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
 			if v == nil {
@@ -3454,6 +3459,12 @@ func (s *CreateTableInput) SetMagneticStoreWriteProperties(v *MagneticStoreWrite
 // SetRetentionProperties sets the RetentionProperties field's value.
 func (s *CreateTableInput) SetRetentionProperties(v *RetentionProperties) *CreateTableInput {
 	s.RetentionProperties = v
+	return s
+}
+
+// SetSchema sets the Schema field's value.
+func (s *CreateTableInput) SetSchema(v *Schema) *CreateTableInput {
+	s.Schema = v
 	return s
 }
 
@@ -5343,7 +5354,7 @@ type MeasureValue struct {
 	// Type is a required field
 	Type *string `type:"string" required:"true" enum:"MeasureValueType"`
 
-	// The value for the MeasureValue.
+	// The value for the MeasureValue. For information, see Data types (https://docs.aws.amazon.com/timestream/latest/developerguide/writes.html#writes.data-types).
 	//
 	// Value is a required field
 	Value *string `min:"1" type:"string" required:"true"`
@@ -5642,6 +5653,80 @@ func (s *MultiMeasureMappings) SetTargetMultiMeasureName(v string) *MultiMeasure
 	return s
 }
 
+// An attribute used in partitioning data in a table. A dimension key partitions
+// data using the values of the dimension specified by the dimension-name as
+// partition key, while a measure key partitions data using measure names (values
+// of the 'measure_name' column).
+type PartitionKey struct {
+	_ struct{} `type:"structure"`
+
+	// The level of enforcement for the specification of a dimension key in ingested
+	// records. Options are REQUIRED (dimension key must be specified) and OPTIONAL
+	// (dimension key does not have to be specified).
+	EnforcementInRecord *string `type:"string" enum:"PartitionKeyEnforcementLevel"`
+
+	// The name of the attribute used for a dimension key.
+	Name *string `min:"1" type:"string"`
+
+	// The type of the partition key. Options are DIMENSION (dimension key) and
+	// MEASURE (measure key).
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true" enum:"PartitionKeyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PartitionKey) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PartitionKey) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PartitionKey) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PartitionKey"}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEnforcementInRecord sets the EnforcementInRecord field's value.
+func (s *PartitionKey) SetEnforcementInRecord(v string) *PartitionKey {
+	s.EnforcementInRecord = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *PartitionKey) SetName(v string) *PartitionKey {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *PartitionKey) SetType(v string) *PartitionKey {
+	s.Type = &v
+	return s
+}
+
 // Represents a time-series data point being written into Timestream. Each record
 // contains an array of dimensions. Dimensions represent the metadata attributes
 // of a time-series data point, such as the instance name or Availability Zone
@@ -5672,7 +5757,7 @@ type Record struct {
 	MeasureValue *string `min:"1" type:"string"`
 
 	// Contains the data type of the measure value for the time-series data point.
-	// Default type is DOUBLE.
+	// Default type is DOUBLE. For more information, see Data types (https://docs.aws.amazon.com/timestream/latest/developerguide/writes.html#writes.data-types).
 	MeasureValueType *string `type:"string" enum:"MeasureValueType"`
 
 	// Contains the list of MeasureValue for time-series data points.
@@ -5937,20 +6022,20 @@ func (s *RejectedRecord) SetRecordIndex(v int64) *RejectedRecord {
 
 // WriteRecords would throw this exception in the following cases:
 //
-//    * Records with duplicate data where there are multiple records with the
-//    same dimensions, timestamps, and measure names but: Measure values are
-//    different Version is not present in the request or the value of version
-//    in the new record is equal to or lower than the existing value In this
-//    case, if Timestream rejects data, the ExistingVersion field in the RejectedRecords
-//    response will indicate the current record’s version. To force an update,
-//    you can resend the request with a version for the record set to a value
-//    greater than the ExistingVersion.
+//   - Records with duplicate data where there are multiple records with the
+//     same dimensions, timestamps, and measure names but: Measure values are
+//     different Version is not present in the request or the value of version
+//     in the new record is equal to or lower than the existing value In this
+//     case, if Timestream rejects data, the ExistingVersion field in the RejectedRecords
+//     response will indicate the current record’s version. To force an update,
+//     you can resend the request with a version for the record set to a value
+//     greater than the ExistingVersion.
 //
-//    * Records with timestamps that lie outside the retention duration of the
-//    memory store.
+//   - Records with timestamps that lie outside the retention duration of the
+//     memory store.
 //
-//    * Records with dimensions or measures that exceed the Timestream defined
-//    limits.
+//   - Records with dimensions or measures that exceed the Timestream defined
+//     limits.
 //
 // For more information, see Quotas (https://docs.aws.amazon.com/timestream/latest/developerguide/ts-limits.html)
 // in the Amazon Timestream Developer Guide.
@@ -6429,6 +6514,65 @@ func (s *S3Configuration) SetObjectKeyPrefix(v string) *S3Configuration {
 	return s
 }
 
+// A Schema specifies the expected data model of the table.
+type Schema struct {
+	_ struct{} `type:"structure"`
+
+	// A non-empty list of partition keys defining the attributes used to partition
+	// the table data. The order of the list determines the partition hierarchy.
+	// The name and type of each partition key as well as the partition key order
+	// cannot be changed after the table is created. However, the enforcement level
+	// of each partition key can be changed.
+	CompositePartitionKey []*PartitionKey `min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Schema) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Schema) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Schema) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Schema"}
+	if s.CompositePartitionKey != nil && len(s.CompositePartitionKey) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CompositePartitionKey", 1))
+	}
+	if s.CompositePartitionKey != nil {
+		for i, v := range s.CompositePartitionKey {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CompositePartitionKey", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCompositePartitionKey sets the CompositePartitionKey field's value.
+func (s *Schema) SetCompositePartitionKey(v []*PartitionKey) *Schema {
+	s.CompositePartitionKey = v
+	return s
+}
+
 // The instance quota of resource exceeded for this account.
 type ServiceQuotaExceededException struct {
 	_            struct{}                  `type:"structure"`
@@ -6517,6 +6661,9 @@ type Table struct {
 	// The retention duration for the memory store and magnetic store.
 	RetentionProperties *RetentionProperties `type:"structure"`
 
+	// The schema of the table.
+	Schema *Schema `type:"structure"`
+
 	// The name of the Timestream table.
 	TableName *string `type:"string"`
 
@@ -6579,6 +6726,12 @@ func (s *Table) SetMagneticStoreWriteProperties(v *MagneticStoreWriteProperties)
 // SetRetentionProperties sets the RetentionProperties field's value.
 func (s *Table) SetRetentionProperties(v *RetentionProperties) *Table {
 	s.RetentionProperties = v
+	return s
+}
+
+// SetSchema sets the Schema field's value.
+func (s *Table) SetSchema(v *Schema) *Table {
+	s.Schema = v
 	return s
 }
 
@@ -7031,6 +7184,9 @@ type UpdateTableInput struct {
 	// The retention duration of the memory store and the magnetic store.
 	RetentionProperties *RetentionProperties `type:"structure"`
 
+	// The schema of the table.
+	Schema *Schema `type:"structure"`
+
 	// The name of the Timestream table.
 	//
 	// TableName is a required field
@@ -7074,6 +7230,11 @@ func (s *UpdateTableInput) Validate() error {
 			invalidParams.AddNested("RetentionProperties", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.Schema != nil {
+		if err := s.Schema.Validate(); err != nil {
+			invalidParams.AddNested("Schema", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -7096,6 +7257,12 @@ func (s *UpdateTableInput) SetMagneticStoreWriteProperties(v *MagneticStoreWrite
 // SetRetentionProperties sets the RetentionProperties field's value.
 func (s *UpdateTableInput) SetRetentionProperties(v *RetentionProperties) *UpdateTableInput {
 	s.RetentionProperties = v
+	return s
+}
+
+// SetSchema sets the Schema field's value.
+func (s *UpdateTableInput) SetSchema(v *Schema) *UpdateTableInput {
+	s.Schema = v
 	return s
 }
 
@@ -7423,6 +7590,38 @@ func MeasureValueType_Values() []string {
 		MeasureValueTypeBoolean,
 		MeasureValueTypeTimestamp,
 		MeasureValueTypeMulti,
+	}
+}
+
+const (
+	// PartitionKeyEnforcementLevelRequired is a PartitionKeyEnforcementLevel enum value
+	PartitionKeyEnforcementLevelRequired = "REQUIRED"
+
+	// PartitionKeyEnforcementLevelOptional is a PartitionKeyEnforcementLevel enum value
+	PartitionKeyEnforcementLevelOptional = "OPTIONAL"
+)
+
+// PartitionKeyEnforcementLevel_Values returns all elements of the PartitionKeyEnforcementLevel enum
+func PartitionKeyEnforcementLevel_Values() []string {
+	return []string{
+		PartitionKeyEnforcementLevelRequired,
+		PartitionKeyEnforcementLevelOptional,
+	}
+}
+
+const (
+	// PartitionKeyTypeDimension is a PartitionKeyType enum value
+	PartitionKeyTypeDimension = "DIMENSION"
+
+	// PartitionKeyTypeMeasure is a PartitionKeyType enum value
+	PartitionKeyTypeMeasure = "MEASURE"
+)
+
+// PartitionKeyType_Values returns all elements of the PartitionKeyType enum
+func PartitionKeyType_Values() []string {
+	return []string{
+		PartitionKeyTypeDimension,
+		PartitionKeyTypeMeasure,
 	}
 }
 

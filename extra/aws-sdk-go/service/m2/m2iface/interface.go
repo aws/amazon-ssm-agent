@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWSMainframeModernization.
-//    func myFunc(svc m2iface.M2API) bool {
-//        // Make svc.CancelBatchJobExecution request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWSMainframeModernization.
+//	func myFunc(svc m2iface.M2API) bool {
+//	    // Make svc.CancelBatchJobExecution request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := m2.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := m2.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockM2Client struct {
-//        m2iface.M2API
-//    }
-//    func (m *mockM2Client) CancelBatchJobExecution(input *m2.CancelBatchJobExecutionInput) (*m2.CancelBatchJobExecutionOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockM2Client struct {
+//	    m2iface.M2API
+//	}
+//	func (m *mockM2Client) CancelBatchJobExecution(input *m2.CancelBatchJobExecutionInput) (*m2.CancelBatchJobExecutionOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockM2Client{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockM2Client{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -119,6 +119,10 @@ type M2API interface {
 	GetEnvironment(*m2.GetEnvironmentInput) (*m2.GetEnvironmentOutput, error)
 	GetEnvironmentWithContext(aws.Context, *m2.GetEnvironmentInput, ...request.Option) (*m2.GetEnvironmentOutput, error)
 	GetEnvironmentRequest(*m2.GetEnvironmentInput) (*request.Request, *m2.GetEnvironmentOutput)
+
+	GetSignedBluinsightsUrl(*m2.GetSignedBluinsightsUrlInput) (*m2.GetSignedBluinsightsUrlOutput, error)
+	GetSignedBluinsightsUrlWithContext(aws.Context, *m2.GetSignedBluinsightsUrlInput, ...request.Option) (*m2.GetSignedBluinsightsUrlOutput, error)
+	GetSignedBluinsightsUrlRequest(*m2.GetSignedBluinsightsUrlInput) (*request.Request, *m2.GetSignedBluinsightsUrlOutput)
 
 	ListApplicationVersions(*m2.ListApplicationVersionsInput) (*m2.ListApplicationVersionsOutput, error)
 	ListApplicationVersionsWithContext(aws.Context, *m2.ListApplicationVersionsInput, ...request.Option) (*m2.ListApplicationVersionsOutput, error)

@@ -4,7 +4,7 @@
 // requests to AWSBillingConductor.
 //
 // Amazon Web Services Billing Conductor is a fully managed service that you
-// can use to customize a pro forma (https://docs.aws.amazon.com/billingconductor/latest/userguide/understanding-eb.html#eb-other-definitions)
+// can use to customize a proforma (https://docs.aws.amazon.com/billingconductor/latest/userguide/understanding-eb.html#eb-other-definitions)
 // version of your billing data each month, to accurately show or chargeback
 // your end customers. Amazon Web Services Billing Conductor doesn't change
 // the way you're billed by Amazon Web Services each month by design. Instead,
@@ -28,7 +28,7 @@
 // See billingconductor package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/billingconductor/
 //
-// Using the Client
+// # Using the Client
 //
 // To contact AWSBillingConductor with the SDK use the New function to create
 // a new service client. With that client you can make API requests to the service.

@@ -131,6 +131,10 @@ const (
 	// schemas and try again.
 	ErrCodeCustomSchemaCountLimitExceededException = "CustomSchemaCountLimitExceededException"
 
+	// ErrCodeDependencyTimeoutException for service response error code
+	// "DependencyTimeoutException".
+	ErrCodeDependencyTimeoutException = "DependencyTimeoutException"
+
 	// ErrCodeDocumentAlreadyExists for service response error code
 	// "DocumentAlreadyExists".
 	//
@@ -419,14 +423,15 @@ const (
 	//
 	//    * You don't have permission to access the managed node.
 	//
-	//    * Amazon Web Services Systems Manager Agent(SSM Agent) isn't running.
+	//    * Amazon Web Services Systems Manager Agent (SSM Agent) isn't running.
 	//    Verify that SSM Agent is running.
 	//
 	//    * SSM Agent isn't registered with the SSM endpoint. Try reinstalling SSM
 	//    Agent.
 	//
-	//    * The managed node isn't in valid state. Valid states are: Running, Pending,
-	//    Stopped, and Stopping. Invalid states are: Shutting-down and Terminated.
+	//    * The managed node isn't in a valid state. Valid states are: Running,
+	//    Pending, Stopped, and Stopping. Invalid states are: Shutting-down and
+	//    Terminated.
 	ErrCodeInvalidInstanceId = "InvalidInstanceId"
 
 	// ErrCodeInvalidInstanceInformationFilterValue for service response error code
@@ -578,7 +583,8 @@ const (
 	// The role name can't contain invalid characters. Also verify that you specified
 	// an IAM role for notifications that includes the required trust policy. For
 	// information about configuring the IAM role for Run Command notifications,
-	// see Configuring Amazon SNS Notifications for Run Command (https://docs.aws.amazon.com/systems-manager/latest/userguide/rc-sns-notifications.html)
+	// see Monitoring Systems Manager status changes using Amazon SNS notifications
+	// (https://docs.aws.amazon.com/systems-manager/latest/userguide/monitoring-sns-notifications.html)
 	// in the Amazon Web Services Systems Manager User Guide.
 	ErrCodeInvalidRole = "InvalidRole"
 
@@ -642,6 +648,13 @@ const (
 	// "MachineFingerprintDoesNotMatch".
 	ErrCodeMachineFingerprintDoesNotMatch = "MachineFingerprintDoesNotMatch"
 
+	// ErrCodeMalformedResourcePolicyDocumentException for service response error code
+	// "MalformedResourcePolicyDocumentException".
+	//
+	// The specified policy document is malformed or invalid, or excessive PutResourcePolicy
+	// or DeleteResourcePolicy calls have been made.
+	ErrCodeMalformedResourcePolicyDocumentException = "MalformedResourcePolicyDocumentException"
+
 	// ErrCodeMaxDocumentSizeExceeded for service response error code
 	// "MaxDocumentSizeExceeded".
 	//
@@ -666,6 +679,12 @@ const (
 	// The OpsItem already exists.
 	ErrCodeOpsItemAlreadyExistsException = "OpsItemAlreadyExistsException"
 
+	// ErrCodeOpsItemConflictException for service response error code
+	// "OpsItemConflictException".
+	//
+	// The specified OpsItem is in the process of being deleted.
+	ErrCodeOpsItemConflictException = "OpsItemConflictException"
+
 	// ErrCodeOpsItemInvalidParameterException for service response error code
 	// "OpsItemInvalidParameterException".
 	//
@@ -676,8 +695,7 @@ const (
 	// ErrCodeOpsItemLimitExceededException for service response error code
 	// "OpsItemLimitExceededException".
 	//
-	// The request caused OpsItems to exceed one or more quotas. For information
-	// about OpsItem quotas, see What are the resource limits for OpsCenter? (https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-learn-more.html#OpsCenter-learn-more-limits).
+	// The request caused OpsItems to exceed one or more quotas.
 	ErrCodeOpsItemLimitExceededException = "OpsItemLimitExceededException"
 
 	// ErrCodeOpsItemNotFoundException for service response error code
@@ -897,6 +915,8 @@ const (
 
 	// ErrCodeResourceNotFoundException for service response error code
 	// "ResourceNotFoundException".
+	//
+	// The specified parameter to be shared could not be found.
 	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
 
 	// ErrCodeResourcePolicyConflictException for service response error code
@@ -913,6 +933,12 @@ const (
 	// One or more parameters specified for the call aren't valid. Verify the parameters
 	// and their values and try again.
 	ErrCodeResourcePolicyInvalidParameterException = "ResourcePolicyInvalidParameterException"
+
+	// ErrCodeResourcePolicyNotFoundException for service response error code
+	// "ResourcePolicyNotFoundException".
+	//
+	// No policies with the specified policy ID and hash could be found.
+	ErrCodeResourcePolicyNotFoundException = "ResourcePolicyNotFoundException"
 
 	// ErrCodeServiceLinkedRoleLockClientException for service response error code
 	// "ServiceLinkedRoleLockClientException".
@@ -991,7 +1017,7 @@ const (
 	// Patching for applications released by Microsoft is only available on EC2
 	// instances and advanced instances. To patch applications released by Microsoft
 	// on on-premises servers and VMs, you must enable advanced instances. For more
-	// information, see Enabling the advanced-instances tier (https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances-advanced.html)
+	// information, see Turning on the advanced-instances tier (https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances-advanced.html)
 	// in the Amazon Web Services Systems Manager User Guide.
 	ErrCodeUnsupportedFeatureRequiredException = "UnsupportedFeatureRequiredException"
 
@@ -1028,8 +1054,8 @@ const (
 	// "UnsupportedPlatformType".
 	//
 	// The document doesn't support the platform type of the given managed node
-	// ID(s). For example, you sent an document for a Windows managed node to a
-	// Linux node.
+	// IDs. For example, you sent an document for a Windows managed node to a Linux
+	// node.
 	ErrCodeUnsupportedPlatformType = "UnsupportedPlatformType"
 )
 
@@ -1055,6 +1081,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"CommandNotInteractive":                          newErrorCommandNotInteractive,
 	"ComplianceTypeCountLimitExceededException":      newErrorComplianceTypeCountLimitExceededException,
 	"CustomSchemaCountLimitExceededException":        newErrorCustomSchemaCountLimitExceededException,
+	"DependencyTimeoutException":                     newErrorDependencyTimeoutException,
 	"DocumentAlreadyExists":                          newErrorDocumentAlreadyExists,
 	"DocumentLimitExceeded":                          newErrorDocumentLimitExceeded,
 	"DocumentPermissionLimit":                        newErrorDocumentPermissionLimit,
@@ -1134,10 +1161,12 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"ItemContentMismatchException":                   newErrorItemContentMismatchException,
 	"ItemSizeLimitExceededException":                 newErrorItemSizeLimitExceededException,
 	"MachineFingerprintDoesNotMatch":                 newErrorMachineFingerprintDoesNotMatch,
+	"MalformedResourcePolicyDocumentException":       newErrorMalformedResourcePolicyDocumentException,
 	"MaxDocumentSizeExceeded":                        newErrorMaxDocumentSizeExceeded,
 	"OpsCenterInvalidArgumentException":              newErrorOpsCenterInvalidArgumentException,
 	"OpsItemAccessDeniedException":                   newErrorOpsItemAccessDeniedException,
 	"OpsItemAlreadyExistsException":                  newErrorOpsItemAlreadyExistsException,
+	"OpsItemConflictException":                       newErrorOpsItemConflictException,
 	"OpsItemInvalidParameterException":               newErrorOpsItemInvalidParameterException,
 	"OpsItemLimitExceededException":                  newErrorOpsItemLimitExceededException,
 	"OpsItemNotFoundException":                       newErrorOpsItemNotFoundException,
@@ -1174,6 +1203,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"ResourceNotFoundException":                      newErrorResourceNotFoundException,
 	"ResourcePolicyConflictException":                newErrorResourcePolicyConflictException,
 	"ResourcePolicyInvalidParameterException":        newErrorResourcePolicyInvalidParameterException,
+	"ResourcePolicyNotFoundException":                newErrorResourcePolicyNotFoundException,
 	"ServiceLinkedRoleLockClientException":           newErrorServiceLinkedRoleLockClientException,
 	"ServiceLinkedRoleLockServiceException":          newErrorServiceLinkedRoleLockServiceException,
 	"ServiceSettingNotFound":                         newErrorServiceSettingNotFound,

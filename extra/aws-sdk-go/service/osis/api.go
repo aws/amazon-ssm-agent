@@ -29,14 +29,13 @@ const opCreatePipeline = "CreatePipeline"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreatePipelineRequest method.
+//	req, resp := client.CreatePipelineRequest(params)
 //
-//    // Example sending a request using the CreatePipelineRequest method.
-//    req, resp := client.CreatePipelineRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/CreatePipeline
 func (c *OSIS) CreatePipelineRequest(input *CreatePipelineInput) (req *request.Request, output *CreatePipelineOutput) {
@@ -68,21 +67,25 @@ func (c *OSIS) CreatePipelineRequest(input *CreatePipelineInput) (req *request.R
 // API operation CreatePipeline for usage and error information.
 //
 // Returned Error Types:
-//   * LimitExceededException
-//   You attempted to create more than the allowed number of tags.
 //
-//   * ValidationException
-//   An exception for missing or invalid input fields.
+//   - LimitExceededException
+//     You attempted to create more than the allowed number of tags.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
 //
-//   * ResourceAlreadyExistsException
-//   You attempted to create a resource that already exists.
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
+//
+//   - ResourceAlreadyExistsException
+//     You attempted to create a resource that already exists.
+//
+//   - ResourceNotFoundException
+//     You attempted to access or delete a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/CreatePipeline
 func (c *OSIS) CreatePipeline(input *CreatePipelineInput) (*CreatePipelineOutput, error) {
@@ -122,14 +125,13 @@ const opDeletePipeline = "DeletePipeline"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePipelineRequest method.
+//	req, resp := client.DeletePipelineRequest(params)
 //
-//    // Example sending a request using the DeletePipelineRequest method.
-//    req, resp := client.DeletePipelineRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/DeletePipeline
 func (c *OSIS) DeletePipelineRequest(input *DeletePipelineInput) (req *request.Request, output *DeletePipelineOutput) {
@@ -162,21 +164,22 @@ func (c *OSIS) DeletePipelineRequest(input *DeletePipelineInput) (req *request.R
 // API operation DeletePipeline for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception for missing or invalid input fields.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
 //
-//   * ResourceNotFoundException
-//   You attempted to access or delete a resource that does not exist.
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
 //
-//   * ConflictException
-//   The client attempted to remove a resource that is currently in use.
+//   - ResourceNotFoundException
+//     You attempted to access or delete a resource that does not exist.
+//
+//   - ConflictException
+//     The client attempted to remove a resource that is currently in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/DeletePipeline
 func (c *OSIS) DeletePipeline(input *DeletePipelineInput) (*DeletePipelineOutput, error) {
@@ -216,14 +219,13 @@ const opGetPipeline = "GetPipeline"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPipelineRequest method.
+//	req, resp := client.GetPipelineRequest(params)
 //
-//    // Example sending a request using the GetPipelineRequest method.
-//    req, resp := client.GetPipelineRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/GetPipeline
 func (c *OSIS) GetPipelineRequest(input *GetPipelineInput) (req *request.Request, output *GetPipelineOutput) {
@@ -254,18 +256,19 @@ func (c *OSIS) GetPipelineRequest(input *GetPipelineInput) (req *request.Request
 // API operation GetPipeline for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception for missing or invalid input fields.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
 //
-//   * ResourceNotFoundException
-//   You attempted to access or delete a resource that does not exist.
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
+//
+//   - ResourceNotFoundException
+//     You attempted to access or delete a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/GetPipeline
 func (c *OSIS) GetPipeline(input *GetPipelineInput) (*GetPipelineOutput, error) {
@@ -305,14 +308,13 @@ const opGetPipelineBlueprint = "GetPipelineBlueprint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPipelineBlueprintRequest method.
+//	req, resp := client.GetPipelineBlueprintRequest(params)
 //
-//    // Example sending a request using the GetPipelineBlueprintRequest method.
-//    req, resp := client.GetPipelineBlueprintRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/GetPipelineBlueprint
 func (c *OSIS) GetPipelineBlueprintRequest(input *GetPipelineBlueprintInput) (req *request.Request, output *GetPipelineBlueprintOutput) {
@@ -346,18 +348,19 @@ func (c *OSIS) GetPipelineBlueprintRequest(input *GetPipelineBlueprintInput) (re
 // API operation GetPipelineBlueprint for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
 //
-//   * ValidationException
-//   An exception for missing or invalid input fields.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
 //
-//   * ResourceNotFoundException
-//   You attempted to access or delete a resource that does not exist.
+//   - ValidationException
+//     An exception for missing or invalid input fields.
+//
+//   - ResourceNotFoundException
+//     You attempted to access or delete a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/GetPipelineBlueprint
 func (c *OSIS) GetPipelineBlueprint(input *GetPipelineBlueprintInput) (*GetPipelineBlueprintOutput, error) {
@@ -397,14 +400,13 @@ const opGetPipelineChangeProgress = "GetPipelineChangeProgress"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPipelineChangeProgressRequest method.
+//	req, resp := client.GetPipelineChangeProgressRequest(params)
 //
-//    // Example sending a request using the GetPipelineChangeProgressRequest method.
-//    req, resp := client.GetPipelineChangeProgressRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/GetPipelineChangeProgress
 func (c *OSIS) GetPipelineChangeProgressRequest(input *GetPipelineChangeProgressInput) (req *request.Request, output *GetPipelineChangeProgressOutput) {
@@ -439,18 +441,19 @@ func (c *OSIS) GetPipelineChangeProgressRequest(input *GetPipelineChangeProgress
 // API operation GetPipelineChangeProgress for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception for missing or invalid input fields.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
 //
-//   * ResourceNotFoundException
-//   You attempted to access or delete a resource that does not exist.
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
+//
+//   - ResourceNotFoundException
+//     You attempted to access or delete a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/GetPipelineChangeProgress
 func (c *OSIS) GetPipelineChangeProgress(input *GetPipelineChangeProgressInput) (*GetPipelineChangeProgressOutput, error) {
@@ -490,14 +493,13 @@ const opListPipelineBlueprints = "ListPipelineBlueprints"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPipelineBlueprintsRequest method.
+//	req, resp := client.ListPipelineBlueprintsRequest(params)
 //
-//    // Example sending a request using the ListPipelineBlueprintsRequest method.
-//    req, resp := client.ListPipelineBlueprintsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/ListPipelineBlueprints
 func (c *OSIS) ListPipelineBlueprintsRequest(input *ListPipelineBlueprintsInput) (req *request.Request, output *ListPipelineBlueprintsOutput) {
@@ -529,18 +531,19 @@ func (c *OSIS) ListPipelineBlueprintsRequest(input *ListPipelineBlueprintsInput)
 // API operation ListPipelineBlueprints for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception for missing or invalid input fields.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
 //
-//   * InvalidPaginationTokenException
-//   An invalid pagination token provided in the request.
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
+//
+//   - InvalidPaginationTokenException
+//     An invalid pagination token provided in the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/ListPipelineBlueprints
 func (c *OSIS) ListPipelineBlueprints(input *ListPipelineBlueprintsInput) (*ListPipelineBlueprintsOutput, error) {
@@ -580,14 +583,13 @@ const opListPipelines = "ListPipelines"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPipelinesRequest method.
+//	req, resp := client.ListPipelinesRequest(params)
 //
-//    // Example sending a request using the ListPipelinesRequest method.
-//    req, resp := client.ListPipelinesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/ListPipelines
 func (c *OSIS) ListPipelinesRequest(input *ListPipelinesInput) (req *request.Request, output *ListPipelinesOutput) {
@@ -626,18 +628,19 @@ func (c *OSIS) ListPipelinesRequest(input *ListPipelinesInput) (req *request.Req
 // API operation ListPipelines for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception for missing or invalid input fields.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
 //
-//   * InvalidPaginationTokenException
-//   An invalid pagination token provided in the request.
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
+//
+//   - InvalidPaginationTokenException
+//     An invalid pagination token provided in the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/ListPipelines
 func (c *OSIS) ListPipelines(input *ListPipelinesInput) (*ListPipelinesOutput, error) {
@@ -669,15 +672,14 @@ func (c *OSIS) ListPipelinesWithContext(ctx aws.Context, input *ListPipelinesInp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPipelines operation.
-//    pageNum := 0
-//    err := client.ListPipelinesPages(params,
-//        func(page *osis.ListPipelinesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPipelines operation.
+//	pageNum := 0
+//	err := client.ListPipelinesPages(params,
+//	    func(page *osis.ListPipelinesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *OSIS) ListPipelinesPages(input *ListPipelinesInput, fn func(*ListPipelinesOutput, bool) bool) error {
 	return c.ListPipelinesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -729,14 +731,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/ListTagsForResource
 func (c *OSIS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -768,18 +769,19 @@ func (c *OSIS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req 
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception for missing or invalid input fields.
 //
-//   * ResourceNotFoundException
-//   You attempted to access or delete a resource that does not exist.
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ResourceNotFoundException
+//     You attempted to access or delete a resource that does not exist.
 //
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
+//
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/ListTagsForResource
 func (c *OSIS) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -819,14 +821,13 @@ const opStartPipeline = "StartPipeline"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartPipelineRequest method.
+//	req, resp := client.StartPipelineRequest(params)
 //
-//    // Example sending a request using the StartPipelineRequest method.
-//    req, resp := client.StartPipelineRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/StartPipeline
 func (c *OSIS) StartPipelineRequest(input *StartPipelineInput) (req *request.Request, output *StartPipelineOutput) {
@@ -858,21 +859,22 @@ func (c *OSIS) StartPipelineRequest(input *StartPipelineInput) (req *request.Req
 // API operation StartPipeline for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
 //
-//   * ConflictException
-//   The client attempted to remove a resource that is currently in use.
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ConflictException
+//     The client attempted to remove a resource that is currently in use.
 //
-//   * ResourceNotFoundException
-//   You attempted to access or delete a resource that does not exist.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
 //
-//   * ValidationException
-//   An exception for missing or invalid input fields.
+//   - ResourceNotFoundException
+//     You attempted to access or delete a resource that does not exist.
+//
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/StartPipeline
 func (c *OSIS) StartPipeline(input *StartPipelineInput) (*StartPipelineOutput, error) {
@@ -912,14 +914,13 @@ const opStopPipeline = "StopPipeline"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopPipelineRequest method.
+//	req, resp := client.StopPipelineRequest(params)
 //
-//    // Example sending a request using the StopPipelineRequest method.
-//    req, resp := client.StopPipelineRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/StopPipeline
 func (c *OSIS) StopPipelineRequest(input *StopPipelineInput) (req *request.Request, output *StopPipelineOutput) {
@@ -951,21 +952,22 @@ func (c *OSIS) StopPipelineRequest(input *StopPipelineInput) (req *request.Reque
 // API operation StopPipeline for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
 //
-//   * ConflictException
-//   The client attempted to remove a resource that is currently in use.
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ConflictException
+//     The client attempted to remove a resource that is currently in use.
 //
-//   * ResourceNotFoundException
-//   You attempted to access or delete a resource that does not exist.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
 //
-//   * ValidationException
-//   An exception for missing or invalid input fields.
+//   - ResourceNotFoundException
+//     You attempted to access or delete a resource that does not exist.
+//
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/StopPipeline
 func (c *OSIS) StopPipeline(input *StopPipelineInput) (*StopPipelineOutput, error) {
@@ -1005,14 +1007,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/TagResource
 func (c *OSIS) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1045,21 +1046,22 @@ func (c *OSIS) TagResourceRequest(input *TagResourceInput) (req *request.Request
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * LimitExceededException
-//   You attempted to create more than the allowed number of tags.
 //
-//   * ValidationException
-//   An exception for missing or invalid input fields.
+//   - LimitExceededException
+//     You attempted to create more than the allowed number of tags.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
 //
-//   * ResourceNotFoundException
-//   You attempted to access or delete a resource that does not exist.
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
+//
+//   - ResourceNotFoundException
+//     You attempted to access or delete a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/TagResource
 func (c *OSIS) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1099,14 +1101,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/UntagResource
 func (c *OSIS) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -1139,18 +1140,19 @@ func (c *OSIS) UntagResourceRequest(input *UntagResourceInput) (req *request.Req
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception for missing or invalid input fields.
 //
-//   * ResourceNotFoundException
-//   You attempted to access or delete a resource that does not exist.
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ResourceNotFoundException
+//     You attempted to access or delete a resource that does not exist.
 //
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
+//
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/UntagResource
 func (c *OSIS) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -1190,14 +1192,13 @@ const opUpdatePipeline = "UpdatePipeline"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdatePipelineRequest method.
+//	req, resp := client.UpdatePipelineRequest(params)
 //
-//    // Example sending a request using the UpdatePipelineRequest method.
-//    req, resp := client.UpdatePipelineRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/UpdatePipeline
 func (c *OSIS) UpdatePipelineRequest(input *UpdatePipelineInput) (req *request.Request, output *UpdatePipelineOutput) {
@@ -1229,21 +1230,22 @@ func (c *OSIS) UpdatePipelineRequest(input *UpdatePipelineInput) (req *request.R
 // API operation UpdatePipeline for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception for missing or invalid input fields.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
 //
-//   * ResourceNotFoundException
-//   You attempted to access or delete a resource that does not exist.
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
 //
-//   * ConflictException
-//   The client attempted to remove a resource that is currently in use.
+//   - ResourceNotFoundException
+//     You attempted to access or delete a resource that does not exist.
+//
+//   - ConflictException
+//     The client attempted to remove a resource that is currently in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/UpdatePipeline
 func (c *OSIS) UpdatePipeline(input *UpdatePipelineInput) (*UpdatePipelineOutput, error) {
@@ -1283,14 +1285,13 @@ const opValidatePipeline = "ValidatePipeline"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ValidatePipelineRequest method.
+//	req, resp := client.ValidatePipelineRequest(params)
 //
-//    // Example sending a request using the ValidatePipelineRequest method.
-//    req, resp := client.ValidatePipelineRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/ValidatePipeline
 func (c *OSIS) ValidatePipelineRequest(input *ValidatePipelineInput) (req *request.Request, output *ValidatePipelineOutput) {
@@ -1323,15 +1324,16 @@ func (c *OSIS) ValidatePipelineRequest(input *ValidatePipelineInput) (req *reque
 // API operation ValidatePipeline for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have permissions to access the resource.
 //
-//   * InternalException
-//   The request failed because of an unknown error, exception, or failure (the
-//   failure is internal to the service).
+//   - AccessDeniedException
+//     You don't have permissions to access the resource.
 //
-//   * ValidationException
-//   An exception for missing or invalid input fields.
+//   - InternalException
+//     The request failed because of an unknown error, exception, or failure (the
+//     failure is internal to the service).
+//
+//   - ValidationException
+//     An exception for missing or invalid input fields.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/osis-2022-01-01/ValidatePipeline
 func (c *OSIS) ValidatePipeline(input *ValidatePipelineInput) (*ValidatePipelineOutput, error) {
@@ -1417,6 +1419,54 @@ func (s *AccessDeniedException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Options that specify the configuration of a persistent buffer. To configure
+// how OpenSearch Ingestion encrypts this data, set the EncryptionAtRestOptions.
+type BufferOptions struct {
+	_ struct{} `type:"structure"`
+
+	// Whether persistent buffering should be enabled.
+	//
+	// PersistentBufferEnabled is a required field
+	PersistentBufferEnabled *bool `type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BufferOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BufferOptions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BufferOptions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BufferOptions"}
+	if s.PersistentBufferEnabled == nil {
+		invalidParams.Add(request.NewErrParamRequired("PersistentBufferEnabled"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPersistentBufferEnabled sets the PersistentBufferEnabled field's value.
+func (s *BufferOptions) SetPersistentBufferEnabled(v bool) *BufferOptions {
+	s.PersistentBufferEnabled = &v
+	return s
 }
 
 // Progress details for a specific stage of a pipeline configuration change.
@@ -1656,6 +1706,13 @@ func (s *ConflictException) RequestID() string {
 type CreatePipelineInput struct {
 	_ struct{} `type:"structure"`
 
+	// Key-value pairs to configure persistent buffering for the pipeline.
+	BufferOptions *BufferOptions `type:"structure"`
+
+	// Key-value pairs to configure encryption for data that is written to a persistent
+	// buffer.
+	EncryptionAtRestOptions *EncryptionAtRestOptions `type:"structure"`
+
 	// Key-value pairs to configure log publishing.
 	LogPublishingOptions *LogPublishingOptions `type:"structure"`
 
@@ -1737,6 +1794,16 @@ func (s *CreatePipelineInput) Validate() error {
 	if s.PipelineName != nil && len(*s.PipelineName) < 3 {
 		invalidParams.Add(request.NewErrParamMinLen("PipelineName", 3))
 	}
+	if s.BufferOptions != nil {
+		if err := s.BufferOptions.Validate(); err != nil {
+			invalidParams.AddNested("BufferOptions", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.EncryptionAtRestOptions != nil {
+		if err := s.EncryptionAtRestOptions.Validate(); err != nil {
+			invalidParams.AddNested("EncryptionAtRestOptions", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.LogPublishingOptions != nil {
 		if err := s.LogPublishingOptions.Validate(); err != nil {
 			invalidParams.AddNested("LogPublishingOptions", err.(request.ErrInvalidParams))
@@ -1762,6 +1829,18 @@ func (s *CreatePipelineInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetBufferOptions sets the BufferOptions field's value.
+func (s *CreatePipelineInput) SetBufferOptions(v *BufferOptions) *CreatePipelineInput {
+	s.BufferOptions = v
+	return s
+}
+
+// SetEncryptionAtRestOptions sets the EncryptionAtRestOptions field's value.
+func (s *CreatePipelineInput) SetEncryptionAtRestOptions(v *EncryptionAtRestOptions) *CreatePipelineInput {
+	s.EncryptionAtRestOptions = v
+	return s
 }
 
 // SetLogPublishingOptions sets the LogPublishingOptions field's value.
@@ -1906,6 +1985,57 @@ func (s DeletePipelineOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DeletePipelineOutput) GoString() string {
 	return s.String()
+}
+
+// Options to control how OpenSearch encrypts all data-at-rest.
+type EncryptionAtRestOptions struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the KMS key used to encrypt data-at-rest in OpenSearch Ingestion.
+	// By default, data is encrypted using an AWS owned key.
+	//
+	// KmsKeyArn is a required field
+	KmsKeyArn *string `min:"7" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EncryptionAtRestOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EncryptionAtRestOptions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EncryptionAtRestOptions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EncryptionAtRestOptions"}
+	if s.KmsKeyArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("KmsKeyArn"))
+	}
+	if s.KmsKeyArn != nil && len(*s.KmsKeyArn) < 7 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyArn", 7))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *EncryptionAtRestOptions) SetKmsKeyArn(v string) *EncryptionAtRestOptions {
+	s.KmsKeyArn = &v
+	return s
 }
 
 type GetPipelineBlueprintInput struct {
@@ -2635,8 +2765,15 @@ func (s *LogPublishingOptions) SetIsLoggingEnabled(v bool) *LogPublishingOptions
 type Pipeline struct {
 	_ struct{} `type:"structure"`
 
+	// Options that specify the configuration of a persistent buffer. To configure
+	// how OpenSearch Ingestion encrypts this data, set the EncryptionAtRestOptions.
+	BufferOptions *BufferOptions `type:"structure"`
+
 	// The date and time when the pipeline was created.
 	CreatedAt *time.Time `type:"timestamp"`
+
+	// Options to control how OpenSearch encrypts all data-at-rest.
+	EncryptionAtRestOptions *EncryptionAtRestOptions `type:"structure"`
 
 	// The ingestion endpoints for the pipeline, which you can send data to.
 	IngestEndpointUrls []*string `type:"list"`
@@ -2662,11 +2799,18 @@ type Pipeline struct {
 	// The name of the pipeline.
 	PipelineName *string `type:"string"`
 
+	// A list of VPC endpoints that OpenSearch Ingestion has created to other AWS
+	// services.
+	ServiceVpcEndpoints []*ServiceVpcEndpoint `type:"list"`
+
 	// The current status of the pipeline.
 	Status *string `type:"string" enum:"PipelineStatus"`
 
 	// The reason for the current status of the pipeline.
 	StatusReason *PipelineStatusReason `type:"structure"`
+
+	// A list of tags associated with the given pipeline.
+	Tags []*Tag `type:"list"`
 
 	// The VPC interface endpoints that have access to the pipeline.
 	VpcEndpoints []*VpcEndpoint `type:"list"`
@@ -2690,9 +2834,21 @@ func (s Pipeline) GoString() string {
 	return s.String()
 }
 
+// SetBufferOptions sets the BufferOptions field's value.
+func (s *Pipeline) SetBufferOptions(v *BufferOptions) *Pipeline {
+	s.BufferOptions = v
+	return s
+}
+
 // SetCreatedAt sets the CreatedAt field's value.
 func (s *Pipeline) SetCreatedAt(v time.Time) *Pipeline {
 	s.CreatedAt = &v
+	return s
+}
+
+// SetEncryptionAtRestOptions sets the EncryptionAtRestOptions field's value.
+func (s *Pipeline) SetEncryptionAtRestOptions(v *EncryptionAtRestOptions) *Pipeline {
+	s.EncryptionAtRestOptions = v
 	return s
 }
 
@@ -2744,6 +2900,12 @@ func (s *Pipeline) SetPipelineName(v string) *Pipeline {
 	return s
 }
 
+// SetServiceVpcEndpoints sets the ServiceVpcEndpoints field's value.
+func (s *Pipeline) SetServiceVpcEndpoints(v []*ServiceVpcEndpoint) *Pipeline {
+	s.ServiceVpcEndpoints = v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *Pipeline) SetStatus(v string) *Pipeline {
 	s.Status = &v
@@ -2753,6 +2915,12 @@ func (s *Pipeline) SetStatus(v string) *Pipeline {
 // SetStatusReason sets the StatusReason field's value.
 func (s *Pipeline) SetStatusReason(v *PipelineStatusReason) *Pipeline {
 	s.StatusReason = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Pipeline) SetTags(v []*Tag) *Pipeline {
+	s.Tags = v
 	return s
 }
 
@@ -2894,6 +3062,9 @@ type PipelineSummary struct {
 
 	// Information about a pipeline's current status.
 	StatusReason *PipelineStatusReason `type:"structure"`
+
+	// A list of tags associated with the given pipeline.
+	Tags []*Tag `type:"list"`
 }
 
 // String returns the string representation.
@@ -2959,6 +3130,12 @@ func (s *PipelineSummary) SetStatus(v string) *PipelineSummary {
 // SetStatusReason sets the StatusReason field's value.
 func (s *PipelineSummary) SetStatusReason(v *PipelineStatusReason) *PipelineSummary {
 	s.StatusReason = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *PipelineSummary) SetTags(v []*Tag) *PipelineSummary {
+	s.Tags = v
 	return s
 }
 
@@ -3088,6 +3265,48 @@ func (s *ResourceNotFoundException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// A container for information about VPC endpoints that were created to other
+// services
+type ServiceVpcEndpoint struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the service for which a VPC endpoint was created.
+	ServiceName *string `type:"string" enum:"VpcEndpointServiceName"`
+
+	// The ID of the VPC endpoint that was created.
+	VpcEndpointId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceVpcEndpoint) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceVpcEndpoint) GoString() string {
+	return s.String()
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *ServiceVpcEndpoint) SetServiceName(v string) *ServiceVpcEndpoint {
+	s.ServiceName = &v
+	return s
+}
+
+// SetVpcEndpointId sets the VpcEndpointId field's value.
+func (s *ServiceVpcEndpoint) SetVpcEndpointId(v string) *ServiceVpcEndpoint {
+	s.VpcEndpointId = &v
+	return s
 }
 
 type StartPipelineInput struct {
@@ -3499,6 +3718,13 @@ func (s UntagResourceOutput) GoString() string {
 type UpdatePipelineInput struct {
 	_ struct{} `type:"structure"`
 
+	// Key-value pairs to configure persistent buffering for the pipeline.
+	BufferOptions *BufferOptions `type:"structure"`
+
+	// Key-value pairs to configure encryption for data that is written to a persistent
+	// buffer.
+	EncryptionAtRestOptions *EncryptionAtRestOptions `type:"structure"`
+
 	// Key-value pairs to configure log publishing.
 	LogPublishingOptions *LogPublishingOptions `type:"structure"`
 
@@ -3555,6 +3781,16 @@ func (s *UpdatePipelineInput) Validate() error {
 	if s.PipelineName != nil && len(*s.PipelineName) < 3 {
 		invalidParams.Add(request.NewErrParamMinLen("PipelineName", 3))
 	}
+	if s.BufferOptions != nil {
+		if err := s.BufferOptions.Validate(); err != nil {
+			invalidParams.AddNested("BufferOptions", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.EncryptionAtRestOptions != nil {
+		if err := s.EncryptionAtRestOptions.Validate(); err != nil {
+			invalidParams.AddNested("EncryptionAtRestOptions", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.LogPublishingOptions != nil {
 		if err := s.LogPublishingOptions.Validate(); err != nil {
 			invalidParams.AddNested("LogPublishingOptions", err.(request.ErrInvalidParams))
@@ -3565,6 +3801,18 @@ func (s *UpdatePipelineInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetBufferOptions sets the BufferOptions field's value.
+func (s *UpdatePipelineInput) SetBufferOptions(v *BufferOptions) *UpdatePipelineInput {
+	s.BufferOptions = v
+	return s
+}
+
+// SetEncryptionAtRestOptions sets the EncryptionAtRestOptions field's value.
+func (s *UpdatePipelineInput) SetEncryptionAtRestOptions(v *EncryptionAtRestOptions) *UpdatePipelineInput {
+	s.EncryptionAtRestOptions = v
+	return s
 }
 
 // SetLogPublishingOptions sets the LogPublishingOptions field's value.
@@ -4024,5 +4272,17 @@ func PipelineStatus_Values() []string {
 		PipelineStatusStartFailed,
 		PipelineStatusStopping,
 		PipelineStatusStopped,
+	}
+}
+
+const (
+	// VpcEndpointServiceNameOpensearchServerless is a VpcEndpointServiceName enum value
+	VpcEndpointServiceNameOpensearchServerless = "OPENSEARCH_SERVERLESS"
+)
+
+// VpcEndpointServiceName_Values returns all elements of the VpcEndpointServiceName enum
+func VpcEndpointServiceName_Values() []string {
+	return []string{
+		VpcEndpointServiceNameOpensearchServerless,
 	}
 }

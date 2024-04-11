@@ -38,14 +38,13 @@ const opStartCallAnalyticsStreamTranscription = "StartCallAnalyticsStreamTranscr
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartCallAnalyticsStreamTranscriptionRequest method.
+//	req, resp := client.StartCallAnalyticsStreamTranscriptionRequest(params)
 //
-//    // Example sending a request using the StartCallAnalyticsStreamTranscriptionRequest method.
-//    req, resp := client.StartCallAnalyticsStreamTranscriptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transcribe-streaming-2017-10-26/StartCallAnalyticsStreamTranscription
 func (c *TranscribeStreamingService) StartCallAnalyticsStreamTranscriptionRequest(input *StartCallAnalyticsStreamTranscriptionInput) (req *request.Request, output *StartCallAnalyticsStreamTranscriptionOutput) {
@@ -103,11 +102,11 @@ func (c *TranscribeStreamingService) StartCallAnalyticsStreamTranscriptionReques
 //
 // The following parameters are required:
 //
-//    * language-code
+//   - language-code
 //
-//    * media-encoding
+//   - media-encoding
 //
-//    * sample-rate
+//   - sample-rate
 //
 // For more information on streaming with Amazon Transcribe, see Transcribing
 // streaming audio (https://docs.aws.amazon.com/transcribe/latest/dg/streaming.html).
@@ -120,27 +119,28 @@ func (c *TranscribeStreamingService) StartCallAnalyticsStreamTranscriptionReques
 // API operation StartCallAnalyticsStreamTranscription for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   One or more arguments to the StartStreamTranscription, StartMedicalStreamTranscription,
-//   or StartCallAnalyticsStreamTranscription operation was not valid. For example,
-//   MediaEncoding or LanguageCode used not valid values. Check the specified
-//   parameters and try your request again.
 //
-//   * LimitExceededException
-//   Your client has exceeded one of the Amazon Transcribe limits. This is typically
-//   the audio length limit. Break your audio stream into smaller chunks and try
-//   your request again.
+//   - BadRequestException
+//     One or more arguments to the StartStreamTranscription, StartMedicalStreamTranscription,
+//     or StartCallAnalyticsStreamTranscription operation was not valid. For example,
+//     MediaEncoding or LanguageCode used not valid values. Check the specified
+//     parameters and try your request again.
 //
-//   * InternalFailureException
-//   A problem occurred while processing the audio. Amazon Transcribe terminated
-//   processing.
+//   - LimitExceededException
+//     Your client has exceeded one of the Amazon Transcribe limits. This is typically
+//     the audio length limit. Break your audio stream into smaller chunks and try
+//     your request again.
 //
-//   * ConflictException
-//   A new stream started with the same session ID. The current stream has been
-//   terminated.
+//   - InternalFailureException
+//     A problem occurred while processing the audio. Amazon Transcribe terminated
+//     processing.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable. Try your request later.
+//   - ConflictException
+//     A new stream started with the same session ID. The current stream has been
+//     terminated.
+//
+//   - ServiceUnavailableException
+//     The service is currently unavailable. Try your request later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transcribe-streaming-2017-10-26/StartCallAnalyticsStreamTranscription
 func (c *TranscribeStreamingService) StartCallAnalyticsStreamTranscription(input *StartCallAnalyticsStreamTranscriptionInput) (*StartCallAnalyticsStreamTranscriptionOutput, error) {
@@ -165,6 +165,7 @@ func (c *TranscribeStreamingService) StartCallAnalyticsStreamTranscriptionWithCo
 }
 
 var _ awserr.Error
+var _ time.Time
 
 // StartCallAnalyticsStreamTranscriptionEventStream provides the event stream handling for the StartCallAnalyticsStreamTranscription.
 //
@@ -206,10 +207,10 @@ type StartCallAnalyticsStreamTranscriptionEventStream struct {
 //
 // The Reader member must be set before reading events from the stream.
 //
-//   es := NewStartCallAnalyticsStreamTranscriptionEventStream(func(o *StartCallAnalyticsStreamTranscriptionEventStream){
-//       es.Writer = myMockStreamWriter
-//       es.Reader = myMockStreamReader
-//   })
+//	es := NewStartCallAnalyticsStreamTranscriptionEventStream(func(o *StartCallAnalyticsStreamTranscriptionEventStream){
+//	    es.Writer = myMockStreamWriter
+//	    es.Reader = myMockStreamReader
+//	})
 func NewStartCallAnalyticsStreamTranscriptionEventStream(opts ...func(*StartCallAnalyticsStreamTranscriptionEventStream)) *StartCallAnalyticsStreamTranscriptionEventStream {
 	es := &StartCallAnalyticsStreamTranscriptionEventStream{
 		done: make(chan struct{}),
@@ -280,8 +281,8 @@ func (es *StartCallAnalyticsStreamTranscriptionEventStream) closeInputPipe() err
 //
 // These events are:
 //
-//     * AudioEvent
-//     * ConfigurationEvent
+//   - AudioEvent
+//   - ConfigurationEvent
 func (es *StartCallAnalyticsStreamTranscriptionEventStream) Send(ctx aws.Context, event AudioStreamEvent) error {
 	return es.Writer.Send(ctx, event)
 }
@@ -325,9 +326,9 @@ func (es *StartCallAnalyticsStreamTranscriptionEventStream) runInputStream(r *re
 //
 // These events are:
 //
-//     * CategoryEvent
-//     * UtteranceEvent
-//     * CallAnalyticsTranscriptResultStreamUnknownEvent
+//   - CategoryEvent
+//   - UtteranceEvent
+//   - CallAnalyticsTranscriptResultStreamUnknownEvent
 func (es *StartCallAnalyticsStreamTranscriptionEventStream) Events() <-chan CallAnalyticsTranscriptResultStreamEvent {
 	return es.Reader.Events()
 }
@@ -366,7 +367,6 @@ func (es *StartCallAnalyticsStreamTranscriptionEventStream) runOutputStream(r *r
 //
 // You can use the closing of the Reader's Events channel to terminate your
 // application's read from the API's stream.
-//
 func (es *StartCallAnalyticsStreamTranscriptionEventStream) Close() (err error) {
 	es.closeOnce.Do(es.safeClose)
 	return es.Err()
@@ -432,14 +432,13 @@ const opStartMedicalStreamTranscription = "StartMedicalStreamTranscription"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartMedicalStreamTranscriptionRequest method.
+//	req, resp := client.StartMedicalStreamTranscriptionRequest(params)
 //
-//    // Example sending a request using the StartMedicalStreamTranscriptionRequest method.
-//    req, resp := client.StartMedicalStreamTranscriptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transcribe-streaming-2017-10-26/StartMedicalStreamTranscription
 func (c *TranscribeStreamingService) StartMedicalStreamTranscriptionRequest(input *StartMedicalStreamTranscriptionInput) (req *request.Request, output *StartMedicalStreamTranscriptionOutput) {
@@ -496,11 +495,11 @@ func (c *TranscribeStreamingService) StartMedicalStreamTranscriptionRequest(inpu
 //
 // The following parameters are required:
 //
-//    * language-code
+//   - language-code
 //
-//    * media-encoding
+//   - media-encoding
 //
-//    * sample-rate
+//   - sample-rate
 //
 // For more information on streaming with Amazon Transcribe Medical, see Transcribing
 // streaming audio (https://docs.aws.amazon.com/transcribe/latest/dg/streaming.html).
@@ -513,27 +512,28 @@ func (c *TranscribeStreamingService) StartMedicalStreamTranscriptionRequest(inpu
 // API operation StartMedicalStreamTranscription for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   One or more arguments to the StartStreamTranscription, StartMedicalStreamTranscription,
-//   or StartCallAnalyticsStreamTranscription operation was not valid. For example,
-//   MediaEncoding or LanguageCode used not valid values. Check the specified
-//   parameters and try your request again.
 //
-//   * LimitExceededException
-//   Your client has exceeded one of the Amazon Transcribe limits. This is typically
-//   the audio length limit. Break your audio stream into smaller chunks and try
-//   your request again.
+//   - BadRequestException
+//     One or more arguments to the StartStreamTranscription, StartMedicalStreamTranscription,
+//     or StartCallAnalyticsStreamTranscription operation was not valid. For example,
+//     MediaEncoding or LanguageCode used not valid values. Check the specified
+//     parameters and try your request again.
 //
-//   * InternalFailureException
-//   A problem occurred while processing the audio. Amazon Transcribe terminated
-//   processing.
+//   - LimitExceededException
+//     Your client has exceeded one of the Amazon Transcribe limits. This is typically
+//     the audio length limit. Break your audio stream into smaller chunks and try
+//     your request again.
 //
-//   * ConflictException
-//   A new stream started with the same session ID. The current stream has been
-//   terminated.
+//   - InternalFailureException
+//     A problem occurred while processing the audio. Amazon Transcribe terminated
+//     processing.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable. Try your request later.
+//   - ConflictException
+//     A new stream started with the same session ID. The current stream has been
+//     terminated.
+//
+//   - ServiceUnavailableException
+//     The service is currently unavailable. Try your request later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transcribe-streaming-2017-10-26/StartMedicalStreamTranscription
 func (c *TranscribeStreamingService) StartMedicalStreamTranscription(input *StartMedicalStreamTranscriptionInput) (*StartMedicalStreamTranscriptionOutput, error) {
@@ -558,6 +558,7 @@ func (c *TranscribeStreamingService) StartMedicalStreamTranscriptionWithContext(
 }
 
 var _ awserr.Error
+var _ time.Time
 
 // StartMedicalStreamTranscriptionEventStream provides the event stream handling for the StartMedicalStreamTranscription.
 //
@@ -599,10 +600,10 @@ type StartMedicalStreamTranscriptionEventStream struct {
 //
 // The Reader member must be set before reading events from the stream.
 //
-//   es := NewStartMedicalStreamTranscriptionEventStream(func(o *StartMedicalStreamTranscriptionEventStream){
-//       es.Writer = myMockStreamWriter
-//       es.Reader = myMockStreamReader
-//   })
+//	es := NewStartMedicalStreamTranscriptionEventStream(func(o *StartMedicalStreamTranscriptionEventStream){
+//	    es.Writer = myMockStreamWriter
+//	    es.Reader = myMockStreamReader
+//	})
 func NewStartMedicalStreamTranscriptionEventStream(opts ...func(*StartMedicalStreamTranscriptionEventStream)) *StartMedicalStreamTranscriptionEventStream {
 	es := &StartMedicalStreamTranscriptionEventStream{
 		done: make(chan struct{}),
@@ -673,8 +674,8 @@ func (es *StartMedicalStreamTranscriptionEventStream) closeInputPipe() error {
 //
 // These events are:
 //
-//     * AudioEvent
-//     * ConfigurationEvent
+//   - AudioEvent
+//   - ConfigurationEvent
 func (es *StartMedicalStreamTranscriptionEventStream) Send(ctx aws.Context, event AudioStreamEvent) error {
 	return es.Writer.Send(ctx, event)
 }
@@ -718,8 +719,8 @@ func (es *StartMedicalStreamTranscriptionEventStream) runInputStream(r *request.
 //
 // These events are:
 //
-//     * MedicalTranscriptEvent
-//     * MedicalTranscriptResultStreamUnknownEvent
+//   - MedicalTranscriptEvent
+//   - MedicalTranscriptResultStreamUnknownEvent
 func (es *StartMedicalStreamTranscriptionEventStream) Events() <-chan MedicalTranscriptResultStreamEvent {
 	return es.Reader.Events()
 }
@@ -758,7 +759,6 @@ func (es *StartMedicalStreamTranscriptionEventStream) runOutputStream(r *request
 //
 // You can use the closing of the Reader's Events channel to terminate your
 // application's read from the API's stream.
-//
 func (es *StartMedicalStreamTranscriptionEventStream) Close() (err error) {
 	es.closeOnce.Do(es.safeClose)
 	return es.Err()
@@ -824,14 +824,13 @@ const opStartStreamTranscription = "StartStreamTranscription"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartStreamTranscriptionRequest method.
+//	req, resp := client.StartStreamTranscriptionRequest(params)
 //
-//    // Example sending a request using the StartStreamTranscriptionRequest method.
-//    req, resp := client.StartStreamTranscriptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transcribe-streaming-2017-10-26/StartStreamTranscription
 func (c *TranscribeStreamingService) StartStreamTranscriptionRequest(input *StartStreamTranscriptionInput) (req *request.Request, output *StartStreamTranscriptionOutput) {
@@ -887,11 +886,11 @@ func (c *TranscribeStreamingService) StartStreamTranscriptionRequest(input *Star
 //
 // The following parameters are required:
 //
-//    * language-code or identify-language
+//   - language-code or identify-language or identify-multiple-language
 //
-//    * media-encoding
+//   - media-encoding
 //
-//    * sample-rate
+//   - sample-rate
 //
 // For more information on streaming with Amazon Transcribe, see Transcribing
 // streaming audio (https://docs.aws.amazon.com/transcribe/latest/dg/streaming.html).
@@ -904,27 +903,28 @@ func (c *TranscribeStreamingService) StartStreamTranscriptionRequest(input *Star
 // API operation StartStreamTranscription for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   One or more arguments to the StartStreamTranscription, StartMedicalStreamTranscription,
-//   or StartCallAnalyticsStreamTranscription operation was not valid. For example,
-//   MediaEncoding or LanguageCode used not valid values. Check the specified
-//   parameters and try your request again.
 //
-//   * LimitExceededException
-//   Your client has exceeded one of the Amazon Transcribe limits. This is typically
-//   the audio length limit. Break your audio stream into smaller chunks and try
-//   your request again.
+//   - BadRequestException
+//     One or more arguments to the StartStreamTranscription, StartMedicalStreamTranscription,
+//     or StartCallAnalyticsStreamTranscription operation was not valid. For example,
+//     MediaEncoding or LanguageCode used not valid values. Check the specified
+//     parameters and try your request again.
 //
-//   * InternalFailureException
-//   A problem occurred while processing the audio. Amazon Transcribe terminated
-//   processing.
+//   - LimitExceededException
+//     Your client has exceeded one of the Amazon Transcribe limits. This is typically
+//     the audio length limit. Break your audio stream into smaller chunks and try
+//     your request again.
 //
-//   * ConflictException
-//   A new stream started with the same session ID. The current stream has been
-//   terminated.
+//   - InternalFailureException
+//     A problem occurred while processing the audio. Amazon Transcribe terminated
+//     processing.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable. Try your request later.
+//   - ConflictException
+//     A new stream started with the same session ID. The current stream has been
+//     terminated.
+//
+//   - ServiceUnavailableException
+//     The service is currently unavailable. Try your request later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/transcribe-streaming-2017-10-26/StartStreamTranscription
 func (c *TranscribeStreamingService) StartStreamTranscription(input *StartStreamTranscriptionInput) (*StartStreamTranscriptionOutput, error) {
@@ -949,6 +949,7 @@ func (c *TranscribeStreamingService) StartStreamTranscriptionWithContext(ctx aws
 }
 
 var _ awserr.Error
+var _ time.Time
 
 // StartStreamTranscriptionEventStream provides the event stream handling for the StartStreamTranscription.
 //
@@ -990,10 +991,10 @@ type StartStreamTranscriptionEventStream struct {
 //
 // The Reader member must be set before reading events from the stream.
 //
-//   es := NewStartStreamTranscriptionEventStream(func(o *StartStreamTranscriptionEventStream){
-//       es.Writer = myMockStreamWriter
-//       es.Reader = myMockStreamReader
-//   })
+//	es := NewStartStreamTranscriptionEventStream(func(o *StartStreamTranscriptionEventStream){
+//	    es.Writer = myMockStreamWriter
+//	    es.Reader = myMockStreamReader
+//	})
 func NewStartStreamTranscriptionEventStream(opts ...func(*StartStreamTranscriptionEventStream)) *StartStreamTranscriptionEventStream {
 	es := &StartStreamTranscriptionEventStream{
 		done: make(chan struct{}),
@@ -1064,8 +1065,8 @@ func (es *StartStreamTranscriptionEventStream) closeInputPipe() error {
 //
 // These events are:
 //
-//     * AudioEvent
-//     * ConfigurationEvent
+//   - AudioEvent
+//   - ConfigurationEvent
 func (es *StartStreamTranscriptionEventStream) Send(ctx aws.Context, event AudioStreamEvent) error {
 	return es.Writer.Send(ctx, event)
 }
@@ -1109,8 +1110,8 @@ func (es *StartStreamTranscriptionEventStream) runInputStream(r *request.Request
 //
 // These events are:
 //
-//     * TranscriptEvent
-//     * TranscriptResultStreamUnknownEvent
+//   - TranscriptEvent
+//   - TranscriptResultStreamUnknownEvent
 func (es *StartStreamTranscriptionEventStream) Events() <-chan TranscriptResultStreamEvent {
 	return es.Reader.Events()
 }
@@ -1149,7 +1150,6 @@ func (es *StartStreamTranscriptionEventStream) runOutputStream(r *request.Reques
 //
 // You can use the closing of the Reader's Events channel to terminate your
 // application's read from the API's stream.
-//
 func (es *StartStreamTranscriptionEventStream) Close() (err error) {
 	es.closeOnce.Do(es.safeClose)
 	return es.Err()
@@ -1316,8 +1316,8 @@ func (s *AudioEvent) MarshalEvent(pm protocol.PayloadMarshaler) (msg eventstream
 //
 // These events are:
 //
-//     * AudioEvent
-//     * ConfigurationEvent
+//   - AudioEvent
+//   - ConfigurationEvent
 type AudioStreamEvent interface {
 	eventAudioStream()
 	eventstreamapi.Marshaler
@@ -1331,8 +1331,8 @@ type AudioStreamEvent interface {
 //
 // These events are:
 //
-//     * AudioEvent
-//     * ConfigurationEvent
+//   - AudioEvent
+//   - ConfigurationEvent
 type AudioStreamWriter interface {
 	// Sends writes events to the stream blocking until the event has been
 	// written. An error is returned if the write fails.
@@ -1660,8 +1660,8 @@ func (s *CallAnalyticsItem) SetVocabularyFilterMatch(v bool) *CallAnalyticsItem 
 //
 // These events are:
 //
-//     * CategoryEvent
-//     * UtteranceEvent
+//   - CategoryEvent
+//   - UtteranceEvent
 type CallAnalyticsTranscriptResultStreamEvent interface {
 	eventCallAnalyticsTranscriptResultStream()
 	eventstreamapi.Marshaler
@@ -1675,9 +1675,9 @@ type CallAnalyticsTranscriptResultStreamEvent interface {
 //
 // These events are:
 //
-//     * CategoryEvent
-//     * UtteranceEvent
-//     * CallAnalyticsTranscriptResultStreamUnknownEvent
+//   - CategoryEvent
+//   - UtteranceEvent
+//   - CallAnalyticsTranscriptResultStreamUnknownEvent
 type CallAnalyticsTranscriptResultStreamReader interface {
 	// Returns a channel of events as they are read from the event stream.
 	Events() <-chan CallAnalyticsTranscriptResultStreamEvent
@@ -3047,7 +3047,7 @@ func (s *MedicalTranscriptEvent) MarshalEvent(pm protocol.PayloadMarshaler) (msg
 //
 // These events are:
 //
-//     * MedicalTranscriptEvent
+//   - MedicalTranscriptEvent
 type MedicalTranscriptResultStreamEvent interface {
 	eventMedicalTranscriptResultStream()
 	eventstreamapi.Marshaler
@@ -3061,8 +3061,8 @@ type MedicalTranscriptResultStreamEvent interface {
 //
 // These events are:
 //
-//     * MedicalTranscriptEvent
-//     * MedicalTranscriptResultStreamUnknownEvent
+//   - MedicalTranscriptEvent
+//   - MedicalTranscriptResultStreamUnknownEvent
 type MedicalTranscriptResultStreamReader interface {
 	// Returns a channel of events as they are read from the event stream.
 	Events() <-chan MedicalTranscriptResultStreamEvent
@@ -4390,12 +4390,32 @@ type StartStreamTranscriptionInput struct {
 	// channel, and you've enabled channel identification, automatic language identification
 	// identifies the dominant language on each audio channel.
 	//
-	// Note that you must include either LanguageCode or IdentifyLanguage in your
-	// request. If you include both parameters, your request fails.
+	// Note that you must include either LanguageCode or IdentifyLanguage or IdentifyMultipleLanguages
+	// in your request. If you include more than one of these parameters, your transcription
+	// job fails.
 	//
 	// Streaming language identification can't be combined with custom language
 	// models or redaction.
 	IdentifyLanguage *bool `location:"header" locationName:"x-amzn-transcribe-identify-language" type:"boolean"`
+
+	// Enables automatic multi-language identification in your transcription job
+	// request. Use this parameter if your stream contains more than one language.
+	// If your stream contains only one language, use IdentifyLanguage instead.
+	//
+	// If you include IdentifyMultipleLanguages, you can optionally include a list
+	// of language codes, using LanguageOptions, that you think may be present in
+	// your stream. Including LanguageOptions restricts IdentifyMultipleLanguages
+	// to only the language options that you specify, which can improve transcription
+	// accuracy.
+	//
+	// If you want to apply a custom vocabulary or a custom vocabulary filter to
+	// your automatic multiple language identification request, include VocabularyNames
+	// or VocabularyFilterNames.
+	//
+	// Note that you must include one of LanguageCode, IdentifyLanguage, or IdentifyMultipleLanguages
+	// in your request. If you include more than one of these parameters, your transcription
+	// job fails.
+	IdentifyMultipleLanguages *bool `location:"header" locationName:"x-amzn-transcribe-identify-multiple-languages" type:"boolean"`
 
 	// Specify the language code that represents the language spoken in your audio.
 	//
@@ -4667,6 +4687,12 @@ func (s *StartStreamTranscriptionInput) SetIdentifyLanguage(v bool) *StartStream
 	return s
 }
 
+// SetIdentifyMultipleLanguages sets the IdentifyMultipleLanguages field's value.
+func (s *StartStreamTranscriptionInput) SetIdentifyMultipleLanguages(v bool) *StartStreamTranscriptionInput {
+	s.IdentifyMultipleLanguages = &v
+	return s
+}
+
 // SetLanguageCode sets the LanguageCode field's value.
 func (s *StartStreamTranscriptionInput) SetLanguageCode(v string) *StartStreamTranscriptionInput {
 	s.LanguageCode = &v
@@ -4783,6 +4809,10 @@ type StartStreamTranscriptionOutput struct {
 	// Shows whether automatic language identification was enabled for your transcription.
 	IdentifyLanguage *bool `location:"header" locationName:"x-amzn-transcribe-identify-language" type:"boolean"`
 
+	// Shows whether automatic multi-language identification was enabled for your
+	// transcription.
+	IdentifyMultipleLanguages *bool `location:"header" locationName:"x-amzn-transcribe-identify-multiple-languages" type:"boolean"`
+
 	// Provides the language code that you specified in your request.
 	LanguageCode *string `location:"header" locationName:"x-amzn-transcribe-language-code" type:"string" enum:"LanguageCode"`
 
@@ -4884,6 +4914,12 @@ func (s *StartStreamTranscriptionOutput) SetEnablePartialResultsStabilization(v 
 // SetIdentifyLanguage sets the IdentifyLanguage field's value.
 func (s *StartStreamTranscriptionOutput) SetIdentifyLanguage(v bool) *StartStreamTranscriptionOutput {
 	s.IdentifyLanguage = &v
+	return s
+}
+
+// SetIdentifyMultipleLanguages sets the IdentifyMultipleLanguages field's value.
+func (s *StartStreamTranscriptionOutput) SetIdentifyMultipleLanguages(v bool) *StartStreamTranscriptionOutput {
+	s.IdentifyMultipleLanguages = &v
 	return s
 }
 
@@ -5150,7 +5186,7 @@ func (s *TranscriptEvent) MarshalEvent(pm protocol.PayloadMarshaler) (msg events
 //
 // These events are:
 //
-//     * TranscriptEvent
+//   - TranscriptEvent
 type TranscriptResultStreamEvent interface {
 	eventTranscriptResultStream()
 	eventstreamapi.Marshaler
@@ -5164,8 +5200,8 @@ type TranscriptResultStreamEvent interface {
 //
 // These events are:
 //
-//     * TranscriptEvent
-//     * TranscriptResultStreamUnknownEvent
+//   - TranscriptEvent
+//   - TranscriptResultStreamUnknownEvent
 type TranscriptResultStreamReader interface {
 	// Returns a channel of events as they are read from the event stream.
 	Events() <-chan TranscriptResultStreamEvent

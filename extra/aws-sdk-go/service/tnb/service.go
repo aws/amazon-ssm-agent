@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a Tnb client from just a session.
-//     svc := tnb.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a Tnb client with additional configuration
-//     svc := tnb.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a Tnb client from just a session.
+//	svc := tnb.New(mySession)
+//
+//	// Create a Tnb client with additional configuration
+//	svc := tnb.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *Tnb {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

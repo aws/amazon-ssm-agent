@@ -29,14 +29,13 @@ const opAcceptCertificateTransfer = "AcceptCertificateTransfer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AcceptCertificateTransferRequest method.
+//	req, resp := client.AcceptCertificateTransferRequest(params)
 //
-//    // Example sending a request using the AcceptCertificateTransferRequest method.
-//    req, resp := client.AcceptCertificateTransferRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) AcceptCertificateTransferRequest(input *AcceptCertificateTransferInput) (req *request.Request, output *AcceptCertificateTransferOutput) {
 	op := &request.Operation{
 		Name:       opAcceptCertificateTransfer,
@@ -73,28 +72,28 @@ func (c *IoT) AcceptCertificateTransferRequest(input *AcceptCertificateTransferI
 // API operation AcceptCertificateTransfer for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * TransferAlreadyCompletedException
-//   You can't revert the certificate transfer because the transfer is already
-//   complete.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - TransferAlreadyCompletedException
+//     You can't revert the certificate transfer because the transfer is already
+//     complete.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) AcceptCertificateTransfer(input *AcceptCertificateTransferInput) (*AcceptCertificateTransferOutput, error) {
 	req, out := c.AcceptCertificateTransferRequest(input)
 	return out, req.Send()
@@ -132,14 +131,13 @@ const opAddThingToBillingGroup = "AddThingToBillingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddThingToBillingGroupRequest method.
+//	req, resp := client.AddThingToBillingGroupRequest(params)
 //
-//    // Example sending a request using the AddThingToBillingGroupRequest method.
-//    req, resp := client.AddThingToBillingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) AddThingToBillingGroupRequest(input *AddThingToBillingGroupInput) (req *request.Request, output *AddThingToBillingGroupOutput) {
 	op := &request.Operation{
 		Name:       opAddThingToBillingGroup,
@@ -172,18 +170,18 @@ func (c *IoT) AddThingToBillingGroupRequest(input *AddThingToBillingGroupInput) 
 // API operation AddThingToBillingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) AddThingToBillingGroup(input *AddThingToBillingGroupInput) (*AddThingToBillingGroupOutput, error) {
 	req, out := c.AddThingToBillingGroupRequest(input)
 	return out, req.Send()
@@ -221,14 +219,13 @@ const opAddThingToThingGroup = "AddThingToThingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddThingToThingGroupRequest method.
+//	req, resp := client.AddThingToThingGroupRequest(params)
 //
-//    // Example sending a request using the AddThingToThingGroupRequest method.
-//    req, resp := client.AddThingToThingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) AddThingToThingGroupRequest(input *AddThingToThingGroupInput) (req *request.Request, output *AddThingToThingGroupOutput) {
 	op := &request.Operation{
 		Name:       opAddThingToThingGroup,
@@ -261,18 +258,18 @@ func (c *IoT) AddThingToThingGroupRequest(input *AddThingToThingGroupInput) (req
 // API operation AddThingToThingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) AddThingToThingGroup(input *AddThingToThingGroupInput) (*AddThingToThingGroupOutput, error) {
 	req, out := c.AddThingToThingGroupRequest(input)
 	return out, req.Send()
@@ -310,14 +307,13 @@ const opAssociateTargetsWithJob = "AssociateTargetsWithJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateTargetsWithJobRequest method.
+//	req, resp := client.AssociateTargetsWithJobRequest(params)
 //
-//    // Example sending a request using the AssociateTargetsWithJobRequest method.
-//    req, resp := client.AssociateTargetsWithJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) AssociateTargetsWithJobRequest(input *AssociateTargetsWithJobInput) (req *request.Request, output *AssociateTargetsWithJobOutput) {
 	op := &request.Operation{
 		Name:       opAssociateTargetsWithJob,
@@ -339,12 +335,12 @@ func (c *IoT) AssociateTargetsWithJobRequest(input *AssociateTargetsWithJobInput
 // Associates a group with a continuous job. The following criteria must be
 // met:
 //
-//    * The job must have been created with the targetSelection field set to
-//    "CONTINUOUS".
+//   - The job must have been created with the targetSelection field set to
+//     "CONTINUOUS".
 //
-//    * The job status must currently be "IN_PROGRESS".
+//   - The job status must currently be "IN_PROGRESS".
 //
-//    * The total number of targets associated with a job must not exceed 100.
+//   - The total number of targets associated with a job must not exceed 100.
 //
 // Requires permission to access the AssociateTargetsWithJob (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
 // action.
@@ -357,21 +353,21 @@ func (c *IoT) AssociateTargetsWithJobRequest(input *AssociateTargetsWithJobInput
 // API operation AssociateTargetsWithJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) AssociateTargetsWithJob(input *AssociateTargetsWithJobInput) (*AssociateTargetsWithJobOutput, error) {
 	req, out := c.AssociateTargetsWithJobRequest(input)
 	return out, req.Send()
@@ -409,14 +405,13 @@ const opAttachPolicy = "AttachPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AttachPolicyRequest method.
+//	req, resp := client.AttachPolicyRequest(params)
 //
-//    // Example sending a request using the AttachPolicyRequest method.
-//    req, resp := client.AttachPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) AttachPolicyRequest(input *AttachPolicyInput) (req *request.Request, output *AttachPolicyOutput) {
 	op := &request.Operation{
 		Name:       opAttachPolicy,
@@ -450,27 +445,27 @@ func (c *IoT) AttachPolicyRequest(input *AttachPolicyInput) (req *request.Reques
 // API operation AttachPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) AttachPolicy(input *AttachPolicyInput) (*AttachPolicyOutput, error) {
 	req, out := c.AttachPolicyRequest(input)
 	return out, req.Send()
@@ -508,14 +503,13 @@ const opAttachPrincipalPolicy = "AttachPrincipalPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AttachPrincipalPolicyRequest method.
+//	req, resp := client.AttachPrincipalPolicyRequest(params)
 //
-//    // Example sending a request using the AttachPrincipalPolicyRequest method.
-//    req, resp := client.AttachPrincipalPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // Deprecated: AttachPrincipalPolicy has been deprecated
 func (c *IoT) AttachPrincipalPolicyRequest(input *AttachPrincipalPolicyInput) (req *request.Request, output *AttachPrincipalPolicyOutput) {
@@ -557,27 +551,27 @@ func (c *IoT) AttachPrincipalPolicyRequest(input *AttachPrincipalPolicyInput) (r
 // API operation AttachPrincipalPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
 // Deprecated: AttachPrincipalPolicy has been deprecated
 func (c *IoT) AttachPrincipalPolicy(input *AttachPrincipalPolicyInput) (*AttachPrincipalPolicyOutput, error) {
@@ -619,14 +613,13 @@ const opAttachSecurityProfile = "AttachSecurityProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AttachSecurityProfileRequest method.
+//	req, resp := client.AttachSecurityProfileRequest(params)
 //
-//    // Example sending a request using the AttachSecurityProfileRequest method.
-//    req, resp := client.AttachSecurityProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) AttachSecurityProfileRequest(input *AttachSecurityProfileInput) (req *request.Request, output *AttachSecurityProfileOutput) {
 	op := &request.Operation{
 		Name:       opAttachSecurityProfile,
@@ -661,25 +654,25 @@ func (c *IoT) AttachSecurityProfileRequest(input *AttachSecurityProfileInput) (r
 // API operation AttachSecurityProfile for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) AttachSecurityProfile(input *AttachSecurityProfileInput) (*AttachSecurityProfileOutput, error) {
 	req, out := c.AttachSecurityProfileRequest(input)
 	return out, req.Send()
@@ -717,14 +710,13 @@ const opAttachThingPrincipal = "AttachThingPrincipal"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AttachThingPrincipalRequest method.
+//	req, resp := client.AttachThingPrincipalRequest(params)
 //
-//    // Example sending a request using the AttachThingPrincipalRequest method.
-//    req, resp := client.AttachThingPrincipalRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) AttachThingPrincipalRequest(input *AttachThingPrincipalInput) (req *request.Request, output *AttachThingPrincipalOutput) {
 	op := &request.Operation{
 		Name:       opAttachThingPrincipal,
@@ -758,24 +750,24 @@ func (c *IoT) AttachThingPrincipalRequest(input *AttachThingPrincipalInput) (req
 // API operation AttachThingPrincipal for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) AttachThingPrincipal(input *AttachThingPrincipalInput) (*AttachThingPrincipalOutput, error) {
 	req, out := c.AttachThingPrincipalRequest(input)
 	return out, req.Send()
@@ -813,14 +805,13 @@ const opCancelAuditMitigationActionsTask = "CancelAuditMitigationActionsTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelAuditMitigationActionsTaskRequest method.
+//	req, resp := client.CancelAuditMitigationActionsTaskRequest(params)
 //
-//    // Example sending a request using the CancelAuditMitigationActionsTaskRequest method.
-//    req, resp := client.CancelAuditMitigationActionsTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CancelAuditMitigationActionsTaskRequest(input *CancelAuditMitigationActionsTaskInput) (req *request.Request, output *CancelAuditMitigationActionsTaskOutput) {
 	op := &request.Operation{
 		Name:       opCancelAuditMitigationActionsTask,
@@ -854,18 +845,18 @@ func (c *IoT) CancelAuditMitigationActionsTaskRequest(input *CancelAuditMitigati
 // API operation CancelAuditMitigationActionsTask for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CancelAuditMitigationActionsTask(input *CancelAuditMitigationActionsTaskInput) (*CancelAuditMitigationActionsTaskOutput, error) {
 	req, out := c.CancelAuditMitigationActionsTaskRequest(input)
 	return out, req.Send()
@@ -903,14 +894,13 @@ const opCancelAuditTask = "CancelAuditTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelAuditTaskRequest method.
+//	req, resp := client.CancelAuditTaskRequest(params)
 //
-//    // Example sending a request using the CancelAuditTaskRequest method.
-//    req, resp := client.CancelAuditTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CancelAuditTaskRequest(input *CancelAuditTaskInput) (req *request.Request, output *CancelAuditTaskOutput) {
 	op := &request.Operation{
 		Name:       opCancelAuditTask,
@@ -944,18 +934,18 @@ func (c *IoT) CancelAuditTaskRequest(input *CancelAuditTaskInput) (req *request.
 // API operation CancelAuditTask for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CancelAuditTask(input *CancelAuditTaskInput) (*CancelAuditTaskOutput, error) {
 	req, out := c.CancelAuditTaskRequest(input)
 	return out, req.Send()
@@ -993,14 +983,13 @@ const opCancelCertificateTransfer = "CancelCertificateTransfer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelCertificateTransferRequest method.
+//	req, resp := client.CancelCertificateTransferRequest(params)
 //
-//    // Example sending a request using the CancelCertificateTransferRequest method.
-//    req, resp := client.CancelCertificateTransferRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CancelCertificateTransferRequest(input *CancelCertificateTransferInput) (req *request.Request, output *CancelCertificateTransferOutput) {
 	op := &request.Operation{
 		Name:       opCancelCertificateTransfer,
@@ -1042,28 +1031,28 @@ func (c *IoT) CancelCertificateTransferRequest(input *CancelCertificateTransferI
 // API operation CancelCertificateTransfer for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * TransferAlreadyCompletedException
-//   You can't revert the certificate transfer because the transfer is already
-//   complete.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - TransferAlreadyCompletedException
+//     You can't revert the certificate transfer because the transfer is already
+//     complete.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CancelCertificateTransfer(input *CancelCertificateTransferInput) (*CancelCertificateTransferOutput, error) {
 	req, out := c.CancelCertificateTransferRequest(input)
 	return out, req.Send()
@@ -1101,14 +1090,13 @@ const opCancelDetectMitigationActionsTask = "CancelDetectMitigationActionsTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelDetectMitigationActionsTaskRequest method.
+//	req, resp := client.CancelDetectMitigationActionsTaskRequest(params)
 //
-//    // Example sending a request using the CancelDetectMitigationActionsTaskRequest method.
-//    req, resp := client.CancelDetectMitigationActionsTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CancelDetectMitigationActionsTaskRequest(input *CancelDetectMitigationActionsTaskInput) (req *request.Request, output *CancelDetectMitigationActionsTaskOutput) {
 	op := &request.Operation{
 		Name:       opCancelDetectMitigationActionsTask,
@@ -1141,18 +1129,18 @@ func (c *IoT) CancelDetectMitigationActionsTaskRequest(input *CancelDetectMitiga
 // API operation CancelDetectMitigationActionsTask for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CancelDetectMitigationActionsTask(input *CancelDetectMitigationActionsTaskInput) (*CancelDetectMitigationActionsTaskOutput, error) {
 	req, out := c.CancelDetectMitigationActionsTaskRequest(input)
 	return out, req.Send()
@@ -1190,14 +1178,13 @@ const opCancelJob = "CancelJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelJobRequest method.
+//	req, resp := client.CancelJobRequest(params)
 //
-//    // Example sending a request using the CancelJobRequest method.
-//    req, resp := client.CancelJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CancelJobRequest(input *CancelJobInput) (req *request.Request, output *CancelJobOutput) {
 	op := &request.Operation{
 		Name:       opCancelJob,
@@ -1229,21 +1216,21 @@ func (c *IoT) CancelJobRequest(input *CancelJobInput) (req *request.Request, out
 // API operation CancelJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) CancelJob(input *CancelJobInput) (*CancelJobOutput, error) {
 	req, out := c.CancelJobRequest(input)
 	return out, req.Send()
@@ -1281,14 +1268,13 @@ const opCancelJobExecution = "CancelJobExecution"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelJobExecutionRequest method.
+//	req, resp := client.CancelJobExecutionRequest(params)
 //
-//    // Example sending a request using the CancelJobExecutionRequest method.
-//    req, resp := client.CancelJobExecutionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CancelJobExecutionRequest(input *CancelJobExecutionInput) (req *request.Request, output *CancelJobExecutionOutput) {
 	op := &request.Operation{
 		Name:       opCancelJobExecution,
@@ -1321,27 +1307,27 @@ func (c *IoT) CancelJobExecutionRequest(input *CancelJobExecutionInput) (req *re
 // API operation CancelJobExecution for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InvalidStateTransitionException
-//   An attempt was made to change to an invalid state, for example by deleting
-//   a job or a job execution which is "IN_PROGRESS" without setting the force
-//   parameter.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidStateTransitionException
+//     An attempt was made to change to an invalid state, for example by deleting
+//     a job or a job execution which is "IN_PROGRESS" without setting the force
+//     parameter.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 func (c *IoT) CancelJobExecution(input *CancelJobExecutionInput) (*CancelJobExecutionOutput, error) {
 	req, out := c.CancelJobExecutionRequest(input)
 	return out, req.Send()
@@ -1379,14 +1365,13 @@ const opClearDefaultAuthorizer = "ClearDefaultAuthorizer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ClearDefaultAuthorizerRequest method.
+//	req, resp := client.ClearDefaultAuthorizerRequest(params)
 //
-//    // Example sending a request using the ClearDefaultAuthorizerRequest method.
-//    req, resp := client.ClearDefaultAuthorizerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ClearDefaultAuthorizerRequest(input *ClearDefaultAuthorizerInput) (req *request.Request, output *ClearDefaultAuthorizerOutput) {
 	op := &request.Operation{
 		Name:       opClearDefaultAuthorizer,
@@ -1419,24 +1404,24 @@ func (c *IoT) ClearDefaultAuthorizerRequest(input *ClearDefaultAuthorizerInput) 
 // API operation ClearDefaultAuthorizer for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ClearDefaultAuthorizer(input *ClearDefaultAuthorizerInput) (*ClearDefaultAuthorizerOutput, error) {
 	req, out := c.ClearDefaultAuthorizerRequest(input)
 	return out, req.Send()
@@ -1474,14 +1459,13 @@ const opConfirmTopicRuleDestination = "ConfirmTopicRuleDestination"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ConfirmTopicRuleDestinationRequest method.
+//	req, resp := client.ConfirmTopicRuleDestinationRequest(params)
 //
-//    // Example sending a request using the ConfirmTopicRuleDestinationRequest method.
-//    req, resp := client.ConfirmTopicRuleDestinationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ConfirmTopicRuleDestinationRequest(input *ConfirmTopicRuleDestinationInput) (req *request.Request, output *ConfirmTopicRuleDestinationOutput) {
 	op := &request.Operation{
 		Name:       opConfirmTopicRuleDestination,
@@ -1517,22 +1501,22 @@ func (c *IoT) ConfirmTopicRuleDestinationRequest(input *ConfirmTopicRuleDestinat
 // API operation ConfirmTopicRuleDestination for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 func (c *IoT) ConfirmTopicRuleDestination(input *ConfirmTopicRuleDestinationInput) (*ConfirmTopicRuleDestinationOutput, error) {
 	req, out := c.ConfirmTopicRuleDestinationRequest(input)
 	return out, req.Send()
@@ -1570,14 +1554,13 @@ const opCreateAuditSuppression = "CreateAuditSuppression"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAuditSuppressionRequest method.
+//	req, resp := client.CreateAuditSuppressionRequest(params)
 //
-//    // Example sending a request using the CreateAuditSuppressionRequest method.
-//    req, resp := client.CreateAuditSuppressionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateAuditSuppressionRequest(input *CreateAuditSuppressionInput) (req *request.Request, output *CreateAuditSuppressionOutput) {
 	op := &request.Operation{
 		Name:       opCreateAuditSuppression,
@@ -1610,21 +1593,21 @@ func (c *IoT) CreateAuditSuppressionRequest(input *CreateAuditSuppressionInput) 
 // API operation CreateAuditSuppression for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) CreateAuditSuppression(input *CreateAuditSuppressionInput) (*CreateAuditSuppressionOutput, error) {
 	req, out := c.CreateAuditSuppressionRequest(input)
 	return out, req.Send()
@@ -1662,14 +1645,13 @@ const opCreateAuthorizer = "CreateAuthorizer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAuthorizerRequest method.
+//	req, resp := client.CreateAuthorizerRequest(params)
 //
-//    // Example sending a request using the CreateAuthorizerRequest method.
-//    req, resp := client.CreateAuthorizerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateAuthorizerRequest(input *CreateAuthorizerInput) (req *request.Request, output *CreateAuthorizerOutput) {
 	op := &request.Operation{
 		Name:       opCreateAuthorizer,
@@ -1701,27 +1683,27 @@ func (c *IoT) CreateAuthorizerRequest(input *CreateAuthorizerInput) (req *reques
 // API operation CreateAuthorizer for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateAuthorizer(input *CreateAuthorizerInput) (*CreateAuthorizerOutput, error) {
 	req, out := c.CreateAuthorizerRequest(input)
 	return out, req.Send()
@@ -1759,14 +1741,13 @@ const opCreateBillingGroup = "CreateBillingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateBillingGroupRequest method.
+//	req, resp := client.CreateBillingGroupRequest(params)
 //
-//    // Example sending a request using the CreateBillingGroupRequest method.
-//    req, resp := client.CreateBillingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateBillingGroupRequest(input *CreateBillingGroupInput) (req *request.Request, output *CreateBillingGroupOutput) {
 	op := &request.Operation{
 		Name:       opCreateBillingGroup,
@@ -1798,18 +1779,18 @@ func (c *IoT) CreateBillingGroupRequest(input *CreateBillingGroupInput) (req *re
 // API operation CreateBillingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateBillingGroup(input *CreateBillingGroupInput) (*CreateBillingGroupOutput, error) {
 	req, out := c.CreateBillingGroupRequest(input)
 	return out, req.Send()
@@ -1847,14 +1828,13 @@ const opCreateCertificateFromCsr = "CreateCertificateFromCsr"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateCertificateFromCsrRequest method.
+//	req, resp := client.CreateCertificateFromCsrRequest(params)
 //
-//    // Example sending a request using the CreateCertificateFromCsrRequest method.
-//    req, resp := client.CreateCertificateFromCsrRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateCertificateFromCsrRequest(input *CreateCertificateFromCsrInput) (req *request.Request, output *CreateCertificateFromCsrOutput) {
 	op := &request.Operation{
 		Name:       opCreateCertificateFromCsr,
@@ -1879,9 +1859,9 @@ func (c *IoT) CreateCertificateFromCsrRequest(input *CreateCertificateFromCsrInp
 // action.
 //
 // The CSR must include a public key that is either an RSA key with a length
-// of at least 2048 bits or an ECC key from NIST P-25 or NIST P-384 curves.
-// For supported certificates, consult Certificate signing algorithms supported
-// by IoT (https://docs.aws.amazon.com/iot/latest/developerguide/x509-client-certs.html#x509-cert-algorithms).
+// of at least 2048 bits or an ECC key from NIST P-256, NIST P-384, or NIST
+// P-521 curves. For supported certificates, consult Certificate signing algorithms
+// supported by IoT (https://docs.aws.amazon.com/iot/latest/developerguide/x509-client-certs.html#x509-cert-algorithms).
 //
 // Reusing the same certificate signing request (CSR) results in a distinct
 // certificate.
@@ -1927,21 +1907,21 @@ func (c *IoT) CreateCertificateFromCsrRequest(input *CreateCertificateFromCsrInp
 // API operation CreateCertificateFromCsr for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateCertificateFromCsr(input *CreateCertificateFromCsrInput) (*CreateCertificateFromCsrOutput, error) {
 	req, out := c.CreateCertificateFromCsrRequest(input)
 	return out, req.Send()
@@ -1963,6 +1943,113 @@ func (c *IoT) CreateCertificateFromCsrWithContext(ctx aws.Context, input *Create
 	return out, req.Send()
 }
 
+const opCreateCertificateProvider = "CreateCertificateProvider"
+
+// CreateCertificateProviderRequest generates a "aws/request.Request" representing the
+// client's request for the CreateCertificateProvider operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateCertificateProvider for more information on using the CreateCertificateProvider
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateCertificateProviderRequest method.
+//	req, resp := client.CreateCertificateProviderRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) CreateCertificateProviderRequest(input *CreateCertificateProviderInput) (req *request.Request, output *CreateCertificateProviderOutput) {
+	op := &request.Operation{
+		Name:       opCreateCertificateProvider,
+		HTTPMethod: "POST",
+		HTTPPath:   "/certificate-providers/{certificateProviderName}",
+	}
+
+	if input == nil {
+		input = &CreateCertificateProviderInput{}
+	}
+
+	output = &CreateCertificateProviderOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateCertificateProvider API operation for AWS IoT.
+//
+// Creates an Amazon Web Services IoT Core certificate provider. You can use
+// Amazon Web Services IoT Core certificate provider to customize how to sign
+// a certificate signing request (CSR) in IoT fleet provisioning. For more information,
+// see Customizing certificate signing using Amazon Web Services IoT Core certificate
+// provider (https://docs.aws.amazon.com/iot/latest/developerguide/provisioning-cert-provider.html)
+// from Amazon Web Services IoT Core Developer Guide.
+//
+// Requires permission to access the CreateCertificateProvider (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// action.
+//
+// After you create a certificate provider, the behavior of CreateCertificateFromCsr
+// API for fleet provisioning (https://docs.aws.amazon.com/iot/latest/developerguide/fleet-provision-api.html#create-cert-csr)
+// will change and all API calls to CreateCertificateFromCsr will invoke the
+// certificate provider to create the certificates. It can take up to a few
+// minutes for this behavior to change after a certificate provider is created.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation CreateCertificateProvider for usage and error information.
+//
+// Returned Error Types:
+//
+//   - LimitExceededException
+//     A limit has been exceeded.
+//
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
+//
+//   - InvalidRequestException
+//     The request is not valid.
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
+//
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
+//
+//   - InternalFailureException
+//     An unexpected error has occurred.
+func (c *IoT) CreateCertificateProvider(input *CreateCertificateProviderInput) (*CreateCertificateProviderOutput, error) {
+	req, out := c.CreateCertificateProviderRequest(input)
+	return out, req.Send()
+}
+
+// CreateCertificateProviderWithContext is the same as CreateCertificateProvider with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateCertificateProvider for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) CreateCertificateProviderWithContext(ctx aws.Context, input *CreateCertificateProviderInput, opts ...request.Option) (*CreateCertificateProviderOutput, error) {
+	req, out := c.CreateCertificateProviderRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateCustomMetric = "CreateCustomMetric"
 
 // CreateCustomMetricRequest generates a "aws/request.Request" representing the
@@ -1979,14 +2066,13 @@ const opCreateCustomMetric = "CreateCustomMetric"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateCustomMetricRequest method.
+//	req, resp := client.CreateCustomMetricRequest(params)
 //
-//    // Example sending a request using the CreateCustomMetricRequest method.
-//    req, resp := client.CreateCustomMetricRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateCustomMetricRequest(input *CreateCustomMetricInput) (req *request.Request, output *CreateCustomMetricOutput) {
 	op := &request.Operation{
 		Name:       opCreateCustomMetric,
@@ -2019,21 +2105,21 @@ func (c *IoT) CreateCustomMetricRequest(input *CreateCustomMetricInput) (req *re
 // API operation CreateCustomMetric for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateCustomMetric(input *CreateCustomMetricInput) (*CreateCustomMetricOutput, error) {
 	req, out := c.CreateCustomMetricRequest(input)
 	return out, req.Send()
@@ -2071,14 +2157,13 @@ const opCreateDimension = "CreateDimension"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDimensionRequest method.
+//	req, resp := client.CreateDimensionRequest(params)
 //
-//    // Example sending a request using the CreateDimensionRequest method.
-//    req, resp := client.CreateDimensionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateDimensionRequest(input *CreateDimensionInput) (req *request.Request, output *CreateDimensionOutput) {
 	op := &request.Operation{
 		Name:       opCreateDimension,
@@ -2113,21 +2198,21 @@ func (c *IoT) CreateDimensionRequest(input *CreateDimensionInput) (req *request.
 // API operation CreateDimension for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) CreateDimension(input *CreateDimensionInput) (*CreateDimensionOutput, error) {
 	req, out := c.CreateDimensionRequest(input)
 	return out, req.Send()
@@ -2165,14 +2250,13 @@ const opCreateDomainConfiguration = "CreateDomainConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDomainConfigurationRequest method.
+//	req, resp := client.CreateDomainConfigurationRequest(params)
 //
-//    // Example sending a request using the CreateDomainConfigurationRequest method.
-//    req, resp := client.CreateDomainConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateDomainConfigurationRequest(input *CreateDomainConfigurationInput) (req *request.Request, output *CreateDomainConfigurationOutput) {
 	op := &request.Operation{
 		Name:       opCreateDomainConfiguration,
@@ -2204,30 +2288,30 @@ func (c *IoT) CreateDomainConfigurationRequest(input *CreateDomainConfigurationI
 // API operation CreateDomainConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * LimitExceededException
-//   A limit has been exceeded.
 //
-//   * CertificateValidationException
-//   The certificate is invalid.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - CertificateValidationException
+//     The certificate is invalid.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) CreateDomainConfiguration(input *CreateDomainConfigurationInput) (*CreateDomainConfigurationOutput, error) {
 	req, out := c.CreateDomainConfigurationRequest(input)
 	return out, req.Send()
@@ -2265,14 +2349,13 @@ const opCreateDynamicThingGroup = "CreateDynamicThingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDynamicThingGroupRequest method.
+//	req, resp := client.CreateDynamicThingGroupRequest(params)
 //
-//    // Example sending a request using the CreateDynamicThingGroupRequest method.
-//    req, resp := client.CreateDynamicThingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateDynamicThingGroupRequest(input *CreateDynamicThingGroupInput) (req *request.Request, output *CreateDynamicThingGroupOutput) {
 	op := &request.Operation{
 		Name:       opCreateDynamicThingGroup,
@@ -2304,27 +2387,27 @@ func (c *IoT) CreateDynamicThingGroupRequest(input *CreateDynamicThingGroupInput
 // API operation CreateDynamicThingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * InvalidQueryException
-//   The query is invalid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InvalidQueryException
+//     The query is invalid.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) CreateDynamicThingGroup(input *CreateDynamicThingGroupInput) (*CreateDynamicThingGroupOutput, error) {
 	req, out := c.CreateDynamicThingGroupRequest(input)
 	return out, req.Send()
@@ -2362,14 +2445,13 @@ const opCreateFleetMetric = "CreateFleetMetric"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFleetMetricRequest method.
+//	req, resp := client.CreateFleetMetricRequest(params)
 //
-//    // Example sending a request using the CreateFleetMetricRequest method.
-//    req, resp := client.CreateFleetMetricRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateFleetMetricRequest(input *CreateFleetMetricInput) (req *request.Request, output *CreateFleetMetricOutput) {
 	op := &request.Operation{
 		Name:       opCreateFleetMetric,
@@ -2401,39 +2483,39 @@ func (c *IoT) CreateFleetMetricRequest(input *CreateFleetMetricInput) (req *requ
 // API operation CreateFleetMetric for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * InvalidQueryException
-//   The query is invalid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidAggregationException
-//   The aggregation is invalid.
+//   - InvalidQueryException
+//     The query is invalid.
 //
-//   * IndexNotReadyException
-//   The index is not ready.
+//   - InvalidAggregationException
+//     The aggregation is invalid.
 //
+//   - IndexNotReadyException
+//     The index is not ready.
 func (c *IoT) CreateFleetMetric(input *CreateFleetMetricInput) (*CreateFleetMetricOutput, error) {
 	req, out := c.CreateFleetMetricRequest(input)
 	return out, req.Send()
@@ -2471,14 +2553,13 @@ const opCreateJob = "CreateJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateJobRequest method.
+//	req, resp := client.CreateJobRequest(params)
 //
-//    // Example sending a request using the CreateJobRequest method.
-//    req, resp := client.CreateJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateJobRequest(input *CreateJobInput) (req *request.Request, output *CreateJobOutput) {
 	op := &request.Operation{
 		Name:       opCreateJob,
@@ -2510,24 +2591,24 @@ func (c *IoT) CreateJobRequest(input *CreateJobInput) (req *request.Request, out
 // API operation CreateJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) CreateJob(input *CreateJobInput) (*CreateJobOutput, error) {
 	req, out := c.CreateJobRequest(input)
 	return out, req.Send()
@@ -2565,14 +2646,13 @@ const opCreateJobTemplate = "CreateJobTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateJobTemplateRequest method.
+//	req, resp := client.CreateJobTemplateRequest(params)
 //
-//    // Example sending a request using the CreateJobTemplateRequest method.
-//    req, resp := client.CreateJobTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateJobTemplateRequest(input *CreateJobTemplateInput) (req *request.Request, output *CreateJobTemplateOutput) {
 	op := &request.Operation{
 		Name:       opCreateJobTemplate,
@@ -2604,24 +2684,24 @@ func (c *IoT) CreateJobTemplateRequest(input *CreateJobTemplateInput) (req *requ
 // API operation CreateJobTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ConflictException
-//   A resource with the same name already exists.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - ConflictException
+//     A resource with the same name already exists.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateJobTemplate(input *CreateJobTemplateInput) (*CreateJobTemplateOutput, error) {
 	req, out := c.CreateJobTemplateRequest(input)
 	return out, req.Send()
@@ -2659,14 +2739,13 @@ const opCreateKeysAndCertificate = "CreateKeysAndCertificate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateKeysAndCertificateRequest method.
+//	req, resp := client.CreateKeysAndCertificateRequest(params)
 //
-//    // Example sending a request using the CreateKeysAndCertificateRequest method.
-//    req, resp := client.CreateKeysAndCertificateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateKeysAndCertificateRequest(input *CreateKeysAndCertificateInput) (req *request.Request, output *CreateKeysAndCertificateOutput) {
 	op := &request.Operation{
 		Name:       opCreateKeysAndCertificate,
@@ -2703,21 +2782,21 @@ func (c *IoT) CreateKeysAndCertificateRequest(input *CreateKeysAndCertificateInp
 // API operation CreateKeysAndCertificate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateKeysAndCertificate(input *CreateKeysAndCertificateInput) (*CreateKeysAndCertificateOutput, error) {
 	req, out := c.CreateKeysAndCertificateRequest(input)
 	return out, req.Send()
@@ -2755,14 +2834,13 @@ const opCreateMitigationAction = "CreateMitigationAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateMitigationActionRequest method.
+//	req, resp := client.CreateMitigationActionRequest(params)
 //
-//    // Example sending a request using the CreateMitigationActionRequest method.
-//    req, resp := client.CreateMitigationActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateMitigationActionRequest(input *CreateMitigationActionInput) (req *request.Request, output *CreateMitigationActionOutput) {
 	op := &request.Operation{
 		Name:       opCreateMitigationAction,
@@ -2797,21 +2875,21 @@ func (c *IoT) CreateMitigationActionRequest(input *CreateMitigationActionInput) 
 // API operation CreateMitigationAction for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateMitigationAction(input *CreateMitigationActionInput) (*CreateMitigationActionOutput, error) {
 	req, out := c.CreateMitigationActionRequest(input)
 	return out, req.Send()
@@ -2849,14 +2927,13 @@ const opCreateOTAUpdate = "CreateOTAUpdate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateOTAUpdateRequest method.
+//	req, resp := client.CreateOTAUpdateRequest(params)
 //
-//    // Example sending a request using the CreateOTAUpdateRequest method.
-//    req, resp := client.CreateOTAUpdateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateOTAUpdateRequest(input *CreateOTAUpdateInput) (req *request.Request, output *CreateOTAUpdateOutput) {
 	op := &request.Operation{
 		Name:       opCreateOTAUpdate,
@@ -2888,30 +2965,30 @@ func (c *IoT) CreateOTAUpdateRequest(input *CreateOTAUpdateInput) (req *request.
 // API operation CreateOTAUpdate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) CreateOTAUpdate(input *CreateOTAUpdateInput) (*CreateOTAUpdateOutput, error) {
 	req, out := c.CreateOTAUpdateRequest(input)
 	return out, req.Send()
@@ -2933,6 +3010,190 @@ func (c *IoT) CreateOTAUpdateWithContext(ctx aws.Context, input *CreateOTAUpdate
 	return out, req.Send()
 }
 
+const opCreatePackage = "CreatePackage"
+
+// CreatePackageRequest generates a "aws/request.Request" representing the
+// client's request for the CreatePackage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreatePackage for more information on using the CreatePackage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreatePackageRequest method.
+//	req, resp := client.CreatePackageRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) CreatePackageRequest(input *CreatePackageInput) (req *request.Request, output *CreatePackageOutput) {
+	op := &request.Operation{
+		Name:       opCreatePackage,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/packages/{packageName}",
+	}
+
+	if input == nil {
+		input = &CreatePackageInput{}
+	}
+
+	output = &CreatePackageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreatePackage API operation for AWS IoT.
+//
+// Creates an IoT software package that can be deployed to your fleet.
+//
+// Requires permission to access the CreatePackage (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// and GetIndexingConfiguration (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// actions.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation CreatePackage for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ConflictException
+//     A resource with the same name already exists.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+//
+//   - ValidationException
+//     The request is not valid.
+//
+//   - ServiceQuotaExceededException
+//     A limit has been exceeded.
+func (c *IoT) CreatePackage(input *CreatePackageInput) (*CreatePackageOutput, error) {
+	req, out := c.CreatePackageRequest(input)
+	return out, req.Send()
+}
+
+// CreatePackageWithContext is the same as CreatePackage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreatePackage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) CreatePackageWithContext(ctx aws.Context, input *CreatePackageInput, opts ...request.Option) (*CreatePackageOutput, error) {
+	req, out := c.CreatePackageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreatePackageVersion = "CreatePackageVersion"
+
+// CreatePackageVersionRequest generates a "aws/request.Request" representing the
+// client's request for the CreatePackageVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreatePackageVersion for more information on using the CreatePackageVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreatePackageVersionRequest method.
+//	req, resp := client.CreatePackageVersionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) CreatePackageVersionRequest(input *CreatePackageVersionInput) (req *request.Request, output *CreatePackageVersionOutput) {
+	op := &request.Operation{
+		Name:       opCreatePackageVersion,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/packages/{packageName}/versions/{versionName}",
+	}
+
+	if input == nil {
+		input = &CreatePackageVersionInput{}
+	}
+
+	output = &CreatePackageVersionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreatePackageVersion API operation for AWS IoT.
+//
+// Creates a new version for an existing IoT software package.
+//
+// Requires permission to access the CreatePackageVersion (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// and GetIndexingConfiguration (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// actions.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation CreatePackageVersion for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ConflictException
+//     A resource with the same name already exists.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+//
+//   - ValidationException
+//     The request is not valid.
+//
+//   - ServiceQuotaExceededException
+//     A limit has been exceeded.
+func (c *IoT) CreatePackageVersion(input *CreatePackageVersionInput) (*CreatePackageVersionOutput, error) {
+	req, out := c.CreatePackageVersionRequest(input)
+	return out, req.Send()
+}
+
+// CreatePackageVersionWithContext is the same as CreatePackageVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreatePackageVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) CreatePackageVersionWithContext(ctx aws.Context, input *CreatePackageVersionInput, opts ...request.Option) (*CreatePackageVersionOutput, error) {
+	req, out := c.CreatePackageVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreatePolicy = "CreatePolicy"
 
 // CreatePolicyRequest generates a "aws/request.Request" representing the
@@ -2949,14 +3210,13 @@ const opCreatePolicy = "CreatePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreatePolicyRequest method.
+//	req, resp := client.CreatePolicyRequest(params)
 //
-//    // Example sending a request using the CreatePolicyRequest method.
-//    req, resp := client.CreatePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreatePolicyRequest(input *CreatePolicyInput) (req *request.Request, output *CreatePolicyOutput) {
 	op := &request.Operation{
 		Name:       opCreatePolicy,
@@ -2992,27 +3252,27 @@ func (c *IoT) CreatePolicyRequest(input *CreatePolicyInput) (req *request.Reques
 // API operation CreatePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
 //
-//   * MalformedPolicyException
-//   The policy documentation is not valid.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - MalformedPolicyException
+//     The policy documentation is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreatePolicy(input *CreatePolicyInput) (*CreatePolicyOutput, error) {
 	req, out := c.CreatePolicyRequest(input)
 	return out, req.Send()
@@ -3050,14 +3310,13 @@ const opCreatePolicyVersion = "CreatePolicyVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreatePolicyVersionRequest method.
+//	req, resp := client.CreatePolicyVersionRequest(params)
 //
-//    // Example sending a request using the CreatePolicyVersionRequest method.
-//    req, resp := client.CreatePolicyVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreatePolicyVersionRequest(input *CreatePolicyVersionInput) (req *request.Request, output *CreatePolicyVersionOutput) {
 	op := &request.Operation{
 		Name:       opCreatePolicyVersion,
@@ -3096,30 +3355,30 @@ func (c *IoT) CreatePolicyVersionRequest(input *CreatePolicyVersionInput) (req *
 // API operation CreatePolicyVersion for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * MalformedPolicyException
-//   The policy documentation is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * VersionsLimitExceededException
-//   The number of policy versions exceeds the limit.
+//   - MalformedPolicyException
+//     The policy documentation is not valid.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - VersionsLimitExceededException
+//     The number of policy versions exceeds the limit.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreatePolicyVersion(input *CreatePolicyVersionInput) (*CreatePolicyVersionOutput, error) {
 	req, out := c.CreatePolicyVersionRequest(input)
 	return out, req.Send()
@@ -3157,14 +3416,13 @@ const opCreateProvisioningClaim = "CreateProvisioningClaim"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProvisioningClaimRequest method.
+//	req, resp := client.CreateProvisioningClaimRequest(params)
 //
-//    // Example sending a request using the CreateProvisioningClaimRequest method.
-//    req, resp := client.CreateProvisioningClaimRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateProvisioningClaimRequest(input *CreateProvisioningClaimInput) (req *request.Request, output *CreateProvisioningClaimOutput) {
 	op := &request.Operation{
 		Name:       opCreateProvisioningClaim,
@@ -3196,24 +3454,24 @@ func (c *IoT) CreateProvisioningClaimRequest(input *CreateProvisioningClaimInput
 // API operation CreateProvisioningClaim for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateProvisioningClaim(input *CreateProvisioningClaimInput) (*CreateProvisioningClaimOutput, error) {
 	req, out := c.CreateProvisioningClaimRequest(input)
 	return out, req.Send()
@@ -3251,14 +3509,13 @@ const opCreateProvisioningTemplate = "CreateProvisioningTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProvisioningTemplateRequest method.
+//	req, resp := client.CreateProvisioningTemplateRequest(params)
 //
-//    // Example sending a request using the CreateProvisioningTemplateRequest method.
-//    req, resp := client.CreateProvisioningTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateProvisioningTemplateRequest(input *CreateProvisioningTemplateInput) (req *request.Request, output *CreateProvisioningTemplateOutput) {
 	op := &request.Operation{
 		Name:       opCreateProvisioningTemplate,
@@ -3290,24 +3547,24 @@ func (c *IoT) CreateProvisioningTemplateRequest(input *CreateProvisioningTemplat
 // API operation CreateProvisioningTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 func (c *IoT) CreateProvisioningTemplate(input *CreateProvisioningTemplateInput) (*CreateProvisioningTemplateOutput, error) {
 	req, out := c.CreateProvisioningTemplateRequest(input)
 	return out, req.Send()
@@ -3345,14 +3602,13 @@ const opCreateProvisioningTemplateVersion = "CreateProvisioningTemplateVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProvisioningTemplateVersionRequest method.
+//	req, resp := client.CreateProvisioningTemplateVersionRequest(params)
 //
-//    // Example sending a request using the CreateProvisioningTemplateVersionRequest method.
-//    req, resp := client.CreateProvisioningTemplateVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateProvisioningTemplateVersionRequest(input *CreateProvisioningTemplateVersionInput) (req *request.Request, output *CreateProvisioningTemplateVersionOutput) {
 	op := &request.Operation{
 		Name:       opCreateProvisioningTemplateVersion,
@@ -3384,28 +3640,28 @@ func (c *IoT) CreateProvisioningTemplateVersionRequest(input *CreateProvisioning
 // API operation CreateProvisioningTemplateVersion for usage and error information.
 //
 // Returned Error Types:
-//   * VersionsLimitExceededException
-//   The number of policy versions exceeds the limit.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - VersionsLimitExceededException
+//     The number of policy versions exceeds the limit.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 func (c *IoT) CreateProvisioningTemplateVersion(input *CreateProvisioningTemplateVersionInput) (*CreateProvisioningTemplateVersionOutput, error) {
 	req, out := c.CreateProvisioningTemplateVersionRequest(input)
 	return out, req.Send()
@@ -3443,14 +3699,13 @@ const opCreateRoleAlias = "CreateRoleAlias"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRoleAliasRequest method.
+//	req, resp := client.CreateRoleAliasRequest(params)
 //
-//    // Example sending a request using the CreateRoleAliasRequest method.
-//    req, resp := client.CreateRoleAliasRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateRoleAliasRequest(input *CreateRoleAliasInput) (req *request.Request, output *CreateRoleAliasOutput) {
 	op := &request.Operation{
 		Name:       opCreateRoleAlias,
@@ -3482,27 +3737,27 @@ func (c *IoT) CreateRoleAliasRequest(input *CreateRoleAliasInput) (req *request.
 // API operation CreateRoleAlias for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateRoleAlias(input *CreateRoleAliasInput) (*CreateRoleAliasOutput, error) {
 	req, out := c.CreateRoleAliasRequest(input)
 	return out, req.Send()
@@ -3540,14 +3795,13 @@ const opCreateScheduledAudit = "CreateScheduledAudit"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateScheduledAuditRequest method.
+//	req, resp := client.CreateScheduledAuditRequest(params)
 //
-//    // Example sending a request using the CreateScheduledAuditRequest method.
-//    req, resp := client.CreateScheduledAuditRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateScheduledAuditRequest(input *CreateScheduledAuditInput) (req *request.Request, output *CreateScheduledAuditOutput) {
 	op := &request.Operation{
 		Name:       opCreateScheduledAudit,
@@ -3579,21 +3833,21 @@ func (c *IoT) CreateScheduledAuditRequest(input *CreateScheduledAuditInput) (req
 // API operation CreateScheduledAudit for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) CreateScheduledAudit(input *CreateScheduledAuditInput) (*CreateScheduledAuditOutput, error) {
 	req, out := c.CreateScheduledAuditRequest(input)
 	return out, req.Send()
@@ -3631,14 +3885,13 @@ const opCreateSecurityProfile = "CreateSecurityProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSecurityProfileRequest method.
+//	req, resp := client.CreateSecurityProfileRequest(params)
 //
-//    // Example sending a request using the CreateSecurityProfileRequest method.
-//    req, resp := client.CreateSecurityProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateSecurityProfileRequest(input *CreateSecurityProfileInput) (req *request.Request, output *CreateSecurityProfileOutput) {
 	op := &request.Operation{
 		Name:       opCreateSecurityProfile,
@@ -3670,18 +3923,18 @@ func (c *IoT) CreateSecurityProfileRequest(input *CreateSecurityProfileInput) (r
 // API operation CreateSecurityProfile for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateSecurityProfile(input *CreateSecurityProfileInput) (*CreateSecurityProfileOutput, error) {
 	req, out := c.CreateSecurityProfileRequest(input)
 	return out, req.Send()
@@ -3719,14 +3972,13 @@ const opCreateStream = "CreateStream"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateStreamRequest method.
+//	req, resp := client.CreateStreamRequest(params)
 //
-//    // Example sending a request using the CreateStreamRequest method.
-//    req, resp := client.CreateStreamRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateStreamRequest(input *CreateStreamInput) (req *request.Request, output *CreateStreamOutput) {
 	op := &request.Operation{
 		Name:       opCreateStream,
@@ -3760,30 +4012,30 @@ func (c *IoT) CreateStreamRequest(input *CreateStreamInput) (req *request.Reques
 // API operation CreateStream for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateStream(input *CreateStreamInput) (*CreateStreamOutput, error) {
 	req, out := c.CreateStreamRequest(input)
 	return out, req.Send()
@@ -3821,14 +4073,13 @@ const opCreateThing = "CreateThing"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateThingRequest method.
+//	req, resp := client.CreateThingRequest(params)
 //
-//    // Example sending a request using the CreateThingRequest method.
-//    req, resp := client.CreateThingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateThingRequest(input *CreateThingInput) (req *request.Request, output *CreateThingOutput) {
 	op := &request.Operation{
 		Name:       opCreateThing,
@@ -3866,27 +4117,27 @@ func (c *IoT) CreateThingRequest(input *CreateThingInput) (req *request.Request,
 // API operation CreateThing for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) CreateThing(input *CreateThingInput) (*CreateThingOutput, error) {
 	req, out := c.CreateThingRequest(input)
 	return out, req.Send()
@@ -3924,14 +4175,13 @@ const opCreateThingGroup = "CreateThingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateThingGroupRequest method.
+//	req, resp := client.CreateThingGroupRequest(params)
 //
-//    // Example sending a request using the CreateThingGroupRequest method.
-//    req, resp := client.CreateThingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateThingGroupRequest(input *CreateThingGroupInput) (req *request.Request, output *CreateThingGroupOutput) {
 	op := &request.Operation{
 		Name:       opCreateThingGroup,
@@ -3955,6 +4205,9 @@ func (c *IoT) CreateThingGroupRequest(input *CreateThingGroupInput) (req *reques
 // This is a control plane operation. See Authorization (https://docs.aws.amazon.com/iot/latest/developerguide/iot-authorization.html)
 // for information about authorizing control plane actions.
 //
+// If the ThingGroup that you create has the exact same attributes as an existing
+// ThingGroup, you will get a 200 success response.
+//
 // Requires permission to access the CreateThingGroup (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
 // action.
 //
@@ -3966,18 +4219,18 @@ func (c *IoT) CreateThingGroupRequest(input *CreateThingGroupInput) (req *reques
 // API operation CreateThingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) CreateThingGroup(input *CreateThingGroupInput) (*CreateThingGroupOutput, error) {
 	req, out := c.CreateThingGroupRequest(input)
 	return out, req.Send()
@@ -4015,14 +4268,13 @@ const opCreateThingType = "CreateThingType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateThingTypeRequest method.
+//	req, resp := client.CreateThingTypeRequest(params)
 //
-//    // Example sending a request using the CreateThingTypeRequest method.
-//    req, resp := client.CreateThingTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateThingTypeRequest(input *CreateThingTypeInput) (req *request.Request, output *CreateThingTypeOutput) {
 	op := &request.Operation{
 		Name:       opCreateThingType,
@@ -4054,24 +4306,24 @@ func (c *IoT) CreateThingTypeRequest(input *CreateThingTypeInput) (req *request.
 // API operation CreateThingType for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 func (c *IoT) CreateThingType(input *CreateThingTypeInput) (*CreateThingTypeOutput, error) {
 	req, out := c.CreateThingTypeRequest(input)
 	return out, req.Send()
@@ -4109,14 +4361,13 @@ const opCreateTopicRule = "CreateTopicRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateTopicRuleRequest method.
+//	req, resp := client.CreateTopicRuleRequest(params)
 //
-//    // Example sending a request using the CreateTopicRuleRequest method.
-//    req, resp := client.CreateTopicRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateTopicRuleRequest(input *CreateTopicRuleInput) (req *request.Request, output *CreateTopicRuleOutput) {
 	op := &request.Operation{
 		Name:       opCreateTopicRule,
@@ -4151,25 +4402,25 @@ func (c *IoT) CreateTopicRuleRequest(input *CreateTopicRuleInput) (req *request.
 // API operation CreateTopicRule for usage and error information.
 //
 // Returned Error Types:
-//   * SqlParseException
-//   The Rule-SQL expression can't be parsed correctly.
 //
-//   * InternalException
-//   An unexpected error has occurred.
+//   - SqlParseException
+//     The Rule-SQL expression can't be parsed correctly.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 func (c *IoT) CreateTopicRule(input *CreateTopicRuleInput) (*CreateTopicRuleOutput, error) {
 	req, out := c.CreateTopicRuleRequest(input)
 	return out, req.Send()
@@ -4207,14 +4458,13 @@ const opCreateTopicRuleDestination = "CreateTopicRuleDestination"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateTopicRuleDestinationRequest method.
+//	req, resp := client.CreateTopicRuleDestinationRequest(params)
 //
-//    // Example sending a request using the CreateTopicRuleDestinationRequest method.
-//    req, resp := client.CreateTopicRuleDestinationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) CreateTopicRuleDestinationRequest(input *CreateTopicRuleDestinationInput) (req *request.Request, output *CreateTopicRuleDestinationOutput) {
 	op := &request.Operation{
 		Name:       opCreateTopicRuleDestination,
@@ -4247,22 +4497,22 @@ func (c *IoT) CreateTopicRuleDestinationRequest(input *CreateTopicRuleDestinatio
 // API operation CreateTopicRuleDestination for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 func (c *IoT) CreateTopicRuleDestination(input *CreateTopicRuleDestinationInput) (*CreateTopicRuleDestinationOutput, error) {
 	req, out := c.CreateTopicRuleDestinationRequest(input)
 	return out, req.Send()
@@ -4300,14 +4550,13 @@ const opDeleteAccountAuditConfiguration = "DeleteAccountAuditConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAccountAuditConfigurationRequest method.
+//	req, resp := client.DeleteAccountAuditConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteAccountAuditConfigurationRequest method.
-//    req, resp := client.DeleteAccountAuditConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteAccountAuditConfigurationRequest(input *DeleteAccountAuditConfigurationInput) (req *request.Request, output *DeleteAccountAuditConfigurationOutput) {
 	op := &request.Operation{
 		Name:       opDeleteAccountAuditConfiguration,
@@ -4342,18 +4591,18 @@ func (c *IoT) DeleteAccountAuditConfigurationRequest(input *DeleteAccountAuditCo
 // API operation DeleteAccountAuditConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteAccountAuditConfiguration(input *DeleteAccountAuditConfigurationInput) (*DeleteAccountAuditConfigurationOutput, error) {
 	req, out := c.DeleteAccountAuditConfigurationRequest(input)
 	return out, req.Send()
@@ -4391,14 +4640,13 @@ const opDeleteAuditSuppression = "DeleteAuditSuppression"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAuditSuppressionRequest method.
+//	req, resp := client.DeleteAuditSuppressionRequest(params)
 //
-//    // Example sending a request using the DeleteAuditSuppressionRequest method.
-//    req, resp := client.DeleteAuditSuppressionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteAuditSuppressionRequest(input *DeleteAuditSuppressionInput) (req *request.Request, output *DeleteAuditSuppressionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteAuditSuppression,
@@ -4431,15 +4679,15 @@ func (c *IoT) DeleteAuditSuppressionRequest(input *DeleteAuditSuppressionInput) 
 // API operation DeleteAuditSuppression for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteAuditSuppression(input *DeleteAuditSuppressionInput) (*DeleteAuditSuppressionOutput, error) {
 	req, out := c.DeleteAuditSuppressionRequest(input)
 	return out, req.Send()
@@ -4477,14 +4725,13 @@ const opDeleteAuthorizer = "DeleteAuthorizer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAuthorizerRequest method.
+//	req, resp := client.DeleteAuthorizerRequest(params)
 //
-//    // Example sending a request using the DeleteAuthorizerRequest method.
-//    req, resp := client.DeleteAuthorizerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteAuthorizerRequest(input *DeleteAuthorizerInput) (req *request.Request, output *DeleteAuthorizerOutput) {
 	op := &request.Operation{
 		Name:       opDeleteAuthorizer,
@@ -4517,27 +4764,27 @@ func (c *IoT) DeleteAuthorizerRequest(input *DeleteAuthorizerInput) (req *reques
 // API operation DeleteAuthorizer for usage and error information.
 //
 // Returned Error Types:
-//   * DeleteConflictException
-//   You can't delete the resource because it is attached to one or more resources.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - DeleteConflictException
+//     You can't delete the resource because it is attached to one or more resources.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteAuthorizer(input *DeleteAuthorizerInput) (*DeleteAuthorizerOutput, error) {
 	req, out := c.DeleteAuthorizerRequest(input)
 	return out, req.Send()
@@ -4575,14 +4822,13 @@ const opDeleteBillingGroup = "DeleteBillingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteBillingGroupRequest method.
+//	req, resp := client.DeleteBillingGroupRequest(params)
 //
-//    // Example sending a request using the DeleteBillingGroupRequest method.
-//    req, resp := client.DeleteBillingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteBillingGroupRequest(input *DeleteBillingGroupInput) (req *request.Request, output *DeleteBillingGroupOutput) {
 	op := &request.Operation{
 		Name:       opDeleteBillingGroup,
@@ -4615,19 +4861,19 @@ func (c *IoT) DeleteBillingGroupRequest(input *DeleteBillingGroupInput) (req *re
 // API operation DeleteBillingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteBillingGroup(input *DeleteBillingGroupInput) (*DeleteBillingGroupOutput, error) {
 	req, out := c.DeleteBillingGroupRequest(input)
 	return out, req.Send()
@@ -4665,14 +4911,13 @@ const opDeleteCACertificate = "DeleteCACertificate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCACertificateRequest method.
+//	req, resp := client.DeleteCACertificateRequest(params)
 //
-//    // Example sending a request using the DeleteCACertificateRequest method.
-//    req, resp := client.DeleteCACertificateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteCACertificateRequest(input *DeleteCACertificateInput) (req *request.Request, output *DeleteCACertificateOutput) {
 	op := &request.Operation{
 		Name:       opDeleteCACertificate,
@@ -4705,27 +4950,27 @@ func (c *IoT) DeleteCACertificateRequest(input *DeleteCACertificateInput) (req *
 // API operation DeleteCACertificate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * CertificateStateException
-//   The certificate operation is not allowed.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - CertificateStateException
+//     The certificate operation is not allowed.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) DeleteCACertificate(input *DeleteCACertificateInput) (*DeleteCACertificateOutput, error) {
 	req, out := c.DeleteCACertificateRequest(input)
 	return out, req.Send()
@@ -4763,14 +5008,13 @@ const opDeleteCertificate = "DeleteCertificate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCertificateRequest method.
+//	req, resp := client.DeleteCertificateRequest(params)
 //
-//    // Example sending a request using the DeleteCertificateRequest method.
-//    req, resp := client.DeleteCertificateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteCertificateRequest(input *DeleteCertificateInput) (req *request.Request, output *DeleteCertificateOutput) {
 	op := &request.Operation{
 		Name:       opDeleteCertificate,
@@ -4808,30 +5052,30 @@ func (c *IoT) DeleteCertificateRequest(input *DeleteCertificateInput) (req *requ
 // API operation DeleteCertificate for usage and error information.
 //
 // Returned Error Types:
-//   * CertificateStateException
-//   The certificate operation is not allowed.
 //
-//   * DeleteConflictException
-//   You can't delete the resource because it is attached to one or more resources.
+//   - CertificateStateException
+//     The certificate operation is not allowed.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - DeleteConflictException
+//     You can't delete the resource because it is attached to one or more resources.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) DeleteCertificate(input *DeleteCertificateInput) (*DeleteCertificateOutput, error) {
 	req, out := c.DeleteCertificateRequest(input)
 	return out, req.Send()
@@ -4853,6 +5097,107 @@ func (c *IoT) DeleteCertificateWithContext(ctx aws.Context, input *DeleteCertifi
 	return out, req.Send()
 }
 
+const opDeleteCertificateProvider = "DeleteCertificateProvider"
+
+// DeleteCertificateProviderRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteCertificateProvider operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteCertificateProvider for more information on using the DeleteCertificateProvider
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteCertificateProviderRequest method.
+//	req, resp := client.DeleteCertificateProviderRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) DeleteCertificateProviderRequest(input *DeleteCertificateProviderInput) (req *request.Request, output *DeleteCertificateProviderOutput) {
+	op := &request.Operation{
+		Name:       opDeleteCertificateProvider,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/certificate-providers/{certificateProviderName}",
+	}
+
+	if input == nil {
+		input = &DeleteCertificateProviderInput{}
+	}
+
+	output = &DeleteCertificateProviderOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteCertificateProvider API operation for AWS IoT.
+//
+// Deletes a certificate provider.
+//
+// Requires permission to access the DeleteCertificateProvider (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// action.
+//
+// If you delete the certificate provider resource, the behavior of CreateCertificateFromCsr
+// will resume, and IoT will create certificates signed by IoT from a certificate
+// signing request (CSR).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation DeleteCertificateProvider for usage and error information.
+//
+// Returned Error Types:
+//
+//   - DeleteConflictException
+//     You can't delete the resource because it is attached to one or more resources.
+//
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
+//
+//   - InvalidRequestException
+//     The request is not valid.
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
+//
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
+//
+//   - InternalFailureException
+//     An unexpected error has occurred.
+func (c *IoT) DeleteCertificateProvider(input *DeleteCertificateProviderInput) (*DeleteCertificateProviderOutput, error) {
+	req, out := c.DeleteCertificateProviderRequest(input)
+	return out, req.Send()
+}
+
+// DeleteCertificateProviderWithContext is the same as DeleteCertificateProvider with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteCertificateProvider for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) DeleteCertificateProviderWithContext(ctx aws.Context, input *DeleteCertificateProviderInput, opts ...request.Option) (*DeleteCertificateProviderOutput, error) {
+	req, out := c.DeleteCertificateProviderRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteCustomMetric = "DeleteCustomMetric"
 
 // DeleteCustomMetricRequest generates a "aws/request.Request" representing the
@@ -4869,14 +5214,13 @@ const opDeleteCustomMetric = "DeleteCustomMetric"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCustomMetricRequest method.
+//	req, resp := client.DeleteCustomMetricRequest(params)
 //
-//    // Example sending a request using the DeleteCustomMetricRequest method.
-//    req, resp := client.DeleteCustomMetricRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteCustomMetricRequest(input *DeleteCustomMetricInput) (req *request.Request, output *DeleteCustomMetricOutput) {
 	op := &request.Operation{
 		Name:       opDeleteCustomMetric,
@@ -4914,15 +5258,15 @@ func (c *IoT) DeleteCustomMetricRequest(input *DeleteCustomMetricInput) (req *re
 // API operation DeleteCustomMetric for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteCustomMetric(input *DeleteCustomMetricInput) (*DeleteCustomMetricOutput, error) {
 	req, out := c.DeleteCustomMetricRequest(input)
 	return out, req.Send()
@@ -4960,14 +5304,13 @@ const opDeleteDimension = "DeleteDimension"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDimensionRequest method.
+//	req, resp := client.DeleteDimensionRequest(params)
 //
-//    // Example sending a request using the DeleteDimensionRequest method.
-//    req, resp := client.DeleteDimensionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteDimensionRequest(input *DeleteDimensionInput) (req *request.Request, output *DeleteDimensionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDimension,
@@ -5000,15 +5343,15 @@ func (c *IoT) DeleteDimensionRequest(input *DeleteDimensionInput) (req *request.
 // API operation DeleteDimension for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) DeleteDimension(input *DeleteDimensionInput) (*DeleteDimensionOutput, error) {
 	req, out := c.DeleteDimensionRequest(input)
 	return out, req.Send()
@@ -5046,14 +5389,13 @@ const opDeleteDomainConfiguration = "DeleteDomainConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDomainConfigurationRequest method.
+//	req, resp := client.DeleteDomainConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteDomainConfigurationRequest method.
-//    req, resp := client.DeleteDomainConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteDomainConfigurationRequest(input *DeleteDomainConfigurationInput) (req *request.Request, output *DeleteDomainConfigurationOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDomainConfiguration,
@@ -5086,24 +5428,24 @@ func (c *IoT) DeleteDomainConfigurationRequest(input *DeleteDomainConfigurationI
 // API operation DeleteDomainConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - InvalidRequestException
+//     The request is not valid.
 func (c *IoT) DeleteDomainConfiguration(input *DeleteDomainConfigurationInput) (*DeleteDomainConfigurationOutput, error) {
 	req, out := c.DeleteDomainConfigurationRequest(input)
 	return out, req.Send()
@@ -5141,14 +5483,13 @@ const opDeleteDynamicThingGroup = "DeleteDynamicThingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDynamicThingGroupRequest method.
+//	req, resp := client.DeleteDynamicThingGroupRequest(params)
 //
-//    // Example sending a request using the DeleteDynamicThingGroupRequest method.
-//    req, resp := client.DeleteDynamicThingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteDynamicThingGroupRequest(input *DeleteDynamicThingGroupInput) (req *request.Request, output *DeleteDynamicThingGroupOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDynamicThingGroup,
@@ -5181,19 +5522,19 @@ func (c *IoT) DeleteDynamicThingGroupRequest(input *DeleteDynamicThingGroupInput
 // API operation DeleteDynamicThingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteDynamicThingGroup(input *DeleteDynamicThingGroupInput) (*DeleteDynamicThingGroupOutput, error) {
 	req, out := c.DeleteDynamicThingGroupRequest(input)
 	return out, req.Send()
@@ -5231,14 +5572,13 @@ const opDeleteFleetMetric = "DeleteFleetMetric"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFleetMetricRequest method.
+//	req, resp := client.DeleteFleetMetricRequest(params)
 //
-//    // Example sending a request using the DeleteFleetMetricRequest method.
-//    req, resp := client.DeleteFleetMetricRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteFleetMetricRequest(input *DeleteFleetMetricInput) (req *request.Request, output *DeleteFleetMetricOutput) {
 	op := &request.Operation{
 		Name:       opDeleteFleetMetric,
@@ -5272,25 +5612,25 @@ func (c *IoT) DeleteFleetMetricRequest(input *DeleteFleetMetricInput) (req *requ
 // API operation DeleteFleetMetric for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 func (c *IoT) DeleteFleetMetric(input *DeleteFleetMetricInput) (*DeleteFleetMetricOutput, error) {
 	req, out := c.DeleteFleetMetricRequest(input)
 	return out, req.Send()
@@ -5328,14 +5668,13 @@ const opDeleteJob = "DeleteJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteJobRequest method.
+//	req, resp := client.DeleteJobRequest(params)
 //
-//    // Example sending a request using the DeleteJobRequest method.
-//    req, resp := client.DeleteJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteJobRequest(input *DeleteJobInput) (req *request.Request, output *DeleteJobOutput) {
 	op := &request.Operation{
 		Name:       opDeleteJob,
@@ -5377,26 +5716,26 @@ func (c *IoT) DeleteJobRequest(input *DeleteJobInput) (req *request.Request, out
 // API operation DeleteJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InvalidStateTransitionException
-//   An attempt was made to change to an invalid state, for example by deleting
-//   a job or a job execution which is "IN_PROGRESS" without setting the force
-//   parameter.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidStateTransitionException
+//     An attempt was made to change to an invalid state, for example by deleting
+//     a job or a job execution which is "IN_PROGRESS" without setting the force
+//     parameter.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) DeleteJob(input *DeleteJobInput) (*DeleteJobOutput, error) {
 	req, out := c.DeleteJobRequest(input)
 	return out, req.Send()
@@ -5434,14 +5773,13 @@ const opDeleteJobExecution = "DeleteJobExecution"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteJobExecutionRequest method.
+//	req, resp := client.DeleteJobExecutionRequest(params)
 //
-//    // Example sending a request using the DeleteJobExecutionRequest method.
-//    req, resp := client.DeleteJobExecutionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteJobExecutionRequest(input *DeleteJobExecutionInput) (req *request.Request, output *DeleteJobExecutionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteJobExecution,
@@ -5474,23 +5812,23 @@ func (c *IoT) DeleteJobExecutionRequest(input *DeleteJobExecutionInput) (req *re
 // API operation DeleteJobExecution for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InvalidStateTransitionException
-//   An attempt was made to change to an invalid state, for example by deleting
-//   a job or a job execution which is "IN_PROGRESS" without setting the force
-//   parameter.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidStateTransitionException
+//     An attempt was made to change to an invalid state, for example by deleting
+//     a job or a job execution which is "IN_PROGRESS" without setting the force
+//     parameter.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) DeleteJobExecution(input *DeleteJobExecutionInput) (*DeleteJobExecutionOutput, error) {
 	req, out := c.DeleteJobExecutionRequest(input)
 	return out, req.Send()
@@ -5528,14 +5866,13 @@ const opDeleteJobTemplate = "DeleteJobTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteJobTemplateRequest method.
+//	req, resp := client.DeleteJobTemplateRequest(params)
 //
-//    // Example sending a request using the DeleteJobTemplateRequest method.
-//    req, resp := client.DeleteJobTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteJobTemplateRequest(input *DeleteJobTemplateInput) (req *request.Request, output *DeleteJobTemplateOutput) {
 	op := &request.Operation{
 		Name:       opDeleteJobTemplate,
@@ -5565,18 +5902,18 @@ func (c *IoT) DeleteJobTemplateRequest(input *DeleteJobTemplateInput) (req *requ
 // API operation DeleteJobTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteJobTemplate(input *DeleteJobTemplateInput) (*DeleteJobTemplateOutput, error) {
 	req, out := c.DeleteJobTemplateRequest(input)
 	return out, req.Send()
@@ -5614,14 +5951,13 @@ const opDeleteMitigationAction = "DeleteMitigationAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMitigationActionRequest method.
+//	req, resp := client.DeleteMitigationActionRequest(params)
 //
-//    // Example sending a request using the DeleteMitigationActionRequest method.
-//    req, resp := client.DeleteMitigationActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteMitigationActionRequest(input *DeleteMitigationActionInput) (req *request.Request, output *DeleteMitigationActionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteMitigationAction,
@@ -5654,15 +5990,15 @@ func (c *IoT) DeleteMitigationActionRequest(input *DeleteMitigationActionInput) 
 // API operation DeleteMitigationAction for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteMitigationAction(input *DeleteMitigationActionInput) (*DeleteMitigationActionOutput, error) {
 	req, out := c.DeleteMitigationActionRequest(input)
 	return out, req.Send()
@@ -5700,14 +6036,13 @@ const opDeleteOTAUpdate = "DeleteOTAUpdate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteOTAUpdateRequest method.
+//	req, resp := client.DeleteOTAUpdateRequest(params)
 //
-//    // Example sending a request using the DeleteOTAUpdateRequest method.
-//    req, resp := client.DeleteOTAUpdateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteOTAUpdateRequest(input *DeleteOTAUpdateInput) (req *request.Request, output *DeleteOTAUpdateOutput) {
 	op := &request.Operation{
 		Name:       opDeleteOTAUpdate,
@@ -5740,28 +6075,28 @@ func (c *IoT) DeleteOTAUpdateRequest(input *DeleteOTAUpdateInput) (req *request.
 // API operation DeleteOTAUpdate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 func (c *IoT) DeleteOTAUpdate(input *DeleteOTAUpdateInput) (*DeleteOTAUpdateOutput, error) {
 	req, out := c.DeleteOTAUpdateRequest(input)
 	return out, req.Send()
@@ -5783,6 +6118,180 @@ func (c *IoT) DeleteOTAUpdateWithContext(ctx aws.Context, input *DeleteOTAUpdate
 	return out, req.Send()
 }
 
+const opDeletePackage = "DeletePackage"
+
+// DeletePackageRequest generates a "aws/request.Request" representing the
+// client's request for the DeletePackage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeletePackage for more information on using the DeletePackage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeletePackageRequest method.
+//	req, resp := client.DeletePackageRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) DeletePackageRequest(input *DeletePackageInput) (req *request.Request, output *DeletePackageOutput) {
+	op := &request.Operation{
+		Name:       opDeletePackage,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/packages/{packageName}",
+	}
+
+	if input == nil {
+		input = &DeletePackageInput{}
+	}
+
+	output = &DeletePackageOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeletePackage API operation for AWS IoT.
+//
+// Deletes a specific version from a software package.
+//
+// Note: All package versions must be deleted before deleting the software package.
+//
+// Requires permission to access the DeletePackageVersion (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation DeletePackage for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+//
+//   - ValidationException
+//     The request is not valid.
+func (c *IoT) DeletePackage(input *DeletePackageInput) (*DeletePackageOutput, error) {
+	req, out := c.DeletePackageRequest(input)
+	return out, req.Send()
+}
+
+// DeletePackageWithContext is the same as DeletePackage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeletePackage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) DeletePackageWithContext(ctx aws.Context, input *DeletePackageInput, opts ...request.Option) (*DeletePackageOutput, error) {
+	req, out := c.DeletePackageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeletePackageVersion = "DeletePackageVersion"
+
+// DeletePackageVersionRequest generates a "aws/request.Request" representing the
+// client's request for the DeletePackageVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeletePackageVersion for more information on using the DeletePackageVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeletePackageVersionRequest method.
+//	req, resp := client.DeletePackageVersionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) DeletePackageVersionRequest(input *DeletePackageVersionInput) (req *request.Request, output *DeletePackageVersionOutput) {
+	op := &request.Operation{
+		Name:       opDeletePackageVersion,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/packages/{packageName}/versions/{versionName}",
+	}
+
+	if input == nil {
+		input = &DeletePackageVersionInput{}
+	}
+
+	output = &DeletePackageVersionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeletePackageVersion API operation for AWS IoT.
+//
+// Deletes a specific version from a software package.
+//
+// Note: If a package version is designated as default, you must remove the
+// designation from the software package using the UpdatePackage action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation DeletePackageVersion for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+//
+//   - ValidationException
+//     The request is not valid.
+func (c *IoT) DeletePackageVersion(input *DeletePackageVersionInput) (*DeletePackageVersionOutput, error) {
+	req, out := c.DeletePackageVersionRequest(input)
+	return out, req.Send()
+}
+
+// DeletePackageVersionWithContext is the same as DeletePackageVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeletePackageVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) DeletePackageVersionWithContext(ctx aws.Context, input *DeletePackageVersionInput, opts ...request.Option) (*DeletePackageVersionOutput, error) {
+	req, out := c.DeletePackageVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeletePolicy = "DeletePolicy"
 
 // DeletePolicyRequest generates a "aws/request.Request" representing the
@@ -5799,14 +6308,13 @@ const opDeletePolicy = "DeletePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePolicyRequest method.
+//	req, resp := client.DeletePolicyRequest(params)
 //
-//    // Example sending a request using the DeletePolicyRequest method.
-//    req, resp := client.DeletePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeletePolicyRequest(input *DeletePolicyInput) (req *request.Request, output *DeletePolicyOutput) {
 	op := &request.Operation{
 		Name:       opDeletePolicy,
@@ -5853,27 +6361,27 @@ func (c *IoT) DeletePolicyRequest(input *DeletePolicyInput) (req *request.Reques
 // API operation DeletePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * DeleteConflictException
-//   You can't delete the resource because it is attached to one or more resources.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - DeleteConflictException
+//     You can't delete the resource because it is attached to one or more resources.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeletePolicy(input *DeletePolicyInput) (*DeletePolicyOutput, error) {
 	req, out := c.DeletePolicyRequest(input)
 	return out, req.Send()
@@ -5911,14 +6419,13 @@ const opDeletePolicyVersion = "DeletePolicyVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePolicyVersionRequest method.
+//	req, resp := client.DeletePolicyVersionRequest(params)
 //
-//    // Example sending a request using the DeletePolicyVersionRequest method.
-//    req, resp := client.DeletePolicyVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeletePolicyVersionRequest(input *DeletePolicyVersionInput) (req *request.Request, output *DeletePolicyVersionOutput) {
 	op := &request.Operation{
 		Name:       opDeletePolicyVersion,
@@ -5954,27 +6461,27 @@ func (c *IoT) DeletePolicyVersionRequest(input *DeletePolicyVersionInput) (req *
 // API operation DeletePolicyVersion for usage and error information.
 //
 // Returned Error Types:
-//   * DeleteConflictException
-//   You can't delete the resource because it is attached to one or more resources.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - DeleteConflictException
+//     You can't delete the resource because it is attached to one or more resources.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeletePolicyVersion(input *DeletePolicyVersionInput) (*DeletePolicyVersionOutput, error) {
 	req, out := c.DeletePolicyVersionRequest(input)
 	return out, req.Send()
@@ -6012,14 +6519,13 @@ const opDeleteProvisioningTemplate = "DeleteProvisioningTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProvisioningTemplateRequest method.
+//	req, resp := client.DeleteProvisioningTemplateRequest(params)
 //
-//    // Example sending a request using the DeleteProvisioningTemplateRequest method.
-//    req, resp := client.DeleteProvisioningTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteProvisioningTemplateRequest(input *DeleteProvisioningTemplateInput) (req *request.Request, output *DeleteProvisioningTemplateOutput) {
 	op := &request.Operation{
 		Name:       opDeleteProvisioningTemplate,
@@ -6052,28 +6558,28 @@ func (c *IoT) DeleteProvisioningTemplateRequest(input *DeleteProvisioningTemplat
 // API operation DeleteProvisioningTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * DeleteConflictException
-//   You can't delete the resource because it is attached to one or more resources.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - DeleteConflictException
+//     You can't delete the resource because it is attached to one or more resources.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 //
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 func (c *IoT) DeleteProvisioningTemplate(input *DeleteProvisioningTemplateInput) (*DeleteProvisioningTemplateOutput, error) {
 	req, out := c.DeleteProvisioningTemplateRequest(input)
 	return out, req.Send()
@@ -6111,14 +6617,13 @@ const opDeleteProvisioningTemplateVersion = "DeleteProvisioningTemplateVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProvisioningTemplateVersionRequest method.
+//	req, resp := client.DeleteProvisioningTemplateVersionRequest(params)
 //
-//    // Example sending a request using the DeleteProvisioningTemplateVersionRequest method.
-//    req, resp := client.DeleteProvisioningTemplateVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteProvisioningTemplateVersionRequest(input *DeleteProvisioningTemplateVersionInput) (req *request.Request, output *DeleteProvisioningTemplateVersionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteProvisioningTemplateVersion,
@@ -6151,28 +6656,28 @@ func (c *IoT) DeleteProvisioningTemplateVersionRequest(input *DeleteProvisioning
 // API operation DeleteProvisioningTemplateVersion for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * DeleteConflictException
-//   You can't delete the resource because it is attached to one or more resources.
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 //
+//   - DeleteConflictException
+//     You can't delete the resource because it is attached to one or more resources.
 func (c *IoT) DeleteProvisioningTemplateVersion(input *DeleteProvisioningTemplateVersionInput) (*DeleteProvisioningTemplateVersionOutput, error) {
 	req, out := c.DeleteProvisioningTemplateVersionRequest(input)
 	return out, req.Send()
@@ -6210,14 +6715,13 @@ const opDeleteRegistrationCode = "DeleteRegistrationCode"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRegistrationCodeRequest method.
+//	req, resp := client.DeleteRegistrationCodeRequest(params)
 //
-//    // Example sending a request using the DeleteRegistrationCodeRequest method.
-//    req, resp := client.DeleteRegistrationCodeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteRegistrationCodeRequest(input *DeleteRegistrationCodeInput) (req *request.Request, output *DeleteRegistrationCodeOutput) {
 	op := &request.Operation{
 		Name:       opDeleteRegistrationCode,
@@ -6250,21 +6754,21 @@ func (c *IoT) DeleteRegistrationCodeRequest(input *DeleteRegistrationCodeInput) 
 // API operation DeleteRegistrationCode for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteRegistrationCode(input *DeleteRegistrationCodeInput) (*DeleteRegistrationCodeOutput, error) {
 	req, out := c.DeleteRegistrationCodeRequest(input)
 	return out, req.Send()
@@ -6302,14 +6806,13 @@ const opDeleteRoleAlias = "DeleteRoleAlias"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRoleAliasRequest method.
+//	req, resp := client.DeleteRoleAliasRequest(params)
 //
-//    // Example sending a request using the DeleteRoleAliasRequest method.
-//    req, resp := client.DeleteRoleAliasRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteRoleAliasRequest(input *DeleteRoleAliasInput) (req *request.Request, output *DeleteRoleAliasOutput) {
 	op := &request.Operation{
 		Name:       opDeleteRoleAlias,
@@ -6329,7 +6832,7 @@ func (c *IoT) DeleteRoleAliasRequest(input *DeleteRoleAliasInput) (req *request.
 
 // DeleteRoleAlias API operation for AWS IoT.
 //
-// Deletes a role alias
+// # Deletes a role alias
 //
 // Requires permission to access the DeleteRoleAlias (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
 // action.
@@ -6342,27 +6845,27 @@ func (c *IoT) DeleteRoleAliasRequest(input *DeleteRoleAliasInput) (req *request.
 // API operation DeleteRoleAlias for usage and error information.
 //
 // Returned Error Types:
-//   * DeleteConflictException
-//   You can't delete the resource because it is attached to one or more resources.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - DeleteConflictException
+//     You can't delete the resource because it is attached to one or more resources.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) DeleteRoleAlias(input *DeleteRoleAliasInput) (*DeleteRoleAliasOutput, error) {
 	req, out := c.DeleteRoleAliasRequest(input)
 	return out, req.Send()
@@ -6400,14 +6903,13 @@ const opDeleteScheduledAudit = "DeleteScheduledAudit"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteScheduledAuditRequest method.
+//	req, resp := client.DeleteScheduledAuditRequest(params)
 //
-//    // Example sending a request using the DeleteScheduledAuditRequest method.
-//    req, resp := client.DeleteScheduledAuditRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteScheduledAuditRequest(input *DeleteScheduledAuditInput) (req *request.Request, output *DeleteScheduledAuditOutput) {
 	op := &request.Operation{
 		Name:       opDeleteScheduledAudit,
@@ -6440,18 +6942,18 @@ func (c *IoT) DeleteScheduledAuditRequest(input *DeleteScheduledAuditInput) (req
 // API operation DeleteScheduledAudit for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteScheduledAudit(input *DeleteScheduledAuditInput) (*DeleteScheduledAuditOutput, error) {
 	req, out := c.DeleteScheduledAuditRequest(input)
 	return out, req.Send()
@@ -6489,14 +6991,13 @@ const opDeleteSecurityProfile = "DeleteSecurityProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSecurityProfileRequest method.
+//	req, resp := client.DeleteSecurityProfileRequest(params)
 //
-//    // Example sending a request using the DeleteSecurityProfileRequest method.
-//    req, resp := client.DeleteSecurityProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteSecurityProfileRequest(input *DeleteSecurityProfileInput) (req *request.Request, output *DeleteSecurityProfileOutput) {
 	op := &request.Operation{
 		Name:       opDeleteSecurityProfile,
@@ -6529,19 +7030,19 @@ func (c *IoT) DeleteSecurityProfileRequest(input *DeleteSecurityProfileInput) (r
 // API operation DeleteSecurityProfile for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 func (c *IoT) DeleteSecurityProfile(input *DeleteSecurityProfileInput) (*DeleteSecurityProfileOutput, error) {
 	req, out := c.DeleteSecurityProfileRequest(input)
 	return out, req.Send()
@@ -6579,14 +7080,13 @@ const opDeleteStream = "DeleteStream"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteStreamRequest method.
+//	req, resp := client.DeleteStreamRequest(params)
 //
-//    // Example sending a request using the DeleteStreamRequest method.
-//    req, resp := client.DeleteStreamRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteStreamRequest(input *DeleteStreamInput) (req *request.Request, output *DeleteStreamOutput) {
 	op := &request.Operation{
 		Name:       opDeleteStream,
@@ -6619,27 +7119,27 @@ func (c *IoT) DeleteStreamRequest(input *DeleteStreamInput) (req *request.Reques
 // API operation DeleteStream for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * DeleteConflictException
-//   You can't delete the resource because it is attached to one or more resources.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - DeleteConflictException
+//     You can't delete the resource because it is attached to one or more resources.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteStream(input *DeleteStreamInput) (*DeleteStreamOutput, error) {
 	req, out := c.DeleteStreamRequest(input)
 	return out, req.Send()
@@ -6677,14 +7177,13 @@ const opDeleteThing = "DeleteThing"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteThingRequest method.
+//	req, resp := client.DeleteThingRequest(params)
 //
-//    // Example sending a request using the DeleteThingRequest method.
-//    req, resp := client.DeleteThingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteThingRequest(input *DeleteThingInput) (req *request.Request, output *DeleteThingOutput) {
 	op := &request.Operation{
 		Name:       opDeleteThing,
@@ -6718,28 +7217,28 @@ func (c *IoT) DeleteThingRequest(input *DeleteThingInput) (req *request.Request,
 // API operation DeleteThing for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteThing(input *DeleteThingInput) (*DeleteThingOutput, error) {
 	req, out := c.DeleteThingRequest(input)
 	return out, req.Send()
@@ -6777,14 +7276,13 @@ const opDeleteThingGroup = "DeleteThingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteThingGroupRequest method.
+//	req, resp := client.DeleteThingGroupRequest(params)
 //
-//    // Example sending a request using the DeleteThingGroupRequest method.
-//    req, resp := client.DeleteThingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteThingGroupRequest(input *DeleteThingGroupInput) (req *request.Request, output *DeleteThingGroupOutput) {
 	op := &request.Operation{
 		Name:       opDeleteThingGroup,
@@ -6817,19 +7315,19 @@ func (c *IoT) DeleteThingGroupRequest(input *DeleteThingGroupInput) (req *reques
 // API operation DeleteThingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteThingGroup(input *DeleteThingGroupInput) (*DeleteThingGroupOutput, error) {
 	req, out := c.DeleteThingGroupRequest(input)
 	return out, req.Send()
@@ -6867,14 +7365,13 @@ const opDeleteThingType = "DeleteThingType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteThingTypeRequest method.
+//	req, resp := client.DeleteThingTypeRequest(params)
 //
-//    // Example sending a request using the DeleteThingTypeRequest method.
-//    req, resp := client.DeleteThingTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteThingTypeRequest(input *DeleteThingTypeInput) (req *request.Request, output *DeleteThingTypeOutput) {
 	op := &request.Operation{
 		Name:       opDeleteThingType,
@@ -6911,24 +7408,24 @@ func (c *IoT) DeleteThingTypeRequest(input *DeleteThingTypeInput) (req *request.
 // API operation DeleteThingType for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeleteThingType(input *DeleteThingTypeInput) (*DeleteThingTypeOutput, error) {
 	req, out := c.DeleteThingTypeRequest(input)
 	return out, req.Send()
@@ -6966,14 +7463,13 @@ const opDeleteTopicRule = "DeleteTopicRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteTopicRuleRequest method.
+//	req, resp := client.DeleteTopicRuleRequest(params)
 //
-//    // Example sending a request using the DeleteTopicRuleRequest method.
-//    req, resp := client.DeleteTopicRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteTopicRuleRequest(input *DeleteTopicRuleInput) (req *request.Request, output *DeleteTopicRuleOutput) {
 	op := &request.Operation{
 		Name:       opDeleteTopicRule,
@@ -7006,22 +7502,22 @@ func (c *IoT) DeleteTopicRuleRequest(input *DeleteTopicRuleInput) (req *request.
 // API operation DeleteTopicRule for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 func (c *IoT) DeleteTopicRule(input *DeleteTopicRuleInput) (*DeleteTopicRuleOutput, error) {
 	req, out := c.DeleteTopicRuleRequest(input)
 	return out, req.Send()
@@ -7059,14 +7555,13 @@ const opDeleteTopicRuleDestination = "DeleteTopicRuleDestination"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteTopicRuleDestinationRequest method.
+//	req, resp := client.DeleteTopicRuleDestinationRequest(params)
 //
-//    // Example sending a request using the DeleteTopicRuleDestinationRequest method.
-//    req, resp := client.DeleteTopicRuleDestinationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteTopicRuleDestinationRequest(input *DeleteTopicRuleDestinationInput) (req *request.Request, output *DeleteTopicRuleDestinationOutput) {
 	op := &request.Operation{
 		Name:       opDeleteTopicRuleDestination,
@@ -7099,22 +7594,22 @@ func (c *IoT) DeleteTopicRuleDestinationRequest(input *DeleteTopicRuleDestinatio
 // API operation DeleteTopicRuleDestination for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 func (c *IoT) DeleteTopicRuleDestination(input *DeleteTopicRuleDestinationInput) (*DeleteTopicRuleDestinationOutput, error) {
 	req, out := c.DeleteTopicRuleDestinationRequest(input)
 	return out, req.Send()
@@ -7152,14 +7647,13 @@ const opDeleteV2LoggingLevel = "DeleteV2LoggingLevel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteV2LoggingLevelRequest method.
+//	req, resp := client.DeleteV2LoggingLevelRequest(params)
 //
-//    // Example sending a request using the DeleteV2LoggingLevelRequest method.
-//    req, resp := client.DeleteV2LoggingLevelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeleteV2LoggingLevelRequest(input *DeleteV2LoggingLevelInput) (req *request.Request, output *DeleteV2LoggingLevelOutput) {
 	op := &request.Operation{
 		Name:       opDeleteV2LoggingLevel,
@@ -7192,15 +7686,15 @@ func (c *IoT) DeleteV2LoggingLevelRequest(input *DeleteV2LoggingLevelInput) (req
 // API operation DeleteV2LoggingLevel for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) DeleteV2LoggingLevel(input *DeleteV2LoggingLevelInput) (*DeleteV2LoggingLevelOutput, error) {
 	req, out := c.DeleteV2LoggingLevelRequest(input)
 	return out, req.Send()
@@ -7238,14 +7732,13 @@ const opDeprecateThingType = "DeprecateThingType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeprecateThingTypeRequest method.
+//	req, resp := client.DeprecateThingTypeRequest(params)
 //
-//    // Example sending a request using the DeprecateThingTypeRequest method.
-//    req, resp := client.DeprecateThingTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DeprecateThingTypeRequest(input *DeprecateThingTypeInput) (req *request.Request, output *DeprecateThingTypeOutput) {
 	op := &request.Operation{
 		Name:       opDeprecateThingType,
@@ -7279,24 +7772,24 @@ func (c *IoT) DeprecateThingTypeRequest(input *DeprecateThingTypeInput) (req *re
 // API operation DeprecateThingType for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DeprecateThingType(input *DeprecateThingTypeInput) (*DeprecateThingTypeOutput, error) {
 	req, out := c.DeprecateThingTypeRequest(input)
 	return out, req.Send()
@@ -7334,14 +7827,13 @@ const opDescribeAccountAuditConfiguration = "DescribeAccountAuditConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeAccountAuditConfigurationRequest method.
+//	req, resp := client.DescribeAccountAuditConfigurationRequest(params)
 //
-//    // Example sending a request using the DescribeAccountAuditConfigurationRequest method.
-//    req, resp := client.DescribeAccountAuditConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeAccountAuditConfigurationRequest(input *DescribeAccountAuditConfigurationInput) (req *request.Request, output *DescribeAccountAuditConfigurationOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAccountAuditConfiguration,
@@ -7375,12 +7867,12 @@ func (c *IoT) DescribeAccountAuditConfigurationRequest(input *DescribeAccountAud
 // API operation DescribeAccountAuditConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The rate exceeds the limit.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeAccountAuditConfiguration(input *DescribeAccountAuditConfigurationInput) (*DescribeAccountAuditConfigurationOutput, error) {
 	req, out := c.DescribeAccountAuditConfigurationRequest(input)
 	return out, req.Send()
@@ -7418,14 +7910,13 @@ const opDescribeAuditFinding = "DescribeAuditFinding"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeAuditFindingRequest method.
+//	req, resp := client.DescribeAuditFindingRequest(params)
 //
-//    // Example sending a request using the DescribeAuditFindingRequest method.
-//    req, resp := client.DescribeAuditFindingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeAuditFindingRequest(input *DescribeAuditFindingInput) (req *request.Request, output *DescribeAuditFindingOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAuditFinding,
@@ -7459,18 +7950,18 @@ func (c *IoT) DescribeAuditFindingRequest(input *DescribeAuditFindingInput) (req
 // API operation DescribeAuditFinding for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeAuditFinding(input *DescribeAuditFindingInput) (*DescribeAuditFindingOutput, error) {
 	req, out := c.DescribeAuditFindingRequest(input)
 	return out, req.Send()
@@ -7508,14 +7999,13 @@ const opDescribeAuditMitigationActionsTask = "DescribeAuditMitigationActionsTask
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeAuditMitigationActionsTaskRequest method.
+//	req, resp := client.DescribeAuditMitigationActionsTaskRequest(params)
 //
-//    // Example sending a request using the DescribeAuditMitigationActionsTaskRequest method.
-//    req, resp := client.DescribeAuditMitigationActionsTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeAuditMitigationActionsTaskRequest(input *DescribeAuditMitigationActionsTaskInput) (req *request.Request, output *DescribeAuditMitigationActionsTaskOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAuditMitigationActionsTask,
@@ -7547,18 +8037,18 @@ func (c *IoT) DescribeAuditMitigationActionsTaskRequest(input *DescribeAuditMiti
 // API operation DescribeAuditMitigationActionsTask for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeAuditMitigationActionsTask(input *DescribeAuditMitigationActionsTaskInput) (*DescribeAuditMitigationActionsTaskOutput, error) {
 	req, out := c.DescribeAuditMitigationActionsTaskRequest(input)
 	return out, req.Send()
@@ -7596,14 +8086,13 @@ const opDescribeAuditSuppression = "DescribeAuditSuppression"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeAuditSuppressionRequest method.
+//	req, resp := client.DescribeAuditSuppressionRequest(params)
 //
-//    // Example sending a request using the DescribeAuditSuppressionRequest method.
-//    req, resp := client.DescribeAuditSuppressionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeAuditSuppressionRequest(input *DescribeAuditSuppressionInput) (req *request.Request, output *DescribeAuditSuppressionOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAuditSuppression,
@@ -7632,18 +8121,18 @@ func (c *IoT) DescribeAuditSuppressionRequest(input *DescribeAuditSuppressionInp
 // API operation DescribeAuditSuppression for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeAuditSuppression(input *DescribeAuditSuppressionInput) (*DescribeAuditSuppressionOutput, error) {
 	req, out := c.DescribeAuditSuppressionRequest(input)
 	return out, req.Send()
@@ -7681,14 +8170,13 @@ const opDescribeAuditTask = "DescribeAuditTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeAuditTaskRequest method.
+//	req, resp := client.DescribeAuditTaskRequest(params)
 //
-//    // Example sending a request using the DescribeAuditTaskRequest method.
-//    req, resp := client.DescribeAuditTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeAuditTaskRequest(input *DescribeAuditTaskInput) (req *request.Request, output *DescribeAuditTaskOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAuditTask,
@@ -7720,18 +8208,18 @@ func (c *IoT) DescribeAuditTaskRequest(input *DescribeAuditTaskInput) (req *requ
 // API operation DescribeAuditTask for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeAuditTask(input *DescribeAuditTaskInput) (*DescribeAuditTaskOutput, error) {
 	req, out := c.DescribeAuditTaskRequest(input)
 	return out, req.Send()
@@ -7769,14 +8257,13 @@ const opDescribeAuthorizer = "DescribeAuthorizer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeAuthorizerRequest method.
+//	req, resp := client.DescribeAuthorizerRequest(params)
 //
-//    // Example sending a request using the DescribeAuthorizerRequest method.
-//    req, resp := client.DescribeAuthorizerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeAuthorizerRequest(input *DescribeAuthorizerInput) (req *request.Request, output *DescribeAuthorizerOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAuthorizer,
@@ -7808,24 +8295,24 @@ func (c *IoT) DescribeAuthorizerRequest(input *DescribeAuthorizerInput) (req *re
 // API operation DescribeAuthorizer for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeAuthorizer(input *DescribeAuthorizerInput) (*DescribeAuthorizerOutput, error) {
 	req, out := c.DescribeAuthorizerRequest(input)
 	return out, req.Send()
@@ -7863,14 +8350,13 @@ const opDescribeBillingGroup = "DescribeBillingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeBillingGroupRequest method.
+//	req, resp := client.DescribeBillingGroupRequest(params)
 //
-//    // Example sending a request using the DescribeBillingGroupRequest method.
-//    req, resp := client.DescribeBillingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeBillingGroupRequest(input *DescribeBillingGroupInput) (req *request.Request, output *DescribeBillingGroupOutput) {
 	op := &request.Operation{
 		Name:       opDescribeBillingGroup,
@@ -7902,18 +8388,18 @@ func (c *IoT) DescribeBillingGroupRequest(input *DescribeBillingGroupInput) (req
 // API operation DescribeBillingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) DescribeBillingGroup(input *DescribeBillingGroupInput) (*DescribeBillingGroupOutput, error) {
 	req, out := c.DescribeBillingGroupRequest(input)
 	return out, req.Send()
@@ -7951,14 +8437,13 @@ const opDescribeCACertificate = "DescribeCACertificate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeCACertificateRequest method.
+//	req, resp := client.DescribeCACertificateRequest(params)
 //
-//    // Example sending a request using the DescribeCACertificateRequest method.
-//    req, resp := client.DescribeCACertificateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeCACertificateRequest(input *DescribeCACertificateInput) (req *request.Request, output *DescribeCACertificateOutput) {
 	op := &request.Operation{
 		Name:       opDescribeCACertificate,
@@ -7990,24 +8475,24 @@ func (c *IoT) DescribeCACertificateRequest(input *DescribeCACertificateInput) (r
 // API operation DescribeCACertificate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) DescribeCACertificate(input *DescribeCACertificateInput) (*DescribeCACertificateOutput, error) {
 	req, out := c.DescribeCACertificateRequest(input)
 	return out, req.Send()
@@ -8045,14 +8530,13 @@ const opDescribeCertificate = "DescribeCertificate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeCertificateRequest method.
+//	req, resp := client.DescribeCertificateRequest(params)
 //
-//    // Example sending a request using the DescribeCertificateRequest method.
-//    req, resp := client.DescribeCertificateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeCertificateRequest(input *DescribeCertificateInput) (req *request.Request, output *DescribeCertificateOutput) {
 	op := &request.Operation{
 		Name:       opDescribeCertificate,
@@ -8084,24 +8568,24 @@ func (c *IoT) DescribeCertificateRequest(input *DescribeCertificateInput) (req *
 // API operation DescribeCertificate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) DescribeCertificate(input *DescribeCertificateInput) (*DescribeCertificateOutput, error) {
 	req, out := c.DescribeCertificateRequest(input)
 	return out, req.Send()
@@ -8123,6 +8607,99 @@ func (c *IoT) DescribeCertificateWithContext(ctx aws.Context, input *DescribeCer
 	return out, req.Send()
 }
 
+const opDescribeCertificateProvider = "DescribeCertificateProvider"
+
+// DescribeCertificateProviderRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeCertificateProvider operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeCertificateProvider for more information on using the DescribeCertificateProvider
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DescribeCertificateProviderRequest method.
+//	req, resp := client.DescribeCertificateProviderRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) DescribeCertificateProviderRequest(input *DescribeCertificateProviderInput) (req *request.Request, output *DescribeCertificateProviderOutput) {
+	op := &request.Operation{
+		Name:       opDescribeCertificateProvider,
+		HTTPMethod: "GET",
+		HTTPPath:   "/certificate-providers/{certificateProviderName}",
+	}
+
+	if input == nil {
+		input = &DescribeCertificateProviderInput{}
+	}
+
+	output = &DescribeCertificateProviderOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeCertificateProvider API operation for AWS IoT.
+//
+// Describes a certificate provider.
+//
+// Requires permission to access the DescribeCertificateProvider (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation DescribeCertificateProvider for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
+//
+//   - InvalidRequestException
+//     The request is not valid.
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
+//
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
+//
+//   - InternalFailureException
+//     An unexpected error has occurred.
+func (c *IoT) DescribeCertificateProvider(input *DescribeCertificateProviderInput) (*DescribeCertificateProviderOutput, error) {
+	req, out := c.DescribeCertificateProviderRequest(input)
+	return out, req.Send()
+}
+
+// DescribeCertificateProviderWithContext is the same as DescribeCertificateProvider with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeCertificateProvider for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) DescribeCertificateProviderWithContext(ctx aws.Context, input *DescribeCertificateProviderInput, opts ...request.Option) (*DescribeCertificateProviderOutput, error) {
+	req, out := c.DescribeCertificateProviderRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeCustomMetric = "DescribeCustomMetric"
 
 // DescribeCustomMetricRequest generates a "aws/request.Request" representing the
@@ -8139,14 +8716,13 @@ const opDescribeCustomMetric = "DescribeCustomMetric"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeCustomMetricRequest method.
+//	req, resp := client.DescribeCustomMetricRequest(params)
 //
-//    // Example sending a request using the DescribeCustomMetricRequest method.
-//    req, resp := client.DescribeCustomMetricRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeCustomMetricRequest(input *DescribeCustomMetricInput) (req *request.Request, output *DescribeCustomMetricOutput) {
 	op := &request.Operation{
 		Name:       opDescribeCustomMetric,
@@ -8178,18 +8754,18 @@ func (c *IoT) DescribeCustomMetricRequest(input *DescribeCustomMetricInput) (req
 // API operation DescribeCustomMetric for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeCustomMetric(input *DescribeCustomMetricInput) (*DescribeCustomMetricOutput, error) {
 	req, out := c.DescribeCustomMetricRequest(input)
 	return out, req.Send()
@@ -8227,14 +8803,13 @@ const opDescribeDefaultAuthorizer = "DescribeDefaultAuthorizer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeDefaultAuthorizerRequest method.
+//	req, resp := client.DescribeDefaultAuthorizerRequest(params)
 //
-//    // Example sending a request using the DescribeDefaultAuthorizerRequest method.
-//    req, resp := client.DescribeDefaultAuthorizerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeDefaultAuthorizerRequest(input *DescribeDefaultAuthorizerInput) (req *request.Request, output *DescribeDefaultAuthorizerOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDefaultAuthorizer,
@@ -8266,24 +8841,24 @@ func (c *IoT) DescribeDefaultAuthorizerRequest(input *DescribeDefaultAuthorizerI
 // API operation DescribeDefaultAuthorizer for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeDefaultAuthorizer(input *DescribeDefaultAuthorizerInput) (*DescribeDefaultAuthorizerOutput, error) {
 	req, out := c.DescribeDefaultAuthorizerRequest(input)
 	return out, req.Send()
@@ -8321,14 +8896,13 @@ const opDescribeDetectMitigationActionsTask = "DescribeDetectMitigationActionsTa
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeDetectMitigationActionsTaskRequest method.
+//	req, resp := client.DescribeDetectMitigationActionsTaskRequest(params)
 //
-//    // Example sending a request using the DescribeDetectMitigationActionsTaskRequest method.
-//    req, resp := client.DescribeDetectMitigationActionsTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeDetectMitigationActionsTaskRequest(input *DescribeDetectMitigationActionsTaskInput) (req *request.Request, output *DescribeDetectMitigationActionsTaskOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDetectMitigationActionsTask,
@@ -8360,18 +8934,18 @@ func (c *IoT) DescribeDetectMitigationActionsTaskRequest(input *DescribeDetectMi
 // API operation DescribeDetectMitigationActionsTask for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeDetectMitigationActionsTask(input *DescribeDetectMitigationActionsTaskInput) (*DescribeDetectMitigationActionsTaskOutput, error) {
 	req, out := c.DescribeDetectMitigationActionsTaskRequest(input)
 	return out, req.Send()
@@ -8409,14 +8983,13 @@ const opDescribeDimension = "DescribeDimension"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeDimensionRequest method.
+//	req, resp := client.DescribeDimensionRequest(params)
 //
-//    // Example sending a request using the DescribeDimensionRequest method.
-//    req, resp := client.DescribeDimensionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeDimensionRequest(input *DescribeDimensionInput) (req *request.Request, output *DescribeDimensionOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDimension,
@@ -8449,18 +9022,18 @@ func (c *IoT) DescribeDimensionRequest(input *DescribeDimensionInput) (req *requ
 // API operation DescribeDimension for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) DescribeDimension(input *DescribeDimensionInput) (*DescribeDimensionOutput, error) {
 	req, out := c.DescribeDimensionRequest(input)
 	return out, req.Send()
@@ -8498,14 +9071,13 @@ const opDescribeDomainConfiguration = "DescribeDomainConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeDomainConfigurationRequest method.
+//	req, resp := client.DescribeDomainConfigurationRequest(params)
 //
-//    // Example sending a request using the DescribeDomainConfigurationRequest method.
-//    req, resp := client.DescribeDomainConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeDomainConfigurationRequest(input *DescribeDomainConfigurationInput) (req *request.Request, output *DescribeDomainConfigurationOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDomainConfiguration,
@@ -8537,24 +9109,24 @@ func (c *IoT) DescribeDomainConfigurationRequest(input *DescribeDomainConfigurat
 // API operation DescribeDomainConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeDomainConfiguration(input *DescribeDomainConfigurationInput) (*DescribeDomainConfigurationOutput, error) {
 	req, out := c.DescribeDomainConfigurationRequest(input)
 	return out, req.Send()
@@ -8592,14 +9164,13 @@ const opDescribeEndpoint = "DescribeEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeEndpointRequest method.
+//	req, resp := client.DescribeEndpointRequest(params)
 //
-//    // Example sending a request using the DescribeEndpointRequest method.
-//    req, resp := client.DescribeEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeEndpointRequest(input *DescribeEndpointInput) (req *request.Request, output *DescribeEndpointOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEndpoint,
@@ -8618,8 +9189,11 @@ func (c *IoT) DescribeEndpointRequest(input *DescribeEndpointInput) (req *reques
 
 // DescribeEndpoint API operation for AWS IoT.
 //
-// Returns a unique endpoint specific to the Amazon Web Services account making
-// the call.
+// Returns or creates a unique endpoint specific to the Amazon Web Services
+// account making the call.
+//
+// The first time DescribeEndpoint is called, an endpoint is created. All subsequent
+// calls to DescribeEndpoint return the same endpoint.
 //
 // Requires permission to access the DescribeEndpoint (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
 // action.
@@ -8632,18 +9206,18 @@ func (c *IoT) DescribeEndpointRequest(input *DescribeEndpointInput) (req *reques
 // API operation DescribeEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) DescribeEndpoint(input *DescribeEndpointInput) (*DescribeEndpointOutput, error) {
 	req, out := c.DescribeEndpointRequest(input)
 	return out, req.Send()
@@ -8681,14 +9255,13 @@ const opDescribeEventConfigurations = "DescribeEventConfigurations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeEventConfigurationsRequest method.
+//	req, resp := client.DescribeEventConfigurationsRequest(params)
 //
-//    // Example sending a request using the DescribeEventConfigurationsRequest method.
-//    req, resp := client.DescribeEventConfigurationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeEventConfigurationsRequest(input *DescribeEventConfigurationsInput) (req *request.Request, output *DescribeEventConfigurationsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEventConfigurations,
@@ -8720,12 +9293,12 @@ func (c *IoT) DescribeEventConfigurationsRequest(input *DescribeEventConfigurati
 // API operation DescribeEventConfigurations for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) DescribeEventConfigurations(input *DescribeEventConfigurationsInput) (*DescribeEventConfigurationsOutput, error) {
 	req, out := c.DescribeEventConfigurationsRequest(input)
 	return out, req.Send()
@@ -8763,14 +9336,13 @@ const opDescribeFleetMetric = "DescribeFleetMetric"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeFleetMetricRequest method.
+//	req, resp := client.DescribeFleetMetricRequest(params)
 //
-//    // Example sending a request using the DescribeFleetMetricRequest method.
-//    req, resp := client.DescribeFleetMetricRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeFleetMetricRequest(input *DescribeFleetMetricInput) (req *request.Request, output *DescribeFleetMetricOutput) {
 	op := &request.Operation{
 		Name:       opDescribeFleetMetric,
@@ -8802,24 +9374,24 @@ func (c *IoT) DescribeFleetMetricRequest(input *DescribeFleetMetricInput) (req *
 // API operation DescribeFleetMetric for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) DescribeFleetMetric(input *DescribeFleetMetricInput) (*DescribeFleetMetricOutput, error) {
 	req, out := c.DescribeFleetMetricRequest(input)
 	return out, req.Send()
@@ -8857,14 +9429,13 @@ const opDescribeIndex = "DescribeIndex"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeIndexRequest method.
+//	req, resp := client.DescribeIndexRequest(params)
 //
-//    // Example sending a request using the DescribeIndexRequest method.
-//    req, resp := client.DescribeIndexRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeIndexRequest(input *DescribeIndexInput) (req *request.Request, output *DescribeIndexOutput) {
 	op := &request.Operation{
 		Name:       opDescribeIndex,
@@ -8896,24 +9467,24 @@ func (c *IoT) DescribeIndexRequest(input *DescribeIndexInput) (req *request.Requ
 // API operation DescribeIndex for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) DescribeIndex(input *DescribeIndexInput) (*DescribeIndexOutput, error) {
 	req, out := c.DescribeIndexRequest(input)
 	return out, req.Send()
@@ -8951,14 +9522,13 @@ const opDescribeJob = "DescribeJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeJobRequest method.
+//	req, resp := client.DescribeJobRequest(params)
 //
-//    // Example sending a request using the DescribeJobRequest method.
-//    req, resp := client.DescribeJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeJobRequest(input *DescribeJobInput) (req *request.Request, output *DescribeJobOutput) {
 	op := &request.Operation{
 		Name:       opDescribeJob,
@@ -8990,18 +9560,18 @@ func (c *IoT) DescribeJobRequest(input *DescribeJobInput) (req *request.Request,
 // API operation DescribeJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) DescribeJob(input *DescribeJobInput) (*DescribeJobOutput, error) {
 	req, out := c.DescribeJobRequest(input)
 	return out, req.Send()
@@ -9039,14 +9609,13 @@ const opDescribeJobExecution = "DescribeJobExecution"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeJobExecutionRequest method.
+//	req, resp := client.DescribeJobExecutionRequest(params)
 //
-//    // Example sending a request using the DescribeJobExecutionRequest method.
-//    req, resp := client.DescribeJobExecutionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeJobExecutionRequest(input *DescribeJobExecutionInput) (req *request.Request, output *DescribeJobExecutionOutput) {
 	op := &request.Operation{
 		Name:       opDescribeJobExecution,
@@ -9078,18 +9647,18 @@ func (c *IoT) DescribeJobExecutionRequest(input *DescribeJobExecutionInput) (req
 // API operation DescribeJobExecution for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) DescribeJobExecution(input *DescribeJobExecutionInput) (*DescribeJobExecutionOutput, error) {
 	req, out := c.DescribeJobExecutionRequest(input)
 	return out, req.Send()
@@ -9127,14 +9696,13 @@ const opDescribeJobTemplate = "DescribeJobTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeJobTemplateRequest method.
+//	req, resp := client.DescribeJobTemplateRequest(params)
 //
-//    // Example sending a request using the DescribeJobTemplateRequest method.
-//    req, resp := client.DescribeJobTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeJobTemplateRequest(input *DescribeJobTemplateInput) (req *request.Request, output *DescribeJobTemplateOutput) {
 	op := &request.Operation{
 		Name:       opDescribeJobTemplate,
@@ -9163,18 +9731,18 @@ func (c *IoT) DescribeJobTemplateRequest(input *DescribeJobTemplateInput) (req *
 // API operation DescribeJobTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeJobTemplate(input *DescribeJobTemplateInput) (*DescribeJobTemplateOutput, error) {
 	req, out := c.DescribeJobTemplateRequest(input)
 	return out, req.Send()
@@ -9212,14 +9780,13 @@ const opDescribeManagedJobTemplate = "DescribeManagedJobTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeManagedJobTemplateRequest method.
+//	req, resp := client.DescribeManagedJobTemplateRequest(params)
 //
-//    // Example sending a request using the DescribeManagedJobTemplateRequest method.
-//    req, resp := client.DescribeManagedJobTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeManagedJobTemplateRequest(input *DescribeManagedJobTemplateInput) (req *request.Request, output *DescribeManagedJobTemplateOutput) {
 	op := &request.Operation{
 		Name:       opDescribeManagedJobTemplate,
@@ -9248,19 +9815,19 @@ func (c *IoT) DescribeManagedJobTemplateRequest(input *DescribeManagedJobTemplat
 // API operation DescribeManagedJobTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   Internal error from the service that indicates an unexpected error or that
-//   the service is unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
 func (c *IoT) DescribeManagedJobTemplate(input *DescribeManagedJobTemplateInput) (*DescribeManagedJobTemplateOutput, error) {
 	req, out := c.DescribeManagedJobTemplateRequest(input)
 	return out, req.Send()
@@ -9298,14 +9865,13 @@ const opDescribeMitigationAction = "DescribeMitigationAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeMitigationActionRequest method.
+//	req, resp := client.DescribeMitigationActionRequest(params)
 //
-//    // Example sending a request using the DescribeMitigationActionRequest method.
-//    req, resp := client.DescribeMitigationActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeMitigationActionRequest(input *DescribeMitigationActionInput) (req *request.Request, output *DescribeMitigationActionOutput) {
 	op := &request.Operation{
 		Name:       opDescribeMitigationAction,
@@ -9337,18 +9903,18 @@ func (c *IoT) DescribeMitigationActionRequest(input *DescribeMitigationActionInp
 // API operation DescribeMitigationAction for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeMitigationAction(input *DescribeMitigationActionInput) (*DescribeMitigationActionOutput, error) {
 	req, out := c.DescribeMitigationActionRequest(input)
 	return out, req.Send()
@@ -9386,14 +9952,13 @@ const opDescribeProvisioningTemplate = "DescribeProvisioningTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProvisioningTemplateRequest method.
+//	req, resp := client.DescribeProvisioningTemplateRequest(params)
 //
-//    // Example sending a request using the DescribeProvisioningTemplateRequest method.
-//    req, resp := client.DescribeProvisioningTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeProvisioningTemplateRequest(input *DescribeProvisioningTemplateInput) (req *request.Request, output *DescribeProvisioningTemplateOutput) {
 	op := &request.Operation{
 		Name:       opDescribeProvisioningTemplate,
@@ -9425,21 +9990,21 @@ func (c *IoT) DescribeProvisioningTemplateRequest(input *DescribeProvisioningTem
 // API operation DescribeProvisioningTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 func (c *IoT) DescribeProvisioningTemplate(input *DescribeProvisioningTemplateInput) (*DescribeProvisioningTemplateOutput, error) {
 	req, out := c.DescribeProvisioningTemplateRequest(input)
 	return out, req.Send()
@@ -9477,14 +10042,13 @@ const opDescribeProvisioningTemplateVersion = "DescribeProvisioningTemplateVersi
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProvisioningTemplateVersionRequest method.
+//	req, resp := client.DescribeProvisioningTemplateVersionRequest(params)
 //
-//    // Example sending a request using the DescribeProvisioningTemplateVersionRequest method.
-//    req, resp := client.DescribeProvisioningTemplateVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeProvisioningTemplateVersionRequest(input *DescribeProvisioningTemplateVersionInput) (req *request.Request, output *DescribeProvisioningTemplateVersionOutput) {
 	op := &request.Operation{
 		Name:       opDescribeProvisioningTemplateVersion,
@@ -9516,21 +10080,21 @@ func (c *IoT) DescribeProvisioningTemplateVersionRequest(input *DescribeProvisio
 // API operation DescribeProvisioningTemplateVersion for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 func (c *IoT) DescribeProvisioningTemplateVersion(input *DescribeProvisioningTemplateVersionInput) (*DescribeProvisioningTemplateVersionOutput, error) {
 	req, out := c.DescribeProvisioningTemplateVersionRequest(input)
 	return out, req.Send()
@@ -9568,14 +10132,13 @@ const opDescribeRoleAlias = "DescribeRoleAlias"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeRoleAliasRequest method.
+//	req, resp := client.DescribeRoleAliasRequest(params)
 //
-//    // Example sending a request using the DescribeRoleAliasRequest method.
-//    req, resp := client.DescribeRoleAliasRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeRoleAliasRequest(input *DescribeRoleAliasInput) (req *request.Request, output *DescribeRoleAliasOutput) {
 	op := &request.Operation{
 		Name:       opDescribeRoleAlias,
@@ -9607,24 +10170,24 @@ func (c *IoT) DescribeRoleAliasRequest(input *DescribeRoleAliasInput) (req *requ
 // API operation DescribeRoleAlias for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) DescribeRoleAlias(input *DescribeRoleAliasInput) (*DescribeRoleAliasOutput, error) {
 	req, out := c.DescribeRoleAliasRequest(input)
 	return out, req.Send()
@@ -9662,14 +10225,13 @@ const opDescribeScheduledAudit = "DescribeScheduledAudit"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeScheduledAuditRequest method.
+//	req, resp := client.DescribeScheduledAuditRequest(params)
 //
-//    // Example sending a request using the DescribeScheduledAuditRequest method.
-//    req, resp := client.DescribeScheduledAuditRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeScheduledAuditRequest(input *DescribeScheduledAuditInput) (req *request.Request, output *DescribeScheduledAuditOutput) {
 	op := &request.Operation{
 		Name:       opDescribeScheduledAudit,
@@ -9701,18 +10263,18 @@ func (c *IoT) DescribeScheduledAuditRequest(input *DescribeScheduledAuditInput) 
 // API operation DescribeScheduledAudit for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeScheduledAudit(input *DescribeScheduledAuditInput) (*DescribeScheduledAuditOutput, error) {
 	req, out := c.DescribeScheduledAuditRequest(input)
 	return out, req.Send()
@@ -9750,14 +10312,13 @@ const opDescribeSecurityProfile = "DescribeSecurityProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeSecurityProfileRequest method.
+//	req, resp := client.DescribeSecurityProfileRequest(params)
 //
-//    // Example sending a request using the DescribeSecurityProfileRequest method.
-//    req, resp := client.DescribeSecurityProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeSecurityProfileRequest(input *DescribeSecurityProfileInput) (req *request.Request, output *DescribeSecurityProfileOutput) {
 	op := &request.Operation{
 		Name:       opDescribeSecurityProfile,
@@ -9789,18 +10350,18 @@ func (c *IoT) DescribeSecurityProfileRequest(input *DescribeSecurityProfileInput
 // API operation DescribeSecurityProfile for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeSecurityProfile(input *DescribeSecurityProfileInput) (*DescribeSecurityProfileOutput, error) {
 	req, out := c.DescribeSecurityProfileRequest(input)
 	return out, req.Send()
@@ -9838,14 +10399,13 @@ const opDescribeStream = "DescribeStream"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeStreamRequest method.
+//	req, resp := client.DescribeStreamRequest(params)
 //
-//    // Example sending a request using the DescribeStreamRequest method.
-//    req, resp := client.DescribeStreamRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeStreamRequest(input *DescribeStreamInput) (req *request.Request, output *DescribeStreamOutput) {
 	op := &request.Operation{
 		Name:       opDescribeStream,
@@ -9877,24 +10437,24 @@ func (c *IoT) DescribeStreamRequest(input *DescribeStreamInput) (req *request.Re
 // API operation DescribeStream for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeStream(input *DescribeStreamInput) (*DescribeStreamOutput, error) {
 	req, out := c.DescribeStreamRequest(input)
 	return out, req.Send()
@@ -9932,14 +10492,13 @@ const opDescribeThing = "DescribeThing"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeThingRequest method.
+//	req, resp := client.DescribeThingRequest(params)
 //
-//    // Example sending a request using the DescribeThingRequest method.
-//    req, resp := client.DescribeThingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeThingRequest(input *DescribeThingInput) (req *request.Request, output *DescribeThingOutput) {
 	op := &request.Operation{
 		Name:       opDescribeThing,
@@ -9971,24 +10530,24 @@ func (c *IoT) DescribeThingRequest(input *DescribeThingInput) (req *request.Requ
 // API operation DescribeThing for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeThing(input *DescribeThingInput) (*DescribeThingOutput, error) {
 	req, out := c.DescribeThingRequest(input)
 	return out, req.Send()
@@ -10026,14 +10585,13 @@ const opDescribeThingGroup = "DescribeThingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeThingGroupRequest method.
+//	req, resp := client.DescribeThingGroupRequest(params)
 //
-//    // Example sending a request using the DescribeThingGroupRequest method.
-//    req, resp := client.DescribeThingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeThingGroupRequest(input *DescribeThingGroupInput) (req *request.Request, output *DescribeThingGroupOutput) {
 	op := &request.Operation{
 		Name:       opDescribeThingGroup,
@@ -10065,18 +10623,18 @@ func (c *IoT) DescribeThingGroupRequest(input *DescribeThingGroupInput) (req *re
 // API operation DescribeThingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) DescribeThingGroup(input *DescribeThingGroupInput) (*DescribeThingGroupOutput, error) {
 	req, out := c.DescribeThingGroupRequest(input)
 	return out, req.Send()
@@ -10114,14 +10672,13 @@ const opDescribeThingRegistrationTask = "DescribeThingRegistrationTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeThingRegistrationTaskRequest method.
+//	req, resp := client.DescribeThingRegistrationTaskRequest(params)
 //
-//    // Example sending a request using the DescribeThingRegistrationTaskRequest method.
-//    req, resp := client.DescribeThingRegistrationTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeThingRegistrationTaskRequest(input *DescribeThingRegistrationTaskInput) (req *request.Request, output *DescribeThingRegistrationTaskOutput) {
 	op := &request.Operation{
 		Name:       opDescribeThingRegistrationTask,
@@ -10153,21 +10710,21 @@ func (c *IoT) DescribeThingRegistrationTaskRequest(input *DescribeThingRegistrat
 // API operation DescribeThingRegistrationTask for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) DescribeThingRegistrationTask(input *DescribeThingRegistrationTaskInput) (*DescribeThingRegistrationTaskOutput, error) {
 	req, out := c.DescribeThingRegistrationTaskRequest(input)
 	return out, req.Send()
@@ -10205,14 +10762,13 @@ const opDescribeThingType = "DescribeThingType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeThingTypeRequest method.
+//	req, resp := client.DescribeThingTypeRequest(params)
 //
-//    // Example sending a request using the DescribeThingTypeRequest method.
-//    req, resp := client.DescribeThingTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DescribeThingTypeRequest(input *DescribeThingTypeInput) (req *request.Request, output *DescribeThingTypeOutput) {
 	op := &request.Operation{
 		Name:       opDescribeThingType,
@@ -10244,24 +10800,24 @@ func (c *IoT) DescribeThingTypeRequest(input *DescribeThingTypeInput) (req *requ
 // API operation DescribeThingType for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DescribeThingType(input *DescribeThingTypeInput) (*DescribeThingTypeOutput, error) {
 	req, out := c.DescribeThingTypeRequest(input)
 	return out, req.Send()
@@ -10299,14 +10855,13 @@ const opDetachPolicy = "DetachPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DetachPolicyRequest method.
+//	req, resp := client.DetachPolicyRequest(params)
 //
-//    // Example sending a request using the DetachPolicyRequest method.
-//    req, resp := client.DetachPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DetachPolicyRequest(input *DetachPolicyInput) (req *request.Request, output *DetachPolicyOutput) {
 	op := &request.Operation{
 		Name:       opDetachPolicy,
@@ -10342,24 +10897,24 @@ func (c *IoT) DetachPolicyRequest(input *DetachPolicyInput) (req *request.Reques
 // API operation DetachPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) DetachPolicy(input *DetachPolicyInput) (*DetachPolicyOutput, error) {
 	req, out := c.DetachPolicyRequest(input)
 	return out, req.Send()
@@ -10397,14 +10952,13 @@ const opDetachPrincipalPolicy = "DetachPrincipalPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DetachPrincipalPolicyRequest method.
+//	req, resp := client.DetachPrincipalPolicyRequest(params)
 //
-//    // Example sending a request using the DetachPrincipalPolicyRequest method.
-//    req, resp := client.DetachPrincipalPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // Deprecated: DetachPrincipalPolicy has been deprecated
 func (c *IoT) DetachPrincipalPolicyRequest(input *DetachPrincipalPolicyInput) (req *request.Request, output *DetachPrincipalPolicyOutput) {
@@ -10445,24 +10999,24 @@ func (c *IoT) DetachPrincipalPolicyRequest(input *DetachPrincipalPolicyInput) (r
 // API operation DetachPrincipalPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
 // Deprecated: DetachPrincipalPolicy has been deprecated
 func (c *IoT) DetachPrincipalPolicy(input *DetachPrincipalPolicyInput) (*DetachPrincipalPolicyOutput, error) {
@@ -10504,14 +11058,13 @@ const opDetachSecurityProfile = "DetachSecurityProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DetachSecurityProfileRequest method.
+//	req, resp := client.DetachSecurityProfileRequest(params)
 //
-//    // Example sending a request using the DetachSecurityProfileRequest method.
-//    req, resp := client.DetachSecurityProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DetachSecurityProfileRequest(input *DetachSecurityProfileInput) (req *request.Request, output *DetachSecurityProfileOutput) {
 	op := &request.Operation{
 		Name:       opDetachSecurityProfile,
@@ -10545,18 +11098,18 @@ func (c *IoT) DetachSecurityProfileRequest(input *DetachSecurityProfileInput) (r
 // API operation DetachSecurityProfile for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DetachSecurityProfile(input *DetachSecurityProfileInput) (*DetachSecurityProfileOutput, error) {
 	req, out := c.DetachSecurityProfileRequest(input)
 	return out, req.Send()
@@ -10594,14 +11147,13 @@ const opDetachThingPrincipal = "DetachThingPrincipal"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DetachThingPrincipalRequest method.
+//	req, resp := client.DetachThingPrincipalRequest(params)
 //
-//    // Example sending a request using the DetachThingPrincipalRequest method.
-//    req, resp := client.DetachThingPrincipalRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DetachThingPrincipalRequest(input *DetachThingPrincipalInput) (req *request.Request, output *DetachThingPrincipalOutput) {
 	op := &request.Operation{
 		Name:       opDetachThingPrincipal,
@@ -10639,24 +11191,24 @@ func (c *IoT) DetachThingPrincipalRequest(input *DetachThingPrincipalInput) (req
 // API operation DetachThingPrincipal for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) DetachThingPrincipal(input *DetachThingPrincipalInput) (*DetachThingPrincipalOutput, error) {
 	req, out := c.DetachThingPrincipalRequest(input)
 	return out, req.Send()
@@ -10694,14 +11246,13 @@ const opDisableTopicRule = "DisableTopicRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisableTopicRuleRequest method.
+//	req, resp := client.DisableTopicRuleRequest(params)
 //
-//    // Example sending a request using the DisableTopicRuleRequest method.
-//    req, resp := client.DisableTopicRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) DisableTopicRuleRequest(input *DisableTopicRuleInput) (req *request.Request, output *DisableTopicRuleOutput) {
 	op := &request.Operation{
 		Name:       opDisableTopicRule,
@@ -10734,22 +11285,22 @@ func (c *IoT) DisableTopicRuleRequest(input *DisableTopicRuleInput) (req *reques
 // API operation DisableTopicRule for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 func (c *IoT) DisableTopicRule(input *DisableTopicRuleInput) (*DisableTopicRuleOutput, error) {
 	req, out := c.DisableTopicRuleRequest(input)
 	return out, req.Send()
@@ -10787,14 +11338,13 @@ const opEnableTopicRule = "EnableTopicRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EnableTopicRuleRequest method.
+//	req, resp := client.EnableTopicRuleRequest(params)
 //
-//    // Example sending a request using the EnableTopicRuleRequest method.
-//    req, resp := client.EnableTopicRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) EnableTopicRuleRequest(input *EnableTopicRuleInput) (req *request.Request, output *EnableTopicRuleOutput) {
 	op := &request.Operation{
 		Name:       opEnableTopicRule,
@@ -10827,22 +11377,22 @@ func (c *IoT) EnableTopicRuleRequest(input *EnableTopicRuleInput) (req *request.
 // API operation EnableTopicRule for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 func (c *IoT) EnableTopicRule(input *EnableTopicRuleInput) (*EnableTopicRuleOutput, error) {
 	req, out := c.EnableTopicRuleRequest(input)
 	return out, req.Send()
@@ -10880,14 +11430,13 @@ const opGetBehaviorModelTrainingSummaries = "GetBehaviorModelTrainingSummaries"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetBehaviorModelTrainingSummariesRequest method.
+//	req, resp := client.GetBehaviorModelTrainingSummariesRequest(params)
 //
-//    // Example sending a request using the GetBehaviorModelTrainingSummariesRequest method.
-//    req, resp := client.GetBehaviorModelTrainingSummariesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetBehaviorModelTrainingSummariesRequest(input *GetBehaviorModelTrainingSummariesInput) (req *request.Request, output *GetBehaviorModelTrainingSummariesOutput) {
 	op := &request.Operation{
 		Name:       opGetBehaviorModelTrainingSummaries,
@@ -10925,18 +11474,18 @@ func (c *IoT) GetBehaviorModelTrainingSummariesRequest(input *GetBehaviorModelTr
 // API operation GetBehaviorModelTrainingSummaries for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) GetBehaviorModelTrainingSummaries(input *GetBehaviorModelTrainingSummariesInput) (*GetBehaviorModelTrainingSummariesOutput, error) {
 	req, out := c.GetBehaviorModelTrainingSummariesRequest(input)
 	return out, req.Send()
@@ -10966,15 +11515,14 @@ func (c *IoT) GetBehaviorModelTrainingSummariesWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetBehaviorModelTrainingSummaries operation.
-//    pageNum := 0
-//    err := client.GetBehaviorModelTrainingSummariesPages(params,
-//        func(page *iot.GetBehaviorModelTrainingSummariesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetBehaviorModelTrainingSummaries operation.
+//	pageNum := 0
+//	err := client.GetBehaviorModelTrainingSummariesPages(params,
+//	    func(page *iot.GetBehaviorModelTrainingSummariesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) GetBehaviorModelTrainingSummariesPages(input *GetBehaviorModelTrainingSummariesInput, fn func(*GetBehaviorModelTrainingSummariesOutput, bool) bool) error {
 	return c.GetBehaviorModelTrainingSummariesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -11026,14 +11574,13 @@ const opGetBucketsAggregation = "GetBucketsAggregation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetBucketsAggregationRequest method.
+//	req, resp := client.GetBucketsAggregationRequest(params)
 //
-//    // Example sending a request using the GetBucketsAggregationRequest method.
-//    req, resp := client.GetBucketsAggregationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetBucketsAggregationRequest(input *GetBucketsAggregationInput) (req *request.Request, output *GetBucketsAggregationOutput) {
 	op := &request.Operation{
 		Name:       opGetBucketsAggregation,
@@ -11065,33 +11612,33 @@ func (c *IoT) GetBucketsAggregationRequest(input *GetBucketsAggregationInput) (r
 // API operation GetBucketsAggregation for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * InvalidQueryException
-//   The query is invalid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidAggregationException
-//   The aggregation is invalid.
+//   - InvalidQueryException
+//     The query is invalid.
 //
-//   * IndexNotReadyException
-//   The index is not ready.
+//   - InvalidAggregationException
+//     The aggregation is invalid.
 //
+//   - IndexNotReadyException
+//     The index is not ready.
 func (c *IoT) GetBucketsAggregation(input *GetBucketsAggregationInput) (*GetBucketsAggregationOutput, error) {
 	req, out := c.GetBucketsAggregationRequest(input)
 	return out, req.Send()
@@ -11129,14 +11676,13 @@ const opGetCardinality = "GetCardinality"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetCardinalityRequest method.
+//	req, resp := client.GetCardinalityRequest(params)
 //
-//    // Example sending a request using the GetCardinalityRequest method.
-//    req, resp := client.GetCardinalityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetCardinalityRequest(input *GetCardinalityInput) (req *request.Request, output *GetCardinalityOutput) {
 	op := &request.Operation{
 		Name:       opGetCardinality,
@@ -11168,33 +11714,33 @@ func (c *IoT) GetCardinalityRequest(input *GetCardinalityInput) (req *request.Re
 // API operation GetCardinality for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * InvalidQueryException
-//   The query is invalid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidAggregationException
-//   The aggregation is invalid.
+//   - InvalidQueryException
+//     The query is invalid.
 //
-//   * IndexNotReadyException
-//   The index is not ready.
+//   - InvalidAggregationException
+//     The aggregation is invalid.
 //
+//   - IndexNotReadyException
+//     The index is not ready.
 func (c *IoT) GetCardinality(input *GetCardinalityInput) (*GetCardinalityOutput, error) {
 	req, out := c.GetCardinalityRequest(input)
 	return out, req.Send()
@@ -11232,14 +11778,13 @@ const opGetEffectivePolicies = "GetEffectivePolicies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetEffectivePoliciesRequest method.
+//	req, resp := client.GetEffectivePoliciesRequest(params)
 //
-//    // Example sending a request using the GetEffectivePoliciesRequest method.
-//    req, resp := client.GetEffectivePoliciesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetEffectivePoliciesRequest(input *GetEffectivePoliciesInput) (req *request.Request, output *GetEffectivePoliciesOutput) {
 	op := &request.Operation{
 		Name:       opGetEffectivePolicies,
@@ -11272,27 +11817,27 @@ func (c *IoT) GetEffectivePoliciesRequest(input *GetEffectivePoliciesInput) (req
 // API operation GetEffectivePolicies for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) GetEffectivePolicies(input *GetEffectivePoliciesInput) (*GetEffectivePoliciesOutput, error) {
 	req, out := c.GetEffectivePoliciesRequest(input)
 	return out, req.Send()
@@ -11330,14 +11875,13 @@ const opGetIndexingConfiguration = "GetIndexingConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetIndexingConfigurationRequest method.
+//	req, resp := client.GetIndexingConfigurationRequest(params)
 //
-//    // Example sending a request using the GetIndexingConfigurationRequest method.
-//    req, resp := client.GetIndexingConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetIndexingConfigurationRequest(input *GetIndexingConfigurationInput) (req *request.Request, output *GetIndexingConfigurationOutput) {
 	op := &request.Operation{
 		Name:       opGetIndexingConfiguration,
@@ -11369,21 +11913,21 @@ func (c *IoT) GetIndexingConfigurationRequest(input *GetIndexingConfigurationInp
 // API operation GetIndexingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) GetIndexingConfiguration(input *GetIndexingConfigurationInput) (*GetIndexingConfigurationOutput, error) {
 	req, out := c.GetIndexingConfigurationRequest(input)
 	return out, req.Send()
@@ -11421,14 +11965,13 @@ const opGetJobDocument = "GetJobDocument"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetJobDocumentRequest method.
+//	req, resp := client.GetJobDocumentRequest(params)
 //
-//    // Example sending a request using the GetJobDocumentRequest method.
-//    req, resp := client.GetJobDocumentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetJobDocumentRequest(input *GetJobDocumentInput) (req *request.Request, output *GetJobDocumentOutput) {
 	op := &request.Operation{
 		Name:       opGetJobDocument,
@@ -11460,18 +12003,18 @@ func (c *IoT) GetJobDocumentRequest(input *GetJobDocumentInput) (req *request.Re
 // API operation GetJobDocument for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) GetJobDocument(input *GetJobDocumentInput) (*GetJobDocumentOutput, error) {
 	req, out := c.GetJobDocumentRequest(input)
 	return out, req.Send()
@@ -11509,14 +12052,13 @@ const opGetLoggingOptions = "GetLoggingOptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLoggingOptionsRequest method.
+//	req, resp := client.GetLoggingOptionsRequest(params)
 //
-//    // Example sending a request using the GetLoggingOptionsRequest method.
-//    req, resp := client.GetLoggingOptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetLoggingOptionsRequest(input *GetLoggingOptionsInput) (req *request.Request, output *GetLoggingOptionsOutput) {
 	op := &request.Operation{
 		Name:       opGetLoggingOptions,
@@ -11550,15 +12092,15 @@ func (c *IoT) GetLoggingOptionsRequest(input *GetLoggingOptionsInput) (req *requ
 // API operation GetLoggingOptions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) GetLoggingOptions(input *GetLoggingOptionsInput) (*GetLoggingOptionsOutput, error) {
 	req, out := c.GetLoggingOptionsRequest(input)
 	return out, req.Send()
@@ -11596,14 +12138,13 @@ const opGetOTAUpdate = "GetOTAUpdate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetOTAUpdateRequest method.
+//	req, resp := client.GetOTAUpdateRequest(params)
 //
-//    // Example sending a request using the GetOTAUpdateRequest method.
-//    req, resp := client.GetOTAUpdateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetOTAUpdateRequest(input *GetOTAUpdateInput) (req *request.Request, output *GetOTAUpdateOutput) {
 	op := &request.Operation{
 		Name:       opGetOTAUpdate,
@@ -11635,24 +12176,24 @@ func (c *IoT) GetOTAUpdateRequest(input *GetOTAUpdateInput) (req *request.Reques
 // API operation GetOTAUpdate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) GetOTAUpdate(input *GetOTAUpdateInput) (*GetOTAUpdateOutput, error) {
 	req, out := c.GetOTAUpdateRequest(input)
 	return out, req.Send()
@@ -11674,6 +12215,264 @@ func (c *IoT) GetOTAUpdateWithContext(ctx aws.Context, input *GetOTAUpdateInput,
 	return out, req.Send()
 }
 
+const opGetPackage = "GetPackage"
+
+// GetPackageRequest generates a "aws/request.Request" representing the
+// client's request for the GetPackage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetPackage for more information on using the GetPackage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetPackageRequest method.
+//	req, resp := client.GetPackageRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) GetPackageRequest(input *GetPackageInput) (req *request.Request, output *GetPackageOutput) {
+	op := &request.Operation{
+		Name:       opGetPackage,
+		HTTPMethod: "GET",
+		HTTPPath:   "/packages/{packageName}",
+	}
+
+	if input == nil {
+		input = &GetPackageInput{}
+	}
+
+	output = &GetPackageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetPackage API operation for AWS IoT.
+//
+// Gets information about the specified software package.
+//
+// Requires permission to access the GetPackage (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation GetPackage for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+//
+//   - ValidationException
+//     The request is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
+func (c *IoT) GetPackage(input *GetPackageInput) (*GetPackageOutput, error) {
+	req, out := c.GetPackageRequest(input)
+	return out, req.Send()
+}
+
+// GetPackageWithContext is the same as GetPackage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetPackage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) GetPackageWithContext(ctx aws.Context, input *GetPackageInput, opts ...request.Option) (*GetPackageOutput, error) {
+	req, out := c.GetPackageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetPackageConfiguration = "GetPackageConfiguration"
+
+// GetPackageConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the GetPackageConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetPackageConfiguration for more information on using the GetPackageConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetPackageConfigurationRequest method.
+//	req, resp := client.GetPackageConfigurationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) GetPackageConfigurationRequest(input *GetPackageConfigurationInput) (req *request.Request, output *GetPackageConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opGetPackageConfiguration,
+		HTTPMethod: "GET",
+		HTTPPath:   "/package-configuration",
+	}
+
+	if input == nil {
+		input = &GetPackageConfigurationInput{}
+	}
+
+	output = &GetPackageConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetPackageConfiguration API operation for AWS IoT.
+//
+// Gets information about the specified software package's configuration.
+//
+// Requires permission to access the GetPackageConfiguration (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation GetPackageConfiguration for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+func (c *IoT) GetPackageConfiguration(input *GetPackageConfigurationInput) (*GetPackageConfigurationOutput, error) {
+	req, out := c.GetPackageConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// GetPackageConfigurationWithContext is the same as GetPackageConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetPackageConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) GetPackageConfigurationWithContext(ctx aws.Context, input *GetPackageConfigurationInput, opts ...request.Option) (*GetPackageConfigurationOutput, error) {
+	req, out := c.GetPackageConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetPackageVersion = "GetPackageVersion"
+
+// GetPackageVersionRequest generates a "aws/request.Request" representing the
+// client's request for the GetPackageVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetPackageVersion for more information on using the GetPackageVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetPackageVersionRequest method.
+//	req, resp := client.GetPackageVersionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) GetPackageVersionRequest(input *GetPackageVersionInput) (req *request.Request, output *GetPackageVersionOutput) {
+	op := &request.Operation{
+		Name:       opGetPackageVersion,
+		HTTPMethod: "GET",
+		HTTPPath:   "/packages/{packageName}/versions/{versionName}",
+	}
+
+	if input == nil {
+		input = &GetPackageVersionInput{}
+	}
+
+	output = &GetPackageVersionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetPackageVersion API operation for AWS IoT.
+//
+// Gets information about the specified package version.
+//
+// Requires permission to access the GetPackageVersion (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation GetPackageVersion for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+//
+//   - ValidationException
+//     The request is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
+func (c *IoT) GetPackageVersion(input *GetPackageVersionInput) (*GetPackageVersionOutput, error) {
+	req, out := c.GetPackageVersionRequest(input)
+	return out, req.Send()
+}
+
+// GetPackageVersionWithContext is the same as GetPackageVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetPackageVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) GetPackageVersionWithContext(ctx aws.Context, input *GetPackageVersionInput, opts ...request.Option) (*GetPackageVersionOutput, error) {
+	req, out := c.GetPackageVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetPercentiles = "GetPercentiles"
 
 // GetPercentilesRequest generates a "aws/request.Request" representing the
@@ -11690,14 +12489,13 @@ const opGetPercentiles = "GetPercentiles"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPercentilesRequest method.
+//	req, resp := client.GetPercentilesRequest(params)
 //
-//    // Example sending a request using the GetPercentilesRequest method.
-//    req, resp := client.GetPercentilesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetPercentilesRequest(input *GetPercentilesInput) (req *request.Request, output *GetPercentilesOutput) {
 	op := &request.Operation{
 		Name:       opGetPercentiles,
@@ -11738,33 +12536,33 @@ func (c *IoT) GetPercentilesRequest(input *GetPercentilesInput) (req *request.Re
 // API operation GetPercentiles for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * InvalidQueryException
-//   The query is invalid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidAggregationException
-//   The aggregation is invalid.
+//   - InvalidQueryException
+//     The query is invalid.
 //
-//   * IndexNotReadyException
-//   The index is not ready.
+//   - InvalidAggregationException
+//     The aggregation is invalid.
 //
+//   - IndexNotReadyException
+//     The index is not ready.
 func (c *IoT) GetPercentiles(input *GetPercentilesInput) (*GetPercentilesOutput, error) {
 	req, out := c.GetPercentilesRequest(input)
 	return out, req.Send()
@@ -11802,14 +12600,13 @@ const opGetPolicy = "GetPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPolicyRequest method.
+//	req, resp := client.GetPolicyRequest(params)
 //
-//    // Example sending a request using the GetPolicyRequest method.
-//    req, resp := client.GetPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetPolicyRequest(input *GetPolicyInput) (req *request.Request, output *GetPolicyOutput) {
 	op := &request.Operation{
 		Name:       opGetPolicy,
@@ -11842,24 +12639,24 @@ func (c *IoT) GetPolicyRequest(input *GetPolicyInput) (req *request.Request, out
 // API operation GetPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) GetPolicy(input *GetPolicyInput) (*GetPolicyOutput, error) {
 	req, out := c.GetPolicyRequest(input)
 	return out, req.Send()
@@ -11897,14 +12694,13 @@ const opGetPolicyVersion = "GetPolicyVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPolicyVersionRequest method.
+//	req, resp := client.GetPolicyVersionRequest(params)
 //
-//    // Example sending a request using the GetPolicyVersionRequest method.
-//    req, resp := client.GetPolicyVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetPolicyVersionRequest(input *GetPolicyVersionInput) (req *request.Request, output *GetPolicyVersionOutput) {
 	op := &request.Operation{
 		Name:       opGetPolicyVersion,
@@ -11936,24 +12732,24 @@ func (c *IoT) GetPolicyVersionRequest(input *GetPolicyVersionInput) (req *reques
 // API operation GetPolicyVersion for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) GetPolicyVersion(input *GetPolicyVersionInput) (*GetPolicyVersionOutput, error) {
 	req, out := c.GetPolicyVersionRequest(input)
 	return out, req.Send()
@@ -11991,14 +12787,13 @@ const opGetRegistrationCode = "GetRegistrationCode"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRegistrationCodeRequest method.
+//	req, resp := client.GetRegistrationCodeRequest(params)
 //
-//    // Example sending a request using the GetRegistrationCodeRequest method.
-//    req, resp := client.GetRegistrationCodeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetRegistrationCodeRequest(input *GetRegistrationCodeInput) (req *request.Request, output *GetRegistrationCodeOutput) {
 	op := &request.Operation{
 		Name:       opGetRegistrationCode,
@@ -12019,6 +12814,10 @@ func (c *IoT) GetRegistrationCodeRequest(input *GetRegistrationCodeInput) (req *
 //
 // Gets a registration code used to register a CA certificate with IoT.
 //
+// IoT will create a registration code as part of this API call if the registration
+// code doesn't exist or has been deleted. If you already have a registration
+// code, this API call will return the same registration code.
+//
 // Requires permission to access the GetRegistrationCode (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
 // action.
 //
@@ -12030,21 +12829,21 @@ func (c *IoT) GetRegistrationCodeRequest(input *GetRegistrationCodeInput) (req *
 // API operation GetRegistrationCode for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The rate exceeds the limit.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - InvalidRequestException
+//     The request is not valid.
 func (c *IoT) GetRegistrationCode(input *GetRegistrationCodeInput) (*GetRegistrationCodeOutput, error) {
 	req, out := c.GetRegistrationCodeRequest(input)
 	return out, req.Send()
@@ -12082,14 +12881,13 @@ const opGetStatistics = "GetStatistics"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetStatisticsRequest method.
+//	req, resp := client.GetStatisticsRequest(params)
 //
-//    // Example sending a request using the GetStatisticsRequest method.
-//    req, resp := client.GetStatisticsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetStatisticsRequest(input *GetStatisticsInput) (req *request.Request, output *GetStatisticsOutput) {
 	op := &request.Operation{
 		Name:       opGetStatistics,
@@ -12123,33 +12921,33 @@ func (c *IoT) GetStatisticsRequest(input *GetStatisticsInput) (req *request.Requ
 // API operation GetStatistics for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * InvalidQueryException
-//   The query is invalid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidAggregationException
-//   The aggregation is invalid.
+//   - InvalidQueryException
+//     The query is invalid.
 //
-//   * IndexNotReadyException
-//   The index is not ready.
+//   - InvalidAggregationException
+//     The aggregation is invalid.
 //
+//   - IndexNotReadyException
+//     The index is not ready.
 func (c *IoT) GetStatistics(input *GetStatisticsInput) (*GetStatisticsOutput, error) {
 	req, out := c.GetStatisticsRequest(input)
 	return out, req.Send()
@@ -12187,14 +12985,13 @@ const opGetTopicRule = "GetTopicRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTopicRuleRequest method.
+//	req, resp := client.GetTopicRuleRequest(params)
 //
-//    // Example sending a request using the GetTopicRuleRequest method.
-//    req, resp := client.GetTopicRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetTopicRuleRequest(input *GetTopicRuleInput) (req *request.Request, output *GetTopicRuleOutput) {
 	op := &request.Operation{
 		Name:       opGetTopicRule,
@@ -12226,18 +13023,18 @@ func (c *IoT) GetTopicRuleRequest(input *GetTopicRuleInput) (req *request.Reques
 // API operation GetTopicRule for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 func (c *IoT) GetTopicRule(input *GetTopicRuleInput) (*GetTopicRuleOutput, error) {
 	req, out := c.GetTopicRuleRequest(input)
 	return out, req.Send()
@@ -12275,14 +13072,13 @@ const opGetTopicRuleDestination = "GetTopicRuleDestination"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTopicRuleDestinationRequest method.
+//	req, resp := client.GetTopicRuleDestinationRequest(params)
 //
-//    // Example sending a request using the GetTopicRuleDestinationRequest method.
-//    req, resp := client.GetTopicRuleDestinationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetTopicRuleDestinationRequest(input *GetTopicRuleDestinationInput) (req *request.Request, output *GetTopicRuleDestinationOutput) {
 	op := &request.Operation{
 		Name:       opGetTopicRuleDestination,
@@ -12314,18 +13110,18 @@ func (c *IoT) GetTopicRuleDestinationRequest(input *GetTopicRuleDestinationInput
 // API operation GetTopicRuleDestination for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 func (c *IoT) GetTopicRuleDestination(input *GetTopicRuleDestinationInput) (*GetTopicRuleDestinationOutput, error) {
 	req, out := c.GetTopicRuleDestinationRequest(input)
 	return out, req.Send()
@@ -12363,14 +13159,13 @@ const opGetV2LoggingOptions = "GetV2LoggingOptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetV2LoggingOptionsRequest method.
+//	req, resp := client.GetV2LoggingOptionsRequest(params)
 //
-//    // Example sending a request using the GetV2LoggingOptionsRequest method.
-//    req, resp := client.GetV2LoggingOptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) GetV2LoggingOptionsRequest(input *GetV2LoggingOptionsInput) (req *request.Request, output *GetV2LoggingOptionsOutput) {
 	op := &request.Operation{
 		Name:       opGetV2LoggingOptions,
@@ -12402,15 +13197,15 @@ func (c *IoT) GetV2LoggingOptionsRequest(input *GetV2LoggingOptionsInput) (req *
 // API operation GetV2LoggingOptions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * NotConfiguredException
-//   The resource is not configured.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - NotConfiguredException
+//     The resource is not configured.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) GetV2LoggingOptions(input *GetV2LoggingOptionsInput) (*GetV2LoggingOptionsOutput, error) {
 	req, out := c.GetV2LoggingOptionsRequest(input)
 	return out, req.Send()
@@ -12448,14 +13243,13 @@ const opListActiveViolations = "ListActiveViolations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListActiveViolationsRequest method.
+//	req, resp := client.ListActiveViolationsRequest(params)
 //
-//    // Example sending a request using the ListActiveViolationsRequest method.
-//    req, resp := client.ListActiveViolationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListActiveViolationsRequest(input *ListActiveViolationsInput) (req *request.Request, output *ListActiveViolationsOutput) {
 	op := &request.Operation{
 		Name:       opListActiveViolations,
@@ -12493,18 +13287,18 @@ func (c *IoT) ListActiveViolationsRequest(input *ListActiveViolationsInput) (req
 // API operation ListActiveViolations for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListActiveViolations(input *ListActiveViolationsInput) (*ListActiveViolationsOutput, error) {
 	req, out := c.ListActiveViolationsRequest(input)
 	return out, req.Send()
@@ -12534,15 +13328,14 @@ func (c *IoT) ListActiveViolationsWithContext(ctx aws.Context, input *ListActive
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListActiveViolations operation.
-//    pageNum := 0
-//    err := client.ListActiveViolationsPages(params,
-//        func(page *iot.ListActiveViolationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListActiveViolations operation.
+//	pageNum := 0
+//	err := client.ListActiveViolationsPages(params,
+//	    func(page *iot.ListActiveViolationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListActiveViolationsPages(input *ListActiveViolationsInput, fn func(*ListActiveViolationsOutput, bool) bool) error {
 	return c.ListActiveViolationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -12594,14 +13387,13 @@ const opListAttachedPolicies = "ListAttachedPolicies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAttachedPoliciesRequest method.
+//	req, resp := client.ListAttachedPoliciesRequest(params)
 //
-//    // Example sending a request using the ListAttachedPoliciesRequest method.
-//    req, resp := client.ListAttachedPoliciesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListAttachedPoliciesRequest(input *ListAttachedPoliciesInput) (req *request.Request, output *ListAttachedPoliciesOutput) {
 	op := &request.Operation{
 		Name:       opListAttachedPolicies,
@@ -12639,27 +13431,27 @@ func (c *IoT) ListAttachedPoliciesRequest(input *ListAttachedPoliciesInput) (req
 // API operation ListAttachedPolicies for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) ListAttachedPolicies(input *ListAttachedPoliciesInput) (*ListAttachedPoliciesOutput, error) {
 	req, out := c.ListAttachedPoliciesRequest(input)
 	return out, req.Send()
@@ -12689,15 +13481,14 @@ func (c *IoT) ListAttachedPoliciesWithContext(ctx aws.Context, input *ListAttach
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAttachedPolicies operation.
-//    pageNum := 0
-//    err := client.ListAttachedPoliciesPages(params,
-//        func(page *iot.ListAttachedPoliciesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAttachedPolicies operation.
+//	pageNum := 0
+//	err := client.ListAttachedPoliciesPages(params,
+//	    func(page *iot.ListAttachedPoliciesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListAttachedPoliciesPages(input *ListAttachedPoliciesInput, fn func(*ListAttachedPoliciesOutput, bool) bool) error {
 	return c.ListAttachedPoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -12749,14 +13540,13 @@ const opListAuditFindings = "ListAuditFindings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAuditFindingsRequest method.
+//	req, resp := client.ListAuditFindingsRequest(params)
 //
-//    // Example sending a request using the ListAuditFindingsRequest method.
-//    req, resp := client.ListAuditFindingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListAuditFindingsRequest(input *ListAuditFindingsInput) (req *request.Request, output *ListAuditFindingsOutput) {
 	op := &request.Operation{
 		Name:       opListAuditFindings,
@@ -12795,15 +13585,15 @@ func (c *IoT) ListAuditFindingsRequest(input *ListAuditFindingsInput) (req *requ
 // API operation ListAuditFindings for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListAuditFindings(input *ListAuditFindingsInput) (*ListAuditFindingsOutput, error) {
 	req, out := c.ListAuditFindingsRequest(input)
 	return out, req.Send()
@@ -12833,15 +13623,14 @@ func (c *IoT) ListAuditFindingsWithContext(ctx aws.Context, input *ListAuditFind
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAuditFindings operation.
-//    pageNum := 0
-//    err := client.ListAuditFindingsPages(params,
-//        func(page *iot.ListAuditFindingsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAuditFindings operation.
+//	pageNum := 0
+//	err := client.ListAuditFindingsPages(params,
+//	    func(page *iot.ListAuditFindingsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListAuditFindingsPages(input *ListAuditFindingsInput, fn func(*ListAuditFindingsOutput, bool) bool) error {
 	return c.ListAuditFindingsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -12893,14 +13682,13 @@ const opListAuditMitigationActionsExecutions = "ListAuditMitigationActionsExecut
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAuditMitigationActionsExecutionsRequest method.
+//	req, resp := client.ListAuditMitigationActionsExecutionsRequest(params)
 //
-//    // Example sending a request using the ListAuditMitigationActionsExecutionsRequest method.
-//    req, resp := client.ListAuditMitigationActionsExecutionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListAuditMitigationActionsExecutionsRequest(input *ListAuditMitigationActionsExecutionsInput) (req *request.Request, output *ListAuditMitigationActionsExecutionsOutput) {
 	op := &request.Operation{
 		Name:       opListAuditMitigationActionsExecutions,
@@ -12938,15 +13726,15 @@ func (c *IoT) ListAuditMitigationActionsExecutionsRequest(input *ListAuditMitiga
 // API operation ListAuditMitigationActionsExecutions for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListAuditMitigationActionsExecutions(input *ListAuditMitigationActionsExecutionsInput) (*ListAuditMitigationActionsExecutionsOutput, error) {
 	req, out := c.ListAuditMitigationActionsExecutionsRequest(input)
 	return out, req.Send()
@@ -12976,15 +13764,14 @@ func (c *IoT) ListAuditMitigationActionsExecutionsWithContext(ctx aws.Context, i
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAuditMitigationActionsExecutions operation.
-//    pageNum := 0
-//    err := client.ListAuditMitigationActionsExecutionsPages(params,
-//        func(page *iot.ListAuditMitigationActionsExecutionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAuditMitigationActionsExecutions operation.
+//	pageNum := 0
+//	err := client.ListAuditMitigationActionsExecutionsPages(params,
+//	    func(page *iot.ListAuditMitigationActionsExecutionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListAuditMitigationActionsExecutionsPages(input *ListAuditMitigationActionsExecutionsInput, fn func(*ListAuditMitigationActionsExecutionsOutput, bool) bool) error {
 	return c.ListAuditMitigationActionsExecutionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -13036,14 +13823,13 @@ const opListAuditMitigationActionsTasks = "ListAuditMitigationActionsTasks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAuditMitigationActionsTasksRequest method.
+//	req, resp := client.ListAuditMitigationActionsTasksRequest(params)
 //
-//    // Example sending a request using the ListAuditMitigationActionsTasksRequest method.
-//    req, resp := client.ListAuditMitigationActionsTasksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListAuditMitigationActionsTasksRequest(input *ListAuditMitigationActionsTasksInput) (req *request.Request, output *ListAuditMitigationActionsTasksOutput) {
 	op := &request.Operation{
 		Name:       opListAuditMitigationActionsTasks,
@@ -13081,15 +13867,15 @@ func (c *IoT) ListAuditMitigationActionsTasksRequest(input *ListAuditMitigationA
 // API operation ListAuditMitigationActionsTasks for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListAuditMitigationActionsTasks(input *ListAuditMitigationActionsTasksInput) (*ListAuditMitigationActionsTasksOutput, error) {
 	req, out := c.ListAuditMitigationActionsTasksRequest(input)
 	return out, req.Send()
@@ -13119,15 +13905,14 @@ func (c *IoT) ListAuditMitigationActionsTasksWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAuditMitigationActionsTasks operation.
-//    pageNum := 0
-//    err := client.ListAuditMitigationActionsTasksPages(params,
-//        func(page *iot.ListAuditMitigationActionsTasksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAuditMitigationActionsTasks operation.
+//	pageNum := 0
+//	err := client.ListAuditMitigationActionsTasksPages(params,
+//	    func(page *iot.ListAuditMitigationActionsTasksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListAuditMitigationActionsTasksPages(input *ListAuditMitigationActionsTasksInput, fn func(*ListAuditMitigationActionsTasksOutput, bool) bool) error {
 	return c.ListAuditMitigationActionsTasksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -13179,14 +13964,13 @@ const opListAuditSuppressions = "ListAuditSuppressions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAuditSuppressionsRequest method.
+//	req, resp := client.ListAuditSuppressionsRequest(params)
 //
-//    // Example sending a request using the ListAuditSuppressionsRequest method.
-//    req, resp := client.ListAuditSuppressionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListAuditSuppressionsRequest(input *ListAuditSuppressionsInput) (req *request.Request, output *ListAuditSuppressionsOutput) {
 	op := &request.Operation{
 		Name:       opListAuditSuppressions,
@@ -13224,15 +14008,15 @@ func (c *IoT) ListAuditSuppressionsRequest(input *ListAuditSuppressionsInput) (r
 // API operation ListAuditSuppressions for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListAuditSuppressions(input *ListAuditSuppressionsInput) (*ListAuditSuppressionsOutput, error) {
 	req, out := c.ListAuditSuppressionsRequest(input)
 	return out, req.Send()
@@ -13262,15 +14046,14 @@ func (c *IoT) ListAuditSuppressionsWithContext(ctx aws.Context, input *ListAudit
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAuditSuppressions operation.
-//    pageNum := 0
-//    err := client.ListAuditSuppressionsPages(params,
-//        func(page *iot.ListAuditSuppressionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAuditSuppressions operation.
+//	pageNum := 0
+//	err := client.ListAuditSuppressionsPages(params,
+//	    func(page *iot.ListAuditSuppressionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListAuditSuppressionsPages(input *ListAuditSuppressionsInput, fn func(*ListAuditSuppressionsOutput, bool) bool) error {
 	return c.ListAuditSuppressionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -13322,14 +14105,13 @@ const opListAuditTasks = "ListAuditTasks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAuditTasksRequest method.
+//	req, resp := client.ListAuditTasksRequest(params)
 //
-//    // Example sending a request using the ListAuditTasksRequest method.
-//    req, resp := client.ListAuditTasksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListAuditTasksRequest(input *ListAuditTasksInput) (req *request.Request, output *ListAuditTasksOutput) {
 	op := &request.Operation{
 		Name:       opListAuditTasks,
@@ -13368,15 +14150,15 @@ func (c *IoT) ListAuditTasksRequest(input *ListAuditTasksInput) (req *request.Re
 // API operation ListAuditTasks for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListAuditTasks(input *ListAuditTasksInput) (*ListAuditTasksOutput, error) {
 	req, out := c.ListAuditTasksRequest(input)
 	return out, req.Send()
@@ -13406,15 +14188,14 @@ func (c *IoT) ListAuditTasksWithContext(ctx aws.Context, input *ListAuditTasksIn
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAuditTasks operation.
-//    pageNum := 0
-//    err := client.ListAuditTasksPages(params,
-//        func(page *iot.ListAuditTasksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAuditTasks operation.
+//	pageNum := 0
+//	err := client.ListAuditTasksPages(params,
+//	    func(page *iot.ListAuditTasksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListAuditTasksPages(input *ListAuditTasksInput, fn func(*ListAuditTasksOutput, bool) bool) error {
 	return c.ListAuditTasksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -13466,14 +14247,13 @@ const opListAuthorizers = "ListAuthorizers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAuthorizersRequest method.
+//	req, resp := client.ListAuthorizersRequest(params)
 //
-//    // Example sending a request using the ListAuthorizersRequest method.
-//    req, resp := client.ListAuthorizersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListAuthorizersRequest(input *ListAuthorizersInput) (req *request.Request, output *ListAuthorizersOutput) {
 	op := &request.Operation{
 		Name:       opListAuthorizers,
@@ -13511,21 +14291,21 @@ func (c *IoT) ListAuthorizersRequest(input *ListAuthorizersInput) (req *request.
 // API operation ListAuthorizers for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListAuthorizers(input *ListAuthorizersInput) (*ListAuthorizersOutput, error) {
 	req, out := c.ListAuthorizersRequest(input)
 	return out, req.Send()
@@ -13555,15 +14335,14 @@ func (c *IoT) ListAuthorizersWithContext(ctx aws.Context, input *ListAuthorizers
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAuthorizers operation.
-//    pageNum := 0
-//    err := client.ListAuthorizersPages(params,
-//        func(page *iot.ListAuthorizersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAuthorizers operation.
+//	pageNum := 0
+//	err := client.ListAuthorizersPages(params,
+//	    func(page *iot.ListAuthorizersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListAuthorizersPages(input *ListAuthorizersInput, fn func(*ListAuthorizersOutput, bool) bool) error {
 	return c.ListAuthorizersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -13615,14 +14394,13 @@ const opListBillingGroups = "ListBillingGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBillingGroupsRequest method.
+//	req, resp := client.ListBillingGroupsRequest(params)
 //
-//    // Example sending a request using the ListBillingGroupsRequest method.
-//    req, resp := client.ListBillingGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListBillingGroupsRequest(input *ListBillingGroupsInput) (req *request.Request, output *ListBillingGroupsOutput) {
 	op := &request.Operation{
 		Name:       opListBillingGroups,
@@ -13660,18 +14438,18 @@ func (c *IoT) ListBillingGroupsRequest(input *ListBillingGroupsInput) (req *requ
 // API operation ListBillingGroups for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) ListBillingGroups(input *ListBillingGroupsInput) (*ListBillingGroupsOutput, error) {
 	req, out := c.ListBillingGroupsRequest(input)
 	return out, req.Send()
@@ -13701,15 +14479,14 @@ func (c *IoT) ListBillingGroupsWithContext(ctx aws.Context, input *ListBillingGr
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBillingGroups operation.
-//    pageNum := 0
-//    err := client.ListBillingGroupsPages(params,
-//        func(page *iot.ListBillingGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBillingGroups operation.
+//	pageNum := 0
+//	err := client.ListBillingGroupsPages(params,
+//	    func(page *iot.ListBillingGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListBillingGroupsPages(input *ListBillingGroupsInput, fn func(*ListBillingGroupsOutput, bool) bool) error {
 	return c.ListBillingGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -13761,14 +14538,13 @@ const opListCACertificates = "ListCACertificates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCACertificatesRequest method.
+//	req, resp := client.ListCACertificatesRequest(params)
 //
-//    // Example sending a request using the ListCACertificatesRequest method.
-//    req, resp := client.ListCACertificatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListCACertificatesRequest(input *ListCACertificatesInput) (req *request.Request, output *ListCACertificatesOutput) {
 	op := &request.Operation{
 		Name:       opListCACertificates,
@@ -13809,21 +14585,21 @@ func (c *IoT) ListCACertificatesRequest(input *ListCACertificatesInput) (req *re
 // API operation ListCACertificates for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListCACertificates(input *ListCACertificatesInput) (*ListCACertificatesOutput, error) {
 	req, out := c.ListCACertificatesRequest(input)
 	return out, req.Send()
@@ -13853,15 +14629,14 @@ func (c *IoT) ListCACertificatesWithContext(ctx aws.Context, input *ListCACertif
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCACertificates operation.
-//    pageNum := 0
-//    err := client.ListCACertificatesPages(params,
-//        func(page *iot.ListCACertificatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCACertificates operation.
+//	pageNum := 0
+//	err := client.ListCACertificatesPages(params,
+//	    func(page *iot.ListCACertificatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListCACertificatesPages(input *ListCACertificatesInput, fn func(*ListCACertificatesOutput, bool) bool) error {
 	return c.ListCACertificatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -13897,6 +14672,96 @@ func (c *IoT) ListCACertificatesPagesWithContext(ctx aws.Context, input *ListCAC
 	return p.Err()
 }
 
+const opListCertificateProviders = "ListCertificateProviders"
+
+// ListCertificateProvidersRequest generates a "aws/request.Request" representing the
+// client's request for the ListCertificateProviders operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCertificateProviders for more information on using the ListCertificateProviders
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListCertificateProvidersRequest method.
+//	req, resp := client.ListCertificateProvidersRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) ListCertificateProvidersRequest(input *ListCertificateProvidersInput) (req *request.Request, output *ListCertificateProvidersOutput) {
+	op := &request.Operation{
+		Name:       opListCertificateProviders,
+		HTTPMethod: "GET",
+		HTTPPath:   "/certificate-providers/",
+	}
+
+	if input == nil {
+		input = &ListCertificateProvidersInput{}
+	}
+
+	output = &ListCertificateProvidersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCertificateProviders API operation for AWS IoT.
+//
+// Lists all your certificate providers in your Amazon Web Services account.
+//
+// Requires permission to access the ListCertificateProviders (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation ListCertificateProviders for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidRequestException
+//     The request is not valid.
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
+//
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
+//
+//   - InternalFailureException
+//     An unexpected error has occurred.
+func (c *IoT) ListCertificateProviders(input *ListCertificateProvidersInput) (*ListCertificateProvidersOutput, error) {
+	req, out := c.ListCertificateProvidersRequest(input)
+	return out, req.Send()
+}
+
+// ListCertificateProvidersWithContext is the same as ListCertificateProviders with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCertificateProviders for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) ListCertificateProvidersWithContext(ctx aws.Context, input *ListCertificateProvidersInput, opts ...request.Option) (*ListCertificateProvidersOutput, error) {
+	req, out := c.ListCertificateProvidersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListCertificates = "ListCertificates"
 
 // ListCertificatesRequest generates a "aws/request.Request" representing the
@@ -13913,14 +14778,13 @@ const opListCertificates = "ListCertificates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCertificatesRequest method.
+//	req, resp := client.ListCertificatesRequest(params)
 //
-//    // Example sending a request using the ListCertificatesRequest method.
-//    req, resp := client.ListCertificatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListCertificatesRequest(input *ListCertificatesInput) (req *request.Request, output *ListCertificatesOutput) {
 	op := &request.Operation{
 		Name:       opListCertificates,
@@ -13961,21 +14825,21 @@ func (c *IoT) ListCertificatesRequest(input *ListCertificatesInput) (req *reques
 // API operation ListCertificates for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListCertificates(input *ListCertificatesInput) (*ListCertificatesOutput, error) {
 	req, out := c.ListCertificatesRequest(input)
 	return out, req.Send()
@@ -14005,15 +14869,14 @@ func (c *IoT) ListCertificatesWithContext(ctx aws.Context, input *ListCertificat
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCertificates operation.
-//    pageNum := 0
-//    err := client.ListCertificatesPages(params,
-//        func(page *iot.ListCertificatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCertificates operation.
+//	pageNum := 0
+//	err := client.ListCertificatesPages(params,
+//	    func(page *iot.ListCertificatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListCertificatesPages(input *ListCertificatesInput, fn func(*ListCertificatesOutput, bool) bool) error {
 	return c.ListCertificatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -14065,14 +14928,13 @@ const opListCertificatesByCA = "ListCertificatesByCA"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCertificatesByCARequest method.
+//	req, resp := client.ListCertificatesByCARequest(params)
 //
-//    // Example sending a request using the ListCertificatesByCARequest method.
-//    req, resp := client.ListCertificatesByCARequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListCertificatesByCARequest(input *ListCertificatesByCAInput) (req *request.Request, output *ListCertificatesByCAOutput) {
 	op := &request.Operation{
 		Name:       opListCertificatesByCA,
@@ -14110,21 +14972,21 @@ func (c *IoT) ListCertificatesByCARequest(input *ListCertificatesByCAInput) (req
 // API operation ListCertificatesByCA for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListCertificatesByCA(input *ListCertificatesByCAInput) (*ListCertificatesByCAOutput, error) {
 	req, out := c.ListCertificatesByCARequest(input)
 	return out, req.Send()
@@ -14154,15 +15016,14 @@ func (c *IoT) ListCertificatesByCAWithContext(ctx aws.Context, input *ListCertif
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCertificatesByCA operation.
-//    pageNum := 0
-//    err := client.ListCertificatesByCAPages(params,
-//        func(page *iot.ListCertificatesByCAOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCertificatesByCA operation.
+//	pageNum := 0
+//	err := client.ListCertificatesByCAPages(params,
+//	    func(page *iot.ListCertificatesByCAOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListCertificatesByCAPages(input *ListCertificatesByCAInput, fn func(*ListCertificatesByCAOutput, bool) bool) error {
 	return c.ListCertificatesByCAPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -14214,14 +15075,13 @@ const opListCustomMetrics = "ListCustomMetrics"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCustomMetricsRequest method.
+//	req, resp := client.ListCustomMetricsRequest(params)
 //
-//    // Example sending a request using the ListCustomMetricsRequest method.
-//    req, resp := client.ListCustomMetricsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListCustomMetricsRequest(input *ListCustomMetricsInput) (req *request.Request, output *ListCustomMetricsOutput) {
 	op := &request.Operation{
 		Name:       opListCustomMetrics,
@@ -14259,15 +15119,15 @@ func (c *IoT) ListCustomMetricsRequest(input *ListCustomMetricsInput) (req *requ
 // API operation ListCustomMetrics for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListCustomMetrics(input *ListCustomMetricsInput) (*ListCustomMetricsOutput, error) {
 	req, out := c.ListCustomMetricsRequest(input)
 	return out, req.Send()
@@ -14297,15 +15157,14 @@ func (c *IoT) ListCustomMetricsWithContext(ctx aws.Context, input *ListCustomMet
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCustomMetrics operation.
-//    pageNum := 0
-//    err := client.ListCustomMetricsPages(params,
-//        func(page *iot.ListCustomMetricsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCustomMetrics operation.
+//	pageNum := 0
+//	err := client.ListCustomMetricsPages(params,
+//	    func(page *iot.ListCustomMetricsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListCustomMetricsPages(input *ListCustomMetricsInput, fn func(*ListCustomMetricsOutput, bool) bool) error {
 	return c.ListCustomMetricsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -14357,14 +15216,13 @@ const opListDetectMitigationActionsExecutions = "ListDetectMitigationActionsExec
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDetectMitigationActionsExecutionsRequest method.
+//	req, resp := client.ListDetectMitigationActionsExecutionsRequest(params)
 //
-//    // Example sending a request using the ListDetectMitigationActionsExecutionsRequest method.
-//    req, resp := client.ListDetectMitigationActionsExecutionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListDetectMitigationActionsExecutionsRequest(input *ListDetectMitigationActionsExecutionsInput) (req *request.Request, output *ListDetectMitigationActionsExecutionsOutput) {
 	op := &request.Operation{
 		Name:       opListDetectMitigationActionsExecutions,
@@ -14403,15 +15261,15 @@ func (c *IoT) ListDetectMitigationActionsExecutionsRequest(input *ListDetectMiti
 // API operation ListDetectMitigationActionsExecutions for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListDetectMitigationActionsExecutions(input *ListDetectMitigationActionsExecutionsInput) (*ListDetectMitigationActionsExecutionsOutput, error) {
 	req, out := c.ListDetectMitigationActionsExecutionsRequest(input)
 	return out, req.Send()
@@ -14441,15 +15299,14 @@ func (c *IoT) ListDetectMitigationActionsExecutionsWithContext(ctx aws.Context, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDetectMitigationActionsExecutions operation.
-//    pageNum := 0
-//    err := client.ListDetectMitigationActionsExecutionsPages(params,
-//        func(page *iot.ListDetectMitigationActionsExecutionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDetectMitigationActionsExecutions operation.
+//	pageNum := 0
+//	err := client.ListDetectMitigationActionsExecutionsPages(params,
+//	    func(page *iot.ListDetectMitigationActionsExecutionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListDetectMitigationActionsExecutionsPages(input *ListDetectMitigationActionsExecutionsInput, fn func(*ListDetectMitigationActionsExecutionsOutput, bool) bool) error {
 	return c.ListDetectMitigationActionsExecutionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -14501,14 +15358,13 @@ const opListDetectMitigationActionsTasks = "ListDetectMitigationActionsTasks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDetectMitigationActionsTasksRequest method.
+//	req, resp := client.ListDetectMitigationActionsTasksRequest(params)
 //
-//    // Example sending a request using the ListDetectMitigationActionsTasksRequest method.
-//    req, resp := client.ListDetectMitigationActionsTasksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListDetectMitigationActionsTasksRequest(input *ListDetectMitigationActionsTasksInput) (req *request.Request, output *ListDetectMitigationActionsTasksOutput) {
 	op := &request.Operation{
 		Name:       opListDetectMitigationActionsTasks,
@@ -14546,15 +15402,15 @@ func (c *IoT) ListDetectMitigationActionsTasksRequest(input *ListDetectMitigatio
 // API operation ListDetectMitigationActionsTasks for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListDetectMitigationActionsTasks(input *ListDetectMitigationActionsTasksInput) (*ListDetectMitigationActionsTasksOutput, error) {
 	req, out := c.ListDetectMitigationActionsTasksRequest(input)
 	return out, req.Send()
@@ -14584,15 +15440,14 @@ func (c *IoT) ListDetectMitigationActionsTasksWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDetectMitigationActionsTasks operation.
-//    pageNum := 0
-//    err := client.ListDetectMitigationActionsTasksPages(params,
-//        func(page *iot.ListDetectMitigationActionsTasksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDetectMitigationActionsTasks operation.
+//	pageNum := 0
+//	err := client.ListDetectMitigationActionsTasksPages(params,
+//	    func(page *iot.ListDetectMitigationActionsTasksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListDetectMitigationActionsTasksPages(input *ListDetectMitigationActionsTasksInput, fn func(*ListDetectMitigationActionsTasksOutput, bool) bool) error {
 	return c.ListDetectMitigationActionsTasksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -14644,14 +15499,13 @@ const opListDimensions = "ListDimensions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDimensionsRequest method.
+//	req, resp := client.ListDimensionsRequest(params)
 //
-//    // Example sending a request using the ListDimensionsRequest method.
-//    req, resp := client.ListDimensionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListDimensionsRequest(input *ListDimensionsInput) (req *request.Request, output *ListDimensionsOutput) {
 	op := &request.Operation{
 		Name:       opListDimensions,
@@ -14690,15 +15544,15 @@ func (c *IoT) ListDimensionsRequest(input *ListDimensionsInput) (req *request.Re
 // API operation ListDimensions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) ListDimensions(input *ListDimensionsInput) (*ListDimensionsOutput, error) {
 	req, out := c.ListDimensionsRequest(input)
 	return out, req.Send()
@@ -14728,15 +15582,14 @@ func (c *IoT) ListDimensionsWithContext(ctx aws.Context, input *ListDimensionsIn
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDimensions operation.
-//    pageNum := 0
-//    err := client.ListDimensionsPages(params,
-//        func(page *iot.ListDimensionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDimensions operation.
+//	pageNum := 0
+//	err := client.ListDimensionsPages(params,
+//	    func(page *iot.ListDimensionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListDimensionsPages(input *ListDimensionsInput, fn func(*ListDimensionsOutput, bool) bool) error {
 	return c.ListDimensionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -14788,14 +15641,13 @@ const opListDomainConfigurations = "ListDomainConfigurations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDomainConfigurationsRequest method.
+//	req, resp := client.ListDomainConfigurationsRequest(params)
 //
-//    // Example sending a request using the ListDomainConfigurationsRequest method.
-//    req, resp := client.ListDomainConfigurationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListDomainConfigurationsRequest(input *ListDomainConfigurationsInput) (req *request.Request, output *ListDomainConfigurationsOutput) {
 	op := &request.Operation{
 		Name:       opListDomainConfigurations,
@@ -14834,21 +15686,21 @@ func (c *IoT) ListDomainConfigurationsRequest(input *ListDomainConfigurationsInp
 // API operation ListDomainConfigurations for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListDomainConfigurations(input *ListDomainConfigurationsInput) (*ListDomainConfigurationsOutput, error) {
 	req, out := c.ListDomainConfigurationsRequest(input)
 	return out, req.Send()
@@ -14878,15 +15730,14 @@ func (c *IoT) ListDomainConfigurationsWithContext(ctx aws.Context, input *ListDo
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDomainConfigurations operation.
-//    pageNum := 0
-//    err := client.ListDomainConfigurationsPages(params,
-//        func(page *iot.ListDomainConfigurationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDomainConfigurations operation.
+//	pageNum := 0
+//	err := client.ListDomainConfigurationsPages(params,
+//	    func(page *iot.ListDomainConfigurationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListDomainConfigurationsPages(input *ListDomainConfigurationsInput, fn func(*ListDomainConfigurationsOutput, bool) bool) error {
 	return c.ListDomainConfigurationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -14938,14 +15789,13 @@ const opListFleetMetrics = "ListFleetMetrics"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFleetMetricsRequest method.
+//	req, resp := client.ListFleetMetricsRequest(params)
 //
-//    // Example sending a request using the ListFleetMetricsRequest method.
-//    req, resp := client.ListFleetMetricsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListFleetMetricsRequest(input *ListFleetMetricsInput) (req *request.Request, output *ListFleetMetricsOutput) {
 	op := &request.Operation{
 		Name:       opListFleetMetrics,
@@ -14983,21 +15833,21 @@ func (c *IoT) ListFleetMetricsRequest(input *ListFleetMetricsInput) (req *reques
 // API operation ListFleetMetrics for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListFleetMetrics(input *ListFleetMetricsInput) (*ListFleetMetricsOutput, error) {
 	req, out := c.ListFleetMetricsRequest(input)
 	return out, req.Send()
@@ -15027,15 +15877,14 @@ func (c *IoT) ListFleetMetricsWithContext(ctx aws.Context, input *ListFleetMetri
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFleetMetrics operation.
-//    pageNum := 0
-//    err := client.ListFleetMetricsPages(params,
-//        func(page *iot.ListFleetMetricsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFleetMetrics operation.
+//	pageNum := 0
+//	err := client.ListFleetMetricsPages(params,
+//	    func(page *iot.ListFleetMetricsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListFleetMetricsPages(input *ListFleetMetricsInput, fn func(*ListFleetMetricsOutput, bool) bool) error {
 	return c.ListFleetMetricsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -15087,14 +15936,13 @@ const opListIndices = "ListIndices"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListIndicesRequest method.
+//	req, resp := client.ListIndicesRequest(params)
 //
-//    // Example sending a request using the ListIndicesRequest method.
-//    req, resp := client.ListIndicesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListIndicesRequest(input *ListIndicesInput) (req *request.Request, output *ListIndicesOutput) {
 	op := &request.Operation{
 		Name:       opListIndices,
@@ -15132,21 +15980,21 @@ func (c *IoT) ListIndicesRequest(input *ListIndicesInput) (req *request.Request,
 // API operation ListIndices for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListIndices(input *ListIndicesInput) (*ListIndicesOutput, error) {
 	req, out := c.ListIndicesRequest(input)
 	return out, req.Send()
@@ -15176,15 +16024,14 @@ func (c *IoT) ListIndicesWithContext(ctx aws.Context, input *ListIndicesInput, o
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListIndices operation.
-//    pageNum := 0
-//    err := client.ListIndicesPages(params,
-//        func(page *iot.ListIndicesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListIndices operation.
+//	pageNum := 0
+//	err := client.ListIndicesPages(params,
+//	    func(page *iot.ListIndicesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListIndicesPages(input *ListIndicesInput, fn func(*ListIndicesOutput, bool) bool) error {
 	return c.ListIndicesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -15236,14 +16083,13 @@ const opListJobExecutionsForJob = "ListJobExecutionsForJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListJobExecutionsForJobRequest method.
+//	req, resp := client.ListJobExecutionsForJobRequest(params)
 //
-//    // Example sending a request using the ListJobExecutionsForJobRequest method.
-//    req, resp := client.ListJobExecutionsForJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListJobExecutionsForJobRequest(input *ListJobExecutionsForJobInput) (req *request.Request, output *ListJobExecutionsForJobOutput) {
 	op := &request.Operation{
 		Name:       opListJobExecutionsForJob,
@@ -15281,18 +16127,18 @@ func (c *IoT) ListJobExecutionsForJobRequest(input *ListJobExecutionsForJobInput
 // API operation ListJobExecutionsForJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) ListJobExecutionsForJob(input *ListJobExecutionsForJobInput) (*ListJobExecutionsForJobOutput, error) {
 	req, out := c.ListJobExecutionsForJobRequest(input)
 	return out, req.Send()
@@ -15322,15 +16168,14 @@ func (c *IoT) ListJobExecutionsForJobWithContext(ctx aws.Context, input *ListJob
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListJobExecutionsForJob operation.
-//    pageNum := 0
-//    err := client.ListJobExecutionsForJobPages(params,
-//        func(page *iot.ListJobExecutionsForJobOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListJobExecutionsForJob operation.
+//	pageNum := 0
+//	err := client.ListJobExecutionsForJobPages(params,
+//	    func(page *iot.ListJobExecutionsForJobOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListJobExecutionsForJobPages(input *ListJobExecutionsForJobInput, fn func(*ListJobExecutionsForJobOutput, bool) bool) error {
 	return c.ListJobExecutionsForJobPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -15382,14 +16227,13 @@ const opListJobExecutionsForThing = "ListJobExecutionsForThing"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListJobExecutionsForThingRequest method.
+//	req, resp := client.ListJobExecutionsForThingRequest(params)
 //
-//    // Example sending a request using the ListJobExecutionsForThingRequest method.
-//    req, resp := client.ListJobExecutionsForThingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListJobExecutionsForThingRequest(input *ListJobExecutionsForThingInput) (req *request.Request, output *ListJobExecutionsForThingOutput) {
 	op := &request.Operation{
 		Name:       opListJobExecutionsForThing,
@@ -15427,18 +16271,18 @@ func (c *IoT) ListJobExecutionsForThingRequest(input *ListJobExecutionsForThingI
 // API operation ListJobExecutionsForThing for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) ListJobExecutionsForThing(input *ListJobExecutionsForThingInput) (*ListJobExecutionsForThingOutput, error) {
 	req, out := c.ListJobExecutionsForThingRequest(input)
 	return out, req.Send()
@@ -15468,15 +16312,14 @@ func (c *IoT) ListJobExecutionsForThingWithContext(ctx aws.Context, input *ListJ
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListJobExecutionsForThing operation.
-//    pageNum := 0
-//    err := client.ListJobExecutionsForThingPages(params,
-//        func(page *iot.ListJobExecutionsForThingOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListJobExecutionsForThing operation.
+//	pageNum := 0
+//	err := client.ListJobExecutionsForThingPages(params,
+//	    func(page *iot.ListJobExecutionsForThingOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListJobExecutionsForThingPages(input *ListJobExecutionsForThingInput, fn func(*ListJobExecutionsForThingOutput, bool) bool) error {
 	return c.ListJobExecutionsForThingPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -15528,14 +16371,13 @@ const opListJobTemplates = "ListJobTemplates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListJobTemplatesRequest method.
+//	req, resp := client.ListJobTemplatesRequest(params)
 //
-//    // Example sending a request using the ListJobTemplatesRequest method.
-//    req, resp := client.ListJobTemplatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListJobTemplatesRequest(input *ListJobTemplatesInput) (req *request.Request, output *ListJobTemplatesOutput) {
 	op := &request.Operation{
 		Name:       opListJobTemplates,
@@ -15573,15 +16415,15 @@ func (c *IoT) ListJobTemplatesRequest(input *ListJobTemplatesInput) (req *reques
 // API operation ListJobTemplates for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListJobTemplates(input *ListJobTemplatesInput) (*ListJobTemplatesOutput, error) {
 	req, out := c.ListJobTemplatesRequest(input)
 	return out, req.Send()
@@ -15611,15 +16453,14 @@ func (c *IoT) ListJobTemplatesWithContext(ctx aws.Context, input *ListJobTemplat
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListJobTemplates operation.
-//    pageNum := 0
-//    err := client.ListJobTemplatesPages(params,
-//        func(page *iot.ListJobTemplatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListJobTemplates operation.
+//	pageNum := 0
+//	err := client.ListJobTemplatesPages(params,
+//	    func(page *iot.ListJobTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListJobTemplatesPages(input *ListJobTemplatesInput, fn func(*ListJobTemplatesOutput, bool) bool) error {
 	return c.ListJobTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -15671,14 +16512,13 @@ const opListJobs = "ListJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListJobsRequest method.
+//	req, resp := client.ListJobsRequest(params)
 //
-//    // Example sending a request using the ListJobsRequest method.
-//    req, resp := client.ListJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListJobsRequest(input *ListJobsInput) (req *request.Request, output *ListJobsOutput) {
 	op := &request.Operation{
 		Name:       opListJobs,
@@ -15716,18 +16556,18 @@ func (c *IoT) ListJobsRequest(input *ListJobsInput) (req *request.Request, outpu
 // API operation ListJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) ListJobs(input *ListJobsInput) (*ListJobsOutput, error) {
 	req, out := c.ListJobsRequest(input)
 	return out, req.Send()
@@ -15757,15 +16597,14 @@ func (c *IoT) ListJobsWithContext(ctx aws.Context, input *ListJobsInput, opts ..
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListJobs operation.
-//    pageNum := 0
-//    err := client.ListJobsPages(params,
-//        func(page *iot.ListJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListJobs operation.
+//	pageNum := 0
+//	err := client.ListJobsPages(params,
+//	    func(page *iot.ListJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListJobsPages(input *ListJobsInput, fn func(*ListJobsOutput, bool) bool) error {
 	return c.ListJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -15817,14 +16656,13 @@ const opListManagedJobTemplates = "ListManagedJobTemplates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListManagedJobTemplatesRequest method.
+//	req, resp := client.ListManagedJobTemplatesRequest(params)
 //
-//    // Example sending a request using the ListManagedJobTemplatesRequest method.
-//    req, resp := client.ListManagedJobTemplatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListManagedJobTemplatesRequest(input *ListManagedJobTemplatesInput) (req *request.Request, output *ListManagedJobTemplatesOutput) {
 	op := &request.Operation{
 		Name:       opListManagedJobTemplates,
@@ -15859,19 +16697,19 @@ func (c *IoT) ListManagedJobTemplatesRequest(input *ListManagedJobTemplatesInput
 // API operation ListManagedJobTemplates for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalServerException
-//   Internal error from the service that indicates an unexpected error or that
-//   the service is unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
 func (c *IoT) ListManagedJobTemplates(input *ListManagedJobTemplatesInput) (*ListManagedJobTemplatesOutput, error) {
 	req, out := c.ListManagedJobTemplatesRequest(input)
 	return out, req.Send()
@@ -15901,15 +16739,14 @@ func (c *IoT) ListManagedJobTemplatesWithContext(ctx aws.Context, input *ListMan
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListManagedJobTemplates operation.
-//    pageNum := 0
-//    err := client.ListManagedJobTemplatesPages(params,
-//        func(page *iot.ListManagedJobTemplatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListManagedJobTemplates operation.
+//	pageNum := 0
+//	err := client.ListManagedJobTemplatesPages(params,
+//	    func(page *iot.ListManagedJobTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListManagedJobTemplatesPages(input *ListManagedJobTemplatesInput, fn func(*ListManagedJobTemplatesOutput, bool) bool) error {
 	return c.ListManagedJobTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -15961,14 +16798,13 @@ const opListMetricValues = "ListMetricValues"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMetricValuesRequest method.
+//	req, resp := client.ListMetricValuesRequest(params)
 //
-//    // Example sending a request using the ListMetricValuesRequest method.
-//    req, resp := client.ListMetricValuesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListMetricValuesRequest(input *ListMetricValuesInput) (req *request.Request, output *ListMetricValuesOutput) {
 	op := &request.Operation{
 		Name:       opListMetricValues,
@@ -16005,18 +16841,18 @@ func (c *IoT) ListMetricValuesRequest(input *ListMetricValuesInput) (req *reques
 // API operation ListMetricValues for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) ListMetricValues(input *ListMetricValuesInput) (*ListMetricValuesOutput, error) {
 	req, out := c.ListMetricValuesRequest(input)
 	return out, req.Send()
@@ -16046,15 +16882,14 @@ func (c *IoT) ListMetricValuesWithContext(ctx aws.Context, input *ListMetricValu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMetricValues operation.
-//    pageNum := 0
-//    err := client.ListMetricValuesPages(params,
-//        func(page *iot.ListMetricValuesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMetricValues operation.
+//	pageNum := 0
+//	err := client.ListMetricValuesPages(params,
+//	    func(page *iot.ListMetricValuesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListMetricValuesPages(input *ListMetricValuesInput, fn func(*ListMetricValuesOutput, bool) bool) error {
 	return c.ListMetricValuesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -16106,14 +16941,13 @@ const opListMitigationActions = "ListMitigationActions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMitigationActionsRequest method.
+//	req, resp := client.ListMitigationActionsRequest(params)
 //
-//    // Example sending a request using the ListMitigationActionsRequest method.
-//    req, resp := client.ListMitigationActionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListMitigationActionsRequest(input *ListMitigationActionsInput) (req *request.Request, output *ListMitigationActionsOutput) {
 	op := &request.Operation{
 		Name:       opListMitigationActions,
@@ -16151,15 +16985,15 @@ func (c *IoT) ListMitigationActionsRequest(input *ListMitigationActionsInput) (r
 // API operation ListMitigationActions for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListMitigationActions(input *ListMitigationActionsInput) (*ListMitigationActionsOutput, error) {
 	req, out := c.ListMitigationActionsRequest(input)
 	return out, req.Send()
@@ -16189,15 +17023,14 @@ func (c *IoT) ListMitigationActionsWithContext(ctx aws.Context, input *ListMitig
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMitigationActions operation.
-//    pageNum := 0
-//    err := client.ListMitigationActionsPages(params,
-//        func(page *iot.ListMitigationActionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMitigationActions operation.
+//	pageNum := 0
+//	err := client.ListMitigationActionsPages(params,
+//	    func(page *iot.ListMitigationActionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListMitigationActionsPages(input *ListMitigationActionsInput, fn func(*ListMitigationActionsOutput, bool) bool) error {
 	return c.ListMitigationActionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -16249,14 +17082,13 @@ const opListOTAUpdates = "ListOTAUpdates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListOTAUpdatesRequest method.
+//	req, resp := client.ListOTAUpdatesRequest(params)
 //
-//    // Example sending a request using the ListOTAUpdatesRequest method.
-//    req, resp := client.ListOTAUpdatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListOTAUpdatesRequest(input *ListOTAUpdatesInput) (req *request.Request, output *ListOTAUpdatesOutput) {
 	op := &request.Operation{
 		Name:       opListOTAUpdates,
@@ -16294,21 +17126,21 @@ func (c *IoT) ListOTAUpdatesRequest(input *ListOTAUpdatesInput) (req *request.Re
 // API operation ListOTAUpdates for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) ListOTAUpdates(input *ListOTAUpdatesInput) (*ListOTAUpdatesOutput, error) {
 	req, out := c.ListOTAUpdatesRequest(input)
 	return out, req.Send()
@@ -16338,15 +17170,14 @@ func (c *IoT) ListOTAUpdatesWithContext(ctx aws.Context, input *ListOTAUpdatesIn
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListOTAUpdates operation.
-//    pageNum := 0
-//    err := client.ListOTAUpdatesPages(params,
-//        func(page *iot.ListOTAUpdatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListOTAUpdates operation.
+//	pageNum := 0
+//	err := client.ListOTAUpdatesPages(params,
+//	    func(page *iot.ListOTAUpdatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListOTAUpdatesPages(input *ListOTAUpdatesInput, fn func(*ListOTAUpdatesOutput, bool) bool) error {
 	return c.ListOTAUpdatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -16398,14 +17229,13 @@ const opListOutgoingCertificates = "ListOutgoingCertificates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListOutgoingCertificatesRequest method.
+//	req, resp := client.ListOutgoingCertificatesRequest(params)
 //
-//    // Example sending a request using the ListOutgoingCertificatesRequest method.
-//    req, resp := client.ListOutgoingCertificatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListOutgoingCertificatesRequest(input *ListOutgoingCertificatesInput) (req *request.Request, output *ListOutgoingCertificatesOutput) {
 	op := &request.Operation{
 		Name:       opListOutgoingCertificates,
@@ -16443,21 +17273,21 @@ func (c *IoT) ListOutgoingCertificatesRequest(input *ListOutgoingCertificatesInp
 // API operation ListOutgoingCertificates for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListOutgoingCertificates(input *ListOutgoingCertificatesInput) (*ListOutgoingCertificatesOutput, error) {
 	req, out := c.ListOutgoingCertificatesRequest(input)
 	return out, req.Send()
@@ -16487,15 +17317,14 @@ func (c *IoT) ListOutgoingCertificatesWithContext(ctx aws.Context, input *ListOu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListOutgoingCertificates operation.
-//    pageNum := 0
-//    err := client.ListOutgoingCertificatesPages(params,
-//        func(page *iot.ListOutgoingCertificatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListOutgoingCertificates operation.
+//	pageNum := 0
+//	err := client.ListOutgoingCertificatesPages(params,
+//	    func(page *iot.ListOutgoingCertificatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListOutgoingCertificatesPages(input *ListOutgoingCertificatesInput, fn func(*ListOutgoingCertificatesOutput, bool) bool) error {
 	return c.ListOutgoingCertificatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -16531,6 +17360,290 @@ func (c *IoT) ListOutgoingCertificatesPagesWithContext(ctx aws.Context, input *L
 	return p.Err()
 }
 
+const opListPackageVersions = "ListPackageVersions"
+
+// ListPackageVersionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListPackageVersions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListPackageVersions for more information on using the ListPackageVersions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListPackageVersionsRequest method.
+//	req, resp := client.ListPackageVersionsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) ListPackageVersionsRequest(input *ListPackageVersionsInput) (req *request.Request, output *ListPackageVersionsOutput) {
+	op := &request.Operation{
+		Name:       opListPackageVersions,
+		HTTPMethod: "GET",
+		HTTPPath:   "/packages/{packageName}/versions",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListPackageVersionsInput{}
+	}
+
+	output = &ListPackageVersionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListPackageVersions API operation for AWS IoT.
+//
+// Lists the software package versions associated to the account.
+//
+// Requires permission to access the ListPackageVersions (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation ListPackageVersions for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+//
+//   - ValidationException
+//     The request is not valid.
+func (c *IoT) ListPackageVersions(input *ListPackageVersionsInput) (*ListPackageVersionsOutput, error) {
+	req, out := c.ListPackageVersionsRequest(input)
+	return out, req.Send()
+}
+
+// ListPackageVersionsWithContext is the same as ListPackageVersions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListPackageVersions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) ListPackageVersionsWithContext(ctx aws.Context, input *ListPackageVersionsInput, opts ...request.Option) (*ListPackageVersionsOutput, error) {
+	req, out := c.ListPackageVersionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListPackageVersionsPages iterates over the pages of a ListPackageVersions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPackageVersions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListPackageVersions operation.
+//	pageNum := 0
+//	err := client.ListPackageVersionsPages(params,
+//	    func(page *iot.ListPackageVersionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *IoT) ListPackageVersionsPages(input *ListPackageVersionsInput, fn func(*ListPackageVersionsOutput, bool) bool) error {
+	return c.ListPackageVersionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPackageVersionsPagesWithContext same as ListPackageVersionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) ListPackageVersionsPagesWithContext(ctx aws.Context, input *ListPackageVersionsInput, fn func(*ListPackageVersionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPackageVersionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPackageVersionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPackageVersionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListPackages = "ListPackages"
+
+// ListPackagesRequest generates a "aws/request.Request" representing the
+// client's request for the ListPackages operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListPackages for more information on using the ListPackages
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListPackagesRequest method.
+//	req, resp := client.ListPackagesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) ListPackagesRequest(input *ListPackagesInput) (req *request.Request, output *ListPackagesOutput) {
+	op := &request.Operation{
+		Name:       opListPackages,
+		HTTPMethod: "GET",
+		HTTPPath:   "/packages",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListPackagesInput{}
+	}
+
+	output = &ListPackagesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListPackages API operation for AWS IoT.
+//
+// Lists the software packages associated to the account.
+//
+// Requires permission to access the ListPackages (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation ListPackages for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+//
+//   - ValidationException
+//     The request is not valid.
+func (c *IoT) ListPackages(input *ListPackagesInput) (*ListPackagesOutput, error) {
+	req, out := c.ListPackagesRequest(input)
+	return out, req.Send()
+}
+
+// ListPackagesWithContext is the same as ListPackages with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListPackages for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) ListPackagesWithContext(ctx aws.Context, input *ListPackagesInput, opts ...request.Option) (*ListPackagesOutput, error) {
+	req, out := c.ListPackagesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListPackagesPages iterates over the pages of a ListPackages operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPackages method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListPackages operation.
+//	pageNum := 0
+//	err := client.ListPackagesPages(params,
+//	    func(page *iot.ListPackagesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *IoT) ListPackagesPages(input *ListPackagesInput, fn func(*ListPackagesOutput, bool) bool) error {
+	return c.ListPackagesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPackagesPagesWithContext same as ListPackagesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) ListPackagesPagesWithContext(ctx aws.Context, input *ListPackagesInput, fn func(*ListPackagesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPackagesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPackagesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPackagesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListPolicies = "ListPolicies"
 
 // ListPoliciesRequest generates a "aws/request.Request" representing the
@@ -16547,14 +17660,13 @@ const opListPolicies = "ListPolicies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPoliciesRequest method.
+//	req, resp := client.ListPoliciesRequest(params)
 //
-//    // Example sending a request using the ListPoliciesRequest method.
-//    req, resp := client.ListPoliciesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListPoliciesRequest(input *ListPoliciesInput) (req *request.Request, output *ListPoliciesOutput) {
 	op := &request.Operation{
 		Name:       opListPolicies,
@@ -16592,21 +17704,21 @@ func (c *IoT) ListPoliciesRequest(input *ListPoliciesInput) (req *request.Reques
 // API operation ListPolicies for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListPolicies(input *ListPoliciesInput) (*ListPoliciesOutput, error) {
 	req, out := c.ListPoliciesRequest(input)
 	return out, req.Send()
@@ -16636,15 +17748,14 @@ func (c *IoT) ListPoliciesWithContext(ctx aws.Context, input *ListPoliciesInput,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPolicies operation.
-//    pageNum := 0
-//    err := client.ListPoliciesPages(params,
-//        func(page *iot.ListPoliciesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPolicies operation.
+//	pageNum := 0
+//	err := client.ListPoliciesPages(params,
+//	    func(page *iot.ListPoliciesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListPoliciesPages(input *ListPoliciesInput, fn func(*ListPoliciesOutput, bool) bool) error {
 	return c.ListPoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -16696,14 +17807,13 @@ const opListPolicyPrincipals = "ListPolicyPrincipals"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPolicyPrincipalsRequest method.
+//	req, resp := client.ListPolicyPrincipalsRequest(params)
 //
-//    // Example sending a request using the ListPolicyPrincipalsRequest method.
-//    req, resp := client.ListPolicyPrincipalsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // Deprecated: ListPolicyPrincipals has been deprecated
 func (c *IoT) ListPolicyPrincipalsRequest(input *ListPolicyPrincipalsInput) (req *request.Request, output *ListPolicyPrincipalsOutput) {
@@ -16749,24 +17859,24 @@ func (c *IoT) ListPolicyPrincipalsRequest(input *ListPolicyPrincipalsInput) (req
 // API operation ListPolicyPrincipals for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
 // Deprecated: ListPolicyPrincipals has been deprecated
 func (c *IoT) ListPolicyPrincipals(input *ListPolicyPrincipalsInput) (*ListPolicyPrincipalsOutput, error) {
@@ -16800,15 +17910,14 @@ func (c *IoT) ListPolicyPrincipalsWithContext(ctx aws.Context, input *ListPolicy
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPolicyPrincipals operation.
-//    pageNum := 0
-//    err := client.ListPolicyPrincipalsPages(params,
-//        func(page *iot.ListPolicyPrincipalsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPolicyPrincipals operation.
+//	pageNum := 0
+//	err := client.ListPolicyPrincipalsPages(params,
+//	    func(page *iot.ListPolicyPrincipalsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 //
 // Deprecated: ListPolicyPrincipalsPages has been deprecated
 func (c *IoT) ListPolicyPrincipalsPages(input *ListPolicyPrincipalsInput, fn func(*ListPolicyPrincipalsOutput, bool) bool) error {
@@ -16864,14 +17973,13 @@ const opListPolicyVersions = "ListPolicyVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPolicyVersionsRequest method.
+//	req, resp := client.ListPolicyVersionsRequest(params)
 //
-//    // Example sending a request using the ListPolicyVersionsRequest method.
-//    req, resp := client.ListPolicyVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListPolicyVersionsRequest(input *ListPolicyVersionsInput) (req *request.Request, output *ListPolicyVersionsOutput) {
 	op := &request.Operation{
 		Name:       opListPolicyVersions,
@@ -16903,24 +18011,24 @@ func (c *IoT) ListPolicyVersionsRequest(input *ListPolicyVersionsInput) (req *re
 // API operation ListPolicyVersions for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListPolicyVersions(input *ListPolicyVersionsInput) (*ListPolicyVersionsOutput, error) {
 	req, out := c.ListPolicyVersionsRequest(input)
 	return out, req.Send()
@@ -16958,14 +18066,13 @@ const opListPrincipalPolicies = "ListPrincipalPolicies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPrincipalPoliciesRequest method.
+//	req, resp := client.ListPrincipalPoliciesRequest(params)
 //
-//    // Example sending a request using the ListPrincipalPoliciesRequest method.
-//    req, resp := client.ListPrincipalPoliciesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // Deprecated: ListPrincipalPolicies has been deprecated
 func (c *IoT) ListPrincipalPoliciesRequest(input *ListPrincipalPoliciesInput) (req *request.Request, output *ListPrincipalPoliciesOutput) {
@@ -17012,24 +18119,24 @@ func (c *IoT) ListPrincipalPoliciesRequest(input *ListPrincipalPoliciesInput) (r
 // API operation ListPrincipalPolicies for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
 // Deprecated: ListPrincipalPolicies has been deprecated
 func (c *IoT) ListPrincipalPolicies(input *ListPrincipalPoliciesInput) (*ListPrincipalPoliciesOutput, error) {
@@ -17063,15 +18170,14 @@ func (c *IoT) ListPrincipalPoliciesWithContext(ctx aws.Context, input *ListPrinc
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPrincipalPolicies operation.
-//    pageNum := 0
-//    err := client.ListPrincipalPoliciesPages(params,
-//        func(page *iot.ListPrincipalPoliciesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPrincipalPolicies operation.
+//	pageNum := 0
+//	err := client.ListPrincipalPoliciesPages(params,
+//	    func(page *iot.ListPrincipalPoliciesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 //
 // Deprecated: ListPrincipalPoliciesPages has been deprecated
 func (c *IoT) ListPrincipalPoliciesPages(input *ListPrincipalPoliciesInput, fn func(*ListPrincipalPoliciesOutput, bool) bool) error {
@@ -17127,14 +18233,13 @@ const opListPrincipalThings = "ListPrincipalThings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPrincipalThingsRequest method.
+//	req, resp := client.ListPrincipalThingsRequest(params)
 //
-//    // Example sending a request using the ListPrincipalThingsRequest method.
-//    req, resp := client.ListPrincipalThingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListPrincipalThingsRequest(input *ListPrincipalThingsInput) (req *request.Request, output *ListPrincipalThingsOutput) {
 	op := &request.Operation{
 		Name:       opListPrincipalThings,
@@ -17174,24 +18279,24 @@ func (c *IoT) ListPrincipalThingsRequest(input *ListPrincipalThingsInput) (req *
 // API operation ListPrincipalThings for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) ListPrincipalThings(input *ListPrincipalThingsInput) (*ListPrincipalThingsOutput, error) {
 	req, out := c.ListPrincipalThingsRequest(input)
 	return out, req.Send()
@@ -17221,15 +18326,14 @@ func (c *IoT) ListPrincipalThingsWithContext(ctx aws.Context, input *ListPrincip
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPrincipalThings operation.
-//    pageNum := 0
-//    err := client.ListPrincipalThingsPages(params,
-//        func(page *iot.ListPrincipalThingsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPrincipalThings operation.
+//	pageNum := 0
+//	err := client.ListPrincipalThingsPages(params,
+//	    func(page *iot.ListPrincipalThingsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListPrincipalThingsPages(input *ListPrincipalThingsInput, fn func(*ListPrincipalThingsOutput, bool) bool) error {
 	return c.ListPrincipalThingsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -17281,14 +18385,13 @@ const opListProvisioningTemplateVersions = "ListProvisioningTemplateVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProvisioningTemplateVersionsRequest method.
+//	req, resp := client.ListProvisioningTemplateVersionsRequest(params)
 //
-//    // Example sending a request using the ListProvisioningTemplateVersionsRequest method.
-//    req, resp := client.ListProvisioningTemplateVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListProvisioningTemplateVersionsRequest(input *ListProvisioningTemplateVersionsInput) (req *request.Request, output *ListProvisioningTemplateVersionsOutput) {
 	op := &request.Operation{
 		Name:       opListProvisioningTemplateVersions,
@@ -17326,21 +18429,21 @@ func (c *IoT) ListProvisioningTemplateVersionsRequest(input *ListProvisioningTem
 // API operation ListProvisioningTemplateVersions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 func (c *IoT) ListProvisioningTemplateVersions(input *ListProvisioningTemplateVersionsInput) (*ListProvisioningTemplateVersionsOutput, error) {
 	req, out := c.ListProvisioningTemplateVersionsRequest(input)
 	return out, req.Send()
@@ -17370,15 +18473,14 @@ func (c *IoT) ListProvisioningTemplateVersionsWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListProvisioningTemplateVersions operation.
-//    pageNum := 0
-//    err := client.ListProvisioningTemplateVersionsPages(params,
-//        func(page *iot.ListProvisioningTemplateVersionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListProvisioningTemplateVersions operation.
+//	pageNum := 0
+//	err := client.ListProvisioningTemplateVersionsPages(params,
+//	    func(page *iot.ListProvisioningTemplateVersionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListProvisioningTemplateVersionsPages(input *ListProvisioningTemplateVersionsInput, fn func(*ListProvisioningTemplateVersionsOutput, bool) bool) error {
 	return c.ListProvisioningTemplateVersionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -17430,14 +18532,13 @@ const opListProvisioningTemplates = "ListProvisioningTemplates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProvisioningTemplatesRequest method.
+//	req, resp := client.ListProvisioningTemplatesRequest(params)
 //
-//    // Example sending a request using the ListProvisioningTemplatesRequest method.
-//    req, resp := client.ListProvisioningTemplatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListProvisioningTemplatesRequest(input *ListProvisioningTemplatesInput) (req *request.Request, output *ListProvisioningTemplatesOutput) {
 	op := &request.Operation{
 		Name:       opListProvisioningTemplates,
@@ -17475,18 +18576,18 @@ func (c *IoT) ListProvisioningTemplatesRequest(input *ListProvisioningTemplatesI
 // API operation ListProvisioningTemplates for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 func (c *IoT) ListProvisioningTemplates(input *ListProvisioningTemplatesInput) (*ListProvisioningTemplatesOutput, error) {
 	req, out := c.ListProvisioningTemplatesRequest(input)
 	return out, req.Send()
@@ -17516,15 +18617,14 @@ func (c *IoT) ListProvisioningTemplatesWithContext(ctx aws.Context, input *ListP
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListProvisioningTemplates operation.
-//    pageNum := 0
-//    err := client.ListProvisioningTemplatesPages(params,
-//        func(page *iot.ListProvisioningTemplatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListProvisioningTemplates operation.
+//	pageNum := 0
+//	err := client.ListProvisioningTemplatesPages(params,
+//	    func(page *iot.ListProvisioningTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListProvisioningTemplatesPages(input *ListProvisioningTemplatesInput, fn func(*ListProvisioningTemplatesOutput, bool) bool) error {
 	return c.ListProvisioningTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -17576,14 +18676,13 @@ const opListRelatedResourcesForAuditFinding = "ListRelatedResourcesForAuditFindi
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRelatedResourcesForAuditFindingRequest method.
+//	req, resp := client.ListRelatedResourcesForAuditFindingRequest(params)
 //
-//    // Example sending a request using the ListRelatedResourcesForAuditFindingRequest method.
-//    req, resp := client.ListRelatedResourcesForAuditFindingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListRelatedResourcesForAuditFindingRequest(input *ListRelatedResourcesForAuditFindingInput) (req *request.Request, output *ListRelatedResourcesForAuditFindingOutput) {
 	op := &request.Operation{
 		Name:       opListRelatedResourcesForAuditFinding,
@@ -17611,23 +18710,23 @@ func (c *IoT) ListRelatedResourcesForAuditFindingRequest(input *ListRelatedResou
 // The related resources of an Audit finding. The following resources can be
 // returned from calling this API:
 //
-//    * DEVICE_CERTIFICATE
+//   - DEVICE_CERTIFICATE
 //
-//    * CA_CERTIFICATE
+//   - CA_CERTIFICATE
 //
-//    * IOT_POLICY
+//   - IOT_POLICY
 //
-//    * COGNITO_IDENTITY_POOL
+//   - COGNITO_IDENTITY_POOL
 //
-//    * CLIENT_ID
+//   - CLIENT_ID
 //
-//    * ACCOUNT_SETTINGS
+//   - ACCOUNT_SETTINGS
 //
-//    * ROLE_ALIAS
+//   - ROLE_ALIAS
 //
-//    * IAM_ROLE
+//   - IAM_ROLE
 //
-//    * ISSUER_CERTIFICATE
+//   - ISSUER_CERTIFICATE
 //
 // This API is similar to DescribeAuditFinding's RelatedResources (https://docs.aws.amazon.com/iot/latest/apireference/API_DescribeAuditFinding.html)
 // but provides pagination and is not limited to 10 resources. When calling
@@ -17644,18 +18743,18 @@ func (c *IoT) ListRelatedResourcesForAuditFindingRequest(input *ListRelatedResou
 // API operation ListRelatedResourcesForAuditFinding for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListRelatedResourcesForAuditFinding(input *ListRelatedResourcesForAuditFindingInput) (*ListRelatedResourcesForAuditFindingOutput, error) {
 	req, out := c.ListRelatedResourcesForAuditFindingRequest(input)
 	return out, req.Send()
@@ -17685,15 +18784,14 @@ func (c *IoT) ListRelatedResourcesForAuditFindingWithContext(ctx aws.Context, in
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRelatedResourcesForAuditFinding operation.
-//    pageNum := 0
-//    err := client.ListRelatedResourcesForAuditFindingPages(params,
-//        func(page *iot.ListRelatedResourcesForAuditFindingOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRelatedResourcesForAuditFinding operation.
+//	pageNum := 0
+//	err := client.ListRelatedResourcesForAuditFindingPages(params,
+//	    func(page *iot.ListRelatedResourcesForAuditFindingOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListRelatedResourcesForAuditFindingPages(input *ListRelatedResourcesForAuditFindingInput, fn func(*ListRelatedResourcesForAuditFindingOutput, bool) bool) error {
 	return c.ListRelatedResourcesForAuditFindingPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -17745,14 +18843,13 @@ const opListRoleAliases = "ListRoleAliases"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRoleAliasesRequest method.
+//	req, resp := client.ListRoleAliasesRequest(params)
 //
-//    // Example sending a request using the ListRoleAliasesRequest method.
-//    req, resp := client.ListRoleAliasesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListRoleAliasesRequest(input *ListRoleAliasesInput) (req *request.Request, output *ListRoleAliasesOutput) {
 	op := &request.Operation{
 		Name:       opListRoleAliases,
@@ -17790,21 +18887,21 @@ func (c *IoT) ListRoleAliasesRequest(input *ListRoleAliasesInput) (req *request.
 // API operation ListRoleAliases for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListRoleAliases(input *ListRoleAliasesInput) (*ListRoleAliasesOutput, error) {
 	req, out := c.ListRoleAliasesRequest(input)
 	return out, req.Send()
@@ -17834,15 +18931,14 @@ func (c *IoT) ListRoleAliasesWithContext(ctx aws.Context, input *ListRoleAliases
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRoleAliases operation.
-//    pageNum := 0
-//    err := client.ListRoleAliasesPages(params,
-//        func(page *iot.ListRoleAliasesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRoleAliases operation.
+//	pageNum := 0
+//	err := client.ListRoleAliasesPages(params,
+//	    func(page *iot.ListRoleAliasesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListRoleAliasesPages(input *ListRoleAliasesInput, fn func(*ListRoleAliasesOutput, bool) bool) error {
 	return c.ListRoleAliasesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -17894,14 +18990,13 @@ const opListScheduledAudits = "ListScheduledAudits"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListScheduledAuditsRequest method.
+//	req, resp := client.ListScheduledAuditsRequest(params)
 //
-//    // Example sending a request using the ListScheduledAuditsRequest method.
-//    req, resp := client.ListScheduledAuditsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListScheduledAuditsRequest(input *ListScheduledAuditsInput) (req *request.Request, output *ListScheduledAuditsOutput) {
 	op := &request.Operation{
 		Name:       opListScheduledAudits,
@@ -17939,15 +19034,15 @@ func (c *IoT) ListScheduledAuditsRequest(input *ListScheduledAuditsInput) (req *
 // API operation ListScheduledAudits for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListScheduledAudits(input *ListScheduledAuditsInput) (*ListScheduledAuditsOutput, error) {
 	req, out := c.ListScheduledAuditsRequest(input)
 	return out, req.Send()
@@ -17977,15 +19072,14 @@ func (c *IoT) ListScheduledAuditsWithContext(ctx aws.Context, input *ListSchedul
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListScheduledAudits operation.
-//    pageNum := 0
-//    err := client.ListScheduledAuditsPages(params,
-//        func(page *iot.ListScheduledAuditsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListScheduledAudits operation.
+//	pageNum := 0
+//	err := client.ListScheduledAuditsPages(params,
+//	    func(page *iot.ListScheduledAuditsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListScheduledAuditsPages(input *ListScheduledAuditsInput, fn func(*ListScheduledAuditsOutput, bool) bool) error {
 	return c.ListScheduledAuditsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -18037,14 +19131,13 @@ const opListSecurityProfiles = "ListSecurityProfiles"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSecurityProfilesRequest method.
+//	req, resp := client.ListSecurityProfilesRequest(params)
 //
-//    // Example sending a request using the ListSecurityProfilesRequest method.
-//    req, resp := client.ListSecurityProfilesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListSecurityProfilesRequest(input *ListSecurityProfilesInput) (req *request.Request, output *ListSecurityProfilesOutput) {
 	op := &request.Operation{
 		Name:       opListSecurityProfiles,
@@ -18085,18 +19178,18 @@ func (c *IoT) ListSecurityProfilesRequest(input *ListSecurityProfilesInput) (req
 // API operation ListSecurityProfiles for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) ListSecurityProfiles(input *ListSecurityProfilesInput) (*ListSecurityProfilesOutput, error) {
 	req, out := c.ListSecurityProfilesRequest(input)
 	return out, req.Send()
@@ -18126,15 +19219,14 @@ func (c *IoT) ListSecurityProfilesWithContext(ctx aws.Context, input *ListSecuri
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSecurityProfiles operation.
-//    pageNum := 0
-//    err := client.ListSecurityProfilesPages(params,
-//        func(page *iot.ListSecurityProfilesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSecurityProfiles operation.
+//	pageNum := 0
+//	err := client.ListSecurityProfilesPages(params,
+//	    func(page *iot.ListSecurityProfilesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListSecurityProfilesPages(input *ListSecurityProfilesInput, fn func(*ListSecurityProfilesOutput, bool) bool) error {
 	return c.ListSecurityProfilesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -18186,14 +19278,13 @@ const opListSecurityProfilesForTarget = "ListSecurityProfilesForTarget"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSecurityProfilesForTargetRequest method.
+//	req, resp := client.ListSecurityProfilesForTargetRequest(params)
 //
-//    // Example sending a request using the ListSecurityProfilesForTargetRequest method.
-//    req, resp := client.ListSecurityProfilesForTargetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListSecurityProfilesForTargetRequest(input *ListSecurityProfilesForTargetInput) (req *request.Request, output *ListSecurityProfilesForTargetOutput) {
 	op := &request.Operation{
 		Name:       opListSecurityProfilesForTarget,
@@ -18231,18 +19322,18 @@ func (c *IoT) ListSecurityProfilesForTargetRequest(input *ListSecurityProfilesFo
 // API operation ListSecurityProfilesForTarget for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) ListSecurityProfilesForTarget(input *ListSecurityProfilesForTargetInput) (*ListSecurityProfilesForTargetOutput, error) {
 	req, out := c.ListSecurityProfilesForTargetRequest(input)
 	return out, req.Send()
@@ -18272,15 +19363,14 @@ func (c *IoT) ListSecurityProfilesForTargetWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSecurityProfilesForTarget operation.
-//    pageNum := 0
-//    err := client.ListSecurityProfilesForTargetPages(params,
-//        func(page *iot.ListSecurityProfilesForTargetOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSecurityProfilesForTarget operation.
+//	pageNum := 0
+//	err := client.ListSecurityProfilesForTargetPages(params,
+//	    func(page *iot.ListSecurityProfilesForTargetOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListSecurityProfilesForTargetPages(input *ListSecurityProfilesForTargetInput, fn func(*ListSecurityProfilesForTargetOutput, bool) bool) error {
 	return c.ListSecurityProfilesForTargetPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -18332,14 +19422,13 @@ const opListStreams = "ListStreams"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListStreamsRequest method.
+//	req, resp := client.ListStreamsRequest(params)
 //
-//    // Example sending a request using the ListStreamsRequest method.
-//    req, resp := client.ListStreamsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListStreamsRequest(input *ListStreamsInput) (req *request.Request, output *ListStreamsOutput) {
 	op := &request.Operation{
 		Name:       opListStreams,
@@ -18377,21 +19466,21 @@ func (c *IoT) ListStreamsRequest(input *ListStreamsInput) (req *request.Request,
 // API operation ListStreams for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListStreams(input *ListStreamsInput) (*ListStreamsOutput, error) {
 	req, out := c.ListStreamsRequest(input)
 	return out, req.Send()
@@ -18421,15 +19510,14 @@ func (c *IoT) ListStreamsWithContext(ctx aws.Context, input *ListStreamsInput, o
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListStreams operation.
-//    pageNum := 0
-//    err := client.ListStreamsPages(params,
-//        func(page *iot.ListStreamsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListStreams operation.
+//	pageNum := 0
+//	err := client.ListStreamsPages(params,
+//	    func(page *iot.ListStreamsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListStreamsPages(input *ListStreamsInput, fn func(*ListStreamsOutput, bool) bool) error {
 	return c.ListStreamsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -18481,14 +19569,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
 	op := &request.Operation{
 		Name:       opListTagsForResource,
@@ -18526,18 +19613,18 @@ func (c *IoT) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
 	return out, req.Send()
@@ -18567,15 +19654,14 @@ func (c *IoT) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsFor
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTagsForResource operation.
-//    pageNum := 0
-//    err := client.ListTagsForResourcePages(params,
-//        func(page *iot.ListTagsForResourceOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTagsForResource operation.
+//	pageNum := 0
+//	err := client.ListTagsForResourcePages(params,
+//	    func(page *iot.ListTagsForResourceOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListTagsForResourcePages(input *ListTagsForResourceInput, fn func(*ListTagsForResourceOutput, bool) bool) error {
 	return c.ListTagsForResourcePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -18627,14 +19713,13 @@ const opListTargetsForPolicy = "ListTargetsForPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTargetsForPolicyRequest method.
+//	req, resp := client.ListTargetsForPolicyRequest(params)
 //
-//    // Example sending a request using the ListTargetsForPolicyRequest method.
-//    req, resp := client.ListTargetsForPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListTargetsForPolicyRequest(input *ListTargetsForPolicyInput) (req *request.Request, output *ListTargetsForPolicyOutput) {
 	op := &request.Operation{
 		Name:       opListTargetsForPolicy,
@@ -18672,27 +19757,27 @@ func (c *IoT) ListTargetsForPolicyRequest(input *ListTargetsForPolicyInput) (req
 // API operation ListTargetsForPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) ListTargetsForPolicy(input *ListTargetsForPolicyInput) (*ListTargetsForPolicyOutput, error) {
 	req, out := c.ListTargetsForPolicyRequest(input)
 	return out, req.Send()
@@ -18722,15 +19807,14 @@ func (c *IoT) ListTargetsForPolicyWithContext(ctx aws.Context, input *ListTarget
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTargetsForPolicy operation.
-//    pageNum := 0
-//    err := client.ListTargetsForPolicyPages(params,
-//        func(page *iot.ListTargetsForPolicyOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTargetsForPolicy operation.
+//	pageNum := 0
+//	err := client.ListTargetsForPolicyPages(params,
+//	    func(page *iot.ListTargetsForPolicyOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListTargetsForPolicyPages(input *ListTargetsForPolicyInput, fn func(*ListTargetsForPolicyOutput, bool) bool) error {
 	return c.ListTargetsForPolicyPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -18782,14 +19866,13 @@ const opListTargetsForSecurityProfile = "ListTargetsForSecurityProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTargetsForSecurityProfileRequest method.
+//	req, resp := client.ListTargetsForSecurityProfileRequest(params)
 //
-//    // Example sending a request using the ListTargetsForSecurityProfileRequest method.
-//    req, resp := client.ListTargetsForSecurityProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListTargetsForSecurityProfileRequest(input *ListTargetsForSecurityProfileInput) (req *request.Request, output *ListTargetsForSecurityProfileOutput) {
 	op := &request.Operation{
 		Name:       opListTargetsForSecurityProfile,
@@ -18828,18 +19911,18 @@ func (c *IoT) ListTargetsForSecurityProfileRequest(input *ListTargetsForSecurity
 // API operation ListTargetsForSecurityProfile for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListTargetsForSecurityProfile(input *ListTargetsForSecurityProfileInput) (*ListTargetsForSecurityProfileOutput, error) {
 	req, out := c.ListTargetsForSecurityProfileRequest(input)
 	return out, req.Send()
@@ -18869,15 +19952,14 @@ func (c *IoT) ListTargetsForSecurityProfileWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTargetsForSecurityProfile operation.
-//    pageNum := 0
-//    err := client.ListTargetsForSecurityProfilePages(params,
-//        func(page *iot.ListTargetsForSecurityProfileOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTargetsForSecurityProfile operation.
+//	pageNum := 0
+//	err := client.ListTargetsForSecurityProfilePages(params,
+//	    func(page *iot.ListTargetsForSecurityProfileOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListTargetsForSecurityProfilePages(input *ListTargetsForSecurityProfileInput, fn func(*ListTargetsForSecurityProfileOutput, bool) bool) error {
 	return c.ListTargetsForSecurityProfilePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -18929,14 +20011,13 @@ const opListThingGroups = "ListThingGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListThingGroupsRequest method.
+//	req, resp := client.ListThingGroupsRequest(params)
 //
-//    // Example sending a request using the ListThingGroupsRequest method.
-//    req, resp := client.ListThingGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListThingGroupsRequest(input *ListThingGroupsInput) (req *request.Request, output *ListThingGroupsOutput) {
 	op := &request.Operation{
 		Name:       opListThingGroups,
@@ -18974,18 +20055,18 @@ func (c *IoT) ListThingGroupsRequest(input *ListThingGroupsInput) (req *request.
 // API operation ListThingGroups for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) ListThingGroups(input *ListThingGroupsInput) (*ListThingGroupsOutput, error) {
 	req, out := c.ListThingGroupsRequest(input)
 	return out, req.Send()
@@ -19015,15 +20096,14 @@ func (c *IoT) ListThingGroupsWithContext(ctx aws.Context, input *ListThingGroups
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListThingGroups operation.
-//    pageNum := 0
-//    err := client.ListThingGroupsPages(params,
-//        func(page *iot.ListThingGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListThingGroups operation.
+//	pageNum := 0
+//	err := client.ListThingGroupsPages(params,
+//	    func(page *iot.ListThingGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListThingGroupsPages(input *ListThingGroupsInput, fn func(*ListThingGroupsOutput, bool) bool) error {
 	return c.ListThingGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -19075,14 +20155,13 @@ const opListThingGroupsForThing = "ListThingGroupsForThing"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListThingGroupsForThingRequest method.
+//	req, resp := client.ListThingGroupsForThingRequest(params)
 //
-//    // Example sending a request using the ListThingGroupsForThingRequest method.
-//    req, resp := client.ListThingGroupsForThingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListThingGroupsForThingRequest(input *ListThingGroupsForThingInput) (req *request.Request, output *ListThingGroupsForThingOutput) {
 	op := &request.Operation{
 		Name:       opListThingGroupsForThing,
@@ -19120,18 +20199,18 @@ func (c *IoT) ListThingGroupsForThingRequest(input *ListThingGroupsForThingInput
 // API operation ListThingGroupsForThing for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) ListThingGroupsForThing(input *ListThingGroupsForThingInput) (*ListThingGroupsForThingOutput, error) {
 	req, out := c.ListThingGroupsForThingRequest(input)
 	return out, req.Send()
@@ -19161,15 +20240,14 @@ func (c *IoT) ListThingGroupsForThingWithContext(ctx aws.Context, input *ListThi
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListThingGroupsForThing operation.
-//    pageNum := 0
-//    err := client.ListThingGroupsForThingPages(params,
-//        func(page *iot.ListThingGroupsForThingOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListThingGroupsForThing operation.
+//	pageNum := 0
+//	err := client.ListThingGroupsForThingPages(params,
+//	    func(page *iot.ListThingGroupsForThingOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListThingGroupsForThingPages(input *ListThingGroupsForThingInput, fn func(*ListThingGroupsForThingOutput, bool) bool) error {
 	return c.ListThingGroupsForThingPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -19221,14 +20299,13 @@ const opListThingPrincipals = "ListThingPrincipals"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListThingPrincipalsRequest method.
+//	req, resp := client.ListThingPrincipalsRequest(params)
 //
-//    // Example sending a request using the ListThingPrincipalsRequest method.
-//    req, resp := client.ListThingPrincipalsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListThingPrincipalsRequest(input *ListThingPrincipalsInput) (req *request.Request, output *ListThingPrincipalsOutput) {
 	op := &request.Operation{
 		Name:       opListThingPrincipals,
@@ -19268,24 +20345,24 @@ func (c *IoT) ListThingPrincipalsRequest(input *ListThingPrincipalsInput) (req *
 // API operation ListThingPrincipals for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) ListThingPrincipals(input *ListThingPrincipalsInput) (*ListThingPrincipalsOutput, error) {
 	req, out := c.ListThingPrincipalsRequest(input)
 	return out, req.Send()
@@ -19315,15 +20392,14 @@ func (c *IoT) ListThingPrincipalsWithContext(ctx aws.Context, input *ListThingPr
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListThingPrincipals operation.
-//    pageNum := 0
-//    err := client.ListThingPrincipalsPages(params,
-//        func(page *iot.ListThingPrincipalsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListThingPrincipals operation.
+//	pageNum := 0
+//	err := client.ListThingPrincipalsPages(params,
+//	    func(page *iot.ListThingPrincipalsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListThingPrincipalsPages(input *ListThingPrincipalsInput, fn func(*ListThingPrincipalsOutput, bool) bool) error {
 	return c.ListThingPrincipalsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -19375,14 +20451,13 @@ const opListThingRegistrationTaskReports = "ListThingRegistrationTaskReports"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListThingRegistrationTaskReportsRequest method.
+//	req, resp := client.ListThingRegistrationTaskReportsRequest(params)
 //
-//    // Example sending a request using the ListThingRegistrationTaskReportsRequest method.
-//    req, resp := client.ListThingRegistrationTaskReportsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListThingRegistrationTaskReportsRequest(input *ListThingRegistrationTaskReportsInput) (req *request.Request, output *ListThingRegistrationTaskReportsOutput) {
 	op := &request.Operation{
 		Name:       opListThingRegistrationTaskReports,
@@ -19417,18 +20492,18 @@ func (c *IoT) ListThingRegistrationTaskReportsRequest(input *ListThingRegistrati
 // API operation ListThingRegistrationTaskReports for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListThingRegistrationTaskReports(input *ListThingRegistrationTaskReportsInput) (*ListThingRegistrationTaskReportsOutput, error) {
 	req, out := c.ListThingRegistrationTaskReportsRequest(input)
 	return out, req.Send()
@@ -19458,15 +20533,14 @@ func (c *IoT) ListThingRegistrationTaskReportsWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListThingRegistrationTaskReports operation.
-//    pageNum := 0
-//    err := client.ListThingRegistrationTaskReportsPages(params,
-//        func(page *iot.ListThingRegistrationTaskReportsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListThingRegistrationTaskReports operation.
+//	pageNum := 0
+//	err := client.ListThingRegistrationTaskReportsPages(params,
+//	    func(page *iot.ListThingRegistrationTaskReportsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListThingRegistrationTaskReportsPages(input *ListThingRegistrationTaskReportsInput, fn func(*ListThingRegistrationTaskReportsOutput, bool) bool) error {
 	return c.ListThingRegistrationTaskReportsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -19518,14 +20592,13 @@ const opListThingRegistrationTasks = "ListThingRegistrationTasks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListThingRegistrationTasksRequest method.
+//	req, resp := client.ListThingRegistrationTasksRequest(params)
 //
-//    // Example sending a request using the ListThingRegistrationTasksRequest method.
-//    req, resp := client.ListThingRegistrationTasksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListThingRegistrationTasksRequest(input *ListThingRegistrationTasksInput) (req *request.Request, output *ListThingRegistrationTasksOutput) {
 	op := &request.Operation{
 		Name:       opListThingRegistrationTasks,
@@ -19563,18 +20636,18 @@ func (c *IoT) ListThingRegistrationTasksRequest(input *ListThingRegistrationTask
 // API operation ListThingRegistrationTasks for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListThingRegistrationTasks(input *ListThingRegistrationTasksInput) (*ListThingRegistrationTasksOutput, error) {
 	req, out := c.ListThingRegistrationTasksRequest(input)
 	return out, req.Send()
@@ -19604,15 +20677,14 @@ func (c *IoT) ListThingRegistrationTasksWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListThingRegistrationTasks operation.
-//    pageNum := 0
-//    err := client.ListThingRegistrationTasksPages(params,
-//        func(page *iot.ListThingRegistrationTasksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListThingRegistrationTasks operation.
+//	pageNum := 0
+//	err := client.ListThingRegistrationTasksPages(params,
+//	    func(page *iot.ListThingRegistrationTasksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListThingRegistrationTasksPages(input *ListThingRegistrationTasksInput, fn func(*ListThingRegistrationTasksOutput, bool) bool) error {
 	return c.ListThingRegistrationTasksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -19664,14 +20736,13 @@ const opListThingTypes = "ListThingTypes"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListThingTypesRequest method.
+//	req, resp := client.ListThingTypesRequest(params)
 //
-//    // Example sending a request using the ListThingTypesRequest method.
-//    req, resp := client.ListThingTypesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListThingTypesRequest(input *ListThingTypesInput) (req *request.Request, output *ListThingTypesOutput) {
 	op := &request.Operation{
 		Name:       opListThingTypes,
@@ -19709,21 +20780,21 @@ func (c *IoT) ListThingTypesRequest(input *ListThingTypesInput) (req *request.Re
 // API operation ListThingTypes for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListThingTypes(input *ListThingTypesInput) (*ListThingTypesOutput, error) {
 	req, out := c.ListThingTypesRequest(input)
 	return out, req.Send()
@@ -19753,15 +20824,14 @@ func (c *IoT) ListThingTypesWithContext(ctx aws.Context, input *ListThingTypesIn
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListThingTypes operation.
-//    pageNum := 0
-//    err := client.ListThingTypesPages(params,
-//        func(page *iot.ListThingTypesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListThingTypes operation.
+//	pageNum := 0
+//	err := client.ListThingTypesPages(params,
+//	    func(page *iot.ListThingTypesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListThingTypesPages(input *ListThingTypesInput, fn func(*ListThingTypesOutput, bool) bool) error {
 	return c.ListThingTypesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -19813,14 +20883,13 @@ const opListThings = "ListThings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListThingsRequest method.
+//	req, resp := client.ListThingsRequest(params)
 //
-//    // Example sending a request using the ListThingsRequest method.
-//    req, resp := client.ListThingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListThingsRequest(input *ListThingsInput) (req *request.Request, output *ListThingsOutput) {
 	op := &request.Operation{
 		Name:       opListThings,
@@ -19867,21 +20936,21 @@ func (c *IoT) ListThingsRequest(input *ListThingsInput) (req *request.Request, o
 // API operation ListThings for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListThings(input *ListThingsInput) (*ListThingsOutput, error) {
 	req, out := c.ListThingsRequest(input)
 	return out, req.Send()
@@ -19911,15 +20980,14 @@ func (c *IoT) ListThingsWithContext(ctx aws.Context, input *ListThingsInput, opt
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListThings operation.
-//    pageNum := 0
-//    err := client.ListThingsPages(params,
-//        func(page *iot.ListThingsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListThings operation.
+//	pageNum := 0
+//	err := client.ListThingsPages(params,
+//	    func(page *iot.ListThingsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListThingsPages(input *ListThingsInput, fn func(*ListThingsOutput, bool) bool) error {
 	return c.ListThingsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -19971,14 +21039,13 @@ const opListThingsInBillingGroup = "ListThingsInBillingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListThingsInBillingGroupRequest method.
+//	req, resp := client.ListThingsInBillingGroupRequest(params)
 //
-//    // Example sending a request using the ListThingsInBillingGroupRequest method.
-//    req, resp := client.ListThingsInBillingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListThingsInBillingGroupRequest(input *ListThingsInBillingGroupInput) (req *request.Request, output *ListThingsInBillingGroupOutput) {
 	op := &request.Operation{
 		Name:       opListThingsInBillingGroup,
@@ -20016,18 +21083,18 @@ func (c *IoT) ListThingsInBillingGroupRequest(input *ListThingsInBillingGroupInp
 // API operation ListThingsInBillingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) ListThingsInBillingGroup(input *ListThingsInBillingGroupInput) (*ListThingsInBillingGroupOutput, error) {
 	req, out := c.ListThingsInBillingGroupRequest(input)
 	return out, req.Send()
@@ -20057,15 +21124,14 @@ func (c *IoT) ListThingsInBillingGroupWithContext(ctx aws.Context, input *ListTh
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListThingsInBillingGroup operation.
-//    pageNum := 0
-//    err := client.ListThingsInBillingGroupPages(params,
-//        func(page *iot.ListThingsInBillingGroupOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListThingsInBillingGroup operation.
+//	pageNum := 0
+//	err := client.ListThingsInBillingGroupPages(params,
+//	    func(page *iot.ListThingsInBillingGroupOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListThingsInBillingGroupPages(input *ListThingsInBillingGroupInput, fn func(*ListThingsInBillingGroupOutput, bool) bool) error {
 	return c.ListThingsInBillingGroupPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -20117,14 +21183,13 @@ const opListThingsInThingGroup = "ListThingsInThingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListThingsInThingGroupRequest method.
+//	req, resp := client.ListThingsInThingGroupRequest(params)
 //
-//    // Example sending a request using the ListThingsInThingGroupRequest method.
-//    req, resp := client.ListThingsInThingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListThingsInThingGroupRequest(input *ListThingsInThingGroupInput) (req *request.Request, output *ListThingsInThingGroupOutput) {
 	op := &request.Operation{
 		Name:       opListThingsInThingGroup,
@@ -20162,18 +21227,18 @@ func (c *IoT) ListThingsInThingGroupRequest(input *ListThingsInThingGroupInput) 
 // API operation ListThingsInThingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) ListThingsInThingGroup(input *ListThingsInThingGroupInput) (*ListThingsInThingGroupOutput, error) {
 	req, out := c.ListThingsInThingGroupRequest(input)
 	return out, req.Send()
@@ -20203,15 +21268,14 @@ func (c *IoT) ListThingsInThingGroupWithContext(ctx aws.Context, input *ListThin
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListThingsInThingGroup operation.
-//    pageNum := 0
-//    err := client.ListThingsInThingGroupPages(params,
-//        func(page *iot.ListThingsInThingGroupOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListThingsInThingGroup operation.
+//	pageNum := 0
+//	err := client.ListThingsInThingGroupPages(params,
+//	    func(page *iot.ListThingsInThingGroupOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListThingsInThingGroupPages(input *ListThingsInThingGroupInput, fn func(*ListThingsInThingGroupOutput, bool) bool) error {
 	return c.ListThingsInThingGroupPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -20263,14 +21327,13 @@ const opListTopicRuleDestinations = "ListTopicRuleDestinations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTopicRuleDestinationsRequest method.
+//	req, resp := client.ListTopicRuleDestinationsRequest(params)
 //
-//    // Example sending a request using the ListTopicRuleDestinationsRequest method.
-//    req, resp := client.ListTopicRuleDestinationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListTopicRuleDestinationsRequest(input *ListTopicRuleDestinationsInput) (req *request.Request, output *ListTopicRuleDestinationsOutput) {
 	op := &request.Operation{
 		Name:       opListTopicRuleDestinations,
@@ -20308,18 +21371,18 @@ func (c *IoT) ListTopicRuleDestinationsRequest(input *ListTopicRuleDestinationsI
 // API operation ListTopicRuleDestinations for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 func (c *IoT) ListTopicRuleDestinations(input *ListTopicRuleDestinationsInput) (*ListTopicRuleDestinationsOutput, error) {
 	req, out := c.ListTopicRuleDestinationsRequest(input)
 	return out, req.Send()
@@ -20349,15 +21412,14 @@ func (c *IoT) ListTopicRuleDestinationsWithContext(ctx aws.Context, input *ListT
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTopicRuleDestinations operation.
-//    pageNum := 0
-//    err := client.ListTopicRuleDestinationsPages(params,
-//        func(page *iot.ListTopicRuleDestinationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTopicRuleDestinations operation.
+//	pageNum := 0
+//	err := client.ListTopicRuleDestinationsPages(params,
+//	    func(page *iot.ListTopicRuleDestinationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListTopicRuleDestinationsPages(input *ListTopicRuleDestinationsInput, fn func(*ListTopicRuleDestinationsOutput, bool) bool) error {
 	return c.ListTopicRuleDestinationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -20409,14 +21471,13 @@ const opListTopicRules = "ListTopicRules"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTopicRulesRequest method.
+//	req, resp := client.ListTopicRulesRequest(params)
 //
-//    // Example sending a request using the ListTopicRulesRequest method.
-//    req, resp := client.ListTopicRulesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListTopicRulesRequest(input *ListTopicRulesInput) (req *request.Request, output *ListTopicRulesOutput) {
 	op := &request.Operation{
 		Name:       opListTopicRules,
@@ -20454,15 +21515,15 @@ func (c *IoT) ListTopicRulesRequest(input *ListTopicRulesInput) (req *request.Re
 // API operation ListTopicRules for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) ListTopicRules(input *ListTopicRulesInput) (*ListTopicRulesOutput, error) {
 	req, out := c.ListTopicRulesRequest(input)
 	return out, req.Send()
@@ -20492,15 +21553,14 @@ func (c *IoT) ListTopicRulesWithContext(ctx aws.Context, input *ListTopicRulesIn
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTopicRules operation.
-//    pageNum := 0
-//    err := client.ListTopicRulesPages(params,
-//        func(page *iot.ListTopicRulesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTopicRules operation.
+//	pageNum := 0
+//	err := client.ListTopicRulesPages(params,
+//	    func(page *iot.ListTopicRulesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListTopicRulesPages(input *ListTopicRulesInput, fn func(*ListTopicRulesOutput, bool) bool) error {
 	return c.ListTopicRulesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -20552,14 +21612,13 @@ const opListV2LoggingLevels = "ListV2LoggingLevels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListV2LoggingLevelsRequest method.
+//	req, resp := client.ListV2LoggingLevelsRequest(params)
 //
-//    // Example sending a request using the ListV2LoggingLevelsRequest method.
-//    req, resp := client.ListV2LoggingLevelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListV2LoggingLevelsRequest(input *ListV2LoggingLevelsInput) (req *request.Request, output *ListV2LoggingLevelsOutput) {
 	op := &request.Operation{
 		Name:       opListV2LoggingLevels,
@@ -20597,18 +21656,18 @@ func (c *IoT) ListV2LoggingLevelsRequest(input *ListV2LoggingLevelsInput) (req *
 // API operation ListV2LoggingLevels for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * NotConfiguredException
-//   The resource is not configured.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - NotConfiguredException
+//     The resource is not configured.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) ListV2LoggingLevels(input *ListV2LoggingLevelsInput) (*ListV2LoggingLevelsOutput, error) {
 	req, out := c.ListV2LoggingLevelsRequest(input)
 	return out, req.Send()
@@ -20638,15 +21697,14 @@ func (c *IoT) ListV2LoggingLevelsWithContext(ctx aws.Context, input *ListV2Loggi
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListV2LoggingLevels operation.
-//    pageNum := 0
-//    err := client.ListV2LoggingLevelsPages(params,
-//        func(page *iot.ListV2LoggingLevelsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListV2LoggingLevels operation.
+//	pageNum := 0
+//	err := client.ListV2LoggingLevelsPages(params,
+//	    func(page *iot.ListV2LoggingLevelsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListV2LoggingLevelsPages(input *ListV2LoggingLevelsInput, fn func(*ListV2LoggingLevelsOutput, bool) bool) error {
 	return c.ListV2LoggingLevelsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -20698,14 +21756,13 @@ const opListViolationEvents = "ListViolationEvents"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListViolationEventsRequest method.
+//	req, resp := client.ListViolationEventsRequest(params)
 //
-//    // Example sending a request using the ListViolationEventsRequest method.
-//    req, resp := client.ListViolationEventsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ListViolationEventsRequest(input *ListViolationEventsInput) (req *request.Request, output *ListViolationEventsOutput) {
 	op := &request.Operation{
 		Name:       opListViolationEvents,
@@ -20745,15 +21802,15 @@ func (c *IoT) ListViolationEventsRequest(input *ListViolationEventsInput) (req *
 // API operation ListViolationEvents for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ListViolationEvents(input *ListViolationEventsInput) (*ListViolationEventsOutput, error) {
 	req, out := c.ListViolationEventsRequest(input)
 	return out, req.Send()
@@ -20783,15 +21840,14 @@ func (c *IoT) ListViolationEventsWithContext(ctx aws.Context, input *ListViolati
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListViolationEvents operation.
-//    pageNum := 0
-//    err := client.ListViolationEventsPages(params,
-//        func(page *iot.ListViolationEventsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListViolationEvents operation.
+//	pageNum := 0
+//	err := client.ListViolationEventsPages(params,
+//	    func(page *iot.ListViolationEventsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoT) ListViolationEventsPages(input *ListViolationEventsInput, fn func(*ListViolationEventsOutput, bool) bool) error {
 	return c.ListViolationEventsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -20843,14 +21899,13 @@ const opPutVerificationStateOnViolation = "PutVerificationStateOnViolation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutVerificationStateOnViolationRequest method.
+//	req, resp := client.PutVerificationStateOnViolationRequest(params)
 //
-//    // Example sending a request using the PutVerificationStateOnViolationRequest method.
-//    req, resp := client.PutVerificationStateOnViolationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) PutVerificationStateOnViolationRequest(input *PutVerificationStateOnViolationInput) (req *request.Request, output *PutVerificationStateOnViolationOutput) {
 	op := &request.Operation{
 		Name:       opPutVerificationStateOnViolation,
@@ -20881,15 +21936,15 @@ func (c *IoT) PutVerificationStateOnViolationRequest(input *PutVerificationState
 // API operation PutVerificationStateOnViolation for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) PutVerificationStateOnViolation(input *PutVerificationStateOnViolationInput) (*PutVerificationStateOnViolationOutput, error) {
 	req, out := c.PutVerificationStateOnViolationRequest(input)
 	return out, req.Send()
@@ -20927,14 +21982,13 @@ const opRegisterCACertificate = "RegisterCACertificate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterCACertificateRequest method.
+//	req, resp := client.RegisterCACertificateRequest(params)
 //
-//    // Example sending a request using the RegisterCACertificateRequest method.
-//    req, resp := client.RegisterCACertificateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) RegisterCACertificateRequest(input *RegisterCACertificateInput) (req *request.Request, output *RegisterCACertificateOutput) {
 	op := &request.Operation{
 		Name:       opRegisterCACertificate,
@@ -20969,36 +22023,36 @@ func (c *IoT) RegisterCACertificateRequest(input *RegisterCACertificateInput) (r
 // API operation RegisterCACertificate for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * RegistrationCodeValidationException
-//   The registration code is invalid.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - RegistrationCodeValidationException
+//     The registration code is invalid.
 //
-//   * CertificateValidationException
-//   The certificate is invalid.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - CertificateValidationException
+//     The certificate is invalid.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) RegisterCACertificate(input *RegisterCACertificateInput) (*RegisterCACertificateOutput, error) {
 	req, out := c.RegisterCACertificateRequest(input)
 	return out, req.Send()
@@ -21036,14 +22090,13 @@ const opRegisterCertificate = "RegisterCertificate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterCertificateRequest method.
+//	req, resp := client.RegisterCertificateRequest(params)
 //
-//    // Example sending a request using the RegisterCertificateRequest method.
-//    req, resp := client.RegisterCertificateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) RegisterCertificateRequest(input *RegisterCertificateInput) (req *request.Request, output *RegisterCertificateOutput) {
 	op := &request.Operation{
 		Name:       opRegisterCertificate,
@@ -21078,35 +22131,35 @@ func (c *IoT) RegisterCertificateRequest(input *RegisterCertificateInput) (req *
 // API operation RegisterCertificate for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * CertificateValidationException
-//   The certificate is invalid.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * CertificateStateException
-//   The certificate operation is not allowed.
+//   - CertificateValidationException
+//     The certificate is invalid.
 //
-//   * CertificateConflictException
-//   Unable to verify the CA certificate used to sign the device certificate you
-//   are attempting to register. This is happens when you have registered more
-//   than one CA certificate that has the same subject field and public key.
+//   - CertificateStateException
+//     The certificate operation is not allowed.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - CertificateConflictException
+//     Unable to verify the CA certificate used to sign the device certificate you
+//     are attempting to register. This is happens when you have registered more
+//     than one CA certificate that has the same subject field and public key.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) RegisterCertificate(input *RegisterCertificateInput) (*RegisterCertificateOutput, error) {
 	req, out := c.RegisterCertificateRequest(input)
 	return out, req.Send()
@@ -21144,14 +22197,13 @@ const opRegisterCertificateWithoutCA = "RegisterCertificateWithoutCA"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterCertificateWithoutCARequest method.
+//	req, resp := client.RegisterCertificateWithoutCARequest(params)
 //
-//    // Example sending a request using the RegisterCertificateWithoutCARequest method.
-//    req, resp := client.RegisterCertificateWithoutCARequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) RegisterCertificateWithoutCARequest(input *RegisterCertificateWithoutCAInput) (req *request.Request, output *RegisterCertificateWithoutCAOutput) {
 	op := &request.Operation{
 		Name:       opRegisterCertificateWithoutCA,
@@ -21182,30 +22234,30 @@ func (c *IoT) RegisterCertificateWithoutCARequest(input *RegisterCertificateWith
 // API operation RegisterCertificateWithoutCA for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 //
-//   * CertificateStateException
-//   The certificate operation is not allowed.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * CertificateValidationException
-//   The certificate is invalid.
+//   - CertificateStateException
+//     The certificate operation is not allowed.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - CertificateValidationException
+//     The certificate is invalid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) RegisterCertificateWithoutCA(input *RegisterCertificateWithoutCAInput) (*RegisterCertificateWithoutCAOutput, error) {
 	req, out := c.RegisterCertificateWithoutCARequest(input)
 	return out, req.Send()
@@ -21243,14 +22295,13 @@ const opRegisterThing = "RegisterThing"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterThingRequest method.
+//	req, resp := client.RegisterThingRequest(params)
 //
-//    // Example sending a request using the RegisterThingRequest method.
-//    req, resp := client.RegisterThingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) RegisterThingRequest(input *RegisterThingInput) (req *request.Request, output *RegisterThingOutput) {
 	op := &request.Operation{
 		Name:       opRegisterThing,
@@ -21287,28 +22338,28 @@ func (c *IoT) RegisterThingRequest(input *RegisterThingInput) (req *request.Requ
 // API operation RegisterThing for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceRegistrationFailureException
-//   The resource registration failed.
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 //
+//   - ResourceRegistrationFailureException
+//     The resource registration failed.
 func (c *IoT) RegisterThing(input *RegisterThingInput) (*RegisterThingOutput, error) {
 	req, out := c.RegisterThingRequest(input)
 	return out, req.Send()
@@ -21346,14 +22397,13 @@ const opRejectCertificateTransfer = "RejectCertificateTransfer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RejectCertificateTransferRequest method.
+//	req, resp := client.RejectCertificateTransferRequest(params)
 //
-//    // Example sending a request using the RejectCertificateTransferRequest method.
-//    req, resp := client.RejectCertificateTransferRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) RejectCertificateTransferRequest(input *RejectCertificateTransferInput) (req *request.Request, output *RejectCertificateTransferOutput) {
 	op := &request.Operation{
 		Name:       opRejectCertificateTransfer,
@@ -21394,28 +22444,28 @@ func (c *IoT) RejectCertificateTransferRequest(input *RejectCertificateTransferI
 // API operation RejectCertificateTransfer for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * TransferAlreadyCompletedException
-//   You can't revert the certificate transfer because the transfer is already
-//   complete.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - TransferAlreadyCompletedException
+//     You can't revert the certificate transfer because the transfer is already
+//     complete.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) RejectCertificateTransfer(input *RejectCertificateTransferInput) (*RejectCertificateTransferOutput, error) {
 	req, out := c.RejectCertificateTransferRequest(input)
 	return out, req.Send()
@@ -21453,14 +22503,13 @@ const opRemoveThingFromBillingGroup = "RemoveThingFromBillingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveThingFromBillingGroupRequest method.
+//	req, resp := client.RemoveThingFromBillingGroupRequest(params)
 //
-//    // Example sending a request using the RemoveThingFromBillingGroupRequest method.
-//    req, resp := client.RemoveThingFromBillingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) RemoveThingFromBillingGroupRequest(input *RemoveThingFromBillingGroupInput) (req *request.Request, output *RemoveThingFromBillingGroupOutput) {
 	op := &request.Operation{
 		Name:       opRemoveThingFromBillingGroup,
@@ -21496,18 +22545,18 @@ func (c *IoT) RemoveThingFromBillingGroupRequest(input *RemoveThingFromBillingGr
 // API operation RemoveThingFromBillingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) RemoveThingFromBillingGroup(input *RemoveThingFromBillingGroupInput) (*RemoveThingFromBillingGroupOutput, error) {
 	req, out := c.RemoveThingFromBillingGroupRequest(input)
 	return out, req.Send()
@@ -21545,14 +22594,13 @@ const opRemoveThingFromThingGroup = "RemoveThingFromThingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveThingFromThingGroupRequest method.
+//	req, resp := client.RemoveThingFromThingGroupRequest(params)
 //
-//    // Example sending a request using the RemoveThingFromThingGroupRequest method.
-//    req, resp := client.RemoveThingFromThingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) RemoveThingFromThingGroupRequest(input *RemoveThingFromThingGroupInput) (req *request.Request, output *RemoveThingFromThingGroupOutput) {
 	op := &request.Operation{
 		Name:       opRemoveThingFromThingGroup,
@@ -21589,18 +22637,18 @@ func (c *IoT) RemoveThingFromThingGroupRequest(input *RemoveThingFromThingGroupI
 // API operation RemoveThingFromThingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) RemoveThingFromThingGroup(input *RemoveThingFromThingGroupInput) (*RemoveThingFromThingGroupOutput, error) {
 	req, out := c.RemoveThingFromThingGroupRequest(input)
 	return out, req.Send()
@@ -21638,14 +22686,13 @@ const opReplaceTopicRule = "ReplaceTopicRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ReplaceTopicRuleRequest method.
+//	req, resp := client.ReplaceTopicRuleRequest(params)
 //
-//    // Example sending a request using the ReplaceTopicRuleRequest method.
-//    req, resp := client.ReplaceTopicRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ReplaceTopicRuleRequest(input *ReplaceTopicRuleInput) (req *request.Request, output *ReplaceTopicRuleOutput) {
 	op := &request.Operation{
 		Name:       opReplaceTopicRule,
@@ -21680,25 +22727,25 @@ func (c *IoT) ReplaceTopicRuleRequest(input *ReplaceTopicRuleInput) (req *reques
 // API operation ReplaceTopicRule for usage and error information.
 //
 // Returned Error Types:
-//   * SqlParseException
-//   The Rule-SQL expression can't be parsed correctly.
 //
-//   * InternalException
-//   An unexpected error has occurred.
+//   - SqlParseException
+//     The Rule-SQL expression can't be parsed correctly.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 func (c *IoT) ReplaceTopicRule(input *ReplaceTopicRuleInput) (*ReplaceTopicRuleOutput, error) {
 	req, out := c.ReplaceTopicRuleRequest(input)
 	return out, req.Send()
@@ -21736,14 +22783,13 @@ const opSearchIndex = "SearchIndex"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchIndexRequest method.
+//	req, resp := client.SearchIndexRequest(params)
 //
-//    // Example sending a request using the SearchIndexRequest method.
-//    req, resp := client.SearchIndexRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) SearchIndexRequest(input *SearchIndexInput) (req *request.Request, output *SearchIndexOutput) {
 	op := &request.Operation{
 		Name:       opSearchIndex,
@@ -21775,30 +22821,30 @@ func (c *IoT) SearchIndexRequest(input *SearchIndexInput) (req *request.Request,
 // API operation SearchIndex for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * InvalidQueryException
-//   The query is invalid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * IndexNotReadyException
-//   The index is not ready.
+//   - InvalidQueryException
+//     The query is invalid.
 //
+//   - IndexNotReadyException
+//     The index is not ready.
 func (c *IoT) SearchIndex(input *SearchIndexInput) (*SearchIndexOutput, error) {
 	req, out := c.SearchIndexRequest(input)
 	return out, req.Send()
@@ -21836,14 +22882,13 @@ const opSetDefaultAuthorizer = "SetDefaultAuthorizer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SetDefaultAuthorizerRequest method.
+//	req, resp := client.SetDefaultAuthorizerRequest(params)
 //
-//    // Example sending a request using the SetDefaultAuthorizerRequest method.
-//    req, resp := client.SetDefaultAuthorizerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) SetDefaultAuthorizerRequest(input *SetDefaultAuthorizerInput) (req *request.Request, output *SetDefaultAuthorizerOutput) {
 	op := &request.Operation{
 		Name:       opSetDefaultAuthorizer,
@@ -21876,27 +22921,27 @@ func (c *IoT) SetDefaultAuthorizerRequest(input *SetDefaultAuthorizerInput) (req
 // API operation SetDefaultAuthorizer for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceAlreadyExistsException
-//   The resource already exists.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceAlreadyExistsException
+//     The resource already exists.
 func (c *IoT) SetDefaultAuthorizer(input *SetDefaultAuthorizerInput) (*SetDefaultAuthorizerOutput, error) {
 	req, out := c.SetDefaultAuthorizerRequest(input)
 	return out, req.Send()
@@ -21934,14 +22979,13 @@ const opSetDefaultPolicyVersion = "SetDefaultPolicyVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SetDefaultPolicyVersionRequest method.
+//	req, resp := client.SetDefaultPolicyVersionRequest(params)
 //
-//    // Example sending a request using the SetDefaultPolicyVersionRequest method.
-//    req, resp := client.SetDefaultPolicyVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) SetDefaultPolicyVersionRequest(input *SetDefaultPolicyVersionInput) (req *request.Request, output *SetDefaultPolicyVersionOutput) {
 	op := &request.Operation{
 		Name:       opSetDefaultPolicyVersion,
@@ -21977,24 +23021,24 @@ func (c *IoT) SetDefaultPolicyVersionRequest(input *SetDefaultPolicyVersionInput
 // API operation SetDefaultPolicyVersion for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) SetDefaultPolicyVersion(input *SetDefaultPolicyVersionInput) (*SetDefaultPolicyVersionOutput, error) {
 	req, out := c.SetDefaultPolicyVersionRequest(input)
 	return out, req.Send()
@@ -22032,14 +23076,13 @@ const opSetLoggingOptions = "SetLoggingOptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SetLoggingOptionsRequest method.
+//	req, resp := client.SetLoggingOptionsRequest(params)
 //
-//    // Example sending a request using the SetLoggingOptionsRequest method.
-//    req, resp := client.SetLoggingOptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) SetLoggingOptionsRequest(input *SetLoggingOptionsInput) (req *request.Request, output *SetLoggingOptionsOutput) {
 	op := &request.Operation{
 		Name:       opSetLoggingOptions,
@@ -22074,15 +23117,15 @@ func (c *IoT) SetLoggingOptionsRequest(input *SetLoggingOptionsInput) (req *requ
 // API operation SetLoggingOptions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) SetLoggingOptions(input *SetLoggingOptionsInput) (*SetLoggingOptionsOutput, error) {
 	req, out := c.SetLoggingOptionsRequest(input)
 	return out, req.Send()
@@ -22120,14 +23163,13 @@ const opSetV2LoggingLevel = "SetV2LoggingLevel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SetV2LoggingLevelRequest method.
+//	req, resp := client.SetV2LoggingLevelRequest(params)
 //
-//    // Example sending a request using the SetV2LoggingLevelRequest method.
-//    req, resp := client.SetV2LoggingLevelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) SetV2LoggingLevelRequest(input *SetV2LoggingLevelInput) (req *request.Request, output *SetV2LoggingLevelOutput) {
 	op := &request.Operation{
 		Name:       opSetV2LoggingLevel,
@@ -22160,21 +23202,21 @@ func (c *IoT) SetV2LoggingLevelRequest(input *SetV2LoggingLevelInput) (req *requ
 // API operation SetV2LoggingLevel for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * NotConfiguredException
-//   The resource is not configured.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - NotConfiguredException
+//     The resource is not configured.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) SetV2LoggingLevel(input *SetV2LoggingLevelInput) (*SetV2LoggingLevelOutput, error) {
 	req, out := c.SetV2LoggingLevelRequest(input)
 	return out, req.Send()
@@ -22212,14 +23254,13 @@ const opSetV2LoggingOptions = "SetV2LoggingOptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SetV2LoggingOptionsRequest method.
+//	req, resp := client.SetV2LoggingOptionsRequest(params)
 //
-//    // Example sending a request using the SetV2LoggingOptionsRequest method.
-//    req, resp := client.SetV2LoggingOptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) SetV2LoggingOptionsRequest(input *SetV2LoggingOptionsInput) (req *request.Request, output *SetV2LoggingOptionsOutput) {
 	op := &request.Operation{
 		Name:       opSetV2LoggingOptions,
@@ -22252,15 +23293,15 @@ func (c *IoT) SetV2LoggingOptionsRequest(input *SetV2LoggingOptionsInput) (req *
 // API operation SetV2LoggingOptions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) SetV2LoggingOptions(input *SetV2LoggingOptionsInput) (*SetV2LoggingOptionsOutput, error) {
 	req, out := c.SetV2LoggingOptionsRequest(input)
 	return out, req.Send()
@@ -22298,14 +23339,13 @@ const opStartAuditMitigationActionsTask = "StartAuditMitigationActionsTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartAuditMitigationActionsTaskRequest method.
+//	req, resp := client.StartAuditMitigationActionsTaskRequest(params)
 //
-//    // Example sending a request using the StartAuditMitigationActionsTaskRequest method.
-//    req, resp := client.StartAuditMitigationActionsTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) StartAuditMitigationActionsTaskRequest(input *StartAuditMitigationActionsTaskInput) (req *request.Request, output *StartAuditMitigationActionsTaskOutput) {
 	op := &request.Operation{
 		Name:       opStartAuditMitigationActionsTask,
@@ -22337,22 +23377,22 @@ func (c *IoT) StartAuditMitigationActionsTaskRequest(input *StartAuditMitigation
 // API operation StartAuditMitigationActionsTask for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * TaskAlreadyExistsException
-//   This exception occurs if you attempt to start a task with the same task-id
-//   as an existing task but with a different clientRequestToken.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - TaskAlreadyExistsException
+//     This exception occurs if you attempt to start a task with the same task-id
+//     as an existing task but with a different clientRequestToken.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) StartAuditMitigationActionsTask(input *StartAuditMitigationActionsTaskInput) (*StartAuditMitigationActionsTaskOutput, error) {
 	req, out := c.StartAuditMitigationActionsTaskRequest(input)
 	return out, req.Send()
@@ -22390,14 +23430,13 @@ const opStartDetectMitigationActionsTask = "StartDetectMitigationActionsTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartDetectMitigationActionsTaskRequest method.
+//	req, resp := client.StartDetectMitigationActionsTaskRequest(params)
 //
-//    // Example sending a request using the StartDetectMitigationActionsTaskRequest method.
-//    req, resp := client.StartDetectMitigationActionsTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) StartDetectMitigationActionsTaskRequest(input *StartDetectMitigationActionsTaskInput) (req *request.Request, output *StartDetectMitigationActionsTaskOutput) {
 	op := &request.Operation{
 		Name:       opStartDetectMitigationActionsTask,
@@ -22429,22 +23468,22 @@ func (c *IoT) StartDetectMitigationActionsTaskRequest(input *StartDetectMitigati
 // API operation StartDetectMitigationActionsTask for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * TaskAlreadyExistsException
-//   This exception occurs if you attempt to start a task with the same task-id
-//   as an existing task but with a different clientRequestToken.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - TaskAlreadyExistsException
+//     This exception occurs if you attempt to start a task with the same task-id
+//     as an existing task but with a different clientRequestToken.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) StartDetectMitigationActionsTask(input *StartDetectMitigationActionsTaskInput) (*StartDetectMitigationActionsTaskOutput, error) {
 	req, out := c.StartDetectMitigationActionsTaskRequest(input)
 	return out, req.Send()
@@ -22482,14 +23521,13 @@ const opStartOnDemandAuditTask = "StartOnDemandAuditTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartOnDemandAuditTaskRequest method.
+//	req, resp := client.StartOnDemandAuditTaskRequest(params)
 //
-//    // Example sending a request using the StartOnDemandAuditTaskRequest method.
-//    req, resp := client.StartOnDemandAuditTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) StartOnDemandAuditTaskRequest(input *StartOnDemandAuditTaskInput) (req *request.Request, output *StartOnDemandAuditTaskOutput) {
 	op := &request.Operation{
 		Name:       opStartOnDemandAuditTask,
@@ -22521,18 +23559,18 @@ func (c *IoT) StartOnDemandAuditTaskRequest(input *StartOnDemandAuditTaskInput) 
 // API operation StartOnDemandAuditTask for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) StartOnDemandAuditTask(input *StartOnDemandAuditTaskInput) (*StartOnDemandAuditTaskOutput, error) {
 	req, out := c.StartOnDemandAuditTaskRequest(input)
 	return out, req.Send()
@@ -22570,14 +23608,13 @@ const opStartThingRegistrationTask = "StartThingRegistrationTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartThingRegistrationTaskRequest method.
+//	req, resp := client.StartThingRegistrationTaskRequest(params)
 //
-//    // Example sending a request using the StartThingRegistrationTaskRequest method.
-//    req, resp := client.StartThingRegistrationTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) StartThingRegistrationTaskRequest(input *StartThingRegistrationTaskInput) (req *request.Request, output *StartThingRegistrationTaskOutput) {
 	op := &request.Operation{
 		Name:       opStartThingRegistrationTask,
@@ -22609,18 +23646,18 @@ func (c *IoT) StartThingRegistrationTaskRequest(input *StartThingRegistrationTas
 // API operation StartThingRegistrationTask for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) StartThingRegistrationTask(input *StartThingRegistrationTaskInput) (*StartThingRegistrationTaskOutput, error) {
 	req, out := c.StartThingRegistrationTaskRequest(input)
 	return out, req.Send()
@@ -22658,14 +23695,13 @@ const opStopThingRegistrationTask = "StopThingRegistrationTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopThingRegistrationTaskRequest method.
+//	req, resp := client.StopThingRegistrationTaskRequest(params)
 //
-//    // Example sending a request using the StopThingRegistrationTaskRequest method.
-//    req, resp := client.StopThingRegistrationTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) StopThingRegistrationTaskRequest(input *StopThingRegistrationTaskInput) (req *request.Request, output *StopThingRegistrationTaskOutput) {
 	op := &request.Operation{
 		Name:       opStopThingRegistrationTask,
@@ -22698,21 +23734,21 @@ func (c *IoT) StopThingRegistrationTaskRequest(input *StopThingRegistrationTaskI
 // API operation StopThingRegistrationTask for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) StopThingRegistrationTask(input *StopThingRegistrationTaskInput) (*StopThingRegistrationTaskOutput, error) {
 	req, out := c.StopThingRegistrationTaskRequest(input)
 	return out, req.Send()
@@ -22750,14 +23786,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
 	op := &request.Operation{
 		Name:       opTagResource,
@@ -22791,21 +23826,21 @@ func (c *IoT) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
 	req, out := c.TagResourceRequest(input)
 	return out, req.Send()
@@ -22843,14 +23878,13 @@ const opTestAuthorization = "TestAuthorization"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TestAuthorizationRequest method.
+//	req, resp := client.TestAuthorizationRequest(params)
 //
-//    // Example sending a request using the TestAuthorizationRequest method.
-//    req, resp := client.TestAuthorizationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) TestAuthorizationRequest(input *TestAuthorizationInput) (req *request.Request, output *TestAuthorizationOutput) {
 	op := &request.Operation{
 		Name:       opTestAuthorization,
@@ -22884,27 +23918,27 @@ func (c *IoT) TestAuthorizationRequest(input *TestAuthorizationInput) (req *requ
 // API operation TestAuthorization for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - LimitExceededException
+//     A limit has been exceeded.
 func (c *IoT) TestAuthorization(input *TestAuthorizationInput) (*TestAuthorizationOutput, error) {
 	req, out := c.TestAuthorizationRequest(input)
 	return out, req.Send()
@@ -22942,14 +23976,13 @@ const opTestInvokeAuthorizer = "TestInvokeAuthorizer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TestInvokeAuthorizerRequest method.
+//	req, resp := client.TestInvokeAuthorizerRequest(params)
 //
-//    // Example sending a request using the TestInvokeAuthorizerRequest method.
-//    req, resp := client.TestInvokeAuthorizerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) TestInvokeAuthorizerRequest(input *TestInvokeAuthorizerInput) (req *request.Request, output *TestInvokeAuthorizerOutput) {
 	op := &request.Operation{
 		Name:       opTestInvokeAuthorizer,
@@ -22983,27 +24016,27 @@ func (c *IoT) TestInvokeAuthorizerRequest(input *TestInvokeAuthorizerInput) (req
 // API operation TestInvokeAuthorizer for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * InvalidResponseException
-//   The response is invalid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - InvalidResponseException
+//     The response is invalid.
 func (c *IoT) TestInvokeAuthorizer(input *TestInvokeAuthorizerInput) (*TestInvokeAuthorizerOutput, error) {
 	req, out := c.TestInvokeAuthorizerRequest(input)
 	return out, req.Send()
@@ -23041,14 +24074,13 @@ const opTransferCertificate = "TransferCertificate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TransferCertificateRequest method.
+//	req, resp := client.TransferCertificateRequest(params)
 //
-//    // Example sending a request using the TransferCertificateRequest method.
-//    req, resp := client.TransferCertificateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) TransferCertificateRequest(input *TransferCertificateInput) (req *request.Request, output *TransferCertificateOutput) {
 	op := &request.Operation{
 		Name:       opTransferCertificate,
@@ -23092,31 +24124,31 @@ func (c *IoT) TransferCertificateRequest(input *TransferCertificateInput) (req *
 // API operation TransferCertificate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * CertificateStateException
-//   The certificate operation is not allowed.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * TransferConflictException
-//   You can't transfer the certificate because authorization policies are still
-//   attached.
+//   - CertificateStateException
+//     The certificate operation is not allowed.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - TransferConflictException
+//     You can't transfer the certificate because authorization policies are still
+//     attached.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) TransferCertificate(input *TransferCertificateInput) (*TransferCertificateOutput, error) {
 	req, out := c.TransferCertificateRequest(input)
 	return out, req.Send()
@@ -23154,14 +24186,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
 	op := &request.Operation{
 		Name:       opUntagResource,
@@ -23194,18 +24225,18 @@ func (c *IoT) UntagResourceRequest(input *UntagResourceInput) (req *request.Requ
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
 	req, out := c.UntagResourceRequest(input)
 	return out, req.Send()
@@ -23243,14 +24274,13 @@ const opUpdateAccountAuditConfiguration = "UpdateAccountAuditConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAccountAuditConfigurationRequest method.
+//	req, resp := client.UpdateAccountAuditConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateAccountAuditConfigurationRequest method.
-//    req, resp := client.UpdateAccountAuditConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateAccountAuditConfigurationRequest(input *UpdateAccountAuditConfigurationInput) (req *request.Request, output *UpdateAccountAuditConfigurationOutput) {
 	op := &request.Operation{
 		Name:       opUpdateAccountAuditConfiguration,
@@ -23285,15 +24315,15 @@ func (c *IoT) UpdateAccountAuditConfigurationRequest(input *UpdateAccountAuditCo
 // API operation UpdateAccountAuditConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateAccountAuditConfiguration(input *UpdateAccountAuditConfigurationInput) (*UpdateAccountAuditConfigurationOutput, error) {
 	req, out := c.UpdateAccountAuditConfigurationRequest(input)
 	return out, req.Send()
@@ -23331,14 +24361,13 @@ const opUpdateAuditSuppression = "UpdateAuditSuppression"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAuditSuppressionRequest method.
+//	req, resp := client.UpdateAuditSuppressionRequest(params)
 //
-//    // Example sending a request using the UpdateAuditSuppressionRequest method.
-//    req, resp := client.UpdateAuditSuppressionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateAuditSuppressionRequest(input *UpdateAuditSuppressionInput) (req *request.Request, output *UpdateAuditSuppressionOutput) {
 	op := &request.Operation{
 		Name:       opUpdateAuditSuppression,
@@ -23368,18 +24397,18 @@ func (c *IoT) UpdateAuditSuppressionRequest(input *UpdateAuditSuppressionInput) 
 // API operation UpdateAuditSuppression for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateAuditSuppression(input *UpdateAuditSuppressionInput) (*UpdateAuditSuppressionOutput, error) {
 	req, out := c.UpdateAuditSuppressionRequest(input)
 	return out, req.Send()
@@ -23417,14 +24446,13 @@ const opUpdateAuthorizer = "UpdateAuthorizer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAuthorizerRequest method.
+//	req, resp := client.UpdateAuthorizerRequest(params)
 //
-//    // Example sending a request using the UpdateAuthorizerRequest method.
-//    req, resp := client.UpdateAuthorizerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateAuthorizerRequest(input *UpdateAuthorizerInput) (req *request.Request, output *UpdateAuthorizerOutput) {
 	op := &request.Operation{
 		Name:       opUpdateAuthorizer,
@@ -23456,27 +24484,27 @@ func (c *IoT) UpdateAuthorizerRequest(input *UpdateAuthorizerInput) (req *reques
 // API operation UpdateAuthorizer for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * LimitExceededException
-//   A limit has been exceeded.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - LimitExceededException
+//     A limit has been exceeded.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateAuthorizer(input *UpdateAuthorizerInput) (*UpdateAuthorizerOutput, error) {
 	req, out := c.UpdateAuthorizerRequest(input)
 	return out, req.Send()
@@ -23514,14 +24542,13 @@ const opUpdateBillingGroup = "UpdateBillingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateBillingGroupRequest method.
+//	req, resp := client.UpdateBillingGroupRequest(params)
 //
-//    // Example sending a request using the UpdateBillingGroupRequest method.
-//    req, resp := client.UpdateBillingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateBillingGroupRequest(input *UpdateBillingGroupInput) (req *request.Request, output *UpdateBillingGroupOutput) {
 	op := &request.Operation{
 		Name:       opUpdateBillingGroup,
@@ -23553,22 +24580,22 @@ func (c *IoT) UpdateBillingGroupRequest(input *UpdateBillingGroupInput) (req *re
 // API operation UpdateBillingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) UpdateBillingGroup(input *UpdateBillingGroupInput) (*UpdateBillingGroupOutput, error) {
 	req, out := c.UpdateBillingGroupRequest(input)
 	return out, req.Send()
@@ -23606,14 +24633,13 @@ const opUpdateCACertificate = "UpdateCACertificate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateCACertificateRequest method.
+//	req, resp := client.UpdateCACertificateRequest(params)
 //
-//    // Example sending a request using the UpdateCACertificateRequest method.
-//    req, resp := client.UpdateCACertificateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateCACertificateRequest(input *UpdateCACertificateInput) (req *request.Request, output *UpdateCACertificateOutput) {
 	op := &request.Operation{
 		Name:       opUpdateCACertificate,
@@ -23646,24 +24672,24 @@ func (c *IoT) UpdateCACertificateRequest(input *UpdateCACertificateInput) (req *
 // API operation UpdateCACertificate for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateCACertificate(input *UpdateCACertificateInput) (*UpdateCACertificateOutput, error) {
 	req, out := c.UpdateCACertificateRequest(input)
 	return out, req.Send()
@@ -23701,14 +24727,13 @@ const opUpdateCertificate = "UpdateCertificate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateCertificateRequest method.
+//	req, resp := client.UpdateCertificateRequest(params)
 //
-//    // Example sending a request using the UpdateCertificateRequest method.
-//    req, resp := client.UpdateCertificateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateCertificateRequest(input *UpdateCertificateInput) (req *request.Request, output *UpdateCertificateOutput) {
 	op := &request.Operation{
 		Name:       opUpdateCertificate,
@@ -23748,27 +24773,27 @@ func (c *IoT) UpdateCertificateRequest(input *UpdateCertificateInput) (req *requ
 // API operation UpdateCertificate for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * CertificateStateException
-//   The certificate operation is not allowed.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - CertificateStateException
+//     The certificate operation is not allowed.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateCertificate(input *UpdateCertificateInput) (*UpdateCertificateOutput, error) {
 	req, out := c.UpdateCertificateRequest(input)
 	return out, req.Send()
@@ -23790,6 +24815,99 @@ func (c *IoT) UpdateCertificateWithContext(ctx aws.Context, input *UpdateCertifi
 	return out, req.Send()
 }
 
+const opUpdateCertificateProvider = "UpdateCertificateProvider"
+
+// UpdateCertificateProviderRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateCertificateProvider operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateCertificateProvider for more information on using the UpdateCertificateProvider
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateCertificateProviderRequest method.
+//	req, resp := client.UpdateCertificateProviderRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) UpdateCertificateProviderRequest(input *UpdateCertificateProviderInput) (req *request.Request, output *UpdateCertificateProviderOutput) {
+	op := &request.Operation{
+		Name:       opUpdateCertificateProvider,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/certificate-providers/{certificateProviderName}",
+	}
+
+	if input == nil {
+		input = &UpdateCertificateProviderInput{}
+	}
+
+	output = &UpdateCertificateProviderOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateCertificateProvider API operation for AWS IoT.
+//
+// Updates a certificate provider.
+//
+// Requires permission to access the UpdateCertificateProvider (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation UpdateCertificateProvider for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
+//
+//   - InvalidRequestException
+//     The request is not valid.
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
+//
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
+//
+//   - InternalFailureException
+//     An unexpected error has occurred.
+func (c *IoT) UpdateCertificateProvider(input *UpdateCertificateProviderInput) (*UpdateCertificateProviderOutput, error) {
+	req, out := c.UpdateCertificateProviderRequest(input)
+	return out, req.Send()
+}
+
+// UpdateCertificateProviderWithContext is the same as UpdateCertificateProvider with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateCertificateProvider for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) UpdateCertificateProviderWithContext(ctx aws.Context, input *UpdateCertificateProviderInput, opts ...request.Option) (*UpdateCertificateProviderOutput, error) {
+	req, out := c.UpdateCertificateProviderRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateCustomMetric = "UpdateCustomMetric"
 
 // UpdateCustomMetricRequest generates a "aws/request.Request" representing the
@@ -23806,14 +24924,13 @@ const opUpdateCustomMetric = "UpdateCustomMetric"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateCustomMetricRequest method.
+//	req, resp := client.UpdateCustomMetricRequest(params)
 //
-//    // Example sending a request using the UpdateCustomMetricRequest method.
-//    req, resp := client.UpdateCustomMetricRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateCustomMetricRequest(input *UpdateCustomMetricInput) (req *request.Request, output *UpdateCustomMetricOutput) {
 	op := &request.Operation{
 		Name:       opUpdateCustomMetric,
@@ -23845,18 +24962,18 @@ func (c *IoT) UpdateCustomMetricRequest(input *UpdateCustomMetricInput) (req *re
 // API operation UpdateCustomMetric for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateCustomMetric(input *UpdateCustomMetricInput) (*UpdateCustomMetricOutput, error) {
 	req, out := c.UpdateCustomMetricRequest(input)
 	return out, req.Send()
@@ -23894,14 +25011,13 @@ const opUpdateDimension = "UpdateDimension"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDimensionRequest method.
+//	req, resp := client.UpdateDimensionRequest(params)
 //
-//    // Example sending a request using the UpdateDimensionRequest method.
-//    req, resp := client.UpdateDimensionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateDimensionRequest(input *UpdateDimensionInput) (req *request.Request, output *UpdateDimensionOutput) {
 	op := &request.Operation{
 		Name:       opUpdateDimension,
@@ -23934,18 +25050,18 @@ func (c *IoT) UpdateDimensionRequest(input *UpdateDimensionInput) (req *request.
 // API operation UpdateDimension for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) UpdateDimension(input *UpdateDimensionInput) (*UpdateDimensionOutput, error) {
 	req, out := c.UpdateDimensionRequest(input)
 	return out, req.Send()
@@ -23983,14 +25099,13 @@ const opUpdateDomainConfiguration = "UpdateDomainConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDomainConfigurationRequest method.
+//	req, resp := client.UpdateDomainConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateDomainConfigurationRequest method.
-//    req, resp := client.UpdateDomainConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateDomainConfigurationRequest(input *UpdateDomainConfigurationInput) (req *request.Request, output *UpdateDomainConfigurationOutput) {
 	op := &request.Operation{
 		Name:       opUpdateDomainConfiguration,
@@ -24023,27 +25138,27 @@ func (c *IoT) UpdateDomainConfigurationRequest(input *UpdateDomainConfigurationI
 // API operation UpdateDomainConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * CertificateValidationException
-//   The certificate is invalid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - CertificateValidationException
+//     The certificate is invalid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateDomainConfiguration(input *UpdateDomainConfigurationInput) (*UpdateDomainConfigurationOutput, error) {
 	req, out := c.UpdateDomainConfigurationRequest(input)
 	return out, req.Send()
@@ -24081,14 +25196,13 @@ const opUpdateDynamicThingGroup = "UpdateDynamicThingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDynamicThingGroupRequest method.
+//	req, resp := client.UpdateDynamicThingGroupRequest(params)
 //
-//    // Example sending a request using the UpdateDynamicThingGroupRequest method.
-//    req, resp := client.UpdateDynamicThingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateDynamicThingGroupRequest(input *UpdateDynamicThingGroupInput) (req *request.Request, output *UpdateDynamicThingGroupOutput) {
 	op := &request.Operation{
 		Name:       opUpdateDynamicThingGroup,
@@ -24120,25 +25234,25 @@ func (c *IoT) UpdateDynamicThingGroupRequest(input *UpdateDynamicThingGroupInput
 // API operation UpdateDynamicThingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * InvalidQueryException
-//   The query is invalid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
+//   - InvalidQueryException
+//     The query is invalid.
 func (c *IoT) UpdateDynamicThingGroup(input *UpdateDynamicThingGroupInput) (*UpdateDynamicThingGroupOutput, error) {
 	req, out := c.UpdateDynamicThingGroupRequest(input)
 	return out, req.Send()
@@ -24176,14 +25290,13 @@ const opUpdateEventConfigurations = "UpdateEventConfigurations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateEventConfigurationsRequest method.
+//	req, resp := client.UpdateEventConfigurationsRequest(params)
 //
-//    // Example sending a request using the UpdateEventConfigurationsRequest method.
-//    req, resp := client.UpdateEventConfigurationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateEventConfigurationsRequest(input *UpdateEventConfigurationsInput) (req *request.Request, output *UpdateEventConfigurationsOutput) {
 	op := &request.Operation{
 		Name:       opUpdateEventConfigurations,
@@ -24216,15 +25329,15 @@ func (c *IoT) UpdateEventConfigurationsRequest(input *UpdateEventConfigurationsI
 // API operation UpdateEventConfigurations for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ThrottlingException
+//     The rate exceeds the limit.
 func (c *IoT) UpdateEventConfigurations(input *UpdateEventConfigurationsInput) (*UpdateEventConfigurationsOutput, error) {
 	req, out := c.UpdateEventConfigurationsRequest(input)
 	return out, req.Send()
@@ -24262,14 +25375,13 @@ const opUpdateFleetMetric = "UpdateFleetMetric"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFleetMetricRequest method.
+//	req, resp := client.UpdateFleetMetricRequest(params)
 //
-//    // Example sending a request using the UpdateFleetMetricRequest method.
-//    req, resp := client.UpdateFleetMetricRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateFleetMetricRequest(input *UpdateFleetMetricInput) (req *request.Request, output *UpdateFleetMetricOutput) {
 	op := &request.Operation{
 		Name:       opUpdateFleetMetric,
@@ -24302,37 +25414,37 @@ func (c *IoT) UpdateFleetMetricRequest(input *UpdateFleetMetricInput) (req *requ
 // API operation UpdateFleetMetric for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * InvalidQueryException
-//   The query is invalid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InvalidAggregationException
-//   The aggregation is invalid.
+//   - InvalidQueryException
+//     The query is invalid.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - InvalidAggregationException
+//     The aggregation is invalid.
 //
-//   * IndexNotReadyException
-//   The index is not ready.
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 //
+//   - IndexNotReadyException
+//     The index is not ready.
 func (c *IoT) UpdateFleetMetric(input *UpdateFleetMetricInput) (*UpdateFleetMetricOutput, error) {
 	req, out := c.UpdateFleetMetricRequest(input)
 	return out, req.Send()
@@ -24370,14 +25482,13 @@ const opUpdateIndexingConfiguration = "UpdateIndexingConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateIndexingConfigurationRequest method.
+//	req, resp := client.UpdateIndexingConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateIndexingConfigurationRequest method.
-//    req, resp := client.UpdateIndexingConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateIndexingConfigurationRequest(input *UpdateIndexingConfigurationInput) (req *request.Request, output *UpdateIndexingConfigurationOutput) {
 	op := &request.Operation{
 		Name:       opUpdateIndexingConfiguration,
@@ -24410,21 +25521,21 @@ func (c *IoT) UpdateIndexingConfigurationRequest(input *UpdateIndexingConfigurat
 // API operation UpdateIndexingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateIndexingConfiguration(input *UpdateIndexingConfigurationInput) (*UpdateIndexingConfigurationOutput, error) {
 	req, out := c.UpdateIndexingConfigurationRequest(input)
 	return out, req.Send()
@@ -24462,14 +25573,13 @@ const opUpdateJob = "UpdateJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateJobRequest method.
+//	req, resp := client.UpdateJobRequest(params)
 //
-//    // Example sending a request using the UpdateJobRequest method.
-//    req, resp := client.UpdateJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateJobRequest(input *UpdateJobInput) (req *request.Request, output *UpdateJobOutput) {
 	op := &request.Operation{
 		Name:       opUpdateJob,
@@ -24502,18 +25612,18 @@ func (c *IoT) UpdateJobRequest(input *UpdateJobInput) (req *request.Request, out
 // API operation UpdateJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 func (c *IoT) UpdateJob(input *UpdateJobInput) (*UpdateJobOutput, error) {
 	req, out := c.UpdateJobRequest(input)
 	return out, req.Send()
@@ -24551,14 +25661,13 @@ const opUpdateMitigationAction = "UpdateMitigationAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateMitigationActionRequest method.
+//	req, resp := client.UpdateMitigationActionRequest(params)
 //
-//    // Example sending a request using the UpdateMitigationActionRequest method.
-//    req, resp := client.UpdateMitigationActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateMitigationActionRequest(input *UpdateMitigationActionInput) (req *request.Request, output *UpdateMitigationActionOutput) {
 	op := &request.Operation{
 		Name:       opUpdateMitigationAction,
@@ -24590,18 +25699,18 @@ func (c *IoT) UpdateMitigationActionRequest(input *UpdateMitigationActionInput) 
 // API operation UpdateMitigationAction for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateMitigationAction(input *UpdateMitigationActionInput) (*UpdateMitigationActionOutput, error) {
 	req, out := c.UpdateMitigationActionRequest(input)
 	return out, req.Send()
@@ -24623,6 +25732,282 @@ func (c *IoT) UpdateMitigationActionWithContext(ctx aws.Context, input *UpdateMi
 	return out, req.Send()
 }
 
+const opUpdatePackage = "UpdatePackage"
+
+// UpdatePackageRequest generates a "aws/request.Request" representing the
+// client's request for the UpdatePackage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdatePackage for more information on using the UpdatePackage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdatePackageRequest method.
+//	req, resp := client.UpdatePackageRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) UpdatePackageRequest(input *UpdatePackageInput) (req *request.Request, output *UpdatePackageOutput) {
+	op := &request.Operation{
+		Name:       opUpdatePackage,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/packages/{packageName}",
+	}
+
+	if input == nil {
+		input = &UpdatePackageInput{}
+	}
+
+	output = &UpdatePackageOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdatePackage API operation for AWS IoT.
+//
+// Updates the supported fields for a specific software package.
+//
+// Requires permission to access the UpdatePackage (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// and GetIndexingConfiguration (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// actions.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation UpdatePackage for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ConflictException
+//     A resource with the same name already exists.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+//
+//   - ValidationException
+//     The request is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
+func (c *IoT) UpdatePackage(input *UpdatePackageInput) (*UpdatePackageOutput, error) {
+	req, out := c.UpdatePackageRequest(input)
+	return out, req.Send()
+}
+
+// UpdatePackageWithContext is the same as UpdatePackage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdatePackage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) UpdatePackageWithContext(ctx aws.Context, input *UpdatePackageInput, opts ...request.Option) (*UpdatePackageOutput, error) {
+	req, out := c.UpdatePackageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdatePackageConfiguration = "UpdatePackageConfiguration"
+
+// UpdatePackageConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdatePackageConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdatePackageConfiguration for more information on using the UpdatePackageConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdatePackageConfigurationRequest method.
+//	req, resp := client.UpdatePackageConfigurationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) UpdatePackageConfigurationRequest(input *UpdatePackageConfigurationInput) (req *request.Request, output *UpdatePackageConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opUpdatePackageConfiguration,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/package-configuration",
+	}
+
+	if input == nil {
+		input = &UpdatePackageConfigurationInput{}
+	}
+
+	output = &UpdatePackageConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdatePackageConfiguration API operation for AWS IoT.
+//
+// Updates the software package configuration.
+//
+// Requires permission to access the UpdatePackageConfiguration (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// and iam:PassRole (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html)
+// actions.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation UpdatePackageConfiguration for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ConflictException
+//     A resource with the same name already exists.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+//
+//   - ValidationException
+//     The request is not valid.
+func (c *IoT) UpdatePackageConfiguration(input *UpdatePackageConfigurationInput) (*UpdatePackageConfigurationOutput, error) {
+	req, out := c.UpdatePackageConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// UpdatePackageConfigurationWithContext is the same as UpdatePackageConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdatePackageConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) UpdatePackageConfigurationWithContext(ctx aws.Context, input *UpdatePackageConfigurationInput, opts ...request.Option) (*UpdatePackageConfigurationOutput, error) {
+	req, out := c.UpdatePackageConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdatePackageVersion = "UpdatePackageVersion"
+
+// UpdatePackageVersionRequest generates a "aws/request.Request" representing the
+// client's request for the UpdatePackageVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdatePackageVersion for more information on using the UpdatePackageVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdatePackageVersionRequest method.
+//	req, resp := client.UpdatePackageVersionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+func (c *IoT) UpdatePackageVersionRequest(input *UpdatePackageVersionInput) (req *request.Request, output *UpdatePackageVersionOutput) {
+	op := &request.Operation{
+		Name:       opUpdatePackageVersion,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/packages/{packageName}/versions/{versionName}",
+	}
+
+	if input == nil {
+		input = &UpdatePackageVersionInput{}
+	}
+
+	output = &UpdatePackageVersionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdatePackageVersion API operation for AWS IoT.
+//
+// Updates the supported fields for a specific package version.
+//
+// Requires permission to access the UpdatePackageVersion (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// and GetIndexingConfiguration (https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsiot.html#awsiot-actions-as-permissions)
+// actions.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation UpdatePackageVersion for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The rate exceeds the limit.
+//
+//   - ConflictException
+//     A resource with the same name already exists.
+//
+//   - InternalServerException
+//     Internal error from the service that indicates an unexpected error or that
+//     the service is unavailable.
+//
+//   - ValidationException
+//     The request is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
+func (c *IoT) UpdatePackageVersion(input *UpdatePackageVersionInput) (*UpdatePackageVersionOutput, error) {
+	req, out := c.UpdatePackageVersionRequest(input)
+	return out, req.Send()
+}
+
+// UpdatePackageVersionWithContext is the same as UpdatePackageVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdatePackageVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) UpdatePackageVersionWithContext(ctx aws.Context, input *UpdatePackageVersionInput, opts ...request.Option) (*UpdatePackageVersionOutput, error) {
+	req, out := c.UpdatePackageVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateProvisioningTemplate = "UpdateProvisioningTemplate"
 
 // UpdateProvisioningTemplateRequest generates a "aws/request.Request" representing the
@@ -24639,14 +26024,13 @@ const opUpdateProvisioningTemplate = "UpdateProvisioningTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProvisioningTemplateRequest method.
+//	req, resp := client.UpdateProvisioningTemplateRequest(params)
 //
-//    // Example sending a request using the UpdateProvisioningTemplateRequest method.
-//    req, resp := client.UpdateProvisioningTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateProvisioningTemplateRequest(input *UpdateProvisioningTemplateInput) (req *request.Request, output *UpdateProvisioningTemplateOutput) {
 	op := &request.Operation{
 		Name:       opUpdateProvisioningTemplate,
@@ -24679,22 +26063,22 @@ func (c *IoT) UpdateProvisioningTemplateRequest(input *UpdateProvisioningTemplat
 // API operation UpdateProvisioningTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InternalFailureException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 func (c *IoT) UpdateProvisioningTemplate(input *UpdateProvisioningTemplateInput) (*UpdateProvisioningTemplateOutput, error) {
 	req, out := c.UpdateProvisioningTemplateRequest(input)
 	return out, req.Send()
@@ -24732,14 +26116,13 @@ const opUpdateRoleAlias = "UpdateRoleAlias"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRoleAliasRequest method.
+//	req, resp := client.UpdateRoleAliasRequest(params)
 //
-//    // Example sending a request using the UpdateRoleAliasRequest method.
-//    req, resp := client.UpdateRoleAliasRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateRoleAliasRequest(input *UpdateRoleAliasInput) (req *request.Request, output *UpdateRoleAliasOutput) {
 	op := &request.Operation{
 		Name:       opUpdateRoleAlias,
@@ -24771,24 +26154,24 @@ func (c *IoT) UpdateRoleAliasRequest(input *UpdateRoleAliasInput) (req *request.
 // API operation UpdateRoleAlias for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateRoleAlias(input *UpdateRoleAliasInput) (*UpdateRoleAliasOutput, error) {
 	req, out := c.UpdateRoleAliasRequest(input)
 	return out, req.Send()
@@ -24826,14 +26209,13 @@ const opUpdateScheduledAudit = "UpdateScheduledAudit"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateScheduledAuditRequest method.
+//	req, resp := client.UpdateScheduledAuditRequest(params)
 //
-//    // Example sending a request using the UpdateScheduledAuditRequest method.
-//    req, resp := client.UpdateScheduledAuditRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateScheduledAuditRequest(input *UpdateScheduledAuditInput) (req *request.Request, output *UpdateScheduledAuditOutput) {
 	op := &request.Operation{
 		Name:       opUpdateScheduledAudit,
@@ -24866,18 +26248,18 @@ func (c *IoT) UpdateScheduledAuditRequest(input *UpdateScheduledAuditInput) (req
 // API operation UpdateScheduledAudit for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateScheduledAudit(input *UpdateScheduledAuditInput) (*UpdateScheduledAuditOutput, error) {
 	req, out := c.UpdateScheduledAuditRequest(input)
 	return out, req.Send()
@@ -24915,14 +26297,13 @@ const opUpdateSecurityProfile = "UpdateSecurityProfile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSecurityProfileRequest method.
+//	req, resp := client.UpdateSecurityProfileRequest(params)
 //
-//    // Example sending a request using the UpdateSecurityProfileRequest method.
-//    req, resp := client.UpdateSecurityProfileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateSecurityProfileRequest(input *UpdateSecurityProfileInput) (req *request.Request, output *UpdateSecurityProfileOutput) {
 	op := &request.Operation{
 		Name:       opUpdateSecurityProfile,
@@ -24954,22 +26335,22 @@ func (c *IoT) UpdateSecurityProfileRequest(input *UpdateSecurityProfileInput) (r
 // API operation UpdateSecurityProfile for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateSecurityProfile(input *UpdateSecurityProfileInput) (*UpdateSecurityProfileOutput, error) {
 	req, out := c.UpdateSecurityProfileRequest(input)
 	return out, req.Send()
@@ -25007,14 +26388,13 @@ const opUpdateStream = "UpdateStream"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateStreamRequest method.
+//	req, resp := client.UpdateStreamRequest(params)
 //
-//    // Example sending a request using the UpdateStreamRequest method.
-//    req, resp := client.UpdateStreamRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateStreamRequest(input *UpdateStreamInput) (req *request.Request, output *UpdateStreamOutput) {
 	op := &request.Operation{
 		Name:       opUpdateStream,
@@ -25046,24 +26426,24 @@ func (c *IoT) UpdateStreamRequest(input *UpdateStreamInput) (req *request.Reques
 // API operation UpdateStream for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) UpdateStream(input *UpdateStreamInput) (*UpdateStreamOutput, error) {
 	req, out := c.UpdateStreamRequest(input)
 	return out, req.Send()
@@ -25101,14 +26481,13 @@ const opUpdateThing = "UpdateThing"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateThingRequest method.
+//	req, resp := client.UpdateThingRequest(params)
 //
-//    // Example sending a request using the UpdateThingRequest method.
-//    req, resp := client.UpdateThingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateThingRequest(input *UpdateThingInput) (req *request.Request, output *UpdateThingOutput) {
 	op := &request.Operation{
 		Name:       opUpdateThing,
@@ -25141,28 +26520,28 @@ func (c *IoT) UpdateThingRequest(input *UpdateThingInput) (req *request.Request,
 // API operation UpdateThing for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) UpdateThing(input *UpdateThingInput) (*UpdateThingOutput, error) {
 	req, out := c.UpdateThingRequest(input)
 	return out, req.Send()
@@ -25200,14 +26579,13 @@ const opUpdateThingGroup = "UpdateThingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateThingGroupRequest method.
+//	req, resp := client.UpdateThingGroupRequest(params)
 //
-//    // Example sending a request using the UpdateThingGroupRequest method.
-//    req, resp := client.UpdateThingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateThingGroupRequest(input *UpdateThingGroupInput) (req *request.Request, output *UpdateThingGroupOutput) {
 	op := &request.Operation{
 		Name:       opUpdateThingGroup,
@@ -25239,22 +26617,22 @@ func (c *IoT) UpdateThingGroupRequest(input *UpdateThingGroupInput) (req *reques
 // API operation UpdateThingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * VersionConflictException
-//   An exception thrown when the version of an entity specified with the expectedVersion
-//   parameter does not match the latest version in the system.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - VersionConflictException
+//     An exception thrown when the version of an entity specified with the expectedVersion
+//     parameter does not match the latest version in the system.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) UpdateThingGroup(input *UpdateThingGroupInput) (*UpdateThingGroupOutput, error) {
 	req, out := c.UpdateThingGroupRequest(input)
 	return out, req.Send()
@@ -25292,14 +26670,13 @@ const opUpdateThingGroupsForThing = "UpdateThingGroupsForThing"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateThingGroupsForThingRequest method.
+//	req, resp := client.UpdateThingGroupsForThingRequest(params)
 //
-//    // Example sending a request using the UpdateThingGroupsForThingRequest method.
-//    req, resp := client.UpdateThingGroupsForThingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateThingGroupsForThingRequest(input *UpdateThingGroupsForThingInput) (req *request.Request, output *UpdateThingGroupsForThingOutput) {
 	op := &request.Operation{
 		Name:       opUpdateThingGroupsForThing,
@@ -25332,18 +26709,18 @@ func (c *IoT) UpdateThingGroupsForThingRequest(input *UpdateThingGroupsForThingI
 // API operation UpdateThingGroupsForThing for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
-//   * ResourceNotFoundException
-//   The specified resource does not exist.
+//   - InternalFailureException
+//     An unexpected error has occurred.
 //
+//   - ResourceNotFoundException
+//     The specified resource does not exist.
 func (c *IoT) UpdateThingGroupsForThing(input *UpdateThingGroupsForThingInput) (*UpdateThingGroupsForThingOutput, error) {
 	req, out := c.UpdateThingGroupsForThingRequest(input)
 	return out, req.Send()
@@ -25381,14 +26758,13 @@ const opUpdateTopicRuleDestination = "UpdateTopicRuleDestination"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateTopicRuleDestinationRequest method.
+//	req, resp := client.UpdateTopicRuleDestinationRequest(params)
 //
-//    // Example sending a request using the UpdateTopicRuleDestinationRequest method.
-//    req, resp := client.UpdateTopicRuleDestinationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) UpdateTopicRuleDestinationRequest(input *UpdateTopicRuleDestinationInput) (req *request.Request, output *UpdateTopicRuleDestinationOutput) {
 	op := &request.Operation{
 		Name:       opUpdateTopicRuleDestination,
@@ -25422,22 +26798,22 @@ func (c *IoT) UpdateTopicRuleDestinationRequest(input *UpdateTopicRuleDestinatio
 // API operation UpdateTopicRuleDestination for usage and error information.
 //
 // Returned Error Types:
-//   * InternalException
-//   An unexpected error has occurred.
 //
-//   * InvalidRequestException
-//   The request is not valid.
+//   - InternalException
+//     An unexpected error has occurred.
 //
-//   * ServiceUnavailableException
-//   The service is temporarily unavailable.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * UnauthorizedException
-//   You are not authorized to perform this operation.
+//   - ServiceUnavailableException
+//     The service is temporarily unavailable.
 //
-//   * ConflictingResourceUpdateException
-//   A conflicting resource update exception. This exception is thrown when two
-//   pending updates cause a conflict.
+//   - UnauthorizedException
+//     You are not authorized to perform this operation.
 //
+//   - ConflictingResourceUpdateException
+//     A conflicting resource update exception. This exception is thrown when two
+//     pending updates cause a conflict.
 func (c *IoT) UpdateTopicRuleDestination(input *UpdateTopicRuleDestinationInput) (*UpdateTopicRuleDestinationOutput, error) {
 	req, out := c.UpdateTopicRuleDestinationRequest(input)
 	return out, req.Send()
@@ -25475,14 +26851,13 @@ const opValidateSecurityProfileBehaviors = "ValidateSecurityProfileBehaviors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ValidateSecurityProfileBehaviorsRequest method.
+//	req, resp := client.ValidateSecurityProfileBehaviorsRequest(params)
 //
-//    // Example sending a request using the ValidateSecurityProfileBehaviorsRequest method.
-//    req, resp := client.ValidateSecurityProfileBehaviorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *IoT) ValidateSecurityProfileBehaviorsRequest(input *ValidateSecurityProfileBehaviorsInput) (req *request.Request, output *ValidateSecurityProfileBehaviorsOutput) {
 	op := &request.Operation{
 		Name:       opValidateSecurityProfileBehaviors,
@@ -25514,15 +26889,15 @@ func (c *IoT) ValidateSecurityProfileBehaviorsRequest(input *ValidateSecurityPro
 // API operation ValidateSecurityProfileBehaviors for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request is not valid.
 //
-//   * ThrottlingException
-//   The rate exceeds the limit.
+//   - InvalidRequestException
+//     The request is not valid.
 //
-//   * InternalFailureException
-//   An unexpected error has occurred.
+//   - ThrottlingException
+//     The rate exceeds the limit.
 //
+//   - InternalFailureException
+//     An unexpected error has occurred.
 func (c *IoT) ValidateSecurityProfileBehaviors(input *ValidateSecurityProfileBehaviorsInput) (*ValidateSecurityProfileBehaviorsOutput, error) {
 	req, out := c.ValidateSecurityProfileBehaviorsRequest(input)
 	return out, req.Send()
@@ -26916,7 +28291,8 @@ type AssociateTargetsWithJobInput struct {
 	//
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
-	// The namespaceId feature is in public preview.
+	// The namespaceId feature is only supported by IoT Greengrass at this time.
+	// For more information, see Setting up IoT Greengrass core devices. (https://docs.aws.amazon.com/greengrass/v2/developerguide/setting-up.html)
 	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 
 	// A list of thing group ARNs that define the targets of the job.
@@ -28881,7 +30257,13 @@ type Behavior struct {
 
 	// The criteria that determine if a device is behaving normally in regard to
 	// the metric.
+	//
+	// In the IoT console, you can choose to be sent an alert through Amazon SNS
+	// when IoT Device Defender detects that a device is behaving anomalously.
 	Criteria *BehaviorCriteria `locationName:"criteria" type:"structure"`
+
+	// Value indicates exporting metrics related to the behavior when it is true.
+	ExportMetric *bool `locationName:"exportMetric" type:"boolean"`
 
 	// What is measured by the behavior.
 	Metric *string `locationName:"metric" type:"string"`
@@ -28948,6 +30330,12 @@ func (s *Behavior) Validate() error {
 // SetCriteria sets the Criteria field's value.
 func (s *Behavior) SetCriteria(v *BehaviorCriteria) *Behavior {
 	s.Criteria = v
+	return s
+}
+
+// SetExportMetric sets the ExportMetric field's value.
+func (s *Behavior) SetExportMetric(v bool) *Behavior {
+	s.ExportMetric = &v
 	return s
 }
 
@@ -30392,6 +31780,47 @@ func (s *CertificateDescription) SetValidity(v *CertificateValidity) *Certificat
 	return s
 }
 
+// The certificate provider summary.
+type CertificateProviderSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the certificate provider.
+	CertificateProviderArn *string `locationName:"certificateProviderArn" type:"string"`
+
+	// The name of the certificate provider.
+	CertificateProviderName *string `locationName:"certificateProviderName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CertificateProviderSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CertificateProviderSummary) GoString() string {
+	return s.String()
+}
+
+// SetCertificateProviderArn sets the CertificateProviderArn field's value.
+func (s *CertificateProviderSummary) SetCertificateProviderArn(v string) *CertificateProviderSummary {
+	s.CertificateProviderArn = &v
+	return s
+}
+
+// SetCertificateProviderName sets the CertificateProviderName field's value.
+func (s *CertificateProviderSummary) SetCertificateProviderName(v string) *CertificateProviderSummary {
+	s.CertificateProviderName = &v
+	return s
+}
+
 // The certificate operation is not allowed.
 type CertificateStateException struct {
 	_            struct{}                  `type:"structure"`
@@ -31129,6 +32558,9 @@ type ConflictException struct {
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
 	Message_ *string `locationName:"message" type:"string"`
+
+	// A resource with the same name already exists.
+	ResourceId *string `locationName:"resourceId" type:"string"`
 }
 
 // String returns the string representation.
@@ -31174,7 +32606,7 @@ func (s *ConflictException) OrigErr() error {
 }
 
 func (s *ConflictException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
 }
 
 // Status code returns the HTTP status code for the request's response error.
@@ -31803,6 +33235,159 @@ func (s *CreateCertificateFromCsrOutput) SetCertificatePem(v string) *CreateCert
 	return s
 }
 
+type CreateCertificateProviderInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of the operations that the certificate provider will use to generate
+	// certificates. Valid value: CreateCertificateFromCsr.
+	//
+	// AccountDefaultForOperations is a required field
+	AccountDefaultForOperations []*string `locationName:"accountDefaultForOperations" min:"1" type:"list" required:"true" enum:"CertificateProviderOperation"`
+
+	// The name of the certificate provider.
+	//
+	// CertificateProviderName is a required field
+	CertificateProviderName *string `location:"uri" locationName:"certificateProviderName" min:"1" type:"string" required:"true"`
+
+	// A string that you can optionally pass in the CreateCertificateProvider request
+	// to make sure the request is idempotent.
+	ClientToken *string `locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
+
+	// The ARN of the Lambda function that defines the authentication logic.
+	//
+	// LambdaFunctionArn is a required field
+	LambdaFunctionArn *string `locationName:"lambdaFunctionArn" type:"string" required:"true"`
+
+	// Metadata which can be used to manage the certificate provider.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCertificateProviderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCertificateProviderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateCertificateProviderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateCertificateProviderInput"}
+	if s.AccountDefaultForOperations == nil {
+		invalidParams.Add(request.NewErrParamRequired("AccountDefaultForOperations"))
+	}
+	if s.AccountDefaultForOperations != nil && len(s.AccountDefaultForOperations) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountDefaultForOperations", 1))
+	}
+	if s.CertificateProviderName == nil {
+		invalidParams.Add(request.NewErrParamRequired("CertificateProviderName"))
+	}
+	if s.CertificateProviderName != nil && len(*s.CertificateProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CertificateProviderName", 1))
+	}
+	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.LambdaFunctionArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LambdaFunctionArn"))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountDefaultForOperations sets the AccountDefaultForOperations field's value.
+func (s *CreateCertificateProviderInput) SetAccountDefaultForOperations(v []*string) *CreateCertificateProviderInput {
+	s.AccountDefaultForOperations = v
+	return s
+}
+
+// SetCertificateProviderName sets the CertificateProviderName field's value.
+func (s *CreateCertificateProviderInput) SetCertificateProviderName(v string) *CreateCertificateProviderInput {
+	s.CertificateProviderName = &v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateCertificateProviderInput) SetClientToken(v string) *CreateCertificateProviderInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetLambdaFunctionArn sets the LambdaFunctionArn field's value.
+func (s *CreateCertificateProviderInput) SetLambdaFunctionArn(v string) *CreateCertificateProviderInput {
+	s.LambdaFunctionArn = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateCertificateProviderInput) SetTags(v []*Tag) *CreateCertificateProviderInput {
+	s.Tags = v
+	return s
+}
+
+type CreateCertificateProviderOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the certificate provider.
+	CertificateProviderArn *string `locationName:"certificateProviderArn" type:"string"`
+
+	// The name of the certificate provider.
+	CertificateProviderName *string `locationName:"certificateProviderName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCertificateProviderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCertificateProviderOutput) GoString() string {
+	return s.String()
+}
+
+// SetCertificateProviderArn sets the CertificateProviderArn field's value.
+func (s *CreateCertificateProviderOutput) SetCertificateProviderArn(v string) *CreateCertificateProviderOutput {
+	s.CertificateProviderArn = &v
+	return s
+}
+
+// SetCertificateProviderName sets the CertificateProviderName field's value.
+func (s *CreateCertificateProviderOutput) SetCertificateProviderName(v string) *CreateCertificateProviderOutput {
+	s.CertificateProviderName = &v
+	return s
+}
+
 type CreateCustomMetricInput struct {
 	_ struct{} `type:"structure"`
 
@@ -32133,6 +33718,9 @@ type CreateDomainConfigurationInput struct {
 	// is not required for Amazon Web Services-managed domains.
 	ServerCertificateArns []*string `locationName:"serverCertificateArns" type:"list"`
 
+	// The server certificate configuration.
+	ServerCertificateConfig *ServerCertificateConfig `locationName:"serverCertificateConfig" type:"structure"`
+
 	// The type of service delivered by the endpoint.
 	//
 	// Amazon Web Services IoT Core currently supports only the DATA service type.
@@ -32232,6 +33820,12 @@ func (s *CreateDomainConfigurationInput) SetDomainName(v string) *CreateDomainCo
 // SetServerCertificateArns sets the ServerCertificateArns field's value.
 func (s *CreateDomainConfigurationInput) SetServerCertificateArns(v []*string) *CreateDomainConfigurationInput {
 	s.ServerCertificateArns = v
+	return s
+}
+
+// SetServerCertificateConfig sets the ServerCertificateConfig field's value.
+func (s *CreateDomainConfigurationInput) SetServerCertificateConfig(v *ServerCertificateConfig) *CreateDomainConfigurationInput {
+	s.ServerCertificateConfig = v
 	return s
 }
 
@@ -32727,6 +34321,15 @@ type CreateJobInput struct {
 	// A short text description of the job.
 	Description *string `locationName:"description" type:"string"`
 
+	// The package version Amazon Resource Names (ARNs) that are installed on the
+	// device when the job successfully completes. The package version must be in
+	// either the Published or Deprecated state when the job deploys. For more information,
+	// see Package version lifecycle (https://docs.aws.amazon.com/iot/latest/developerguide/preparing-to-use-software-package-catalog.html#package-version-lifecycle).
+	//
+	// Note:The following Length Constraints relates to a single ARN. Up to 25 package
+	// version ARNs are allowed.
+	DestinationPackageVersions []*string `locationName:"destinationPackageVersions" type:"list"`
+
 	// The job document. Required if you don't specify a value for documentSource.
 	Document *string `locationName:"document" type:"string"`
 
@@ -32741,7 +34344,7 @@ type CreateJobInput struct {
 	// An S3 link, or S3 object URL, to the job document. The link is an Amazon
 	// S3 object URL and is required if you don't specify a value for document.
 	//
-	// For example, --document-source https://s3.region-code.amazonaws.com/example-firmware/device-firmware.1.0.
+	// For example, --document-source https://s3.region-code.amazonaws.com/example-firmware/device-firmware.1.0
 	//
 	// For more information, see Methods for accessing a bucket (https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html).
 	DocumentSource *string `locationName:"documentSource" min:"1" type:"string"`
@@ -32770,7 +34373,8 @@ type CreateJobInput struct {
 	//
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
-	// The namespaceId feature is in public preview.
+	// The namespaceId feature is only supported by IoT Greengrass at this time.
+	// For more information, see Setting up IoT Greengrass core devices. (https://docs.aws.amazon.com/greengrass/v2/developerguide/setting-up.html)
 	NamespaceId *string `locationName:"namespaceId" type:"string"`
 
 	// Configuration information for pre-signed S3 URLs.
@@ -32897,6 +34501,12 @@ func (s *CreateJobInput) SetAbortConfig(v *AbortConfig) *CreateJobInput {
 // SetDescription sets the Description field's value.
 func (s *CreateJobInput) SetDescription(v string) *CreateJobInput {
 	s.Description = &v
+	return s
+}
+
+// SetDestinationPackageVersions sets the DestinationPackageVersions field's value.
+func (s *CreateJobInput) SetDestinationPackageVersions(v []*string) *CreateJobInput {
+	s.DestinationPackageVersions = v
 	return s
 }
 
@@ -33044,21 +34654,24 @@ type CreateJobTemplateInput struct {
 	// Description is a required field
 	Description *string `locationName:"description" type:"string" required:"true"`
 
+	// The package version Amazon Resource Names (ARNs) that are installed on the
+	// device when the job successfully completes. The package version must be in
+	// either the Published or Deprecated state when the job deploys. For more information,
+	// see Package version lifecycle (https://docs.aws.amazon.com/iot/latest/developerguide/preparing-to-use-software-package-catalog.html#package-version-lifecycle).
+	//
+	// Note:The following Length Constraints relates to a single ARN. Up to 25 package
+	// version ARNs are allowed.
+	DestinationPackageVersions []*string `locationName:"destinationPackageVersions" type:"list"`
+
 	// The job document. Required if you don't specify a value for documentSource.
 	Document *string `locationName:"document" type:"string"`
 
-	// An S3 link to the job document to use in the template. Required if you don't
-	// specify a value for document.
+	// An S3 link, or S3 object URL, to the job document. The link is an Amazon
+	// S3 object URL and is required if you don't specify a value for document.
 	//
-	// If the job document resides in an S3 bucket, you must use a placeholder link
-	// when specifying the document.
+	// For example, --document-source https://s3.region-code.amazonaws.com/example-firmware/device-firmware.1.0
 	//
-	// The placeholder link is of the following form:
-	//
-	// ${aws:iot:s3-presigned-url:https://s3.amazonaws.com/bucket/key}
-	//
-	// where bucket is your bucket name and key is the object in the bucket to which
-	// you are linking.
+	// For more information, see Methods for accessing a bucket (https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html).
 	DocumentSource *string `locationName:"documentSource" min:"1" type:"string"`
 
 	// The ARN of the job to use as the basis for the job template.
@@ -33182,6 +34795,12 @@ func (s *CreateJobTemplateInput) SetAbortConfig(v *AbortConfig) *CreateJobTempla
 // SetDescription sets the Description field's value.
 func (s *CreateJobTemplateInput) SetDescription(v string) *CreateJobTemplateInput {
 	s.Description = &v
+	return s
+}
+
+// SetDestinationPackageVersions sets the DestinationPackageVersions field's value.
+func (s *CreateJobTemplateInput) SetDestinationPackageVersions(v []*string) *CreateJobTemplateInput {
+	s.DestinationPackageVersions = v
 	return s
 }
 
@@ -33528,7 +35147,8 @@ func (s *CreateMitigationActionOutput) SetActionId(v string) *CreateMitigationAc
 type CreateOTAUpdateInput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of additional OTA update parameters which are name-value pairs.
+	// A list of additional OTA update parameters, which are name-value pairs. They
+	// won't be sent to devices as a part of the Job document.
 	AdditionalParameters map[string]*string `locationName:"additionalParameters" type:"map"`
 
 	// The criteria that determine when and how a job abort takes place.
@@ -33815,6 +35435,367 @@ func (s *CreateOTAUpdateOutput) SetOtaUpdateId(v string) *CreateOTAUpdateOutput 
 // SetOtaUpdateStatus sets the OtaUpdateStatus field's value.
 func (s *CreateOTAUpdateOutput) SetOtaUpdateStatus(v string) *CreateOTAUpdateOutput {
 	s.OtaUpdateStatus = &v
+	return s
+}
+
+type CreatePackageInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique case-sensitive identifier that you can provide to ensure the idempotency
+	// of the request. Don't reuse this client token if a new idempotent request
+	// is required.
+	ClientToken *string `location:"querystring" locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
+
+	// A summary of the package being created. This can be used to outline the package's
+	// contents or purpose.
+	//
+	// Description is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreatePackageInput's
+	// String and GoString methods.
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
+
+	// The name of the new software package.
+	//
+	// PackageName is a required field
+	PackageName *string `location:"uri" locationName:"packageName" min:"1" type:"string" required:"true"`
+
+	// Metadata that can be used to manage the package.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePackageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePackageInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.PackageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageName"))
+	}
+	if s.PackageName != nil && len(*s.PackageName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreatePackageInput) SetClientToken(v string) *CreatePackageInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreatePackageInput) SetDescription(v string) *CreatePackageInput {
+	s.Description = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *CreatePackageInput) SetPackageName(v string) *CreatePackageInput {
+	s.PackageName = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreatePackageInput) SetTags(v map[string]*string) *CreatePackageInput {
+	s.Tags = v
+	return s
+}
+
+type CreatePackageOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The package description.
+	//
+	// Description is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreatePackageOutput's
+	// String and GoString methods.
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
+
+	// The Amazon Resource Name (ARN) for the package.
+	PackageArn *string `locationName:"packageArn" type:"string"`
+
+	// The name of the software package.
+	PackageName *string `locationName:"packageName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageOutput) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreatePackageOutput) SetDescription(v string) *CreatePackageOutput {
+	s.Description = &v
+	return s
+}
+
+// SetPackageArn sets the PackageArn field's value.
+func (s *CreatePackageOutput) SetPackageArn(v string) *CreatePackageOutput {
+	s.PackageArn = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *CreatePackageOutput) SetPackageName(v string) *CreatePackageOutput {
+	s.PackageName = &v
+	return s
+}
+
+type CreatePackageVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	// Metadata that can be used to define a package version’s configuration.
+	// For example, the S3 file location, configuration options that are being sent
+	// to the device or fleet.
+	//
+	// The combined size of all the attributes on a package version is limited to
+	// 3KB.
+	//
+	// Attributes is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreatePackageVersionInput's
+	// String and GoString methods.
+	Attributes map[string]*string `locationName:"attributes" type:"map" sensitive:"true"`
+
+	// A unique case-sensitive identifier that you can provide to ensure the idempotency
+	// of the request. Don't reuse this client token if a new idempotent request
+	// is required.
+	ClientToken *string `location:"querystring" locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
+
+	// A summary of the package version being created. This can be used to outline
+	// the package's contents or purpose.
+	//
+	// Description is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreatePackageVersionInput's
+	// String and GoString methods.
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
+
+	// The name of the associated software package.
+	//
+	// PackageName is a required field
+	PackageName *string `location:"uri" locationName:"packageName" min:"1" type:"string" required:"true"`
+
+	// Metadata that can be used to manage the package version.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+
+	// The name of the new package version.
+	//
+	// VersionName is a required field
+	VersionName *string `location:"uri" locationName:"versionName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePackageVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePackageVersionInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.PackageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageName"))
+	}
+	if s.PackageName != nil && len(*s.PackageName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.VersionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VersionName"))
+	}
+	if s.VersionName != nil && len(*s.VersionName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *CreatePackageVersionInput) SetAttributes(v map[string]*string) *CreatePackageVersionInput {
+	s.Attributes = v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreatePackageVersionInput) SetClientToken(v string) *CreatePackageVersionInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreatePackageVersionInput) SetDescription(v string) *CreatePackageVersionInput {
+	s.Description = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *CreatePackageVersionInput) SetPackageName(v string) *CreatePackageVersionInput {
+	s.PackageName = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreatePackageVersionInput) SetTags(v map[string]*string) *CreatePackageVersionInput {
+	s.Tags = v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *CreatePackageVersionInput) SetVersionName(v string) *CreatePackageVersionInput {
+	s.VersionName = &v
+	return s
+}
+
+type CreatePackageVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Metadata that were added to the package version that can be used to define
+	// a package version’s configuration.
+	//
+	// Attributes is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreatePackageVersionOutput's
+	// String and GoString methods.
+	Attributes map[string]*string `locationName:"attributes" type:"map" sensitive:"true"`
+
+	// The package version description.
+	//
+	// Description is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreatePackageVersionOutput's
+	// String and GoString methods.
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
+
+	// Error reason for a package version failure during creation or update.
+	ErrorReason *string `locationName:"errorReason" type:"string"`
+
+	// The name of the associated software package.
+	PackageName *string `locationName:"packageName" min:"1" type:"string"`
+
+	// The Amazon Resource Name (ARN) for the package.
+	PackageVersionArn *string `locationName:"packageVersionArn" min:"1" type:"string"`
+
+	// The status of the package version. For more information, see Package version
+	// lifecycle (https://docs.aws.amazon.com/iot/latest/developerguide/preparing-to-use-software-package-catalog.html#package-version-lifecycle).
+	Status *string `locationName:"status" type:"string" enum:"PackageVersionStatus"`
+
+	// The name of the new package version.
+	VersionName *string `locationName:"versionName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageVersionOutput) GoString() string {
+	return s.String()
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *CreatePackageVersionOutput) SetAttributes(v map[string]*string) *CreatePackageVersionOutput {
+	s.Attributes = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreatePackageVersionOutput) SetDescription(v string) *CreatePackageVersionOutput {
+	s.Description = &v
+	return s
+}
+
+// SetErrorReason sets the ErrorReason field's value.
+func (s *CreatePackageVersionOutput) SetErrorReason(v string) *CreatePackageVersionOutput {
+	s.ErrorReason = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *CreatePackageVersionOutput) SetPackageName(v string) *CreatePackageVersionOutput {
+	s.PackageName = &v
+	return s
+}
+
+// SetPackageVersionArn sets the PackageVersionArn field's value.
+func (s *CreatePackageVersionOutput) SetPackageVersionArn(v string) *CreatePackageVersionOutput {
+	s.PackageVersionArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreatePackageVersionOutput) SetStatus(v string) *CreatePackageVersionOutput {
+	s.Status = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *CreatePackageVersionOutput) SetVersionName(v string) *CreatePackageVersionOutput {
+	s.VersionName = &v
 	return s
 }
 
@@ -34870,6 +36851,9 @@ type CreateSecurityProfileInput struct {
 	// alert.
 	Behaviors []*Behavior `locationName:"behaviors" type:"list"`
 
+	// Specifies the MQTT topic and role ARN required for metric export.
+	MetricsExportConfig *MetricsExportConfig `locationName:"metricsExportConfig" type:"structure"`
+
 	// A description of the security profile.
 	SecurityProfileDescription *string `locationName:"securityProfileDescription" type:"string"`
 
@@ -34939,6 +36923,11 @@ func (s *CreateSecurityProfileInput) Validate() error {
 			}
 		}
 	}
+	if s.MetricsExportConfig != nil {
+		if err := s.MetricsExportConfig.Validate(); err != nil {
+			invalidParams.AddNested("MetricsExportConfig", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
 			if v == nil {
@@ -34977,6 +36966,12 @@ func (s *CreateSecurityProfileInput) SetAlertTargets(v map[string]*AlertTarget) 
 // SetBehaviors sets the Behaviors field's value.
 func (s *CreateSecurityProfileInput) SetBehaviors(v []*Behavior) *CreateSecurityProfileInput {
 	s.Behaviors = v
+	return s
+}
+
+// SetMetricsExportConfig sets the MetricsExportConfig field's value.
+func (s *CreateSecurityProfileInput) SetMetricsExportConfig(v *MetricsExportConfig) *CreateSecurityProfileInput {
+	s.MetricsExportConfig = v
 	return s
 }
 
@@ -36332,6 +38327,77 @@ func (s DeleteCertificateOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteCertificateProviderInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name of the certificate provider.
+	//
+	// CertificateProviderName is a required field
+	CertificateProviderName *string `location:"uri" locationName:"certificateProviderName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCertificateProviderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCertificateProviderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteCertificateProviderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteCertificateProviderInput"}
+	if s.CertificateProviderName == nil {
+		invalidParams.Add(request.NewErrParamRequired("CertificateProviderName"))
+	}
+	if s.CertificateProviderName != nil && len(*s.CertificateProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CertificateProviderName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCertificateProviderName sets the CertificateProviderName field's value.
+func (s *DeleteCertificateProviderInput) SetCertificateProviderName(v string) *DeleteCertificateProviderInput {
+	s.CertificateProviderName = &v
+	return s
+}
+
+type DeleteCertificateProviderOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCertificateProviderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCertificateProviderOutput) GoString() string {
+	return s.String()
+}
+
 // You can't delete the resource because it is attached to one or more resources.
 type DeleteConflictException struct {
 	_            struct{}                  `type:"structure"`
@@ -36805,7 +38871,8 @@ type DeleteJobExecutionInput struct {
 	//
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
-	// The namespaceId feature is in public preview.
+	// The namespaceId feature is only supported by IoT Greengrass at this time.
+	// For more information, see Setting up IoT Greengrass core devices. (https://docs.aws.amazon.com/greengrass/v2/developerguide/setting-up.html)
 	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 
 	// The name of the thing whose job execution will be deleted.
@@ -36939,7 +39006,8 @@ type DeleteJobInput struct {
 	//
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
-	// The namespaceId feature is in public preview.
+	// The namespaceId feature is only supported by IoT Greengrass at this time.
+	// For more information, see Setting up IoT Greengrass core devices. (https://docs.aws.amazon.com/greengrass/v2/developerguide/setting-up.html)
 	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 }
 
@@ -37249,6 +39317,193 @@ func (s DeleteOTAUpdateOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s DeleteOTAUpdateOutput) GoString() string {
+	return s.String()
+}
+
+type DeletePackageInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique case-sensitive identifier that you can provide to ensure the idempotency
+	// of the request. Don't reuse this client token if a new idempotent request
+	// is required.
+	ClientToken *string `location:"querystring" locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
+
+	// The name of the target software package.
+	//
+	// PackageName is a required field
+	PackageName *string `location:"uri" locationName:"packageName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeletePackageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeletePackageInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.PackageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageName"))
+	}
+	if s.PackageName != nil && len(*s.PackageName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *DeletePackageInput) SetClientToken(v string) *DeletePackageInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *DeletePackageInput) SetPackageName(v string) *DeletePackageInput {
+	s.PackageName = &v
+	return s
+}
+
+type DeletePackageOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageOutput) GoString() string {
+	return s.String()
+}
+
+type DeletePackageVersionInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// A unique case-sensitive identifier that you can provide to ensure the idempotency
+	// of the request. Don't reuse this client token if a new idempotent request
+	// is required.
+	ClientToken *string `location:"querystring" locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
+
+	// The name of the associated software package.
+	//
+	// PackageName is a required field
+	PackageName *string `location:"uri" locationName:"packageName" min:"1" type:"string" required:"true"`
+
+	// The name of the target package version.
+	//
+	// VersionName is a required field
+	VersionName *string `location:"uri" locationName:"versionName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeletePackageVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeletePackageVersionInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.PackageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageName"))
+	}
+	if s.PackageName != nil && len(*s.PackageName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
+	}
+	if s.VersionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VersionName"))
+	}
+	if s.VersionName != nil && len(*s.VersionName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *DeletePackageVersionInput) SetClientToken(v string) *DeletePackageVersionInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *DeletePackageVersionInput) SetPackageName(v string) *DeletePackageVersionInput {
+	s.PackageName = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *DeletePackageVersionInput) SetVersionName(v string) *DeletePackageVersionInput {
+	s.VersionName = &v
+	return s
+}
+
+type DeletePackageVersionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageVersionOutput) GoString() string {
 	return s.String()
 }
 
@@ -39434,6 +41689,133 @@ func (s *DescribeCertificateOutput) SetCertificateDescription(v *CertificateDesc
 	return s
 }
 
+type DescribeCertificateProviderInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name of the certificate provider.
+	//
+	// CertificateProviderName is a required field
+	CertificateProviderName *string `location:"uri" locationName:"certificateProviderName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCertificateProviderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCertificateProviderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeCertificateProviderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeCertificateProviderInput"}
+	if s.CertificateProviderName == nil {
+		invalidParams.Add(request.NewErrParamRequired("CertificateProviderName"))
+	}
+	if s.CertificateProviderName != nil && len(*s.CertificateProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CertificateProviderName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCertificateProviderName sets the CertificateProviderName field's value.
+func (s *DescribeCertificateProviderInput) SetCertificateProviderName(v string) *DescribeCertificateProviderInput {
+	s.CertificateProviderName = &v
+	return s
+}
+
+type DescribeCertificateProviderOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of the operations that the certificate provider will use to generate
+	// certificates. Valid value: CreateCertificateFromCsr.
+	AccountDefaultForOperations []*string `locationName:"accountDefaultForOperations" min:"1" type:"list" enum:"CertificateProviderOperation"`
+
+	// The ARN of the certificate provider.
+	CertificateProviderArn *string `locationName:"certificateProviderArn" type:"string"`
+
+	// The name of the certificate provider.
+	CertificateProviderName *string `locationName:"certificateProviderName" min:"1" type:"string"`
+
+	// The date-time string that indicates when the certificate provider was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp"`
+
+	// The Lambda function ARN that's associated with the certificate provider.
+	LambdaFunctionArn *string `locationName:"lambdaFunctionArn" type:"string"`
+
+	// The date-time string that indicates when the certificate provider was last
+	// updated.
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCertificateProviderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCertificateProviderOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccountDefaultForOperations sets the AccountDefaultForOperations field's value.
+func (s *DescribeCertificateProviderOutput) SetAccountDefaultForOperations(v []*string) *DescribeCertificateProviderOutput {
+	s.AccountDefaultForOperations = v
+	return s
+}
+
+// SetCertificateProviderArn sets the CertificateProviderArn field's value.
+func (s *DescribeCertificateProviderOutput) SetCertificateProviderArn(v string) *DescribeCertificateProviderOutput {
+	s.CertificateProviderArn = &v
+	return s
+}
+
+// SetCertificateProviderName sets the CertificateProviderName field's value.
+func (s *DescribeCertificateProviderOutput) SetCertificateProviderName(v string) *DescribeCertificateProviderOutput {
+	s.CertificateProviderName = &v
+	return s
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *DescribeCertificateProviderOutput) SetCreationDate(v time.Time) *DescribeCertificateProviderOutput {
+	s.CreationDate = &v
+	return s
+}
+
+// SetLambdaFunctionArn sets the LambdaFunctionArn field's value.
+func (s *DescribeCertificateProviderOutput) SetLambdaFunctionArn(v string) *DescribeCertificateProviderOutput {
+	s.LambdaFunctionArn = &v
+	return s
+}
+
+// SetLastModifiedDate sets the LastModifiedDate field's value.
+func (s *DescribeCertificateProviderOutput) SetLastModifiedDate(v time.Time) *DescribeCertificateProviderOutput {
+	s.LastModifiedDate = &v
+	return s
+}
+
 type DescribeCustomMetricInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -39897,6 +42279,9 @@ type DescribeDomainConfigurationOutput struct {
 	// The date and time the domain configuration's status was last changed.
 	LastStatusChangeDate *time.Time `locationName:"lastStatusChangeDate" type:"timestamp"`
 
+	// The server certificate configuration.
+	ServerCertificateConfig *ServerCertificateConfig `locationName:"serverCertificateConfig" type:"structure"`
+
 	// A list containing summary information about the server certificate included
 	// in the domain configuration.
 	ServerCertificates []*ServerCertificateSummary `locationName:"serverCertificates" type:"list"`
@@ -39968,6 +42353,12 @@ func (s *DescribeDomainConfigurationOutput) SetLastStatusChangeDate(v time.Time)
 	return s
 }
 
+// SetServerCertificateConfig sets the ServerCertificateConfig field's value.
+func (s *DescribeDomainConfigurationOutput) SetServerCertificateConfig(v *ServerCertificateConfig) *DescribeDomainConfigurationOutput {
+	s.ServerCertificateConfig = v
+	return s
+}
+
 // SetServerCertificates sets the ServerCertificates field's value.
 func (s *DescribeDomainConfigurationOutput) SetServerCertificates(v []*ServerCertificateSummary) *DescribeDomainConfigurationOutput {
 	s.ServerCertificates = v
@@ -40002,7 +42393,8 @@ type DescribeEndpointInput struct {
 	//
 	// We strongly recommend that customers use the newer iot:Data-ATS endpoint
 	// type to avoid issues related to the widespread distrust of Symantec certificate
-	// authorities.
+	// authorities. ATS Signed Certificates are more secure and are trusted by most
+	// popular browsers.
 	EndpointType *string `location:"querystring" locationName:"endpointType" type:"string"`
 }
 
@@ -40693,6 +43085,15 @@ type DescribeJobTemplateOutput struct {
 	// A description of the job template.
 	Description *string `locationName:"description" type:"string"`
 
+	// The package version Amazon Resource Names (ARNs) that are installed on the
+	// device when the job successfully completes. The package version must be in
+	// either the Published or Deprecated state when the job deploys. For more information,
+	// see Package version lifecycle (https://docs.aws.amazon.com/iot/latest/developerguide/preparing-to-use-software-package-catalog.html#package-version-lifecycle).
+	//
+	// Note:The following Length Constraints relates to a single ARN. Up to 25 package
+	// version ARNs are allowed.
+	DestinationPackageVersions []*string `locationName:"destinationPackageVersions" type:"list"`
+
 	// The job document.
 	Document *string `locationName:"document" type:"string"`
 
@@ -40759,6 +43160,12 @@ func (s *DescribeJobTemplateOutput) SetCreatedAt(v time.Time) *DescribeJobTempla
 // SetDescription sets the Description field's value.
 func (s *DescribeJobTemplateOutput) SetDescription(v string) *DescribeJobTemplateOutput {
 	s.Description = &v
+	return s
+}
+
+// SetDestinationPackageVersions sets the DestinationPackageVersions field's value.
+func (s *DescribeJobTemplateOutput) SetDestinationPackageVersions(v []*string) *DescribeJobTemplateOutput {
+	s.DestinationPackageVersions = v
 	return s
 }
 
@@ -41696,6 +44103,9 @@ type DescribeSecurityProfileOutput struct {
 	// The time the security profile was last modified.
 	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp"`
 
+	// Specifies the MQTT topic and role ARN required for metric export.
+	MetricsExportConfig *MetricsExportConfig `locationName:"metricsExportConfig" type:"structure"`
+
 	// The ARN of the security profile.
 	SecurityProfileArn *string `locationName:"securityProfileArn" type:"string"`
 
@@ -41762,6 +44172,12 @@ func (s *DescribeSecurityProfileOutput) SetCreationDate(v time.Time) *DescribeSe
 // SetLastModifiedDate sets the LastModifiedDate field's value.
 func (s *DescribeSecurityProfileOutput) SetLastModifiedDate(v time.Time) *DescribeSecurityProfileOutput {
 	s.LastModifiedDate = &v
+	return s
+}
+
+// SetMetricsExportConfig sets the MetricsExportConfig field's value.
+func (s *DescribeSecurityProfileOutput) SetMetricsExportConfig(v *MetricsExportConfig) *DescribeSecurityProfileOutput {
+	s.MetricsExportConfig = v
 	return s
 }
 
@@ -43375,11 +45791,11 @@ func (s *DocumentParameter) SetRegex(v string) *DocumentParameter {
 // with an Amazon Web Services-managed domain (for example, dbc123defghijk.iot.us-west-2.amazonaws.com),
 // a customer managed domain, or a default endpoint.
 //
-//    * Data
+//   - Data
 //
-//    * Jobs
+//   - Jobs
 //
-//    * CredentialProvider
+//   - CredentialProvider
 type DomainConfigurationSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -44354,6 +46770,50 @@ func (s *FleetMetricNameAndArn) SetMetricName(v string) *FleetMetricNameAndArn {
 	return s
 }
 
+// A geolocation target that you select to index. Each geolocation target contains
+// a name and order key-value pair that specifies the geolocation target fields.
+type GeoLocationTarget struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the geolocation target field. If the target field is part of
+	// a named shadow, you must select the named shadow using the namedShadow filter.
+	Name *string `locationName:"name" type:"string"`
+
+	// The order of the geolocation target field. This field is optional. The default
+	// value is LatLon.
+	Order *string `locationName:"order" type:"string" enum:"TargetFieldOrder"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeoLocationTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GeoLocationTarget) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *GeoLocationTarget) SetName(v string) *GeoLocationTarget {
+	s.Name = &v
+	return s
+}
+
+// SetOrder sets the Order field's value.
+func (s *GeoLocationTarget) SetOrder(v string) *GeoLocationTarget {
+	s.Order = &v
+	return s
+}
+
 type GetBehaviorModelTrainingSummariesInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -45104,6 +47564,367 @@ func (s GetOTAUpdateOutput) GoString() string {
 // SetOtaUpdateInfo sets the OtaUpdateInfo field's value.
 func (s *GetOTAUpdateOutput) SetOtaUpdateInfo(v *OTAUpdateInfo) *GetOTAUpdateOutput {
 	s.OtaUpdateInfo = v
+	return s
+}
+
+type GetPackageConfigurationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageConfigurationInput) GoString() string {
+	return s.String()
+}
+
+type GetPackageConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The version that is associated to a specific job.
+	VersionUpdateByJobsConfig *VersionUpdateByJobsConfig `locationName:"versionUpdateByJobsConfig" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetVersionUpdateByJobsConfig sets the VersionUpdateByJobsConfig field's value.
+func (s *GetPackageConfigurationOutput) SetVersionUpdateByJobsConfig(v *VersionUpdateByJobsConfig) *GetPackageConfigurationOutput {
+	s.VersionUpdateByJobsConfig = v
+	return s
+}
+
+type GetPackageInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name of the target software package.
+	//
+	// PackageName is a required field
+	PackageName *string `location:"uri" locationName:"packageName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetPackageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetPackageInput"}
+	if s.PackageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageName"))
+	}
+	if s.PackageName != nil && len(*s.PackageName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *GetPackageInput) SetPackageName(v string) *GetPackageInput {
+	s.PackageName = &v
+	return s
+}
+
+type GetPackageOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The date the package was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp"`
+
+	// The name of the default package version.
+	DefaultVersionName *string `locationName:"defaultVersionName" min:"1" type:"string"`
+
+	// The package description.
+	//
+	// Description is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetPackageOutput's
+	// String and GoString methods.
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
+
+	// The date when the package was last updated.
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp"`
+
+	// The ARN for the package.
+	PackageArn *string `locationName:"packageArn" type:"string"`
+
+	// The name of the software package.
+	PackageName *string `locationName:"packageName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *GetPackageOutput) SetCreationDate(v time.Time) *GetPackageOutput {
+	s.CreationDate = &v
+	return s
+}
+
+// SetDefaultVersionName sets the DefaultVersionName field's value.
+func (s *GetPackageOutput) SetDefaultVersionName(v string) *GetPackageOutput {
+	s.DefaultVersionName = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *GetPackageOutput) SetDescription(v string) *GetPackageOutput {
+	s.Description = &v
+	return s
+}
+
+// SetLastModifiedDate sets the LastModifiedDate field's value.
+func (s *GetPackageOutput) SetLastModifiedDate(v time.Time) *GetPackageOutput {
+	s.LastModifiedDate = &v
+	return s
+}
+
+// SetPackageArn sets the PackageArn field's value.
+func (s *GetPackageOutput) SetPackageArn(v string) *GetPackageOutput {
+	s.PackageArn = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *GetPackageOutput) SetPackageName(v string) *GetPackageOutput {
+	s.PackageName = &v
+	return s
+}
+
+type GetPackageVersionInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name of the associated package.
+	//
+	// PackageName is a required field
+	PackageName *string `location:"uri" locationName:"packageName" min:"1" type:"string" required:"true"`
+
+	// The name of the target package version.
+	//
+	// VersionName is a required field
+	VersionName *string `location:"uri" locationName:"versionName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetPackageVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetPackageVersionInput"}
+	if s.PackageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageName"))
+	}
+	if s.PackageName != nil && len(*s.PackageName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
+	}
+	if s.VersionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VersionName"))
+	}
+	if s.VersionName != nil && len(*s.VersionName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *GetPackageVersionInput) SetPackageName(v string) *GetPackageVersionInput {
+	s.PackageName = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *GetPackageVersionInput) SetVersionName(v string) *GetPackageVersionInput {
+	s.VersionName = &v
+	return s
+}
+
+type GetPackageVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Metadata that were added to the package version that can be used to define
+	// a package version’s configuration.
+	//
+	// Attributes is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetPackageVersionOutput's
+	// String and GoString methods.
+	Attributes map[string]*string `locationName:"attributes" type:"map" sensitive:"true"`
+
+	// The date when the package version was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp"`
+
+	// The package version description.
+	//
+	// Description is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetPackageVersionOutput's
+	// String and GoString methods.
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
+
+	// Error reason for a package version failure during creation or update.
+	ErrorReason *string `locationName:"errorReason" type:"string"`
+
+	// The date when the package version was last updated.
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp"`
+
+	// The name of the software package.
+	PackageName *string `locationName:"packageName" min:"1" type:"string"`
+
+	// The ARN for the package version.
+	PackageVersionArn *string `locationName:"packageVersionArn" min:"1" type:"string"`
+
+	// The status associated to the package version. For more information, see Package
+	// version lifecycle (https://docs.aws.amazon.com/iot/latest/developerguide/preparing-to-use-software-package-catalog.html#package-version-lifecycle).
+	Status *string `locationName:"status" type:"string" enum:"PackageVersionStatus"`
+
+	// The name of the package version.
+	VersionName *string `locationName:"versionName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetPackageVersionOutput) GoString() string {
+	return s.String()
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *GetPackageVersionOutput) SetAttributes(v map[string]*string) *GetPackageVersionOutput {
+	s.Attributes = v
+	return s
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *GetPackageVersionOutput) SetCreationDate(v time.Time) *GetPackageVersionOutput {
+	s.CreationDate = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *GetPackageVersionOutput) SetDescription(v string) *GetPackageVersionOutput {
+	s.Description = &v
+	return s
+}
+
+// SetErrorReason sets the ErrorReason field's value.
+func (s *GetPackageVersionOutput) SetErrorReason(v string) *GetPackageVersionOutput {
+	s.ErrorReason = &v
+	return s
+}
+
+// SetLastModifiedDate sets the LastModifiedDate field's value.
+func (s *GetPackageVersionOutput) SetLastModifiedDate(v time.Time) *GetPackageVersionOutput {
+	s.LastModifiedDate = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *GetPackageVersionOutput) SetPackageName(v string) *GetPackageVersionOutput {
+	s.PackageName = &v
+	return s
+}
+
+// SetPackageVersionArn sets the PackageVersionArn field's value.
+func (s *GetPackageVersionOutput) SetPackageVersionArn(v string) *GetPackageVersionOutput {
+	s.PackageVersionArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetPackageVersionOutput) SetStatus(v string) *GetPackageVersionOutput {
+	s.Status = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *GetPackageVersionOutput) SetVersionName(v string) *GetPackageVersionOutput {
+	s.VersionName = &v
 	return s
 }
 
@@ -46454,12 +49275,29 @@ func (s *IndexNotReadyException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Provides additional filters for specific data sources. Named shadow is the
-// only data source that currently supports and requires a filter. To add named
-// shadows to your fleet indexing configuration, set namedShadowIndexingMode
-// to be ON and specify your shadow names in filter.
+// Provides additional selections for named shadows and geolocation data.
+//
+// To add named shadows to your fleet indexing configuration, set namedShadowIndexingMode
+// to be ON and specify your shadow names in namedShadowNames filter.
+//
+// To add geolocation data to your fleet indexing configuration:
+//
+//   - If you store geolocation data in a class/unnamed shadow, set thingIndexingMode
+//     to be REGISTRY_AND_SHADOW and specify your geolocation data in geoLocations
+//     filter.
+//
+//   - If you store geolocation data in a named shadow, set namedShadowIndexingMode
+//     to be ON, add the shadow name in namedShadowNames filter, and specify
+//     your geolocation data in geoLocations filter. For more information, see
+//     Managing fleet indexing (https://docs.aws.amazon.com/iot/latest/developerguide/managing-fleet-index.html).
 type IndexingFilter struct {
 	_ struct{} `type:"structure"`
+
+	// The list of geolocation targets that you select to index. The default maximum
+	// number of geolocation targets for indexing is 1. To increase the limit, see
+	// Amazon Web Services IoT Device Management Quotas (https://docs.aws.amazon.com/general/latest/gr/iot_device_management.html#fleet-indexing-limits)
+	// in the Amazon Web Services General Reference.
+	GeoLocations []*GeoLocationTarget `locationName:"geoLocations" type:"list"`
 
 	// The shadow names that you select to index. The default maximum number of
 	// shadow names for indexing is 10. To increase the limit, see Amazon Web Services
@@ -46484,6 +49322,12 @@ func (s IndexingFilter) String() string {
 // value will be replaced with "sensitive".
 func (s IndexingFilter) GoString() string {
 	return s.String()
+}
+
+// SetGeoLocations sets the GeoLocations field's value.
+func (s *IndexingFilter) SetGeoLocations(v []*GeoLocationTarget) *IndexingFilter {
+	s.GeoLocations = v
+	return s
 }
 
 // SetNamedShadowNames sets the NamedShadowNames field's value.
@@ -47322,6 +50166,17 @@ type Job struct {
 	// A short text description of the job.
 	Description *string `locationName:"description" type:"string"`
 
+	// The package version Amazon Resource Names (ARNs) that are installed on the
+	// device when the job successfully completes. The package version must be in
+	// either the Published or Deprecated state when the job deploys. For more information,
+	// see Package version lifecycle (https://docs.aws.amazon.com/iot/latest/developerguide/preparing-to-use-software-package-catalog.html#package-version-lifecycle).The
+	// package version must be in either the Published or Deprecated state when
+	// the job deploys. For more information, see Package version lifecycle (https://docs.aws.amazon.com/iot/latest/developerguide/preparing-to-use-software-package-catalog.html#package-version-lifecycle).
+	//
+	// Note:The following Length Constraints relates to a single ARN. Up to 25 package
+	// version ARNs are allowed.
+	DestinationPackageVersions []*string `locationName:"destinationPackageVersions" type:"list"`
+
 	// A key-value map that pairs the patterns that need to be replaced in a managed
 	// template job document schema. You can use the description of each key as
 	// a guidance to specify the inputs during runtime when creating a job.
@@ -47369,7 +50224,8 @@ type Job struct {
 	//
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
-	// The namespaceId feature is in public preview.
+	// The namespaceId feature is only supported by IoT Greengrass at this time.
+	// For more information, see Setting up IoT Greengrass core devices. (https://docs.aws.amazon.com/greengrass/v2/developerguide/setting-up.html)
 	NamespaceId *string `locationName:"namespaceId" type:"string"`
 
 	// Configuration for pre-signed S3 URLs.
@@ -47456,6 +50312,12 @@ func (s *Job) SetCreatedAt(v time.Time) *Job {
 // SetDescription sets the Description field's value.
 func (s *Job) SetDescription(v string) *Job {
 	s.Description = &v
+	return s
+}
+
+// SetDestinationPackageVersions sets the DestinationPackageVersions field's value.
+func (s *Job) SetDestinationPackageVersions(v []*string) *Job {
+	s.DestinationPackageVersions = v
 	return s
 }
 
@@ -48319,6 +51181,9 @@ type KafkaAction struct {
 	// DestinationArn is a required field
 	DestinationArn *string `locationName:"destinationArn" type:"string" required:"true"`
 
+	// The list of Kafka headers that you specify.
+	Headers []*KafkaActionHeader `locationName:"headers" min:"1" type:"list"`
+
 	// The Kafka message key.
 	Key *string `locationName:"key" type:"string"`
 
@@ -48358,8 +51223,21 @@ func (s *KafkaAction) Validate() error {
 	if s.DestinationArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("DestinationArn"))
 	}
+	if s.Headers != nil && len(s.Headers) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Headers", 1))
+	}
 	if s.Topic == nil {
 		invalidParams.Add(request.NewErrParamRequired("Topic"))
+	}
+	if s.Headers != nil {
+		for i, v := range s.Headers {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Headers", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -48380,6 +51258,12 @@ func (s *KafkaAction) SetDestinationArn(v string) *KafkaAction {
 	return s
 }
 
+// SetHeaders sets the Headers field's value.
+func (s *KafkaAction) SetHeaders(v []*KafkaActionHeader) *KafkaAction {
+	s.Headers = v
+	return s
+}
+
 // SetKey sets the Key field's value.
 func (s *KafkaAction) SetKey(v string) *KafkaAction {
 	s.Key = &v
@@ -48395,6 +51279,71 @@ func (s *KafkaAction) SetPartition(v string) *KafkaAction {
 // SetTopic sets the Topic field's value.
 func (s *KafkaAction) SetTopic(v string) *KafkaAction {
 	s.Topic = &v
+	return s
+}
+
+// Specifies a Kafka header using key-value pairs when you create a Rule’s
+// Kafka Action. You can use these headers to route data from IoT clients to
+// downstream Kafka clusters without modifying your message payload.
+//
+// For more information about Rule's Kafka action, see Apache Kafka (https://docs.aws.amazon.com/iot/latest/developerguide/apache-kafka-rule-action.html).
+type KafkaActionHeader struct {
+	_ struct{} `type:"structure"`
+
+	// The key of the Kafka header.
+	//
+	// Key is a required field
+	Key *string `locationName:"key" type:"string" required:"true"`
+
+	// The value of the Kafka header.
+	//
+	// Value is a required field
+	Value *string `locationName:"value" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KafkaActionHeader) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KafkaActionHeader) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *KafkaActionHeader) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "KafkaActionHeader"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *KafkaActionHeader) SetKey(v string) *KafkaActionHeader {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *KafkaActionHeader) SetValue(v string) *KafkaActionHeader {
+	s.Value = &v
 	return s
 }
 
@@ -49958,6 +52907,86 @@ func (s *ListCACertificatesOutput) SetNextMarker(v string) *ListCACertificatesOu
 	return s
 }
 
+type ListCertificateProvidersInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Returns the list of certificate providers in ascending alphabetical order.
+	AscendingOrder *bool `location:"querystring" locationName:"isAscendingOrder" type:"boolean"`
+
+	// The token for the next set of results, or null if there are no more results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCertificateProvidersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCertificateProvidersInput) GoString() string {
+	return s.String()
+}
+
+// SetAscendingOrder sets the AscendingOrder field's value.
+func (s *ListCertificateProvidersInput) SetAscendingOrder(v bool) *ListCertificateProvidersInput {
+	s.AscendingOrder = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCertificateProvidersInput) SetNextToken(v string) *ListCertificateProvidersInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCertificateProvidersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of certificate providers in your Amazon Web Services account.
+	CertificateProviders []*CertificateProviderSummary `locationName:"certificateProviders" type:"list"`
+
+	// The token for the next set of results, or null if there are no more results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCertificateProvidersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCertificateProvidersOutput) GoString() string {
+	return s.String()
+}
+
+// SetCertificateProviders sets the CertificateProviders field's value.
+func (s *ListCertificateProvidersOutput) SetCertificateProviders(v []*CertificateProviderSummary) *ListCertificateProvidersOutput {
+	s.CertificateProviders = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCertificateProvidersOutput) SetNextToken(v string) *ListCertificateProvidersOutput {
+	s.NextToken = &v
+	return s
+}
+
 // The input to the ListCertificatesByCA operation.
 type ListCertificatesByCAInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
@@ -51081,7 +54110,8 @@ type ListJobExecutionsForThingInput struct {
 	//
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
-	// The namespaceId feature is in public preview.
+	// The namespaceId feature is only supported by IoT Greengrass at this time.
+	// For more information, see Setting up IoT Greengrass core devices. (https://docs.aws.amazon.com/greengrass/v2/developerguide/setting-up.html)
 	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 
 	// The token to retrieve the next set of results.
@@ -51322,7 +54352,8 @@ type ListJobsInput struct {
 	//
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
-	// The namespaceId feature is in public preview.
+	// The namespaceId feature is only supported by IoT Greengrass at this time.
+	// For more information, see Setting up IoT Greengrass core devices. (https://docs.aws.amazon.com/greengrass/v2/developerguide/setting-up.html)
 	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 
 	// The token to retrieve the next set of results.
@@ -52059,6 +55090,219 @@ func (s *ListOutgoingCertificatesOutput) SetNextMarker(v string) *ListOutgoingCe
 // SetOutgoingCertificates sets the OutgoingCertificates field's value.
 func (s *ListOutgoingCertificatesOutput) SetOutgoingCertificates(v []*OutgoingCertificate) *ListOutgoingCertificatesOutput {
 	s.OutgoingCertificates = v
+	return s
+}
+
+type ListPackageVersionsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of results to return at one time.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The name of the target software package.
+	//
+	// PackageName is a required field
+	PackageName *string `location:"uri" locationName:"packageName" min:"1" type:"string" required:"true"`
+
+	// The status of the package version. For more information, see Package version
+	// lifecycle (https://docs.aws.amazon.com/iot/latest/developerguide/preparing-to-use-software-package-catalog.html#package-version-lifecycle).
+	Status *string `location:"querystring" locationName:"status" type:"string" enum:"PackageVersionStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackageVersionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackageVersionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPackageVersionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPackageVersionsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.PackageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageName"))
+	}
+	if s.PackageName != nil && len(*s.PackageName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListPackageVersionsInput) SetMaxResults(v int64) *ListPackageVersionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPackageVersionsInput) SetNextToken(v string) *ListPackageVersionsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *ListPackageVersionsInput) SetPackageName(v string) *ListPackageVersionsInput {
+	s.PackageName = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ListPackageVersionsInput) SetStatus(v string) *ListPackageVersionsInput {
+	s.Status = &v
+	return s
+}
+
+type ListPackageVersionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token for the next set of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// Lists the package versions associated to the package.
+	PackageVersionSummaries []*PackageVersionSummary `locationName:"packageVersionSummaries" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackageVersionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackageVersionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPackageVersionsOutput) SetNextToken(v string) *ListPackageVersionsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPackageVersionSummaries sets the PackageVersionSummaries field's value.
+func (s *ListPackageVersionsOutput) SetPackageVersionSummaries(v []*PackageVersionSummary) *ListPackageVersionsOutput {
+	s.PackageVersionSummaries = v
+	return s
+}
+
+type ListPackagesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of results returned at one time.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackagesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackagesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPackagesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPackagesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListPackagesInput) SetMaxResults(v int64) *ListPackagesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPackagesInput) SetNextToken(v string) *ListPackagesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListPackagesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token for the next set of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The software package summary.
+	PackageSummaries []*PackageSummary `locationName:"packageSummaries" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackagesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackagesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPackagesOutput) SetNextToken(v string) *ListPackagesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPackageSummaries sets the PackageSummaries field's value.
+func (s *ListPackagesOutput) SetPackageSummaries(v []*PackageSummary) *ListPackagesOutput {
+	s.PackageSummaries = v
 	return s
 }
 
@@ -55732,7 +58976,7 @@ type MaintenanceWindow struct {
 	// Displays the duration of the next maintenance window.
 	//
 	// DurationInMinutes is a required field
-	DurationInMinutes *int64 `locationName:"durationInMinutes" min:"30" type:"integer" required:"true"`
+	DurationInMinutes *int64 `locationName:"durationInMinutes" min:"1" type:"integer" required:"true"`
 
 	// Displays the start time of the next maintenance window.
 	//
@@ -55764,8 +59008,8 @@ func (s *MaintenanceWindow) Validate() error {
 	if s.DurationInMinutes == nil {
 		invalidParams.Add(request.NewErrParamRequired("DurationInMinutes"))
 	}
-	if s.DurationInMinutes != nil && *s.DurationInMinutes < 30 {
-		invalidParams.Add(request.NewErrParamMinValue("DurationInMinutes", 30))
+	if s.DurationInMinutes != nil && *s.DurationInMinutes < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("DurationInMinutes", 1))
 	}
 	if s.StartTime == nil {
 		invalidParams.Add(request.NewErrParamRequired("StartTime"))
@@ -56034,6 +59278,10 @@ func (s *MetricDimension) SetOperator(v string) *MetricDimension {
 type MetricToRetain struct {
 	_ struct{} `type:"structure"`
 
+	// The value indicates exporting metrics related to the MetricToRetain when
+	// it's true.
+	ExportMetric *bool `locationName:"exportMetric" type:"boolean"`
+
 	// What is measured by the behavior.
 	//
 	// Metric is a required field
@@ -56077,6 +59325,12 @@ func (s *MetricToRetain) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetExportMetric sets the ExportMetric field's value.
+func (s *MetricToRetain) SetExportMetric(v bool) *MetricToRetain {
+	s.ExportMetric = &v
+	return s
 }
 
 // SetMetric sets the Metric field's value.
@@ -56168,6 +59422,75 @@ func (s *MetricValue) SetPorts(v []*int64) *MetricValue {
 // SetStrings sets the Strings field's value.
 func (s *MetricValue) SetStrings(v []*string) *MetricValue {
 	s.Strings = v
+	return s
+}
+
+// Set configurations for metrics export.
+type MetricsExportConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The MQTT topic that Device Defender Detect should publish messages to for
+	// metrics export.
+	//
+	// MqttTopic is a required field
+	MqttTopic *string `locationName:"mqttTopic" min:"1" type:"string" required:"true"`
+
+	// This role ARN has permission to publish MQTT messages, after which Device
+	// Defender Detect can assume the role and publish messages on your behalf.
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MetricsExportConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MetricsExportConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MetricsExportConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MetricsExportConfig"}
+	if s.MqttTopic == nil {
+		invalidParams.Add(request.NewErrParamRequired("MqttTopic"))
+	}
+	if s.MqttTopic != nil && len(*s.MqttTopic) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MqttTopic", 1))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMqttTopic sets the MqttTopic field's value.
+func (s *MetricsExportConfig) SetMqttTopic(v string) *MetricsExportConfig {
+	s.MqttTopic = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *MetricsExportConfig) SetRoleArn(v string) *MetricsExportConfig {
+	s.RoleArn = &v
 	return s
 }
 
@@ -56735,7 +60058,8 @@ func (s *NotConfiguredException) RequestID() string {
 type OTAUpdateFile struct {
 	_ struct{} `type:"structure"`
 
-	// A list of name/attribute pairs.
+	// A list of name-attribute pairs. They won't be sent to devices as a part of
+	// the Job document.
 	Attributes map[string]*string `locationName:"attributes" type:"map"`
 
 	// The code signing method of the file.
@@ -57231,6 +60555,134 @@ func (s *OutgoingCertificate) SetTransferMessage(v string) *OutgoingCertificate 
 // SetTransferredTo sets the TransferredTo field's value.
 func (s *OutgoingCertificate) SetTransferredTo(v string) *OutgoingCertificate {
 	s.TransferredTo = &v
+	return s
+}
+
+// A summary of information about a software package.
+type PackageSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The date that the package was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp"`
+
+	// The name of the default package version.
+	DefaultVersionName *string `locationName:"defaultVersionName" min:"1" type:"string"`
+
+	// The date that the package was last updated.
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp"`
+
+	// The name for the target software package.
+	PackageName *string `locationName:"packageName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *PackageSummary) SetCreationDate(v time.Time) *PackageSummary {
+	s.CreationDate = &v
+	return s
+}
+
+// SetDefaultVersionName sets the DefaultVersionName field's value.
+func (s *PackageSummary) SetDefaultVersionName(v string) *PackageSummary {
+	s.DefaultVersionName = &v
+	return s
+}
+
+// SetLastModifiedDate sets the LastModifiedDate field's value.
+func (s *PackageSummary) SetLastModifiedDate(v time.Time) *PackageSummary {
+	s.LastModifiedDate = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *PackageSummary) SetPackageName(v string) *PackageSummary {
+	s.PackageName = &v
+	return s
+}
+
+// A summary of information about a package version.
+type PackageVersionSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The date that the package version was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp"`
+
+	// The date that the package version was last updated.
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp"`
+
+	// The name of the associated software package.
+	PackageName *string `locationName:"packageName" min:"1" type:"string"`
+
+	// The status of the package version. For more information, see Package version
+	// lifecycle (https://docs.aws.amazon.com/iot/latest/developerguide/preparing-to-use-software-package-catalog.html#package-version-lifecycle).
+	Status *string `locationName:"status" type:"string" enum:"PackageVersionStatus"`
+
+	// The name of the target package version.
+	VersionName *string `locationName:"versionName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageVersionSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageVersionSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *PackageVersionSummary) SetCreationDate(v time.Time) *PackageVersionSummary {
+	s.CreationDate = &v
+	return s
+}
+
+// SetLastModifiedDate sets the LastModifiedDate field's value.
+func (s *PackageVersionSummary) SetLastModifiedDate(v time.Time) *PackageVersionSummary {
+	s.LastModifiedDate = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *PackageVersionSummary) SetPackageName(v string) *PackageVersionSummary {
+	s.PackageName = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *PackageVersionSummary) SetStatus(v string) *PackageVersionSummary {
+	s.Status = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *PackageVersionSummary) SetVersionName(v string) *PackageVersionSummary {
+	s.VersionName = &v
 	return s
 }
 
@@ -60115,6 +63567,9 @@ type SchedulingConfig struct {
 	// minutes. The maximum duration between startTime and endTime is two years.
 	// The date and time format for the endTime is YYYY-MM-DD for the date and HH:MM
 	// for the time.
+	//
+	// For more information on the syntax for endTime when using an API command
+	// or the Command Line Interface, see Timestamp (https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-parameters-types.html#parameter-type-timestamp).
 	EndTime *string `locationName:"endTime" min:"1" type:"string"`
 
 	// An optional configuration within the SchedulingConfig to setup a recurring
@@ -60127,6 +63582,9 @@ type SchedulingConfig struct {
 	// and must be scheduled a minimum of thirty minutes from the current time.
 	// The date and time format for the startTime is YYYY-MM-DD for the date and
 	// HH:MM for the time.
+	//
+	// For more information on the syntax for startTime when using an API command
+	// or the Command Line Interface, see Timestamp (https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-parameters-types.html#parameter-type-timestamp).
 	StartTime *string `locationName:"startTime" min:"1" type:"string"`
 }
 
@@ -60204,7 +63662,10 @@ type SearchIndexInput struct {
 	// The search index name.
 	IndexName *string `locationName:"indexName" min:"1" type:"string"`
 
-	// The maximum number of results to return at one time.
+	// The maximum number of results to return per page at one time. This maximum
+	// number cannot exceed 100. The response might contain fewer results but will
+	// never contain more. You can use nextToken (https://docs.aws.amazon.com/iot/latest/apireference/API_SearchIndex.html#iot-SearchIndex-request-nextToken)
+	// to retrieve the next set of results until nextToken returns NULL.
 	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
 
 	// The token used to get the next set of results, or null if there are no additional
@@ -60461,6 +63922,43 @@ func (s *SecurityProfileTargetMapping) SetTarget(v *SecurityProfileTarget) *Secu
 	return s
 }
 
+// The server certificate configuration.
+type ServerCertificateConfig struct {
+	_ struct{} `type:"structure"`
+
+	// A Boolean value that indicates whether Online Certificate Status Protocol
+	// (OCSP) server certificate check is enabled or not.
+	//
+	// For more information, see Configuring OCSP server-certificate stapling in
+	// domain configuration (https://docs.aws.amazon.com/iot/latest/developerguide/iot-custom-domain-ocsp-config.html)
+	// from Amazon Web Services IoT Core Developer Guide.
+	EnableOCSPCheck *bool `locationName:"enableOCSPCheck" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServerCertificateConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServerCertificateConfig) GoString() string {
+	return s.String()
+}
+
+// SetEnableOCSPCheck sets the EnableOCSPCheck field's value.
+func (s *ServerCertificateConfig) SetEnableOCSPCheck(v bool) *ServerCertificateConfig {
+	s.EnableOCSPCheck = &v
+	return s
+}
+
 // An object that contains information about a server certificate.
 type ServerCertificateSummary struct {
 	_ struct{} `type:"structure"`
@@ -60509,6 +64007,70 @@ func (s *ServerCertificateSummary) SetServerCertificateStatus(v string) *ServerC
 func (s *ServerCertificateSummary) SetServerCertificateStatusDetail(v string) *ServerCertificateSummary {
 	s.ServerCertificateStatusDetail = &v
 	return s
+}
+
+// A limit has been exceeded.
+type ServiceQuotaExceededException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceQuotaExceededException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ServiceQuotaExceededException) GoString() string {
+	return s.String()
+}
+
+func newErrorServiceQuotaExceededException(v protocol.ResponseMetadata) error {
+	return &ServiceQuotaExceededException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ServiceQuotaExceededException) Code() string {
+	return "ServiceQuotaExceededException"
+}
+
+// Message returns the exception's message.
+func (s *ServiceQuotaExceededException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ServiceQuotaExceededException) OrigErr() error {
+	return nil
+}
+
+func (s *ServiceQuotaExceededException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ServiceQuotaExceededException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ServiceQuotaExceededException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // The service is temporarily unavailable.
@@ -63486,6 +67048,8 @@ type ThingGroupIndexingConfiguration struct {
 	// Fleet Indexing service. This is an optional field. For more information,
 	// see Managed fields (https://docs.aws.amazon.com/iot/latest/developerguide/managing-fleet-index.html#managed-field)
 	// in the Amazon Web Services IoT Core Developer Guide.
+	//
+	// You can't modify managed fields by updating fleet indexing configuration.
 	ManagedFields []*Field `locationName:"managedFields" type:"list"`
 
 	// Thing group indexing mode.
@@ -63654,14 +67218,29 @@ type ThingIndexingConfiguration struct {
 	// Detect. (https://docs.aws.amazon.com/iot/latest/developerguide/device-defender-detect.html)
 	DeviceDefenderIndexingMode *string `locationName:"deviceDefenderIndexingMode" type:"string" enum:"DeviceDefenderIndexingMode"`
 
-	// Provides additional filters for specific data sources. Named shadow is the
-	// only data source that currently supports and requires a filter. To add named
-	// shadows to your fleet indexing configuration, set namedShadowIndexingMode
-	// to be ON and specify your shadow names in filter.
+	// Provides additional selections for named shadows and geolocation data.
+	//
+	// To add named shadows to your fleet indexing configuration, set namedShadowIndexingMode
+	// to be ON and specify your shadow names in namedShadowNames filter.
+	//
+	// To add geolocation data to your fleet indexing configuration:
+	//
+	//    * If you store geolocation data in a class/unnamed shadow, set thingIndexingMode
+	//    to be REGISTRY_AND_SHADOW and specify your geolocation data in geoLocations
+	//    filter.
+	//
+	//    * If you store geolocation data in a named shadow, set namedShadowIndexingMode
+	//    to be ON, add the shadow name in namedShadowNames filter, and specify
+	//    your geolocation data in geoLocations filter. For more information, see
+	//    Managing fleet indexing (https://docs.aws.amazon.com/iot/latest/developerguide/managing-fleet-index.html).
 	Filter *IndexingFilter `locationName:"filter" type:"structure"`
 
 	// Contains fields that are indexed and whose types are already known by the
-	// Fleet Indexing service.
+	// Fleet Indexing service. This is an optional field. For more information,
+	// see Managed fields (https://docs.aws.amazon.com/iot/latest/developerguide/managing-fleet-index.html#managed-field)
+	// in the Amazon Web Services IoT Core Developer Guide.
+	//
+	// You can't modify managed fields by updating fleet indexing configuration.
 	ManagedFields []*Field `locationName:"managedFields" type:"list"`
 
 	// Named shadow indexing mode. Valid values are:
@@ -66116,6 +69695,117 @@ func (s UpdateCertificateOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateCertificateProviderInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of the operations that the certificate provider will use to generate
+	// certificates. Valid value: CreateCertificateFromCsr.
+	AccountDefaultForOperations []*string `locationName:"accountDefaultForOperations" min:"1" type:"list" enum:"CertificateProviderOperation"`
+
+	// The name of the certificate provider.
+	//
+	// CertificateProviderName is a required field
+	CertificateProviderName *string `location:"uri" locationName:"certificateProviderName" min:"1" type:"string" required:"true"`
+
+	// The Lambda function ARN that's associated with the certificate provider.
+	LambdaFunctionArn *string `locationName:"lambdaFunctionArn" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCertificateProviderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCertificateProviderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateCertificateProviderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateCertificateProviderInput"}
+	if s.AccountDefaultForOperations != nil && len(s.AccountDefaultForOperations) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountDefaultForOperations", 1))
+	}
+	if s.CertificateProviderName == nil {
+		invalidParams.Add(request.NewErrParamRequired("CertificateProviderName"))
+	}
+	if s.CertificateProviderName != nil && len(*s.CertificateProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CertificateProviderName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountDefaultForOperations sets the AccountDefaultForOperations field's value.
+func (s *UpdateCertificateProviderInput) SetAccountDefaultForOperations(v []*string) *UpdateCertificateProviderInput {
+	s.AccountDefaultForOperations = v
+	return s
+}
+
+// SetCertificateProviderName sets the CertificateProviderName field's value.
+func (s *UpdateCertificateProviderInput) SetCertificateProviderName(v string) *UpdateCertificateProviderInput {
+	s.CertificateProviderName = &v
+	return s
+}
+
+// SetLambdaFunctionArn sets the LambdaFunctionArn field's value.
+func (s *UpdateCertificateProviderInput) SetLambdaFunctionArn(v string) *UpdateCertificateProviderInput {
+	s.LambdaFunctionArn = &v
+	return s
+}
+
+type UpdateCertificateProviderOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the certificate provider.
+	CertificateProviderArn *string `locationName:"certificateProviderArn" type:"string"`
+
+	// The name of the certificate provider.
+	CertificateProviderName *string `locationName:"certificateProviderName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCertificateProviderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCertificateProviderOutput) GoString() string {
+	return s.String()
+}
+
+// SetCertificateProviderArn sets the CertificateProviderArn field's value.
+func (s *UpdateCertificateProviderOutput) SetCertificateProviderArn(v string) *UpdateCertificateProviderOutput {
+	s.CertificateProviderArn = &v
+	return s
+}
+
+// SetCertificateProviderName sets the CertificateProviderName field's value.
+func (s *UpdateCertificateProviderOutput) SetCertificateProviderName(v string) *UpdateCertificateProviderOutput {
+	s.CertificateProviderName = &v
+	return s
+}
+
 type UpdateCustomMetricInput struct {
 	_ struct{} `type:"structure"`
 
@@ -66475,6 +70165,9 @@ type UpdateDomainConfigurationInput struct {
 	// Removes the authorization configuration from a domain.
 	RemoveAuthorizerConfig *bool `locationName:"removeAuthorizerConfig" type:"boolean"`
 
+	// The server certificate configuration.
+	ServerCertificateConfig *ServerCertificateConfig `locationName:"serverCertificateConfig" type:"structure"`
+
 	// An object that specifies the TLS configuration for a domain.
 	TlsConfig *TlsConfig `locationName:"tlsConfig" type:"structure"`
 }
@@ -66539,6 +70232,12 @@ func (s *UpdateDomainConfigurationInput) SetDomainConfigurationStatus(v string) 
 // SetRemoveAuthorizerConfig sets the RemoveAuthorizerConfig field's value.
 func (s *UpdateDomainConfigurationInput) SetRemoveAuthorizerConfig(v bool) *UpdateDomainConfigurationInput {
 	s.RemoveAuthorizerConfig = &v
+	return s
+}
+
+// SetServerCertificateConfig sets the ServerCertificateConfig field's value.
+func (s *UpdateDomainConfigurationInput) SetServerCertificateConfig(v *ServerCertificateConfig) *UpdateDomainConfigurationInput {
+	s.ServerCertificateConfig = v
 	return s
 }
 
@@ -67068,7 +70767,8 @@ type UpdateJobInput struct {
 	//
 	// $aws/things/THING_NAME/jobs/JOB_ID/notify-namespace-NAMESPACE_ID/
 	//
-	// The namespaceId feature is in public preview.
+	// The namespaceId feature is only supported by IoT Greengrass at this time.
+	// For more information, see Setting up IoT Greengrass core devices. (https://docs.aws.amazon.com/greengrass/v2/developerguide/setting-up.html)
 	NamespaceId *string `location:"querystring" locationName:"namespaceId" type:"string"`
 
 	// Configuration information for pre-signed S3 URLs.
@@ -67320,6 +71020,361 @@ func (s *UpdateMitigationActionOutput) SetActionArn(v string) *UpdateMitigationA
 func (s *UpdateMitigationActionOutput) SetActionId(v string) *UpdateMitigationActionOutput {
 	s.ActionId = &v
 	return s
+}
+
+type UpdatePackageConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique case-sensitive identifier that you can provide to ensure the idempotency
+	// of the request. Don't reuse this client token if a new idempotent request
+	// is required.
+	ClientToken *string `location:"querystring" locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
+
+	// Configuration to manage job's package version reporting. This updates the
+	// thing's reserved named shadow that the job targets.
+	VersionUpdateByJobsConfig *VersionUpdateByJobsConfig `locationName:"versionUpdateByJobsConfig" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdatePackageConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdatePackageConfigurationInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.VersionUpdateByJobsConfig != nil {
+		if err := s.VersionUpdateByJobsConfig.Validate(); err != nil {
+			invalidParams.AddNested("VersionUpdateByJobsConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *UpdatePackageConfigurationInput) SetClientToken(v string) *UpdatePackageConfigurationInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetVersionUpdateByJobsConfig sets the VersionUpdateByJobsConfig field's value.
+func (s *UpdatePackageConfigurationInput) SetVersionUpdateByJobsConfig(v *VersionUpdateByJobsConfig) *UpdatePackageConfigurationInput {
+	s.VersionUpdateByJobsConfig = v
+	return s
+}
+
+type UpdatePackageConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+type UpdatePackageInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique case-sensitive identifier that you can provide to ensure the idempotency
+	// of the request. Don't reuse this client token if a new idempotent request
+	// is required.
+	ClientToken *string `location:"querystring" locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
+
+	// The name of the default package version.
+	//
+	// Note: You cannot name a defaultVersion and set unsetDefaultVersion equal
+	// to true at the same time.
+	DefaultVersionName *string `locationName:"defaultVersionName" min:"1" type:"string"`
+
+	// The package description.
+	//
+	// Description is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdatePackageInput's
+	// String and GoString methods.
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
+
+	// The name of the target software package.
+	//
+	// PackageName is a required field
+	PackageName *string `location:"uri" locationName:"packageName" min:"1" type:"string" required:"true"`
+
+	// Indicates whether you want to remove the named default package version from
+	// the software package. Set as true to remove the default package version.
+	//
+	// Note: You cannot name a defaultVersion and set unsetDefaultVersion equal
+	// to true at the same time.
+	UnsetDefaultVersion *bool `locationName:"unsetDefaultVersion" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdatePackageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdatePackageInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.DefaultVersionName != nil && len(*s.DefaultVersionName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DefaultVersionName", 1))
+	}
+	if s.PackageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageName"))
+	}
+	if s.PackageName != nil && len(*s.PackageName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *UpdatePackageInput) SetClientToken(v string) *UpdatePackageInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDefaultVersionName sets the DefaultVersionName field's value.
+func (s *UpdatePackageInput) SetDefaultVersionName(v string) *UpdatePackageInput {
+	s.DefaultVersionName = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdatePackageInput) SetDescription(v string) *UpdatePackageInput {
+	s.Description = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *UpdatePackageInput) SetPackageName(v string) *UpdatePackageInput {
+	s.PackageName = &v
+	return s
+}
+
+// SetUnsetDefaultVersion sets the UnsetDefaultVersion field's value.
+func (s *UpdatePackageInput) SetUnsetDefaultVersion(v bool) *UpdatePackageInput {
+	s.UnsetDefaultVersion = &v
+	return s
+}
+
+type UpdatePackageOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageOutput) GoString() string {
+	return s.String()
+}
+
+type UpdatePackageVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The status that the package version should be assigned. For more information,
+	// see Package version lifecycle (https://docs.aws.amazon.com/iot/latest/developerguide/preparing-to-use-software-package-catalog.html#package-version-lifecycle).
+	Action *string `locationName:"action" type:"string" enum:"PackageVersionAction"`
+
+	// Metadata that can be used to define a package version’s configuration.
+	// For example, the Amazon S3 file location, configuration options that are
+	// being sent to the device or fleet.
+	//
+	// Note: Attributes can be updated only when the package version is in a draft
+	// state.
+	//
+	// The combined size of all the attributes on a package version is limited to
+	// 3KB.
+	//
+	// Attributes is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdatePackageVersionInput's
+	// String and GoString methods.
+	Attributes map[string]*string `locationName:"attributes" type:"map" sensitive:"true"`
+
+	// A unique case-sensitive identifier that you can provide to ensure the idempotency
+	// of the request. Don't reuse this client token if a new idempotent request
+	// is required.
+	ClientToken *string `location:"querystring" locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
+
+	// The package version description.
+	//
+	// Description is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdatePackageVersionInput's
+	// String and GoString methods.
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
+
+	// The name of the associated software package.
+	//
+	// PackageName is a required field
+	PackageName *string `location:"uri" locationName:"packageName" min:"1" type:"string" required:"true"`
+
+	// The name of the target package version.
+	//
+	// VersionName is a required field
+	VersionName *string `location:"uri" locationName:"versionName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdatePackageVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdatePackageVersionInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.PackageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageName"))
+	}
+	if s.PackageName != nil && len(*s.PackageName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageName", 1))
+	}
+	if s.VersionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VersionName"))
+	}
+	if s.VersionName != nil && len(*s.VersionName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAction sets the Action field's value.
+func (s *UpdatePackageVersionInput) SetAction(v string) *UpdatePackageVersionInput {
+	s.Action = &v
+	return s
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *UpdatePackageVersionInput) SetAttributes(v map[string]*string) *UpdatePackageVersionInput {
+	s.Attributes = v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *UpdatePackageVersionInput) SetClientToken(v string) *UpdatePackageVersionInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdatePackageVersionInput) SetDescription(v string) *UpdatePackageVersionInput {
+	s.Description = &v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *UpdatePackageVersionInput) SetPackageName(v string) *UpdatePackageVersionInput {
+	s.PackageName = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *UpdatePackageVersionInput) SetVersionName(v string) *UpdatePackageVersionInput {
+	s.VersionName = &v
+	return s
+}
+
+type UpdatePackageVersionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageVersionOutput) GoString() string {
+	return s.String()
 }
 
 type UpdateProvisioningTemplateInput struct {
@@ -67738,10 +71793,16 @@ type UpdateSecurityProfileInput struct {
 	// are defined in the current invocation, an exception occurs.
 	DeleteBehaviors *bool `locationName:"deleteBehaviors" type:"boolean"`
 
+	// Set the value as true to delete metrics export related configurations.
+	DeleteMetricsExportConfig *bool `locationName:"deleteMetricsExportConfig" type:"boolean"`
+
 	// The expected version of the security profile. A new version is generated
 	// whenever the security profile is updated. If you specify a value that is
 	// different from the actual version, a VersionConflictException is thrown.
 	ExpectedVersion *int64 `location:"querystring" locationName:"expectedVersion" type:"long"`
+
+	// Specifies the MQTT topic and role ARN required for metric export.
+	MetricsExportConfig *MetricsExportConfig `locationName:"metricsExportConfig" type:"structure"`
 
 	// A description of the security profile.
 	SecurityProfileDescription *string `locationName:"securityProfileDescription" type:"string"`
@@ -67809,6 +71870,11 @@ func (s *UpdateSecurityProfileInput) Validate() error {
 			}
 		}
 	}
+	if s.MetricsExportConfig != nil {
+		if err := s.MetricsExportConfig.Validate(); err != nil {
+			invalidParams.AddNested("MetricsExportConfig", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -67858,9 +71924,21 @@ func (s *UpdateSecurityProfileInput) SetDeleteBehaviors(v bool) *UpdateSecurityP
 	return s
 }
 
+// SetDeleteMetricsExportConfig sets the DeleteMetricsExportConfig field's value.
+func (s *UpdateSecurityProfileInput) SetDeleteMetricsExportConfig(v bool) *UpdateSecurityProfileInput {
+	s.DeleteMetricsExportConfig = &v
+	return s
+}
+
 // SetExpectedVersion sets the ExpectedVersion field's value.
 func (s *UpdateSecurityProfileInput) SetExpectedVersion(v int64) *UpdateSecurityProfileInput {
 	s.ExpectedVersion = &v
+	return s
+}
+
+// SetMetricsExportConfig sets the MetricsExportConfig field's value.
+func (s *UpdateSecurityProfileInput) SetMetricsExportConfig(v *MetricsExportConfig) *UpdateSecurityProfileInput {
+	s.MetricsExportConfig = v
 	return s
 }
 
@@ -67906,6 +71984,9 @@ type UpdateSecurityProfileOutput struct {
 
 	// The time the security profile was last modified.
 	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp"`
+
+	// Specifies the MQTT topic and role ARN required for metric export.
+	MetricsExportConfig *MetricsExportConfig `locationName:"metricsExportConfig" type:"structure"`
 
 	// The ARN of the security profile that was updated.
 	SecurityProfileArn *string `locationName:"securityProfileArn" type:"string"`
@@ -67971,6 +72052,12 @@ func (s *UpdateSecurityProfileOutput) SetCreationDate(v time.Time) *UpdateSecuri
 // SetLastModifiedDate sets the LastModifiedDate field's value.
 func (s *UpdateSecurityProfileOutput) SetLastModifiedDate(v time.Time) *UpdateSecurityProfileOutput {
 	s.LastModifiedDate = &v
+	return s
+}
+
+// SetMetricsExportConfig sets the MetricsExportConfig field's value.
+func (s *UpdateSecurityProfileOutput) SetMetricsExportConfig(v *MetricsExportConfig) *UpdateSecurityProfileOutput {
+	s.MetricsExportConfig = v
 	return s
 }
 
@@ -68769,6 +72856,70 @@ func (s *ValidationError) SetErrorMessage(v string) *ValidationError {
 	return s
 }
 
+// The request is not valid.
+type ValidationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ValidationException) GoString() string {
+	return s.String()
+}
+
+func newErrorValidationException(v protocol.ResponseMetadata) error {
+	return &ValidationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ValidationException) Code() string {
+	return "ValidationException"
+}
+
+// Message returns the exception's message.
+func (s *ValidationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ValidationException) OrigErr() error {
+	return nil
+}
+
+func (s *ValidationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ValidationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ValidationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // An exception thrown when the version of an entity specified with the expectedVersion
 // parameter does not match the latest version in the system.
 type VersionConflictException struct {
@@ -68833,6 +72984,67 @@ func (s *VersionConflictException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *VersionConflictException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Configuration to manage IoT Job's package version reporting. If configured,
+// Jobs updates the thing's reserved named shadow with the package version information
+// up on successful job completion.
+//
+// Note: For each job, the destinationPackageVersions attribute has to be set
+// with the correct data for Jobs to report to the thing shadow.
+type VersionUpdateByJobsConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether the Job is enabled or not.
+	Enabled *bool `locationName:"enabled" type:"boolean"`
+
+	// The Amazon Resource Name (ARN) of the role that grants permission to the
+	// IoT jobs service to update the reserved named shadow when the job successfully
+	// completes.
+	RoleArn *string `locationName:"roleArn" min:"20" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VersionUpdateByJobsConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VersionUpdateByJobsConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VersionUpdateByJobsConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VersionUpdateByJobsConfig"}
+	if s.RoleArn != nil && len(*s.RoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEnabled sets the Enabled field's value.
+func (s *VersionUpdateByJobsConfig) SetEnabled(v bool) *VersionUpdateByJobsConfig {
+	s.Enabled = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *VersionUpdateByJobsConfig) SetRoleArn(v string) *VersionUpdateByJobsConfig {
+	s.RoleArn = &v
+	return s
 }
 
 // The number of policy versions exceeds the limit.
@@ -69762,6 +73974,18 @@ func CertificateMode_Values() []string {
 }
 
 const (
+	// CertificateProviderOperationCreateCertificateFromCsr is a CertificateProviderOperation enum value
+	CertificateProviderOperationCreateCertificateFromCsr = "CreateCertificateFromCsr"
+)
+
+// CertificateProviderOperation_Values returns all elements of the CertificateProviderOperation enum
+func CertificateProviderOperation_Values() []string {
+	return []string{
+		CertificateProviderOperationCreateCertificateFromCsr,
+	}
+}
+
+const (
 	// CertificateStatusActive is a CertificateStatus enum value
 	CertificateStatusActive = "ACTIVE"
 
@@ -70590,6 +74814,42 @@ func OTAUpdateStatus_Values() []string {
 }
 
 const (
+	// PackageVersionActionPublish is a PackageVersionAction enum value
+	PackageVersionActionPublish = "PUBLISH"
+
+	// PackageVersionActionDeprecate is a PackageVersionAction enum value
+	PackageVersionActionDeprecate = "DEPRECATE"
+)
+
+// PackageVersionAction_Values returns all elements of the PackageVersionAction enum
+func PackageVersionAction_Values() []string {
+	return []string{
+		PackageVersionActionPublish,
+		PackageVersionActionDeprecate,
+	}
+}
+
+const (
+	// PackageVersionStatusDraft is a PackageVersionStatus enum value
+	PackageVersionStatusDraft = "DRAFT"
+
+	// PackageVersionStatusPublished is a PackageVersionStatus enum value
+	PackageVersionStatusPublished = "PUBLISHED"
+
+	// PackageVersionStatusDeprecated is a PackageVersionStatus enum value
+	PackageVersionStatusDeprecated = "DEPRECATED"
+)
+
+// PackageVersionStatus_Values returns all elements of the PackageVersionStatus enum
+func PackageVersionStatus_Values() []string {
+	return []string{
+		PackageVersionStatusDraft,
+		PackageVersionStatusPublished,
+		PackageVersionStatusDeprecated,
+	}
+}
+
+const (
 	// PolicyTemplateNameBlankPolicy is a PolicyTemplateName enum value
 	PolicyTemplateNameBlankPolicy = "BLANK_POLICY"
 )
@@ -70758,6 +75018,22 @@ func Status_Values() []string {
 		StatusFailed,
 		StatusCancelled,
 		StatusCancelling,
+	}
+}
+
+const (
+	// TargetFieldOrderLatLon is a TargetFieldOrder enum value
+	TargetFieldOrderLatLon = "LatLon"
+
+	// TargetFieldOrderLonLat is a TargetFieldOrder enum value
+	TargetFieldOrderLonLat = "LonLat"
+)
+
+// TargetFieldOrder_Values returns all elements of the TargetFieldOrder enum
+func TargetFieldOrder_Values() []string {
+	return []string{
+		TargetFieldOrderLatLon,
+		TargetFieldOrderLonLat,
 	}
 }
 

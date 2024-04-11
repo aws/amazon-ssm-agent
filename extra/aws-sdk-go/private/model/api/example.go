@@ -209,10 +209,10 @@ func (a *API) AttachExamples(filename string) error {
 	}
 
 	if a.Metadata.ServiceID == "" {
-		fmt.Println(strings.Split(filename, "/")[3])
-		servID := strings.Split(filename, "/")[3]
-		a.Metadata.ServiceID = servID
-	}
+        fmt.Println(strings.Split(filename, "/")[3])
+        servID := strings.Split(filename, "/")[3]
+        a.Metadata.ServiceID = servID
+    }
 
 	return p.setup()
 }

@@ -29,14 +29,13 @@ const opBatchEvaluateFeature = "BatchEvaluateFeature"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchEvaluateFeatureRequest method.
+//	req, resp := client.BatchEvaluateFeatureRequest(params)
 //
-//    // Example sending a request using the BatchEvaluateFeatureRequest method.
-//    req, resp := client.BatchEvaluateFeatureRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/BatchEvaluateFeature
 func (c *CloudWatchEvidently) BatchEvaluateFeatureRequest(input *BatchEvaluateFeatureInput) (req *request.Request, output *BatchEvaluateFeatureOutput) {
@@ -91,17 +90,18 @@ func (c *CloudWatchEvidently) BatchEvaluateFeatureRequest(input *BatchEvaluateFe
 // API operation BatchEvaluateFeature for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/BatchEvaluateFeature
 func (c *CloudWatchEvidently) BatchEvaluateFeature(input *BatchEvaluateFeatureInput) (*BatchEvaluateFeatureOutput, error) {
@@ -141,14 +141,13 @@ const opCreateExperiment = "CreateExperiment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateExperimentRequest method.
+//	req, resp := client.CreateExperimentRequest(params)
 //
-//    // Example sending a request using the CreateExperimentRequest method.
-//    req, resp := client.CreateExperimentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/CreateExperiment
 func (c *CloudWatchEvidently) CreateExperimentRequest(input *CreateExperimentInput) (req *request.Request, output *CreateExperimentOutput) {
@@ -192,20 +191,21 @@ func (c *CloudWatchEvidently) CreateExperimentRequest(input *CreateExperimentInp
 // API operation CreateExperiment for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/CreateExperiment
 func (c *CloudWatchEvidently) CreateExperiment(input *CreateExperimentInput) (*CreateExperimentOutput, error) {
@@ -245,14 +245,13 @@ const opCreateFeature = "CreateFeature"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFeatureRequest method.
+//	req, resp := client.CreateFeatureRequest(params)
 //
-//    // Example sending a request using the CreateFeatureRequest method.
-//    req, resp := client.CreateFeatureRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/CreateFeature
 func (c *CloudWatchEvidently) CreateFeatureRequest(input *CreateFeatureInput) (req *request.Request, output *CreateFeatureOutput) {
@@ -289,20 +288,21 @@ func (c *CloudWatchEvidently) CreateFeatureRequest(input *CreateFeatureInput) (r
 // API operation CreateFeature for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/CreateFeature
 func (c *CloudWatchEvidently) CreateFeature(input *CreateFeatureInput) (*CreateFeatureOutput, error) {
@@ -342,14 +342,13 @@ const opCreateLaunch = "CreateLaunch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateLaunchRequest method.
+//	req, resp := client.CreateLaunchRequest(params)
 //
-//    // Example sending a request using the CreateLaunchRequest method.
-//    req, resp := client.CreateLaunchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/CreateLaunch
 func (c *CloudWatchEvidently) CreateLaunchRequest(input *CreateLaunchInput) (req *request.Request, output *CreateLaunchOutput) {
@@ -390,20 +389,21 @@ func (c *CloudWatchEvidently) CreateLaunchRequest(input *CreateLaunchInput) (req
 // API operation CreateLaunch for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/CreateLaunch
 func (c *CloudWatchEvidently) CreateLaunch(input *CreateLaunchInput) (*CreateLaunchOutput, error) {
@@ -443,14 +443,13 @@ const opCreateProject = "CreateProject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProjectRequest method.
+//	req, resp := client.CreateProjectRequest(params)
 //
-//    // Example sending a request using the CreateProjectRequest method.
-//    req, resp := client.CreateProjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/CreateProject
 func (c *CloudWatchEvidently) CreateProjectRequest(input *CreateProjectInput) (req *request.Request, output *CreateProjectOutput) {
@@ -485,17 +484,18 @@ func (c *CloudWatchEvidently) CreateProjectRequest(input *CreateProjectInput) (r
 // API operation CreateProject for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/CreateProject
 func (c *CloudWatchEvidently) CreateProject(input *CreateProjectInput) (*CreateProjectOutput, error) {
@@ -535,14 +535,13 @@ const opCreateSegment = "CreateSegment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSegmentRequest method.
+//	req, resp := client.CreateSegmentRequest(params)
 //
-//    // Example sending a request using the CreateSegmentRequest method.
-//    req, resp := client.CreateSegmentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/CreateSegment
 func (c *CloudWatchEvidently) CreateSegmentRequest(input *CreateSegmentInput) (req *request.Request, output *CreateSegmentOutput) {
@@ -589,17 +588,18 @@ func (c *CloudWatchEvidently) CreateSegmentRequest(input *CreateSegmentInput) (r
 // API operation CreateSegment for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/CreateSegment
 func (c *CloudWatchEvidently) CreateSegment(input *CreateSegmentInput) (*CreateSegmentOutput, error) {
@@ -639,14 +639,13 @@ const opDeleteExperiment = "DeleteExperiment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteExperimentRequest method.
+//	req, resp := client.DeleteExperimentRequest(params)
 //
-//    // Example sending a request using the DeleteExperimentRequest method.
-//    req, resp := client.DeleteExperimentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/DeleteExperiment
 func (c *CloudWatchEvidently) DeleteExperimentRequest(input *DeleteExperimentInput) (req *request.Request, output *DeleteExperimentOutput) {
@@ -681,23 +680,24 @@ func (c *CloudWatchEvidently) DeleteExperimentRequest(input *DeleteExperimentInp
 // API operation DeleteExperiment for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * InternalServerException
-//   Unexpected error while processing the request. Retry the request.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - InternalServerException
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * ServiceUnavailableException
-//   The service was unavailable. Retry the request.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ServiceUnavailableException
+//     The service was unavailable. Retry the request.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/DeleteExperiment
 func (c *CloudWatchEvidently) DeleteExperiment(input *DeleteExperimentInput) (*DeleteExperimentOutput, error) {
@@ -737,14 +737,13 @@ const opDeleteFeature = "DeleteFeature"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFeatureRequest method.
+//	req, resp := client.DeleteFeatureRequest(params)
 //
-//    // Example sending a request using the DeleteFeatureRequest method.
-//    req, resp := client.DeleteFeatureRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/DeleteFeature
 func (c *CloudWatchEvidently) DeleteFeatureRequest(input *DeleteFeatureInput) (req *request.Request, output *DeleteFeatureOutput) {
@@ -776,20 +775,21 @@ func (c *CloudWatchEvidently) DeleteFeatureRequest(input *DeleteFeatureInput) (r
 // API operation DeleteFeature for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/DeleteFeature
 func (c *CloudWatchEvidently) DeleteFeature(input *DeleteFeatureInput) (*DeleteFeatureOutput, error) {
@@ -829,14 +829,13 @@ const opDeleteLaunch = "DeleteLaunch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteLaunchRequest method.
+//	req, resp := client.DeleteLaunchRequest(params)
 //
-//    // Example sending a request using the DeleteLaunchRequest method.
-//    req, resp := client.DeleteLaunchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/DeleteLaunch
 func (c *CloudWatchEvidently) DeleteLaunchRequest(input *DeleteLaunchInput) (req *request.Request, output *DeleteLaunchOutput) {
@@ -870,20 +869,21 @@ func (c *CloudWatchEvidently) DeleteLaunchRequest(input *DeleteLaunchInput) (req
 // API operation DeleteLaunch for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/DeleteLaunch
 func (c *CloudWatchEvidently) DeleteLaunch(input *DeleteLaunchInput) (*DeleteLaunchOutput, error) {
@@ -923,14 +923,13 @@ const opDeleteProject = "DeleteProject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProjectRequest method.
+//	req, resp := client.DeleteProjectRequest(params)
 //
-//    // Example sending a request using the DeleteProjectRequest method.
-//    req, resp := client.DeleteProjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/DeleteProject
 func (c *CloudWatchEvidently) DeleteProjectRequest(input *DeleteProjectInput) (req *request.Request, output *DeleteProjectOutput) {
@@ -964,20 +963,21 @@ func (c *CloudWatchEvidently) DeleteProjectRequest(input *DeleteProjectInput) (r
 // API operation DeleteProject for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/DeleteProject
 func (c *CloudWatchEvidently) DeleteProject(input *DeleteProjectInput) (*DeleteProjectOutput, error) {
@@ -1017,14 +1017,13 @@ const opDeleteSegment = "DeleteSegment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSegmentRequest method.
+//	req, resp := client.DeleteSegmentRequest(params)
 //
-//    // Example sending a request using the DeleteSegmentRequest method.
-//    req, resp := client.DeleteSegmentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/DeleteSegment
 func (c *CloudWatchEvidently) DeleteSegmentRequest(input *DeleteSegmentInput) (req *request.Request, output *DeleteSegmentOutput) {
@@ -1057,20 +1056,21 @@ func (c *CloudWatchEvidently) DeleteSegmentRequest(input *DeleteSegmentInput) (r
 // API operation DeleteSegment for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/DeleteSegment
 func (c *CloudWatchEvidently) DeleteSegment(input *DeleteSegmentInput) (*DeleteSegmentOutput, error) {
@@ -1110,14 +1110,13 @@ const opEvaluateFeature = "EvaluateFeature"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EvaluateFeatureRequest method.
+//	req, resp := client.EvaluateFeatureRequest(params)
 //
-//    // Example sending a request using the EvaluateFeatureRequest method.
-//    req, resp := client.EvaluateFeatureRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/EvaluateFeature
 func (c *CloudWatchEvidently) EvaluateFeatureRequest(input *EvaluateFeatureInput) (req *request.Request, output *EvaluateFeatureOutput) {
@@ -1183,17 +1182,18 @@ func (c *CloudWatchEvidently) EvaluateFeatureRequest(input *EvaluateFeatureInput
 // API operation EvaluateFeature for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/EvaluateFeature
 func (c *CloudWatchEvidently) EvaluateFeature(input *EvaluateFeatureInput) (*EvaluateFeatureOutput, error) {
@@ -1233,14 +1233,13 @@ const opGetExperiment = "GetExperiment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetExperimentRequest method.
+//	req, resp := client.GetExperimentRequest(params)
 //
-//    // Example sending a request using the GetExperimentRequest method.
-//    req, resp := client.GetExperimentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetExperiment
 func (c *CloudWatchEvidently) GetExperimentRequest(input *GetExperimentInput) (req *request.Request, output *GetExperimentOutput) {
@@ -1273,17 +1272,18 @@ func (c *CloudWatchEvidently) GetExperimentRequest(input *GetExperimentInput) (r
 // API operation GetExperiment for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetExperiment
 func (c *CloudWatchEvidently) GetExperiment(input *GetExperimentInput) (*GetExperimentOutput, error) {
@@ -1323,14 +1323,13 @@ const opGetExperimentResults = "GetExperimentResults"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetExperimentResultsRequest method.
+//	req, resp := client.GetExperimentResultsRequest(params)
 //
-//    // Example sending a request using the GetExperimentResultsRequest method.
-//    req, resp := client.GetExperimentResultsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetExperimentResults
 func (c *CloudWatchEvidently) GetExperimentResultsRequest(input *GetExperimentResultsInput) (req *request.Request, output *GetExperimentResultsOutput) {
@@ -1370,20 +1369,21 @@ func (c *CloudWatchEvidently) GetExperimentResultsRequest(input *GetExperimentRe
 // API operation GetExperimentResults for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetExperimentResults
 func (c *CloudWatchEvidently) GetExperimentResults(input *GetExperimentResultsInput) (*GetExperimentResultsOutput, error) {
@@ -1423,14 +1423,13 @@ const opGetFeature = "GetFeature"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFeatureRequest method.
+//	req, resp := client.GetFeatureRequest(params)
 //
-//    // Example sending a request using the GetFeatureRequest method.
-//    req, resp := client.GetFeatureRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetFeature
 func (c *CloudWatchEvidently) GetFeatureRequest(input *GetFeatureInput) (req *request.Request, output *GetFeatureOutput) {
@@ -1462,17 +1461,18 @@ func (c *CloudWatchEvidently) GetFeatureRequest(input *GetFeatureInput) (req *re
 // API operation GetFeature for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetFeature
 func (c *CloudWatchEvidently) GetFeature(input *GetFeatureInput) (*GetFeatureOutput, error) {
@@ -1512,14 +1512,13 @@ const opGetLaunch = "GetLaunch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLaunchRequest method.
+//	req, resp := client.GetLaunchRequest(params)
 //
-//    // Example sending a request using the GetLaunchRequest method.
-//    req, resp := client.GetLaunchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetLaunch
 func (c *CloudWatchEvidently) GetLaunchRequest(input *GetLaunchInput) (req *request.Request, output *GetLaunchOutput) {
@@ -1551,17 +1550,18 @@ func (c *CloudWatchEvidently) GetLaunchRequest(input *GetLaunchInput) (req *requ
 // API operation GetLaunch for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetLaunch
 func (c *CloudWatchEvidently) GetLaunch(input *GetLaunchInput) (*GetLaunchOutput, error) {
@@ -1601,14 +1601,13 @@ const opGetProject = "GetProject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetProjectRequest method.
+//	req, resp := client.GetProjectRequest(params)
 //
-//    // Example sending a request using the GetProjectRequest method.
-//    req, resp := client.GetProjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetProject
 func (c *CloudWatchEvidently) GetProjectRequest(input *GetProjectInput) (req *request.Request, output *GetProjectOutput) {
@@ -1640,17 +1639,18 @@ func (c *CloudWatchEvidently) GetProjectRequest(input *GetProjectInput) (req *re
 // API operation GetProject for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetProject
 func (c *CloudWatchEvidently) GetProject(input *GetProjectInput) (*GetProjectOutput, error) {
@@ -1690,14 +1690,13 @@ const opGetSegment = "GetSegment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSegmentRequest method.
+//	req, resp := client.GetSegmentRequest(params)
 //
-//    // Example sending a request using the GetSegmentRequest method.
-//    req, resp := client.GetSegmentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetSegment
 func (c *CloudWatchEvidently) GetSegmentRequest(input *GetSegmentInput) (req *request.Request, output *GetSegmentOutput) {
@@ -1729,17 +1728,18 @@ func (c *CloudWatchEvidently) GetSegmentRequest(input *GetSegmentInput) (req *re
 // API operation GetSegment for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/GetSegment
 func (c *CloudWatchEvidently) GetSegment(input *GetSegmentInput) (*GetSegmentOutput, error) {
@@ -1779,14 +1779,13 @@ const opListExperiments = "ListExperiments"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListExperimentsRequest method.
+//	req, resp := client.ListExperimentsRequest(params)
 //
-//    // Example sending a request using the ListExperimentsRequest method.
-//    req, resp := client.ListExperimentsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListExperiments
 func (c *CloudWatchEvidently) ListExperimentsRequest(input *ListExperimentsInput) (req *request.Request, output *ListExperimentsOutput) {
@@ -1824,14 +1823,15 @@ func (c *CloudWatchEvidently) ListExperimentsRequest(input *ListExperimentsInput
 // API operation ListExperiments for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListExperiments
 func (c *CloudWatchEvidently) ListExperiments(input *ListExperimentsInput) (*ListExperimentsOutput, error) {
@@ -1863,15 +1863,14 @@ func (c *CloudWatchEvidently) ListExperimentsWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListExperiments operation.
-//    pageNum := 0
-//    err := client.ListExperimentsPages(params,
-//        func(page *cloudwatchevidently.ListExperimentsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListExperiments operation.
+//	pageNum := 0
+//	err := client.ListExperimentsPages(params,
+//	    func(page *cloudwatchevidently.ListExperimentsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudWatchEvidently) ListExperimentsPages(input *ListExperimentsInput, fn func(*ListExperimentsOutput, bool) bool) error {
 	return c.ListExperimentsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1923,14 +1922,13 @@ const opListFeatures = "ListFeatures"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFeaturesRequest method.
+//	req, resp := client.ListFeaturesRequest(params)
 //
-//    // Example sending a request using the ListFeaturesRequest method.
-//    req, resp := client.ListFeaturesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListFeatures
 func (c *CloudWatchEvidently) ListFeaturesRequest(input *ListFeaturesInput) (req *request.Request, output *ListFeaturesOutput) {
@@ -1967,17 +1965,18 @@ func (c *CloudWatchEvidently) ListFeaturesRequest(input *ListFeaturesInput) (req
 // API operation ListFeatures for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListFeatures
 func (c *CloudWatchEvidently) ListFeatures(input *ListFeaturesInput) (*ListFeaturesOutput, error) {
@@ -2009,15 +2008,14 @@ func (c *CloudWatchEvidently) ListFeaturesWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFeatures operation.
-//    pageNum := 0
-//    err := client.ListFeaturesPages(params,
-//        func(page *cloudwatchevidently.ListFeaturesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFeatures operation.
+//	pageNum := 0
+//	err := client.ListFeaturesPages(params,
+//	    func(page *cloudwatchevidently.ListFeaturesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudWatchEvidently) ListFeaturesPages(input *ListFeaturesInput, fn func(*ListFeaturesOutput, bool) bool) error {
 	return c.ListFeaturesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2069,14 +2067,13 @@ const opListLaunches = "ListLaunches"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLaunchesRequest method.
+//	req, resp := client.ListLaunchesRequest(params)
 //
-//    // Example sending a request using the ListLaunchesRequest method.
-//    req, resp := client.ListLaunchesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListLaunches
 func (c *CloudWatchEvidently) ListLaunchesRequest(input *ListLaunchesInput) (req *request.Request, output *ListLaunchesOutput) {
@@ -2113,14 +2110,15 @@ func (c *CloudWatchEvidently) ListLaunchesRequest(input *ListLaunchesInput) (req
 // API operation ListLaunches for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListLaunches
 func (c *CloudWatchEvidently) ListLaunches(input *ListLaunchesInput) (*ListLaunchesOutput, error) {
@@ -2152,15 +2150,14 @@ func (c *CloudWatchEvidently) ListLaunchesWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLaunches operation.
-//    pageNum := 0
-//    err := client.ListLaunchesPages(params,
-//        func(page *cloudwatchevidently.ListLaunchesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLaunches operation.
+//	pageNum := 0
+//	err := client.ListLaunchesPages(params,
+//	    func(page *cloudwatchevidently.ListLaunchesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudWatchEvidently) ListLaunchesPages(input *ListLaunchesInput, fn func(*ListLaunchesOutput, bool) bool) error {
 	return c.ListLaunchesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2212,14 +2209,13 @@ const opListProjects = "ListProjects"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProjectsRequest method.
+//	req, resp := client.ListProjectsRequest(params)
 //
-//    // Example sending a request using the ListProjectsRequest method.
-//    req, resp := client.ListProjectsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListProjects
 func (c *CloudWatchEvidently) ListProjectsRequest(input *ListProjectsInput) (req *request.Request, output *ListProjectsOutput) {
@@ -2257,14 +2253,15 @@ func (c *CloudWatchEvidently) ListProjectsRequest(input *ListProjectsInput) (req
 // API operation ListProjects for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListProjects
 func (c *CloudWatchEvidently) ListProjects(input *ListProjectsInput) (*ListProjectsOutput, error) {
@@ -2296,15 +2293,14 @@ func (c *CloudWatchEvidently) ListProjectsWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListProjects operation.
-//    pageNum := 0
-//    err := client.ListProjectsPages(params,
-//        func(page *cloudwatchevidently.ListProjectsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListProjects operation.
+//	pageNum := 0
+//	err := client.ListProjectsPages(params,
+//	    func(page *cloudwatchevidently.ListProjectsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudWatchEvidently) ListProjectsPages(input *ListProjectsInput, fn func(*ListProjectsOutput, bool) bool) error {
 	return c.ListProjectsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2356,14 +2352,13 @@ const opListSegmentReferences = "ListSegmentReferences"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSegmentReferencesRequest method.
+//	req, resp := client.ListSegmentReferencesRequest(params)
 //
-//    // Example sending a request using the ListSegmentReferencesRequest method.
-//    req, resp := client.ListSegmentReferencesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListSegmentReferences
 func (c *CloudWatchEvidently) ListSegmentReferencesRequest(input *ListSegmentReferencesInput) (req *request.Request, output *ListSegmentReferencesOutput) {
@@ -2401,17 +2396,18 @@ func (c *CloudWatchEvidently) ListSegmentReferencesRequest(input *ListSegmentRef
 // API operation ListSegmentReferences for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListSegmentReferences
 func (c *CloudWatchEvidently) ListSegmentReferences(input *ListSegmentReferencesInput) (*ListSegmentReferencesOutput, error) {
@@ -2443,15 +2439,14 @@ func (c *CloudWatchEvidently) ListSegmentReferencesWithContext(ctx aws.Context, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSegmentReferences operation.
-//    pageNum := 0
-//    err := client.ListSegmentReferencesPages(params,
-//        func(page *cloudwatchevidently.ListSegmentReferencesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSegmentReferences operation.
+//	pageNum := 0
+//	err := client.ListSegmentReferencesPages(params,
+//	    func(page *cloudwatchevidently.ListSegmentReferencesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudWatchEvidently) ListSegmentReferencesPages(input *ListSegmentReferencesInput, fn func(*ListSegmentReferencesOutput, bool) bool) error {
 	return c.ListSegmentReferencesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2503,14 +2498,13 @@ const opListSegments = "ListSegments"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSegmentsRequest method.
+//	req, resp := client.ListSegmentsRequest(params)
 //
-//    // Example sending a request using the ListSegmentsRequest method.
-//    req, resp := client.ListSegmentsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListSegments
 func (c *CloudWatchEvidently) ListSegmentsRequest(input *ListSegmentsInput) (req *request.Request, output *ListSegmentsOutput) {
@@ -2548,14 +2542,15 @@ func (c *CloudWatchEvidently) ListSegmentsRequest(input *ListSegmentsInput) (req
 // API operation ListSegments for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListSegments
 func (c *CloudWatchEvidently) ListSegments(input *ListSegmentsInput) (*ListSegmentsOutput, error) {
@@ -2587,15 +2582,14 @@ func (c *CloudWatchEvidently) ListSegmentsWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSegments operation.
-//    pageNum := 0
-//    err := client.ListSegmentsPages(params,
-//        func(page *cloudwatchevidently.ListSegmentsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSegments operation.
+//	pageNum := 0
+//	err := client.ListSegmentsPages(params,
+//	    func(page *cloudwatchevidently.ListSegmentsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudWatchEvidently) ListSegmentsPages(input *ListSegmentsInput, fn func(*ListSegmentsOutput, bool) bool) error {
 	return c.ListSegmentsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2647,14 +2641,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListTagsForResource
 func (c *CloudWatchEvidently) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2685,14 +2678,15 @@ func (c *CloudWatchEvidently) ListTagsForResourceRequest(input *ListTagsForResou
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/ListTagsForResource
 func (c *CloudWatchEvidently) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2732,14 +2726,13 @@ const opPutProjectEvents = "PutProjectEvents"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutProjectEventsRequest method.
+//	req, resp := client.PutProjectEventsRequest(params)
 //
-//    // Example sending a request using the PutProjectEventsRequest method.
-//    req, resp := client.PutProjectEventsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/PutProjectEvents
 func (c *CloudWatchEvidently) PutProjectEventsRequest(input *PutProjectEventsInput) (req *request.Request, output *PutProjectEventsOutput) {
@@ -2773,17 +2766,18 @@ func (c *CloudWatchEvidently) PutProjectEventsRequest(input *PutProjectEventsInp
 // API operation PutProjectEvents for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/PutProjectEvents
 func (c *CloudWatchEvidently) PutProjectEvents(input *PutProjectEventsInput) (*PutProjectEventsOutput, error) {
@@ -2823,14 +2817,13 @@ const opStartExperiment = "StartExperiment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartExperimentRequest method.
+//	req, resp := client.StartExperimentRequest(params)
 //
-//    // Example sending a request using the StartExperimentRequest method.
-//    req, resp := client.StartExperimentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/StartExperiment
 func (c *CloudWatchEvidently) StartExperimentRequest(input *StartExperimentInput) (req *request.Request, output *StartExperimentOutput) {
@@ -2862,23 +2855,24 @@ func (c *CloudWatchEvidently) StartExperimentRequest(input *StartExperimentInput
 // API operation StartExperiment for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/StartExperiment
 func (c *CloudWatchEvidently) StartExperiment(input *StartExperimentInput) (*StartExperimentOutput, error) {
@@ -2918,14 +2912,13 @@ const opStartLaunch = "StartLaunch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartLaunchRequest method.
+//	req, resp := client.StartLaunchRequest(params)
 //
-//    // Example sending a request using the StartLaunchRequest method.
-//    req, resp := client.StartLaunchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/StartLaunch
 func (c *CloudWatchEvidently) StartLaunchRequest(input *StartLaunchInput) (req *request.Request, output *StartLaunchOutput) {
@@ -2956,23 +2949,24 @@ func (c *CloudWatchEvidently) StartLaunchRequest(input *StartLaunchInput) (req *
 // API operation StartLaunch for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/StartLaunch
 func (c *CloudWatchEvidently) StartLaunch(input *StartLaunchInput) (*StartLaunchOutput, error) {
@@ -3012,14 +3006,13 @@ const opStopExperiment = "StopExperiment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopExperimentRequest method.
+//	req, resp := client.StopExperimentRequest(params)
 //
-//    // Example sending a request using the StopExperimentRequest method.
-//    req, resp := client.StopExperimentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/StopExperiment
 func (c *CloudWatchEvidently) StopExperimentRequest(input *StopExperimentInput) (req *request.Request, output *StopExperimentOutput) {
@@ -3051,23 +3044,24 @@ func (c *CloudWatchEvidently) StopExperimentRequest(input *StopExperimentInput) 
 // API operation StopExperiment for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/StopExperiment
 func (c *CloudWatchEvidently) StopExperiment(input *StopExperimentInput) (*StopExperimentOutput, error) {
@@ -3107,14 +3101,13 @@ const opStopLaunch = "StopLaunch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopLaunchRequest method.
+//	req, resp := client.StopLaunchRequest(params)
 //
-//    // Example sending a request using the StopLaunchRequest method.
-//    req, resp := client.StopLaunchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/StopLaunch
 func (c *CloudWatchEvidently) StopLaunchRequest(input *StopLaunchInput) (req *request.Request, output *StopLaunchOutput) {
@@ -3150,17 +3143,18 @@ func (c *CloudWatchEvidently) StopLaunchRequest(input *StopLaunchInput) (req *re
 // API operation StopLaunch for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/StopLaunch
 func (c *CloudWatchEvidently) StopLaunch(input *StopLaunchInput) (*StopLaunchOutput, error) {
@@ -3200,14 +3194,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/TagResource
 func (c *CloudWatchEvidently) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -3257,14 +3250,15 @@ func (c *CloudWatchEvidently) TagResourceRequest(input *TagResourceInput) (req *
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/TagResource
 func (c *CloudWatchEvidently) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -3304,14 +3298,13 @@ const opTestSegmentPattern = "TestSegmentPattern"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TestSegmentPatternRequest method.
+//	req, resp := client.TestSegmentPatternRequest(params)
 //
-//    // Example sending a request using the TestSegmentPatternRequest method.
-//    req, resp := client.TestSegmentPatternRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/TestSegmentPattern
 func (c *CloudWatchEvidently) TestSegmentPatternRequest(input *TestSegmentPatternInput) (req *request.Request, output *TestSegmentPatternOutput) {
@@ -3344,14 +3337,15 @@ func (c *CloudWatchEvidently) TestSegmentPatternRequest(input *TestSegmentPatter
 // API operation TestSegmentPattern for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied because of request throttling. Retry the request.
 //
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
+//   - ThrottlingException
+//     The request was denied because of request throttling. Retry the request.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/TestSegmentPattern
 func (c *CloudWatchEvidently) TestSegmentPattern(input *TestSegmentPatternInput) (*TestSegmentPatternOutput, error) {
@@ -3391,14 +3385,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UntagResource
 func (c *CloudWatchEvidently) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -3430,14 +3423,15 @@ func (c *CloudWatchEvidently) UntagResourceRequest(input *UntagResourceInput) (r
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UntagResource
 func (c *CloudWatchEvidently) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -3477,14 +3471,13 @@ const opUpdateExperiment = "UpdateExperiment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateExperimentRequest method.
+//	req, resp := client.UpdateExperimentRequest(params)
 //
-//    // Example sending a request using the UpdateExperimentRequest method.
-//    req, resp := client.UpdateExperimentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UpdateExperiment
 func (c *CloudWatchEvidently) UpdateExperimentRequest(input *UpdateExperimentInput) (req *request.Request, output *UpdateExperimentOutput) {
@@ -3518,17 +3511,18 @@ func (c *CloudWatchEvidently) UpdateExperimentRequest(input *UpdateExperimentInp
 // API operation UpdateExperiment for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UpdateExperiment
 func (c *CloudWatchEvidently) UpdateExperiment(input *UpdateExperimentInput) (*UpdateExperimentOutput, error) {
@@ -3568,14 +3562,13 @@ const opUpdateFeature = "UpdateFeature"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFeatureRequest method.
+//	req, resp := client.UpdateFeatureRequest(params)
 //
-//    // Example sending a request using the UpdateFeatureRequest method.
-//    req, resp := client.UpdateFeatureRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UpdateFeature
 func (c *CloudWatchEvidently) UpdateFeatureRequest(input *UpdateFeatureInput) (req *request.Request, output *UpdateFeatureOutput) {
@@ -3609,20 +3602,21 @@ func (c *CloudWatchEvidently) UpdateFeatureRequest(input *UpdateFeatureInput) (r
 // API operation UpdateFeature for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UpdateFeature
 func (c *CloudWatchEvidently) UpdateFeature(input *UpdateFeatureInput) (*UpdateFeatureOutput, error) {
@@ -3662,14 +3656,13 @@ const opUpdateLaunch = "UpdateLaunch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateLaunchRequest method.
+//	req, resp := client.UpdateLaunchRequest(params)
 //
-//    // Example sending a request using the UpdateLaunchRequest method.
-//    req, resp := client.UpdateLaunchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UpdateLaunch
 func (c *CloudWatchEvidently) UpdateLaunchRequest(input *UpdateLaunchInput) (req *request.Request, output *UpdateLaunchOutput) {
@@ -3703,17 +3696,18 @@ func (c *CloudWatchEvidently) UpdateLaunchRequest(input *UpdateLaunchInput) (req
 // API operation UpdateLaunch for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UpdateLaunch
 func (c *CloudWatchEvidently) UpdateLaunch(input *UpdateLaunchInput) (*UpdateLaunchOutput, error) {
@@ -3753,14 +3747,13 @@ const opUpdateProject = "UpdateProject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProjectRequest method.
+//	req, resp := client.UpdateProjectRequest(params)
 //
-//    // Example sending a request using the UpdateProjectRequest method.
-//    req, resp := client.UpdateProjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UpdateProject
 func (c *CloudWatchEvidently) UpdateProjectRequest(input *UpdateProjectInput) (req *request.Request, output *UpdateProjectOutput) {
@@ -3799,20 +3792,21 @@ func (c *CloudWatchEvidently) UpdateProjectRequest(input *UpdateProjectInput) (r
 // API operation UpdateProject for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UpdateProject
 func (c *CloudWatchEvidently) UpdateProject(input *UpdateProjectInput) (*UpdateProjectOutput, error) {
@@ -3852,14 +3846,13 @@ const opUpdateProjectDataDelivery = "UpdateProjectDataDelivery"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProjectDataDeliveryRequest method.
+//	req, resp := client.UpdateProjectDataDeliveryRequest(params)
 //
-//    // Example sending a request using the UpdateProjectDataDeliveryRequest method.
-//    req, resp := client.UpdateProjectDataDeliveryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UpdateProjectDataDelivery
 func (c *CloudWatchEvidently) UpdateProjectDataDeliveryRequest(input *UpdateProjectDataDeliveryInput) (req *request.Request, output *UpdateProjectDataDeliveryOutput) {
@@ -3895,20 +3888,21 @@ func (c *CloudWatchEvidently) UpdateProjectDataDeliveryRequest(input *UpdateProj
 // API operation UpdateProjectDataDelivery for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
 //
-//   * AccessDeniedException
-//   You do not have sufficient permissions to perform this action.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - AccessDeniedException
+//     You do not have sufficient permissions to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/evidently-2021-02-01/UpdateProjectDataDelivery
 func (c *CloudWatchEvidently) UpdateProjectDataDelivery(input *UpdateProjectDataDeliveryInput) (*UpdateProjectDataDeliveryOutput, error) {

@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a IoTFleetWise client from just a session.
-//     svc := iotfleetwise.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a IoTFleetWise client with additional configuration
-//     svc := iotfleetwise.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a IoTFleetWise client from just a session.
+//	svc := iotfleetwise.New(mySession)
+//
+//	// Create a IoTFleetWise client with additional configuration
+//	svc := iotfleetwise.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *IoTFleetWise {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

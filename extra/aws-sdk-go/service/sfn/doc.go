@@ -22,12 +22,17 @@
 // SDKs, or an HTTP API. For more information about Step Functions, see the
 // Step Functions Developer Guide (https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html) .
 //
+// If you use the Step Functions API actions using Amazon Web Services SDK integrations,
+// make sure the API actions are in camel case and parameter names are in Pascal
+// case. For example, you could use Step Functions API action startSyncExecution
+// and specify its parameter as StateMachineArn.
+//
 // See https://docs.aws.amazon.com/goto/WebAPI/states-2016-11-23 for more information on this service.
 //
 // See sfn package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/sfn/
 //
-// Using the Client
+// # Using the Client
 //
 // To contact AWS Step Functions with the SDK use the New function to create
 // a new service client. With that client you can make API requests to the service.

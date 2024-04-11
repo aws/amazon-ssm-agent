@@ -17,7 +17,8 @@ const (
 	// ErrCodeConflictException for service response error code
 	// "ConflictException".
 	//
-	// An attachment with that identifier is already being uploaded.
+	// The requested operation conflicts with the current state of a service resource
+	// associated with the request.
 	ErrCodeConflictException = "ConflictException"
 
 	// ErrCodeInternalServerException for service response error code
@@ -26,6 +27,12 @@ const (
 	// This exception occurs when there is an internal failure in the Amazon Connect
 	// service.
 	ErrCodeInternalServerException = "InternalServerException"
+
+	// ErrCodeResourceNotFoundException for service response error code
+	// "ResourceNotFoundException".
+	//
+	// The resource was not found.
+	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
 
 	// ErrCodeServiceQuotaExceededException for service response error code
 	// "ServiceQuotaExceededException".
@@ -50,6 +57,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"AccessDeniedException":         newErrorAccessDeniedException,
 	"ConflictException":             newErrorConflictException,
 	"InternalServerException":       newErrorInternalServerException,
+	"ResourceNotFoundException":     newErrorResourceNotFoundException,
 	"ServiceQuotaExceededException": newErrorServiceQuotaExceededException,
 	"ThrottlingException":           newErrorThrottlingException,
 	"ValidationException":           newErrorValidationException,

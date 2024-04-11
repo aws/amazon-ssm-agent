@@ -28,14 +28,13 @@ const opBatchGetCollection = "BatchGetCollection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetCollectionRequest method.
+//	req, resp := client.BatchGetCollectionRequest(params)
 //
-//    // Example sending a request using the BatchGetCollectionRequest method.
-//    req, resp := client.BatchGetCollectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/BatchGetCollection
 func (c *OpenSearchServerless) BatchGetCollectionRequest(input *BatchGetCollectionInput) (req *request.Request, output *BatchGetCollectionOutput) {
@@ -68,12 +67,13 @@ func (c *OpenSearchServerless) BatchGetCollectionRequest(input *BatchGetCollecti
 // API operation BatchGetCollection for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/BatchGetCollection
 func (c *OpenSearchServerless) BatchGetCollection(input *BatchGetCollectionInput) (*BatchGetCollectionOutput, error) {
@@ -97,6 +97,174 @@ func (c *OpenSearchServerless) BatchGetCollectionWithContext(ctx aws.Context, in
 	return out, req.Send()
 }
 
+const opBatchGetEffectiveLifecyclePolicy = "BatchGetEffectiveLifecyclePolicy"
+
+// BatchGetEffectiveLifecyclePolicyRequest generates a "aws/request.Request" representing the
+// client's request for the BatchGetEffectiveLifecyclePolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchGetEffectiveLifecyclePolicy for more information on using the BatchGetEffectiveLifecyclePolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the BatchGetEffectiveLifecyclePolicyRequest method.
+//	req, resp := client.BatchGetEffectiveLifecyclePolicyRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/BatchGetEffectiveLifecyclePolicy
+func (c *OpenSearchServerless) BatchGetEffectiveLifecyclePolicyRequest(input *BatchGetEffectiveLifecyclePolicyInput) (req *request.Request, output *BatchGetEffectiveLifecyclePolicyOutput) {
+	op := &request.Operation{
+		Name:       opBatchGetEffectiveLifecyclePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &BatchGetEffectiveLifecyclePolicyInput{}
+	}
+
+	output = &BatchGetEffectiveLifecyclePolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchGetEffectiveLifecyclePolicy API operation for OpenSearch Service Serverless.
+//
+// Returns a list of successful and failed retrievals for the OpenSearch Serverless
+// indexes. For more information, see Viewing data lifecycle policies (https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-lifecycle.html#serverless-lifecycle-list).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for OpenSearch Service Serverless's
+// API operation BatchGetEffectiveLifecyclePolicy for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/BatchGetEffectiveLifecyclePolicy
+func (c *OpenSearchServerless) BatchGetEffectiveLifecyclePolicy(input *BatchGetEffectiveLifecyclePolicyInput) (*BatchGetEffectiveLifecyclePolicyOutput, error) {
+	req, out := c.BatchGetEffectiveLifecyclePolicyRequest(input)
+	return out, req.Send()
+}
+
+// BatchGetEffectiveLifecyclePolicyWithContext is the same as BatchGetEffectiveLifecyclePolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchGetEffectiveLifecyclePolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OpenSearchServerless) BatchGetEffectiveLifecyclePolicyWithContext(ctx aws.Context, input *BatchGetEffectiveLifecyclePolicyInput, opts ...request.Option) (*BatchGetEffectiveLifecyclePolicyOutput, error) {
+	req, out := c.BatchGetEffectiveLifecyclePolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opBatchGetLifecyclePolicy = "BatchGetLifecyclePolicy"
+
+// BatchGetLifecyclePolicyRequest generates a "aws/request.Request" representing the
+// client's request for the BatchGetLifecyclePolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchGetLifecyclePolicy for more information on using the BatchGetLifecyclePolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the BatchGetLifecyclePolicyRequest method.
+//	req, resp := client.BatchGetLifecyclePolicyRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/BatchGetLifecyclePolicy
+func (c *OpenSearchServerless) BatchGetLifecyclePolicyRequest(input *BatchGetLifecyclePolicyInput) (req *request.Request, output *BatchGetLifecyclePolicyOutput) {
+	op := &request.Operation{
+		Name:       opBatchGetLifecyclePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &BatchGetLifecyclePolicyInput{}
+	}
+
+	output = &BatchGetLifecyclePolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchGetLifecyclePolicy API operation for OpenSearch Service Serverless.
+//
+// Returns one or more configured OpenSearch Serverless lifecycle policies.
+// For more information, see Viewing data lifecycle policies (https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-lifecycle.html#serverless-lifecycle-list).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for OpenSearch Service Serverless's
+// API operation BatchGetLifecyclePolicy for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/BatchGetLifecyclePolicy
+func (c *OpenSearchServerless) BatchGetLifecyclePolicy(input *BatchGetLifecyclePolicyInput) (*BatchGetLifecyclePolicyOutput, error) {
+	req, out := c.BatchGetLifecyclePolicyRequest(input)
+	return out, req.Send()
+}
+
+// BatchGetLifecyclePolicyWithContext is the same as BatchGetLifecyclePolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchGetLifecyclePolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OpenSearchServerless) BatchGetLifecyclePolicyWithContext(ctx aws.Context, input *BatchGetLifecyclePolicyInput, opts ...request.Option) (*BatchGetLifecyclePolicyOutput, error) {
+	req, out := c.BatchGetLifecyclePolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opBatchGetVpcEndpoint = "BatchGetVpcEndpoint"
 
 // BatchGetVpcEndpointRequest generates a "aws/request.Request" representing the
@@ -113,14 +281,13 @@ const opBatchGetVpcEndpoint = "BatchGetVpcEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetVpcEndpointRequest method.
+//	req, resp := client.BatchGetVpcEndpointRequest(params)
 //
-//    // Example sending a request using the BatchGetVpcEndpointRequest method.
-//    req, resp := client.BatchGetVpcEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/BatchGetVpcEndpoint
 func (c *OpenSearchServerless) BatchGetVpcEndpointRequest(input *BatchGetVpcEndpointInput) (req *request.Request, output *BatchGetVpcEndpointOutput) {
@@ -153,12 +320,13 @@ func (c *OpenSearchServerless) BatchGetVpcEndpointRequest(input *BatchGetVpcEndp
 // API operation BatchGetVpcEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/BatchGetVpcEndpoint
 func (c *OpenSearchServerless) BatchGetVpcEndpoint(input *BatchGetVpcEndpointInput) (*BatchGetVpcEndpointOutput, error) {
@@ -198,14 +366,13 @@ const opCreateAccessPolicy = "CreateAccessPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAccessPolicyRequest method.
+//	req, resp := client.CreateAccessPolicyRequest(params)
 //
-//    // Example sending a request using the CreateAccessPolicyRequest method.
-//    req, resp := client.CreateAccessPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateAccessPolicy
 func (c *OpenSearchServerless) CreateAccessPolicyRequest(input *CreateAccessPolicyInput) (req *request.Request, output *CreateAccessPolicyOutput) {
@@ -240,21 +407,22 @@ func (c *OpenSearchServerless) CreateAccessPolicyRequest(input *CreateAccessPoli
 // API operation CreateAccessPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
 //
-//   * ServiceQuotaExceededException
-//   Thrown when you attempt to create more resources than the service allows
-//   based on service quotas.
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+//   - ServiceQuotaExceededException
+//     Thrown when you attempt to create more resources than the service allows
+//     based on service quotas.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateAccessPolicy
 func (c *OpenSearchServerless) CreateAccessPolicy(input *CreateAccessPolicyInput) (*CreateAccessPolicyOutput, error) {
@@ -294,14 +462,13 @@ const opCreateCollection = "CreateCollection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateCollectionRequest method.
+//	req, resp := client.CreateCollectionRequest(params)
 //
-//    // Example sending a request using the CreateCollectionRequest method.
-//    req, resp := client.CreateCollectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateCollection
 func (c *OpenSearchServerless) CreateCollectionRequest(input *CreateCollectionInput) (req *request.Request, output *CreateCollectionOutput) {
@@ -333,24 +500,26 @@ func (c *OpenSearchServerless) CreateCollectionRequest(input *CreateCollectionIn
 // API operation CreateCollection for usage and error information.
 //
 // Returned Error Types:
-//   * OcuLimitExceededException
-//   OCU Limit Exceeded for service limits
 //
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
+//   - OcuLimitExceededException
+//     Thrown when the collection you're attempting to create results in a number
+//     of search or indexing OCUs that exceeds the account limit.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
 //
-//   * ServiceQuotaExceededException
-//   Thrown when you attempt to create more resources than the service allows
-//   based on service quotas.
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+//   - ServiceQuotaExceededException
+//     Thrown when you attempt to create more resources than the service allows
+//     based on service quotas.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateCollection
 func (c *OpenSearchServerless) CreateCollection(input *CreateCollectionInput) (*CreateCollectionOutput, error) {
@@ -374,6 +543,101 @@ func (c *OpenSearchServerless) CreateCollectionWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+const opCreateLifecyclePolicy = "CreateLifecyclePolicy"
+
+// CreateLifecyclePolicyRequest generates a "aws/request.Request" representing the
+// client's request for the CreateLifecyclePolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateLifecyclePolicy for more information on using the CreateLifecyclePolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateLifecyclePolicyRequest method.
+//	req, resp := client.CreateLifecyclePolicyRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateLifecyclePolicy
+func (c *OpenSearchServerless) CreateLifecyclePolicyRequest(input *CreateLifecyclePolicyInput) (req *request.Request, output *CreateLifecyclePolicyOutput) {
+	op := &request.Operation{
+		Name:       opCreateLifecyclePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateLifecyclePolicyInput{}
+	}
+
+	output = &CreateLifecyclePolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateLifecyclePolicy API operation for OpenSearch Service Serverless.
+//
+// Creates a lifecyle policy to be applied to OpenSearch Serverless indexes.
+// Lifecycle policies define the number of days or hours to retain the data
+// on an OpenSearch Serverless index. For more information, see Creating data
+// lifecycle policies (https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-lifecycle.html#serverless-lifecycle-create).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for OpenSearch Service Serverless's
+// API operation CreateLifecyclePolicy for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+//   - ServiceQuotaExceededException
+//     Thrown when you attempt to create more resources than the service allows
+//     based on service quotas.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateLifecyclePolicy
+func (c *OpenSearchServerless) CreateLifecyclePolicy(input *CreateLifecyclePolicyInput) (*CreateLifecyclePolicyOutput, error) {
+	req, out := c.CreateLifecyclePolicyRequest(input)
+	return out, req.Send()
+}
+
+// CreateLifecyclePolicyWithContext is the same as CreateLifecyclePolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateLifecyclePolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OpenSearchServerless) CreateLifecyclePolicyWithContext(ctx aws.Context, input *CreateLifecyclePolicyInput, opts ...request.Option) (*CreateLifecyclePolicyOutput, error) {
+	req, out := c.CreateLifecyclePolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateSecurityConfig = "CreateSecurityConfig"
 
 // CreateSecurityConfigRequest generates a "aws/request.Request" representing the
@@ -390,14 +654,13 @@ const opCreateSecurityConfig = "CreateSecurityConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSecurityConfigRequest method.
+//	req, resp := client.CreateSecurityConfigRequest(params)
 //
-//    // Example sending a request using the CreateSecurityConfigRequest method.
-//    req, resp := client.CreateSecurityConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateSecurityConfig
 func (c *OpenSearchServerless) CreateSecurityConfigRequest(input *CreateSecurityConfigInput) (req *request.Request, output *CreateSecurityConfigOutput) {
@@ -429,21 +692,22 @@ func (c *OpenSearchServerless) CreateSecurityConfigRequest(input *CreateSecurity
 // API operation CreateSecurityConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
 //
-//   * ServiceQuotaExceededException
-//   Thrown when you attempt to create more resources than the service allows
-//   based on service quotas.
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+//   - ServiceQuotaExceededException
+//     Thrown when you attempt to create more resources than the service allows
+//     based on service quotas.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateSecurityConfig
 func (c *OpenSearchServerless) CreateSecurityConfig(input *CreateSecurityConfigInput) (*CreateSecurityConfigOutput, error) {
@@ -483,14 +747,13 @@ const opCreateSecurityPolicy = "CreateSecurityPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSecurityPolicyRequest method.
+//	req, resp := client.CreateSecurityPolicyRequest(params)
 //
-//    // Example sending a request using the CreateSecurityPolicyRequest method.
-//    req, resp := client.CreateSecurityPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateSecurityPolicy
 func (c *OpenSearchServerless) CreateSecurityPolicyRequest(input *CreateSecurityPolicyInput) (req *request.Request, output *CreateSecurityPolicyOutput) {
@@ -526,21 +789,22 @@ func (c *OpenSearchServerless) CreateSecurityPolicyRequest(input *CreateSecurity
 // API operation CreateSecurityPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
 //
-//   * ServiceQuotaExceededException
-//   Thrown when you attempt to create more resources than the service allows
-//   based on service quotas.
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+//   - ServiceQuotaExceededException
+//     Thrown when you attempt to create more resources than the service allows
+//     based on service quotas.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateSecurityPolicy
 func (c *OpenSearchServerless) CreateSecurityPolicy(input *CreateSecurityPolicyInput) (*CreateSecurityPolicyOutput, error) {
@@ -580,14 +844,13 @@ const opCreateVpcEndpoint = "CreateVpcEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateVpcEndpointRequest method.
+//	req, resp := client.CreateVpcEndpointRequest(params)
 //
-//    // Example sending a request using the CreateVpcEndpointRequest method.
-//    req, resp := client.CreateVpcEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateVpcEndpoint
 func (c *OpenSearchServerless) CreateVpcEndpointRequest(input *CreateVpcEndpointInput) (req *request.Request, output *CreateVpcEndpointOutput) {
@@ -620,21 +883,22 @@ func (c *OpenSearchServerless) CreateVpcEndpointRequest(input *CreateVpcEndpoint
 // API operation CreateVpcEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
 //
-//   * ServiceQuotaExceededException
-//   Thrown when you attempt to create more resources than the service allows
-//   based on service quotas.
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+//   - ServiceQuotaExceededException
+//     Thrown when you attempt to create more resources than the service allows
+//     based on service quotas.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/CreateVpcEndpoint
 func (c *OpenSearchServerless) CreateVpcEndpoint(input *CreateVpcEndpointInput) (*CreateVpcEndpointOutput, error) {
@@ -674,14 +938,13 @@ const opDeleteAccessPolicy = "DeleteAccessPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAccessPolicyRequest method.
+//	req, resp := client.DeleteAccessPolicyRequest(params)
 //
-//    // Example sending a request using the DeleteAccessPolicyRequest method.
-//    req, resp := client.DeleteAccessPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteAccessPolicy
 func (c *OpenSearchServerless) DeleteAccessPolicyRequest(input *DeleteAccessPolicyInput) (req *request.Request, output *DeleteAccessPolicyOutput) {
@@ -714,20 +977,21 @@ func (c *OpenSearchServerless) DeleteAccessPolicyRequest(input *DeleteAccessPoli
 // API operation DeleteAccessPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteAccessPolicy
 func (c *OpenSearchServerless) DeleteAccessPolicy(input *DeleteAccessPolicyInput) (*DeleteAccessPolicyOutput, error) {
@@ -767,14 +1031,13 @@ const opDeleteCollection = "DeleteCollection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCollectionRequest method.
+//	req, resp := client.DeleteCollectionRequest(params)
 //
-//    // Example sending a request using the DeleteCollectionRequest method.
-//    req, resp := client.DeleteCollectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteCollection
 func (c *OpenSearchServerless) DeleteCollectionRequest(input *DeleteCollectionInput) (req *request.Request, output *DeleteCollectionOutput) {
@@ -806,20 +1069,21 @@ func (c *OpenSearchServerless) DeleteCollectionRequest(input *DeleteCollectionIn
 // API operation DeleteCollection for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteCollection
 func (c *OpenSearchServerless) DeleteCollection(input *DeleteCollectionInput) (*DeleteCollectionOutput, error) {
@@ -843,6 +1107,99 @@ func (c *OpenSearchServerless) DeleteCollectionWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+const opDeleteLifecyclePolicy = "DeleteLifecyclePolicy"
+
+// DeleteLifecyclePolicyRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteLifecyclePolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteLifecyclePolicy for more information on using the DeleteLifecyclePolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteLifecyclePolicyRequest method.
+//	req, resp := client.DeleteLifecyclePolicyRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteLifecyclePolicy
+func (c *OpenSearchServerless) DeleteLifecyclePolicyRequest(input *DeleteLifecyclePolicyInput) (req *request.Request, output *DeleteLifecyclePolicyOutput) {
+	op := &request.Operation{
+		Name:       opDeleteLifecyclePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteLifecyclePolicyInput{}
+	}
+
+	output = &DeleteLifecyclePolicyOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteLifecyclePolicy API operation for OpenSearch Service Serverless.
+//
+// Deletes an OpenSearch Serverless lifecycle policy. For more information,
+// see Deleting data lifecycle policies (https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-lifecycle.html#serverless-lifecycle-delete).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for OpenSearch Service Serverless's
+// API operation DeleteLifecyclePolicy for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
+//
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteLifecyclePolicy
+func (c *OpenSearchServerless) DeleteLifecyclePolicy(input *DeleteLifecyclePolicyInput) (*DeleteLifecyclePolicyOutput, error) {
+	req, out := c.DeleteLifecyclePolicyRequest(input)
+	return out, req.Send()
+}
+
+// DeleteLifecyclePolicyWithContext is the same as DeleteLifecyclePolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteLifecyclePolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OpenSearchServerless) DeleteLifecyclePolicyWithContext(ctx aws.Context, input *DeleteLifecyclePolicyInput, opts ...request.Option) (*DeleteLifecyclePolicyOutput, error) {
+	req, out := c.DeleteLifecyclePolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteSecurityConfig = "DeleteSecurityConfig"
 
 // DeleteSecurityConfigRequest generates a "aws/request.Request" representing the
@@ -859,14 +1216,13 @@ const opDeleteSecurityConfig = "DeleteSecurityConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSecurityConfigRequest method.
+//	req, resp := client.DeleteSecurityConfigRequest(params)
 //
-//    // Example sending a request using the DeleteSecurityConfigRequest method.
-//    req, resp := client.DeleteSecurityConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteSecurityConfig
 func (c *OpenSearchServerless) DeleteSecurityConfigRequest(input *DeleteSecurityConfigInput) (req *request.Request, output *DeleteSecurityConfigOutput) {
@@ -899,20 +1255,21 @@ func (c *OpenSearchServerless) DeleteSecurityConfigRequest(input *DeleteSecurity
 // API operation DeleteSecurityConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteSecurityConfig
 func (c *OpenSearchServerless) DeleteSecurityConfig(input *DeleteSecurityConfigInput) (*DeleteSecurityConfigOutput, error) {
@@ -952,14 +1309,13 @@ const opDeleteSecurityPolicy = "DeleteSecurityPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSecurityPolicyRequest method.
+//	req, resp := client.DeleteSecurityPolicyRequest(params)
 //
-//    // Example sending a request using the DeleteSecurityPolicyRequest method.
-//    req, resp := client.DeleteSecurityPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteSecurityPolicy
 func (c *OpenSearchServerless) DeleteSecurityPolicyRequest(input *DeleteSecurityPolicyInput) (req *request.Request, output *DeleteSecurityPolicyOutput) {
@@ -991,20 +1347,21 @@ func (c *OpenSearchServerless) DeleteSecurityPolicyRequest(input *DeleteSecurity
 // API operation DeleteSecurityPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteSecurityPolicy
 func (c *OpenSearchServerless) DeleteSecurityPolicy(input *DeleteSecurityPolicyInput) (*DeleteSecurityPolicyOutput, error) {
@@ -1044,14 +1401,13 @@ const opDeleteVpcEndpoint = "DeleteVpcEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteVpcEndpointRequest method.
+//	req, resp := client.DeleteVpcEndpointRequest(params)
 //
-//    // Example sending a request using the DeleteVpcEndpointRequest method.
-//    req, resp := client.DeleteVpcEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteVpcEndpoint
 func (c *OpenSearchServerless) DeleteVpcEndpointRequest(input *DeleteVpcEndpointInput) (req *request.Request, output *DeleteVpcEndpointOutput) {
@@ -1083,20 +1439,21 @@ func (c *OpenSearchServerless) DeleteVpcEndpointRequest(input *DeleteVpcEndpoint
 // API operation DeleteVpcEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/DeleteVpcEndpoint
 func (c *OpenSearchServerless) DeleteVpcEndpoint(input *DeleteVpcEndpointInput) (*DeleteVpcEndpointOutput, error) {
@@ -1136,14 +1493,13 @@ const opGetAccessPolicy = "GetAccessPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAccessPolicyRequest method.
+//	req, resp := client.GetAccessPolicyRequest(params)
 //
-//    // Example sending a request using the GetAccessPolicyRequest method.
-//    req, resp := client.GetAccessPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/GetAccessPolicy
 func (c *OpenSearchServerless) GetAccessPolicyRequest(input *GetAccessPolicyInput) (req *request.Request, output *GetAccessPolicyOutput) {
@@ -1175,15 +1531,16 @@ func (c *OpenSearchServerless) GetAccessPolicyRequest(input *GetAccessPolicyInpu
 // API operation GetAccessPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/GetAccessPolicy
 func (c *OpenSearchServerless) GetAccessPolicy(input *GetAccessPolicyInput) (*GetAccessPolicyOutput, error) {
@@ -1223,14 +1580,13 @@ const opGetAccountSettings = "GetAccountSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAccountSettingsRequest method.
+//	req, resp := client.GetAccountSettingsRequest(params)
 //
-//    // Example sending a request using the GetAccountSettingsRequest method.
-//    req, resp := client.GetAccountSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/GetAccountSettings
 func (c *OpenSearchServerless) GetAccountSettingsRequest(input *GetAccountSettingsInput) (req *request.Request, output *GetAccountSettingsOutput) {
@@ -1261,12 +1617,13 @@ func (c *OpenSearchServerless) GetAccountSettingsRequest(input *GetAccountSettin
 // API operation GetAccountSettings for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/GetAccountSettings
 func (c *OpenSearchServerless) GetAccountSettings(input *GetAccountSettingsInput) (*GetAccountSettingsOutput, error) {
@@ -1306,14 +1663,13 @@ const opGetPoliciesStats = "GetPoliciesStats"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPoliciesStatsRequest method.
+//	req, resp := client.GetPoliciesStatsRequest(params)
 //
-//    // Example sending a request using the GetPoliciesStatsRequest method.
-//    req, resp := client.GetPoliciesStatsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/GetPoliciesStats
 func (c *OpenSearchServerless) GetPoliciesStatsRequest(input *GetPoliciesStatsInput) (req *request.Request, output *GetPoliciesStatsOutput) {
@@ -1345,8 +1701,8 @@ func (c *OpenSearchServerless) GetPoliciesStatsRequest(input *GetPoliciesStatsIn
 // API operation GetPoliciesStats for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/GetPoliciesStats
 func (c *OpenSearchServerless) GetPoliciesStats(input *GetPoliciesStatsInput) (*GetPoliciesStatsOutput, error) {
@@ -1386,14 +1742,13 @@ const opGetSecurityConfig = "GetSecurityConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSecurityConfigRequest method.
+//	req, resp := client.GetSecurityConfigRequest(params)
 //
-//    // Example sending a request using the GetSecurityConfigRequest method.
-//    req, resp := client.GetSecurityConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/GetSecurityConfig
 func (c *OpenSearchServerless) GetSecurityConfigRequest(input *GetSecurityConfigInput) (req *request.Request, output *GetSecurityConfigOutput) {
@@ -1426,15 +1781,16 @@ func (c *OpenSearchServerless) GetSecurityConfigRequest(input *GetSecurityConfig
 // API operation GetSecurityConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/GetSecurityConfig
 func (c *OpenSearchServerless) GetSecurityConfig(input *GetSecurityConfigInput) (*GetSecurityConfigOutput, error) {
@@ -1474,14 +1830,13 @@ const opGetSecurityPolicy = "GetSecurityPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSecurityPolicyRequest method.
+//	req, resp := client.GetSecurityPolicyRequest(params)
 //
-//    // Example sending a request using the GetSecurityPolicyRequest method.
-//    req, resp := client.GetSecurityPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/GetSecurityPolicy
 func (c *OpenSearchServerless) GetSecurityPolicyRequest(input *GetSecurityPolicyInput) (req *request.Request, output *GetSecurityPolicyOutput) {
@@ -1515,15 +1870,16 @@ func (c *OpenSearchServerless) GetSecurityPolicyRequest(input *GetSecurityPolicy
 // API operation GetSecurityPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/GetSecurityPolicy
 func (c *OpenSearchServerless) GetSecurityPolicy(input *GetSecurityPolicyInput) (*GetSecurityPolicyOutput, error) {
@@ -1563,14 +1919,13 @@ const opListAccessPolicies = "ListAccessPolicies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAccessPoliciesRequest method.
+//	req, resp := client.ListAccessPoliciesRequest(params)
 //
-//    // Example sending a request using the ListAccessPoliciesRequest method.
-//    req, resp := client.ListAccessPoliciesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListAccessPolicies
 func (c *OpenSearchServerless) ListAccessPoliciesRequest(input *ListAccessPoliciesInput) (req *request.Request, output *ListAccessPoliciesOutput) {
@@ -1607,12 +1962,13 @@ func (c *OpenSearchServerless) ListAccessPoliciesRequest(input *ListAccessPolici
 // API operation ListAccessPolicies for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListAccessPolicies
 func (c *OpenSearchServerless) ListAccessPolicies(input *ListAccessPoliciesInput) (*ListAccessPoliciesOutput, error) {
@@ -1644,15 +2000,14 @@ func (c *OpenSearchServerless) ListAccessPoliciesWithContext(ctx aws.Context, in
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAccessPolicies operation.
-//    pageNum := 0
-//    err := client.ListAccessPoliciesPages(params,
-//        func(page *opensearchserverless.ListAccessPoliciesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAccessPolicies operation.
+//	pageNum := 0
+//	err := client.ListAccessPoliciesPages(params,
+//	    func(page *opensearchserverless.ListAccessPoliciesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *OpenSearchServerless) ListAccessPoliciesPages(input *ListAccessPoliciesInput, fn func(*ListAccessPoliciesOutput, bool) bool) error {
 	return c.ListAccessPoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1704,14 +2059,13 @@ const opListCollections = "ListCollections"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCollectionsRequest method.
+//	req, resp := client.ListCollectionsRequest(params)
 //
-//    // Example sending a request using the ListCollectionsRequest method.
-//    req, resp := client.ListCollectionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListCollections
 func (c *OpenSearchServerless) ListCollectionsRequest(input *ListCollectionsInput) (req *request.Request, output *ListCollectionsOutput) {
@@ -1752,12 +2106,13 @@ func (c *OpenSearchServerless) ListCollectionsRequest(input *ListCollectionsInpu
 // API operation ListCollections for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListCollections
 func (c *OpenSearchServerless) ListCollections(input *ListCollectionsInput) (*ListCollectionsOutput, error) {
@@ -1789,15 +2144,14 @@ func (c *OpenSearchServerless) ListCollectionsWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCollections operation.
-//    pageNum := 0
-//    err := client.ListCollectionsPages(params,
-//        func(page *opensearchserverless.ListCollectionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCollections operation.
+//	pageNum := 0
+//	err := client.ListCollectionsPages(params,
+//	    func(page *opensearchserverless.ListCollectionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *OpenSearchServerless) ListCollectionsPages(input *ListCollectionsInput, fn func(*ListCollectionsOutput, bool) bool) error {
 	return c.ListCollectionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1833,6 +2187,147 @@ func (c *OpenSearchServerless) ListCollectionsPagesWithContext(ctx aws.Context, 
 	return p.Err()
 }
 
+const opListLifecyclePolicies = "ListLifecyclePolicies"
+
+// ListLifecyclePoliciesRequest generates a "aws/request.Request" representing the
+// client's request for the ListLifecyclePolicies operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListLifecyclePolicies for more information on using the ListLifecyclePolicies
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListLifecyclePoliciesRequest method.
+//	req, resp := client.ListLifecyclePoliciesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListLifecyclePolicies
+func (c *OpenSearchServerless) ListLifecyclePoliciesRequest(input *ListLifecyclePoliciesInput) (req *request.Request, output *ListLifecyclePoliciesOutput) {
+	op := &request.Operation{
+		Name:       opListLifecyclePolicies,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListLifecyclePoliciesInput{}
+	}
+
+	output = &ListLifecyclePoliciesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListLifecyclePolicies API operation for OpenSearch Service Serverless.
+//
+// Returns a list of OpenSearch Serverless lifecycle policies. For more information,
+// see Viewing data lifecycle policies (https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-lifecycle.html#serverless-lifecycle-list).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for OpenSearch Service Serverless's
+// API operation ListLifecyclePolicies for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListLifecyclePolicies
+func (c *OpenSearchServerless) ListLifecyclePolicies(input *ListLifecyclePoliciesInput) (*ListLifecyclePoliciesOutput, error) {
+	req, out := c.ListLifecyclePoliciesRequest(input)
+	return out, req.Send()
+}
+
+// ListLifecyclePoliciesWithContext is the same as ListLifecyclePolicies with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListLifecyclePolicies for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OpenSearchServerless) ListLifecyclePoliciesWithContext(ctx aws.Context, input *ListLifecyclePoliciesInput, opts ...request.Option) (*ListLifecyclePoliciesOutput, error) {
+	req, out := c.ListLifecyclePoliciesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListLifecyclePoliciesPages iterates over the pages of a ListLifecyclePolicies operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListLifecyclePolicies method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListLifecyclePolicies operation.
+//	pageNum := 0
+//	err := client.ListLifecyclePoliciesPages(params,
+//	    func(page *opensearchserverless.ListLifecyclePoliciesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *OpenSearchServerless) ListLifecyclePoliciesPages(input *ListLifecyclePoliciesInput, fn func(*ListLifecyclePoliciesOutput, bool) bool) error {
+	return c.ListLifecyclePoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListLifecyclePoliciesPagesWithContext same as ListLifecyclePoliciesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OpenSearchServerless) ListLifecyclePoliciesPagesWithContext(ctx aws.Context, input *ListLifecyclePoliciesInput, fn func(*ListLifecyclePoliciesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListLifecyclePoliciesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListLifecyclePoliciesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListLifecyclePoliciesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListSecurityConfigs = "ListSecurityConfigs"
 
 // ListSecurityConfigsRequest generates a "aws/request.Request" representing the
@@ -1849,14 +2344,13 @@ const opListSecurityConfigs = "ListSecurityConfigs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSecurityConfigsRequest method.
+//	req, resp := client.ListSecurityConfigsRequest(params)
 //
-//    // Example sending a request using the ListSecurityConfigsRequest method.
-//    req, resp := client.ListSecurityConfigsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListSecurityConfigs
 func (c *OpenSearchServerless) ListSecurityConfigsRequest(input *ListSecurityConfigsInput) (req *request.Request, output *ListSecurityConfigsOutput) {
@@ -1895,12 +2389,13 @@ func (c *OpenSearchServerless) ListSecurityConfigsRequest(input *ListSecurityCon
 // API operation ListSecurityConfigs for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListSecurityConfigs
 func (c *OpenSearchServerless) ListSecurityConfigs(input *ListSecurityConfigsInput) (*ListSecurityConfigsOutput, error) {
@@ -1932,15 +2427,14 @@ func (c *OpenSearchServerless) ListSecurityConfigsWithContext(ctx aws.Context, i
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSecurityConfigs operation.
-//    pageNum := 0
-//    err := client.ListSecurityConfigsPages(params,
-//        func(page *opensearchserverless.ListSecurityConfigsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSecurityConfigs operation.
+//	pageNum := 0
+//	err := client.ListSecurityConfigsPages(params,
+//	    func(page *opensearchserverless.ListSecurityConfigsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *OpenSearchServerless) ListSecurityConfigsPages(input *ListSecurityConfigsInput, fn func(*ListSecurityConfigsOutput, bool) bool) error {
 	return c.ListSecurityConfigsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1992,14 +2486,13 @@ const opListSecurityPolicies = "ListSecurityPolicies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSecurityPoliciesRequest method.
+//	req, resp := client.ListSecurityPoliciesRequest(params)
 //
-//    // Example sending a request using the ListSecurityPoliciesRequest method.
-//    req, resp := client.ListSecurityPoliciesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListSecurityPolicies
 func (c *OpenSearchServerless) ListSecurityPoliciesRequest(input *ListSecurityPoliciesInput) (req *request.Request, output *ListSecurityPoliciesOutput) {
@@ -2036,12 +2529,13 @@ func (c *OpenSearchServerless) ListSecurityPoliciesRequest(input *ListSecurityPo
 // API operation ListSecurityPolicies for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListSecurityPolicies
 func (c *OpenSearchServerless) ListSecurityPolicies(input *ListSecurityPoliciesInput) (*ListSecurityPoliciesOutput, error) {
@@ -2073,15 +2567,14 @@ func (c *OpenSearchServerless) ListSecurityPoliciesWithContext(ctx aws.Context, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSecurityPolicies operation.
-//    pageNum := 0
-//    err := client.ListSecurityPoliciesPages(params,
-//        func(page *opensearchserverless.ListSecurityPoliciesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSecurityPolicies operation.
+//	pageNum := 0
+//	err := client.ListSecurityPoliciesPages(params,
+//	    func(page *opensearchserverless.ListSecurityPoliciesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *OpenSearchServerless) ListSecurityPoliciesPages(input *ListSecurityPoliciesInput, fn func(*ListSecurityPoliciesOutput, bool) bool) error {
 	return c.ListSecurityPoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2133,14 +2626,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListTagsForResource
 func (c *OpenSearchServerless) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2172,15 +2664,16 @@ func (c *OpenSearchServerless) ListTagsForResourceRequest(input *ListTagsForReso
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListTagsForResource
 func (c *OpenSearchServerless) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2220,14 +2713,13 @@ const opListVpcEndpoints = "ListVpcEndpoints"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListVpcEndpointsRequest method.
+//	req, resp := client.ListVpcEndpointsRequest(params)
 //
-//    // Example sending a request using the ListVpcEndpointsRequest method.
-//    req, resp := client.ListVpcEndpointsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListVpcEndpoints
 func (c *OpenSearchServerless) ListVpcEndpointsRequest(input *ListVpcEndpointsInput) (req *request.Request, output *ListVpcEndpointsOutput) {
@@ -2266,12 +2758,13 @@ func (c *OpenSearchServerless) ListVpcEndpointsRequest(input *ListVpcEndpointsIn
 // API operation ListVpcEndpoints for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/ListVpcEndpoints
 func (c *OpenSearchServerless) ListVpcEndpoints(input *ListVpcEndpointsInput) (*ListVpcEndpointsOutput, error) {
@@ -2303,15 +2796,14 @@ func (c *OpenSearchServerless) ListVpcEndpointsWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListVpcEndpoints operation.
-//    pageNum := 0
-//    err := client.ListVpcEndpointsPages(params,
-//        func(page *opensearchserverless.ListVpcEndpointsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListVpcEndpoints operation.
+//	pageNum := 0
+//	err := client.ListVpcEndpointsPages(params,
+//	    func(page *opensearchserverless.ListVpcEndpointsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *OpenSearchServerless) ListVpcEndpointsPages(input *ListVpcEndpointsInput, fn func(*ListVpcEndpointsOutput, bool) bool) error {
 	return c.ListVpcEndpointsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2363,14 +2855,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/TagResource
 func (c *OpenSearchServerless) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2403,24 +2894,25 @@ func (c *OpenSearchServerless) TagResourceRequest(input *TagResourceInput) (req 
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
 //
-//   * ServiceQuotaExceededException
-//   Thrown when you attempt to create more resources than the service allows
-//   based on service quotas.
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+//   - ServiceQuotaExceededException
+//     Thrown when you attempt to create more resources than the service allows
+//     based on service quotas.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/TagResource
 func (c *OpenSearchServerless) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2460,14 +2952,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UntagResource
 func (c *OpenSearchServerless) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2500,20 +2991,21 @@ func (c *OpenSearchServerless) UntagResourceRequest(input *UntagResourceInput) (
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UntagResource
 func (c *OpenSearchServerless) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2553,14 +3045,13 @@ const opUpdateAccessPolicy = "UpdateAccessPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAccessPolicyRequest method.
+//	req, resp := client.UpdateAccessPolicyRequest(params)
 //
-//    // Example sending a request using the UpdateAccessPolicyRequest method.
-//    req, resp := client.UpdateAccessPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateAccessPolicy
 func (c *OpenSearchServerless) UpdateAccessPolicyRequest(input *UpdateAccessPolicyInput) (req *request.Request, output *UpdateAccessPolicyOutput) {
@@ -2592,20 +3083,21 @@ func (c *OpenSearchServerless) UpdateAccessPolicyRequest(input *UpdateAccessPoli
 // API operation UpdateAccessPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateAccessPolicy
 func (c *OpenSearchServerless) UpdateAccessPolicy(input *UpdateAccessPolicyInput) (*UpdateAccessPolicyOutput, error) {
@@ -2645,14 +3137,13 @@ const opUpdateAccountSettings = "UpdateAccountSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAccountSettingsRequest method.
+//	req, resp := client.UpdateAccountSettingsRequest(params)
 //
-//    // Example sending a request using the UpdateAccountSettingsRequest method.
-//    req, resp := client.UpdateAccountSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateAccountSettings
 func (c *OpenSearchServerless) UpdateAccountSettingsRequest(input *UpdateAccountSettingsInput) (req *request.Request, output *UpdateAccountSettingsOutput) {
@@ -2685,12 +3176,13 @@ func (c *OpenSearchServerless) UpdateAccountSettingsRequest(input *UpdateAccount
 // API operation UpdateAccountSettings for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateAccountSettings
 func (c *OpenSearchServerless) UpdateAccountSettings(input *UpdateAccountSettingsInput) (*UpdateAccountSettingsOutput, error) {
@@ -2730,14 +3222,13 @@ const opUpdateCollection = "UpdateCollection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateCollectionRequest method.
+//	req, resp := client.UpdateCollectionRequest(params)
 //
-//    // Example sending a request using the UpdateCollectionRequest method.
-//    req, resp := client.UpdateCollectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateCollection
 func (c *OpenSearchServerless) UpdateCollectionRequest(input *UpdateCollectionInput) (req *request.Request, output *UpdateCollectionOutput) {
@@ -2768,17 +3259,18 @@ func (c *OpenSearchServerless) UpdateCollectionRequest(input *UpdateCollectionIn
 // API operation UpdateCollection for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateCollection
 func (c *OpenSearchServerless) UpdateCollection(input *UpdateCollectionInput) (*UpdateCollectionOutput, error) {
@@ -2802,6 +3294,102 @@ func (c *OpenSearchServerless) UpdateCollectionWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+const opUpdateLifecyclePolicy = "UpdateLifecyclePolicy"
+
+// UpdateLifecyclePolicyRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateLifecyclePolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateLifecyclePolicy for more information on using the UpdateLifecyclePolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateLifecyclePolicyRequest method.
+//	req, resp := client.UpdateLifecyclePolicyRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateLifecyclePolicy
+func (c *OpenSearchServerless) UpdateLifecyclePolicyRequest(input *UpdateLifecyclePolicyInput) (req *request.Request, output *UpdateLifecyclePolicyOutput) {
+	op := &request.Operation{
+		Name:       opUpdateLifecyclePolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateLifecyclePolicyInput{}
+	}
+
+	output = &UpdateLifecyclePolicyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateLifecyclePolicy API operation for OpenSearch Service Serverless.
+//
+// Updates an OpenSearch Serverless access policy. For more information, see
+// Updating data lifecycle policies (https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-lifecycle.html#serverless-lifecycle-update).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for OpenSearch Service Serverless's
+// API operation UpdateLifecyclePolicy for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
+//
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
+//
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+//   - ServiceQuotaExceededException
+//     Thrown when you attempt to create more resources than the service allows
+//     based on service quotas.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateLifecyclePolicy
+func (c *OpenSearchServerless) UpdateLifecyclePolicy(input *UpdateLifecyclePolicyInput) (*UpdateLifecyclePolicyOutput, error) {
+	req, out := c.UpdateLifecyclePolicyRequest(input)
+	return out, req.Send()
+}
+
+// UpdateLifecyclePolicyWithContext is the same as UpdateLifecyclePolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateLifecyclePolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OpenSearchServerless) UpdateLifecyclePolicyWithContext(ctx aws.Context, input *UpdateLifecyclePolicyInput, opts ...request.Option) (*UpdateLifecyclePolicyOutput, error) {
+	req, out := c.UpdateLifecyclePolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateSecurityConfig = "UpdateSecurityConfig"
 
 // UpdateSecurityConfigRequest generates a "aws/request.Request" representing the
@@ -2818,14 +3406,13 @@ const opUpdateSecurityConfig = "UpdateSecurityConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSecurityConfigRequest method.
+//	req, resp := client.UpdateSecurityConfigRequest(params)
 //
-//    // Example sending a request using the UpdateSecurityConfigRequest method.
-//    req, resp := client.UpdateSecurityConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateSecurityConfig
 func (c *OpenSearchServerless) UpdateSecurityConfigRequest(input *UpdateSecurityConfigInput) (req *request.Request, output *UpdateSecurityConfigOutput) {
@@ -2857,20 +3444,21 @@ func (c *OpenSearchServerless) UpdateSecurityConfigRequest(input *UpdateSecurity
 // API operation UpdateSecurityConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateSecurityConfig
 func (c *OpenSearchServerless) UpdateSecurityConfig(input *UpdateSecurityConfigInput) (*UpdateSecurityConfigOutput, error) {
@@ -2910,14 +3498,13 @@ const opUpdateSecurityPolicy = "UpdateSecurityPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSecurityPolicyRequest method.
+//	req, resp := client.UpdateSecurityPolicyRequest(params)
 //
-//    // Example sending a request using the UpdateSecurityPolicyRequest method.
-//    req, resp := client.UpdateSecurityPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateSecurityPolicy
 func (c *OpenSearchServerless) UpdateSecurityPolicyRequest(input *UpdateSecurityPolicyInput) (req *request.Request, output *UpdateSecurityPolicyOutput) {
@@ -2950,24 +3537,25 @@ func (c *OpenSearchServerless) UpdateSecurityPolicyRequest(input *UpdateSecurity
 // API operation UpdateSecurityPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ResourceNotFoundException
-//   Thrown when accessing or deleting a resource that does not exist.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - ResourceNotFoundException
+//     Thrown when accessing or deleting a resource that does not exist.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
 //
-//   * ServiceQuotaExceededException
-//   Thrown when you attempt to create more resources than the service allows
-//   based on service quotas.
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
+//
+//   - ServiceQuotaExceededException
+//     Thrown when you attempt to create more resources than the service allows
+//     based on service quotas.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateSecurityPolicy
 func (c *OpenSearchServerless) UpdateSecurityPolicy(input *UpdateSecurityPolicyInput) (*UpdateSecurityPolicyOutput, error) {
@@ -3007,14 +3595,13 @@ const opUpdateVpcEndpoint = "UpdateVpcEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateVpcEndpointRequest method.
+//	req, resp := client.UpdateVpcEndpointRequest(params)
 //
-//    // Example sending a request using the UpdateVpcEndpointRequest method.
-//    req, resp := client.UpdateVpcEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateVpcEndpoint
 func (c *OpenSearchServerless) UpdateVpcEndpointRequest(input *UpdateVpcEndpointInput) (req *request.Request, output *UpdateVpcEndpointOutput) {
@@ -3046,17 +3633,18 @@ func (c *OpenSearchServerless) UpdateVpcEndpointRequest(input *UpdateVpcEndpoint
 // API operation UpdateVpcEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ConflictException
-//   When creating a resource, thrown when a resource with the same name already
-//   exists or is being created. When deleting a resource, thrown when the resource
-//   is not in the ACTIVE or FAILED state.
+//   - InternalServerException
+//     Thrown when an error internal to the service occurs while processing a request.
 //
-//   * ValidationException
-//   Thrown when the HTTP request contains invalid input or is missing required
-//   input.
+//   - ConflictException
+//     When creating a resource, thrown when a resource with the same name already
+//     exists or is being created. When deleting a resource, thrown when the resource
+//     is not in the ACTIVE or FAILED state.
+//
+//   - ValidationException
+//     Thrown when the HTTP request contains invalid input or is missing required
+//     input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/opensearchserverless-2021-11-01/UpdateVpcEndpoint
 func (c *OpenSearchServerless) UpdateVpcEndpoint(input *UpdateVpcEndpointInput) (*UpdateVpcEndpointOutput, error) {
@@ -3208,7 +3796,7 @@ type AccessPolicySummary struct {
 	// The version of the policy.
 	PolicyVersion *string `locationName:"policyVersion" min:"20" type:"string"`
 
-	// The type of access policy. Currently the only available type is data.
+	// The type of access policy. Currently, the only available type is data.
 	Type *string `locationName:"type" type:"string" enum:"AccessPolicyType"`
 }
 
@@ -3400,6 +3988,205 @@ func (s *BatchGetCollectionOutput) SetCollectionErrorDetails(v []*CollectionErro
 	return s
 }
 
+type BatchGetEffectiveLifecyclePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifiers of policy types and resource names.
+	//
+	// ResourceIdentifiers is a required field
+	ResourceIdentifiers []*LifecyclePolicyResourceIdentifier `locationName:"resourceIdentifiers" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetEffectiveLifecyclePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetEffectiveLifecyclePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchGetEffectiveLifecyclePolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchGetEffectiveLifecyclePolicyInput"}
+	if s.ResourceIdentifiers == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceIdentifiers"))
+	}
+	if s.ResourceIdentifiers != nil && len(s.ResourceIdentifiers) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceIdentifiers", 1))
+	}
+	if s.ResourceIdentifiers != nil {
+		for i, v := range s.ResourceIdentifiers {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ResourceIdentifiers", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceIdentifiers sets the ResourceIdentifiers field's value.
+func (s *BatchGetEffectiveLifecyclePolicyInput) SetResourceIdentifiers(v []*LifecyclePolicyResourceIdentifier) *BatchGetEffectiveLifecyclePolicyInput {
+	s.ResourceIdentifiers = v
+	return s
+}
+
+type BatchGetEffectiveLifecyclePolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of lifecycle policies applied to the OpenSearch Serverless indexes.
+	EffectiveLifecyclePolicyDetails []*EffectiveLifecyclePolicyDetail `locationName:"effectiveLifecyclePolicyDetails" type:"list"`
+
+	// A list of resources for which retrieval failed.
+	EffectiveLifecyclePolicyErrorDetails []*EffectiveLifecyclePolicyErrorDetail `locationName:"effectiveLifecyclePolicyErrorDetails" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetEffectiveLifecyclePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetEffectiveLifecyclePolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetEffectiveLifecyclePolicyDetails sets the EffectiveLifecyclePolicyDetails field's value.
+func (s *BatchGetEffectiveLifecyclePolicyOutput) SetEffectiveLifecyclePolicyDetails(v []*EffectiveLifecyclePolicyDetail) *BatchGetEffectiveLifecyclePolicyOutput {
+	s.EffectiveLifecyclePolicyDetails = v
+	return s
+}
+
+// SetEffectiveLifecyclePolicyErrorDetails sets the EffectiveLifecyclePolicyErrorDetails field's value.
+func (s *BatchGetEffectiveLifecyclePolicyOutput) SetEffectiveLifecyclePolicyErrorDetails(v []*EffectiveLifecyclePolicyErrorDetail) *BatchGetEffectiveLifecyclePolicyOutput {
+	s.EffectiveLifecyclePolicyErrorDetails = v
+	return s
+}
+
+type BatchGetLifecyclePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifiers of policy types and policy names.
+	//
+	// Identifiers is a required field
+	Identifiers []*LifecyclePolicyIdentifier `locationName:"identifiers" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetLifecyclePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetLifecyclePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchGetLifecyclePolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchGetLifecyclePolicyInput"}
+	if s.Identifiers == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifiers"))
+	}
+	if s.Identifiers != nil && len(s.Identifiers) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifiers", 1))
+	}
+	if s.Identifiers != nil {
+		for i, v := range s.Identifiers {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Identifiers", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifiers sets the Identifiers field's value.
+func (s *BatchGetLifecyclePolicyInput) SetIdentifiers(v []*LifecyclePolicyIdentifier) *BatchGetLifecyclePolicyInput {
+	s.Identifiers = v
+	return s
+}
+
+type BatchGetLifecyclePolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of lifecycle policies matched to the input policy name and policy
+	// type.
+	LifecyclePolicyDetails []*LifecyclePolicyDetail `locationName:"lifecyclePolicyDetails" type:"list"`
+
+	// A list of lifecycle policy names and policy types for which retrieval failed.
+	LifecyclePolicyErrorDetails []*LifecyclePolicyErrorDetail `locationName:"lifecyclePolicyErrorDetails" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetLifecyclePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetLifecyclePolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetLifecyclePolicyDetails sets the LifecyclePolicyDetails field's value.
+func (s *BatchGetLifecyclePolicyOutput) SetLifecyclePolicyDetails(v []*LifecyclePolicyDetail) *BatchGetLifecyclePolicyOutput {
+	s.LifecyclePolicyDetails = v
+	return s
+}
+
+// SetLifecyclePolicyErrorDetails sets the LifecyclePolicyErrorDetails field's value.
+func (s *BatchGetLifecyclePolicyOutput) SetLifecyclePolicyErrorDetails(v []*LifecyclePolicyErrorDetail) *BatchGetLifecyclePolicyOutput {
+	s.LifecyclePolicyErrorDetails = v
+	return s
+}
+
 type BatchGetVpcEndpointInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3582,6 +4369,9 @@ type CollectionDetail struct {
 	// The name of the collection.
 	Name *string `locationName:"name" min:"3" type:"string"`
 
+	// Details about an OpenSearch Serverless collection.
+	StandbyReplicas *string `locationName:"standbyReplicas" type:"string" enum:"StandbyReplicas"`
+
 	// The current status of the collection.
 	Status *string `locationName:"status" type:"string" enum:"CollectionStatus"`
 
@@ -3661,6 +4451,12 @@ func (s *CollectionDetail) SetName(v string) *CollectionDetail {
 	return s
 }
 
+// SetStandbyReplicas sets the StandbyReplicas field's value.
+func (s *CollectionDetail) SetStandbyReplicas(v string) *CollectionDetail {
+	s.StandbyReplicas = &v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *CollectionDetail) SetStatus(v string) *CollectionDetail {
 	s.Status = &v
@@ -3735,7 +4531,7 @@ func (s *CollectionErrorDetail) SetName(v string) *CollectionErrorDetail {
 	return s
 }
 
-// List of filter keys that you can use for LIST, UPDATE, and DELETE requests
+// A list of filter keys that you can use for LIST, UPDATE, and DELETE requests
 // to OpenSearch Serverless collections.
 type CollectionFilters struct {
 	_ struct{} `type:"structure"`
@@ -4073,6 +4869,9 @@ type CreateCollectionDetail struct {
 	// The name of the collection.
 	Name *string `locationName:"name" min:"3" type:"string"`
 
+	// Creates details about an OpenSearch Serverless collection.
+	StandbyReplicas *string `locationName:"standbyReplicas" type:"string" enum:"StandbyReplicas"`
+
 	// The current status of the collection.
 	Status *string `locationName:"status" type:"string" enum:"CollectionStatus"`
 
@@ -4140,6 +4939,12 @@ func (s *CreateCollectionDetail) SetName(v string) *CreateCollectionDetail {
 	return s
 }
 
+// SetStandbyReplicas sets the StandbyReplicas field's value.
+func (s *CreateCollectionDetail) SetStandbyReplicas(v string) *CreateCollectionDetail {
+	s.StandbyReplicas = &v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *CreateCollectionDetail) SetStatus(v string) *CreateCollectionDetail {
 	s.Status = &v
@@ -4165,6 +4970,9 @@ type CreateCollectionInput struct {
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"3" type:"string" required:"true"`
+
+	// Indicates whether standby replicas should be used for a collection.
+	StandbyReplicas *string `locationName:"standbyReplicas" type:"string" enum:"StandbyReplicas"`
 
 	// An arbitrary set of tags (key–value pairs) to associate with the OpenSearch
 	// Serverless collection.
@@ -4239,6 +5047,12 @@ func (s *CreateCollectionInput) SetName(v string) *CreateCollectionInput {
 	return s
 }
 
+// SetStandbyReplicas sets the StandbyReplicas field's value.
+func (s *CreateCollectionInput) SetStandbyReplicas(v string) *CreateCollectionInput {
+	s.StandbyReplicas = &v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *CreateCollectionInput) SetTags(v []*Tag) *CreateCollectionInput {
 	s.Tags = v
@@ -4279,6 +5093,138 @@ func (s CreateCollectionOutput) GoString() string {
 // SetCreateCollectionDetail sets the CreateCollectionDetail field's value.
 func (s *CreateCollectionOutput) SetCreateCollectionDetail(v *CreateCollectionDetail) *CreateCollectionOutput {
 	s.CreateCollectionDetail = v
+	return s
+}
+
+type CreateLifecyclePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier to ensure idempotency of the request.
+	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// A description of the lifecycle policy.
+	Description *string `locationName:"description" type:"string"`
+
+	// The name of the lifecycle policy.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"3" type:"string" required:"true"`
+
+	// The JSON policy document to use as the content for the lifecycle policy.
+	//
+	// Policy is a required field
+	Policy *string `locationName:"policy" min:"1" type:"string" required:"true"`
+
+	// The type of lifecycle policy.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"LifecyclePolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLifecyclePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLifecyclePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateLifecyclePolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateLifecyclePolicyInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 3))
+	}
+	if s.Policy == nil {
+		invalidParams.Add(request.NewErrParamRequired("Policy"))
+	}
+	if s.Policy != nil && len(*s.Policy) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Policy", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateLifecyclePolicyInput) SetClientToken(v string) *CreateLifecyclePolicyInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateLifecyclePolicyInput) SetDescription(v string) *CreateLifecyclePolicyInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateLifecyclePolicyInput) SetName(v string) *CreateLifecyclePolicyInput {
+	s.Name = &v
+	return s
+}
+
+// SetPolicy sets the Policy field's value.
+func (s *CreateLifecyclePolicyInput) SetPolicy(v string) *CreateLifecyclePolicyInput {
+	s.Policy = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *CreateLifecyclePolicyInput) SetType(v string) *CreateLifecyclePolicyInput {
+	s.Type = &v
+	return s
+}
+
+type CreateLifecyclePolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Details about the created lifecycle policy.
+	LifecyclePolicyDetail *LifecyclePolicyDetail `locationName:"lifecyclePolicyDetail" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLifecyclePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLifecyclePolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetLifecyclePolicyDetail sets the LifecyclePolicyDetail field's value.
+func (s *CreateLifecyclePolicyOutput) SetLifecyclePolicyDetail(v *LifecyclePolicyDetail) *CreateLifecyclePolicyOutput {
+	s.LifecyclePolicyDetail = v
 	return s
 }
 
@@ -4981,6 +5927,103 @@ func (s *DeleteCollectionOutput) SetDeleteCollectionDetail(v *DeleteCollectionDe
 	return s
 }
 
+type DeleteLifecyclePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique, case-sensitive identifier to ensure idempotency of the request.
+	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The name of the policy to delete.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"3" type:"string" required:"true"`
+
+	// The type of lifecycle policy.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"LifecyclePolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLifecyclePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLifecyclePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteLifecyclePolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteLifecyclePolicyInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 3))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *DeleteLifecyclePolicyInput) SetClientToken(v string) *DeleteLifecyclePolicyInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DeleteLifecyclePolicyInput) SetName(v string) *DeleteLifecyclePolicyInput {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *DeleteLifecyclePolicyInput) SetType(v string) *DeleteLifecyclePolicyInput {
+	s.Type = &v
+	return s
+}
+
+type DeleteLifecyclePolicyOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLifecyclePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteLifecyclePolicyOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteSecurityConfigInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5304,6 +6347,147 @@ func (s *DeleteVpcEndpointOutput) SetDeleteVpcEndpointDetail(v *DeleteVpcEndpoin
 	return s
 }
 
+// Error information for an OpenSearch Serverless request.
+type EffectiveLifecyclePolicyDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The minimum number of index retention days set. That is an optional param
+	// that will return as true if the minimum number of days or hours is not set
+	// to a index resource.
+	NoMinRetentionPeriod *bool `locationName:"noMinRetentionPeriod" type:"boolean"`
+
+	// The name of the lifecycle policy.
+	PolicyName *string `locationName:"policyName" min:"3" type:"string"`
+
+	// The name of the OpenSearch Serverless index resource.
+	Resource *string `locationName:"resource" type:"string"`
+
+	// The type of OpenSearch Serverless resource. Currently, the only supported
+	// resource is index.
+	ResourceType *string `locationName:"resourceType" type:"string" enum:"ResourceType"`
+
+	// The minimum number of index retention in days or hours. This is an optional
+	// parameter that will return only if it’s set.
+	RetentionPeriod *string `locationName:"retentionPeriod" type:"string"`
+
+	// The type of lifecycle policy.
+	Type *string `locationName:"type" type:"string" enum:"LifecyclePolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EffectiveLifecyclePolicyDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EffectiveLifecyclePolicyDetail) GoString() string {
+	return s.String()
+}
+
+// SetNoMinRetentionPeriod sets the NoMinRetentionPeriod field's value.
+func (s *EffectiveLifecyclePolicyDetail) SetNoMinRetentionPeriod(v bool) *EffectiveLifecyclePolicyDetail {
+	s.NoMinRetentionPeriod = &v
+	return s
+}
+
+// SetPolicyName sets the PolicyName field's value.
+func (s *EffectiveLifecyclePolicyDetail) SetPolicyName(v string) *EffectiveLifecyclePolicyDetail {
+	s.PolicyName = &v
+	return s
+}
+
+// SetResource sets the Resource field's value.
+func (s *EffectiveLifecyclePolicyDetail) SetResource(v string) *EffectiveLifecyclePolicyDetail {
+	s.Resource = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *EffectiveLifecyclePolicyDetail) SetResourceType(v string) *EffectiveLifecyclePolicyDetail {
+	s.ResourceType = &v
+	return s
+}
+
+// SetRetentionPeriod sets the RetentionPeriod field's value.
+func (s *EffectiveLifecyclePolicyDetail) SetRetentionPeriod(v string) *EffectiveLifecyclePolicyDetail {
+	s.RetentionPeriod = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *EffectiveLifecyclePolicyDetail) SetType(v string) *EffectiveLifecyclePolicyDetail {
+	s.Type = &v
+	return s
+}
+
+// Error information for an OpenSearch Serverless request.
+type EffectiveLifecyclePolicyErrorDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The error code for the request.
+	ErrorCode *string `locationName:"errorCode" type:"string"`
+
+	// A description of the error. For example, The specified Index resource is
+	// not found.
+	ErrorMessage *string `locationName:"errorMessage" type:"string"`
+
+	// The name of OpenSearch Serverless index resource.
+	Resource *string `locationName:"resource" type:"string"`
+
+	// The type of lifecycle policy.
+	Type *string `locationName:"type" type:"string" enum:"LifecyclePolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EffectiveLifecyclePolicyErrorDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EffectiveLifecyclePolicyErrorDetail) GoString() string {
+	return s.String()
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *EffectiveLifecyclePolicyErrorDetail) SetErrorCode(v string) *EffectiveLifecyclePolicyErrorDetail {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *EffectiveLifecyclePolicyErrorDetail) SetErrorMessage(v string) *EffectiveLifecyclePolicyErrorDetail {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetResource sets the Resource field's value.
+func (s *EffectiveLifecyclePolicyErrorDetail) SetResource(v string) *EffectiveLifecyclePolicyErrorDetail {
+	s.Resource = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *EffectiveLifecyclePolicyErrorDetail) SetType(v string) *EffectiveLifecyclePolicyErrorDetail {
+	s.Type = &v
+	return s
+}
+
 type GetAccessPolicyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5312,7 +6496,7 @@ type GetAccessPolicyInput struct {
 	// Name is a required field
 	Name *string `locationName:"name" min:"3" type:"string" required:"true"`
 
-	// Tye type of policy. Currently the only supported value is data.
+	// Tye type of policy. Currently, the only supported value is data.
 	//
 	// Type is a required field
 	Type *string `locationName:"type" type:"string" required:"true" enum:"AccessPolicyType"`
@@ -5479,6 +6663,9 @@ type GetPoliciesStatsOutput struct {
 	// Information about the data access policies in your account.
 	AccessPolicyStats *AccessPolicyStats `type:"structure"`
 
+	// Information about the lifecycle policies in your account.
+	LifecyclePolicyStats *LifecyclePolicyStats `type:"structure"`
+
 	// Information about the security configurations in your account.
 	SecurityConfigStats *SecurityConfigStats `type:"structure"`
 
@@ -5511,6 +6698,12 @@ func (s GetPoliciesStatsOutput) GoString() string {
 // SetAccessPolicyStats sets the AccessPolicyStats field's value.
 func (s *GetPoliciesStatsOutput) SetAccessPolicyStats(v *AccessPolicyStats) *GetPoliciesStatsOutput {
 	s.AccessPolicyStats = v
+	return s
+}
+
+// SetLifecyclePolicyStats sets the LifecyclePolicyStats field's value.
+func (s *GetPoliciesStatsOutput) SetLifecyclePolicyStats(v *LifecyclePolicyStats) *GetPoliciesStatsOutput {
+	s.LifecyclePolicyStats = v
 	return s
 }
 
@@ -5770,6 +6963,377 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Details about an OpenSearch Serverless lifecycle policy.
+type LifecyclePolicyDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The date the lifecycle policy was created.
+	CreatedDate *int64 `locationName:"createdDate" type:"long"`
+
+	// The description of the lifecycle policy.
+	Description *string `locationName:"description" type:"string"`
+
+	// The timestamp of when the lifecycle policy was last modified.
+	LastModifiedDate *int64 `locationName:"lastModifiedDate" type:"long"`
+
+	// The name of the lifecycle policy.
+	Name *string `locationName:"name" min:"3" type:"string"`
+
+	// The version of the lifecycle policy.
+	PolicyVersion *string `locationName:"policyVersion" min:"20" type:"string"`
+
+	// The type of lifecycle policy.
+	Type *string `locationName:"type" type:"string" enum:"LifecyclePolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicyDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicyDetail) GoString() string {
+	return s.String()
+}
+
+// SetCreatedDate sets the CreatedDate field's value.
+func (s *LifecyclePolicyDetail) SetCreatedDate(v int64) *LifecyclePolicyDetail {
+	s.CreatedDate = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *LifecyclePolicyDetail) SetDescription(v string) *LifecyclePolicyDetail {
+	s.Description = &v
+	return s
+}
+
+// SetLastModifiedDate sets the LastModifiedDate field's value.
+func (s *LifecyclePolicyDetail) SetLastModifiedDate(v int64) *LifecyclePolicyDetail {
+	s.LastModifiedDate = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *LifecyclePolicyDetail) SetName(v string) *LifecyclePolicyDetail {
+	s.Name = &v
+	return s
+}
+
+// SetPolicyVersion sets the PolicyVersion field's value.
+func (s *LifecyclePolicyDetail) SetPolicyVersion(v string) *LifecyclePolicyDetail {
+	s.PolicyVersion = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *LifecyclePolicyDetail) SetType(v string) *LifecyclePolicyDetail {
+	s.Type = &v
+	return s
+}
+
+// Error information for an OpenSearch Serverless request.
+type LifecyclePolicyErrorDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The error code for the request. For example, NOT_FOUND.
+	ErrorCode *string `locationName:"errorCode" type:"string"`
+
+	// A description of the error. For example, The specified Lifecycle Policy is
+	// not found.
+	ErrorMessage *string `locationName:"errorMessage" type:"string"`
+
+	// The name of the lifecycle policy.
+	Name *string `locationName:"name" min:"3" type:"string"`
+
+	// The type of lifecycle policy.
+	Type *string `locationName:"type" type:"string" enum:"LifecyclePolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicyErrorDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicyErrorDetail) GoString() string {
+	return s.String()
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *LifecyclePolicyErrorDetail) SetErrorCode(v string) *LifecyclePolicyErrorDetail {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *LifecyclePolicyErrorDetail) SetErrorMessage(v string) *LifecyclePolicyErrorDetail {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *LifecyclePolicyErrorDetail) SetName(v string) *LifecyclePolicyErrorDetail {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *LifecyclePolicyErrorDetail) SetType(v string) *LifecyclePolicyErrorDetail {
+	s.Type = &v
+	return s
+}
+
+// The unique identifiers of policy types and policy names.
+type LifecyclePolicyIdentifier struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the lifecycle policy.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"3" type:"string" required:"true"`
+
+	// The type of lifecycle policy.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"LifecyclePolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicyIdentifier) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicyIdentifier) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LifecyclePolicyIdentifier) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LifecyclePolicyIdentifier"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 3))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *LifecyclePolicyIdentifier) SetName(v string) *LifecyclePolicyIdentifier {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *LifecyclePolicyIdentifier) SetType(v string) *LifecyclePolicyIdentifier {
+	s.Type = &v
+	return s
+}
+
+// The unique identifiers of policy types and resource names.
+type LifecyclePolicyResourceIdentifier struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the OpenSearch Serverless ilndex resource.
+	//
+	// Resource is a required field
+	Resource *string `locationName:"resource" type:"string" required:"true"`
+
+	// The type of lifecycle policy.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"LifecyclePolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicyResourceIdentifier) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicyResourceIdentifier) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LifecyclePolicyResourceIdentifier) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LifecyclePolicyResourceIdentifier"}
+	if s.Resource == nil {
+		invalidParams.Add(request.NewErrParamRequired("Resource"))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResource sets the Resource field's value.
+func (s *LifecyclePolicyResourceIdentifier) SetResource(v string) *LifecyclePolicyResourceIdentifier {
+	s.Resource = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *LifecyclePolicyResourceIdentifier) SetType(v string) *LifecyclePolicyResourceIdentifier {
+	s.Type = &v
+	return s
+}
+
+// Statistics for an OpenSearch Serverless lifecycle policy.
+type LifecyclePolicyStats struct {
+	_ struct{} `type:"structure"`
+
+	// The number of retention lifecycle policies in the current account.
+	RetentionPolicyCount *int64 `type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicyStats) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicyStats) GoString() string {
+	return s.String()
+}
+
+// SetRetentionPolicyCount sets the RetentionPolicyCount field's value.
+func (s *LifecyclePolicyStats) SetRetentionPolicyCount(v int64) *LifecyclePolicyStats {
+	s.RetentionPolicyCount = &v
+	return s
+}
+
+// A summary of the lifecycle policy.
+type LifecyclePolicySummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Epoch time when the lifecycle policy was created.
+	CreatedDate *int64 `locationName:"createdDate" type:"long"`
+
+	// The description of the lifecycle policy.
+	Description *string `locationName:"description" type:"string"`
+
+	// The date and time when the lifecycle policy was last modified.
+	LastModifiedDate *int64 `locationName:"lastModifiedDate" type:"long"`
+
+	// The name of the lifecycle policy.
+	Name *string `locationName:"name" min:"3" type:"string"`
+
+	// The version of the lifecycle policy.
+	PolicyVersion *string `locationName:"policyVersion" min:"20" type:"string"`
+
+	// The type of lifecycle policy.
+	Type *string `locationName:"type" type:"string" enum:"LifecyclePolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicySummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LifecyclePolicySummary) GoString() string {
+	return s.String()
+}
+
+// SetCreatedDate sets the CreatedDate field's value.
+func (s *LifecyclePolicySummary) SetCreatedDate(v int64) *LifecyclePolicySummary {
+	s.CreatedDate = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *LifecyclePolicySummary) SetDescription(v string) *LifecyclePolicySummary {
+	s.Description = &v
+	return s
+}
+
+// SetLastModifiedDate sets the LastModifiedDate field's value.
+func (s *LifecyclePolicySummary) SetLastModifiedDate(v int64) *LifecyclePolicySummary {
+	s.LastModifiedDate = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *LifecyclePolicySummary) SetName(v string) *LifecyclePolicySummary {
+	s.Name = &v
+	return s
+}
+
+// SetPolicyVersion sets the PolicyVersion field's value.
+func (s *LifecyclePolicySummary) SetPolicyVersion(v string) *LifecyclePolicySummary {
+	s.PolicyVersion = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *LifecyclePolicySummary) SetType(v string) *LifecyclePolicySummary {
+	s.Type = &v
+	return s
+}
+
 type ListAccessPoliciesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5898,7 +7462,7 @@ func (s *ListAccessPoliciesOutput) SetNextToken(v string) *ListAccessPoliciesOut
 type ListCollectionsInput struct {
 	_ struct{} `type:"structure"`
 
-	// List of filter names and values that you can use for requests.
+	// A list of filter names and values that you can use for requests.
 	CollectionFilters *CollectionFilters `locationName:"collectionFilters" type:"structure"`
 
 	// The maximum number of results to return. Default is 20. You can use nextToken
@@ -6003,6 +7567,132 @@ func (s *ListCollectionsOutput) SetCollectionSummaries(v []*CollectionSummary) *
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListCollectionsOutput) SetNextToken(v string) *ListCollectionsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListLifecyclePoliciesInput struct {
+	_ struct{} `type:"structure"`
+
+	// An optional parameter that specifies the maximum number of results to return.
+	// You can use use nextToken to get the next page of results. The default is
+	// 10.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// If your initial ListLifecyclePolicies operation returns a nextToken, you
+	// can include the returned nextToken in subsequent ListLifecyclePolicies operations,
+	// which returns results in the next page.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// Resource filters that policies can apply to. Currently, the only supported
+	// resource type is index.
+	Resources []*string `locationName:"resources" min:"1" type:"list"`
+
+	// The type of lifecycle policy.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"LifecyclePolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLifecyclePoliciesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLifecyclePoliciesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListLifecyclePoliciesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListLifecyclePoliciesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Resources != nil && len(s.Resources) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Resources", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListLifecyclePoliciesInput) SetMaxResults(v int64) *ListLifecyclePoliciesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListLifecyclePoliciesInput) SetNextToken(v string) *ListLifecyclePoliciesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResources sets the Resources field's value.
+func (s *ListLifecyclePoliciesInput) SetResources(v []*string) *ListLifecyclePoliciesInput {
+	s.Resources = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ListLifecyclePoliciesInput) SetType(v string) *ListLifecyclePoliciesInput {
+	s.Type = &v
+	return s
+}
+
+type ListLifecyclePoliciesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Details about the requested lifecycle policies.
+	LifecyclePolicySummaries []*LifecyclePolicySummary `locationName:"lifecyclePolicySummaries" type:"list"`
+
+	// When nextToken is returned, there are more results available. The value of
+	// nextToken is a unique pagination token for each page. Make the call again
+	// using the returned token to retrieve the next page.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLifecyclePoliciesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListLifecyclePoliciesOutput) GoString() string {
+	return s.String()
+}
+
+// SetLifecyclePolicySummaries sets the LifecyclePolicySummaries field's value.
+func (s *ListLifecyclePoliciesOutput) SetLifecyclePolicySummaries(v []*LifecyclePolicySummary) *ListLifecyclePoliciesOutput {
+	s.LifecyclePolicySummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListLifecyclePoliciesOutput) SetNextToken(v string) *ListLifecyclePoliciesOutput {
 	s.NextToken = &v
 	return s
 }
@@ -6433,7 +8123,8 @@ func (s *ListVpcEndpointsOutput) SetVpcEndpointSummaries(v []*VpcEndpointSummary
 	return s
 }
 
-// OCU Limit Exceeded for service limits
+// Thrown when the collection you're attempting to create results in a number
+// of search or indexing OCUs that exceeds the account limit.
 type OcuLimitExceededException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -7791,6 +9482,150 @@ func (s *UpdateCollectionOutput) SetUpdateCollectionDetail(v *UpdateCollectionDe
 	return s
 }
 
+type UpdateLifecyclePolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier to ensure idempotency of the request.
+	ClientToken *string `locationName:"clientToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// A description of the lifecycle policy.
+	Description *string `locationName:"description" type:"string"`
+
+	// The name of the policy.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"3" type:"string" required:"true"`
+
+	// The JSON policy document to use as the content for the lifecycle policy.
+	Policy *string `locationName:"policy" min:"1" type:"string"`
+
+	// The version of the policy being updated.
+	//
+	// PolicyVersion is a required field
+	PolicyVersion *string `locationName:"policyVersion" min:"20" type:"string" required:"true"`
+
+	// The type of lifecycle policy.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"LifecyclePolicyType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLifecyclePolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLifecyclePolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateLifecyclePolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateLifecyclePolicyInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 3))
+	}
+	if s.Policy != nil && len(*s.Policy) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Policy", 1))
+	}
+	if s.PolicyVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyVersion"))
+	}
+	if s.PolicyVersion != nil && len(*s.PolicyVersion) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("PolicyVersion", 20))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *UpdateLifecyclePolicyInput) SetClientToken(v string) *UpdateLifecyclePolicyInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateLifecyclePolicyInput) SetDescription(v string) *UpdateLifecyclePolicyInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateLifecyclePolicyInput) SetName(v string) *UpdateLifecyclePolicyInput {
+	s.Name = &v
+	return s
+}
+
+// SetPolicy sets the Policy field's value.
+func (s *UpdateLifecyclePolicyInput) SetPolicy(v string) *UpdateLifecyclePolicyInput {
+	s.Policy = &v
+	return s
+}
+
+// SetPolicyVersion sets the PolicyVersion field's value.
+func (s *UpdateLifecyclePolicyInput) SetPolicyVersion(v string) *UpdateLifecyclePolicyInput {
+	s.PolicyVersion = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *UpdateLifecyclePolicyInput) SetType(v string) *UpdateLifecyclePolicyInput {
+	s.Type = &v
+	return s
+}
+
+type UpdateLifecyclePolicyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Details about the updated lifecycle policy.
+	LifecyclePolicyDetail *LifecyclePolicyDetail `locationName:"lifecyclePolicyDetail" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLifecyclePolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateLifecyclePolicyOutput) GoString() string {
+	return s.String()
+}
+
+// SetLifecyclePolicyDetail sets the LifecyclePolicyDetail field's value.
+func (s *UpdateLifecyclePolicyOutput) SetLifecyclePolicyDetail(v *LifecyclePolicyDetail) *UpdateLifecyclePolicyOutput {
+	s.LifecyclePolicyDetail = v
+	return s
+}
+
 type UpdateSecurityConfigInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8620,6 +10455,9 @@ const (
 
 	// CollectionTypeTimeseries is a CollectionType enum value
 	CollectionTypeTimeseries = "TIMESERIES"
+
+	// CollectionTypeVectorsearch is a CollectionType enum value
+	CollectionTypeVectorsearch = "VECTORSEARCH"
 )
 
 // CollectionType_Values returns all elements of the CollectionType enum
@@ -8627,6 +10465,31 @@ func CollectionType_Values() []string {
 	return []string{
 		CollectionTypeSearch,
 		CollectionTypeTimeseries,
+		CollectionTypeVectorsearch,
+	}
+}
+
+const (
+	// LifecyclePolicyTypeRetention is a LifecyclePolicyType enum value
+	LifecyclePolicyTypeRetention = "retention"
+)
+
+// LifecyclePolicyType_Values returns all elements of the LifecyclePolicyType enum
+func LifecyclePolicyType_Values() []string {
+	return []string{
+		LifecyclePolicyTypeRetention,
+	}
+}
+
+const (
+	// ResourceTypeIndex is a ResourceType enum value
+	ResourceTypeIndex = "index"
+)
+
+// ResourceType_Values returns all elements of the ResourceType enum
+func ResourceType_Values() []string {
+	return []string{
+		ResourceTypeIndex,
 	}
 }
 
@@ -8655,6 +10518,22 @@ func SecurityPolicyType_Values() []string {
 	return []string{
 		SecurityPolicyTypeEncryption,
 		SecurityPolicyTypeNetwork,
+	}
+}
+
+const (
+	// StandbyReplicasEnabled is a StandbyReplicas enum value
+	StandbyReplicasEnabled = "ENABLED"
+
+	// StandbyReplicasDisabled is a StandbyReplicas enum value
+	StandbyReplicasDisabled = "DISABLED"
+)
+
+// StandbyReplicas_Values returns all elements of the StandbyReplicas enum
+func StandbyReplicas_Values() []string {
+	return []string{
+		StandbyReplicasEnabled,
+		StandbyReplicasDisabled,
 	}
 }
 

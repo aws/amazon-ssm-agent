@@ -26,7 +26,6 @@ func parseTime(layout, value string) *time.Time {
 }
 
 // To accept an invitation be a member account
-//
 // The following example demonstrates how an account can accept an invitation from the
 // Security Hub administrator account to be a member account. This operation is applicable
 // only to member accounts that are not added through AWS Organizations.
@@ -65,8 +64,46 @@ func ExampleSecurityHub_AcceptAdministratorInvitation_shared00() {
 	fmt.Println(result)
 }
 
+// To delete one or more automation rules
+// The following example deletes the specified automation rules.
+func ExampleSecurityHub_BatchDeleteAutomationRules_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.BatchDeleteAutomationRulesInput{
+		AutomationRulesArns: []*string{
+			aws.String("arn:aws:securityhub:us-east-1:123456789012:automation-rule/a1b2c3d4-5678-90ab-cdef-EXAMPLE11111"),
+			aws.String("arn:aws:securityhub:us-east-1:123456789012:automation-rule/a1b2c3d4-5678-90ab-cdef-EXAMPLE22222"),
+		},
+	}
+
+	result, err := svc.BatchDeleteAutomationRules(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To disable one or more security standards
-//
 // The following example disables a security standard in Security Hub.
 func ExampleSecurityHub_BatchDisableStandards_shared00() {
 	svc := securityhub.New(session.New())
@@ -88,6 +125,8 @@ func ExampleSecurityHub_BatchDisableStandards_shared00() {
 				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
 			case securityhub.ErrCodeLimitExceededException:
 				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -102,9 +141,9 @@ func ExampleSecurityHub_BatchDisableStandards_shared00() {
 	fmt.Println(result)
 }
 
-// To import security findings from a third party provider to Security Hub
-//
-// The following example imports findings from a third party provider to Security Hub.
+// To enable security standards
+// The following example enables the security standard specified by the StandardArn.
+// You can use this operation to enable one or more Security Hub standards.
 func ExampleSecurityHub_BatchEnableStandards_shared00() {
 	svc := securityhub.New(session.New())
 	input := &securityhub.BatchEnableStandardsInput{
@@ -127,6 +166,181 @@ func ExampleSecurityHub_BatchEnableStandards_shared00() {
 				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
 			case securityhub.ErrCodeLimitExceededException:
 				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To update one ore more automation rules
+// The following example updates the specified automation rules.
+func ExampleSecurityHub_BatchGetAutomationRules_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.BatchGetAutomationRulesInput{
+		AutomationRulesArns: []*string{
+			aws.String("arn:aws:securityhub:us-east-1:123456789012:automation-rule/a1b2c3d4-5678-90ab-cdef-EXAMPLE11111"),
+			aws.String("arn:aws:securityhub:us-east-1:123456789012:automation-rule/a1b2c3d4-5678-90ab-cdef-EXAMPLE22222"),
+		},
+	}
+
+	result, err := svc.BatchGetAutomationRules(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To get configuration associations for a batch of targets
+// This operation provides details about configuration associations for a batch of target
+// accounts, organizational units, or the root.
+func ExampleSecurityHub_BatchGetConfigurationPolicyAssociations_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.BatchGetConfigurationPolicyAssociationsInput{
+		ConfigurationPolicyAssociationIdentifiers: []*securityhub.ConfigurationPolicyAssociation{
+			{
+				Target: &securityhub.Target{
+					AccountId: aws.String("111122223333"),
+				},
+			},
+			{
+				Target: &securityhub.Target{
+					RootId: aws.String("r-f6g7h8i9j0example"),
+				},
+			},
+		},
+	}
+
+	result, err := svc.BatchGetConfigurationPolicyAssociations(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To get security control details
+// The following example gets details for the specified controls in the current AWS
+// account and AWS Region.
+func ExampleSecurityHub_BatchGetSecurityControls_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.BatchGetSecurityControlsInput{
+		SecurityControlIds: []*string{
+			aws.String("ACM.1"),
+			aws.String("APIGateway.1"),
+		},
+	}
+
+	result, err := svc.BatchGetSecurityControls(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To get enablement status of a batch of controls
+// The following example retrieves the enablement status of the specified controls in
+// the specified standards.
+func ExampleSecurityHub_BatchGetStandardsControlAssociations_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.BatchGetStandardsControlAssociationsInput{
+		StandardsControlAssociationIds: []*securityhub.StandardsControlAssociationId{
+			{
+				SecurityControlId: aws.String("CloudTrail.1"),
+				StandardsArn:      aws.String("arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0"),
+			},
+			{
+				SecurityControlId: aws.String("CloudWatch.12"),
+				StandardsArn:      aws.String("arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0"),
+			},
+		},
+	}
+
+	result, err := svc.BatchGetStandardsControlAssociations(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -142,7 +356,6 @@ func ExampleSecurityHub_BatchEnableStandards_shared00() {
 }
 
 // To import security findings from a third party provider to Security Hub
-//
 // The following example imports findings from a third party provider to Security Hub.
 func ExampleSecurityHub_BatchImportFindings_shared00() {
 	svc := securityhub.New(session.New())
@@ -205,8 +418,53 @@ func ExampleSecurityHub_BatchImportFindings_shared00() {
 	fmt.Println(result)
 }
 
+// To update one ore more automation rules
+// The following example updates the specified automation rules.
+func ExampleSecurityHub_BatchUpdateAutomationRules_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.BatchUpdateAutomationRulesInput{
+		UpdateAutomationRulesRequestItems: []*securityhub.UpdateAutomationRulesRequestItem{
+			{
+				RuleArn:    aws.String("arn:aws:securityhub:us-east-1:123456789012:automation-rule/a1b2c3d4-5678-90ab-cdef-EXAMPLE11111"),
+				RuleOrder:  aws.Int64(15),
+				RuleStatus: aws.String("ENABLED"),
+			},
+			{
+				RuleArn:    aws.String("arn:aws:securityhub:us-east-1:123456789012:automation-rule/a1b2c3d4-5678-90ab-cdef-EXAMPLE22222"),
+				RuleStatus: aws.String("DISABLED"),
+			},
+		},
+	}
+
+	result, err := svc.BatchUpdateAutomationRules(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To update Security Hub findings
-//
 // The following example updates Security Hub findings. The finding identifier parameter
 // specifies which findings to update. Only specific finding fields can be updated with
 // this operation.
@@ -276,8 +534,58 @@ func ExampleSecurityHub_BatchUpdateFindings_shared00() {
 	fmt.Println(result)
 }
 
+// To update enablement status of a batch of controls
+// The following example disables CloudWatch.12 in CIS AWS Foundations Benchmark v1.2.0.
+// The example returns an error for CloudTrail.1 because an invalid standard ARN is
+// provided.
+func ExampleSecurityHub_BatchUpdateStandardsControlAssociations_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.BatchUpdateStandardsControlAssociationsInput{
+		StandardsControlAssociationUpdates: []*securityhub.StandardsControlAssociationUpdate{
+			{
+				AssociationStatus: aws.String("DISABLED"),
+				SecurityControlId: aws.String("CloudTrail.1"),
+				StandardsArn:      aws.String("arn:aws:securityhub:::ruleset/sample-standard/v/1.1.0"),
+				UpdatedReason:     aws.String("Not relevant to environment"),
+			},
+			{
+				AssociationStatus: aws.String("DISABLED"),
+				SecurityControlId: aws.String("CloudWatch.12"),
+				StandardsArn:      aws.String("arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0"),
+				UpdatedReason:     aws.String("Not relevant to environment"),
+			},
+		},
+	}
+
+	result, err := svc.BatchUpdateStandardsControlAssociations(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To create a custom action target
-//
 // The following example creates a custom action target in Security Hub. Custom actions
 // on findings and insights automatically trigger actions in Amazon CloudWatch Events.
 func ExampleSecurityHub_CreateActionTarget_shared00() {
@@ -316,8 +624,162 @@ func ExampleSecurityHub_CreateActionTarget_shared00() {
 	fmt.Println(result)
 }
 
+// To create an automation rule
+// The following example creates an automation rule.
+func ExampleSecurityHub_CreateAutomationRule_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.CreateAutomationRuleInput{
+		Actions: []*securityhub.AutomationRulesAction{
+			{
+				FindingFieldsUpdate: &securityhub.AutomationRulesFindingFieldsUpdate{
+					Note: &securityhub.NoteUpdate{
+						Text:      aws.String("This is a critical S3 bucket, please look into this ASAP"),
+						UpdatedBy: aws.String("test-user"),
+					},
+					Severity: &securityhub.SeverityUpdate{
+						Label: aws.String("CRITICAL"),
+					},
+				},
+				Type: aws.String("FINDING_FIELDS_UPDATE"),
+			},
+		},
+		Criteria: &securityhub.AutomationRulesFindingFilters{
+			ComplianceStatus: []*securityhub.StringFilter{
+				{
+					Comparison: aws.String("EQUALS"),
+					Value:      aws.String("FAILED"),
+				},
+			},
+			ProductName: []*securityhub.StringFilter{
+				{
+					Comparison: aws.String("EQUALS"),
+					Value:      aws.String("Security Hub"),
+				},
+			},
+			RecordState: []*securityhub.StringFilter{
+				{
+					Comparison: aws.String("EQUALS"),
+					Value:      aws.String("ACTIVE"),
+				},
+			},
+			ResourceId: []*securityhub.StringFilter{
+				{
+					Comparison: aws.String("EQUALS"),
+					Value:      aws.String("arn:aws:s3:::examplebucket/developers/design_info.doc"),
+				},
+			},
+			WorkflowStatus: []*securityhub.StringFilter{
+				{
+					Comparison: aws.String("EQUALS"),
+					Value:      aws.String("NEW"),
+				},
+			},
+		},
+		Description: aws.String("Elevate finding severity to Critical for important resources"),
+		IsTerminal:  aws.Bool(false),
+		RuleName:    aws.String("Elevate severity for important resources"),
+		RuleOrder:   aws.Int64(1),
+		RuleStatus:  aws.String("ENABLED"),
+		Tags: map[string]*string{
+			"important-resources-rule": aws.String("s3-bucket"),
+		},
+	}
+
+	result, err := svc.CreateAutomationRule(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To create a configuration policy
+// This operation creates a configuration policy in Security Hub.
+func ExampleSecurityHub_CreateConfigurationPolicy_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.CreateConfigurationPolicyInput{
+		ConfigurationPolicy: &securityhub.Policy{
+			SecurityHub: &securityhub.SecurityHubPolicy{
+				EnabledStandardIdentifiers: []*string{
+					aws.String("arn:aws:securityhub:us-east-1::standards/aws-foundational-security-best-practices/v/1.0.0"),
+					aws.String("arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0"),
+				},
+				SecurityControlsConfiguration: &securityhub.SecurityControlsConfiguration{
+					DisabledSecurityControlIdentifiers: []*string{
+						aws.String("CloudWatch.1"),
+					},
+					SecurityControlCustomParameters: []*securityhub.SecurityControlCustomParameter{
+						{
+							Parameters: map[string]*securityhub.ParameterConfiguration{
+								"daysToExpiration": {
+									Value: &securityhub.ParameterValue{
+										Integer: aws.Int64(14),
+									},
+									ValueType: aws.String("CUSTOM"),
+								},
+							},
+							SecurityControlId: aws.String("ACM.1"),
+						},
+					},
+				},
+				ServiceEnabled: aws.Bool(true),
+			},
+		},
+		Description: aws.String("Configuration policy for testing FSBP and CIS"),
+		Name:        aws.String("TestConfigurationPolicy"),
+	}
+
+	result, err := svc.CreateConfigurationPolicy(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			case securityhub.ErrCodeResourceConflictException:
+				fmt.Println(securityhub.ErrCodeResourceConflictException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To enable cross-Region aggregation
-//
 // The following example creates a finding aggregator. This is required to enable cross-Region
 // aggregation.
 func ExampleSecurityHub_CreateFindingAggregator_shared00() {
@@ -359,7 +821,6 @@ func ExampleSecurityHub_CreateFindingAggregator_shared00() {
 }
 
 // To create a custom insight
-//
 // The following example creates a custom insight in Security Hub. An insight is a collection
 // of findings that relate to a security issue.
 func ExampleSecurityHub_CreateInsight_shared00() {
@@ -412,7 +873,6 @@ func ExampleSecurityHub_CreateInsight_shared00() {
 }
 
 // To add a member account
-//
 // The following example creates a member association between the specified accounts
 // and the administrator account (the account that makes the request). This operation
 // is used to add accounts that aren't part of an organization.
@@ -443,6 +903,8 @@ func ExampleSecurityHub_CreateMembers_shared00() {
 				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
 			case securityhub.ErrCodeResourceConflictException:
 				fmt.Println(securityhub.ErrCodeResourceConflictException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -458,7 +920,6 @@ func ExampleSecurityHub_CreateMembers_shared00() {
 }
 
 // To decline invitation to become a member account
-//
 // The following example declines an invitation from the Security Hub administrator
 // account to become a member account. The invited account makes the request.
 func ExampleSecurityHub_DeclineInvitations_shared00() {
@@ -497,7 +958,6 @@ func ExampleSecurityHub_DeclineInvitations_shared00() {
 }
 
 // To delete a custom action target
-//
 // The following example deletes a custom action target that triggers target actions
 // in Amazon CloudWatch Events. Deleting a custom action target doesn't affect findings
 // or insights that were already sent to CloudWatch Events based on the custom action.
@@ -533,8 +993,47 @@ func ExampleSecurityHub_DeleteActionTarget_shared00() {
 	fmt.Println(result)
 }
 
+// To delete a configuration policy
+// This operation deletes the specified configuration policy.
+func ExampleSecurityHub_DeleteConfigurationPolicy_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.DeleteConfigurationPolicyInput{
+		Identifier: aws.String("arn:aws:securityhub:us-east-1:123456789012:configuration-policy/a1b2c3d4-5678-90ab-cdef-EXAMPLE11111"),
+	}
+
+	result, err := svc.DeleteConfigurationPolicy(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeResourceConflictException:
+				fmt.Println(securityhub.ErrCodeResourceConflictException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To delete a finding aggregator
-//
 // The following example deletes a finding aggregator in Security Hub. Deleting the
 // finding aggregator stops cross-Region aggregation. This operation produces no output.
 func ExampleSecurityHub_DeleteFindingAggregator_shared00() {
@@ -574,7 +1073,6 @@ func ExampleSecurityHub_DeleteFindingAggregator_shared00() {
 }
 
 // To delete a custom insight
-//
 // The following example deletes a custom insight in Security Hub.
 func ExampleSecurityHub_DeleteInsight_shared00() {
 	svc := securityhub.New(session.New())
@@ -611,7 +1109,6 @@ func ExampleSecurityHub_DeleteInsight_shared00() {
 }
 
 // To delete a custom insight
-//
 // The following example deletes an invitation sent by the Security Hub administrator
 // account to a prospective member account. This operation is used only for invitations
 // sent to accounts that aren't part of an organization. Organization accounts don't
@@ -653,7 +1150,6 @@ func ExampleSecurityHub_DeleteInvitations_shared00() {
 }
 
 // To delete a member account
-//
 // The following example deletes the specified member account from Security Hub. This
 // operation can be used to delete member accounts that are part of an organization
 // or that were invited manually.
@@ -695,7 +1191,6 @@ func ExampleSecurityHub_DeleteMembers_shared00() {
 }
 
 // To return custom action targets
-//
 // The following example returns a list of custom action targets. You use custom actions
 // on findings and insights in Security Hub to trigger target actions in Amazon CloudWatch
 // Events.
@@ -734,7 +1229,6 @@ func ExampleSecurityHub_DescribeActionTargets_shared00() {
 }
 
 // To return details about Hub resource
-//
 // The following example returns details about the Hub resource in the calling account.
 // The Hub resource represents the implementation of the AWS Security Hub service in
 // the calling account.
@@ -772,11 +1266,9 @@ func ExampleSecurityHub_DescribeHub_shared00() {
 	fmt.Println(result)
 }
 
-// To get information about Organizations configuration
-//
-// The following example returns details about the way in which AWS Organizations is
-// configured for a Security Hub account that belongs to an organization. Only a Security
-// Hub administrator account can call this operation.
+// To get information about organization configuration
+// This operation provides information about the way your organization is configured
+// in Security Hub. Only a Security Hub administrator account can invoke this operation.
 func ExampleSecurityHub_DescribeOrganizationConfiguration_shared00() {
 	svc := securityhub.New(session.New())
 	input := &securityhub.DescribeOrganizationConfigurationInput{}
@@ -808,7 +1300,6 @@ func ExampleSecurityHub_DescribeOrganizationConfiguration_shared00() {
 }
 
 // To get information about Security Hub integrations
-//
 // The following example returns details about AWS services and third-party products
 // that Security Hub integrates with.
 func ExampleSecurityHub_DescribeProducts_shared00() {
@@ -846,7 +1337,6 @@ func ExampleSecurityHub_DescribeProducts_shared00() {
 }
 
 // To get available Security Hub standards
-//
 // The following example returns a list of available security standards in Security
 // Hub.
 func ExampleSecurityHub_DescribeStandards_shared00() {
@@ -878,7 +1368,6 @@ func ExampleSecurityHub_DescribeStandards_shared00() {
 }
 
 // To get a list of controls for a security standard
-//
 // The following example returns a list of security controls and control details that
 // apply to a specified security standard. The list includes controls that are enabled
 // and disabled in the standard.
@@ -917,7 +1406,6 @@ func ExampleSecurityHub_DescribeStandardsControls_shared00() {
 }
 
 // To end a Security Hub integration
-//
 // The following example ends an integration between Security Hub and the specified
 // product that sends findings to Security Hub. After the integration ends, the product
 // no longer sends findings to Security Hub.
@@ -956,7 +1444,6 @@ func ExampleSecurityHub_DisableImportFindingsForProduct_shared00() {
 }
 
 // To remove a Security Hub administrator account
-//
 // The following example removes the Security Hub administrator account in the Region
 // from which the operation was executed. This operation doesn't remove the delegated
 // administrator account in AWS Organizations.
@@ -978,6 +1465,8 @@ func ExampleSecurityHub_DisableOrganizationAdminAccount_shared00() {
 				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
 			case securityhub.ErrCodeLimitExceededException:
 				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -993,7 +1482,6 @@ func ExampleSecurityHub_DisableOrganizationAdminAccount_shared00() {
 }
 
 // To deactivate Security Hub
-//
 // The following example deactivates Security Hub for the current account and Region.
 func ExampleSecurityHub_DisableSecurityHub_shared00() {
 	svc := securityhub.New(session.New())
@@ -1011,6 +1499,8 @@ func ExampleSecurityHub_DisableSecurityHub_shared00() {
 				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
 			case securityhub.ErrCodeResourceNotFoundException:
 				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1026,7 +1516,6 @@ func ExampleSecurityHub_DisableSecurityHub_shared00() {
 }
 
 // To disassociate requesting account from administrator account
-//
 // The following example dissociates the requesting account from its associated administrator
 // account.
 func ExampleSecurityHub_DisassociateFromAdministratorAccount_shared00() {
@@ -1062,7 +1551,6 @@ func ExampleSecurityHub_DisassociateFromAdministratorAccount_shared00() {
 }
 
 // To disassociate member accounts from administrator account
-//
 // The following example dissociates the specified member accounts from the associated
 // administrator account.
 func ExampleSecurityHub_DisassociateMembers_shared00() {
@@ -1088,6 +1576,8 @@ func ExampleSecurityHub_DisassociateMembers_shared00() {
 				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
 			case securityhub.ErrCodeResourceNotFoundException:
 				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1103,7 +1593,6 @@ func ExampleSecurityHub_DisassociateMembers_shared00() {
 }
 
 // To activate an integration
-//
 // The following example activates an integration between Security Hub and a third party
 // partner product that sends findings to Security Hub.
 func ExampleSecurityHub_EnableImportFindingsForProduct_shared00() {
@@ -1141,7 +1630,6 @@ func ExampleSecurityHub_EnableImportFindingsForProduct_shared00() {
 }
 
 // To designate a Security Hub administrator
-//
 // The following example designates the specified account as the Security Hub administrator
 // account. The requesting account must be the organization management account.
 func ExampleSecurityHub_EnableOrganizationAdminAccount_shared00() {
@@ -1162,6 +1650,8 @@ func ExampleSecurityHub_EnableOrganizationAdminAccount_shared00() {
 				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
 			case securityhub.ErrCodeLimitExceededException:
 				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1177,7 +1667,6 @@ func ExampleSecurityHub_EnableOrganizationAdminAccount_shared00() {
 }
 
 // To activate Security Hub
-//
 // The following example activates the Security Hub service in the requesting AWS account.
 // The service is activated in the current AWS Region or the Region that you specify
 // in the request. Some standards are automatically turned on in your account unless
@@ -1221,7 +1710,6 @@ func ExampleSecurityHub_EnableSecurityHub_shared00() {
 }
 
 // To get details about the Security Hub administrator account
-//
 // The following example provides details about the Security Hub administrator account
 // for the requesting member account.
 func ExampleSecurityHub_GetAdministratorAccount_shared00() {
@@ -1256,8 +1744,86 @@ func ExampleSecurityHub_GetAdministratorAccount_shared00() {
 	fmt.Println(result)
 }
 
+// To get details about a configuration policy
+// This operation provides details about the specified configuration policy.
+func ExampleSecurityHub_GetConfigurationPolicy_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.GetConfigurationPolicyInput{
+		Identifier: aws.String("arn:aws:securityhub:us-east-1:123456789012:configuration-policy/a1b2c3d4-5678-90ab-cdef-EXAMPLE11111"),
+	}
+
+	result, err := svc.GetConfigurationPolicy(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To get details about a configuration association
+// This operation provides details about configuration associations for a specific target
+// account, organizational unit, or the root.
+func ExampleSecurityHub_GetConfigurationPolicyAssociation_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.GetConfigurationPolicyAssociationInput{
+		Target: &securityhub.Target{
+			AccountId: aws.String("111122223333"),
+		},
+	}
+
+	result, err := svc.GetConfigurationPolicyAssociation(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To return a list of enabled standards
-//
 // The following example returns a list of Security Hub standards that are currently
 // enabled in your account.
 func ExampleSecurityHub_GetEnabledStandards_shared00() {
@@ -1295,7 +1861,6 @@ func ExampleSecurityHub_GetEnabledStandards_shared00() {
 }
 
 // To get cross-Region aggregation details
-//
 // The following example returns cross-Region aggregation details for the requesting
 // account.
 func ExampleSecurityHub_GetFindingAggregator_shared00() {
@@ -1335,7 +1900,6 @@ func ExampleSecurityHub_GetFindingAggregator_shared00() {
 }
 
 // To get finding history
-//
 // The following example retrieves the history of the specified finding during the specified
 // time frame. If the time frame permits, Security Hub returns finding history for the
 // last 90 days.
@@ -1378,7 +1942,6 @@ func ExampleSecurityHub_GetFindingHistory_shared00() {
 }
 
 // To get a list of findings
-//
 // The following example returns a filtered and sorted list of Security Hub findings.
 func ExampleSecurityHub_GetFindings_shared00() {
 	svc := securityhub.New(session.New())
@@ -1421,7 +1984,6 @@ func ExampleSecurityHub_GetFindings_shared00() {
 }
 
 // To get the results of a Security Hub insight
-//
 // The following example returns the results of the Security Hub insight specified by
 // the insight ARN.
 func ExampleSecurityHub_GetInsightResults_shared00() {
@@ -1459,7 +2021,6 @@ func ExampleSecurityHub_GetInsightResults_shared00() {
 }
 
 // To get details of a Security Hub insight
-//
 // The following example returns details of the Security Hub insight with the specified
 // ARN.
 func ExampleSecurityHub_GetInsights_shared00() {
@@ -1499,7 +2060,6 @@ func ExampleSecurityHub_GetInsights_shared00() {
 }
 
 // To get a count of membership invitations
-//
 // The following example returns a count of invitations that the Security Hub administrator
 // sent to the current member account, not including the currently accepted invitation.
 func ExampleSecurityHub_GetInvitationsCount_shared00() {
@@ -1533,7 +2093,6 @@ func ExampleSecurityHub_GetInvitationsCount_shared00() {
 }
 
 // To get member account details
-//
 // The following example returns details for the Security Hub member accounts with the
 // specified AWS account IDs. An administrator account may be the delegated Security
 // Hub administrator account for an organization or an administrator account that enabled
@@ -1575,8 +2134,43 @@ func ExampleSecurityHub_GetMembers_shared00() {
 	fmt.Println(result)
 }
 
+// To get the definition of a security control.
+// The following example retrieves definition details for the specified security control.
+func ExampleSecurityHub_GetSecurityControlDefinition_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.GetSecurityControlDefinitionInput{
+		SecurityControlId: aws.String("EC2.4"),
+	}
+
+	result, err := svc.GetSecurityControlDefinition(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To invite accounts to become members
-//
 // The following example invites the specified AWS accounts to become member accounts
 // associated with the calling Security Hub administrator account. You only use this
 // operation to invite accounts that don't belong to an AWS Organizations organization.
@@ -1617,8 +2211,124 @@ func ExampleSecurityHub_InviteMembers_shared00() {
 	fmt.Println(result)
 }
 
+// To list automation rules
+// The following example lists automation rules and rule metadata in the calling account.
+func ExampleSecurityHub_ListAutomationRules_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.ListAutomationRulesInput{
+		MaxResults: aws.Int64(2),
+		NextToken:  aws.String("example-token"),
+	}
+
+	result, err := svc.ListAutomationRules(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To view a list of configuration policies
+// This operation provides a list of your configuration policies, including metadata
+// for each policy.
+func ExampleSecurityHub_ListConfigurationPolicies_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.ListConfigurationPoliciesInput{
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("U1FsdGVkX19nBV2zoh+Gou9NgnulLJHWpn9xnG4hqSOhvw3o2JqjI86QDxdf"),
+	}
+
+	result, err := svc.ListConfigurationPolicies(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To list configuration associations
+// This operation lists all of the associations between targets and configuration policies
+// or self-managed behavior. Targets can include accounts, organizational units, or
+// the root.
+func ExampleSecurityHub_ListConfigurationPolicyAssociations_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.ListConfigurationPolicyAssociationsInput{
+		Filters: &securityhub.AssociationFilters{
+			AssociationType: aws.String("APPLIED"),
+		},
+		MaxResults: aws.Int64(1),
+		NextToken:  aws.String("U1FsdGVkX19nBV2zoh+Gou9NgnulLJHWpn9xnG4hqSOhvw3o2JqjI86QDxdf"),
+	}
+
+	result, err := svc.ListConfigurationPolicyAssociations(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To list ARNs for enabled integrations
-//
 // The following example returns a list of subscription Amazon Resource Names (ARNs)
 // for the product integrations that you have currently enabled in Security Hub.
 func ExampleSecurityHub_ListEnabledProductsForImport_shared00() {
@@ -1650,7 +2360,6 @@ func ExampleSecurityHub_ListEnabledProductsForImport_shared00() {
 }
 
 // To update the enablement status of a standard control
-//
 // The following example disables the specified control in the specified security standard.
 func ExampleSecurityHub_ListFindingAggregators_shared00() {
 	svc := securityhub.New(session.New())
@@ -1685,7 +2394,6 @@ func ExampleSecurityHub_ListFindingAggregators_shared00() {
 }
 
 // To list membership invitations to calling account
-//
 // The following example returns a list of Security Hub member invitations sent to the
 // calling AWS account. Only accounts that are invited manually use this operation.
 // It's not for use by accounts that are managed through AWS Organizations.
@@ -1720,7 +2428,6 @@ func ExampleSecurityHub_ListInvitations_shared00() {
 }
 
 // To list member account details
-//
 // The following example returns details about member accounts for the calling Security
 // Hub administrator account. The response includes member accounts that are managed
 // through AWS Organizations and those that were invited manually.
@@ -1755,7 +2462,6 @@ func ExampleSecurityHub_ListMembers_shared00() {
 }
 
 // To list administrator acccounts for an organization
-//
 // The following example lists the Security Hub administrator accounts for an organization.
 // Only the organization management account can call this operation.
 func ExampleSecurityHub_ListOrganizationAdminAccounts_shared00() {
@@ -1789,7 +2495,6 @@ func ExampleSecurityHub_ListOrganizationAdminAccounts_shared00() {
 }
 
 // To list security controls that apply to a standard
-//
 // The following example lists security controls that apply to a specified Security
 // Hub standard.
 func ExampleSecurityHub_ListSecurityControlDefinitions_shared00() {
@@ -1827,7 +2532,6 @@ func ExampleSecurityHub_ListSecurityControlDefinitions_shared00() {
 }
 
 // To say whether standard
-//
 // The following example specifies whether a control is currently enabled or disabled
 // in each enabled standard in the calling account. The response also provides other
 // details about the control.
@@ -1864,7 +2568,6 @@ func ExampleSecurityHub_ListStandardsControlAssociations_shared00() {
 }
 
 // To get a list of tags for a resource
-//
 // The following example returns a list of tags associated with the specified resource.
 func ExampleSecurityHub_ListTagsForResource_shared00() {
 	svc := securityhub.New(session.New())
@@ -1896,8 +2599,91 @@ func ExampleSecurityHub_ListTagsForResource_shared00() {
 	fmt.Println(result)
 }
 
+// To associate a configuration with a target
+// This operation associates a configuration policy or self-managed behavior with the
+// target account, organizational unit, or the root.
+func ExampleSecurityHub_StartConfigurationPolicyAssociation_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.StartConfigurationPolicyAssociationInput{
+		ConfigurationPolicyIdentifier: aws.String("arn:aws:securityhub:us-east-1:123456789012:configuration-policy/a1b2c3d4-5678-90ab-cdef-EXAMPLE11111"),
+		Target: &securityhub.Target{
+			AccountId: aws.String("111122223333"),
+		},
+	}
+
+	result, err := svc.StartConfigurationPolicyAssociation(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To disassociate a configuration from a target
+// This operation disassociates a configuration policy or self-managed behavior from
+// the target account, organizational unit, or the root.
+func ExampleSecurityHub_StartConfigurationPolicyDisassociation_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.StartConfigurationPolicyDisassociationInput{
+		ConfigurationPolicyIdentifier: aws.String("SELF_MANAGED_SECURITY_HUB"),
+		Target: &securityhub.Target{
+			RootId: aws.String("r-f6g7h8i9j0example"),
+		},
+	}
+
+	result, err := svc.StartConfigurationPolicyDisassociation(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To tag a resource
-//
 // The following example adds the 'Department' and 'Area' tags to the specified resource.
 func ExampleSecurityHub_TagResource_shared00() {
 	svc := securityhub.New(session.New())
@@ -1934,7 +2720,6 @@ func ExampleSecurityHub_TagResource_shared00() {
 }
 
 // To remove tags from a resource
-//
 // The following example removes the 'Department' tag from the specified resource.
 func ExampleSecurityHub_UntagResource_shared00() {
 	svc := securityhub.New(session.New())
@@ -1970,7 +2755,6 @@ func ExampleSecurityHub_UntagResource_shared00() {
 }
 
 // To update the name and description of a custom action target
-//
 // The following example updates the name and description of a custom action target
 // in Security Hub. You can create custom actions to automatically respond to Security
 // Hub findings using Amazon EventBridge.
@@ -2008,8 +2792,78 @@ func ExampleSecurityHub_UpdateActionTarget_shared00() {
 	fmt.Println(result)
 }
 
+// To update a configuration policy
+// This operation updates the specified configuration policy.
+func ExampleSecurityHub_UpdateConfigurationPolicy_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.UpdateConfigurationPolicyInput{
+		ConfigurationPolicy: &securityhub.Policy{
+			SecurityHub: &securityhub.SecurityHubPolicy{
+				EnabledStandardIdentifiers: []*string{
+					aws.String("arn:aws:securityhub:us-east-1::standards/aws-foundational-security-best-practices/v/1.0.0"),
+					aws.String("arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0"),
+				},
+				SecurityControlsConfiguration: &securityhub.SecurityControlsConfiguration{
+					DisabledSecurityControlIdentifiers: []*string{
+						aws.String("CloudWatch.1"),
+						aws.String("CloudWatch.2"),
+					},
+					SecurityControlCustomParameters: []*securityhub.SecurityControlCustomParameter{
+						{
+							Parameters: map[string]*securityhub.ParameterConfiguration{
+								"daysToExpiration": {
+									Value: &securityhub.ParameterValue{
+										Integer: aws.Int64(21),
+									},
+									ValueType: aws.String("CUSTOM"),
+								},
+							},
+							SecurityControlId: aws.String("ACM.1"),
+						},
+					},
+				},
+				ServiceEnabled: aws.Bool(true),
+			},
+		},
+		Description:   aws.String("Updated configuration policy for testing FSBP and CIS"),
+		Identifier:    aws.String("arn:aws:securityhub:us-east-1:123456789012:configuration-policy/a1b2c3d4-5678-90ab-cdef-EXAMPLE11111"),
+		Name:          aws.String("TestConfigurationPolicy"),
+		UpdatedReason: aws.String("Enabling ACM.2"),
+	}
+
+	result, err := svc.UpdateConfigurationPolicy(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			case securityhub.ErrCodeResourceConflictException:
+				fmt.Println(securityhub.ErrCodeResourceConflictException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To update cross-Region aggregation settings
-//
 // The following example updates the cross-Region aggregation configuration. You use
 // this operation to change the list of linked Regions and the treatment of new Regions.
 // However, you cannot use this operation to change the aggregation Region.
@@ -2055,7 +2909,6 @@ func ExampleSecurityHub_UpdateFindingAggregator_shared00() {
 }
 
 // To update an insight
-//
 // The following example updates the specified Security Hub insight.
 func ExampleSecurityHub_UpdateInsight_shared00() {
 	svc := securityhub.New(session.New())
@@ -2107,14 +2960,16 @@ func ExampleSecurityHub_UpdateInsight_shared00() {
 }
 
 // To update organization configuration
-//
-// The following example updates the configuration for an organization so that Security
-// Hub is automatically activated for new member accounts. Only the Security Hub administrator
-// account can call this operation.
+// This operation updates the way your organization is configured in Security Hub. Only
+// a Security Hub administrator account can invoke this operation.
 func ExampleSecurityHub_UpdateOrganizationConfiguration_shared00() {
 	svc := securityhub.New(session.New())
 	input := &securityhub.UpdateOrganizationConfigurationInput{
-		AutoEnable: aws.Bool(true),
+		AutoEnable:          aws.Bool(false),
+		AutoEnableStandards: aws.String("NONE"),
+		OrganizationConfiguration: &securityhub.OrganizationConfiguration{
+			ConfigurationType: aws.String("CENTRAL"),
+		},
 	}
 
 	result, err := svc.UpdateOrganizationConfiguration(input)
@@ -2129,6 +2984,62 @@ func ExampleSecurityHub_UpdateOrganizationConfiguration_shared00() {
 				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
 			case securityhub.ErrCodeLimitExceededException:
 				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeResourceConflictException:
+				fmt.Println(securityhub.ErrCodeResourceConflictException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To update security control properties
+// The following example updates the specified security control. Specifically, this
+// example updates control parameters.
+func ExampleSecurityHub_UpdateSecurityControl_shared00() {
+	svc := securityhub.New(session.New())
+	input := &securityhub.UpdateSecurityControlInput{
+		LastUpdateReason: aws.String("Comply with internal requirements"),
+		Parameters: map[string]*securityhub.ParameterConfiguration{
+			"maxCredentialUsageAge": {
+				Value: &securityhub.ParameterValue{
+					Integer: aws.Int64(15),
+				},
+				ValueType: aws.String("CUSTOM"),
+			},
+		},
+		SecurityControlId: aws.String("ACM.1"),
+	}
+
+	result, err := svc.UpdateSecurityControl(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case securityhub.ErrCodeInternalException:
+				fmt.Println(securityhub.ErrCodeInternalException, aerr.Error())
+			case securityhub.ErrCodeInvalidInputException:
+				fmt.Println(securityhub.ErrCodeInvalidInputException, aerr.Error())
+			case securityhub.ErrCodeInvalidAccessException:
+				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
+			case securityhub.ErrCodeLimitExceededException:
+				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
+			case securityhub.ErrCodeResourceNotFoundException:
+				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeResourceInUseException:
+				fmt.Println(securityhub.ErrCodeResourceInUseException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -2144,7 +3055,6 @@ func ExampleSecurityHub_UpdateOrganizationConfiguration_shared00() {
 }
 
 // To update Security Hub settings
-//
 // The following example updates Security Hub settings to turn on consolidated control
 // findings, and to automatically enable new controls in enabled standards.
 func ExampleSecurityHub_UpdateSecurityHubConfiguration_shared00() {
@@ -2168,6 +3078,8 @@ func ExampleSecurityHub_UpdateSecurityHubConfiguration_shared00() {
 				fmt.Println(securityhub.ErrCodeLimitExceededException, aerr.Error())
 			case securityhub.ErrCodeResourceNotFoundException:
 				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -2183,7 +3095,6 @@ func ExampleSecurityHub_UpdateSecurityHubConfiguration_shared00() {
 }
 
 // To update the enablement status of a standard control
-//
 // The following example disables the specified control in the specified security standard.
 func ExampleSecurityHub_UpdateStandardsControl_shared00() {
 	svc := securityhub.New(session.New())
@@ -2205,6 +3116,8 @@ func ExampleSecurityHub_UpdateStandardsControl_shared00() {
 				fmt.Println(securityhub.ErrCodeInvalidAccessException, aerr.Error())
 			case securityhub.ErrCodeResourceNotFoundException:
 				fmt.Println(securityhub.ErrCodeResourceNotFoundException, aerr.Error())
+			case securityhub.ErrCodeAccessDeniedException:
+				fmt.Println(securityhub.ErrCodeAccessDeniedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

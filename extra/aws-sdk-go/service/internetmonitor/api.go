@@ -29,14 +29,13 @@ const opCreateMonitor = "CreateMonitor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateMonitorRequest method.
+//	req, resp := client.CreateMonitorRequest(params)
 //
-//    // Example sending a request using the CreateMonitorRequest method.
-//    req, resp := client.CreateMonitorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/CreateMonitor
 func (c *InternetMonitor) CreateMonitorRequest(input *CreateMonitorInput) (req *request.Request, output *CreateMonitorOutput) {
@@ -58,20 +57,23 @@ func (c *InternetMonitor) CreateMonitorRequest(input *CreateMonitorInput) (req *
 // CreateMonitor API operation for Amazon CloudWatch Internet Monitor.
 //
 // Creates a monitor in Amazon CloudWatch Internet Monitor. A monitor is built
-// based on information from the application resources that you add: Amazon
-// Virtual Private Clouds (VPCs), Amazon CloudFront distributions, and WorkSpaces
+// based on information from the application resources that you add: VPCs, Network
+// Load Balancers (NLBs), Amazon CloudFront distributions, and Amazon WorkSpaces
 // directories. Internet Monitor then publishes internet measurements from Amazon
-// Web Services that are specific to the city-networks, that is, the locations
+// Web Services that are specific to the city-networks. That is, the locations
 // and ASNs (typically internet service providers or ISPs), where clients access
 // your application. For more information, see Using Amazon CloudWatch Internet
 // Monitor (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-InternetMonitor.html)
 // in the Amazon CloudWatch User Guide.
 //
-// When you create a monitor, you set a maximum limit for the number of city-networks
-// where client traffic is monitored. The city-network maximum that you choose
-// is the limit, but you only pay for the number of city-networks that are actually
-// monitored. You can change the maximum at any time by updating your monitor.
-// For more information, see Choosing a city-network maximum value (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/IMCityNetworksMaximum.html)
+// When you create a monitor, you choose the percentage of traffic that you
+// want to monitor. You can also set a maximum limit for the number of city-networks
+// where client traffic is monitored, that caps the total traffic that Internet
+// Monitor monitors. A city-network maximum is the limit of city-networks, but
+// you only pay for the number of city-networks that are actually monitored.
+// You can update your monitor at any time to change the percentage of traffic
+// to monitor or the city-networks maximum. For more information, see Choosing
+// a city-network maximum value (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/IMCityNetworksMaximum.html)
 // in the Amazon CloudWatch User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -82,23 +84,24 @@ func (c *InternetMonitor) CreateMonitorRequest(input *CreateMonitorInput) (req *
 // API operation CreateMonitor for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An internal error occurred.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InternalServerException
+//     An internal error occurred.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ConflictException
-//   The requested resource is in use.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * LimitExceededException
-//   The request exceeded a service quota.
+//   - ConflictException
+//     The requested resource is in use.
 //
-//   * ValidationException
-//   Invalid request.
+//   - LimitExceededException
+//     The request exceeded a service quota.
+//
+//   - ValidationException
+//     Invalid request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/CreateMonitor
 func (c *InternetMonitor) CreateMonitor(input *CreateMonitorInput) (*CreateMonitorOutput, error) {
@@ -138,14 +141,13 @@ const opDeleteMonitor = "DeleteMonitor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMonitorRequest method.
+//	req, resp := client.DeleteMonitorRequest(params)
 //
-//    // Example sending a request using the DeleteMonitorRequest method.
-//    req, resp := client.DeleteMonitorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/DeleteMonitor
 func (c *InternetMonitor) DeleteMonitorRequest(input *DeleteMonitorInput) (req *request.Request, output *DeleteMonitorOutput) {
@@ -177,17 +179,18 @@ func (c *InternetMonitor) DeleteMonitorRequest(input *DeleteMonitorInput) (req *
 // API operation DeleteMonitor for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An internal error occurred.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InternalServerException
+//     An internal error occurred.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ValidationException
-//   Invalid request.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     Invalid request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/DeleteMonitor
 func (c *InternetMonitor) DeleteMonitor(input *DeleteMonitorInput) (*DeleteMonitorOutput, error) {
@@ -227,14 +230,13 @@ const opGetHealthEvent = "GetHealthEvent"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetHealthEventRequest method.
+//	req, resp := client.GetHealthEventRequest(params)
 //
-//    // Example sending a request using the GetHealthEventRequest method.
-//    req, resp := client.GetHealthEventRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/GetHealthEvent
 func (c *InternetMonitor) GetHealthEventRequest(input *GetHealthEventInput) (req *request.Request, output *GetHealthEventOutput) {
@@ -257,11 +259,11 @@ func (c *InternetMonitor) GetHealthEventRequest(input *GetHealthEventInput) (req
 //
 // Gets information the Amazon CloudWatch Internet Monitor has created and stored
 // about a health event for a specified monitor. This information includes the
-// impacted locations, and all of the information related to the event by location.
+// impacted locations, and all the information related to the event, by location.
 //
-// The information returned includes the performance, availability, and round-trip
-// time impact, information about the network providers, the event type, and
-// so on.
+// The information returned includes the impact on performance, availability,
+// and round-trip time, information about the network providers (ASNs), the
+// event type, and so on.
 //
 // Information rolled up at the global traffic level is also returned, including
 // the impact type and total traffic impact.
@@ -274,17 +276,18 @@ func (c *InternetMonitor) GetHealthEventRequest(input *GetHealthEventInput) (req
 // API operation GetHealthEvent for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An internal error occurred.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InternalServerException
+//     An internal error occurred.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ValidationException
-//   Invalid request.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     Invalid request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/GetHealthEvent
 func (c *InternetMonitor) GetHealthEvent(input *GetHealthEventInput) (*GetHealthEventOutput, error) {
@@ -324,14 +327,13 @@ const opGetMonitor = "GetMonitor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMonitorRequest method.
+//	req, resp := client.GetMonitorRequest(params)
 //
-//    // Example sending a request using the GetMonitorRequest method.
-//    req, resp := client.GetMonitorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/GetMonitor
 func (c *InternetMonitor) GetMonitorRequest(input *GetMonitorInput) (req *request.Request, output *GetMonitorOutput) {
@@ -365,17 +367,18 @@ func (c *InternetMonitor) GetMonitorRequest(input *GetMonitorInput) (req *reques
 // API operation GetMonitor for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An internal error occurred.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InternalServerException
+//     An internal error occurred.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ValidationException
-//   Invalid request.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     Invalid request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/GetMonitor
 func (c *InternetMonitor) GetMonitor(input *GetMonitorInput) (*GetMonitorOutput, error) {
@@ -399,6 +402,264 @@ func (c *InternetMonitor) GetMonitorWithContext(ctx aws.Context, input *GetMonit
 	return out, req.Send()
 }
 
+const opGetQueryResults = "GetQueryResults"
+
+// GetQueryResultsRequest generates a "aws/request.Request" representing the
+// client's request for the GetQueryResults operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetQueryResults for more information on using the GetQueryResults
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetQueryResultsRequest method.
+//	req, resp := client.GetQueryResultsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/GetQueryResults
+func (c *InternetMonitor) GetQueryResultsRequest(input *GetQueryResultsInput) (req *request.Request, output *GetQueryResultsOutput) {
+	op := &request.Operation{
+		Name:       opGetQueryResults,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v20210603/Monitors/{MonitorName}/Queries/{QueryId}/Results",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetQueryResultsInput{}
+	}
+
+	output = &GetQueryResultsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetQueryResults API operation for Amazon CloudWatch Internet Monitor.
+//
+// Return the data for a query with the Amazon CloudWatch Internet Monitor query
+// interface. Specify the query that you want to return results for by providing
+// a QueryId and a monitor name.
+//
+// For more information about using the query interface, including examples,
+// see Using the Amazon CloudWatch Internet Monitor query interface (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-view-cw-tools-cwim-query.html)
+// in the Amazon CloudWatch Internet Monitor User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Internet Monitor's
+// API operation GetQueryResults for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An internal error occurred.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - LimitExceededException
+//     The request exceeded a service quota.
+//
+//   - ValidationException
+//     Invalid request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/GetQueryResults
+func (c *InternetMonitor) GetQueryResults(input *GetQueryResultsInput) (*GetQueryResultsOutput, error) {
+	req, out := c.GetQueryResultsRequest(input)
+	return out, req.Send()
+}
+
+// GetQueryResultsWithContext is the same as GetQueryResults with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetQueryResults for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *InternetMonitor) GetQueryResultsWithContext(ctx aws.Context, input *GetQueryResultsInput, opts ...request.Option) (*GetQueryResultsOutput, error) {
+	req, out := c.GetQueryResultsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetQueryResultsPages iterates over the pages of a GetQueryResults operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetQueryResults method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a GetQueryResults operation.
+//	pageNum := 0
+//	err := client.GetQueryResultsPages(params,
+//	    func(page *internetmonitor.GetQueryResultsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *InternetMonitor) GetQueryResultsPages(input *GetQueryResultsInput, fn func(*GetQueryResultsOutput, bool) bool) error {
+	return c.GetQueryResultsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetQueryResultsPagesWithContext same as GetQueryResultsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *InternetMonitor) GetQueryResultsPagesWithContext(ctx aws.Context, input *GetQueryResultsInput, fn func(*GetQueryResultsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetQueryResultsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetQueryResultsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetQueryResultsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opGetQueryStatus = "GetQueryStatus"
+
+// GetQueryStatusRequest generates a "aws/request.Request" representing the
+// client's request for the GetQueryStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetQueryStatus for more information on using the GetQueryStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetQueryStatusRequest method.
+//	req, resp := client.GetQueryStatusRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/GetQueryStatus
+func (c *InternetMonitor) GetQueryStatusRequest(input *GetQueryStatusInput) (req *request.Request, output *GetQueryStatusOutput) {
+	op := &request.Operation{
+		Name:       opGetQueryStatus,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v20210603/Monitors/{MonitorName}/Queries/{QueryId}/Status",
+	}
+
+	if input == nil {
+		input = &GetQueryStatusInput{}
+	}
+
+	output = &GetQueryStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetQueryStatus API operation for Amazon CloudWatch Internet Monitor.
+//
+// Returns the current status of a query for the Amazon CloudWatch Internet
+// Monitor query interface, for a specified query ID and monitor. When you run
+// a query, check the status to make sure that the query has SUCCEEDED before
+// you review the results.
+//
+//   - QUEUED: The query is scheduled to run.
+//
+//   - RUNNING: The query is in progress but not complete.
+//
+//   - SUCCEEDED: The query completed sucessfully.
+//
+//   - FAILED: The query failed due to an error.
+//
+//   - CANCELED: The query was canceled.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Internet Monitor's
+// API operation GetQueryStatus for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An internal error occurred.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - LimitExceededException
+//     The request exceeded a service quota.
+//
+//   - ValidationException
+//     Invalid request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/GetQueryStatus
+func (c *InternetMonitor) GetQueryStatus(input *GetQueryStatusInput) (*GetQueryStatusOutput, error) {
+	req, out := c.GetQueryStatusRequest(input)
+	return out, req.Send()
+}
+
+// GetQueryStatusWithContext is the same as GetQueryStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetQueryStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *InternetMonitor) GetQueryStatusWithContext(ctx aws.Context, input *GetQueryStatusInput, opts ...request.Option) (*GetQueryStatusOutput, error) {
+	req, out := c.GetQueryStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListHealthEvents = "ListHealthEvents"
 
 // ListHealthEventsRequest generates a "aws/request.Request" representing the
@@ -415,14 +676,13 @@ const opListHealthEvents = "ListHealthEvents"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListHealthEventsRequest method.
+//	req, resp := client.ListHealthEventsRequest(params)
 //
-//    // Example sending a request using the ListHealthEventsRequest method.
-//    req, resp := client.ListHealthEventsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/ListHealthEvents
 func (c *InternetMonitor) ListHealthEventsRequest(input *ListHealthEventsInput) (req *request.Request, output *ListHealthEventsOutput) {
@@ -450,9 +710,8 @@ func (c *InternetMonitor) ListHealthEventsRequest(input *ListHealthEventsInput) 
 // ListHealthEvents API operation for Amazon CloudWatch Internet Monitor.
 //
 // Lists all health events for a monitor in Amazon CloudWatch Internet Monitor.
-// Returns all information for health events including the client location information
-// the network cause and status, event start and end time, percentage of total
-// traffic impacted, and status.
+// Returns information for health events including the event start and end time
+// and the status.
 //
 // Health events that have start times during the time frame that is requested
 // are not included in the list of health events.
@@ -465,17 +724,18 @@ func (c *InternetMonitor) ListHealthEventsRequest(input *ListHealthEventsInput) 
 // API operation ListHealthEvents for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An internal error occurred.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InternalServerException
+//     An internal error occurred.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ValidationException
-//   Invalid request.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     Invalid request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/ListHealthEvents
 func (c *InternetMonitor) ListHealthEvents(input *ListHealthEventsInput) (*ListHealthEventsOutput, error) {
@@ -507,15 +767,14 @@ func (c *InternetMonitor) ListHealthEventsWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListHealthEvents operation.
-//    pageNum := 0
-//    err := client.ListHealthEventsPages(params,
-//        func(page *internetmonitor.ListHealthEventsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListHealthEvents operation.
+//	pageNum := 0
+//	err := client.ListHealthEventsPages(params,
+//	    func(page *internetmonitor.ListHealthEventsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *InternetMonitor) ListHealthEventsPages(input *ListHealthEventsInput, fn func(*ListHealthEventsOutput, bool) bool) error {
 	return c.ListHealthEventsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -567,14 +826,13 @@ const opListMonitors = "ListMonitors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMonitorsRequest method.
+//	req, resp := client.ListMonitorsRequest(params)
 //
-//    // Example sending a request using the ListMonitorsRequest method.
-//    req, resp := client.ListMonitorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/ListMonitors
 func (c *InternetMonitor) ListMonitorsRequest(input *ListMonitorsInput) (req *request.Request, output *ListMonitorsOutput) {
@@ -612,17 +870,18 @@ func (c *InternetMonitor) ListMonitorsRequest(input *ListMonitorsInput) (req *re
 // API operation ListMonitors for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An internal error occurred.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InternalServerException
+//     An internal error occurred.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ValidationException
-//   Invalid request.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     Invalid request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/ListMonitors
 func (c *InternetMonitor) ListMonitors(input *ListMonitorsInput) (*ListMonitorsOutput, error) {
@@ -654,15 +913,14 @@ func (c *InternetMonitor) ListMonitorsWithContext(ctx aws.Context, input *ListMo
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMonitors operation.
-//    pageNum := 0
-//    err := client.ListMonitorsPages(params,
-//        func(page *internetmonitor.ListMonitorsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMonitors operation.
+//	pageNum := 0
+//	err := client.ListMonitorsPages(params,
+//	    func(page *internetmonitor.ListMonitorsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *InternetMonitor) ListMonitorsPages(input *ListMonitorsInput, fn func(*ListMonitorsOutput, bool) bool) error {
 	return c.ListMonitorsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -714,14 +972,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/ListTagsForResource
 func (c *InternetMonitor) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -753,20 +1010,21 @@ func (c *InternetMonitor) ListTagsForResourceRequest(input *ListTagsForResourceI
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * TooManyRequestsException
-//   There were too many requests.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - TooManyRequestsException
+//     There were too many requests.
 //
-//   * NotFoundException
-//   The request specifies something that doesn't exist.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * BadRequestException
-//   A bad request was received.
+//   - NotFoundException
+//     The request specifies something that doesn't exist.
 //
-//   * InternalServerErrorException
-//   There was an internal server error.
+//   - BadRequestException
+//     A bad request was received.
+//
+//   - InternalServerErrorException
+//     There was an internal server error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/ListTagsForResource
 func (c *InternetMonitor) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -790,6 +1048,196 @@ func (c *InternetMonitor) ListTagsForResourceWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opStartQuery = "StartQuery"
+
+// StartQueryRequest generates a "aws/request.Request" representing the
+// client's request for the StartQuery operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartQuery for more information on using the StartQuery
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StartQueryRequest method.
+//	req, resp := client.StartQueryRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/StartQuery
+func (c *InternetMonitor) StartQueryRequest(input *StartQueryInput) (req *request.Request, output *StartQueryOutput) {
+	op := &request.Operation{
+		Name:       opStartQuery,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v20210603/Monitors/{MonitorName}/Queries",
+	}
+
+	if input == nil {
+		input = &StartQueryInput{}
+	}
+
+	output = &StartQueryOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartQuery API operation for Amazon CloudWatch Internet Monitor.
+//
+// Start a query to return data for a specific query type for the Amazon CloudWatch
+// Internet Monitor query interface. Specify a time period for the data that
+// you want returned by using StartTime and EndTime. You filter the query results
+// to return by providing parameters that you specify with FilterParameters.
+//
+// For more information about using the query interface, including examples,
+// see Using the Amazon CloudWatch Internet Monitor query interface (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-view-cw-tools-cwim-query.html)
+// in the Amazon CloudWatch Internet Monitor User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Internet Monitor's
+// API operation StartQuery for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An internal error occurred.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - LimitExceededException
+//     The request exceeded a service quota.
+//
+//   - ValidationException
+//     Invalid request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/StartQuery
+func (c *InternetMonitor) StartQuery(input *StartQueryInput) (*StartQueryOutput, error) {
+	req, out := c.StartQueryRequest(input)
+	return out, req.Send()
+}
+
+// StartQueryWithContext is the same as StartQuery with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartQuery for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *InternetMonitor) StartQueryWithContext(ctx aws.Context, input *StartQueryInput, opts ...request.Option) (*StartQueryOutput, error) {
+	req, out := c.StartQueryRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStopQuery = "StopQuery"
+
+// StopQueryRequest generates a "aws/request.Request" representing the
+// client's request for the StopQuery operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopQuery for more information on using the StopQuery
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StopQueryRequest method.
+//	req, resp := client.StopQueryRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/StopQuery
+func (c *InternetMonitor) StopQueryRequest(input *StopQueryInput) (req *request.Request, output *StopQueryOutput) {
+	op := &request.Operation{
+		Name:       opStopQuery,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v20210603/Monitors/{MonitorName}/Queries/{QueryId}",
+	}
+
+	if input == nil {
+		input = &StopQueryInput{}
+	}
+
+	output = &StopQueryOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StopQuery API operation for Amazon CloudWatch Internet Monitor.
+//
+// Stop a query that is progress for a specific monitor.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Internet Monitor's
+// API operation StopQuery for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An internal error occurred.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - LimitExceededException
+//     The request exceeded a service quota.
+//
+//   - ValidationException
+//     Invalid request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/StopQuery
+func (c *InternetMonitor) StopQuery(input *StopQueryInput) (*StopQueryOutput, error) {
+	req, out := c.StopQueryRequest(input)
+	return out, req.Send()
+}
+
+// StopQueryWithContext is the same as StopQuery with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopQuery for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *InternetMonitor) StopQueryWithContext(ctx aws.Context, input *StopQueryInput, opts ...request.Option) (*StopQueryOutput, error) {
+	req, out := c.StopQueryRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opTagResource = "TagResource"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
@@ -806,14 +1254,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/TagResource
 func (c *InternetMonitor) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -850,20 +1297,21 @@ func (c *InternetMonitor) TagResourceRequest(input *TagResourceInput) (req *requ
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * TooManyRequestsException
-//   There were too many requests.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - TooManyRequestsException
+//     There were too many requests.
 //
-//   * NotFoundException
-//   The request specifies something that doesn't exist.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * BadRequestException
-//   A bad request was received.
+//   - NotFoundException
+//     The request specifies something that doesn't exist.
 //
-//   * InternalServerErrorException
-//   There was an internal server error.
+//   - BadRequestException
+//     A bad request was received.
+//
+//   - InternalServerErrorException
+//     There was an internal server error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/TagResource
 func (c *InternetMonitor) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -903,14 +1351,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/UntagResource
 func (c *InternetMonitor) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -942,20 +1389,21 @@ func (c *InternetMonitor) UntagResourceRequest(input *UntagResourceInput) (req *
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * TooManyRequestsException
-//   There were too many requests.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - TooManyRequestsException
+//     There were too many requests.
 //
-//   * NotFoundException
-//   The request specifies something that doesn't exist.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * BadRequestException
-//   A bad request was received.
+//   - NotFoundException
+//     The request specifies something that doesn't exist.
 //
-//   * InternalServerErrorException
-//   There was an internal server error.
+//   - BadRequestException
+//     A bad request was received.
+//
+//   - InternalServerErrorException
+//     There was an internal server error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/UntagResource
 func (c *InternetMonitor) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -995,14 +1443,13 @@ const opUpdateMonitor = "UpdateMonitor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateMonitorRequest method.
+//	req, resp := client.UpdateMonitorRequest(params)
 //
-//    // Example sending a request using the UpdateMonitorRequest method.
-//    req, resp := client.UpdateMonitorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/UpdateMonitor
 func (c *InternetMonitor) UpdateMonitorRequest(input *UpdateMonitorInput) (req *request.Request, output *UpdateMonitorOutput) {
@@ -1023,10 +1470,10 @@ func (c *InternetMonitor) UpdateMonitorRequest(input *UpdateMonitorInput) (req *
 
 // UpdateMonitor API operation for Amazon CloudWatch Internet Monitor.
 //
-// Updates a monitor. You can update a monitor to change the maximum number
-// of city-networks (locations and ASNs or internet service providers), to add
-// or remove resources, or to change the status of the monitor. Note that you
-// can't change the name of a monitor.
+// Updates a monitor. You can update a monitor to change the percentage of traffic
+// to monitor or the maximum number of city-networks (locations and ASNs), to
+// add or remove resources, or to change the status of the monitor. Note that
+// you can't change the name of a monitor.
 //
 // The city-network maximum that you choose is the limit, but you only pay for
 // the number of city-networks that are actually monitored. For more information,
@@ -1041,23 +1488,24 @@ func (c *InternetMonitor) UpdateMonitorRequest(input *UpdateMonitorInput) (req *
 // API operation UpdateMonitor for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An internal error occurred.
 //
-//   * ResourceNotFoundException
-//   The request specifies a resource that doesn't exist.
+//   - InternalServerException
+//     An internal error occurred.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ResourceNotFoundException
+//     The request specifies a resource that doesn't exist.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * LimitExceededException
-//   The request exceeded a service quota.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   Invalid request.
+//   - LimitExceededException
+//     The request exceeded a service quota.
+//
+//   - ValidationException
+//     Invalid request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/internetmonitor-2021-06-03/UpdateMonitor
 func (c *InternetMonitor) UpdateMonitor(input *UpdateMonitorInput) (*UpdateMonitorOutput, error) {
@@ -1145,15 +1593,16 @@ func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Measurements about the availability for your application on the internet,
-// calculated by Amazon CloudWatch Internet Monitor. Amazon Web Services has
-// substantial historical data about internet performance and availability between
-// Amazon Web Services services and different network providers and geographies.
-// By applying statistical analysis to the data, Internet Monitor can detect
-// when the performance and availability for your application has dropped, compared
-// to an estimated baseline that's already calculated. To make it easier to
-// see those drops, we report that information to you in the form of health
-// scores: a performance score and an availability score.
+// Amazon CloudWatch Internet Monitor calculates measurements about the availability
+// for your application's internet traffic between client locations and Amazon
+// Web Services. Amazon Web Services has substantial historical data about internet
+// performance and availability between Amazon Web Services services and different
+// network providers and geographies. By applying statistical analysis to the
+// data, Internet Monitor can detect when the performance and availability for
+// your application has dropped, compared to an estimated baseline that's already
+// calculated. To make it easier to see those drops, we report that information
+// to you in the form of health scores: a performance score and an availability
+// score.
 //
 // Availability in Internet Monitor represents the estimated percentage of traffic
 // that is not seeing an availability drop. For example, an availability score
@@ -1191,10 +1640,14 @@ type AvailabilityMeasurement struct {
 	// User Guide.
 	PercentOfClientLocationImpacted *float64 `type:"double"`
 
-	// The percentage of impact caused by a health event for total traffic globally.
+	// The impact on total traffic that a health event has, in increased latency
+	// or reduced availability. This is the percentage of how much latency has increased
+	// or availability has decreased during the event, compared to what is typical
+	// for traffic from this client location to the Amazon Web Services location
+	// using this client network.
 	//
-	// For information about how Internet Monitor calculates impact, see Inside
-	// Internet Monitor (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-inside-internet-monitor.html)
+	// For information about how Internet Monitor calculates impact, see How Internet
+	// Monitor works (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-inside-internet-monitor.html)
 	// in the Amazon CloudWatch Internet Monitor section of the Amazon CloudWatch
 	// User Guide.
 	PercentOfTotalTrafficImpacted *float64 `type:"double"`
@@ -1372,14 +1825,27 @@ type CreateMonitorInput struct {
 	// other API requests.
 	ClientToken *string `type:"string" idempotencyToken:"true"`
 
+	// Defines the threshold percentages and other configuration information for
+	// when Amazon CloudWatch Internet Monitor creates a health event. Internet
+	// Monitor creates a health event when an internet issue that affects your application
+	// end users has a health score percentage that is at or below a specific threshold,
+	// and, sometimes, when other criteria are met.
+	//
+	// If you don't set a health event threshold, the default value is 95%.
+	//
+	// For more information, see Change health event thresholds (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-overview.html#IMUpdateThresholdFromOverview)
+	// in the Internet Monitor section of the CloudWatch User Guide.
+	HealthEventsConfig *HealthEventsConfig `type:"structure"`
+
 	// Publish internet measurements for Internet Monitor to an Amazon S3 bucket
 	// in addition to CloudWatch Logs.
 	InternetMeasurementsLogDelivery *InternetMeasurementsLogDelivery `type:"structure"`
 
 	// The maximum number of city-networks to monitor for your resources. A city-network
 	// is the location (city) where clients access your application resources from
-	// and the network or ASN, such as an internet service provider (ISP), that
-	// clients access the resources through. This limit helps control billing costs.
+	// and the ASN or network provider, such as an internet service provider (ISP),
+	// that clients access the resources through. Setting this limit can help control
+	// billing costs.
 	//
 	// To learn more, see Choosing a city-network maximum value (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/IMCityNetworksMaximum.html)
 	// in the Amazon CloudWatch Internet Monitor section of the CloudWatch User
@@ -1392,21 +1858,28 @@ type CreateMonitorInput struct {
 	MonitorName *string `min:"1" type:"string" required:"true"`
 
 	// The resources to include in a monitor, which you provide as a set of Amazon
-	// Resource Names (ARNs).
+	// Resource Names (ARNs). Resources can be VPCs, NLBs, Amazon CloudFront distributions,
+	// or Amazon WorkSpaces directories.
 	//
-	// You can add a combination of Amazon Virtual Private Clouds (VPCs) and Amazon
-	// CloudFront distributions, or you can add Amazon WorkSpaces directories. You
-	// can't add all three types of resources.
+	// You can add a combination of VPCs and CloudFront distributions, or you can
+	// add WorkSpaces directories, or you can add NLBs. You can't add NLBs or WorkSpaces
+	// directories together with any other resources.
 	//
-	// If you add only VPC resources, at least one VPC must have an Internet Gateway
-	// attached to it, to make sure that it has internet connectivity.
+	// If you add only Amazon VPC resources, at least one VPC must have an Internet
+	// Gateway attached to it, to make sure that it has internet connectivity.
 	Resources []*string `type:"list"`
 
 	// The tags for a monitor. You can add a maximum of 50 tags in Internet Monitor.
 	Tags map[string]*string `type:"map"`
 
 	// The percentage of the internet-facing traffic for your application that you
-	// want to monitor with this monitor.
+	// want to monitor with this monitor. If you set a city-networks maximum, that
+	// limit overrides the traffic percentage that you set.
+	//
+	// To learn more, see Choosing an application traffic percentage to monitor
+	// (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/IMTrafficPercentage.html)
+	// in the Amazon CloudWatch Internet Monitor section of the CloudWatch User
+	// Guide.
 	TrafficPercentageToMonitor *int64 `min:"1" type:"integer"`
 }
 
@@ -1458,6 +1931,12 @@ func (s *CreateMonitorInput) Validate() error {
 // SetClientToken sets the ClientToken field's value.
 func (s *CreateMonitorInput) SetClientToken(v string) *CreateMonitorInput {
 	s.ClientToken = &v
+	return s
+}
+
+// SetHealthEventsConfig sets the HealthEventsConfig field's value.
+func (s *CreateMonitorInput) SetHealthEventsConfig(v *HealthEventsConfig) *CreateMonitorInput {
+	s.HealthEventsConfig = v
 	return s
 }
 
@@ -1612,15 +2091,89 @@ func (s DeleteMonitorOutput) GoString() string {
 	return s.String()
 }
 
+// A filter that you use with the results of a Amazon CloudWatch Internet Monitor
+// query that you created and ran. The query sets up a repository of data that
+// is a subset of your application's Internet Monitor data. FilterParameter
+// is a string that defines how you want to filter the repository of data to
+// return a set of results, based on your criteria.
+//
+// The filter parameters that you can specify depend on the query type that
+// you used to create the repository, since each query type returns a different
+// set of Internet Monitor data.
+//
+// For each filter, you specify a field (such as city), an operator (such as
+// not_equals, and a value or array of values (such as ["Seattle", "Redmond"]).
+// Separate values in the array with commas.
+//
+// For more information about specifying filter parameters, see Using the Amazon
+// CloudWatch Internet Monitor query interface (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-view-cw-tools-cwim-query.html)
+// in the Amazon CloudWatch Internet Monitor User Guide.
+type FilterParameter struct {
+	_ struct{} `type:"structure"`
+
+	// A data field that you want to filter, to further scope your application's
+	// Internet Monitor data in a repository that you created by running a query.
+	// A field might be city, for example. The field must be one of the fields that
+	// was returned by the specific query that you used to create the repository.
+	Field *string `type:"string"`
+
+	// The operator to use with the filter field and a value, such as not_equals.
+	Operator *string `type:"string" enum:"Operator"`
+
+	// One or more values to be used, together with the specified operator, to filter
+	// data for a query. For example, you could specify an array of values such
+	// as ["Seattle", "Redmond"]. Values in the array are separated by commas.
+	Values []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterParameter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FilterParameter) GoString() string {
+	return s.String()
+}
+
+// SetField sets the Field field's value.
+func (s *FilterParameter) SetField(v string) *FilterParameter {
+	s.Field = &v
+	return s
+}
+
+// SetOperator sets the Operator field's value.
+func (s *FilterParameter) SetOperator(v string) *FilterParameter {
+	s.Operator = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *FilterParameter) SetValues(v []*string) *FilterParameter {
+	s.Values = v
+	return s
+}
+
 type GetHealthEventInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The internally generated identifier of a health event. Because EventID contains
+	// The internally-generated identifier of a health event. Because EventID contains
 	// the forward slash (“/”) character, you must URL-encode the EventID field
 	// in the request URL.
 	//
 	// EventId is a required field
 	EventId *string `location:"uri" locationName:"EventId" min:"1" type:"string" required:"true"`
+
+	// TBD
+	LinkedAccountId *string `location:"querystring" locationName:"LinkedAccountId" min:"12" type:"string"`
 
 	// The name of the monitor.
 	//
@@ -1655,6 +2208,9 @@ func (s *GetHealthEventInput) Validate() error {
 	if s.EventId != nil && len(*s.EventId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("EventId", 1))
 	}
+	if s.LinkedAccountId != nil && len(*s.LinkedAccountId) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("LinkedAccountId", 12))
+	}
 	if s.MonitorName == nil {
 		invalidParams.Add(request.NewErrParamRequired("MonitorName"))
 	}
@@ -1671,6 +2227,12 @@ func (s *GetHealthEventInput) Validate() error {
 // SetEventId sets the EventId field's value.
 func (s *GetHealthEventInput) SetEventId(v string) *GetHealthEventInput {
 	s.EventId = &v
+	return s
+}
+
+// SetLinkedAccountId sets the LinkedAccountId field's value.
+func (s *GetHealthEventInput) SetLinkedAccountId(v string) *GetHealthEventInput {
+	s.LinkedAccountId = &v
 	return s
 }
 
@@ -1695,10 +2257,15 @@ type GetHealthEventOutput struct {
 	// EventArn is a required field
 	EventArn *string `min:"20" type:"string" required:"true"`
 
-	// The internally generated identifier of a health event.
+	// The internally-generated identifier of a health event.
 	//
 	// EventId is a required field
 	EventId *string `min:"1" type:"string" required:"true"`
+
+	// The threshold percentage for a health score that determines, along with other
+	// configuration information, when Internet Monitor creates a health event when
+	// there's an internet issue that affects your application end users.
+	HealthScoreThreshold *float64 `type:"double"`
 
 	// The type of impairment of a specific health event.
 	//
@@ -1715,7 +2282,11 @@ type GetHealthEventOutput struct {
 	// LastUpdatedAt is a required field
 	LastUpdatedAt *time.Time `type:"timestamp" timestampFormat:"iso8601" required:"true"`
 
-	// The impact on total traffic that a health event has.
+	// The impact on total traffic that a health event has, in increased latency
+	// or reduced availability. This is the percentage of how much latency has increased
+	// or availability has decreased during the event, compared to what is typical
+	// for traffic from this client location to the Amazon Web Services location
+	// using this client network.
 	PercentOfTotalTrafficImpacted *float64 `type:"double"`
 
 	// The time when a health event started.
@@ -1771,6 +2342,12 @@ func (s *GetHealthEventOutput) SetEventId(v string) *GetHealthEventOutput {
 	return s
 }
 
+// SetHealthScoreThreshold sets the HealthScoreThreshold field's value.
+func (s *GetHealthEventOutput) SetHealthScoreThreshold(v float64) *GetHealthEventOutput {
+	s.HealthScoreThreshold = &v
+	return s
+}
+
 // SetImpactType sets the ImpactType field's value.
 func (s *GetHealthEventOutput) SetImpactType(v string) *GetHealthEventOutput {
 	s.ImpactType = &v
@@ -1810,6 +2387,9 @@ func (s *GetHealthEventOutput) SetStatus(v string) *GetHealthEventOutput {
 type GetMonitorInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
+	// TBD
+	LinkedAccountId *string `location:"querystring" locationName:"LinkedAccountId" min:"12" type:"string"`
+
 	// The name of the monitor.
 	//
 	// MonitorName is a required field
@@ -1837,6 +2417,9 @@ func (s GetMonitorInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *GetMonitorInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetMonitorInput"}
+	if s.LinkedAccountId != nil && len(*s.LinkedAccountId) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("LinkedAccountId", 12))
+	}
 	if s.MonitorName == nil {
 		invalidParams.Add(request.NewErrParamRequired("MonitorName"))
 	}
@@ -1848,6 +2431,12 @@ func (s *GetMonitorInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetLinkedAccountId sets the LinkedAccountId field's value.
+func (s *GetMonitorInput) SetLinkedAccountId(v string) *GetMonitorInput {
+	s.LinkedAccountId = &v
+	return s
 }
 
 // SetMonitorName sets the MonitorName field's value.
@@ -1864,6 +2453,15 @@ type GetMonitorOutput struct {
 	// CreatedAt is a required field
 	CreatedAt *time.Time `type:"timestamp" timestampFormat:"iso8601" required:"true"`
 
+	// The list of health event threshold configurations. The threshold percentage
+	// for a health score determines, along with other configuration information,
+	// when Internet Monitor creates a health event when there's an internet issue
+	// that affects your application end users.
+	//
+	// For more information, see Change health event thresholds (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-overview.html#IMUpdateThresholdFromOverview)
+	// in the Internet Monitor section of the CloudWatch User Guide.
+	HealthEventsConfig *HealthEventsConfig `type:"structure"`
+
 	// Publish internet measurements for Internet Monitor to another location, such
 	// as an Amazon S3 bucket. The measurements are also published to Amazon CloudWatch
 	// Logs.
@@ -1871,8 +2469,9 @@ type GetMonitorOutput struct {
 
 	// The maximum number of city-networks to monitor for your resources. A city-network
 	// is the location (city) where clients access your application resources from
-	// and the network or ASN, such as an internet service provider (ISP), that
-	// clients access the resources through. This limit helps control billing costs.
+	// and the ASN or network provider, such as an internet service provider (ISP),
+	// that clients access the resources through. This limit can help control billing
+	// costs.
 	//
 	// To learn more, see Choosing a city-network maximum value (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/IMCityNetworksMaximum.html)
 	// in the Amazon CloudWatch Internet Monitor section of the CloudWatch User
@@ -1900,8 +2499,8 @@ type GetMonitorOutput struct {
 	// Additional information about the health of the data processing for the monitor.
 	ProcessingStatusInfo *string `type:"string"`
 
-	// The resources that have been added for the monitor. Resources are listed
-	// by their Amazon Resource Names (ARNs).
+	// The resources monitored by the monitor. Resources are listed by their Amazon
+	// Resource Names (ARNs).
 	//
 	// Resources is a required field
 	Resources []*string `type:"list" required:"true"`
@@ -1914,8 +2513,14 @@ type GetMonitorOutput struct {
 	// The tags that have been added to monitor.
 	Tags map[string]*string `type:"map"`
 
-	// The percentage of the internet-facing traffic for your application that you
-	// want to monitor with this monitor.
+	// The percentage of the internet-facing traffic for your application to monitor
+	// with this monitor. If you set a city-networks maximum, that limit overrides
+	// the traffic percentage that you set.
+	//
+	// To learn more, see Choosing an application traffic percentage to monitor
+	// (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/IMTrafficPercentage.html)
+	// in the Amazon CloudWatch Internet Monitor section of the CloudWatch User
+	// Guide.
 	TrafficPercentageToMonitor *int64 `min:"1" type:"integer"`
 }
 
@@ -1940,6 +2545,12 @@ func (s GetMonitorOutput) GoString() string {
 // SetCreatedAt sets the CreatedAt field's value.
 func (s *GetMonitorOutput) SetCreatedAt(v time.Time) *GetMonitorOutput {
 	s.CreatedAt = &v
+	return s
+}
+
+// SetHealthEventsConfig sets the HealthEventsConfig field's value.
+func (s *GetMonitorOutput) SetHealthEventsConfig(v *HealthEventsConfig) *GetMonitorOutput {
+	s.HealthEventsConfig = v
 	return s
 }
 
@@ -2009,6 +2620,253 @@ func (s *GetMonitorOutput) SetTrafficPercentageToMonitor(v int64) *GetMonitorOut
 	return s
 }
 
+type GetQueryResultsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The number of query results that you want to return with this call.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The name of the monitor to return data for.
+	//
+	// MonitorName is a required field
+	MonitorName *string `location:"uri" locationName:"MonitorName" min:"1" type:"string" required:"true"`
+
+	// The token for the next set of results. You receive this token from a previous
+	// call.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// The ID of the query that you want to return data results for. A QueryId is
+	// an internally-generated identifier for a specific query.
+	//
+	// QueryId is a required field
+	QueryId *string `location:"uri" locationName:"QueryId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQueryResultsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQueryResultsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetQueryResultsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetQueryResultsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.MonitorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("MonitorName"))
+	}
+	if s.MonitorName != nil && len(*s.MonitorName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MonitorName", 1))
+	}
+	if s.QueryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryId"))
+	}
+	if s.QueryId != nil && len(*s.QueryId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetQueryResultsInput) SetMaxResults(v int64) *GetQueryResultsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetMonitorName sets the MonitorName field's value.
+func (s *GetQueryResultsInput) SetMonitorName(v string) *GetQueryResultsInput {
+	s.MonitorName = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetQueryResultsInput) SetNextToken(v string) *GetQueryResultsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetQueryId sets the QueryId field's value.
+func (s *GetQueryResultsInput) SetQueryId(v string) *GetQueryResultsInput {
+	s.QueryId = &v
+	return s
+}
+
+type GetQueryResultsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The data results that the query returns. Data is returned in arrays, aligned
+	// with the Fields for the query, which creates a repository of Amazon CloudWatch
+	// Internet Monitor information for your application. Then, you can filter the
+	// information in the repository by using FilterParameters that you define.
+	//
+	// Data is a required field
+	Data [][]*string `type:"list" required:"true"`
+
+	// The fields that the query returns data for. Fields are name-data type pairs,
+	// such as availability_score-float.
+	//
+	// Fields is a required field
+	Fields []*QueryField `type:"list" required:"true"`
+
+	// The token for the next set of results. You receive this token from a previous
+	// call.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQueryResultsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQueryResultsOutput) GoString() string {
+	return s.String()
+}
+
+// SetData sets the Data field's value.
+func (s *GetQueryResultsOutput) SetData(v [][]*string) *GetQueryResultsOutput {
+	s.Data = v
+	return s
+}
+
+// SetFields sets the Fields field's value.
+func (s *GetQueryResultsOutput) SetFields(v []*QueryField) *GetQueryResultsOutput {
+	s.Fields = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetQueryResultsOutput) SetNextToken(v string) *GetQueryResultsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type GetQueryStatusInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name of the monitor.
+	//
+	// MonitorName is a required field
+	MonitorName *string `location:"uri" locationName:"MonitorName" min:"1" type:"string" required:"true"`
+
+	// The ID of the query that you want to return the status for. A QueryId is
+	// an internally-generated dentifier for a specific query.
+	//
+	// QueryId is a required field
+	QueryId *string `location:"uri" locationName:"QueryId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQueryStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQueryStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetQueryStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetQueryStatusInput"}
+	if s.MonitorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("MonitorName"))
+	}
+	if s.MonitorName != nil && len(*s.MonitorName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MonitorName", 1))
+	}
+	if s.QueryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryId"))
+	}
+	if s.QueryId != nil && len(*s.QueryId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMonitorName sets the MonitorName field's value.
+func (s *GetQueryStatusInput) SetMonitorName(v string) *GetQueryStatusInput {
+	s.MonitorName = &v
+	return s
+}
+
+// SetQueryId sets the QueryId field's value.
+func (s *GetQueryStatusInput) SetQueryId(v string) *GetQueryStatusInput {
+	s.QueryId = &v
+	return s
+}
+
+type GetQueryStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The current status for a query.
+	//
+	// Status is a required field
+	Status *string `type:"string" required:"true" enum:"QueryStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQueryStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetQueryStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetQueryStatusOutput) SetStatus(v string) *GetQueryStatusOutput {
+	s.Status = &v
+	return s
+}
+
 // Information about a health event created in a monitor in Amazon CloudWatch
 // Internet Monitor.
 type HealthEvent struct {
@@ -2026,11 +2884,16 @@ type HealthEvent struct {
 	// EventArn is a required field
 	EventArn *string `min:"20" type:"string" required:"true"`
 
-	// The internally generated identifier of a specific network traffic impairment
+	// The internally-generated identifier of a specific network traffic impairment
 	// health event.
 	//
 	// EventId is a required field
 	EventId *string `min:"1" type:"string" required:"true"`
+
+	// The value of the threshold percentage for performance or availability that
+	// was configured when Amazon CloudWatch Internet Monitor created the health
+	// event.
+	HealthScoreThreshold *float64 `type:"double"`
 
 	// The type of impairment for a health event.
 	//
@@ -2047,7 +2910,11 @@ type HealthEvent struct {
 	// LastUpdatedAt is a required field
 	LastUpdatedAt *time.Time `type:"timestamp" timestampFormat:"iso8601" required:"true"`
 
-	// The impact on global traffic monitored by this monitor for this health event.
+	// The impact on total traffic that a health event has, in increased latency
+	// or reduced availability. This is the percentage of how much latency has increased
+	// or availability has decreased during the event, compared to what is typical
+	// for traffic from this client location to the Amazon Web Services location
+	// using this client network.
 	PercentOfTotalTrafficImpacted *float64 `type:"double"`
 
 	// When a health event started.
@@ -2103,6 +2970,12 @@ func (s *HealthEvent) SetEventId(v string) *HealthEvent {
 	return s
 }
 
+// SetHealthScoreThreshold sets the HealthScoreThreshold field's value.
+func (s *HealthEvent) SetHealthScoreThreshold(v float64) *HealthEvent {
+	s.HealthScoreThreshold = &v
+	return s
+}
+
 // SetImpactType sets the ImpactType field's value.
 func (s *HealthEvent) SetImpactType(v string) *HealthEvent {
 	s.ImpactType = &v
@@ -2136,6 +3009,89 @@ func (s *HealthEvent) SetStartedAt(v time.Time) *HealthEvent {
 // SetStatus sets the Status field's value.
 func (s *HealthEvent) SetStatus(v string) *HealthEvent {
 	s.Status = &v
+	return s
+}
+
+// A complex type with the configuration information that determines the threshold
+// and other conditions for when Internet Monitor creates a health event for
+// an overall performance or availability issue, across an application's geographies.
+//
+// Defines the percentages, for overall performance scores and availability
+// scores for an application, that are the thresholds for when Amazon CloudWatch
+// Internet Monitor creates a health event. You can override the defaults to
+// set a custom threshold for overall performance or availability scores, or
+// both.
+//
+// You can also set thresholds for local health scores,, where Internet Monitor
+// creates a health event when scores cross a threshold for one or more city-networks,
+// in addition to creating an event when an overall score crosses a threshold.
+//
+// If you don't set a health event threshold, the default value is 95%.
+//
+// For local thresholds, you also set a minimum percentage of overall traffic
+// that is impacted by an issue before Internet Monitor creates an event. In
+// addition, you can disable local thresholds, for performance scores, availability
+// scores, or both.
+//
+// For more information, see Change health event thresholds (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-overview.html#IMUpdateThresholdFromOverview)
+// in the Internet Monitor section of the CloudWatch User Guide.
+type HealthEventsConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The configuration that determines the threshold and other conditions for
+	// when Internet Monitor creates a health event for a local availability issue.
+	AvailabilityLocalHealthEventsConfig *LocalHealthEventsConfig `type:"structure"`
+
+	// The health event threshold percentage set for availability scores.
+	AvailabilityScoreThreshold *float64 `type:"double"`
+
+	// The configuration that determines the threshold and other conditions for
+	// when Internet Monitor creates a health event for a local performance issue.
+	PerformanceLocalHealthEventsConfig *LocalHealthEventsConfig `type:"structure"`
+
+	// The health event threshold percentage set for performance scores.
+	PerformanceScoreThreshold *float64 `type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HealthEventsConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s HealthEventsConfig) GoString() string {
+	return s.String()
+}
+
+// SetAvailabilityLocalHealthEventsConfig sets the AvailabilityLocalHealthEventsConfig field's value.
+func (s *HealthEventsConfig) SetAvailabilityLocalHealthEventsConfig(v *LocalHealthEventsConfig) *HealthEventsConfig {
+	s.AvailabilityLocalHealthEventsConfig = v
+	return s
+}
+
+// SetAvailabilityScoreThreshold sets the AvailabilityScoreThreshold field's value.
+func (s *HealthEventsConfig) SetAvailabilityScoreThreshold(v float64) *HealthEventsConfig {
+	s.AvailabilityScoreThreshold = &v
+	return s
+}
+
+// SetPerformanceLocalHealthEventsConfig sets the PerformanceLocalHealthEventsConfig field's value.
+func (s *HealthEventsConfig) SetPerformanceLocalHealthEventsConfig(v *LocalHealthEventsConfig) *HealthEventsConfig {
+	s.PerformanceLocalHealthEventsConfig = v
+	return s
+}
+
+// SetPerformanceScoreThreshold sets the PerformanceScoreThreshold field's value.
+func (s *HealthEventsConfig) SetPerformanceScoreThreshold(v float64) *HealthEventsConfig {
+	s.PerformanceScoreThreshold = &v
 	return s
 }
 
@@ -2178,6 +3134,10 @@ type ImpactedLocation struct {
 
 	// The calculated health at a specific location.
 	InternetHealth *InternetHealth `type:"structure"`
+
+	// The IPv4 prefixes at the client location that was impacted by the health
+	// event.
+	Ipv4Prefixes []*string `type:"list"`
 
 	// The latitude where the health event is located.
 	Latitude *float64 `type:"double"`
@@ -2269,6 +3229,12 @@ func (s *ImpactedLocation) SetCountryCode(v string) *ImpactedLocation {
 // SetInternetHealth sets the InternetHealth field's value.
 func (s *ImpactedLocation) SetInternetHealth(v *InternetHealth) *ImpactedLocation {
 	s.InternetHealth = v
+	return s
+}
+
+// SetIpv4Prefixes sets the Ipv4Prefixes field's value.
+func (s *ImpactedLocation) SetIpv4Prefixes(v []*string) *ImpactedLocation {
+	s.Ipv4Prefixes = v
 	return s
 }
 
@@ -2449,9 +3415,9 @@ func (s *InternalServerException) RequestID() string {
 // network providers and geographies. By applying statistical analysis to the
 // data, Internet Monitor can detect when the performance and availability for
 // your application has dropped, compared to an estimated baseline that's already
-// calculated. To make it easier to see those drops, we report that information
-// to you in the form of health scores: a performance score and an availability
-// score.
+// calculated. To make it easier to see those drops, Internet Monitor reports
+// the information to you in the form of health scores: a performance score
+// and an availability score.
 type InternetHealth struct {
 	_ struct{} `type:"structure"`
 
@@ -2634,6 +3600,9 @@ type ListHealthEventsInput struct {
 	// The status of a health event.
 	EventStatus *string `location:"querystring" locationName:"EventStatus" type:"string" enum:"HealthEventStatus"`
 
+	// TBD
+	LinkedAccountId *string `location:"querystring" locationName:"LinkedAccountId" min:"12" type:"string"`
+
 	// The number of health event objects that you want to return with this call.
 	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
 
@@ -2671,6 +3640,9 @@ func (s ListHealthEventsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListHealthEventsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListHealthEventsInput"}
+	if s.LinkedAccountId != nil && len(*s.LinkedAccountId) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("LinkedAccountId", 12))
+	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
@@ -2696,6 +3668,12 @@ func (s *ListHealthEventsInput) SetEndTime(v time.Time) *ListHealthEventsInput {
 // SetEventStatus sets the EventStatus field's value.
 func (s *ListHealthEventsInput) SetEventStatus(v string) *ListHealthEventsInput {
 	s.EventStatus = &v
+	return s
+}
+
+// SetLinkedAccountId sets the LinkedAccountId field's value.
+func (s *ListHealthEventsInput) SetLinkedAccountId(v string) *ListHealthEventsInput {
+	s.LinkedAccountId = &v
 	return s
 }
 
@@ -2769,6 +3747,9 @@ func (s *ListHealthEventsOutput) SetNextToken(v string) *ListHealthEventsOutput 
 type ListMonitorsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
+	// TBD
+	IncludeLinkedAccounts *bool `location:"querystring" locationName:"IncludeLinkedAccounts" type:"boolean"`
+
 	// The number of monitor objects that you want to return with this call.
 	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
 
@@ -2812,6 +3793,12 @@ func (s *ListMonitorsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetIncludeLinkedAccounts sets the IncludeLinkedAccounts field's value.
+func (s *ListMonitorsInput) SetIncludeLinkedAccounts(v bool) *ListMonitorsInput {
+	s.IncludeLinkedAccounts = &v
+	return s
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -2952,6 +3939,78 @@ func (s ListTagsForResourceOutput) GoString() string {
 // SetTags sets the Tags field's value.
 func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForResourceOutput {
 	s.Tags = v
+	return s
+}
+
+// A complex type with the configuration information that determines the threshold
+// and other conditions for when Internet Monitor creates a health event for
+// a local performance or availability issue, when scores cross a threshold
+// for one or more city-networks.
+//
+// Defines the percentages, for performance scores or availability scores, that
+// are the local thresholds for when Amazon CloudWatch Internet Monitor creates
+// a health event. Also defines whether a local threshold is enabled or disabled,
+// and the minimum percentage of overall traffic that must be impacted by an
+// issue before Internet Monitor creates an event when a threshold is crossed
+// for a local health score.
+//
+// If you don't set a local health event threshold, the default value is 60%.
+//
+// For more information, see Change health event thresholds (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-overview.html#IMUpdateThresholdFromOverview)
+// in the Internet Monitor section of the CloudWatch User Guide.
+type LocalHealthEventsConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The health event threshold percentage set for a local health score.
+	HealthScoreThreshold *float64 `type:"double"`
+
+	// The minimum percentage of overall traffic for an application that must be
+	// impacted by an issue before Internet Monitor creates an event when a threshold
+	// is crossed for a local health score.
+	//
+	// If you don't set a minimum traffic impact threshold, the default value is
+	// 0.1%.
+	MinTrafficImpact *float64 `type:"double"`
+
+	// The status of whether Internet Monitor creates a health event based on a
+	// threshold percentage set for a local health score. The status can be ENABLED
+	// or DISABLED.
+	Status *string `type:"string" enum:"LocalHealthEventsConfigStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LocalHealthEventsConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LocalHealthEventsConfig) GoString() string {
+	return s.String()
+}
+
+// SetHealthScoreThreshold sets the HealthScoreThreshold field's value.
+func (s *LocalHealthEventsConfig) SetHealthScoreThreshold(v float64) *LocalHealthEventsConfig {
+	s.HealthScoreThreshold = &v
+	return s
+}
+
+// SetMinTrafficImpact sets the MinTrafficImpact field's value.
+func (s *LocalHealthEventsConfig) SetMinTrafficImpact(v float64) *LocalHealthEventsConfig {
+	s.MinTrafficImpact = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *LocalHealthEventsConfig) SetStatus(v string) *LocalHealthEventsConfig {
+	s.Status = &v
 	return s
 }
 
@@ -3189,15 +4248,16 @@ func (s *NotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Measurements about the performance for your application on the internet calculated
-// by Amazon CloudWatch Internet Monitor. Amazon Web Services has substantial
-// historical data about internet performance and availability between Amazon
-// Web Services services and different network providers and geographies. By
-// applying statistical analysis to the data, Internet Monitor can detect when
-// the performance and availability for your application has dropped, compared
-// to an estimated baseline that's already calculated. To make it easier to
-// see those drops, we report that information to you in the form of health
-// scores: a performance score and an availability score.
+// Amazon CloudWatch Internet Monitor calculates measurements about the performance
+// for your application's internet traffic between client locations and Amazon
+// Web Services. Amazon Web Services has substantial historical data about internet
+// performance and availability between Amazon Web Services services and different
+// network providers and geographies. By applying statistical analysis to the
+// data, Internet Monitor can detect when the performance and availability for
+// your application has dropped, compared to an estimated baseline that's already
+// calculated. To make it easier to see those drops, we report that information
+// to you in the form of health scores: a performance score and an availability
+// score.
 //
 // Performance in Internet Monitor represents the estimated percentage of traffic
 // that is not seeing a performance drop. For example, a performance score of
@@ -3237,10 +4297,11 @@ type PerformanceMeasurement struct {
 	// Guide.
 	PercentOfClientLocationImpacted *float64 `type:"double"`
 
-	// How much performance impact was caused by a health event for total traffic
-	// globally. For performance, this is the percentage of how much latency increased
-	// during the event compared to typical performance for your application traffic
-	// globally.
+	// The impact on total traffic that a health event has, in increased latency
+	// or reduced availability. This is the percentage of how much latency has increased
+	// or availability has decreased during the event, compared to what is typical
+	// for traffic from this client location to the Amazon Web Services location
+	// using this client network.
 	//
 	// For more information, see When Amazon Web Services creates and resolves health
 	// events (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-inside-internet-monitor.html#IMHealthEventStartStop)
@@ -3297,6 +4358,53 @@ func (s *PerformanceMeasurement) SetPercentOfTotalTrafficImpacted(v float64) *Pe
 // SetRoundTripTime sets the RoundTripTime field's value.
 func (s *PerformanceMeasurement) SetRoundTripTime(v *RoundTripTime) *PerformanceMeasurement {
 	s.RoundTripTime = v
+	return s
+}
+
+// Defines a field to query for your application's Amazon CloudWatch Internet
+// Monitor data. You create a data repository by running a query of a specific
+// type. Each QueryType includes a specific set of fields and datatypes to retrieve
+// data for.
+type QueryField struct {
+	_ struct{} `type:"structure"`
+
+	// The name of a field to query your application's Amazon CloudWatch Internet
+	// Monitor data for, such as availability_score.
+	Name *string `type:"string"`
+
+	// The data type for a query field, which must correspond to the field you're
+	// defining for QueryField. For example, if the query field name is availability_score,
+	// the data type is float.
+	Type *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QueryField) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s QueryField) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *QueryField) SetName(v string) *QueryField {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *QueryField) SetType(v string) *QueryField {
+	s.Type = &v
 	return s
 }
 
@@ -3482,6 +4590,265 @@ func (s *S3Config) SetBucketPrefix(v string) *S3Config {
 func (s *S3Config) SetLogDeliveryStatus(v string) *S3Config {
 	s.LogDeliveryStatus = &v
 	return s
+}
+
+type StartQueryInput struct {
+	_ struct{} `type:"structure"`
+
+	// The timestamp that is the end of the period that you want to retrieve data
+	// for with your query.
+	//
+	// EndTime is a required field
+	EndTime *time.Time `type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The FilterParameters field that you use with Amazon CloudWatch Internet Monitor
+	// queries is a string the defines how you want a query to be filtered. The
+	// filter parameters that you can specify depend on the query type, since each
+	// query type returns a different set of Internet Monitor data.
+	//
+	// For more information about specifying filter parameters, see Using the Amazon
+	// CloudWatch Internet Monitor query interface (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-view-cw-tools-cwim-query.html)
+	// in the Amazon CloudWatch Internet Monitor User Guide.
+	FilterParameters []*FilterParameter `type:"list"`
+
+	// TBD
+	LinkedAccountId *string `min:"12" type:"string"`
+
+	// The name of the monitor to query.
+	//
+	// MonitorName is a required field
+	MonitorName *string `location:"uri" locationName:"MonitorName" min:"1" type:"string" required:"true"`
+
+	// The type of query to run. The following are the three types of queries that
+	// you can run using the Internet Monitor query interface:
+	//
+	//    * MEASUREMENTS: Provides availability score, performance score, total
+	//    traffic, and round-trip times, at 5 minute intervals.
+	//
+	//    * TOP_LOCATIONS: Provides availability score, performance score, total
+	//    traffic, and time to first byte (TTFB) information, for the top location
+	//    and ASN combinations that you're monitoring, by traffic volume.
+	//
+	//    * TOP_LOCATION_DETAILS: Provides TTFB for Amazon CloudFront, your current
+	//    configuration, and the best performing EC2 configuration, at 1 hour intervals.
+	//
+	// For lists of the fields returned with each query type and more information
+	// about how each type of query is performed, see Using the Amazon CloudWatch
+	// Internet Monitor query interface (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-view-cw-tools-cwim-query.html)
+	// in the Amazon CloudWatch Internet Monitor User Guide.
+	//
+	// QueryType is a required field
+	QueryType *string `type:"string" required:"true" enum:"QueryType"`
+
+	// The timestamp that is the beginning of the period that you want to retrieve
+	// data for with your query.
+	//
+	// StartTime is a required field
+	StartTime *time.Time `type:"timestamp" timestampFormat:"iso8601" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartQueryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartQueryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartQueryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartQueryInput"}
+	if s.EndTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTime"))
+	}
+	if s.LinkedAccountId != nil && len(*s.LinkedAccountId) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("LinkedAccountId", 12))
+	}
+	if s.MonitorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("MonitorName"))
+	}
+	if s.MonitorName != nil && len(*s.MonitorName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MonitorName", 1))
+	}
+	if s.QueryType == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryType"))
+	}
+	if s.StartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTime"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *StartQueryInput) SetEndTime(v time.Time) *StartQueryInput {
+	s.EndTime = &v
+	return s
+}
+
+// SetFilterParameters sets the FilterParameters field's value.
+func (s *StartQueryInput) SetFilterParameters(v []*FilterParameter) *StartQueryInput {
+	s.FilterParameters = v
+	return s
+}
+
+// SetLinkedAccountId sets the LinkedAccountId field's value.
+func (s *StartQueryInput) SetLinkedAccountId(v string) *StartQueryInput {
+	s.LinkedAccountId = &v
+	return s
+}
+
+// SetMonitorName sets the MonitorName field's value.
+func (s *StartQueryInput) SetMonitorName(v string) *StartQueryInput {
+	s.MonitorName = &v
+	return s
+}
+
+// SetQueryType sets the QueryType field's value.
+func (s *StartQueryInput) SetQueryType(v string) *StartQueryInput {
+	s.QueryType = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *StartQueryInput) SetStartTime(v time.Time) *StartQueryInput {
+	s.StartTime = &v
+	return s
+}
+
+type StartQueryOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The internally-generated identifier of a specific query.
+	//
+	// QueryId is a required field
+	QueryId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartQueryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartQueryOutput) GoString() string {
+	return s.String()
+}
+
+// SetQueryId sets the QueryId field's value.
+func (s *StartQueryOutput) SetQueryId(v string) *StartQueryOutput {
+	s.QueryId = &v
+	return s
+}
+
+type StopQueryInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name of the monitor.
+	//
+	// MonitorName is a required field
+	MonitorName *string `location:"uri" locationName:"MonitorName" min:"1" type:"string" required:"true"`
+
+	// The ID of the query that you want to stop. A QueryId is an internally-generated
+	// identifier for a specific query.
+	//
+	// QueryId is a required field
+	QueryId *string `location:"uri" locationName:"QueryId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopQueryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopQueryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopQueryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopQueryInput"}
+	if s.MonitorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("MonitorName"))
+	}
+	if s.MonitorName != nil && len(*s.MonitorName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MonitorName", 1))
+	}
+	if s.QueryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryId"))
+	}
+	if s.QueryId != nil && len(*s.QueryId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMonitorName sets the MonitorName field's value.
+func (s *StopQueryInput) SetMonitorName(v string) *StopQueryInput {
+	s.MonitorName = &v
+	return s
+}
+
+// SetQueryId sets the QueryId field's value.
+func (s *StopQueryInput) SetQueryId(v string) *StopQueryInput {
+	s.QueryId = &v
+	return s
+}
+
+type StopQueryOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopQueryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopQueryOutput) GoString() string {
+	return s.String()
 }
 
 type TagResourceInput struct {
@@ -3792,15 +5159,25 @@ type UpdateMonitorInput struct {
 	// for other API requests.
 	ClientToken *string `type:"string" idempotencyToken:"true"`
 
+	// The list of health score thresholds. A threshold percentage for health scores,
+	// along with other configuration information, determines when Internet Monitor
+	// creates a health event when there's an internet issue that affects your application
+	// end users.
+	//
+	// For more information, see Change health event thresholds (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-overview.html#IMUpdateThresholdFromOverview)
+	// in the Internet Monitor section of the CloudWatch User Guide.
+	HealthEventsConfig *HealthEventsConfig `type:"structure"`
+
 	// Publish internet measurements for Internet Monitor to another location, such
 	// as an Amazon S3 bucket. The measurements are also published to Amazon CloudWatch
 	// Logs.
 	InternetMeasurementsLogDelivery *InternetMeasurementsLogDelivery `type:"structure"`
 
-	// The maximum number of city-networks to monitor for your resources. A city-network
+	// The maximum number of city-networks to monitor for your application. A city-network
 	// is the location (city) where clients access your application resources from
-	// and the network or ASN, such as an internet service provider, that clients
-	// access the resources through.
+	// and the ASN or network provider, such as an internet service provider (ISP),
+	// that clients access the resources through. Setting this limit can help control
+	// billing costs.
 	MaxCityNetworksToMonitor *int64 `min:"1" type:"integer"`
 
 	// The name of the monitor.
@@ -3809,14 +5186,16 @@ type UpdateMonitorInput struct {
 	MonitorName *string `location:"uri" locationName:"MonitorName" min:"1" type:"string" required:"true"`
 
 	// The resources to include in a monitor, which you provide as a set of Amazon
-	// Resource Names (ARNs).
+	// Resource Names (ARNs). Resources can be VPCs, NLBs, Amazon CloudFront distributions,
+	// or Amazon WorkSpaces directories.
 	//
-	// You can add a combination of Amazon Virtual Private Clouds (VPCs) and Amazon
-	// CloudFront distributions, or you can add Amazon WorkSpaces directories. You
-	// can't add all three types of resources.
+	// You can add a combination of VPCs and CloudFront distributions, or you can
+	// add WorkSpaces directories, or you can add NLBs. You can't add NLBs or WorkSpaces
+	// directories together with any other resources.
 	//
-	// If you add only VPC resources, at least one VPC must have an Internet Gateway
-	// attached to it, to make sure that it has internet connectivity.
+	// If you add only Amazon Virtual Private Clouds resources, at least one VPC
+	// must have an Internet Gateway attached to it, to make sure that it has internet
+	// connectivity.
 	ResourcesToAdd []*string `type:"list"`
 
 	// The resources to remove from a monitor, which you provide as a set of Amazon
@@ -3829,7 +5208,13 @@ type UpdateMonitorInput struct {
 	Status *string `type:"string" enum:"MonitorConfigState"`
 
 	// The percentage of the internet-facing traffic for your application that you
-	// want to monitor with this monitor.
+	// want to monitor with this monitor. If you set a city-networks maximum, that
+	// limit overrides the traffic percentage that you set.
+	//
+	// To learn more, see Choosing an application traffic percentage to monitor
+	// (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/IMTrafficPercentage.html)
+	// in the Amazon CloudWatch Internet Monitor section of the CloudWatch User
+	// Guide.
 	TrafficPercentageToMonitor *int64 `min:"1" type:"integer"`
 }
 
@@ -3881,6 +5266,12 @@ func (s *UpdateMonitorInput) Validate() error {
 // SetClientToken sets the ClientToken field's value.
 func (s *UpdateMonitorInput) SetClientToken(v string) *UpdateMonitorInput {
 	s.ClientToken = &v
+	return s
+}
+
+// SetHealthEventsConfig sets the HealthEventsConfig field's value.
+func (s *UpdateMonitorInput) SetHealthEventsConfig(v *HealthEventsConfig) *UpdateMonitorInput {
+	s.HealthEventsConfig = v
 	return s
 }
 
@@ -4040,6 +5431,12 @@ const (
 
 	// HealthEventImpactTypePerformance is a HealthEventImpactType enum value
 	HealthEventImpactTypePerformance = "PERFORMANCE"
+
+	// HealthEventImpactTypeLocalAvailability is a HealthEventImpactType enum value
+	HealthEventImpactTypeLocalAvailability = "LOCAL_AVAILABILITY"
+
+	// HealthEventImpactTypeLocalPerformance is a HealthEventImpactType enum value
+	HealthEventImpactTypeLocalPerformance = "LOCAL_PERFORMANCE"
 )
 
 // HealthEventImpactType_Values returns all elements of the HealthEventImpactType enum
@@ -4047,6 +5444,8 @@ func HealthEventImpactType_Values() []string {
 	return []string{
 		HealthEventImpactTypeAvailability,
 		HealthEventImpactTypePerformance,
+		HealthEventImpactTypeLocalAvailability,
+		HealthEventImpactTypeLocalPerformance,
 	}
 }
 
@@ -4063,6 +5462,22 @@ func HealthEventStatus_Values() []string {
 	return []string{
 		HealthEventStatusActive,
 		HealthEventStatusResolved,
+	}
+}
+
+const (
+	// LocalHealthEventsConfigStatusEnabled is a LocalHealthEventsConfigStatus enum value
+	LocalHealthEventsConfigStatusEnabled = "ENABLED"
+
+	// LocalHealthEventsConfigStatusDisabled is a LocalHealthEventsConfigStatus enum value
+	LocalHealthEventsConfigStatusDisabled = "DISABLED"
+)
+
+// LocalHealthEventsConfigStatus_Values returns all elements of the LocalHealthEventsConfigStatus enum
+func LocalHealthEventsConfigStatus_Values() []string {
+	return []string{
+		LocalHealthEventsConfigStatusEnabled,
+		LocalHealthEventsConfigStatusDisabled,
 	}
 }
 
@@ -4135,6 +5550,70 @@ func MonitorProcessingStatusCode_Values() []string {
 		MonitorProcessingStatusCodeInsufficientData,
 		MonitorProcessingStatusCodeFaultService,
 		MonitorProcessingStatusCodeFaultAccessCloudwatch,
+	}
+}
+
+const (
+	// OperatorEquals is a Operator enum value
+	OperatorEquals = "EQUALS"
+
+	// OperatorNotEquals is a Operator enum value
+	OperatorNotEquals = "NOT_EQUALS"
+)
+
+// Operator_Values returns all elements of the Operator enum
+func Operator_Values() []string {
+	return []string{
+		OperatorEquals,
+		OperatorNotEquals,
+	}
+}
+
+const (
+	// QueryStatusQueued is a QueryStatus enum value
+	QueryStatusQueued = "QUEUED"
+
+	// QueryStatusRunning is a QueryStatus enum value
+	QueryStatusRunning = "RUNNING"
+
+	// QueryStatusSucceeded is a QueryStatus enum value
+	QueryStatusSucceeded = "SUCCEEDED"
+
+	// QueryStatusFailed is a QueryStatus enum value
+	QueryStatusFailed = "FAILED"
+
+	// QueryStatusCanceled is a QueryStatus enum value
+	QueryStatusCanceled = "CANCELED"
+)
+
+// QueryStatus_Values returns all elements of the QueryStatus enum
+func QueryStatus_Values() []string {
+	return []string{
+		QueryStatusQueued,
+		QueryStatusRunning,
+		QueryStatusSucceeded,
+		QueryStatusFailed,
+		QueryStatusCanceled,
+	}
+}
+
+const (
+	// QueryTypeMeasurements is a QueryType enum value
+	QueryTypeMeasurements = "MEASUREMENTS"
+
+	// QueryTypeTopLocations is a QueryType enum value
+	QueryTypeTopLocations = "TOP_LOCATIONS"
+
+	// QueryTypeTopLocationDetails is a QueryType enum value
+	QueryTypeTopLocationDetails = "TOP_LOCATION_DETAILS"
+)
+
+// QueryType_Values returns all elements of the QueryType enum
+func QueryType_Values() []string {
+	return []string{
+		QueryTypeMeasurements,
+		QueryTypeTopLocations,
+		QueryTypeTopLocationDetails,
 	}
 }
 

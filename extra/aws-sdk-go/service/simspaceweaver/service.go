@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a SimSpaceWeaver client from just a session.
-//     svc := simspaceweaver.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a SimSpaceWeaver client with additional configuration
-//     svc := simspaceweaver.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a SimSpaceWeaver client from just a session.
+//	svc := simspaceweaver.New(mySession)
+//
+//	// Create a SimSpaceWeaver client with additional configuration
+//	svc := simspaceweaver.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *SimSpaceWeaver {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

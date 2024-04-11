@@ -29,14 +29,13 @@ const opCreateSchedule = "CreateSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateScheduleRequest method.
+//	req, resp := client.CreateScheduleRequest(params)
 //
-//    // Example sending a request using the CreateScheduleRequest method.
-//    req, resp := client.CreateScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/CreateSchedule
 func (c *Scheduler) CreateScheduleRequest(input *CreateScheduleInput) (req *request.Request, output *CreateScheduleOutput) {
@@ -67,23 +66,24 @@ func (c *Scheduler) CreateScheduleRequest(input *CreateScheduleInput) (req *requ
 // API operation CreateSchedule for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ConflictException
-//   Updating or deleting the resource can cause an inconsistent state.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting the resource can cause an inconsistent state.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/CreateSchedule
 func (c *Scheduler) CreateSchedule(input *CreateScheduleInput) (*CreateScheduleOutput, error) {
@@ -123,14 +123,13 @@ const opCreateScheduleGroup = "CreateScheduleGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateScheduleGroupRequest method.
+//	req, resp := client.CreateScheduleGroupRequest(params)
 //
-//    // Example sending a request using the CreateScheduleGroupRequest method.
-//    req, resp := client.CreateScheduleGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/CreateScheduleGroup
 func (c *Scheduler) CreateScheduleGroupRequest(input *CreateScheduleGroupInput) (req *request.Request, output *CreateScheduleGroupOutput) {
@@ -161,20 +160,21 @@ func (c *Scheduler) CreateScheduleGroupRequest(input *CreateScheduleGroupInput) 
 // API operation CreateScheduleGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ConflictException
-//   Updating or deleting the resource can cause an inconsistent state.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ConflictException
+//     Updating or deleting the resource can cause an inconsistent state.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/CreateScheduleGroup
 func (c *Scheduler) CreateScheduleGroup(input *CreateScheduleGroupInput) (*CreateScheduleGroupOutput, error) {
@@ -214,14 +214,13 @@ const opDeleteSchedule = "DeleteSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteScheduleRequest method.
+//	req, resp := client.DeleteScheduleRequest(params)
 //
-//    // Example sending a request using the DeleteScheduleRequest method.
-//    req, resp := client.DeleteScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/DeleteSchedule
 func (c *Scheduler) DeleteScheduleRequest(input *DeleteScheduleInput) (req *request.Request, output *DeleteScheduleOutput) {
@@ -253,20 +252,21 @@ func (c *Scheduler) DeleteScheduleRequest(input *DeleteScheduleInput) (req *requ
 // API operation DeleteSchedule for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ConflictException
-//   Updating or deleting the resource can cause an inconsistent state.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting the resource can cause an inconsistent state.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/DeleteSchedule
 func (c *Scheduler) DeleteSchedule(input *DeleteScheduleInput) (*DeleteScheduleOutput, error) {
@@ -306,14 +306,13 @@ const opDeleteScheduleGroup = "DeleteScheduleGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteScheduleGroupRequest method.
+//	req, resp := client.DeleteScheduleGroupRequest(params)
 //
-//    // Example sending a request using the DeleteScheduleGroupRequest method.
-//    req, resp := client.DeleteScheduleGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/DeleteScheduleGroup
 func (c *Scheduler) DeleteScheduleGroupRequest(input *DeleteScheduleGroupInput) (req *request.Request, output *DeleteScheduleGroupOutput) {
@@ -353,20 +352,21 @@ func (c *Scheduler) DeleteScheduleGroupRequest(input *DeleteScheduleGroupInput) 
 // API operation DeleteScheduleGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ConflictException
-//   Updating or deleting the resource can cause an inconsistent state.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting the resource can cause an inconsistent state.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/DeleteScheduleGroup
 func (c *Scheduler) DeleteScheduleGroup(input *DeleteScheduleGroupInput) (*DeleteScheduleGroupOutput, error) {
@@ -406,14 +406,13 @@ const opGetSchedule = "GetSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetScheduleRequest method.
+//	req, resp := client.GetScheduleRequest(params)
 //
-//    // Example sending a request using the GetScheduleRequest method.
-//    req, resp := client.GetScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/GetSchedule
 func (c *Scheduler) GetScheduleRequest(input *GetScheduleInput) (req *request.Request, output *GetScheduleOutput) {
@@ -444,17 +443,18 @@ func (c *Scheduler) GetScheduleRequest(input *GetScheduleInput) (req *request.Re
 // API operation GetSchedule for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/GetSchedule
 func (c *Scheduler) GetSchedule(input *GetScheduleInput) (*GetScheduleOutput, error) {
@@ -494,14 +494,13 @@ const opGetScheduleGroup = "GetScheduleGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetScheduleGroupRequest method.
+//	req, resp := client.GetScheduleGroupRequest(params)
 //
-//    // Example sending a request using the GetScheduleGroupRequest method.
-//    req, resp := client.GetScheduleGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/GetScheduleGroup
 func (c *Scheduler) GetScheduleGroupRequest(input *GetScheduleGroupInput) (req *request.Request, output *GetScheduleGroupOutput) {
@@ -532,17 +531,18 @@ func (c *Scheduler) GetScheduleGroupRequest(input *GetScheduleGroupInput) (req *
 // API operation GetScheduleGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/GetScheduleGroup
 func (c *Scheduler) GetScheduleGroup(input *GetScheduleGroupInput) (*GetScheduleGroupOutput, error) {
@@ -582,14 +582,13 @@ const opListScheduleGroups = "ListScheduleGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListScheduleGroupsRequest method.
+//	req, resp := client.ListScheduleGroupsRequest(params)
 //
-//    // Example sending a request using the ListScheduleGroupsRequest method.
-//    req, resp := client.ListScheduleGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/ListScheduleGroups
 func (c *Scheduler) ListScheduleGroupsRequest(input *ListScheduleGroupsInput) (req *request.Request, output *ListScheduleGroupsOutput) {
@@ -626,14 +625,15 @@ func (c *Scheduler) ListScheduleGroupsRequest(input *ListScheduleGroupsInput) (r
 // API operation ListScheduleGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/ListScheduleGroups
 func (c *Scheduler) ListScheduleGroups(input *ListScheduleGroupsInput) (*ListScheduleGroupsOutput, error) {
@@ -665,15 +665,14 @@ func (c *Scheduler) ListScheduleGroupsWithContext(ctx aws.Context, input *ListSc
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListScheduleGroups operation.
-//    pageNum := 0
-//    err := client.ListScheduleGroupsPages(params,
-//        func(page *scheduler.ListScheduleGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListScheduleGroups operation.
+//	pageNum := 0
+//	err := client.ListScheduleGroupsPages(params,
+//	    func(page *scheduler.ListScheduleGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Scheduler) ListScheduleGroupsPages(input *ListScheduleGroupsInput, fn func(*ListScheduleGroupsOutput, bool) bool) error {
 	return c.ListScheduleGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -725,14 +724,13 @@ const opListSchedules = "ListSchedules"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSchedulesRequest method.
+//	req, resp := client.ListSchedulesRequest(params)
 //
-//    // Example sending a request using the ListSchedulesRequest method.
-//    req, resp := client.ListSchedulesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/ListSchedules
 func (c *Scheduler) ListSchedulesRequest(input *ListSchedulesInput) (req *request.Request, output *ListSchedulesOutput) {
@@ -769,17 +767,18 @@ func (c *Scheduler) ListSchedulesRequest(input *ListSchedulesInput) (req *reques
 // API operation ListSchedules for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/ListSchedules
 func (c *Scheduler) ListSchedules(input *ListSchedulesInput) (*ListSchedulesOutput, error) {
@@ -811,15 +810,14 @@ func (c *Scheduler) ListSchedulesWithContext(ctx aws.Context, input *ListSchedul
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSchedules operation.
-//    pageNum := 0
-//    err := client.ListSchedulesPages(params,
-//        func(page *scheduler.ListSchedulesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSchedules operation.
+//	pageNum := 0
+//	err := client.ListSchedulesPages(params,
+//	    func(page *scheduler.ListSchedulesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Scheduler) ListSchedulesPages(input *ListSchedulesInput, fn func(*ListSchedulesOutput, bool) bool) error {
 	return c.ListSchedulesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -871,14 +869,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/ListTagsForResource
 func (c *Scheduler) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -909,17 +906,18 @@ func (c *Scheduler) ListTagsForResourceRequest(input *ListTagsForResourceInput) 
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/ListTagsForResource
 func (c *Scheduler) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -959,14 +957,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/TagResource
 func (c *Scheduler) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -999,20 +996,21 @@ func (c *Scheduler) TagResourceRequest(input *TagResourceInput) (req *request.Re
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ConflictException
-//   Updating or deleting the resource can cause an inconsistent state.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting the resource can cause an inconsistent state.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/TagResource
 func (c *Scheduler) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1052,14 +1050,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/UntagResource
 func (c *Scheduler) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -1092,20 +1089,21 @@ func (c *Scheduler) UntagResourceRequest(input *UntagResourceInput) (req *reques
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ConflictException
-//   Updating or deleting the resource can cause an inconsistent state.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting the resource can cause an inconsistent state.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/UntagResource
 func (c *Scheduler) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -1145,14 +1143,13 @@ const opUpdateSchedule = "UpdateSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateScheduleRequest method.
+//	req, resp := client.UpdateScheduleRequest(params)
 //
-//    // Example sending a request using the UpdateScheduleRequest method.
-//    req, resp := client.UpdateScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/UpdateSchedule
 func (c *Scheduler) UpdateScheduleRequest(input *UpdateScheduleInput) (req *request.Request, output *UpdateScheduleOutput) {
@@ -1191,20 +1188,21 @@ func (c *Scheduler) UpdateScheduleRequest(input *UpdateScheduleInput) (req *requ
 // API operation UpdateSchedule for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   Unexpected error encountered while processing the request.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ConflictException
-//   Updating or deleting the resource can cause an inconsistent state.
+//   - InternalServerException
+//     Unexpected error encountered while processing the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - ConflictException
+//     Updating or deleting the resource can cause an inconsistent state.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/scheduler-2021-06-30/UpdateSchedule
 func (c *Scheduler) UpdateSchedule(input *UpdateScheduleInput) (*UpdateScheduleOutput, error) {
@@ -1562,6 +1560,10 @@ func (s *CreateScheduleGroupOutput) SetScheduleGroupArn(v string) *CreateSchedul
 type CreateScheduleInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies the action that EventBridge Scheduler applies to the schedule after
+	// the schedule completes invoking the target.
+	ActionAfterCompletion *string `type:"string" enum:"ActionAfterCompletion"`
+
 	// Unique, case-sensitive identifier you provide to ensure the idempotency of
 	// the request. If you do not specify a client token, EventBridge Scheduler
 	// uses a randomly generated token for the request to ensure idempotency.
@@ -1600,7 +1602,7 @@ type CreateScheduleInput struct {
 	//
 	//    * at expression - at(yyyy-mm-ddThh:mm:ss)
 	//
-	//    * rate expression - rate(unit value)
+	//    * rate expression - rate(value unit)
 	//
 	//    * cron expression - cron(fields)
 	//
@@ -1709,6 +1711,12 @@ func (s *CreateScheduleInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetActionAfterCompletion sets the ActionAfterCompletion field's value.
+func (s *CreateScheduleInput) SetActionAfterCompletion(v string) *CreateScheduleInput {
+	s.ActionAfterCompletion = &v
+	return s
 }
 
 // SetClientToken sets the ClientToken field's value.
@@ -2571,6 +2579,10 @@ func (s *GetScheduleInput) SetName(v string) *GetScheduleInput {
 type GetScheduleOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates the action that EventBridge Scheduler applies to the schedule after
+	// the schedule completes invoking the target.
+	ActionAfterCompletion *string `type:"string" enum:"ActionAfterCompletion"`
+
 	// The Amazon Resource Name (ARN) of the schedule.
 	Arn *string `min:"1" type:"string"`
 
@@ -2608,7 +2620,7 @@ type GetScheduleOutput struct {
 	//
 	//    * at expression - at(yyyy-mm-ddThh:mm:ss)
 	//
-	//    * rate expression - rate(unit value)
+	//    * rate expression - rate(value unit)
 	//
 	//    * cron expression - cron(fields)
 	//
@@ -2663,6 +2675,12 @@ func (s GetScheduleOutput) String() string {
 // value will be replaced with "sensitive".
 func (s GetScheduleOutput) GoString() string {
 	return s.String()
+}
+
+// SetActionAfterCompletion sets the ActionAfterCompletion field's value.
+func (s *GetScheduleOutput) SetActionAfterCompletion(v string) *GetScheduleOutput {
+	s.ActionAfterCompletion = &v
+	return s
 }
 
 // SetArn sets the Arn field's value.
@@ -4408,6 +4426,10 @@ func (s UntagResourceOutput) GoString() string {
 type UpdateScheduleInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies the action that EventBridge Scheduler applies to the schedule after
+	// the schedule completes invoking the target.
+	ActionAfterCompletion *string `type:"string" enum:"ActionAfterCompletion"`
+
 	// Unique, case-sensitive identifier you provide to ensure the idempotency of
 	// the request. If you do not specify a client token, EventBridge Scheduler
 	// uses a randomly generated token for the request to ensure idempotency.
@@ -4448,7 +4470,7 @@ type UpdateScheduleInput struct {
 	//
 	//    * at expression - at(yyyy-mm-ddThh:mm:ss)
 	//
-	//    * rate expression - rate(unit value)
+	//    * rate expression - rate(value unit)
 	//
 	//    * cron expression - cron(fields)
 	//
@@ -4558,6 +4580,12 @@ func (s *UpdateScheduleInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetActionAfterCompletion sets the ActionAfterCompletion field's value.
+func (s *UpdateScheduleInput) SetActionAfterCompletion(v string) *UpdateScheduleInput {
+	s.ActionAfterCompletion = &v
+	return s
 }
 
 // SetClientToken sets the ClientToken field's value.
@@ -4727,6 +4755,22 @@ func (s *ValidationException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ValidationException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+const (
+	// ActionAfterCompletionNone is a ActionAfterCompletion enum value
+	ActionAfterCompletionNone = "NONE"
+
+	// ActionAfterCompletionDelete is a ActionAfterCompletion enum value
+	ActionAfterCompletionDelete = "DELETE"
+)
+
+// ActionAfterCompletion_Values returns all elements of the ActionAfterCompletion enum
+func ActionAfterCompletion_Values() []string {
+	return []string{
+		ActionAfterCompletionNone,
+		ActionAfterCompletionDelete,
+	}
 }
 
 const (

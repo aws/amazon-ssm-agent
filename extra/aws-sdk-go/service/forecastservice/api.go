@@ -29,14 +29,13 @@ const opCreateAutoPredictor = "CreateAutoPredictor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAutoPredictorRequest method.
+//	req, resp := client.CreateAutoPredictorRequest(params)
 //
-//    // Example sending a request using the CreateAutoPredictorRequest method.
-//    req, resp := client.CreateAutoPredictorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateAutoPredictor
 func (c *ForecastService) CreateAutoPredictorRequest(input *CreateAutoPredictorInput) (req *request.Request, output *CreateAutoPredictorOutput) {
@@ -64,29 +63,29 @@ func (c *ForecastService) CreateAutoPredictorRequest(input *CreateAutoPredictorI
 // You can use CreateAutoPredictor to create new predictors or upgrade/retrain
 // existing predictors.
 //
-// Creating new predictors
+// # Creating new predictors
 //
 // The following parameters are required when creating a new predictor:
 //
-//    * PredictorName - A unique name for the predictor.
+//   - PredictorName - A unique name for the predictor.
 //
-//    * DatasetGroupArn - The ARN of the dataset group used to train the predictor.
+//   - DatasetGroupArn - The ARN of the dataset group used to train the predictor.
 //
-//    * ForecastFrequency - The granularity of your forecasts (hourly, daily,
-//    weekly, etc).
+//   - ForecastFrequency - The granularity of your forecasts (hourly, daily,
+//     weekly, etc).
 //
-//    * ForecastHorizon - The number of time-steps that the model predicts.
-//    The forecast horizon is also called the prediction length.
+//   - ForecastHorizon - The number of time-steps that the model predicts.
+//     The forecast horizon is also called the prediction length.
 //
 // When creating a new predictor, do not specify a value for ReferencePredictorArn.
 //
-// Upgrading and retraining predictors
+// # Upgrading and retraining predictors
 //
 // The following parameters are required when retraining or upgrading a predictor:
 //
-//    * PredictorName - A unique name for the predictor.
+//   - PredictorName - A unique name for the predictor.
 //
-//    * ReferencePredictorArn - The ARN of the predictor to retrain or upgrade.
+//   - ReferencePredictorArn - The ARN of the predictor to retrain or upgrade.
 //
 // When upgrading or retraining a predictor, only specify values for the ReferencePredictorArn
 // and PredictorName.
@@ -99,22 +98,23 @@ func (c *ForecastService) CreateAutoPredictorRequest(input *CreateAutoPredictorI
 // API operation CreateAutoPredictor for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateAutoPredictor
 func (c *ForecastService) CreateAutoPredictor(input *CreateAutoPredictorInput) (*CreateAutoPredictorOutput, error) {
@@ -154,14 +154,13 @@ const opCreateDataset = "CreateDataset"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDatasetRequest method.
+//	req, resp := client.CreateDatasetRequest(params)
 //
-//    // Example sending a request using the CreateDatasetRequest method.
-//    req, resp := client.CreateDatasetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateDataset
 func (c *ForecastService) CreateDatasetRequest(input *CreateDatasetInput) (req *request.Request, output *CreateDatasetOutput) {
@@ -186,16 +185,16 @@ func (c *ForecastService) CreateDatasetRequest(input *CreateDatasetInput) (req *
 // you provide helps Forecast understand how to consume the data for model training.
 // This includes the following:
 //
-//    * DataFrequency - How frequently your historical time-series data is collected.
+//   - DataFrequency - How frequently your historical time-series data is collected.
 //
-//    * Domain and DatasetType - Each dataset has an associated dataset domain
-//    and a type within the domain. Amazon Forecast provides a list of predefined
-//    domains and types within each domain. For each unique dataset domain and
-//    type within the domain, Amazon Forecast requires your data to include
-//    a minimum set of predefined fields.
+//   - Domain and DatasetType - Each dataset has an associated dataset domain
+//     and a type within the domain. Amazon Forecast provides a list of predefined
+//     domains and types within each domain. For each unique dataset domain and
+//     type within the domain, Amazon Forecast requires your data to include
+//     a minimum set of predefined fields.
 //
-//    * Schema - A schema specifies the fields in the dataset, including the
-//    field name and data type.
+//   - Schema - A schema specifies the fields in the dataset, including the
+//     field name and data type.
 //
 // After creating a dataset, you import your training data into it and add the
 // dataset to a dataset group. You use the dataset group to create a predictor.
@@ -219,15 +218,16 @@ func (c *ForecastService) CreateDatasetRequest(input *CreateDatasetInput) (req *
 // API operation CreateDataset for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateDataset
 func (c *ForecastService) CreateDataset(input *CreateDatasetInput) (*CreateDatasetOutput, error) {
@@ -267,14 +267,13 @@ const opCreateDatasetGroup = "CreateDatasetGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDatasetGroupRequest method.
+//	req, resp := client.CreateDatasetGroupRequest(params)
 //
-//    // Example sending a request using the CreateDatasetGroupRequest method.
-//    req, resp := client.CreateDatasetGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateDatasetGroup
 func (c *ForecastService) CreateDatasetGroupRequest(input *CreateDatasetGroupInput) (req *request.Request, output *CreateDatasetGroupOutput) {
@@ -319,22 +318,23 @@ func (c *ForecastService) CreateDatasetGroupRequest(input *CreateDatasetGroupInp
 // API operation CreateDatasetGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateDatasetGroup
 func (c *ForecastService) CreateDatasetGroup(input *CreateDatasetGroupInput) (*CreateDatasetGroupOutput, error) {
@@ -374,14 +374,13 @@ const opCreateDatasetImportJob = "CreateDatasetImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDatasetImportJobRequest method.
+//	req, resp := client.CreateDatasetImportJobRequest(params)
 //
-//    // Example sending a request using the CreateDatasetImportJobRequest method.
-//    req, resp := client.CreateDatasetImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateDatasetImportJob
 func (c *ForecastService) CreateDatasetImportJobRequest(input *CreateDatasetImportJobInput) (req *request.Request, output *CreateDatasetImportJobOutput) {
@@ -438,22 +437,23 @@ func (c *ForecastService) CreateDatasetImportJobRequest(input *CreateDatasetImpo
 // API operation CreateDatasetImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateDatasetImportJob
 func (c *ForecastService) CreateDatasetImportJob(input *CreateDatasetImportJobInput) (*CreateDatasetImportJobOutput, error) {
@@ -493,14 +493,13 @@ const opCreateExplainability = "CreateExplainability"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateExplainabilityRequest method.
+//	req, resp := client.CreateExplainabilityRequest(params)
 //
-//    // Example sending a request using the CreateExplainabilityRequest method.
-//    req, resp := client.CreateExplainabilityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateExplainability
 func (c *ForecastService) CreateExplainabilityRequest(input *CreateExplainabilityInput) (req *request.Request, output *CreateExplainabilityOutput) {
@@ -521,7 +520,6 @@ func (c *ForecastService) CreateExplainabilityRequest(input *CreateExplainabilit
 
 // CreateExplainability API operation for Amazon Forecast Service.
 //
-//
 // Explainability is only available for Forecasts and Predictors generated from
 // an AutoPredictor (CreateAutoPredictor)
 //
@@ -541,7 +539,7 @@ func (c *ForecastService) CreateExplainabilityRequest(input *CreateExplainabilit
 // provide a Predictor ARN. To receive Impact scores for specific time series
 // and time points, provide a Forecast ARN.
 //
-// CreateExplainability with a Predictor ARN
+// # CreateExplainability with a Predictor ARN
 //
 // You can only have one Explainability resource per predictor. If you already
 // enabled ExplainPredictor in CreateAutoPredictor, that predictor already has
@@ -549,52 +547,52 @@ func (c *ForecastService) CreateExplainabilityRequest(input *CreateExplainabilit
 //
 // The following parameters are required when providing a Predictor ARN:
 //
-//    * ExplainabilityName - A unique name for the Explainability.
+//   - ExplainabilityName - A unique name for the Explainability.
 //
-//    * ResourceArn - The Arn of the predictor.
+//   - ResourceArn - The Arn of the predictor.
 //
-//    * TimePointGranularity - Must be set to “ALL”.
+//   - TimePointGranularity - Must be set to “ALL”.
 //
-//    * TimeSeriesGranularity - Must be set to “ALL”.
+//   - TimeSeriesGranularity - Must be set to “ALL”.
 //
 // Do not specify a value for the following parameters:
 //
-//    * DataSource - Only valid when TimeSeriesGranularity is “SPECIFIC”.
+//   - DataSource - Only valid when TimeSeriesGranularity is “SPECIFIC”.
 //
-//    * Schema - Only valid when TimeSeriesGranularity is “SPECIFIC”.
+//   - Schema - Only valid when TimeSeriesGranularity is “SPECIFIC”.
 //
-//    * StartDateTime - Only valid when TimePointGranularity is “SPECIFIC”.
+//   - StartDateTime - Only valid when TimePointGranularity is “SPECIFIC”.
 //
-//    * EndDateTime - Only valid when TimePointGranularity is “SPECIFIC”.
+//   - EndDateTime - Only valid when TimePointGranularity is “SPECIFIC”.
 //
-// CreateExplainability with a Forecast ARN
+// # CreateExplainability with a Forecast ARN
 //
 // You can specify a maximum of 50 time series and 500 time points.
 //
 // The following parameters are required when providing a Predictor ARN:
 //
-//    * ExplainabilityName - A unique name for the Explainability.
+//   - ExplainabilityName - A unique name for the Explainability.
 //
-//    * ResourceArn - The Arn of the forecast.
+//   - ResourceArn - The Arn of the forecast.
 //
-//    * TimePointGranularity - Either “ALL” or “SPECIFIC”.
+//   - TimePointGranularity - Either “ALL” or “SPECIFIC”.
 //
-//    * TimeSeriesGranularity - Either “ALL” or “SPECIFIC”.
+//   - TimeSeriesGranularity - Either “ALL” or “SPECIFIC”.
 //
 // If you set TimeSeriesGranularity to “SPECIFIC”, you must also provide
 // the following:
 //
-//    * DataSource - The S3 location of the CSV file specifying your time series.
+//   - DataSource - The S3 location of the CSV file specifying your time series.
 //
-//    * Schema - The Schema defines the attributes and attribute types listed
-//    in the Data Source.
+//   - Schema - The Schema defines the attributes and attribute types listed
+//     in the Data Source.
 //
 // If you set TimePointGranularity to “SPECIFIC”, you must also provide
 // the following:
 //
-//    * StartDateTime - The first timestamp in the range of time points.
+//   - StartDateTime - The first timestamp in the range of time points.
 //
-//    * EndDateTime - The last timestamp in the range of time points.
+//   - EndDateTime - The last timestamp in the range of time points.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -604,22 +602,23 @@ func (c *ForecastService) CreateExplainabilityRequest(input *CreateExplainabilit
 // API operation CreateExplainability for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateExplainability
 func (c *ForecastService) CreateExplainability(input *CreateExplainabilityInput) (*CreateExplainabilityOutput, error) {
@@ -659,14 +658,13 @@ const opCreateExplainabilityExport = "CreateExplainabilityExport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateExplainabilityExportRequest method.
+//	req, resp := client.CreateExplainabilityExportRequest(params)
 //
-//    // Example sending a request using the CreateExplainabilityExportRequest method.
-//    req, resp := client.CreateExplainabilityExportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateExplainabilityExport
 func (c *ForecastService) CreateExplainabilityExportRequest(input *CreateExplainabilityExportInput) (req *request.Request, output *CreateExplainabilityExportOutput) {
@@ -707,22 +705,23 @@ func (c *ForecastService) CreateExplainabilityExportRequest(input *CreateExplain
 // API operation CreateExplainabilityExport for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateExplainabilityExport
 func (c *ForecastService) CreateExplainabilityExport(input *CreateExplainabilityExportInput) (*CreateExplainabilityExportOutput, error) {
@@ -762,14 +761,13 @@ const opCreateForecast = "CreateForecast"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateForecastRequest method.
+//	req, resp := client.CreateForecastRequest(params)
 //
-//    // Example sending a request using the CreateForecastRequest method.
-//    req, resp := client.CreateForecastRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateForecast
 func (c *ForecastService) CreateForecastRequest(input *CreateForecastInput) (req *request.Request, output *CreateForecastOutput) {
@@ -825,22 +823,23 @@ func (c *ForecastService) CreateForecastRequest(input *CreateForecastInput) (req
 // API operation CreateForecast for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateForecast
 func (c *ForecastService) CreateForecast(input *CreateForecastInput) (*CreateForecastOutput, error) {
@@ -880,14 +879,13 @@ const opCreateForecastExportJob = "CreateForecastExportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateForecastExportJobRequest method.
+//	req, resp := client.CreateForecastExportJobRequest(params)
 //
-//    // Example sending a request using the CreateForecastExportJobRequest method.
-//    req, resp := client.CreateForecastExportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateForecastExportJob
 func (c *ForecastService) CreateForecastExportJobRequest(input *CreateForecastExportJobInput) (req *request.Request, output *CreateForecastExportJobOutput) {
@@ -937,22 +935,23 @@ func (c *ForecastService) CreateForecastExportJobRequest(input *CreateForecastEx
 // API operation CreateForecastExportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateForecastExportJob
 func (c *ForecastService) CreateForecastExportJob(input *CreateForecastExportJobInput) (*CreateForecastExportJobOutput, error) {
@@ -992,14 +991,13 @@ const opCreateMonitor = "CreateMonitor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateMonitorRequest method.
+//	req, resp := client.CreateMonitorRequest(params)
 //
-//    // Example sending a request using the CreateMonitorRequest method.
-//    req, resp := client.CreateMonitorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateMonitor
 func (c *ForecastService) CreateMonitorRequest(input *CreateMonitorInput) (req *request.Request, output *CreateMonitorOutput) {
@@ -1032,22 +1030,23 @@ func (c *ForecastService) CreateMonitorRequest(input *CreateMonitorInput) (req *
 // API operation CreateMonitor for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateMonitor
 func (c *ForecastService) CreateMonitor(input *CreateMonitorInput) (*CreateMonitorOutput, error) {
@@ -1087,14 +1086,13 @@ const opCreatePredictor = "CreatePredictor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreatePredictorRequest method.
+//	req, resp := client.CreatePredictorRequest(params)
 //
-//    // Example sending a request using the CreatePredictorRequest method.
-//    req, resp := client.CreatePredictorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreatePredictor
 func (c *ForecastService) CreatePredictorRequest(input *CreatePredictorInput) (req *request.Request, output *CreatePredictorOutput) {
@@ -1114,7 +1112,6 @@ func (c *ForecastService) CreatePredictorRequest(input *CreatePredictorInput) (r
 }
 
 // CreatePredictor API operation for Amazon Forecast Service.
-//
 //
 // This operation creates a legacy predictor that does not include all the predictor
 // functionalities provided by Amazon Forecast. To create a predictor that is
@@ -1145,7 +1142,7 @@ func (c *ForecastService) CreatePredictorRequest(input *CreatePredictorInput) (r
 // and 0.9 (P90) quantiles. You can choose custom forecast types to train and
 // evaluate your predictor by setting the ForecastTypes.
 //
-// AutoML
+// # AutoML
 //
 // If you want Amazon Forecast to evaluate each algorithm and choose the one
 // that minimizes the objective function, set PerformAutoML to true. The objective
@@ -1155,13 +1152,13 @@ func (c *ForecastService) CreatePredictorRequest(input *CreatePredictorInput) (r
 //
 // When AutoML is enabled, the following properties are disallowed:
 //
-//    * AlgorithmArn
+//   - AlgorithmArn
 //
-//    * HPOConfig
+//   - HPOConfig
 //
-//    * PerformHPO
+//   - PerformHPO
 //
-//    * TrainingParameters
+//   - TrainingParameters
 //
 // To get a list of all of your predictors, use the ListPredictors operation.
 //
@@ -1177,22 +1174,23 @@ func (c *ForecastService) CreatePredictorRequest(input *CreatePredictorInput) (r
 // API operation CreatePredictor for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreatePredictor
 func (c *ForecastService) CreatePredictor(input *CreatePredictorInput) (*CreatePredictorOutput, error) {
@@ -1232,14 +1230,13 @@ const opCreatePredictorBacktestExportJob = "CreatePredictorBacktestExportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreatePredictorBacktestExportJobRequest method.
+//	req, resp := client.CreatePredictorBacktestExportJobRequest(params)
 //
-//    // Example sending a request using the CreatePredictorBacktestExportJobRequest method.
-//    req, resp := client.CreatePredictorBacktestExportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreatePredictorBacktestExportJob
 func (c *ForecastService) CreatePredictorBacktestExportJobRequest(input *CreatePredictorBacktestExportJobInput) (req *request.Request, output *CreatePredictorBacktestExportJobOutput) {
@@ -1286,22 +1283,23 @@ func (c *ForecastService) CreatePredictorBacktestExportJobRequest(input *CreateP
 // API operation CreatePredictorBacktestExportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreatePredictorBacktestExportJob
 func (c *ForecastService) CreatePredictorBacktestExportJob(input *CreatePredictorBacktestExportJobInput) (*CreatePredictorBacktestExportJobOutput, error) {
@@ -1341,14 +1339,13 @@ const opCreateWhatIfAnalysis = "CreateWhatIfAnalysis"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWhatIfAnalysisRequest method.
+//	req, resp := client.CreateWhatIfAnalysisRequest(params)
 //
-//    // Example sending a request using the CreateWhatIfAnalysisRequest method.
-//    req, resp := client.CreateWhatIfAnalysisRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateWhatIfAnalysis
 func (c *ForecastService) CreateWhatIfAnalysisRequest(input *CreateWhatIfAnalysisInput) (req *request.Request, output *CreateWhatIfAnalysisOutput) {
@@ -1403,22 +1400,23 @@ func (c *ForecastService) CreateWhatIfAnalysisRequest(input *CreateWhatIfAnalysi
 // API operation CreateWhatIfAnalysis for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateWhatIfAnalysis
 func (c *ForecastService) CreateWhatIfAnalysis(input *CreateWhatIfAnalysisInput) (*CreateWhatIfAnalysisOutput, error) {
@@ -1458,14 +1456,13 @@ const opCreateWhatIfForecast = "CreateWhatIfForecast"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWhatIfForecastRequest method.
+//	req, resp := client.CreateWhatIfForecastRequest(params)
 //
-//    // Example sending a request using the CreateWhatIfForecastRequest method.
-//    req, resp := client.CreateWhatIfForecastRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateWhatIfForecast
 func (c *ForecastService) CreateWhatIfForecastRequest(input *CreateWhatIfForecastInput) (req *request.Request, output *CreateWhatIfForecastOutput) {
@@ -1498,22 +1495,23 @@ func (c *ForecastService) CreateWhatIfForecastRequest(input *CreateWhatIfForecas
 // API operation CreateWhatIfForecast for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateWhatIfForecast
 func (c *ForecastService) CreateWhatIfForecast(input *CreateWhatIfForecastInput) (*CreateWhatIfForecastOutput, error) {
@@ -1553,14 +1551,13 @@ const opCreateWhatIfForecastExport = "CreateWhatIfForecastExport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWhatIfForecastExportRequest method.
+//	req, resp := client.CreateWhatIfForecastExportRequest(params)
 //
-//    // Example sending a request using the CreateWhatIfForecastExportRequest method.
-//    req, resp := client.CreateWhatIfForecastExportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateWhatIfForecastExport
 func (c *ForecastService) CreateWhatIfForecastExportRequest(input *CreateWhatIfForecastExportInput) (req *request.Request, output *CreateWhatIfForecastExportOutput) {
@@ -1610,22 +1607,23 @@ func (c *ForecastService) CreateWhatIfForecastExportRequest(input *CreateWhatIfF
 // API operation CreateWhatIfForecastExport for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceAlreadyExistsException
-//   There is already a resource with this name. Try again with a different name.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - ResourceAlreadyExistsException
+//     There is already a resource with this name. Try again with a different name.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceInUseException
+//     The specified resource is in use.
+//
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/CreateWhatIfForecastExport
 func (c *ForecastService) CreateWhatIfForecastExport(input *CreateWhatIfForecastExportInput) (*CreateWhatIfForecastExportOutput, error) {
@@ -1665,14 +1663,13 @@ const opDeleteDataset = "DeleteDataset"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDatasetRequest method.
+//	req, resp := client.DeleteDatasetRequest(params)
 //
-//    // Example sending a request using the DeleteDatasetRequest method.
-//    req, resp := client.DeleteDatasetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteDataset
 func (c *ForecastService) DeleteDatasetRequest(input *DeleteDatasetInput) (req *request.Request, output *DeleteDatasetOutput) {
@@ -1713,16 +1710,17 @@ func (c *ForecastService) DeleteDatasetRequest(input *DeleteDatasetInput) (req *
 // API operation DeleteDataset for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteDataset
 func (c *ForecastService) DeleteDataset(input *DeleteDatasetInput) (*DeleteDatasetOutput, error) {
@@ -1762,14 +1760,13 @@ const opDeleteDatasetGroup = "DeleteDatasetGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDatasetGroupRequest method.
+//	req, resp := client.DeleteDatasetGroupRequest(params)
 //
-//    // Example sending a request using the DeleteDatasetGroupRequest method.
-//    req, resp := client.DeleteDatasetGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteDatasetGroup
 func (c *ForecastService) DeleteDatasetGroupRequest(input *DeleteDatasetGroupInput) (req *request.Request, output *DeleteDatasetGroupOutput) {
@@ -1807,16 +1804,17 @@ func (c *ForecastService) DeleteDatasetGroupRequest(input *DeleteDatasetGroupInp
 // API operation DeleteDatasetGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteDatasetGroup
 func (c *ForecastService) DeleteDatasetGroup(input *DeleteDatasetGroupInput) (*DeleteDatasetGroupOutput, error) {
@@ -1856,14 +1854,13 @@ const opDeleteDatasetImportJob = "DeleteDatasetImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDatasetImportJobRequest method.
+//	req, resp := client.DeleteDatasetImportJobRequest(params)
 //
-//    // Example sending a request using the DeleteDatasetImportJobRequest method.
-//    req, resp := client.DeleteDatasetImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteDatasetImportJob
 func (c *ForecastService) DeleteDatasetImportJobRequest(input *DeleteDatasetImportJobInput) (req *request.Request, output *DeleteDatasetImportJobOutput) {
@@ -1899,16 +1896,17 @@ func (c *ForecastService) DeleteDatasetImportJobRequest(input *DeleteDatasetImpo
 // API operation DeleteDatasetImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteDatasetImportJob
 func (c *ForecastService) DeleteDatasetImportJob(input *DeleteDatasetImportJobInput) (*DeleteDatasetImportJobOutput, error) {
@@ -1948,14 +1946,13 @@ const opDeleteExplainability = "DeleteExplainability"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteExplainabilityRequest method.
+//	req, resp := client.DeleteExplainabilityRequest(params)
 //
-//    // Example sending a request using the DeleteExplainabilityRequest method.
-//    req, resp := client.DeleteExplainabilityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteExplainability
 func (c *ForecastService) DeleteExplainabilityRequest(input *DeleteExplainabilityInput) (req *request.Request, output *DeleteExplainabilityOutput) {
@@ -1990,16 +1987,17 @@ func (c *ForecastService) DeleteExplainabilityRequest(input *DeleteExplainabilit
 // API operation DeleteExplainability for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteExplainability
 func (c *ForecastService) DeleteExplainability(input *DeleteExplainabilityInput) (*DeleteExplainabilityOutput, error) {
@@ -2039,14 +2037,13 @@ const opDeleteExplainabilityExport = "DeleteExplainabilityExport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteExplainabilityExportRequest method.
+//	req, resp := client.DeleteExplainabilityExportRequest(params)
 //
-//    // Example sending a request using the DeleteExplainabilityExportRequest method.
-//    req, resp := client.DeleteExplainabilityExportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteExplainabilityExport
 func (c *ForecastService) DeleteExplainabilityExportRequest(input *DeleteExplainabilityExportInput) (req *request.Request, output *DeleteExplainabilityExportOutput) {
@@ -2078,16 +2075,17 @@ func (c *ForecastService) DeleteExplainabilityExportRequest(input *DeleteExplain
 // API operation DeleteExplainabilityExport for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteExplainabilityExport
 func (c *ForecastService) DeleteExplainabilityExport(input *DeleteExplainabilityExportInput) (*DeleteExplainabilityExportOutput, error) {
@@ -2127,14 +2125,13 @@ const opDeleteForecast = "DeleteForecast"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteForecastRequest method.
+//	req, resp := client.DeleteForecastRequest(params)
 //
-//    // Example sending a request using the DeleteForecastRequest method.
-//    req, resp := client.DeleteForecastRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteForecast
 func (c *ForecastService) DeleteForecastRequest(input *DeleteForecastInput) (req *request.Request, output *DeleteForecastOutput) {
@@ -2171,16 +2168,17 @@ func (c *ForecastService) DeleteForecastRequest(input *DeleteForecastInput) (req
 // API operation DeleteForecast for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteForecast
 func (c *ForecastService) DeleteForecast(input *DeleteForecastInput) (*DeleteForecastOutput, error) {
@@ -2220,14 +2218,13 @@ const opDeleteForecastExportJob = "DeleteForecastExportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteForecastExportJobRequest method.
+//	req, resp := client.DeleteForecastExportJobRequest(params)
 //
-//    // Example sending a request using the DeleteForecastExportJobRequest method.
-//    req, resp := client.DeleteForecastExportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteForecastExportJob
 func (c *ForecastService) DeleteForecastExportJobRequest(input *DeleteForecastExportJobInput) (req *request.Request, output *DeleteForecastExportJobOutput) {
@@ -2261,16 +2258,17 @@ func (c *ForecastService) DeleteForecastExportJobRequest(input *DeleteForecastEx
 // API operation DeleteForecastExportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteForecastExportJob
 func (c *ForecastService) DeleteForecastExportJob(input *DeleteForecastExportJobInput) (*DeleteForecastExportJobOutput, error) {
@@ -2310,14 +2308,13 @@ const opDeleteMonitor = "DeleteMonitor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMonitorRequest method.
+//	req, resp := client.DeleteMonitorRequest(params)
 //
-//    // Example sending a request using the DeleteMonitorRequest method.
-//    req, resp := client.DeleteMonitorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteMonitor
 func (c *ForecastService) DeleteMonitorRequest(input *DeleteMonitorInput) (req *request.Request, output *DeleteMonitorOutput) {
@@ -2350,16 +2347,17 @@ func (c *ForecastService) DeleteMonitorRequest(input *DeleteMonitorInput) (req *
 // API operation DeleteMonitor for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteMonitor
 func (c *ForecastService) DeleteMonitor(input *DeleteMonitorInput) (*DeleteMonitorOutput, error) {
@@ -2399,14 +2397,13 @@ const opDeletePredictor = "DeletePredictor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePredictorRequest method.
+//	req, resp := client.DeletePredictorRequest(params)
 //
-//    // Example sending a request using the DeletePredictorRequest method.
-//    req, resp := client.DeletePredictorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeletePredictor
 func (c *ForecastService) DeletePredictorRequest(input *DeletePredictorInput) (req *request.Request, output *DeletePredictorOutput) {
@@ -2440,16 +2437,17 @@ func (c *ForecastService) DeletePredictorRequest(input *DeletePredictorInput) (r
 // API operation DeletePredictor for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeletePredictor
 func (c *ForecastService) DeletePredictor(input *DeletePredictorInput) (*DeletePredictorOutput, error) {
@@ -2489,14 +2487,13 @@ const opDeletePredictorBacktestExportJob = "DeletePredictorBacktestExportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePredictorBacktestExportJobRequest method.
+//	req, resp := client.DeletePredictorBacktestExportJobRequest(params)
 //
-//    // Example sending a request using the DeletePredictorBacktestExportJobRequest method.
-//    req, resp := client.DeletePredictorBacktestExportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeletePredictorBacktestExportJob
 func (c *ForecastService) DeletePredictorBacktestExportJobRequest(input *DeletePredictorBacktestExportJobInput) (req *request.Request, output *DeletePredictorBacktestExportJobOutput) {
@@ -2528,16 +2525,17 @@ func (c *ForecastService) DeletePredictorBacktestExportJobRequest(input *DeleteP
 // API operation DeletePredictorBacktestExportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeletePredictorBacktestExportJob
 func (c *ForecastService) DeletePredictorBacktestExportJob(input *DeletePredictorBacktestExportJobInput) (*DeletePredictorBacktestExportJobOutput, error) {
@@ -2577,14 +2575,13 @@ const opDeleteResourceTree = "DeleteResourceTree"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResourceTreeRequest method.
+//	req, resp := client.DeleteResourceTreeRequest(params)
 //
-//    // Example sending a request using the DeleteResourceTreeRequest method.
-//    req, resp := client.DeleteResourceTreeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteResourceTree
 func (c *ForecastService) DeleteResourceTreeRequest(input *DeleteResourceTreeInput) (req *request.Request, output *DeleteResourceTreeOutput) {
@@ -2615,15 +2612,15 @@ func (c *ForecastService) DeleteResourceTreeRequest(input *DeleteResourceTreeInp
 //
 // Amazon Forecast resources possess the following parent-child resource hierarchies:
 //
-//    * Dataset: dataset import jobs
+//   - Dataset: dataset import jobs
 //
-//    * Dataset Group: predictors, predictor backtest export jobs, forecasts,
-//    forecast export jobs
+//   - Dataset Group: predictors, predictor backtest export jobs, forecasts,
+//     forecast export jobs
 //
-//    * Predictor: predictor backtest export jobs, forecasts, forecast export
-//    jobs
+//   - Predictor: predictor backtest export jobs, forecasts, forecast export
+//     jobs
 //
-//    * Forecast: forecast export jobs
+//   - Forecast: forecast export jobs
 //
 // DeleteResourceTree will only delete Amazon Forecast resources, and will not
 // delete datasets or exported files stored in Amazon S3.
@@ -2636,16 +2633,17 @@ func (c *ForecastService) DeleteResourceTreeRequest(input *DeleteResourceTreeInp
 // API operation DeleteResourceTree for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteResourceTree
 func (c *ForecastService) DeleteResourceTree(input *DeleteResourceTreeInput) (*DeleteResourceTreeOutput, error) {
@@ -2685,14 +2683,13 @@ const opDeleteWhatIfAnalysis = "DeleteWhatIfAnalysis"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWhatIfAnalysisRequest method.
+//	req, resp := client.DeleteWhatIfAnalysisRequest(params)
 //
-//    // Example sending a request using the DeleteWhatIfAnalysisRequest method.
-//    req, resp := client.DeleteWhatIfAnalysisRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteWhatIfAnalysis
 func (c *ForecastService) DeleteWhatIfAnalysisRequest(input *DeleteWhatIfAnalysisInput) (req *request.Request, output *DeleteWhatIfAnalysisOutput) {
@@ -2729,16 +2726,17 @@ func (c *ForecastService) DeleteWhatIfAnalysisRequest(input *DeleteWhatIfAnalysi
 // API operation DeleteWhatIfAnalysis for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteWhatIfAnalysis
 func (c *ForecastService) DeleteWhatIfAnalysis(input *DeleteWhatIfAnalysisInput) (*DeleteWhatIfAnalysisOutput, error) {
@@ -2778,14 +2776,13 @@ const opDeleteWhatIfForecast = "DeleteWhatIfForecast"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWhatIfForecastRequest method.
+//	req, resp := client.DeleteWhatIfForecastRequest(params)
 //
-//    // Example sending a request using the DeleteWhatIfForecastRequest method.
-//    req, resp := client.DeleteWhatIfForecastRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteWhatIfForecast
 func (c *ForecastService) DeleteWhatIfForecastRequest(input *DeleteWhatIfForecastInput) (req *request.Request, output *DeleteWhatIfForecastOutput) {
@@ -2822,16 +2819,17 @@ func (c *ForecastService) DeleteWhatIfForecastRequest(input *DeleteWhatIfForecas
 // API operation DeleteWhatIfForecast for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteWhatIfForecast
 func (c *ForecastService) DeleteWhatIfForecast(input *DeleteWhatIfForecastInput) (*DeleteWhatIfForecastOutput, error) {
@@ -2871,14 +2869,13 @@ const opDeleteWhatIfForecastExport = "DeleteWhatIfForecastExport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWhatIfForecastExportRequest method.
+//	req, resp := client.DeleteWhatIfForecastExportRequest(params)
 //
-//    // Example sending a request using the DeleteWhatIfForecastExportRequest method.
-//    req, resp := client.DeleteWhatIfForecastExportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteWhatIfForecastExport
 func (c *ForecastService) DeleteWhatIfForecastExportRequest(input *DeleteWhatIfForecastExportInput) (req *request.Request, output *DeleteWhatIfForecastExportOutput) {
@@ -2913,16 +2910,17 @@ func (c *ForecastService) DeleteWhatIfForecastExportRequest(input *DeleteWhatIfF
 // API operation DeleteWhatIfForecastExport for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DeleteWhatIfForecastExport
 func (c *ForecastService) DeleteWhatIfForecastExport(input *DeleteWhatIfForecastExportInput) (*DeleteWhatIfForecastExportOutput, error) {
@@ -2962,14 +2960,13 @@ const opDescribeAutoPredictor = "DescribeAutoPredictor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeAutoPredictorRequest method.
+//	req, resp := client.DescribeAutoPredictorRequest(params)
 //
-//    // Example sending a request using the DescribeAutoPredictorRequest method.
-//    req, resp := client.DescribeAutoPredictorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeAutoPredictor
 func (c *ForecastService) DescribeAutoPredictorRequest(input *DescribeAutoPredictorInput) (req *request.Request, output *DescribeAutoPredictorOutput) {
@@ -3000,13 +2997,14 @@ func (c *ForecastService) DescribeAutoPredictorRequest(input *DescribeAutoPredic
 // API operation DescribeAutoPredictor for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeAutoPredictor
 func (c *ForecastService) DescribeAutoPredictor(input *DescribeAutoPredictorInput) (*DescribeAutoPredictorOutput, error) {
@@ -3046,14 +3044,13 @@ const opDescribeDataset = "DescribeDataset"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeDatasetRequest method.
+//	req, resp := client.DescribeDatasetRequest(params)
 //
-//    // Example sending a request using the DescribeDatasetRequest method.
-//    req, resp := client.DescribeDatasetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeDataset
 func (c *ForecastService) DescribeDatasetRequest(input *DescribeDatasetInput) (req *request.Request, output *DescribeDatasetOutput) {
@@ -3080,11 +3077,11 @@ func (c *ForecastService) DescribeDatasetRequest(input *DescribeDatasetInput) (r
 // In addition to listing the parameters specified in the CreateDataset request,
 // this operation includes the following dataset properties:
 //
-//    * CreationTime
+//   - CreationTime
 //
-//    * LastModificationTime
+//   - LastModificationTime
 //
-//    * Status
+//   - Status
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3094,13 +3091,14 @@ func (c *ForecastService) DescribeDatasetRequest(input *DescribeDatasetInput) (r
 // API operation DescribeDataset for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeDataset
 func (c *ForecastService) DescribeDataset(input *DescribeDatasetInput) (*DescribeDatasetOutput, error) {
@@ -3140,14 +3138,13 @@ const opDescribeDatasetGroup = "DescribeDatasetGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeDatasetGroupRequest method.
+//	req, resp := client.DescribeDatasetGroupRequest(params)
 //
-//    // Example sending a request using the DescribeDatasetGroupRequest method.
-//    req, resp := client.DescribeDatasetGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeDatasetGroup
 func (c *ForecastService) DescribeDatasetGroupRequest(input *DescribeDatasetGroupInput) (req *request.Request, output *DescribeDatasetGroupOutput) {
@@ -3174,13 +3171,13 @@ func (c *ForecastService) DescribeDatasetGroupRequest(input *DescribeDatasetGrou
 // In addition to listing the parameters provided in the CreateDatasetGroup
 // request, this operation includes the following properties:
 //
-//    * DatasetArns - The datasets belonging to the group.
+//   - DatasetArns - The datasets belonging to the group.
 //
-//    * CreationTime
+//   - CreationTime
 //
-//    * LastModificationTime
+//   - LastModificationTime
 //
-//    * Status
+//   - Status
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3190,13 +3187,14 @@ func (c *ForecastService) DescribeDatasetGroupRequest(input *DescribeDatasetGrou
 // API operation DescribeDatasetGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeDatasetGroup
 func (c *ForecastService) DescribeDatasetGroup(input *DescribeDatasetGroupInput) (*DescribeDatasetGroupOutput, error) {
@@ -3236,14 +3234,13 @@ const opDescribeDatasetImportJob = "DescribeDatasetImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeDatasetImportJobRequest method.
+//	req, resp := client.DescribeDatasetImportJobRequest(params)
 //
-//    // Example sending a request using the DescribeDatasetImportJobRequest method.
-//    req, resp := client.DescribeDatasetImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeDatasetImportJob
 func (c *ForecastService) DescribeDatasetImportJobRequest(input *DescribeDatasetImportJobInput) (req *request.Request, output *DescribeDatasetImportJobOutput) {
@@ -3270,17 +3267,17 @@ func (c *ForecastService) DescribeDatasetImportJobRequest(input *DescribeDataset
 // In addition to listing the parameters provided in the CreateDatasetImportJob
 // request, this operation includes the following properties:
 //
-//    * CreationTime
+//   - CreationTime
 //
-//    * LastModificationTime
+//   - LastModificationTime
 //
-//    * DataSize
+//   - DataSize
 //
-//    * FieldStatistics
+//   - FieldStatistics
 //
-//    * Status
+//   - Status
 //
-//    * Message - If an error occurred, information about the error.
+//   - Message - If an error occurred, information about the error.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3290,13 +3287,14 @@ func (c *ForecastService) DescribeDatasetImportJobRequest(input *DescribeDataset
 // API operation DescribeDatasetImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeDatasetImportJob
 func (c *ForecastService) DescribeDatasetImportJob(input *DescribeDatasetImportJobInput) (*DescribeDatasetImportJobOutput, error) {
@@ -3336,14 +3334,13 @@ const opDescribeExplainability = "DescribeExplainability"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeExplainabilityRequest method.
+//	req, resp := client.DescribeExplainabilityRequest(params)
 //
-//    // Example sending a request using the DescribeExplainabilityRequest method.
-//    req, resp := client.DescribeExplainabilityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeExplainability
 func (c *ForecastService) DescribeExplainabilityRequest(input *DescribeExplainabilityInput) (req *request.Request, output *DescribeExplainabilityOutput) {
@@ -3375,13 +3372,14 @@ func (c *ForecastService) DescribeExplainabilityRequest(input *DescribeExplainab
 // API operation DescribeExplainability for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeExplainability
 func (c *ForecastService) DescribeExplainability(input *DescribeExplainabilityInput) (*DescribeExplainabilityOutput, error) {
@@ -3421,14 +3419,13 @@ const opDescribeExplainabilityExport = "DescribeExplainabilityExport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeExplainabilityExportRequest method.
+//	req, resp := client.DescribeExplainabilityExportRequest(params)
 //
-//    // Example sending a request using the DescribeExplainabilityExportRequest method.
-//    req, resp := client.DescribeExplainabilityExportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeExplainabilityExport
 func (c *ForecastService) DescribeExplainabilityExportRequest(input *DescribeExplainabilityExportInput) (req *request.Request, output *DescribeExplainabilityExportOutput) {
@@ -3460,13 +3457,14 @@ func (c *ForecastService) DescribeExplainabilityExportRequest(input *DescribeExp
 // API operation DescribeExplainabilityExport for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeExplainabilityExport
 func (c *ForecastService) DescribeExplainabilityExport(input *DescribeExplainabilityExportInput) (*DescribeExplainabilityExportOutput, error) {
@@ -3506,14 +3504,13 @@ const opDescribeForecast = "DescribeForecast"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeForecastRequest method.
+//	req, resp := client.DescribeForecastRequest(params)
 //
-//    // Example sending a request using the DescribeForecastRequest method.
-//    req, resp := client.DescribeForecastRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeForecast
 func (c *ForecastService) DescribeForecastRequest(input *DescribeForecastInput) (req *request.Request, output *DescribeForecastOutput) {
@@ -3539,15 +3536,15 @@ func (c *ForecastService) DescribeForecastRequest(input *DescribeForecastInput) 
 // In addition to listing the properties provided in the CreateForecast request,
 // this operation lists the following properties:
 //
-//    * DatasetGroupArn - The dataset group that provided the training data.
+//   - DatasetGroupArn - The dataset group that provided the training data.
 //
-//    * CreationTime
+//   - CreationTime
 //
-//    * LastModificationTime
+//   - LastModificationTime
 //
-//    * Status
+//   - Status
 //
-//    * Message - If an error occurred, information about the error.
+//   - Message - If an error occurred, information about the error.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3557,13 +3554,14 @@ func (c *ForecastService) DescribeForecastRequest(input *DescribeForecastInput) 
 // API operation DescribeForecast for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeForecast
 func (c *ForecastService) DescribeForecast(input *DescribeForecastInput) (*DescribeForecastOutput, error) {
@@ -3603,14 +3601,13 @@ const opDescribeForecastExportJob = "DescribeForecastExportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeForecastExportJobRequest method.
+//	req, resp := client.DescribeForecastExportJobRequest(params)
 //
-//    // Example sending a request using the DescribeForecastExportJobRequest method.
-//    req, resp := client.DescribeForecastExportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeForecastExportJob
 func (c *ForecastService) DescribeForecastExportJobRequest(input *DescribeForecastExportJobInput) (req *request.Request, output *DescribeForecastExportJobOutput) {
@@ -3637,13 +3634,13 @@ func (c *ForecastService) DescribeForecastExportJobRequest(input *DescribeForeca
 // In addition to listing the properties provided by the user in the CreateForecastExportJob
 // request, this operation lists the following properties:
 //
-//    * CreationTime
+//   - CreationTime
 //
-//    * LastModificationTime
+//   - LastModificationTime
 //
-//    * Status
+//   - Status
 //
-//    * Message - If an error occurred, information about the error.
+//   - Message - If an error occurred, information about the error.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3653,13 +3650,14 @@ func (c *ForecastService) DescribeForecastExportJobRequest(input *DescribeForeca
 // API operation DescribeForecastExportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeForecastExportJob
 func (c *ForecastService) DescribeForecastExportJob(input *DescribeForecastExportJobInput) (*DescribeForecastExportJobOutput, error) {
@@ -3699,14 +3697,13 @@ const opDescribeMonitor = "DescribeMonitor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeMonitorRequest method.
+//	req, resp := client.DescribeMonitorRequest(params)
 //
-//    // Example sending a request using the DescribeMonitorRequest method.
-//    req, resp := client.DescribeMonitorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeMonitor
 func (c *ForecastService) DescribeMonitorRequest(input *DescribeMonitorInput) (req *request.Request, output *DescribeMonitorOutput) {
@@ -3730,19 +3727,19 @@ func (c *ForecastService) DescribeMonitorRequest(input *DescribeMonitorInput) (r
 // Describes a monitor resource. In addition to listing the properties provided
 // in the CreateMonitor request, this operation lists the following properties:
 //
-//    * Baseline
+//   - Baseline
 //
-//    * CreationTime
+//   - CreationTime
 //
-//    * LastEvaluationTime
+//   - LastEvaluationTime
 //
-//    * LastEvaluationState
+//   - LastEvaluationState
 //
-//    * LastModificationTime
+//   - LastModificationTime
 //
-//    * Message
+//   - Message
 //
-//    * Status
+//   - Status
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3752,13 +3749,14 @@ func (c *ForecastService) DescribeMonitorRequest(input *DescribeMonitorInput) (r
 // API operation DescribeMonitor for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeMonitor
 func (c *ForecastService) DescribeMonitor(input *DescribeMonitorInput) (*DescribeMonitorOutput, error) {
@@ -3798,14 +3796,13 @@ const opDescribePredictor = "DescribePredictor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribePredictorRequest method.
+//	req, resp := client.DescribePredictorRequest(params)
 //
-//    // Example sending a request using the DescribePredictorRequest method.
-//    req, resp := client.DescribePredictorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribePredictor
 func (c *ForecastService) DescribePredictorRequest(input *DescribePredictorInput) (req *request.Request, output *DescribePredictorOutput) {
@@ -3826,7 +3823,6 @@ func (c *ForecastService) DescribePredictorRequest(input *DescribePredictorInput
 
 // DescribePredictor API operation for Amazon Forecast Service.
 //
-//
 // This operation is only valid for legacy predictors created with CreatePredictor.
 // If you are not using a legacy predictor, use DescribeAutoPredictor.
 //
@@ -3835,19 +3831,19 @@ func (c *ForecastService) DescribePredictorRequest(input *DescribePredictorInput
 // In addition to listing the properties provided in the CreatePredictor request,
 // this operation lists the following properties:
 //
-//    * DatasetImportJobArns - The dataset import jobs used to import training
-//    data.
+//   - DatasetImportJobArns - The dataset import jobs used to import training
+//     data.
 //
-//    * AutoMLAlgorithmArns - If AutoML is performed, the algorithms that were
-//    evaluated.
+//   - AutoMLAlgorithmArns - If AutoML is performed, the algorithms that were
+//     evaluated.
 //
-//    * CreationTime
+//   - CreationTime
 //
-//    * LastModificationTime
+//   - LastModificationTime
 //
-//    * Status
+//   - Status
 //
-//    * Message - If an error occurred, information about the error.
+//   - Message - If an error occurred, information about the error.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3857,13 +3853,14 @@ func (c *ForecastService) DescribePredictorRequest(input *DescribePredictorInput
 // API operation DescribePredictor for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribePredictor
 func (c *ForecastService) DescribePredictor(input *DescribePredictorInput) (*DescribePredictorOutput, error) {
@@ -3903,14 +3900,13 @@ const opDescribePredictorBacktestExportJob = "DescribePredictorBacktestExportJob
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribePredictorBacktestExportJobRequest method.
+//	req, resp := client.DescribePredictorBacktestExportJobRequest(params)
 //
-//    // Example sending a request using the DescribePredictorBacktestExportJobRequest method.
-//    req, resp := client.DescribePredictorBacktestExportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribePredictorBacktestExportJob
 func (c *ForecastService) DescribePredictorBacktestExportJobRequest(input *DescribePredictorBacktestExportJobInput) (req *request.Request, output *DescribePredictorBacktestExportJobOutput) {
@@ -3937,13 +3933,13 @@ func (c *ForecastService) DescribePredictorBacktestExportJobRequest(input *Descr
 // In addition to listing the properties provided by the user in the CreatePredictorBacktestExportJob
 // request, this operation lists the following properties:
 //
-//    * CreationTime
+//   - CreationTime
 //
-//    * LastModificationTime
+//   - LastModificationTime
 //
-//    * Status
+//   - Status
 //
-//    * Message (if an error occurred)
+//   - Message (if an error occurred)
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3953,13 +3949,14 @@ func (c *ForecastService) DescribePredictorBacktestExportJobRequest(input *Descr
 // API operation DescribePredictorBacktestExportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribePredictorBacktestExportJob
 func (c *ForecastService) DescribePredictorBacktestExportJob(input *DescribePredictorBacktestExportJobInput) (*DescribePredictorBacktestExportJobOutput, error) {
@@ -3999,14 +3996,13 @@ const opDescribeWhatIfAnalysis = "DescribeWhatIfAnalysis"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeWhatIfAnalysisRequest method.
+//	req, resp := client.DescribeWhatIfAnalysisRequest(params)
 //
-//    // Example sending a request using the DescribeWhatIfAnalysisRequest method.
-//    req, resp := client.DescribeWhatIfAnalysisRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeWhatIfAnalysis
 func (c *ForecastService) DescribeWhatIfAnalysisRequest(input *DescribeWhatIfAnalysisInput) (req *request.Request, output *DescribeWhatIfAnalysisOutput) {
@@ -4032,13 +4028,13 @@ func (c *ForecastService) DescribeWhatIfAnalysisRequest(input *DescribeWhatIfAna
 // In addition to listing the properties provided in the CreateWhatIfAnalysis
 // request, this operation lists the following properties:
 //
-//    * CreationTime
+//   - CreationTime
 //
-//    * LastModificationTime
+//   - LastModificationTime
 //
-//    * Message - If an error occurred, information about the error.
+//   - Message - If an error occurred, information about the error.
 //
-//    * Status
+//   - Status
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4048,13 +4044,14 @@ func (c *ForecastService) DescribeWhatIfAnalysisRequest(input *DescribeWhatIfAna
 // API operation DescribeWhatIfAnalysis for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeWhatIfAnalysis
 func (c *ForecastService) DescribeWhatIfAnalysis(input *DescribeWhatIfAnalysisInput) (*DescribeWhatIfAnalysisOutput, error) {
@@ -4094,14 +4091,13 @@ const opDescribeWhatIfForecast = "DescribeWhatIfForecast"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeWhatIfForecastRequest method.
+//	req, resp := client.DescribeWhatIfForecastRequest(params)
 //
-//    // Example sending a request using the DescribeWhatIfForecastRequest method.
-//    req, resp := client.DescribeWhatIfForecastRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeWhatIfForecast
 func (c *ForecastService) DescribeWhatIfForecastRequest(input *DescribeWhatIfForecastInput) (req *request.Request, output *DescribeWhatIfForecastOutput) {
@@ -4127,13 +4123,13 @@ func (c *ForecastService) DescribeWhatIfForecastRequest(input *DescribeWhatIfFor
 // In addition to listing the properties provided in the CreateWhatIfForecast
 // request, this operation lists the following properties:
 //
-//    * CreationTime
+//   - CreationTime
 //
-//    * LastModificationTime
+//   - LastModificationTime
 //
-//    * Message - If an error occurred, information about the error.
+//   - Message - If an error occurred, information about the error.
 //
-//    * Status
+//   - Status
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4143,13 +4139,14 @@ func (c *ForecastService) DescribeWhatIfForecastRequest(input *DescribeWhatIfFor
 // API operation DescribeWhatIfForecast for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeWhatIfForecast
 func (c *ForecastService) DescribeWhatIfForecast(input *DescribeWhatIfForecastInput) (*DescribeWhatIfForecastOutput, error) {
@@ -4189,14 +4186,13 @@ const opDescribeWhatIfForecastExport = "DescribeWhatIfForecastExport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeWhatIfForecastExportRequest method.
+//	req, resp := client.DescribeWhatIfForecastExportRequest(params)
 //
-//    // Example sending a request using the DescribeWhatIfForecastExportRequest method.
-//    req, resp := client.DescribeWhatIfForecastExportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeWhatIfForecastExport
 func (c *ForecastService) DescribeWhatIfForecastExportRequest(input *DescribeWhatIfForecastExportInput) (req *request.Request, output *DescribeWhatIfForecastExportOutput) {
@@ -4223,13 +4219,13 @@ func (c *ForecastService) DescribeWhatIfForecastExportRequest(input *DescribeWha
 // In addition to listing the properties provided in the CreateWhatIfForecastExport
 // request, this operation lists the following properties:
 //
-//    * CreationTime
+//   - CreationTime
 //
-//    * LastModificationTime
+//   - LastModificationTime
 //
-//    * Message - If an error occurred, information about the error.
+//   - Message - If an error occurred, information about the error.
 //
-//    * Status
+//   - Status
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4239,13 +4235,14 @@ func (c *ForecastService) DescribeWhatIfForecastExportRequest(input *DescribeWha
 // API operation DescribeWhatIfForecastExport for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/DescribeWhatIfForecastExport
 func (c *ForecastService) DescribeWhatIfForecastExport(input *DescribeWhatIfForecastExportInput) (*DescribeWhatIfForecastExportOutput, error) {
@@ -4285,14 +4282,13 @@ const opGetAccuracyMetrics = "GetAccuracyMetrics"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAccuracyMetricsRequest method.
+//	req, resp := client.GetAccuracyMetricsRequest(params)
 //
-//    // Example sending a request using the GetAccuracyMetricsRequest method.
-//    req, resp := client.GetAccuracyMetricsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/GetAccuracyMetrics
 func (c *ForecastService) GetAccuracyMetricsRequest(input *GetAccuracyMetricsInput) (req *request.Request, output *GetAccuracyMetricsOutput) {
@@ -4341,16 +4337,17 @@ func (c *ForecastService) GetAccuracyMetricsRequest(input *GetAccuracyMetricsInp
 // API operation GetAccuracyMetrics for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/GetAccuracyMetrics
 func (c *ForecastService) GetAccuracyMetrics(input *GetAccuracyMetricsInput) (*GetAccuracyMetricsOutput, error) {
@@ -4390,14 +4387,13 @@ const opListDatasetGroups = "ListDatasetGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDatasetGroupsRequest method.
+//	req, resp := client.ListDatasetGroupsRequest(params)
 //
-//    // Example sending a request using the ListDatasetGroupsRequest method.
-//    req, resp := client.ListDatasetGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListDatasetGroups
 func (c *ForecastService) ListDatasetGroupsRequest(input *ListDatasetGroupsInput) (req *request.Request, output *ListDatasetGroupsOutput) {
@@ -4439,8 +4435,8 @@ func (c *ForecastService) ListDatasetGroupsRequest(input *ListDatasetGroupsInput
 // API operation ListDatasetGroups for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListDatasetGroups
 func (c *ForecastService) ListDatasetGroups(input *ListDatasetGroupsInput) (*ListDatasetGroupsOutput, error) {
@@ -4472,15 +4468,14 @@ func (c *ForecastService) ListDatasetGroupsWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDatasetGroups operation.
-//    pageNum := 0
-//    err := client.ListDatasetGroupsPages(params,
-//        func(page *forecastservice.ListDatasetGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDatasetGroups operation.
+//	pageNum := 0
+//	err := client.ListDatasetGroupsPages(params,
+//	    func(page *forecastservice.ListDatasetGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListDatasetGroupsPages(input *ListDatasetGroupsInput, fn func(*ListDatasetGroupsOutput, bool) bool) error {
 	return c.ListDatasetGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4532,14 +4527,13 @@ const opListDatasetImportJobs = "ListDatasetImportJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDatasetImportJobsRequest method.
+//	req, resp := client.ListDatasetImportJobsRequest(params)
 //
-//    // Example sending a request using the ListDatasetImportJobsRequest method.
-//    req, resp := client.ListDatasetImportJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListDatasetImportJobs
 func (c *ForecastService) ListDatasetImportJobsRequest(input *ListDatasetImportJobsInput) (req *request.Request, output *ListDatasetImportJobsOutput) {
@@ -4582,12 +4576,13 @@ func (c *ForecastService) ListDatasetImportJobsRequest(input *ListDatasetImportJ
 // API operation ListDatasetImportJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListDatasetImportJobs
 func (c *ForecastService) ListDatasetImportJobs(input *ListDatasetImportJobsInput) (*ListDatasetImportJobsOutput, error) {
@@ -4619,15 +4614,14 @@ func (c *ForecastService) ListDatasetImportJobsWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDatasetImportJobs operation.
-//    pageNum := 0
-//    err := client.ListDatasetImportJobsPages(params,
-//        func(page *forecastservice.ListDatasetImportJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDatasetImportJobs operation.
+//	pageNum := 0
+//	err := client.ListDatasetImportJobsPages(params,
+//	    func(page *forecastservice.ListDatasetImportJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListDatasetImportJobsPages(input *ListDatasetImportJobsInput, fn func(*ListDatasetImportJobsOutput, bool) bool) error {
 	return c.ListDatasetImportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4679,14 +4673,13 @@ const opListDatasets = "ListDatasets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDatasetsRequest method.
+//	req, resp := client.ListDatasetsRequest(params)
 //
-//    // Example sending a request using the ListDatasetsRequest method.
-//    req, resp := client.ListDatasetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListDatasets
 func (c *ForecastService) ListDatasetsRequest(input *ListDatasetsInput) (req *request.Request, output *ListDatasetsOutput) {
@@ -4727,8 +4720,8 @@ func (c *ForecastService) ListDatasetsRequest(input *ListDatasetsInput) (req *re
 // API operation ListDatasets for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListDatasets
 func (c *ForecastService) ListDatasets(input *ListDatasetsInput) (*ListDatasetsOutput, error) {
@@ -4760,15 +4753,14 @@ func (c *ForecastService) ListDatasetsWithContext(ctx aws.Context, input *ListDa
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDatasets operation.
-//    pageNum := 0
-//    err := client.ListDatasetsPages(params,
-//        func(page *forecastservice.ListDatasetsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDatasets operation.
+//	pageNum := 0
+//	err := client.ListDatasetsPages(params,
+//	    func(page *forecastservice.ListDatasetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListDatasetsPages(input *ListDatasetsInput, fn func(*ListDatasetsOutput, bool) bool) error {
 	return c.ListDatasetsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4820,14 +4812,13 @@ const opListExplainabilities = "ListExplainabilities"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListExplainabilitiesRequest method.
+//	req, resp := client.ListExplainabilitiesRequest(params)
 //
-//    // Example sending a request using the ListExplainabilitiesRequest method.
-//    req, resp := client.ListExplainabilitiesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListExplainabilities
 func (c *ForecastService) ListExplainabilitiesRequest(input *ListExplainabilitiesInput) (req *request.Request, output *ListExplainabilitiesOutput) {
@@ -4869,12 +4860,13 @@ func (c *ForecastService) ListExplainabilitiesRequest(input *ListExplainabilitie
 // API operation ListExplainabilities for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListExplainabilities
 func (c *ForecastService) ListExplainabilities(input *ListExplainabilitiesInput) (*ListExplainabilitiesOutput, error) {
@@ -4906,15 +4898,14 @@ func (c *ForecastService) ListExplainabilitiesWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListExplainabilities operation.
-//    pageNum := 0
-//    err := client.ListExplainabilitiesPages(params,
-//        func(page *forecastservice.ListExplainabilitiesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListExplainabilities operation.
+//	pageNum := 0
+//	err := client.ListExplainabilitiesPages(params,
+//	    func(page *forecastservice.ListExplainabilitiesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListExplainabilitiesPages(input *ListExplainabilitiesInput, fn func(*ListExplainabilitiesOutput, bool) bool) error {
 	return c.ListExplainabilitiesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4966,14 +4957,13 @@ const opListExplainabilityExports = "ListExplainabilityExports"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListExplainabilityExportsRequest method.
+//	req, resp := client.ListExplainabilityExportsRequest(params)
 //
-//    // Example sending a request using the ListExplainabilityExportsRequest method.
-//    req, resp := client.ListExplainabilityExportsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListExplainabilityExports
 func (c *ForecastService) ListExplainabilityExportsRequest(input *ListExplainabilityExportsInput) (req *request.Request, output *ListExplainabilityExportsOutput) {
@@ -5015,12 +5005,13 @@ func (c *ForecastService) ListExplainabilityExportsRequest(input *ListExplainabi
 // API operation ListExplainabilityExports for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListExplainabilityExports
 func (c *ForecastService) ListExplainabilityExports(input *ListExplainabilityExportsInput) (*ListExplainabilityExportsOutput, error) {
@@ -5052,15 +5043,14 @@ func (c *ForecastService) ListExplainabilityExportsWithContext(ctx aws.Context, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListExplainabilityExports operation.
-//    pageNum := 0
-//    err := client.ListExplainabilityExportsPages(params,
-//        func(page *forecastservice.ListExplainabilityExportsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListExplainabilityExports operation.
+//	pageNum := 0
+//	err := client.ListExplainabilityExportsPages(params,
+//	    func(page *forecastservice.ListExplainabilityExportsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListExplainabilityExportsPages(input *ListExplainabilityExportsInput, fn func(*ListExplainabilityExportsOutput, bool) bool) error {
 	return c.ListExplainabilityExportsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5112,14 +5102,13 @@ const opListForecastExportJobs = "ListForecastExportJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListForecastExportJobsRequest method.
+//	req, resp := client.ListForecastExportJobsRequest(params)
 //
-//    // Example sending a request using the ListForecastExportJobsRequest method.
-//    req, resp := client.ListForecastExportJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListForecastExportJobs
 func (c *ForecastService) ListForecastExportJobsRequest(input *ListForecastExportJobsInput) (req *request.Request, output *ListForecastExportJobsOutput) {
@@ -5160,12 +5149,13 @@ func (c *ForecastService) ListForecastExportJobsRequest(input *ListForecastExpor
 // API operation ListForecastExportJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListForecastExportJobs
 func (c *ForecastService) ListForecastExportJobs(input *ListForecastExportJobsInput) (*ListForecastExportJobsOutput, error) {
@@ -5197,15 +5187,14 @@ func (c *ForecastService) ListForecastExportJobsWithContext(ctx aws.Context, inp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListForecastExportJobs operation.
-//    pageNum := 0
-//    err := client.ListForecastExportJobsPages(params,
-//        func(page *forecastservice.ListForecastExportJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListForecastExportJobs operation.
+//	pageNum := 0
+//	err := client.ListForecastExportJobsPages(params,
+//	    func(page *forecastservice.ListForecastExportJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListForecastExportJobsPages(input *ListForecastExportJobsInput, fn func(*ListForecastExportJobsOutput, bool) bool) error {
 	return c.ListForecastExportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5257,14 +5246,13 @@ const opListForecasts = "ListForecasts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListForecastsRequest method.
+//	req, resp := client.ListForecastsRequest(params)
 //
-//    // Example sending a request using the ListForecastsRequest method.
-//    req, resp := client.ListForecastsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListForecasts
 func (c *ForecastService) ListForecastsRequest(input *ListForecastsInput) (req *request.Request, output *ListForecastsOutput) {
@@ -5305,12 +5293,13 @@ func (c *ForecastService) ListForecastsRequest(input *ListForecastsInput) (req *
 // API operation ListForecasts for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListForecasts
 func (c *ForecastService) ListForecasts(input *ListForecastsInput) (*ListForecastsOutput, error) {
@@ -5342,15 +5331,14 @@ func (c *ForecastService) ListForecastsWithContext(ctx aws.Context, input *ListF
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListForecasts operation.
-//    pageNum := 0
-//    err := client.ListForecastsPages(params,
-//        func(page *forecastservice.ListForecastsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListForecasts operation.
+//	pageNum := 0
+//	err := client.ListForecastsPages(params,
+//	    func(page *forecastservice.ListForecastsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListForecastsPages(input *ListForecastsInput, fn func(*ListForecastsOutput, bool) bool) error {
 	return c.ListForecastsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5402,14 +5390,13 @@ const opListMonitorEvaluations = "ListMonitorEvaluations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMonitorEvaluationsRequest method.
+//	req, resp := client.ListMonitorEvaluationsRequest(params)
 //
-//    // Example sending a request using the ListMonitorEvaluationsRequest method.
-//    req, resp := client.ListMonitorEvaluationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListMonitorEvaluations
 func (c *ForecastService) ListMonitorEvaluationsRequest(input *ListMonitorEvaluationsInput) (req *request.Request, output *ListMonitorEvaluationsOutput) {
@@ -5450,16 +5437,17 @@ func (c *ForecastService) ListMonitorEvaluationsRequest(input *ListMonitorEvalua
 // API operation ListMonitorEvaluations for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListMonitorEvaluations
 func (c *ForecastService) ListMonitorEvaluations(input *ListMonitorEvaluationsInput) (*ListMonitorEvaluationsOutput, error) {
@@ -5491,15 +5479,14 @@ func (c *ForecastService) ListMonitorEvaluationsWithContext(ctx aws.Context, inp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMonitorEvaluations operation.
-//    pageNum := 0
-//    err := client.ListMonitorEvaluationsPages(params,
-//        func(page *forecastservice.ListMonitorEvaluationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMonitorEvaluations operation.
+//	pageNum := 0
+//	err := client.ListMonitorEvaluationsPages(params,
+//	    func(page *forecastservice.ListMonitorEvaluationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListMonitorEvaluationsPages(input *ListMonitorEvaluationsInput, fn func(*ListMonitorEvaluationsOutput, bool) bool) error {
 	return c.ListMonitorEvaluationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5551,14 +5538,13 @@ const opListMonitors = "ListMonitors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMonitorsRequest method.
+//	req, resp := client.ListMonitorsRequest(params)
 //
-//    // Example sending a request using the ListMonitorsRequest method.
-//    req, resp := client.ListMonitorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListMonitors
 func (c *ForecastService) ListMonitorsRequest(input *ListMonitorsInput) (req *request.Request, output *ListMonitorsOutput) {
@@ -5599,12 +5585,13 @@ func (c *ForecastService) ListMonitorsRequest(input *ListMonitorsInput) (req *re
 // API operation ListMonitors for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListMonitors
 func (c *ForecastService) ListMonitors(input *ListMonitorsInput) (*ListMonitorsOutput, error) {
@@ -5636,15 +5623,14 @@ func (c *ForecastService) ListMonitorsWithContext(ctx aws.Context, input *ListMo
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMonitors operation.
-//    pageNum := 0
-//    err := client.ListMonitorsPages(params,
-//        func(page *forecastservice.ListMonitorsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMonitors operation.
+//	pageNum := 0
+//	err := client.ListMonitorsPages(params,
+//	    func(page *forecastservice.ListMonitorsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListMonitorsPages(input *ListMonitorsInput, fn func(*ListMonitorsOutput, bool) bool) error {
 	return c.ListMonitorsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5696,14 +5682,13 @@ const opListPredictorBacktestExportJobs = "ListPredictorBacktestExportJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPredictorBacktestExportJobsRequest method.
+//	req, resp := client.ListPredictorBacktestExportJobsRequest(params)
 //
-//    // Example sending a request using the ListPredictorBacktestExportJobsRequest method.
-//    req, resp := client.ListPredictorBacktestExportJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListPredictorBacktestExportJobs
 func (c *ForecastService) ListPredictorBacktestExportJobsRequest(input *ListPredictorBacktestExportJobsInput) (req *request.Request, output *ListPredictorBacktestExportJobsOutput) {
@@ -5745,12 +5730,13 @@ func (c *ForecastService) ListPredictorBacktestExportJobsRequest(input *ListPred
 // API operation ListPredictorBacktestExportJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListPredictorBacktestExportJobs
 func (c *ForecastService) ListPredictorBacktestExportJobs(input *ListPredictorBacktestExportJobsInput) (*ListPredictorBacktestExportJobsOutput, error) {
@@ -5782,15 +5768,14 @@ func (c *ForecastService) ListPredictorBacktestExportJobsWithContext(ctx aws.Con
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPredictorBacktestExportJobs operation.
-//    pageNum := 0
-//    err := client.ListPredictorBacktestExportJobsPages(params,
-//        func(page *forecastservice.ListPredictorBacktestExportJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPredictorBacktestExportJobs operation.
+//	pageNum := 0
+//	err := client.ListPredictorBacktestExportJobsPages(params,
+//	    func(page *forecastservice.ListPredictorBacktestExportJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListPredictorBacktestExportJobsPages(input *ListPredictorBacktestExportJobsInput, fn func(*ListPredictorBacktestExportJobsOutput, bool) bool) error {
 	return c.ListPredictorBacktestExportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5842,14 +5827,13 @@ const opListPredictors = "ListPredictors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPredictorsRequest method.
+//	req, resp := client.ListPredictorsRequest(params)
 //
-//    // Example sending a request using the ListPredictorsRequest method.
-//    req, resp := client.ListPredictorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListPredictors
 func (c *ForecastService) ListPredictorsRequest(input *ListPredictorsInput) (req *request.Request, output *ListPredictorsOutput) {
@@ -5892,12 +5876,13 @@ func (c *ForecastService) ListPredictorsRequest(input *ListPredictorsInput) (req
 // API operation ListPredictors for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListPredictors
 func (c *ForecastService) ListPredictors(input *ListPredictorsInput) (*ListPredictorsOutput, error) {
@@ -5929,15 +5914,14 @@ func (c *ForecastService) ListPredictorsWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPredictors operation.
-//    pageNum := 0
-//    err := client.ListPredictorsPages(params,
-//        func(page *forecastservice.ListPredictorsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPredictors operation.
+//	pageNum := 0
+//	err := client.ListPredictorsPages(params,
+//	    func(page *forecastservice.ListPredictorsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListPredictorsPages(input *ListPredictorsInput, fn func(*ListPredictorsOutput, bool) bool) error {
 	return c.ListPredictorsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5989,14 +5973,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListTagsForResource
 func (c *ForecastService) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -6027,13 +6010,14 @@ func (c *ForecastService) ListTagsForResourceRequest(input *ListTagsForResourceI
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListTagsForResource
 func (c *ForecastService) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -6073,14 +6057,13 @@ const opListWhatIfAnalyses = "ListWhatIfAnalyses"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWhatIfAnalysesRequest method.
+//	req, resp := client.ListWhatIfAnalysesRequest(params)
 //
-//    // Example sending a request using the ListWhatIfAnalysesRequest method.
-//    req, resp := client.ListWhatIfAnalysesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListWhatIfAnalyses
 func (c *ForecastService) ListWhatIfAnalysesRequest(input *ListWhatIfAnalysesInput) (req *request.Request, output *ListWhatIfAnalysesOutput) {
@@ -6121,12 +6104,13 @@ func (c *ForecastService) ListWhatIfAnalysesRequest(input *ListWhatIfAnalysesInp
 // API operation ListWhatIfAnalyses for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListWhatIfAnalyses
 func (c *ForecastService) ListWhatIfAnalyses(input *ListWhatIfAnalysesInput) (*ListWhatIfAnalysesOutput, error) {
@@ -6158,15 +6142,14 @@ func (c *ForecastService) ListWhatIfAnalysesWithContext(ctx aws.Context, input *
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWhatIfAnalyses operation.
-//    pageNum := 0
-//    err := client.ListWhatIfAnalysesPages(params,
-//        func(page *forecastservice.ListWhatIfAnalysesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWhatIfAnalyses operation.
+//	pageNum := 0
+//	err := client.ListWhatIfAnalysesPages(params,
+//	    func(page *forecastservice.ListWhatIfAnalysesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListWhatIfAnalysesPages(input *ListWhatIfAnalysesInput, fn func(*ListWhatIfAnalysesOutput, bool) bool) error {
 	return c.ListWhatIfAnalysesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6218,14 +6201,13 @@ const opListWhatIfForecastExports = "ListWhatIfForecastExports"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWhatIfForecastExportsRequest method.
+//	req, resp := client.ListWhatIfForecastExportsRequest(params)
 //
-//    // Example sending a request using the ListWhatIfForecastExportsRequest method.
-//    req, resp := client.ListWhatIfForecastExportsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListWhatIfForecastExports
 func (c *ForecastService) ListWhatIfForecastExportsRequest(input *ListWhatIfForecastExportsInput) (req *request.Request, output *ListWhatIfForecastExportsOutput) {
@@ -6266,12 +6248,13 @@ func (c *ForecastService) ListWhatIfForecastExportsRequest(input *ListWhatIfFore
 // API operation ListWhatIfForecastExports for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListWhatIfForecastExports
 func (c *ForecastService) ListWhatIfForecastExports(input *ListWhatIfForecastExportsInput) (*ListWhatIfForecastExportsOutput, error) {
@@ -6303,15 +6286,14 @@ func (c *ForecastService) ListWhatIfForecastExportsWithContext(ctx aws.Context, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWhatIfForecastExports operation.
-//    pageNum := 0
-//    err := client.ListWhatIfForecastExportsPages(params,
-//        func(page *forecastservice.ListWhatIfForecastExportsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWhatIfForecastExports operation.
+//	pageNum := 0
+//	err := client.ListWhatIfForecastExportsPages(params,
+//	    func(page *forecastservice.ListWhatIfForecastExportsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListWhatIfForecastExportsPages(input *ListWhatIfForecastExportsInput, fn func(*ListWhatIfForecastExportsOutput, bool) bool) error {
 	return c.ListWhatIfForecastExportsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6363,14 +6345,13 @@ const opListWhatIfForecasts = "ListWhatIfForecasts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWhatIfForecastsRequest method.
+//	req, resp := client.ListWhatIfForecastsRequest(params)
 //
-//    // Example sending a request using the ListWhatIfForecastsRequest method.
-//    req, resp := client.ListWhatIfForecastsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListWhatIfForecasts
 func (c *ForecastService) ListWhatIfForecastsRequest(input *ListWhatIfForecastsInput) (req *request.Request, output *ListWhatIfForecastsOutput) {
@@ -6411,12 +6392,13 @@ func (c *ForecastService) ListWhatIfForecastsRequest(input *ListWhatIfForecastsI
 // API operation ListWhatIfForecasts for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ListWhatIfForecasts
 func (c *ForecastService) ListWhatIfForecasts(input *ListWhatIfForecastsInput) (*ListWhatIfForecastsOutput, error) {
@@ -6448,15 +6430,14 @@ func (c *ForecastService) ListWhatIfForecastsWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWhatIfForecasts operation.
-//    pageNum := 0
-//    err := client.ListWhatIfForecastsPages(params,
-//        func(page *forecastservice.ListWhatIfForecastsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWhatIfForecasts operation.
+//	pageNum := 0
+//	err := client.ListWhatIfForecastsPages(params,
+//	    func(page *forecastservice.ListWhatIfForecastsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ForecastService) ListWhatIfForecastsPages(input *ListWhatIfForecastsInput, fn func(*ListWhatIfForecastsOutput, bool) bool) error {
 	return c.ListWhatIfForecastsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6508,14 +6489,13 @@ const opResumeResource = "ResumeResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ResumeResourceRequest method.
+//	req, resp := client.ResumeResourceRequest(params)
 //
-//    // Example sending a request using the ResumeResourceRequest method.
-//    req, resp := client.ResumeResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ResumeResource
 func (c *ForecastService) ResumeResourceRequest(input *ResumeResourceInput) (req *request.Request, output *ResumeResourceOutput) {
@@ -6547,19 +6527,20 @@ func (c *ForecastService) ResumeResourceRequest(input *ResumeResourceInput) (req
 // API operation ResumeResource for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/ResumeResource
 func (c *ForecastService) ResumeResource(input *ResumeResourceInput) (*ResumeResourceOutput, error) {
@@ -6599,14 +6580,13 @@ const opStopResource = "StopResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopResourceRequest method.
+//	req, resp := client.StopResourceRequest(params)
 //
-//    // Example sending a request using the StopResourceRequest method.
-//    req, resp := client.StopResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/StopResource
 func (c *ForecastService) StopResourceRequest(input *StopResourceInput) (req *request.Request, output *StopResourceOutput) {
@@ -6636,19 +6616,19 @@ func (c *ForecastService) StopResourceRequest(input *StopResourceInput) (req *re
 // This operation can be applied to the following resources (and their corresponding
 // child resources):
 //
-//    * Dataset Import Job
+//   - Dataset Import Job
 //
-//    * Predictor Job
+//   - Predictor Job
 //
-//    * Forecast Job
+//   - Forecast Job
 //
-//    * Forecast Export Job
+//   - Forecast Export Job
 //
-//    * Predictor Backtest Export Job
+//   - Predictor Backtest Export Job
 //
-//    * Explainability Job
+//   - Explainability Job
 //
-//    * Explainability Export Job
+//   - Explainability Export Job
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6658,16 +6638,17 @@ func (c *ForecastService) StopResourceRequest(input *StopResourceInput) (req *re
 // API operation StopResource for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
+//
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/StopResource
 func (c *ForecastService) StopResource(input *StopResourceInput) (*StopResourceOutput, error) {
@@ -6707,14 +6688,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/TagResource
 func (c *ForecastService) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -6749,16 +6729,17 @@ func (c *ForecastService) TagResourceRequest(input *TagResourceInput) (req *requ
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
 //
-//   * LimitExceededException
-//   The limit on the number of resources per account has been exceeded.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - LimitExceededException
+//     The limit on the number of resources per account has been exceeded.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/TagResource
 func (c *ForecastService) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -6798,14 +6779,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/UntagResource
 func (c *ForecastService) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -6837,13 +6817,14 @@ func (c *ForecastService) UntagResourceRequest(input *UntagResourceInput) (req *
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
 //
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/UntagResource
 func (c *ForecastService) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -6883,14 +6864,13 @@ const opUpdateDatasetGroup = "UpdateDatasetGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDatasetGroupRequest method.
+//	req, resp := client.UpdateDatasetGroupRequest(params)
 //
-//    // Example sending a request using the UpdateDatasetGroupRequest method.
-//    req, resp := client.UpdateDatasetGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/UpdateDatasetGroup
 func (c *ForecastService) UpdateDatasetGroupRequest(input *UpdateDatasetGroupInput) (req *request.Request, output *UpdateDatasetGroupOutput) {
@@ -6926,16 +6906,17 @@ func (c *ForecastService) UpdateDatasetGroupRequest(input *UpdateDatasetGroupInp
 // API operation UpdateDatasetGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   We can't process the request because it includes an invalid value or a value
-//   that exceeds the valid range.
 //
-//   * ResourceNotFoundException
-//   We can't find a resource with that Amazon Resource Name (ARN). Check the
-//   ARN and try again.
+//   - InvalidInputException
+//     We can't process the request because it includes an invalid value or a value
+//     that exceeds the valid range.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find a resource with that Amazon Resource Name (ARN). Check the
+//     ARN and try again.
+//
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecast-2018-06-26/UpdateDatasetGroup
 func (c *ForecastService) UpdateDatasetGroup(input *UpdateDatasetGroupInput) (*UpdateDatasetGroupOutput, error) {
@@ -7053,7 +7034,7 @@ func (s *Action) SetValue(v float64) *Action {
 // Describes an additional dataset. This object is part of the DataConfig object.
 // Forecast supports the Weather Index and Holidays additional datasets.
 //
-// Weather Index
+// # Weather Index
 //
 // The Amazon Forecast Weather Index is a built-in dataset that incorporates
 // historical and projected weather information into your model. The Weather
@@ -7061,7 +7042,7 @@ func (s *Action) SetValue(v float64) *Action {
 // data and up to 14 days of projected weather data. For more information, see
 // Amazon Forecast Weather Index (https://docs.aws.amazon.com/forecast/latest/dg/weather.html).
 //
-// Holidays
+// # Holidays
 //
 // Holidays is a built-in dataset that incorporates national holiday information
 // into your model. It provides native support for the holiday calendars of
@@ -15291,7 +15272,6 @@ func (s *ExplainabilitySummary) SetStatus(v string) *ExplainabilitySummary {
 	return s
 }
 
-//
 // This object belongs to the CreatePredictor operation. If you created your
 // predictor with CreateAutoPredictor, see AttributeConfig.
 //
@@ -15389,7 +15369,6 @@ func (s *Featurization) SetFeaturizationPipeline(v []*FeaturizationMethod) *Feat
 	return s
 }
 
-//
 // This object belongs to the CreatePredictor operation. If you created your
 // predictor with CreateAutoPredictor, see AttributeConfig.
 //
@@ -16120,7 +16099,6 @@ func (s *HyperParameterTuningJobConfig) SetParameterRanges(v *ParameterRanges) *
 	return s
 }
 
-//
 // This object belongs to the CreatePredictor operation. If you created your
 // predictor with CreateAutoPredictor, see DataConfig.
 //
@@ -20135,7 +20113,6 @@ func (s StopResourceOutput) GoString() string {
 	return s.String()
 }
 
-//
 // This object belongs to the CreatePredictor operation. If you created your
 // predictor with CreateAutoPredictor, see AdditionalDataset.
 //
@@ -20143,7 +20120,7 @@ func (s StopResourceOutput) GoString() string {
 // of the InputDataConfig object. Forecast supports the Weather Index and Holidays
 // built-in featurizations.
 //
-// Weather Index
+// # Weather Index
 //
 // The Amazon Forecast Weather Index is a built-in featurization that incorporates
 // historical and projected weather information into your model. The Weather
@@ -20151,7 +20128,7 @@ func (s StopResourceOutput) GoString() string {
 // data and up to 14 days of projected weather data. For more information, see
 // Amazon Forecast Weather Index (https://docs.aws.amazon.com/forecast/latest/dg/weather.html).
 //
-// Holidays
+// # Holidays
 //
 // Holidays is a built-in featurization that incorporates a feature-engineered
 // dataset of national holiday information into your model. It provides native
@@ -20366,29 +20343,29 @@ func (s *SupplementaryFeature) SetValue(v string) *SupplementaryFeature {
 //
 // The following basic restrictions apply to tags:
 //
-//    * Maximum number of tags per resource - 50.
+//   - Maximum number of tags per resource - 50.
 //
-//    * For each resource, each tag key must be unique, and each tag key can
-//    have only one value.
+//   - For each resource, each tag key must be unique, and each tag key can
+//     have only one value.
 //
-//    * Maximum key length - 128 Unicode characters in UTF-8.
+//   - Maximum key length - 128 Unicode characters in UTF-8.
 //
-//    * Maximum value length - 256 Unicode characters in UTF-8.
+//   - Maximum value length - 256 Unicode characters in UTF-8.
 //
-//    * If your tagging schema is used across multiple services and resources,
-//    remember that other services may have restrictions on allowed characters.
-//    Generally allowed characters are: letters, numbers, and spaces representable
-//    in UTF-8, and the following characters: + - = . _ : / @.
+//   - If your tagging schema is used across multiple services and resources,
+//     remember that other services may have restrictions on allowed characters.
+//     Generally allowed characters are: letters, numbers, and spaces representable
+//     in UTF-8, and the following characters: + - = . _ : / @.
 //
-//    * Tag keys and values are case sensitive.
+//   - Tag keys and values are case sensitive.
 //
-//    * Do not use aws:, AWS:, or any upper or lowercase combination of such
-//    as a prefix for keys as it is reserved for Amazon Web Services use. You
-//    cannot edit or delete tag keys with this prefix. Values can have this
-//    prefix. If a tag value has aws as its prefix but the key does not, then
-//    Forecast considers it to be a user tag and will count against the limit
-//    of 50 tags. Tags with only the key prefix of aws do not count against
-//    your tags per resource limit.
+//   - Do not use aws:, AWS:, or any upper or lowercase combination of such
+//     as a prefix for keys as it is reserved for Amazon Web Services use. You
+//     cannot edit or delete tag keys with this prefix. Values can have this
+//     prefix. If a tag value has aws as its prefix but the key does not, then
+//     Forecast considers it to be a user tag and will count against the limit
+//     of 50 tags. Tags with only the key prefix of aws do not count against
+//     your tags per resource limit.
 type Tag struct {
 	_ struct{} `type:"structure"`
 
@@ -20989,11 +20966,11 @@ func (s *TimeSeriesReplacementsDataSource) SetTimestampFormat(v string) *TimeSer
 //
 // The TimeSeriesIdentifiers object needs the following information:
 //
-//    * DataSource
+//   - DataSource
 //
-//    * Format
+//   - Format
 //
-//    * Schema
+//   - Schema
 type TimeSeriesSelector struct {
 	_ struct{} `type:"structure"`
 

@@ -29,14 +29,13 @@ const opDeleteScalingPolicy = "DeleteScalingPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteScalingPolicyRequest method.
+//	req, resp := client.DeleteScalingPolicyRequest(params)
 //
-//    // Example sending a request using the DeleteScalingPolicyRequest method.
-//    req, resp := client.DeleteScalingPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DeleteScalingPolicy
 func (c *ApplicationAutoScaling) DeleteScalingPolicyRequest(input *DeleteScalingPolicyInput) (req *request.Request, output *DeleteScalingPolicyOutput) {
@@ -65,8 +64,8 @@ func (c *ApplicationAutoScaling) DeleteScalingPolicyRequest(input *DeleteScaling
 // not delete the CloudWatch alarm associated with the scaling policy, even
 // if it no longer has an associated action.
 //
-// For more information, see Delete a step scaling policy (https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-step-scaling-policies.html#delete-step-scaling-policy)
-// and Delete a target tracking scaling policy (https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-target-tracking.html#delete-target-tracking-policy)
+// For more information, see Delete a step scaling policy (https://docs.aws.amazon.com/autoscaling/application/userguide/create-step-scaling-policy-cli.html#delete-step-scaling-policy)
+// and Delete a target tracking scaling policy (https://docs.aws.amazon.com/autoscaling/application/userguide/create-target-tracking-policy-cli.html#delete-target-tracking-policy)
 // in the Application Auto Scaling User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -77,23 +76,24 @@ func (c *ApplicationAutoScaling) DeleteScalingPolicyRequest(input *DeleteScaling
 // API operation DeleteScalingPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
 //
-//   * ObjectNotFoundException
-//   The specified object could not be found. For any operation that depends on
-//   the existence of a scalable target, this exception is thrown if the scalable
-//   target with the specified service namespace, resource ID, and scalable dimension
-//   does not exist. For any operation that deletes or deregisters a resource,
-//   this exception is thrown if the resource cannot be found.
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
-//   * ConcurrentUpdateException
-//   Concurrent updates caused an exception, for example, if you request an update
-//   to an Application Auto Scaling resource that already has a pending update.
+//   - ObjectNotFoundException
+//     The specified object could not be found. For any operation that depends on
+//     the existence of a scalable target, this exception is thrown if the scalable
+//     target with the specified service namespace, resource ID, and scalable dimension
+//     does not exist. For any operation that deletes or deregisters a resource,
+//     this exception is thrown if the resource cannot be found.
 //
-//   * InternalServiceException
-//   The service encountered an internal error.
+//   - ConcurrentUpdateException
+//     Concurrent updates caused an exception, for example, if you request an update
+//     to an Application Auto Scaling resource that already has a pending update.
+//
+//   - InternalServiceException
+//     The service encountered an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DeleteScalingPolicy
 func (c *ApplicationAutoScaling) DeleteScalingPolicy(input *DeleteScalingPolicyInput) (*DeleteScalingPolicyOutput, error) {
@@ -133,14 +133,13 @@ const opDeleteScheduledAction = "DeleteScheduledAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteScheduledActionRequest method.
+//	req, resp := client.DeleteScheduledActionRequest(params)
 //
-//    // Example sending a request using the DeleteScheduledActionRequest method.
-//    req, resp := client.DeleteScheduledActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DeleteScheduledAction
 func (c *ApplicationAutoScaling) DeleteScheduledActionRequest(input *DeleteScheduledActionInput) (req *request.Request, output *DeleteScheduledActionOutput) {
@@ -176,23 +175,24 @@ func (c *ApplicationAutoScaling) DeleteScheduledActionRequest(input *DeleteSched
 // API operation DeleteScheduledAction for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
 //
-//   * ObjectNotFoundException
-//   The specified object could not be found. For any operation that depends on
-//   the existence of a scalable target, this exception is thrown if the scalable
-//   target with the specified service namespace, resource ID, and scalable dimension
-//   does not exist. For any operation that deletes or deregisters a resource,
-//   this exception is thrown if the resource cannot be found.
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
-//   * ConcurrentUpdateException
-//   Concurrent updates caused an exception, for example, if you request an update
-//   to an Application Auto Scaling resource that already has a pending update.
+//   - ObjectNotFoundException
+//     The specified object could not be found. For any operation that depends on
+//     the existence of a scalable target, this exception is thrown if the scalable
+//     target with the specified service namespace, resource ID, and scalable dimension
+//     does not exist. For any operation that deletes or deregisters a resource,
+//     this exception is thrown if the resource cannot be found.
 //
-//   * InternalServiceException
-//   The service encountered an internal error.
+//   - ConcurrentUpdateException
+//     Concurrent updates caused an exception, for example, if you request an update
+//     to an Application Auto Scaling resource that already has a pending update.
+//
+//   - InternalServiceException
+//     The service encountered an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DeleteScheduledAction
 func (c *ApplicationAutoScaling) DeleteScheduledAction(input *DeleteScheduledActionInput) (*DeleteScheduledActionOutput, error) {
@@ -232,14 +232,13 @@ const opDeregisterScalableTarget = "DeregisterScalableTarget"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeregisterScalableTargetRequest method.
+//	req, resp := client.DeregisterScalableTargetRequest(params)
 //
-//    // Example sending a request using the DeregisterScalableTargetRequest method.
-//    req, resp := client.DeregisterScalableTargetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DeregisterScalableTarget
 func (c *ApplicationAutoScaling) DeregisterScalableTargetRequest(input *DeregisterScalableTargetInput) (req *request.Request, output *DeregisterScalableTargetOutput) {
@@ -276,23 +275,24 @@ func (c *ApplicationAutoScaling) DeregisterScalableTargetRequest(input *Deregist
 // API operation DeregisterScalableTarget for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
 //
-//   * ObjectNotFoundException
-//   The specified object could not be found. For any operation that depends on
-//   the existence of a scalable target, this exception is thrown if the scalable
-//   target with the specified service namespace, resource ID, and scalable dimension
-//   does not exist. For any operation that deletes or deregisters a resource,
-//   this exception is thrown if the resource cannot be found.
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
-//   * ConcurrentUpdateException
-//   Concurrent updates caused an exception, for example, if you request an update
-//   to an Application Auto Scaling resource that already has a pending update.
+//   - ObjectNotFoundException
+//     The specified object could not be found. For any operation that depends on
+//     the existence of a scalable target, this exception is thrown if the scalable
+//     target with the specified service namespace, resource ID, and scalable dimension
+//     does not exist. For any operation that deletes or deregisters a resource,
+//     this exception is thrown if the resource cannot be found.
 //
-//   * InternalServiceException
-//   The service encountered an internal error.
+//   - ConcurrentUpdateException
+//     Concurrent updates caused an exception, for example, if you request an update
+//     to an Application Auto Scaling resource that already has a pending update.
+//
+//   - InternalServiceException
+//     The service encountered an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DeregisterScalableTarget
 func (c *ApplicationAutoScaling) DeregisterScalableTarget(input *DeregisterScalableTargetInput) (*DeregisterScalableTargetOutput, error) {
@@ -332,14 +332,13 @@ const opDescribeScalableTargets = "DescribeScalableTargets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeScalableTargetsRequest method.
+//	req, resp := client.DescribeScalableTargetsRequest(params)
 //
-//    // Example sending a request using the DescribeScalableTargetsRequest method.
-//    req, resp := client.DescribeScalableTargetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DescribeScalableTargets
 func (c *ApplicationAutoScaling) DescribeScalableTargetsRequest(input *DescribeScalableTargetsInput) (req *request.Request, output *DescribeScalableTargetsOutput) {
@@ -378,19 +377,20 @@ func (c *ApplicationAutoScaling) DescribeScalableTargetsRequest(input *DescribeS
 // API operation DescribeScalableTargets for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
 //
-//   * InvalidNextTokenException
-//   The next token supplied was invalid.
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
-//   * ConcurrentUpdateException
-//   Concurrent updates caused an exception, for example, if you request an update
-//   to an Application Auto Scaling resource that already has a pending update.
+//   - InvalidNextTokenException
+//     The next token supplied was invalid.
 //
-//   * InternalServiceException
-//   The service encountered an internal error.
+//   - ConcurrentUpdateException
+//     Concurrent updates caused an exception, for example, if you request an update
+//     to an Application Auto Scaling resource that already has a pending update.
+//
+//   - InternalServiceException
+//     The service encountered an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DescribeScalableTargets
 func (c *ApplicationAutoScaling) DescribeScalableTargets(input *DescribeScalableTargetsInput) (*DescribeScalableTargetsOutput, error) {
@@ -422,15 +422,14 @@ func (c *ApplicationAutoScaling) DescribeScalableTargetsWithContext(ctx aws.Cont
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeScalableTargets operation.
-//    pageNum := 0
-//    err := client.DescribeScalableTargetsPages(params,
-//        func(page *applicationautoscaling.DescribeScalableTargetsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeScalableTargets operation.
+//	pageNum := 0
+//	err := client.DescribeScalableTargetsPages(params,
+//	    func(page *applicationautoscaling.DescribeScalableTargetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ApplicationAutoScaling) DescribeScalableTargetsPages(input *DescribeScalableTargetsInput, fn func(*DescribeScalableTargetsOutput, bool) bool) error {
 	return c.DescribeScalableTargetsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -482,14 +481,13 @@ const opDescribeScalingActivities = "DescribeScalingActivities"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeScalingActivitiesRequest method.
+//	req, resp := client.DescribeScalingActivitiesRequest(params)
 //
-//    // Example sending a request using the DescribeScalingActivitiesRequest method.
-//    req, resp := client.DescribeScalingActivitiesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DescribeScalingActivities
 func (c *ApplicationAutoScaling) DescribeScalingActivitiesRequest(input *DescribeScalingActivitiesInput) (req *request.Request, output *DescribeScalingActivitiesOutput) {
@@ -532,19 +530,20 @@ func (c *ApplicationAutoScaling) DescribeScalingActivitiesRequest(input *Describ
 // API operation DescribeScalingActivities for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
 //
-//   * InvalidNextTokenException
-//   The next token supplied was invalid.
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
-//   * ConcurrentUpdateException
-//   Concurrent updates caused an exception, for example, if you request an update
-//   to an Application Auto Scaling resource that already has a pending update.
+//   - InvalidNextTokenException
+//     The next token supplied was invalid.
 //
-//   * InternalServiceException
-//   The service encountered an internal error.
+//   - ConcurrentUpdateException
+//     Concurrent updates caused an exception, for example, if you request an update
+//     to an Application Auto Scaling resource that already has a pending update.
+//
+//   - InternalServiceException
+//     The service encountered an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DescribeScalingActivities
 func (c *ApplicationAutoScaling) DescribeScalingActivities(input *DescribeScalingActivitiesInput) (*DescribeScalingActivitiesOutput, error) {
@@ -576,15 +575,14 @@ func (c *ApplicationAutoScaling) DescribeScalingActivitiesWithContext(ctx aws.Co
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeScalingActivities operation.
-//    pageNum := 0
-//    err := client.DescribeScalingActivitiesPages(params,
-//        func(page *applicationautoscaling.DescribeScalingActivitiesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeScalingActivities operation.
+//	pageNum := 0
+//	err := client.DescribeScalingActivitiesPages(params,
+//	    func(page *applicationautoscaling.DescribeScalingActivitiesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ApplicationAutoScaling) DescribeScalingActivitiesPages(input *DescribeScalingActivitiesInput, fn func(*DescribeScalingActivitiesOutput, bool) bool) error {
 	return c.DescribeScalingActivitiesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -636,14 +634,13 @@ const opDescribeScalingPolicies = "DescribeScalingPolicies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeScalingPoliciesRequest method.
+//	req, resp := client.DescribeScalingPoliciesRequest(params)
 //
-//    // Example sending a request using the DescribeScalingPoliciesRequest method.
-//    req, resp := client.DescribeScalingPoliciesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DescribeScalingPolicies
 func (c *ApplicationAutoScaling) DescribeScalingPoliciesRequest(input *DescribeScalingPoliciesInput) (req *request.Request, output *DescribeScalingPoliciesOutput) {
@@ -687,27 +684,28 @@ func (c *ApplicationAutoScaling) DescribeScalingPoliciesRequest(input *DescribeS
 // API operation DescribeScalingPolicies for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
 //
-//   * FailedResourceAccessException
-//   Failed access to resources caused an exception. This exception is thrown
-//   when Application Auto Scaling is unable to retrieve the alarms associated
-//   with a scaling policy due to a client error, for example, if the role ARN
-//   specified for a scalable target does not have permission to call the CloudWatch
-//   DescribeAlarms (https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_DescribeAlarms.html)
-//   on your behalf.
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
-//   * InvalidNextTokenException
-//   The next token supplied was invalid.
+//   - FailedResourceAccessException
+//     Failed access to resources caused an exception. This exception is thrown
+//     when Application Auto Scaling is unable to retrieve the alarms associated
+//     with a scaling policy due to a client error, for example, if the role ARN
+//     specified for a scalable target does not have permission to call the CloudWatch
+//     DescribeAlarms (https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_DescribeAlarms.html)
+//     on your behalf.
 //
-//   * ConcurrentUpdateException
-//   Concurrent updates caused an exception, for example, if you request an update
-//   to an Application Auto Scaling resource that already has a pending update.
+//   - InvalidNextTokenException
+//     The next token supplied was invalid.
 //
-//   * InternalServiceException
-//   The service encountered an internal error.
+//   - ConcurrentUpdateException
+//     Concurrent updates caused an exception, for example, if you request an update
+//     to an Application Auto Scaling resource that already has a pending update.
+//
+//   - InternalServiceException
+//     The service encountered an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DescribeScalingPolicies
 func (c *ApplicationAutoScaling) DescribeScalingPolicies(input *DescribeScalingPoliciesInput) (*DescribeScalingPoliciesOutput, error) {
@@ -739,15 +737,14 @@ func (c *ApplicationAutoScaling) DescribeScalingPoliciesWithContext(ctx aws.Cont
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeScalingPolicies operation.
-//    pageNum := 0
-//    err := client.DescribeScalingPoliciesPages(params,
-//        func(page *applicationautoscaling.DescribeScalingPoliciesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeScalingPolicies operation.
+//	pageNum := 0
+//	err := client.DescribeScalingPoliciesPages(params,
+//	    func(page *applicationautoscaling.DescribeScalingPoliciesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ApplicationAutoScaling) DescribeScalingPoliciesPages(input *DescribeScalingPoliciesInput, fn func(*DescribeScalingPoliciesOutput, bool) bool) error {
 	return c.DescribeScalingPoliciesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -799,14 +796,13 @@ const opDescribeScheduledActions = "DescribeScheduledActions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeScheduledActionsRequest method.
+//	req, resp := client.DescribeScheduledActionsRequest(params)
 //
-//    // Example sending a request using the DescribeScheduledActionsRequest method.
-//    req, resp := client.DescribeScheduledActionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DescribeScheduledActions
 func (c *ApplicationAutoScaling) DescribeScheduledActionsRequest(input *DescribeScheduledActionsInput) (req *request.Request, output *DescribeScheduledActionsOutput) {
@@ -851,19 +847,20 @@ func (c *ApplicationAutoScaling) DescribeScheduledActionsRequest(input *Describe
 // API operation DescribeScheduledActions for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
 //
-//   * InvalidNextTokenException
-//   The next token supplied was invalid.
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
-//   * ConcurrentUpdateException
-//   Concurrent updates caused an exception, for example, if you request an update
-//   to an Application Auto Scaling resource that already has a pending update.
+//   - InvalidNextTokenException
+//     The next token supplied was invalid.
 //
-//   * InternalServiceException
-//   The service encountered an internal error.
+//   - ConcurrentUpdateException
+//     Concurrent updates caused an exception, for example, if you request an update
+//     to an Application Auto Scaling resource that already has a pending update.
+//
+//   - InternalServiceException
+//     The service encountered an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/DescribeScheduledActions
 func (c *ApplicationAutoScaling) DescribeScheduledActions(input *DescribeScheduledActionsInput) (*DescribeScheduledActionsOutput, error) {
@@ -895,15 +892,14 @@ func (c *ApplicationAutoScaling) DescribeScheduledActionsWithContext(ctx aws.Con
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeScheduledActions operation.
-//    pageNum := 0
-//    err := client.DescribeScheduledActionsPages(params,
-//        func(page *applicationautoscaling.DescribeScheduledActionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeScheduledActions operation.
+//	pageNum := 0
+//	err := client.DescribeScheduledActionsPages(params,
+//	    func(page *applicationautoscaling.DescribeScheduledActionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ApplicationAutoScaling) DescribeScheduledActionsPages(input *DescribeScheduledActionsInput, fn func(*DescribeScheduledActionsOutput, bool) bool) error {
 	return c.DescribeScheduledActionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -955,14 +951,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/ListTagsForResource
 func (c *ApplicationAutoScaling) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -997,8 +992,8 @@ func (c *ApplicationAutoScaling) ListTagsForResourceRequest(input *ListTagsForRe
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/ListTagsForResource
 func (c *ApplicationAutoScaling) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1038,14 +1033,13 @@ const opPutScalingPolicy = "PutScalingPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutScalingPolicyRequest method.
+//	req, resp := client.PutScalingPolicyRequest(params)
 //
-//    // Example sending a request using the PutScalingPolicyRequest method.
-//    req, resp := client.PutScalingPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/PutScalingPolicy
 func (c *ApplicationAutoScaling) PutScalingPolicyRequest(input *PutScalingPolicyInput) (req *request.Request, output *PutScalingPolicyOutput) {
@@ -1109,35 +1103,36 @@ func (c *ApplicationAutoScaling) PutScalingPolicyRequest(input *PutScalingPolicy
 // API operation PutScalingPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
 //
-//   * LimitExceededException
-//   A per-account resource limit is exceeded. For more information, see Application
-//   Auto Scaling service quotas (https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-limits.html).
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
-//   * ObjectNotFoundException
-//   The specified object could not be found. For any operation that depends on
-//   the existence of a scalable target, this exception is thrown if the scalable
-//   target with the specified service namespace, resource ID, and scalable dimension
-//   does not exist. For any operation that deletes or deregisters a resource,
-//   this exception is thrown if the resource cannot be found.
+//   - LimitExceededException
+//     A per-account resource limit is exceeded. For more information, see Application
+//     Auto Scaling service quotas (https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-limits.html).
 //
-//   * ConcurrentUpdateException
-//   Concurrent updates caused an exception, for example, if you request an update
-//   to an Application Auto Scaling resource that already has a pending update.
+//   - ObjectNotFoundException
+//     The specified object could not be found. For any operation that depends on
+//     the existence of a scalable target, this exception is thrown if the scalable
+//     target with the specified service namespace, resource ID, and scalable dimension
+//     does not exist. For any operation that deletes or deregisters a resource,
+//     this exception is thrown if the resource cannot be found.
 //
-//   * FailedResourceAccessException
-//   Failed access to resources caused an exception. This exception is thrown
-//   when Application Auto Scaling is unable to retrieve the alarms associated
-//   with a scaling policy due to a client error, for example, if the role ARN
-//   specified for a scalable target does not have permission to call the CloudWatch
-//   DescribeAlarms (https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_DescribeAlarms.html)
-//   on your behalf.
+//   - ConcurrentUpdateException
+//     Concurrent updates caused an exception, for example, if you request an update
+//     to an Application Auto Scaling resource that already has a pending update.
 //
-//   * InternalServiceException
-//   The service encountered an internal error.
+//   - FailedResourceAccessException
+//     Failed access to resources caused an exception. This exception is thrown
+//     when Application Auto Scaling is unable to retrieve the alarms associated
+//     with a scaling policy due to a client error, for example, if the role ARN
+//     specified for a scalable target does not have permission to call the CloudWatch
+//     DescribeAlarms (https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_DescribeAlarms.html)
+//     on your behalf.
+//
+//   - InternalServiceException
+//     The service encountered an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/PutScalingPolicy
 func (c *ApplicationAutoScaling) PutScalingPolicy(input *PutScalingPolicyInput) (*PutScalingPolicyOutput, error) {
@@ -1177,14 +1172,13 @@ const opPutScheduledAction = "PutScheduledAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutScheduledActionRequest method.
+//	req, resp := client.PutScheduledActionRequest(params)
 //
-//    // Example sending a request using the PutScheduledActionRequest method.
-//    req, resp := client.PutScheduledActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/PutScheduledAction
 func (c *ApplicationAutoScaling) PutScheduledActionRequest(input *PutScheduledActionInput) (req *request.Request, output *PutScheduledActionOutput) {
@@ -1236,27 +1230,28 @@ func (c *ApplicationAutoScaling) PutScheduledActionRequest(input *PutScheduledAc
 // API operation PutScheduledAction for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
 //
-//   * LimitExceededException
-//   A per-account resource limit is exceeded. For more information, see Application
-//   Auto Scaling service quotas (https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-limits.html).
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
-//   * ObjectNotFoundException
-//   The specified object could not be found. For any operation that depends on
-//   the existence of a scalable target, this exception is thrown if the scalable
-//   target with the specified service namespace, resource ID, and scalable dimension
-//   does not exist. For any operation that deletes or deregisters a resource,
-//   this exception is thrown if the resource cannot be found.
+//   - LimitExceededException
+//     A per-account resource limit is exceeded. For more information, see Application
+//     Auto Scaling service quotas (https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-limits.html).
 //
-//   * ConcurrentUpdateException
-//   Concurrent updates caused an exception, for example, if you request an update
-//   to an Application Auto Scaling resource that already has a pending update.
+//   - ObjectNotFoundException
+//     The specified object could not be found. For any operation that depends on
+//     the existence of a scalable target, this exception is thrown if the scalable
+//     target with the specified service namespace, resource ID, and scalable dimension
+//     does not exist. For any operation that deletes or deregisters a resource,
+//     this exception is thrown if the resource cannot be found.
 //
-//   * InternalServiceException
-//   The service encountered an internal error.
+//   - ConcurrentUpdateException
+//     Concurrent updates caused an exception, for example, if you request an update
+//     to an Application Auto Scaling resource that already has a pending update.
+//
+//   - InternalServiceException
+//     The service encountered an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/PutScheduledAction
 func (c *ApplicationAutoScaling) PutScheduledAction(input *PutScheduledActionInput) (*PutScheduledActionOutput, error) {
@@ -1296,14 +1291,13 @@ const opRegisterScalableTarget = "RegisterScalableTarget"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterScalableTargetRequest method.
+//	req, resp := client.RegisterScalableTargetRequest(params)
 //
-//    // Example sending a request using the RegisterScalableTargetRequest method.
-//    req, resp := client.RegisterScalableTargetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/RegisterScalableTarget
 func (c *ApplicationAutoScaling) RegisterScalableTargetRequest(input *RegisterScalableTargetInput) (req *request.Request, output *RegisterScalableTargetOutput) {
@@ -1377,20 +1371,21 @@ func (c *ApplicationAutoScaling) RegisterScalableTargetRequest(input *RegisterSc
 // API operation RegisterScalableTarget for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
 //
-//   * LimitExceededException
-//   A per-account resource limit is exceeded. For more information, see Application
-//   Auto Scaling service quotas (https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-limits.html).
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
-//   * ConcurrentUpdateException
-//   Concurrent updates caused an exception, for example, if you request an update
-//   to an Application Auto Scaling resource that already has a pending update.
+//   - LimitExceededException
+//     A per-account resource limit is exceeded. For more information, see Application
+//     Auto Scaling service quotas (https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-limits.html).
 //
-//   * InternalServiceException
-//   The service encountered an internal error.
+//   - ConcurrentUpdateException
+//     Concurrent updates caused an exception, for example, if you request an update
+//     to an Application Auto Scaling resource that already has a pending update.
+//
+//   - InternalServiceException
+//     The service encountered an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/RegisterScalableTarget
 func (c *ApplicationAutoScaling) RegisterScalableTarget(input *RegisterScalableTargetInput) (*RegisterScalableTargetOutput, error) {
@@ -1430,14 +1425,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/TagResource
 func (c *ApplicationAutoScaling) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1487,15 +1481,16 @@ func (c *ApplicationAutoScaling) TagResourceRequest(input *TagResourceInput) (re
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * TooManyTagsException
-//   The request contains too many tags. Try the request again with fewer tags.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
 //
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
+//   - TooManyTagsException
+//     The request contains too many tags. Try the request again with fewer tags.
+//
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/TagResource
 func (c *ApplicationAutoScaling) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1535,14 +1530,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/UntagResource
 func (c *ApplicationAutoScaling) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -1575,12 +1569,13 @@ func (c *ApplicationAutoScaling) UntagResourceRequest(input *UntagResourceInput)
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource doesn't exist.
 //
-//   * ValidationException
-//   An exception was thrown for a validation issue. Review the available parameters
-//   for the API request.
+//   - ResourceNotFoundException
+//     The specified resource doesn't exist.
+//
+//   - ValidationException
+//     An exception was thrown for a validation issue. Review the available parameters
+//     for the API request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/application-autoscaling-2016-02-06/UntagResource
 func (c *ApplicationAutoScaling) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -1723,16 +1718,16 @@ func (s *ConcurrentUpdateException) RequestID() string {
 //
 // To create your customized metric specification:
 //
-//    * Add values for each required parameter from CloudWatch. You can use
-//    an existing metric, or a new metric that you create. To use your own metric,
-//    you must first publish the metric to CloudWatch. For more information,
-//    see Publish custom metrics (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html)
-//    in the Amazon CloudWatch User Guide.
+//   - Add values for each required parameter from CloudWatch. You can use
+//     an existing metric, or a new metric that you create. To use your own metric,
+//     you must first publish the metric to CloudWatch. For more information,
+//     see Publish custom metrics (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html)
+//     in the Amazon CloudWatch User Guide.
 //
-//    * Choose a metric that changes proportionally with capacity. The value
-//    of the metric should increase or decrease in inverse proportion to the
-//    number of capacity units. That is, the value of the metric should decrease
-//    when capacity increases, and increase when capacity decreases.
+//   - Choose a metric that changes proportionally with capacity. The value
+//     of the metric should increase or decrease in inverse proportion to the
+//     number of capacity units. That is, the value of the metric should decrease
+//     when capacity increases, and increase when capacity decreases.
 //
 // For more information about the CloudWatch terminology below, see Amazon CloudWatch
 // concepts (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html)
@@ -1917,6 +1912,9 @@ type DeleteScalingPolicyInput struct {
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
 	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
+	//
 	// ResourceId is a required field
 	ResourceId *string `min:"1" type:"string" required:"true"`
 
@@ -1986,6 +1984,9 @@ type DeleteScalingPolicyInput struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	//
 	// ScalableDimension is a required field
 	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
@@ -2151,6 +2152,9 @@ type DeleteScheduledActionInput struct {
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
 	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
+	//
 	// ResourceId is a required field
 	ResourceId *string `min:"1" type:"string" required:"true"`
 
@@ -2220,6 +2224,9 @@ type DeleteScheduledActionInput struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	//
 	// ScalableDimension is a required field
 	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
@@ -2390,6 +2397,9 @@ type DeregisterScalableTargetInput struct {
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
 	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
+	//
 	// ResourceId is a required field
 	ResourceId *string `min:"1" type:"string" required:"true"`
 
@@ -2459,6 +2469,9 @@ type DeregisterScalableTargetInput struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	//
 	// ScalableDimension is a required field
 	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
@@ -2623,6 +2636,9 @@ type DescribeScalableTargetsInput struct {
 	//
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
+	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
 	ResourceIds []*string `type:"list"`
 
 	// The scalable dimension associated with the scalable target. This string consists
@@ -2692,6 +2708,9 @@ type DescribeScalableTargetsInput struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	ScalableDimension *string `type:"string" enum:"ScalableDimension"`
 
 	// The namespace of the Amazon Web Services service that provides the resource.
@@ -2883,6 +2902,9 @@ type DescribeScalingActivitiesInput struct {
 	//
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
+	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
 	ResourceId *string `min:"1" type:"string"`
 
 	// The scalable dimension. This string consists of the service namespace, resource
@@ -2952,6 +2974,9 @@ type DescribeScalingActivitiesInput struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	ScalableDimension *string `type:"string" enum:"ScalableDimension"`
 
 	// The namespace of the Amazon Web Services service that provides the resource.
@@ -3148,6 +3173,9 @@ type DescribeScalingPoliciesInput struct {
 	//
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
+	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
 	ResourceId *string `min:"1" type:"string"`
 
 	// The scalable dimension. This string consists of the service namespace, resource
@@ -3217,6 +3245,9 @@ type DescribeScalingPoliciesInput struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	ScalableDimension *string `type:"string" enum:"ScalableDimension"`
 
 	// The namespace of the Amazon Web Services service that provides the resource.
@@ -3410,6 +3441,9 @@ type DescribeScheduledActionsInput struct {
 	//
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
+	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
 	ResourceId *string `min:"1" type:"string"`
 
 	// The scalable dimension. This string consists of the service namespace, resource
@@ -3479,6 +3513,9 @@ type DescribeScheduledActionsInput struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	ScalableDimension *string `type:"string" enum:"ScalableDimension"`
 
 	// The names of the scheduled actions to describe.
@@ -4159,7 +4196,7 @@ func (s *ObjectNotFoundException) RequestID() string {
 // Only the Amazon Web Services that you're using send metrics to Amazon CloudWatch.
 // To determine whether a desired metric already exists by looking up its namespace
 // and dimension using the CloudWatch metrics dashboard in the console, follow
-// the procedure in Building dashboards with CloudWatch (https://docs.aws.amazon.com/autoscaling/application/userguide/monitoring-cloudwatch.html)
+// the procedure in Monitor your resources using CloudWatch (https://docs.aws.amazon.com/autoscaling/application/userguide/monitoring-cloudwatch.html)
 // in the Application Auto Scaling User Guide.
 type PredefinedMetricSpecification struct {
 	_ struct{} `type:"structure"`
@@ -4260,7 +4297,7 @@ type PutScalingPolicyInput struct {
 	//
 	// The following policy types are supported:
 	//
-	// TargetTrackingScaling—Not supported for Amazon EMR
+	// TargetTrackingScaling—Not supported for Amazon EMR.
 	//
 	// StepScaling—Not supported for DynamoDB, Amazon Comprehend, Lambda, Amazon
 	// Keyspaces, Amazon MSK, Amazon ElastiCache, or Neptune.
@@ -4327,6 +4364,9 @@ type PutScalingPolicyInput struct {
 	//
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
+	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
 	//
 	// ResourceId is a required field
 	ResourceId *string `min:"1" type:"string" required:"true"`
@@ -4397,6 +4437,9 @@ type PutScalingPolicyInput struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	//
 	// ScalableDimension is a required field
 	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
@@ -4626,6 +4669,9 @@ type PutScheduledActionInput struct {
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
 	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
+	//
 	// ResourceId is a required field
 	ResourceId *string `min:"1" type:"string" required:"true"`
 
@@ -4695,6 +4741,9 @@ type PutScheduledActionInput struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	//
 	// ScalableDimension is a required field
 	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
@@ -4919,9 +4968,9 @@ type RegisterScalableTargetInput struct {
 	//
 	//    * Lambda provisioned concurrency
 	//
-	//    * SageMaker Serverless endpoint provisioned concurrency
-	//
 	//    * SageMaker endpoint variants
+	//
+	//    * SageMaker Serverless endpoint provisioned concurrency
 	//
 	//    * Spot Fleets
 	//
@@ -4994,6 +5043,9 @@ type RegisterScalableTargetInput struct {
 	//
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
+	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
 	//
 	// ResourceId is a required field
 	ResourceId *string `min:"1" type:"string" required:"true"`
@@ -5073,6 +5125,9 @@ type RegisterScalableTargetInput struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	//
 	// ScalableDimension is a required field
 	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
@@ -5385,6 +5440,9 @@ type ScalableTarget struct {
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
 	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
+	//
 	// ResourceId is a required field
 	ResourceId *string `min:"1" type:"string" required:"true"`
 
@@ -5460,6 +5518,9 @@ type ScalableTarget struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	//
 	// ScalableDimension is a required field
 	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
@@ -5691,6 +5752,9 @@ type ScalingActivity struct {
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
 	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
+	//
 	// ResourceId is a required field
 	ResourceId *string `min:"1" type:"string" required:"true"`
 
@@ -5760,6 +5824,9 @@ type ScalingActivity struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	//
 	// ScalableDimension is a required field
 	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
@@ -5971,6 +6038,9 @@ type ScalingPolicy struct {
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
 	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
+	//
 	// ResourceId is a required field
 	ResourceId *string `min:"1" type:"string" required:"true"`
 
@@ -6040,6 +6110,9 @@ type ScalingPolicy struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	//
 	// ScalableDimension is a required field
 	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
@@ -6205,6 +6278,9 @@ type ScheduledAction struct {
 	//    * SageMaker Serverless endpoint - The resource type is variant and the
 	//    unique identifier is the resource ID. Example: endpoint/my-end-point/variant/KMeansClustering.
 	//
+	//    * SageMaker inference component - The resource type is inference-component
+	//    and the unique identifier is the resource ID. Example: inference-component/my-inference-component.
+	//
 	// ResourceId is a required field
 	ResourceId *string `min:"1" type:"string" required:"true"`
 
@@ -6274,6 +6350,9 @@ type ScheduledAction struct {
 	//
 	//    * sagemaker:variant:DesiredProvisionedConcurrency - The provisioned concurrency
 	//    for a SageMaker Serverless endpoint.
+	//
+	//    * sagemaker:inference-component:DesiredCopyCount - The number of copies
+	//    across an endpoint for a SageMaker inference component.
 	ScalableDimension *string `type:"string" enum:"ScalableDimension"`
 
 	// The new minimum and maximum capacity. You can set both values or just one.
@@ -6427,27 +6506,27 @@ func (s *ScheduledAction) SetTimezone(v string) *ScheduledAction {
 // For the following examples, suppose that you have an alarm with a breach
 // threshold of 50:
 //
-//    * To initiate the adjustment when the metric is greater than or equal
-//    to 50 and less than 60, specify a lower bound of 0 and an upper bound
-//    of 10.
+//   - To initiate the adjustment when the metric is greater than or equal
+//     to 50 and less than 60, specify a lower bound of 0 and an upper bound
+//     of 10.
 //
-//    * To initiate the adjustment when the metric is greater than 40 and less
-//    than or equal to 50, specify a lower bound of -10 and an upper bound of
-//    0.
+//   - To initiate the adjustment when the metric is greater than 40 and less
+//     than or equal to 50, specify a lower bound of -10 and an upper bound of
+//     0.
 //
 // There are a few rules for the step adjustments for your step policy:
 //
-//    * The ranges of your step adjustments can't overlap or have a gap.
+//   - The ranges of your step adjustments can't overlap or have a gap.
 //
-//    * At most one step adjustment can have a null lower bound. If one step
-//    adjustment has a negative lower bound, then there must be a step adjustment
-//    with a null lower bound.
+//   - At most one step adjustment can have a null lower bound. If one step
+//     adjustment has a negative lower bound, then there must be a step adjustment
+//     with a null lower bound.
 //
-//    * At most one step adjustment can have a null upper bound. If one step
-//    adjustment has a positive upper bound, then there must be a step adjustment
-//    with a null upper bound.
+//   - At most one step adjustment can have a null upper bound. If one step
+//     adjustment has a positive upper bound, then there must be a step adjustment
+//     with a null upper bound.
 //
-//    * The upper and lower bound can't be null in the same step adjustment.
+//   - The upper and lower bound can't be null in the same step adjustment.
 type StepAdjustment struct {
 	_ struct{} `type:"structure"`
 
@@ -6469,7 +6548,7 @@ type StepAdjustment struct {
 
 	// The amount by which to scale, based on the specified adjustment type. A positive
 	// value adds to the current capacity while a negative number removes from the
-	// current capacity. For exact capacity, you must specify a positive value.
+	// current capacity. For exact capacity, you must specify a non-negative value.
 	//
 	// ScalingAdjustment is a required field
 	ScalingAdjustment *int64 `type:"integer" required:"true"`
@@ -6526,6 +6605,9 @@ func (s *StepAdjustment) SetScalingAdjustment(v int64) *StepAdjustment {
 
 // Represents a step scaling policy configuration to use with Application Auto
 // Scaling.
+//
+// For more information, see Step scaling policies (https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-step-scaling-policies.html)
+// in the Application Auto Scaling User Guide.
 type StepScalingPolicyConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -6537,61 +6619,9 @@ type StepScalingPolicyConfiguration struct {
 	AdjustmentType *string `type:"string" enum:"AdjustmentType"`
 
 	// The amount of time, in seconds, to wait for a previous scaling activity to
-	// take effect.
-	//
-	// With scale-out policies, the intention is to continuously (but not excessively)
-	// scale out. After Application Auto Scaling successfully scales out using a
-	// step scaling policy, it starts to calculate the cooldown time. The scaling
-	// policy won't increase the desired capacity again unless either a larger scale
-	// out is triggered or the cooldown period ends. While the cooldown period is
-	// in effect, capacity added by the initiating scale-out activity is calculated
-	// as part of the desired capacity for the next scale-out activity. For example,
-	// when an alarm triggers a step scaling policy to increase the capacity by
-	// 2, the scaling activity completes successfully, and a cooldown period starts.
-	// If the alarm triggers again during the cooldown period but at a more aggressive
-	// step adjustment of 3, the previous increase of 2 is considered part of the
-	// current capacity. Therefore, only 1 is added to the capacity.
-	//
-	// With scale-in policies, the intention is to scale in conservatively to protect
-	// your application’s availability, so scale-in activities are blocked until
-	// the cooldown period has expired. However, if another alarm triggers a scale-out
-	// activity during the cooldown period after a scale-in activity, Application
-	// Auto Scaling scales out the target immediately. In this case, the cooldown
-	// period for the scale-in activity stops and doesn't complete.
-	//
-	// Application Auto Scaling provides a default value of 600 for Amazon ElastiCache
-	// replication groups and a default value of 300 for the following scalable
-	// targets:
-	//
-	//    * AppStream 2.0 fleets
-	//
-	//    * Aurora DB clusters
-	//
-	//    * ECS services
-	//
-	//    * EMR clusters
-	//
-	//    * Neptune clusters
-	//
-	//    * SageMaker Serverless endpoint provisioned concurrency
-	//
-	//    * SageMaker endpoint variants
-	//
-	//    * Spot Fleets
-	//
-	//    * Custom resources
-	//
-	// For all other scalable targets, the default value is 0:
-	//
-	//    * Amazon Comprehend document classification and entity recognizer endpoints
-	//
-	//    * DynamoDB tables and global secondary indexes
-	//
-	//    * Amazon Keyspaces tables
-	//
-	//    * Lambda provisioned concurrency
-	//
-	//    * Amazon MSK broker storage
+	// take effect. If not specified, the default value is 300. For more information,
+	// see Cooldown period (https://docs.aws.amazon.com/autoscaling/application/userguide/step-scaling-policy-overview.html#step-scaling-cooldown)
+	// in the Application Auto Scaling User Guide.
 	Cooldown *int64 `type:"integer"`
 
 	// The aggregation type for the CloudWatch metrics. Valid values are Minimum,
@@ -7213,6 +7243,9 @@ func (s *TargetTrackingMetricStat) SetUnit(v string) *TargetTrackingMetricStat {
 
 // Represents a target tracking scaling policy configuration to use with Application
 // Auto Scaling.
+//
+// For more information, see Target tracking scaling policies (https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-target-tracking.html)
+// in the Application Auto Scaling User Guide.
 type TargetTrackingScalingPolicyConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -7232,95 +7265,15 @@ type TargetTrackingScalingPolicyConfiguration struct {
 	PredefinedMetricSpecification *PredefinedMetricSpecification `type:"structure"`
 
 	// The amount of time, in seconds, after a scale-in activity completes before
-	// another scale-in activity can start.
-	//
-	// With the scale-in cooldown period, the intention is to scale in conservatively
-	// to protect your application’s availability, so scale-in activities are
-	// blocked until the cooldown period has expired. However, if another alarm
-	// triggers a scale-out activity during the scale-in cooldown period, Application
-	// Auto Scaling scales out the target immediately. In this case, the scale-in
-	// cooldown period stops and doesn't complete.
-	//
-	// Application Auto Scaling provides a default value of 600 for Amazon ElastiCache
-	// replication groups and a default value of 300 for the following scalable
-	// targets:
-	//
-	//    * AppStream 2.0 fleets
-	//
-	//    * Aurora DB clusters
-	//
-	//    * ECS services
-	//
-	//    * EMR clusters
-	//
-	//    * Neptune clusters
-	//
-	//    * SageMaker Serverless endpoint provisioned concurrency
-	//
-	//    * SageMaker endpoint variants
-	//
-	//    * Spot Fleets
-	//
-	//    * Custom resources
-	//
-	// For all other scalable targets, the default value is 0:
-	//
-	//    * Amazon Comprehend document classification and entity recognizer endpoints
-	//
-	//    * DynamoDB tables and global secondary indexes
-	//
-	//    * Amazon Keyspaces tables
-	//
-	//    * Lambda provisioned concurrency
-	//
-	//    * Amazon MSK broker storage
+	// another scale-in activity can start. For more information and for default
+	// values, see Define cooldown periods (https://docs.aws.amazon.com/autoscaling/application/userguide/target-tracking-scaling-policy-overview.html#target-tracking-cooldown)
+	// in the Application Auto Scaling User Guide.
 	ScaleInCooldown *int64 `type:"integer"`
 
 	// The amount of time, in seconds, to wait for a previous scale-out activity
-	// to take effect.
-	//
-	// With the scale-out cooldown period, the intention is to continuously (but
-	// not excessively) scale out. After Application Auto Scaling successfully scales
-	// out using a target tracking scaling policy, it starts to calculate the cooldown
-	// time. The scaling policy won't increase the desired capacity again unless
-	// either a larger scale out is triggered or the cooldown period ends. While
-	// the cooldown period is in effect, the capacity added by the initiating scale-out
-	// activity is calculated as part of the desired capacity for the next scale-out
-	// activity.
-	//
-	// Application Auto Scaling provides a default value of 600 for Amazon ElastiCache
-	// replication groups and a default value of 300 for the following scalable
-	// targets:
-	//
-	//    * AppStream 2.0 fleets
-	//
-	//    * Aurora DB clusters
-	//
-	//    * ECS services
-	//
-	//    * EMR clusters
-	//
-	//    * Neptune clusters
-	//
-	//    * SageMaker Serverless endpoint provisioned concurrency
-	//
-	//    * SageMaker endpoint variants
-	//
-	//    * Spot Fleets
-	//
-	//    * Custom resources
-	//
-	// For all other scalable targets, the default value is 0:
-	//
-	//    * Amazon Comprehend document classification and entity recognizer endpoints
-	//
-	//    * DynamoDB tables and global secondary indexes
-	//
-	//    * Amazon Keyspaces tables
-	//
-	//    * Lambda provisioned concurrency
-	//
-	//    * Amazon MSK broker storage
+	// to take effect. For more information and for default values, see Define cooldown
+	// periods (https://docs.aws.amazon.com/autoscaling/application/userguide/target-tracking-scaling-policy-overview.html#target-tracking-cooldown)
+	// in the Application Auto Scaling User Guide.
 	ScaleOutCooldown *int64 `type:"integer"`
 
 	// The target value for the metric. Although this property accepts numbers of
@@ -7772,6 +7725,12 @@ const (
 
 	// MetricTypeSageMakerVariantProvisionedConcurrencyUtilization is a MetricType enum value
 	MetricTypeSageMakerVariantProvisionedConcurrencyUtilization = "SageMakerVariantProvisionedConcurrencyUtilization"
+
+	// MetricTypeElastiCacheDatabaseCapacityUsageCountedForEvictPercentage is a MetricType enum value
+	MetricTypeElastiCacheDatabaseCapacityUsageCountedForEvictPercentage = "ElastiCacheDatabaseCapacityUsageCountedForEvictPercentage"
+
+	// MetricTypeSageMakerInferenceComponentInvocationsPerCopy is a MetricType enum value
+	MetricTypeSageMakerInferenceComponentInvocationsPerCopy = "SageMakerInferenceComponentInvocationsPerCopy"
 )
 
 // MetricType_Values returns all elements of the MetricType enum
@@ -7799,6 +7758,8 @@ func MetricType_Values() []string {
 		MetricTypeElastiCacheDatabaseMemoryUsageCountedForEvictPercentage,
 		MetricTypeNeptuneReaderAverageCpuutilization,
 		MetricTypeSageMakerVariantProvisionedConcurrencyUtilization,
+		MetricTypeElastiCacheDatabaseCapacityUsageCountedForEvictPercentage,
+		MetricTypeSageMakerInferenceComponentInvocationsPerCopy,
 	}
 }
 
@@ -7881,6 +7842,9 @@ const (
 
 	// ScalableDimensionSagemakerVariantDesiredProvisionedConcurrency is a ScalableDimension enum value
 	ScalableDimensionSagemakerVariantDesiredProvisionedConcurrency = "sagemaker:variant:DesiredProvisionedConcurrency"
+
+	// ScalableDimensionSagemakerInferenceComponentDesiredCopyCount is a ScalableDimension enum value
+	ScalableDimensionSagemakerInferenceComponentDesiredCopyCount = "sagemaker:inference-component:DesiredCopyCount"
 )
 
 // ScalableDimension_Values returns all elements of the ScalableDimension enum
@@ -7907,6 +7871,7 @@ func ScalableDimension_Values() []string {
 		ScalableDimensionElasticacheReplicationGroupReplicas,
 		ScalableDimensionNeptuneClusterReadReplicaCount,
 		ScalableDimensionSagemakerVariantDesiredProvisionedConcurrency,
+		ScalableDimensionSagemakerInferenceComponentDesiredCopyCount,
 	}
 }
 

@@ -31,14 +31,13 @@ const opDeleteObject = "DeleteObject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteObjectRequest method.
+//	req, resp := client.DeleteObjectRequest(params)
 //
-//    // Example sending a request using the DeleteObjectRequest method.
-//    req, resp := client.DeleteObjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/DeleteObject
 func (c *BackupStorage) DeleteObjectRequest(input *DeleteObjectInput) (req *request.Request, output *DeleteObjectOutput) {
@@ -70,28 +69,29 @@ func (c *BackupStorage) DeleteObjectRequest(input *DeleteObjectInput) (req *requ
 // API operation DeleteObject for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   Retryable exception, indicates internal server error.
 //
-//   * ServiceInternalException
-//   Deprecated. To be removed from the model.
+//   - ServiceUnavailableException
+//     Retryable exception, indicates internal server error.
 //
-//   * RetryableException
-//   Retryable exception. In general indicates internal failure that can be fixed
-//   by retry.
+//   - ServiceInternalException
+//     Deprecated. To be removed from the model.
 //
-//   * IllegalArgumentException
-//   Non-retryable exception, indicates client error (wrong argument passed to
-//   API). See exception message for details.
+//   - RetryableException
+//     Retryable exception. In general indicates internal failure that can be fixed
+//     by retry.
 //
-//   * ResourceNotFoundException
-//   Non-retryable exception. Attempted to make an operation on non-existing or
-//   expired resource.
+//   - IllegalArgumentException
+//     Non-retryable exception, indicates client error (wrong argument passed to
+//     API). See exception message for details.
 //
-//   * ThrottlingException
-//   Increased rate over throttling limits. Can be retried with exponential backoff.
+//   - ResourceNotFoundException
+//     Non-retryable exception. Attempted to make an operation on non-existing or
+//     expired resource.
 //
-//   * AccessDeniedException
+//   - ThrottlingException
+//     Increased rate over throttling limits. Can be retried with exponential backoff.
+//
+//   - AccessDeniedException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/DeleteObject
 func (c *BackupStorage) DeleteObject(input *DeleteObjectInput) (*DeleteObjectOutput, error) {
@@ -131,14 +131,13 @@ const opGetChunk = "GetChunk"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetChunkRequest method.
+//	req, resp := client.GetChunkRequest(params)
 //
-//    // Example sending a request using the GetChunkRequest method.
-//    req, resp := client.GetChunkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/GetChunk
 func (c *BackupStorage) GetChunkRequest(input *GetChunkInput) (req *request.Request, output *GetChunkOutput) {
@@ -169,29 +168,30 @@ func (c *BackupStorage) GetChunkRequest(input *GetChunkInput) (req *request.Requ
 // API operation GetChunk for usage and error information.
 //
 // Returned Error Types:
-//   * IllegalArgumentException
-//   Non-retryable exception, indicates client error (wrong argument passed to
-//   API). See exception message for details.
 //
-//   * RetryableException
-//   Retryable exception. In general indicates internal failure that can be fixed
-//   by retry.
+//   - IllegalArgumentException
+//     Non-retryable exception, indicates client error (wrong argument passed to
+//     API). See exception message for details.
 //
-//   * ResourceNotFoundException
-//   Non-retryable exception. Attempted to make an operation on non-existing or
-//   expired resource.
+//   - RetryableException
+//     Retryable exception. In general indicates internal failure that can be fixed
+//     by retry.
 //
-//   * ServiceInternalException
-//   Deprecated. To be removed from the model.
+//   - ResourceNotFoundException
+//     Non-retryable exception. Attempted to make an operation on non-existing or
+//     expired resource.
 //
-//   * ThrottlingException
-//   Increased rate over throttling limits. Can be retried with exponential backoff.
+//   - ServiceInternalException
+//     Deprecated. To be removed from the model.
 //
-//   * KMSInvalidKeyUsageException
-//   Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
-//   message for details.
+//   - ThrottlingException
+//     Increased rate over throttling limits. Can be retried with exponential backoff.
 //
-//   * AccessDeniedException
+//   - KMSInvalidKeyUsageException
+//     Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
+//     message for details.
+//
+//   - AccessDeniedException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/GetChunk
 func (c *BackupStorage) GetChunk(input *GetChunkInput) (*GetChunkOutput, error) {
@@ -231,14 +231,13 @@ const opGetObjectMetadata = "GetObjectMetadata"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetObjectMetadataRequest method.
+//	req, resp := client.GetObjectMetadataRequest(params)
 //
-//    // Example sending a request using the GetObjectMetadataRequest method.
-//    req, resp := client.GetObjectMetadataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/GetObjectMetadata
 func (c *BackupStorage) GetObjectMetadataRequest(input *GetObjectMetadataInput) (req *request.Request, output *GetObjectMetadataOutput) {
@@ -269,32 +268,33 @@ func (c *BackupStorage) GetObjectMetadataRequest(input *GetObjectMetadataInput) 
 // API operation GetObjectMetadata for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   Retryable exception, indicates internal server error.
 //
-//   * ServiceInternalException
-//   Deprecated. To be removed from the model.
+//   - ServiceUnavailableException
+//     Retryable exception, indicates internal server error.
 //
-//   * ResourceNotFoundException
-//   Non-retryable exception. Attempted to make an operation on non-existing or
-//   expired resource.
+//   - ServiceInternalException
+//     Deprecated. To be removed from the model.
 //
-//   * RetryableException
-//   Retryable exception. In general indicates internal failure that can be fixed
-//   by retry.
+//   - ResourceNotFoundException
+//     Non-retryable exception. Attempted to make an operation on non-existing or
+//     expired resource.
 //
-//   * IllegalArgumentException
-//   Non-retryable exception, indicates client error (wrong argument passed to
-//   API). See exception message for details.
+//   - RetryableException
+//     Retryable exception. In general indicates internal failure that can be fixed
+//     by retry.
 //
-//   * ThrottlingException
-//   Increased rate over throttling limits. Can be retried with exponential backoff.
+//   - IllegalArgumentException
+//     Non-retryable exception, indicates client error (wrong argument passed to
+//     API). See exception message for details.
 //
-//   * KMSInvalidKeyUsageException
-//   Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
-//   message for details.
+//   - ThrottlingException
+//     Increased rate over throttling limits. Can be retried with exponential backoff.
 //
-//   * AccessDeniedException
+//   - KMSInvalidKeyUsageException
+//     Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
+//     message for details.
+//
+//   - AccessDeniedException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/GetObjectMetadata
 func (c *BackupStorage) GetObjectMetadata(input *GetObjectMetadataInput) (*GetObjectMetadataOutput, error) {
@@ -334,14 +334,13 @@ const opListChunks = "ListChunks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListChunksRequest method.
+//	req, resp := client.ListChunksRequest(params)
 //
-//    // Example sending a request using the ListChunksRequest method.
-//    req, resp := client.ListChunksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/ListChunks
 func (c *BackupStorage) ListChunksRequest(input *ListChunksInput) (req *request.Request, output *ListChunksOutput) {
@@ -368,7 +367,7 @@ func (c *BackupStorage) ListChunksRequest(input *ListChunksInput) (req *request.
 
 // ListChunks API operation for AWS Backup Storage.
 //
-// List chunks in a given Object
+// # List chunks in a given Object
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -378,25 +377,26 @@ func (c *BackupStorage) ListChunksRequest(input *ListChunksInput) (req *request.
 // API operation ListChunks for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   Retryable exception, indicates internal server error.
 //
-//   * ResourceNotFoundException
-//   Non-retryable exception. Attempted to make an operation on non-existing or
-//   expired resource.
+//   - ServiceUnavailableException
+//     Retryable exception, indicates internal server error.
 //
-//   * ServiceInternalException
-//   Deprecated. To be removed from the model.
+//   - ResourceNotFoundException
+//     Non-retryable exception. Attempted to make an operation on non-existing or
+//     expired resource.
 //
-//   * RetryableException
-//   Retryable exception. In general indicates internal failure that can be fixed
-//   by retry.
+//   - ServiceInternalException
+//     Deprecated. To be removed from the model.
 //
-//   * IllegalArgumentException
-//   Non-retryable exception, indicates client error (wrong argument passed to
-//   API). See exception message for details.
+//   - RetryableException
+//     Retryable exception. In general indicates internal failure that can be fixed
+//     by retry.
 //
-//   * AccessDeniedException
+//   - IllegalArgumentException
+//     Non-retryable exception, indicates client error (wrong argument passed to
+//     API). See exception message for details.
+//
+//   - AccessDeniedException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/ListChunks
 func (c *BackupStorage) ListChunks(input *ListChunksInput) (*ListChunksOutput, error) {
@@ -428,15 +428,14 @@ func (c *BackupStorage) ListChunksWithContext(ctx aws.Context, input *ListChunks
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListChunks operation.
-//    pageNum := 0
-//    err := client.ListChunksPages(params,
-//        func(page *backupstorage.ListChunksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListChunks operation.
+//	pageNum := 0
+//	err := client.ListChunksPages(params,
+//	    func(page *backupstorage.ListChunksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BackupStorage) ListChunksPages(input *ListChunksInput, fn func(*ListChunksOutput, bool) bool) error {
 	return c.ListChunksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -488,14 +487,13 @@ const opListObjects = "ListObjects"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListObjectsRequest method.
+//	req, resp := client.ListObjectsRequest(params)
 //
-//    // Example sending a request using the ListObjectsRequest method.
-//    req, resp := client.ListObjectsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/ListObjects
 func (c *BackupStorage) ListObjectsRequest(input *ListObjectsInput) (req *request.Request, output *ListObjectsOutput) {
@@ -532,32 +530,33 @@ func (c *BackupStorage) ListObjectsRequest(input *ListObjectsInput) (req *reques
 // API operation ListObjects for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   Retryable exception, indicates internal server error.
 //
-//   * ServiceInternalException
-//   Deprecated. To be removed from the model.
+//   - ServiceUnavailableException
+//     Retryable exception, indicates internal server error.
 //
-//   * RetryableException
-//   Retryable exception. In general indicates internal failure that can be fixed
-//   by retry.
+//   - ServiceInternalException
+//     Deprecated. To be removed from the model.
 //
-//   * IllegalArgumentException
-//   Non-retryable exception, indicates client error (wrong argument passed to
-//   API). See exception message for details.
+//   - RetryableException
+//     Retryable exception. In general indicates internal failure that can be fixed
+//     by retry.
 //
-//   * ThrottlingException
-//   Increased rate over throttling limits. Can be retried with exponential backoff.
+//   - IllegalArgumentException
+//     Non-retryable exception, indicates client error (wrong argument passed to
+//     API). See exception message for details.
 //
-//   * ResourceNotFoundException
-//   Non-retryable exception. Attempted to make an operation on non-existing or
-//   expired resource.
+//   - ThrottlingException
+//     Increased rate over throttling limits. Can be retried with exponential backoff.
 //
-//   * KMSInvalidKeyUsageException
-//   Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
-//   message for details.
+//   - ResourceNotFoundException
+//     Non-retryable exception. Attempted to make an operation on non-existing or
+//     expired resource.
 //
-//   * AccessDeniedException
+//   - KMSInvalidKeyUsageException
+//     Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
+//     message for details.
+//
+//   - AccessDeniedException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/ListObjects
 func (c *BackupStorage) ListObjects(input *ListObjectsInput) (*ListObjectsOutput, error) {
@@ -589,15 +588,14 @@ func (c *BackupStorage) ListObjectsWithContext(ctx aws.Context, input *ListObjec
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListObjects operation.
-//    pageNum := 0
-//    err := client.ListObjectsPages(params,
-//        func(page *backupstorage.ListObjectsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListObjects operation.
+//	pageNum := 0
+//	err := client.ListObjectsPages(params,
+//	    func(page *backupstorage.ListObjectsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BackupStorage) ListObjectsPages(input *ListObjectsInput, fn func(*ListObjectsOutput, bool) bool) error {
 	return c.ListObjectsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -649,14 +647,13 @@ const opNotifyObjectComplete = "NotifyObjectComplete"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the NotifyObjectCompleteRequest method.
+//	req, resp := client.NotifyObjectCompleteRequest(params)
 //
-//    // Example sending a request using the NotifyObjectCompleteRequest method.
-//    req, resp := client.NotifyObjectCompleteRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/NotifyObjectComplete
 func (c *BackupStorage) NotifyObjectCompleteRequest(input *NotifyObjectCompleteInput) (req *request.Request, output *NotifyObjectCompleteOutput) {
@@ -680,7 +677,7 @@ func (c *BackupStorage) NotifyObjectCompleteRequest(input *NotifyObjectCompleteI
 
 // NotifyObjectComplete API operation for AWS Backup Storage.
 //
-// Complete upload
+// # Complete upload
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -690,32 +687,33 @@ func (c *BackupStorage) NotifyObjectCompleteRequest(input *NotifyObjectCompleteI
 // API operation NotifyObjectComplete for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   Retryable exception, indicates internal server error.
 //
-//   * ServiceInternalException
-//   Deprecated. To be removed from the model.
+//   - ServiceUnavailableException
+//     Retryable exception, indicates internal server error.
 //
-//   * NotReadableInputStreamException
-//   Retryalble exception. Indicated issues while reading an input stream due
-//   to the networking issues or connection drop on the client side.
+//   - ServiceInternalException
+//     Deprecated. To be removed from the model.
 //
-//   * RetryableException
-//   Retryable exception. In general indicates internal failure that can be fixed
-//   by retry.
+//   - NotReadableInputStreamException
+//     Retryalble exception. Indicated issues while reading an input stream due
+//     to the networking issues or connection drop on the client side.
 //
-//   * IllegalArgumentException
-//   Non-retryable exception, indicates client error (wrong argument passed to
-//   API). See exception message for details.
+//   - RetryableException
+//     Retryable exception. In general indicates internal failure that can be fixed
+//     by retry.
 //
-//   * ThrottlingException
-//   Increased rate over throttling limits. Can be retried with exponential backoff.
+//   - IllegalArgumentException
+//     Non-retryable exception, indicates client error (wrong argument passed to
+//     API). See exception message for details.
 //
-//   * KMSInvalidKeyUsageException
-//   Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
-//   message for details.
+//   - ThrottlingException
+//     Increased rate over throttling limits. Can be retried with exponential backoff.
 //
-//   * AccessDeniedException
+//   - KMSInvalidKeyUsageException
+//     Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
+//     message for details.
+//
+//   - AccessDeniedException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/NotifyObjectComplete
 func (c *BackupStorage) NotifyObjectComplete(input *NotifyObjectCompleteInput) (*NotifyObjectCompleteOutput, error) {
@@ -755,14 +753,13 @@ const opPutChunk = "PutChunk"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutChunkRequest method.
+//	req, resp := client.PutChunkRequest(params)
 //
-//    // Example sending a request using the PutChunkRequest method.
-//    req, resp := client.PutChunkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/PutChunk
 func (c *BackupStorage) PutChunkRequest(input *PutChunkInput) (req *request.Request, output *PutChunkOutput) {
@@ -796,32 +793,33 @@ func (c *BackupStorage) PutChunkRequest(input *PutChunkInput) (req *request.Requ
 // API operation PutChunk for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   Retryable exception, indicates internal server error.
 //
-//   * ServiceInternalException
-//   Deprecated. To be removed from the model.
+//   - ServiceUnavailableException
+//     Retryable exception, indicates internal server error.
 //
-//   * NotReadableInputStreamException
-//   Retryalble exception. Indicated issues while reading an input stream due
-//   to the networking issues or connection drop on the client side.
+//   - ServiceInternalException
+//     Deprecated. To be removed from the model.
 //
-//   * RetryableException
-//   Retryable exception. In general indicates internal failure that can be fixed
-//   by retry.
+//   - NotReadableInputStreamException
+//     Retryalble exception. Indicated issues while reading an input stream due
+//     to the networking issues or connection drop on the client side.
 //
-//   * IllegalArgumentException
-//   Non-retryable exception, indicates client error (wrong argument passed to
-//   API). See exception message for details.
+//   - RetryableException
+//     Retryable exception. In general indicates internal failure that can be fixed
+//     by retry.
 //
-//   * ThrottlingException
-//   Increased rate over throttling limits. Can be retried with exponential backoff.
+//   - IllegalArgumentException
+//     Non-retryable exception, indicates client error (wrong argument passed to
+//     API). See exception message for details.
 //
-//   * KMSInvalidKeyUsageException
-//   Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
-//   message for details.
+//   - ThrottlingException
+//     Increased rate over throttling limits. Can be retried with exponential backoff.
 //
-//   * AccessDeniedException
+//   - KMSInvalidKeyUsageException
+//     Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
+//     message for details.
+//
+//   - AccessDeniedException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/PutChunk
 func (c *BackupStorage) PutChunk(input *PutChunkInput) (*PutChunkOutput, error) {
@@ -861,14 +859,13 @@ const opPutObject = "PutObject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutObjectRequest method.
+//	req, resp := client.PutObjectRequest(params)
 //
-//    // Example sending a request using the PutObjectRequest method.
-//    req, resp := client.PutObjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/PutObject
 func (c *BackupStorage) PutObjectRequest(input *PutObjectInput) (req *request.Request, output *PutObjectOutput) {
@@ -903,32 +900,33 @@ func (c *BackupStorage) PutObjectRequest(input *PutObjectInput) (req *request.Re
 // API operation PutObject for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   Retryable exception, indicates internal server error.
 //
-//   * ServiceInternalException
-//   Deprecated. To be removed from the model.
+//   - ServiceUnavailableException
+//     Retryable exception, indicates internal server error.
 //
-//   * NotReadableInputStreamException
-//   Retryalble exception. Indicated issues while reading an input stream due
-//   to the networking issues or connection drop on the client side.
+//   - ServiceInternalException
+//     Deprecated. To be removed from the model.
 //
-//   * RetryableException
-//   Retryable exception. In general indicates internal failure that can be fixed
-//   by retry.
+//   - NotReadableInputStreamException
+//     Retryalble exception. Indicated issues while reading an input stream due
+//     to the networking issues or connection drop on the client side.
 //
-//   * IllegalArgumentException
-//   Non-retryable exception, indicates client error (wrong argument passed to
-//   API). See exception message for details.
+//   - RetryableException
+//     Retryable exception. In general indicates internal failure that can be fixed
+//     by retry.
 //
-//   * ThrottlingException
-//   Increased rate over throttling limits. Can be retried with exponential backoff.
+//   - IllegalArgumentException
+//     Non-retryable exception, indicates client error (wrong argument passed to
+//     API). See exception message for details.
 //
-//   * KMSInvalidKeyUsageException
-//   Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
-//   message for details.
+//   - ThrottlingException
+//     Increased rate over throttling limits. Can be retried with exponential backoff.
 //
-//   * AccessDeniedException
+//   - KMSInvalidKeyUsageException
+//     Non-retryable exception. Indicates the KMS key usage is incorrect. See exception
+//     message for details.
+//
+//   - AccessDeniedException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/PutObject
 func (c *BackupStorage) PutObject(input *PutObjectInput) (*PutObjectOutput, error) {
@@ -968,14 +966,13 @@ const opStartObject = "StartObject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartObjectRequest method.
+//	req, resp := client.StartObjectRequest(params)
 //
-//    // Example sending a request using the StartObjectRequest method.
-//    req, resp := client.StartObjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/StartObject
 func (c *BackupStorage) StartObjectRequest(input *StartObjectInput) (req *request.Request, output *StartObjectOutput) {
@@ -1006,32 +1003,33 @@ func (c *BackupStorage) StartObjectRequest(input *StartObjectInput) (req *reques
 // API operation StartObject for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   Retryable exception, indicates internal server error.
 //
-//   * ServiceInternalException
-//   Deprecated. To be removed from the model.
+//   - ServiceUnavailableException
+//     Retryable exception, indicates internal server error.
 //
-//   * RetryableException
-//   Retryable exception. In general indicates internal failure that can be fixed
-//   by retry.
+//   - ServiceInternalException
+//     Deprecated. To be removed from the model.
 //
-//   * IllegalArgumentException
-//   Non-retryable exception, indicates client error (wrong argument passed to
-//   API). See exception message for details.
+//   - RetryableException
+//     Retryable exception. In general indicates internal failure that can be fixed
+//     by retry.
 //
-//   * ResourceNotFoundException
-//   Non-retryable exception. Attempted to make an operation on non-existing or
-//   expired resource.
+//   - IllegalArgumentException
+//     Non-retryable exception, indicates client error (wrong argument passed to
+//     API). See exception message for details.
 //
-//   * DataAlreadyExistsException
-//   Non-retryable exception. Attempted to create already existing object or chunk.
-//   This message contains a checksum of already presented data.
+//   - ResourceNotFoundException
+//     Non-retryable exception. Attempted to make an operation on non-existing or
+//     expired resource.
 //
-//   * ThrottlingException
-//   Increased rate over throttling limits. Can be retried with exponential backoff.
+//   - DataAlreadyExistsException
+//     Non-retryable exception. Attempted to create already existing object or chunk.
+//     This message contains a checksum of already presented data.
 //
-//   * AccessDeniedException
+//   - ThrottlingException
+//     Increased rate over throttling limits. Can be retried with exponential backoff.
+//
+//   - AccessDeniedException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backupstorage-2018-04-10/StartObject
 func (c *BackupStorage) StartObject(input *StartObjectInput) (*StartObjectOutput, error) {

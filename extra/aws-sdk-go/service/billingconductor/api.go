@@ -28,14 +28,13 @@ const opAssociateAccounts = "AssociateAccounts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateAccountsRequest method.
+//	req, resp := client.AssociateAccountsRequest(params)
 //
-//    // Example sending a request using the AssociateAccountsRequest method.
-//    req, resp := client.AssociateAccountsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/AssociateAccounts
 func (c *BillingConductor) AssociateAccountsRequest(input *AssociateAccountsInput) (req *request.Request, output *AssociateAccountsOutput) {
@@ -70,27 +69,27 @@ func (c *BillingConductor) AssociateAccountsRequest(input *AssociateAccountsInpu
 // API operation AssociateAccounts for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceLimitExceededException
-//   The request would cause a service limit to exceed.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ServiceLimitExceededException
+//     The request would cause a service limit to exceed.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/AssociateAccounts
 func (c *BillingConductor) AssociateAccounts(input *AssociateAccountsInput) (*AssociateAccountsOutput, error) {
@@ -130,14 +129,13 @@ const opAssociatePricingRules = "AssociatePricingRules"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociatePricingRulesRequest method.
+//	req, resp := client.AssociatePricingRulesRequest(params)
 //
-//    // Example sending a request using the AssociatePricingRulesRequest method.
-//    req, resp := client.AssociatePricingRulesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/AssociatePricingRules
 func (c *BillingConductor) AssociatePricingRulesRequest(input *AssociatePricingRulesInput) (req *request.Request, output *AssociatePricingRulesOutput) {
@@ -169,27 +167,27 @@ func (c *BillingConductor) AssociatePricingRulesRequest(input *AssociatePricingR
 // API operation AssociatePricingRules for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceLimitExceededException
-//   The request would cause a service limit to exceed.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ServiceLimitExceededException
+//     The request would cause a service limit to exceed.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/AssociatePricingRules
 func (c *BillingConductor) AssociatePricingRules(input *AssociatePricingRulesInput) (*AssociatePricingRulesOutput, error) {
@@ -229,14 +227,13 @@ const opBatchAssociateResourcesToCustomLineItem = "BatchAssociateResourcesToCust
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchAssociateResourcesToCustomLineItemRequest method.
+//	req, resp := client.BatchAssociateResourcesToCustomLineItemRequest(params)
 //
-//    // Example sending a request using the BatchAssociateResourcesToCustomLineItemRequest method.
-//    req, resp := client.BatchAssociateResourcesToCustomLineItemRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/BatchAssociateResourcesToCustomLineItem
 func (c *BillingConductor) BatchAssociateResourcesToCustomLineItemRequest(input *BatchAssociateResourcesToCustomLineItemInput) (req *request.Request, output *BatchAssociateResourcesToCustomLineItemOutput) {
@@ -267,27 +264,27 @@ func (c *BillingConductor) BatchAssociateResourcesToCustomLineItemRequest(input 
 // API operation BatchAssociateResourcesToCustomLineItem for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceLimitExceededException
-//   The request would cause a service limit to exceed.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ServiceLimitExceededException
+//     The request would cause a service limit to exceed.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/BatchAssociateResourcesToCustomLineItem
 func (c *BillingConductor) BatchAssociateResourcesToCustomLineItem(input *BatchAssociateResourcesToCustomLineItemInput) (*BatchAssociateResourcesToCustomLineItemOutput, error) {
@@ -327,14 +324,13 @@ const opBatchDisassociateResourcesFromCustomLineItem = "BatchDisassociateResourc
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchDisassociateResourcesFromCustomLineItemRequest method.
+//	req, resp := client.BatchDisassociateResourcesFromCustomLineItemRequest(params)
 //
-//    // Example sending a request using the BatchDisassociateResourcesFromCustomLineItemRequest method.
-//    req, resp := client.BatchDisassociateResourcesFromCustomLineItemRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/BatchDisassociateResourcesFromCustomLineItem
 func (c *BillingConductor) BatchDisassociateResourcesFromCustomLineItemRequest(input *BatchDisassociateResourcesFromCustomLineItemInput) (req *request.Request, output *BatchDisassociateResourcesFromCustomLineItemOutput) {
@@ -365,24 +361,24 @@ func (c *BillingConductor) BatchDisassociateResourcesFromCustomLineItemRequest(i
 // API operation BatchDisassociateResourcesFromCustomLineItem for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/BatchDisassociateResourcesFromCustomLineItem
 func (c *BillingConductor) BatchDisassociateResourcesFromCustomLineItem(input *BatchDisassociateResourcesFromCustomLineItemInput) (*BatchDisassociateResourcesFromCustomLineItemOutput, error) {
@@ -422,14 +418,13 @@ const opCreateBillingGroup = "CreateBillingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateBillingGroupRequest method.
+//	req, resp := client.CreateBillingGroupRequest(params)
 //
-//    // Example sending a request using the CreateBillingGroupRequest method.
-//    req, resp := client.CreateBillingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/CreateBillingGroup
 func (c *BillingConductor) CreateBillingGroupRequest(input *CreateBillingGroupInput) (req *request.Request, output *CreateBillingGroupOutput) {
@@ -461,24 +456,24 @@ func (c *BillingConductor) CreateBillingGroupRequest(input *CreateBillingGroupIn
 // API operation CreateBillingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceLimitExceededException
-//   The request would cause a service limit to exceed.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ServiceLimitExceededException
+//     The request would cause a service limit to exceed.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/CreateBillingGroup
 func (c *BillingConductor) CreateBillingGroup(input *CreateBillingGroupInput) (*CreateBillingGroupOutput, error) {
@@ -518,14 +513,13 @@ const opCreateCustomLineItem = "CreateCustomLineItem"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateCustomLineItemRequest method.
+//	req, resp := client.CreateCustomLineItemRequest(params)
 //
-//    // Example sending a request using the CreateCustomLineItemRequest method.
-//    req, resp := client.CreateCustomLineItemRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/CreateCustomLineItem
 func (c *BillingConductor) CreateCustomLineItemRequest(input *CreateCustomLineItemInput) (req *request.Request, output *CreateCustomLineItemOutput) {
@@ -558,24 +552,24 @@ func (c *BillingConductor) CreateCustomLineItemRequest(input *CreateCustomLineIt
 // API operation CreateCustomLineItem for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceLimitExceededException
-//   The request would cause a service limit to exceed.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ServiceLimitExceededException
+//     The request would cause a service limit to exceed.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/CreateCustomLineItem
 func (c *BillingConductor) CreateCustomLineItem(input *CreateCustomLineItemInput) (*CreateCustomLineItemOutput, error) {
@@ -615,14 +609,13 @@ const opCreatePricingPlan = "CreatePricingPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreatePricingPlanRequest method.
+//	req, resp := client.CreatePricingPlanRequest(params)
 //
-//    // Example sending a request using the CreatePricingPlanRequest method.
-//    req, resp := client.CreatePricingPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/CreatePricingPlan
 func (c *BillingConductor) CreatePricingPlanRequest(input *CreatePricingPlanInput) (req *request.Request, output *CreatePricingPlanOutput) {
@@ -654,27 +647,27 @@ func (c *BillingConductor) CreatePricingPlanRequest(input *CreatePricingPlanInpu
 // API operation CreatePricingPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceLimitExceededException
-//   The request would cause a service limit to exceed.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ServiceLimitExceededException
+//     The request would cause a service limit to exceed.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/CreatePricingPlan
 func (c *BillingConductor) CreatePricingPlan(input *CreatePricingPlanInput) (*CreatePricingPlanOutput, error) {
@@ -714,14 +707,13 @@ const opCreatePricingRule = "CreatePricingRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreatePricingRuleRequest method.
+//	req, resp := client.CreatePricingRuleRequest(params)
 //
-//    // Example sending a request using the CreatePricingRuleRequest method.
-//    req, resp := client.CreatePricingRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/CreatePricingRule
 func (c *BillingConductor) CreatePricingRuleRequest(input *CreatePricingRuleInput) (req *request.Request, output *CreatePricingRuleOutput) {
@@ -753,24 +745,24 @@ func (c *BillingConductor) CreatePricingRuleRequest(input *CreatePricingRuleInpu
 // API operation CreatePricingRule for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceLimitExceededException
-//   The request would cause a service limit to exceed.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ServiceLimitExceededException
+//     The request would cause a service limit to exceed.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/CreatePricingRule
 func (c *BillingConductor) CreatePricingRule(input *CreatePricingRuleInput) (*CreatePricingRuleOutput, error) {
@@ -810,14 +802,13 @@ const opDeleteBillingGroup = "DeleteBillingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteBillingGroupRequest method.
+//	req, resp := client.DeleteBillingGroupRequest(params)
 //
-//    // Example sending a request using the DeleteBillingGroupRequest method.
-//    req, resp := client.DeleteBillingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DeleteBillingGroup
 func (c *BillingConductor) DeleteBillingGroupRequest(input *DeleteBillingGroupInput) (req *request.Request, output *DeleteBillingGroupOutput) {
@@ -848,18 +839,18 @@ func (c *BillingConductor) DeleteBillingGroupRequest(input *DeleteBillingGroupIn
 // API operation DeleteBillingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DeleteBillingGroup
 func (c *BillingConductor) DeleteBillingGroup(input *DeleteBillingGroupInput) (*DeleteBillingGroupOutput, error) {
@@ -899,14 +890,13 @@ const opDeleteCustomLineItem = "DeleteCustomLineItem"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCustomLineItemRequest method.
+//	req, resp := client.DeleteCustomLineItemRequest(params)
 //
-//    // Example sending a request using the DeleteCustomLineItemRequest method.
-//    req, resp := client.DeleteCustomLineItemRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DeleteCustomLineItem
 func (c *BillingConductor) DeleteCustomLineItemRequest(input *DeleteCustomLineItemInput) (req *request.Request, output *DeleteCustomLineItemOutput) {
@@ -938,21 +928,21 @@ func (c *BillingConductor) DeleteCustomLineItemRequest(input *DeleteCustomLineIt
 // API operation DeleteCustomLineItem for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DeleteCustomLineItem
 func (c *BillingConductor) DeleteCustomLineItem(input *DeleteCustomLineItemInput) (*DeleteCustomLineItemOutput, error) {
@@ -992,14 +982,13 @@ const opDeletePricingPlan = "DeletePricingPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePricingPlanRequest method.
+//	req, resp := client.DeletePricingPlanRequest(params)
 //
-//    // Example sending a request using the DeletePricingPlanRequest method.
-//    req, resp := client.DeletePricingPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DeletePricingPlan
 func (c *BillingConductor) DeletePricingPlanRequest(input *DeletePricingPlanInput) (req *request.Request, output *DeletePricingPlanOutput) {
@@ -1031,21 +1020,21 @@ func (c *BillingConductor) DeletePricingPlanRequest(input *DeletePricingPlanInpu
 // API operation DeletePricingPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DeletePricingPlan
 func (c *BillingConductor) DeletePricingPlan(input *DeletePricingPlanInput) (*DeletePricingPlanOutput, error) {
@@ -1085,14 +1074,13 @@ const opDeletePricingRule = "DeletePricingRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePricingRuleRequest method.
+//	req, resp := client.DeletePricingRuleRequest(params)
 //
-//    // Example sending a request using the DeletePricingRuleRequest method.
-//    req, resp := client.DeletePricingRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DeletePricingRule
 func (c *BillingConductor) DeletePricingRuleRequest(input *DeletePricingRuleInput) (req *request.Request, output *DeletePricingRuleOutput) {
@@ -1124,21 +1112,21 @@ func (c *BillingConductor) DeletePricingRuleRequest(input *DeletePricingRuleInpu
 // API operation DeletePricingRule for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DeletePricingRule
 func (c *BillingConductor) DeletePricingRule(input *DeletePricingRuleInput) (*DeletePricingRuleOutput, error) {
@@ -1178,14 +1166,13 @@ const opDisassociateAccounts = "DisassociateAccounts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateAccountsRequest method.
+//	req, resp := client.DisassociateAccountsRequest(params)
 //
-//    // Example sending a request using the DisassociateAccountsRequest method.
-//    req, resp := client.DisassociateAccountsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DisassociateAccounts
 func (c *BillingConductor) DisassociateAccountsRequest(input *DisassociateAccountsInput) (req *request.Request, output *DisassociateAccountsOutput) {
@@ -1216,24 +1203,24 @@ func (c *BillingConductor) DisassociateAccountsRequest(input *DisassociateAccoun
 // API operation DisassociateAccounts for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DisassociateAccounts
 func (c *BillingConductor) DisassociateAccounts(input *DisassociateAccountsInput) (*DisassociateAccountsOutput, error) {
@@ -1273,14 +1260,13 @@ const opDisassociatePricingRules = "DisassociatePricingRules"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociatePricingRulesRequest method.
+//	req, resp := client.DisassociatePricingRulesRequest(params)
 //
-//    // Example sending a request using the DisassociatePricingRulesRequest method.
-//    req, resp := client.DisassociatePricingRulesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DisassociatePricingRules
 func (c *BillingConductor) DisassociatePricingRulesRequest(input *DisassociatePricingRulesInput) (req *request.Request, output *DisassociatePricingRulesOutput) {
@@ -1311,24 +1297,24 @@ func (c *BillingConductor) DisassociatePricingRulesRequest(input *DisassociatePr
 // API operation DisassociatePricingRules for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/DisassociatePricingRules
 func (c *BillingConductor) DisassociatePricingRules(input *DisassociatePricingRulesInput) (*DisassociatePricingRulesOutput, error) {
@@ -1352,6 +1338,99 @@ func (c *BillingConductor) DisassociatePricingRulesWithContext(ctx aws.Context, 
 	return out, req.Send()
 }
 
+const opGetBillingGroupCostReport = "GetBillingGroupCostReport"
+
+// GetBillingGroupCostReportRequest generates a "aws/request.Request" representing the
+// client's request for the GetBillingGroupCostReport operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetBillingGroupCostReport for more information on using the GetBillingGroupCostReport
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetBillingGroupCostReportRequest method.
+//	req, resp := client.GetBillingGroupCostReportRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/GetBillingGroupCostReport
+func (c *BillingConductor) GetBillingGroupCostReportRequest(input *GetBillingGroupCostReportInput) (req *request.Request, output *GetBillingGroupCostReportOutput) {
+	op := &request.Operation{
+		Name:       opGetBillingGroupCostReport,
+		HTTPMethod: "POST",
+		HTTPPath:   "/get-billing-group-cost-report",
+	}
+
+	if input == nil {
+		input = &GetBillingGroupCostReportInput{}
+	}
+
+	output = &GetBillingGroupCostReportOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetBillingGroupCostReport API operation for AWSBillingConductor.
+//
+// Retrieves the margin summary report, which includes the Amazon Web Services
+// cost and charged amount (pro forma cost) by Amazon Web Service for a specific
+// billing group.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSBillingConductor's
+// API operation GetBillingGroupCostReport for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/GetBillingGroupCostReport
+func (c *BillingConductor) GetBillingGroupCostReport(input *GetBillingGroupCostReportInput) (*GetBillingGroupCostReportOutput, error) {
+	req, out := c.GetBillingGroupCostReportRequest(input)
+	return out, req.Send()
+}
+
+// GetBillingGroupCostReportWithContext is the same as GetBillingGroupCostReport with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetBillingGroupCostReport for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *BillingConductor) GetBillingGroupCostReportWithContext(ctx aws.Context, input *GetBillingGroupCostReportInput, opts ...request.Option) (*GetBillingGroupCostReportOutput, error) {
+	req, out := c.GetBillingGroupCostReportRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListAccountAssociations = "ListAccountAssociations"
 
 // ListAccountAssociationsRequest generates a "aws/request.Request" representing the
@@ -1368,14 +1447,13 @@ const opListAccountAssociations = "ListAccountAssociations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAccountAssociationsRequest method.
+//	req, resp := client.ListAccountAssociationsRequest(params)
 //
-//    // Example sending a request using the ListAccountAssociationsRequest method.
-//    req, resp := client.ListAccountAssociationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListAccountAssociations
 func (c *BillingConductor) ListAccountAssociationsRequest(input *ListAccountAssociationsInput) (req *request.Request, output *ListAccountAssociationsOutput) {
@@ -1415,21 +1493,21 @@ func (c *BillingConductor) ListAccountAssociationsRequest(input *ListAccountAsso
 // API operation ListAccountAssociations for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListAccountAssociations
 func (c *BillingConductor) ListAccountAssociations(input *ListAccountAssociationsInput) (*ListAccountAssociationsOutput, error) {
@@ -1461,15 +1539,14 @@ func (c *BillingConductor) ListAccountAssociationsWithContext(ctx aws.Context, i
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAccountAssociations operation.
-//    pageNum := 0
-//    err := client.ListAccountAssociationsPages(params,
-//        func(page *billingconductor.ListAccountAssociationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAccountAssociations operation.
+//	pageNum := 0
+//	err := client.ListAccountAssociationsPages(params,
+//	    func(page *billingconductor.ListAccountAssociationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BillingConductor) ListAccountAssociationsPages(input *ListAccountAssociationsInput, fn func(*ListAccountAssociationsOutput, bool) bool) error {
 	return c.ListAccountAssociationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1521,14 +1598,13 @@ const opListBillingGroupCostReports = "ListBillingGroupCostReports"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBillingGroupCostReportsRequest method.
+//	req, resp := client.ListBillingGroupCostReportsRequest(params)
 //
-//    // Example sending a request using the ListBillingGroupCostReportsRequest method.
-//    req, resp := client.ListBillingGroupCostReportsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListBillingGroupCostReports
 func (c *BillingConductor) ListBillingGroupCostReportsRequest(input *ListBillingGroupCostReportsInput) (req *request.Request, output *ListBillingGroupCostReportsOutput) {
@@ -1567,21 +1643,21 @@ func (c *BillingConductor) ListBillingGroupCostReportsRequest(input *ListBilling
 // API operation ListBillingGroupCostReports for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListBillingGroupCostReports
 func (c *BillingConductor) ListBillingGroupCostReports(input *ListBillingGroupCostReportsInput) (*ListBillingGroupCostReportsOutput, error) {
@@ -1613,15 +1689,14 @@ func (c *BillingConductor) ListBillingGroupCostReportsWithContext(ctx aws.Contex
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBillingGroupCostReports operation.
-//    pageNum := 0
-//    err := client.ListBillingGroupCostReportsPages(params,
-//        func(page *billingconductor.ListBillingGroupCostReportsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBillingGroupCostReports operation.
+//	pageNum := 0
+//	err := client.ListBillingGroupCostReportsPages(params,
+//	    func(page *billingconductor.ListBillingGroupCostReportsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BillingConductor) ListBillingGroupCostReportsPages(input *ListBillingGroupCostReportsInput, fn func(*ListBillingGroupCostReportsOutput, bool) bool) error {
 	return c.ListBillingGroupCostReportsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1673,14 +1748,13 @@ const opListBillingGroups = "ListBillingGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBillingGroupsRequest method.
+//	req, resp := client.ListBillingGroupsRequest(params)
 //
-//    // Example sending a request using the ListBillingGroupsRequest method.
-//    req, resp := client.ListBillingGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListBillingGroups
 func (c *BillingConductor) ListBillingGroupsRequest(input *ListBillingGroupsInput) (req *request.Request, output *ListBillingGroupsOutput) {
@@ -1719,21 +1793,21 @@ func (c *BillingConductor) ListBillingGroupsRequest(input *ListBillingGroupsInpu
 // API operation ListBillingGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListBillingGroups
 func (c *BillingConductor) ListBillingGroups(input *ListBillingGroupsInput) (*ListBillingGroupsOutput, error) {
@@ -1765,15 +1839,14 @@ func (c *BillingConductor) ListBillingGroupsWithContext(ctx aws.Context, input *
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBillingGroups operation.
-//    pageNum := 0
-//    err := client.ListBillingGroupsPages(params,
-//        func(page *billingconductor.ListBillingGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBillingGroups operation.
+//	pageNum := 0
+//	err := client.ListBillingGroupsPages(params,
+//	    func(page *billingconductor.ListBillingGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BillingConductor) ListBillingGroupsPages(input *ListBillingGroupsInput, fn func(*ListBillingGroupsOutput, bool) bool) error {
 	return c.ListBillingGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1825,14 +1898,13 @@ const opListCustomLineItemVersions = "ListCustomLineItemVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCustomLineItemVersionsRequest method.
+//	req, resp := client.ListCustomLineItemVersionsRequest(params)
 //
-//    // Example sending a request using the ListCustomLineItemVersionsRequest method.
-//    req, resp := client.ListCustomLineItemVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListCustomLineItemVersions
 func (c *BillingConductor) ListCustomLineItemVersionsRequest(input *ListCustomLineItemVersionsInput) (req *request.Request, output *ListCustomLineItemVersionsOutput) {
@@ -1869,18 +1941,18 @@ func (c *BillingConductor) ListCustomLineItemVersionsRequest(input *ListCustomLi
 // API operation ListCustomLineItemVersions for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListCustomLineItemVersions
 func (c *BillingConductor) ListCustomLineItemVersions(input *ListCustomLineItemVersionsInput) (*ListCustomLineItemVersionsOutput, error) {
@@ -1912,15 +1984,14 @@ func (c *BillingConductor) ListCustomLineItemVersionsWithContext(ctx aws.Context
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCustomLineItemVersions operation.
-//    pageNum := 0
-//    err := client.ListCustomLineItemVersionsPages(params,
-//        func(page *billingconductor.ListCustomLineItemVersionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCustomLineItemVersions operation.
+//	pageNum := 0
+//	err := client.ListCustomLineItemVersionsPages(params,
+//	    func(page *billingconductor.ListCustomLineItemVersionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BillingConductor) ListCustomLineItemVersionsPages(input *ListCustomLineItemVersionsInput, fn func(*ListCustomLineItemVersionsOutput, bool) bool) error {
 	return c.ListCustomLineItemVersionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1972,14 +2043,13 @@ const opListCustomLineItems = "ListCustomLineItems"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCustomLineItemsRequest method.
+//	req, resp := client.ListCustomLineItemsRequest(params)
 //
-//    // Example sending a request using the ListCustomLineItemsRequest method.
-//    req, resp := client.ListCustomLineItemsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListCustomLineItems
 func (c *BillingConductor) ListCustomLineItemsRequest(input *ListCustomLineItemsInput) (req *request.Request, output *ListCustomLineItemsOutput) {
@@ -2018,21 +2088,21 @@ func (c *BillingConductor) ListCustomLineItemsRequest(input *ListCustomLineItems
 // API operation ListCustomLineItems for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListCustomLineItems
 func (c *BillingConductor) ListCustomLineItems(input *ListCustomLineItemsInput) (*ListCustomLineItemsOutput, error) {
@@ -2064,15 +2134,14 @@ func (c *BillingConductor) ListCustomLineItemsWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCustomLineItems operation.
-//    pageNum := 0
-//    err := client.ListCustomLineItemsPages(params,
-//        func(page *billingconductor.ListCustomLineItemsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCustomLineItems operation.
+//	pageNum := 0
+//	err := client.ListCustomLineItemsPages(params,
+//	    func(page *billingconductor.ListCustomLineItemsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BillingConductor) ListCustomLineItemsPages(input *ListCustomLineItemsInput, fn func(*ListCustomLineItemsOutput, bool) bool) error {
 	return c.ListCustomLineItemsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2124,14 +2193,13 @@ const opListPricingPlans = "ListPricingPlans"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPricingPlansRequest method.
+//	req, resp := client.ListPricingPlansRequest(params)
 //
-//    // Example sending a request using the ListPricingPlansRequest method.
-//    req, resp := client.ListPricingPlansRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListPricingPlans
 func (c *BillingConductor) ListPricingPlansRequest(input *ListPricingPlansInput) (req *request.Request, output *ListPricingPlansOutput) {
@@ -2169,18 +2237,18 @@ func (c *BillingConductor) ListPricingPlansRequest(input *ListPricingPlansInput)
 // API operation ListPricingPlans for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListPricingPlans
 func (c *BillingConductor) ListPricingPlans(input *ListPricingPlansInput) (*ListPricingPlansOutput, error) {
@@ -2212,15 +2280,14 @@ func (c *BillingConductor) ListPricingPlansWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPricingPlans operation.
-//    pageNum := 0
-//    err := client.ListPricingPlansPages(params,
-//        func(page *billingconductor.ListPricingPlansOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPricingPlans operation.
+//	pageNum := 0
+//	err := client.ListPricingPlansPages(params,
+//	    func(page *billingconductor.ListPricingPlansOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BillingConductor) ListPricingPlansPages(input *ListPricingPlansInput, fn func(*ListPricingPlansOutput, bool) bool) error {
 	return c.ListPricingPlansPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2272,14 +2339,13 @@ const opListPricingPlansAssociatedWithPricingRule = "ListPricingPlansAssociatedW
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPricingPlansAssociatedWithPricingRuleRequest method.
+//	req, resp := client.ListPricingPlansAssociatedWithPricingRuleRequest(params)
 //
-//    // Example sending a request using the ListPricingPlansAssociatedWithPricingRuleRequest method.
-//    req, resp := client.ListPricingPlansAssociatedWithPricingRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListPricingPlansAssociatedWithPricingRule
 func (c *BillingConductor) ListPricingPlansAssociatedWithPricingRuleRequest(input *ListPricingPlansAssociatedWithPricingRuleInput) (req *request.Request, output *ListPricingPlansAssociatedWithPricingRuleOutput) {
@@ -2316,21 +2382,21 @@ func (c *BillingConductor) ListPricingPlansAssociatedWithPricingRuleRequest(inpu
 // API operation ListPricingPlansAssociatedWithPricingRule for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListPricingPlansAssociatedWithPricingRule
 func (c *BillingConductor) ListPricingPlansAssociatedWithPricingRule(input *ListPricingPlansAssociatedWithPricingRuleInput) (*ListPricingPlansAssociatedWithPricingRuleOutput, error) {
@@ -2362,15 +2428,14 @@ func (c *BillingConductor) ListPricingPlansAssociatedWithPricingRuleWithContext(
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPricingPlansAssociatedWithPricingRule operation.
-//    pageNum := 0
-//    err := client.ListPricingPlansAssociatedWithPricingRulePages(params,
-//        func(page *billingconductor.ListPricingPlansAssociatedWithPricingRuleOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPricingPlansAssociatedWithPricingRule operation.
+//	pageNum := 0
+//	err := client.ListPricingPlansAssociatedWithPricingRulePages(params,
+//	    func(page *billingconductor.ListPricingPlansAssociatedWithPricingRuleOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BillingConductor) ListPricingPlansAssociatedWithPricingRulePages(input *ListPricingPlansAssociatedWithPricingRuleInput, fn func(*ListPricingPlansAssociatedWithPricingRuleOutput, bool) bool) error {
 	return c.ListPricingPlansAssociatedWithPricingRulePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2422,14 +2487,13 @@ const opListPricingRules = "ListPricingRules"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPricingRulesRequest method.
+//	req, resp := client.ListPricingRulesRequest(params)
 //
-//    // Example sending a request using the ListPricingRulesRequest method.
-//    req, resp := client.ListPricingRulesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListPricingRules
 func (c *BillingConductor) ListPricingRulesRequest(input *ListPricingRulesInput) (req *request.Request, output *ListPricingRulesOutput) {
@@ -2467,18 +2531,18 @@ func (c *BillingConductor) ListPricingRulesRequest(input *ListPricingRulesInput)
 // API operation ListPricingRules for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListPricingRules
 func (c *BillingConductor) ListPricingRules(input *ListPricingRulesInput) (*ListPricingRulesOutput, error) {
@@ -2510,15 +2574,14 @@ func (c *BillingConductor) ListPricingRulesWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPricingRules operation.
-//    pageNum := 0
-//    err := client.ListPricingRulesPages(params,
-//        func(page *billingconductor.ListPricingRulesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPricingRules operation.
+//	pageNum := 0
+//	err := client.ListPricingRulesPages(params,
+//	    func(page *billingconductor.ListPricingRulesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BillingConductor) ListPricingRulesPages(input *ListPricingRulesInput, fn func(*ListPricingRulesOutput, bool) bool) error {
 	return c.ListPricingRulesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2570,14 +2633,13 @@ const opListPricingRulesAssociatedToPricingPlan = "ListPricingRulesAssociatedToP
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPricingRulesAssociatedToPricingPlanRequest method.
+//	req, resp := client.ListPricingRulesAssociatedToPricingPlanRequest(params)
 //
-//    // Example sending a request using the ListPricingRulesAssociatedToPricingPlanRequest method.
-//    req, resp := client.ListPricingRulesAssociatedToPricingPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListPricingRulesAssociatedToPricingPlan
 func (c *BillingConductor) ListPricingRulesAssociatedToPricingPlanRequest(input *ListPricingRulesAssociatedToPricingPlanInput) (req *request.Request, output *ListPricingRulesAssociatedToPricingPlanOutput) {
@@ -2614,21 +2676,21 @@ func (c *BillingConductor) ListPricingRulesAssociatedToPricingPlanRequest(input 
 // API operation ListPricingRulesAssociatedToPricingPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListPricingRulesAssociatedToPricingPlan
 func (c *BillingConductor) ListPricingRulesAssociatedToPricingPlan(input *ListPricingRulesAssociatedToPricingPlanInput) (*ListPricingRulesAssociatedToPricingPlanOutput, error) {
@@ -2660,15 +2722,14 @@ func (c *BillingConductor) ListPricingRulesAssociatedToPricingPlanWithContext(ct
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPricingRulesAssociatedToPricingPlan operation.
-//    pageNum := 0
-//    err := client.ListPricingRulesAssociatedToPricingPlanPages(params,
-//        func(page *billingconductor.ListPricingRulesAssociatedToPricingPlanOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPricingRulesAssociatedToPricingPlan operation.
+//	pageNum := 0
+//	err := client.ListPricingRulesAssociatedToPricingPlanPages(params,
+//	    func(page *billingconductor.ListPricingRulesAssociatedToPricingPlanOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BillingConductor) ListPricingRulesAssociatedToPricingPlanPages(input *ListPricingRulesAssociatedToPricingPlanInput, fn func(*ListPricingRulesAssociatedToPricingPlanOutput, bool) bool) error {
 	return c.ListPricingRulesAssociatedToPricingPlanPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2720,14 +2781,13 @@ const opListResourcesAssociatedToCustomLineItem = "ListResourcesAssociatedToCust
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResourcesAssociatedToCustomLineItemRequest method.
+//	req, resp := client.ListResourcesAssociatedToCustomLineItemRequest(params)
 //
-//    // Example sending a request using the ListResourcesAssociatedToCustomLineItemRequest method.
-//    req, resp := client.ListResourcesAssociatedToCustomLineItemRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListResourcesAssociatedToCustomLineItem
 func (c *BillingConductor) ListResourcesAssociatedToCustomLineItemRequest(input *ListResourcesAssociatedToCustomLineItemInput) (req *request.Request, output *ListResourcesAssociatedToCustomLineItemOutput) {
@@ -2764,21 +2824,21 @@ func (c *BillingConductor) ListResourcesAssociatedToCustomLineItemRequest(input 
 // API operation ListResourcesAssociatedToCustomLineItem for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListResourcesAssociatedToCustomLineItem
 func (c *BillingConductor) ListResourcesAssociatedToCustomLineItem(input *ListResourcesAssociatedToCustomLineItemInput) (*ListResourcesAssociatedToCustomLineItemOutput, error) {
@@ -2810,15 +2870,14 @@ func (c *BillingConductor) ListResourcesAssociatedToCustomLineItemWithContext(ct
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResourcesAssociatedToCustomLineItem operation.
-//    pageNum := 0
-//    err := client.ListResourcesAssociatedToCustomLineItemPages(params,
-//        func(page *billingconductor.ListResourcesAssociatedToCustomLineItemOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResourcesAssociatedToCustomLineItem operation.
+//	pageNum := 0
+//	err := client.ListResourcesAssociatedToCustomLineItemPages(params,
+//	    func(page *billingconductor.ListResourcesAssociatedToCustomLineItemOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BillingConductor) ListResourcesAssociatedToCustomLineItemPages(input *ListResourcesAssociatedToCustomLineItemInput, fn func(*ListResourcesAssociatedToCustomLineItemOutput, bool) bool) error {
 	return c.ListResourcesAssociatedToCustomLineItemPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2870,14 +2929,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListTagsForResource
 func (c *BillingConductor) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2908,21 +2966,21 @@ func (c *BillingConductor) ListTagsForResourceRequest(input *ListTagsForResource
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/ListTagsForResource
 func (c *BillingConductor) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2962,14 +3020,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/TagResource
 func (c *BillingConductor) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -3003,21 +3060,21 @@ func (c *BillingConductor) TagResourceRequest(input *TagResourceInput) (req *req
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/TagResource
 func (c *BillingConductor) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -3057,14 +3114,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/UntagResource
 func (c *BillingConductor) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -3096,21 +3152,21 @@ func (c *BillingConductor) UntagResourceRequest(input *UntagResourceInput) (req 
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/UntagResource
 func (c *BillingConductor) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -3150,14 +3206,13 @@ const opUpdateBillingGroup = "UpdateBillingGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateBillingGroupRequest method.
+//	req, resp := client.UpdateBillingGroupRequest(params)
 //
-//    // Example sending a request using the UpdateBillingGroupRequest method.
-//    req, resp := client.UpdateBillingGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/UpdateBillingGroup
 func (c *BillingConductor) UpdateBillingGroupRequest(input *UpdateBillingGroupInput) (req *request.Request, output *UpdateBillingGroupOutput) {
@@ -3188,24 +3243,24 @@ func (c *BillingConductor) UpdateBillingGroupRequest(input *UpdateBillingGroupIn
 // API operation UpdateBillingGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/UpdateBillingGroup
 func (c *BillingConductor) UpdateBillingGroup(input *UpdateBillingGroupInput) (*UpdateBillingGroupOutput, error) {
@@ -3245,14 +3300,13 @@ const opUpdateCustomLineItem = "UpdateCustomLineItem"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateCustomLineItemRequest method.
+//	req, resp := client.UpdateCustomLineItemRequest(params)
 //
-//    // Example sending a request using the UpdateCustomLineItemRequest method.
-//    req, resp := client.UpdateCustomLineItemRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/UpdateCustomLineItem
 func (c *BillingConductor) UpdateCustomLineItemRequest(input *UpdateCustomLineItemInput) (req *request.Request, output *UpdateCustomLineItemOutput) {
@@ -3283,21 +3337,21 @@ func (c *BillingConductor) UpdateCustomLineItemRequest(input *UpdateCustomLineIt
 // API operation UpdateCustomLineItem for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/UpdateCustomLineItem
 func (c *BillingConductor) UpdateCustomLineItem(input *UpdateCustomLineItemInput) (*UpdateCustomLineItemOutput, error) {
@@ -3337,14 +3391,13 @@ const opUpdatePricingPlan = "UpdatePricingPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdatePricingPlanRequest method.
+//	req, resp := client.UpdatePricingPlanRequest(params)
 //
-//    // Example sending a request using the UpdatePricingPlanRequest method.
-//    req, resp := client.UpdatePricingPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/UpdatePricingPlan
 func (c *BillingConductor) UpdatePricingPlanRequest(input *UpdatePricingPlanInput) (req *request.Request, output *UpdatePricingPlanOutput) {
@@ -3375,24 +3428,24 @@ func (c *BillingConductor) UpdatePricingPlanRequest(input *UpdatePricingPlanInpu
 // API operation UpdatePricingPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/UpdatePricingPlan
 func (c *BillingConductor) UpdatePricingPlan(input *UpdatePricingPlanInput) (*UpdatePricingPlanOutput, error) {
@@ -3432,14 +3485,13 @@ const opUpdatePricingRule = "UpdatePricingRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdatePricingRuleRequest method.
+//	req, resp := client.UpdatePricingRuleRequest(params)
 //
-//    // Example sending a request using the UpdatePricingRuleRequest method.
-//    req, resp := client.UpdatePricingRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/UpdatePricingRule
 func (c *BillingConductor) UpdatePricingRuleRequest(input *UpdatePricingRuleInput) (req *request.Request, output *UpdatePricingRuleOutput) {
@@ -3470,24 +3522,24 @@ func (c *BillingConductor) UpdatePricingRuleRequest(input *UpdatePricingRuleInpu
 // API operation UpdatePricingRule for usage and error information.
 //
 // Returned Error Types:
-//   * ThrottlingException
-//   The request was denied due to request throttling.
 //
-//   * ConflictException
-//   You can cause an inconsistent state by updating or deleting a resource.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ConflictException
+//     You can cause an inconsistent state by updating or deleting a resource.
 //
-//   * ValidationException
-//   The input doesn't match with the constraints specified by Amazon Web Services
-//   services.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing a request.
+//   - ValidationException
+//     The input doesn't match with the constraints specified by Amazon Web Services.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that doesn't exist.
+//   - InternalServerException
+//     An unexpected error occurred while processing a request.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/billingconductor-2021-07-30/UpdatePricingRule
 func (c *BillingConductor) UpdatePricingRule(input *UpdatePricingRuleInput) (*UpdatePricingRuleOutput, error) {
@@ -3643,9 +3695,13 @@ func (s *AccountAssociationsListElement) SetBillingGroupArn(v string) *AccountAs
 }
 
 // The set of accounts that will be under the billing group. The set of accounts
-// resemble the linked accounts in a consolidated family.
+// resemble the linked accounts in a consolidated billing family.
 type AccountGrouping struct {
 	_ struct{} `type:"structure"`
+
+	// Specifies if this billing group will automatically associate newly added
+	// Amazon Web Services accounts that join your consolidated billing family.
+	AutoAssociate *bool `type:"boolean"`
 
 	// The account IDs that make up the billing group. Account IDs must be a part
 	// of the consolidated billing family, and not associated with another billing
@@ -3687,6 +3743,12 @@ func (s *AccountGrouping) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAutoAssociate sets the AutoAssociate field's value.
+func (s *AccountGrouping) SetAutoAssociate(v bool) *AccountGrouping {
+	s.AutoAssociate = &v
+	return s
 }
 
 // SetLinkedAccountIds sets the LinkedAccountIds field's value.
@@ -3965,6 +4027,50 @@ func (s *AssociateResourceResponseElement) SetArn(v string) *AssociateResourceRe
 // SetError sets the Error field's value.
 func (s *AssociateResourceResponseElement) SetError(v *AssociateResourceError) *AssociateResourceResponseElement {
 	s.Error = v
+	return s
+}
+
+// The key-value pair that represents the attribute by which the BillingGroupCostReportResults
+// are grouped. For example, if you want a service-level breakdown for Amazon
+// Simple Storage Service (Amazon S3) of the billing group, the attribute will
+// be a key-value pair of "PRODUCT_NAME" and "S3".
+type Attribute struct {
+	_ struct{} `type:"structure"`
+
+	// The key in a key-value pair that describes the margin summary.
+	Key *string `type:"string"`
+
+	// The value in a key-value pair that describes the margin summary.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Attribute) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Attribute) GoString() string {
+	return s.String()
+}
+
+// SetKey sets the Key field's value.
+func (s *Attribute) SetKey(v string) *Attribute {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *Attribute) SetValue(v string) *Attribute {
+	s.Value = &v
 	return s
 }
 
@@ -4285,9 +4391,106 @@ func (s *BillingGroupCostReportElement) SetProformaCost(v string) *BillingGroupC
 	return s
 }
 
+// A paginated call to retrieve a list of summary reports of actual Amazon Web
+// Services charges and the calculated Amazon Web Services charges, broken down
+// by attributes.
+type BillingGroupCostReportResultElement struct {
+	_ struct{} `type:"structure"`
+
+	// The actual Amazon Web Services charges for the billing group.
+	AWSCost *string `type:"string"`
+
+	// The Amazon Resource Number (ARN) that uniquely identifies the billing group.
+	Arn *string `type:"string"`
+
+	// The list of key-value pairs that represent the attributes by which the BillingGroupCostReportResults
+	// are grouped. For example, if you want the Amazon S3 service-level breakdown
+	// of a billing group for November 2023, the attributes list will contain a
+	// key-value pair of "PRODUCT_NAME" and "S3" and a key-value pair of "BILLING_PERIOD"
+	// and "Nov 2023".
+	Attributes []*Attribute `type:"list"`
+
+	// The displayed currency.
+	Currency *string `type:"string"`
+
+	// The billing group margin.
+	Margin *string `type:"string"`
+
+	// The percentage of the billing group margin.
+	MarginPercentage *string `type:"string"`
+
+	// The hypothetical Amazon Web Services charges based on the associated pricing
+	// plan of a billing group.
+	ProformaCost *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BillingGroupCostReportResultElement) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BillingGroupCostReportResultElement) GoString() string {
+	return s.String()
+}
+
+// SetAWSCost sets the AWSCost field's value.
+func (s *BillingGroupCostReportResultElement) SetAWSCost(v string) *BillingGroupCostReportResultElement {
+	s.AWSCost = &v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *BillingGroupCostReportResultElement) SetArn(v string) *BillingGroupCostReportResultElement {
+	s.Arn = &v
+	return s
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *BillingGroupCostReportResultElement) SetAttributes(v []*Attribute) *BillingGroupCostReportResultElement {
+	s.Attributes = v
+	return s
+}
+
+// SetCurrency sets the Currency field's value.
+func (s *BillingGroupCostReportResultElement) SetCurrency(v string) *BillingGroupCostReportResultElement {
+	s.Currency = &v
+	return s
+}
+
+// SetMargin sets the Margin field's value.
+func (s *BillingGroupCostReportResultElement) SetMargin(v string) *BillingGroupCostReportResultElement {
+	s.Margin = &v
+	return s
+}
+
+// SetMarginPercentage sets the MarginPercentage field's value.
+func (s *BillingGroupCostReportResultElement) SetMarginPercentage(v string) *BillingGroupCostReportResultElement {
+	s.MarginPercentage = &v
+	return s
+}
+
+// SetProformaCost sets the ProformaCost field's value.
+func (s *BillingGroupCostReportResultElement) SetProformaCost(v string) *BillingGroupCostReportResultElement {
+	s.ProformaCost = &v
+	return s
+}
+
 // A representation of a billing group.
 type BillingGroupListElement struct {
 	_ struct{} `type:"structure"`
+
+	// Specifies if the billing group has automatic account association (AutoAssociate)
+	// enabled.
+	AccountGrouping *ListBillingGroupAccountGrouping `type:"structure"`
 
 	// The Amazon Resource Number (ARN) that can be used to uniquely identify the
 	// billing group.
@@ -4348,6 +4551,12 @@ func (s BillingGroupListElement) GoString() string {
 	return s.String()
 }
 
+// SetAccountGrouping sets the AccountGrouping field's value.
+func (s *BillingGroupListElement) SetAccountGrouping(v *ListBillingGroupAccountGrouping) *BillingGroupListElement {
+	s.AccountGrouping = v
+	return s
+}
+
 // SetArn sets the Arn field's value.
 func (s *BillingGroupListElement) SetArn(v string) *BillingGroupListElement {
 	s.Arn = &v
@@ -4405,6 +4614,72 @@ func (s *BillingGroupListElement) SetStatus(v string) *BillingGroupListElement {
 // SetStatusReason sets the StatusReason field's value.
 func (s *BillingGroupListElement) SetStatusReason(v string) *BillingGroupListElement {
 	s.StatusReason = &v
+	return s
+}
+
+// A time range for which the margin summary is effective. The time range can
+// be up to 12 months.
+type BillingPeriodRange struct {
+	_ struct{} `type:"structure"`
+
+	// The exclusive end billing period that defines a billing period range for
+	// the margin summary. For example, if you choose a billing period that starts
+	// in October 2023 and ends in December 2023, the margin summary will only include
+	// data from October 2023 and November 2023.
+	//
+	// ExclusiveEndBillingPeriod is a required field
+	ExclusiveEndBillingPeriod *string `type:"string" required:"true"`
+
+	// The inclusive start billing period that defines a billing period range for
+	// the margin summary.
+	//
+	// InclusiveStartBillingPeriod is a required field
+	InclusiveStartBillingPeriod *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BillingPeriodRange) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BillingPeriodRange) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BillingPeriodRange) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BillingPeriodRange"}
+	if s.ExclusiveEndBillingPeriod == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExclusiveEndBillingPeriod"))
+	}
+	if s.InclusiveStartBillingPeriod == nil {
+		invalidParams.Add(request.NewErrParamRequired("InclusiveStartBillingPeriod"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExclusiveEndBillingPeriod sets the ExclusiveEndBillingPeriod field's value.
+func (s *BillingPeriodRange) SetExclusiveEndBillingPeriod(v string) *BillingPeriodRange {
+	s.ExclusiveEndBillingPeriod = &v
+	return s
+}
+
+// SetInclusiveStartBillingPeriod sets the InclusiveStartBillingPeriod field's value.
+func (s *BillingPeriodRange) SetInclusiveStartBillingPeriod(v string) *BillingPeriodRange {
+	s.InclusiveStartBillingPeriod = &v
 	return s
 }
 
@@ -4538,7 +4813,7 @@ type CreateBillingGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The set of accounts that will be under the billing group. The set of accounts
-	// resemble the linked accounts in a consolidated family.
+	// resemble the linked accounts in a consolidated billing family.
 	//
 	// AccountGrouping is a required field
 	AccountGrouping *AccountGrouping `type:"structure" required:"true"`
@@ -4709,6 +4984,10 @@ func (s *CreateBillingGroupOutput) SetArn(v string) *CreateBillingGroupOutput {
 type CreateCustomLineItemInput struct {
 	_ struct{} `type:"structure"`
 
+	// The Amazon Web Services account in which this custom line item will be applied
+	// to.
+	AccountId *string `type:"string"`
+
 	// The Amazon Resource Name (ARN) that references the billing group where the
 	// custom line item applies to.
 	//
@@ -4812,6 +5091,12 @@ func (s *CreateCustomLineItemInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *CreateCustomLineItemInput) SetAccountId(v string) *CreateCustomLineItemInput {
+	s.AccountId = &v
+	return s
 }
 
 // SetBillingGroupArn sets the BillingGroupArn field's value.
@@ -5413,6 +5698,9 @@ type CustomLineItemChargeDetails struct {
 	// flat custom line item.
 	Flat *CustomLineItemFlatChargeDetails `type:"structure"`
 
+	// A representation of the line item filter.
+	LineItemFilters []*LineItemFilter `type:"list"`
+
 	// A CustomLineItemPercentageChargeDetails that describes the charge details
 	// of a percentage custom line item.
 	Percentage *CustomLineItemPercentageChargeDetails `type:"structure"`
@@ -5453,6 +5741,16 @@ func (s *CustomLineItemChargeDetails) Validate() error {
 			invalidParams.AddNested("Flat", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.LineItemFilters != nil {
+		for i, v := range s.LineItemFilters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "LineItemFilters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.Percentage != nil {
 		if err := s.Percentage.Validate(); err != nil {
 			invalidParams.AddNested("Percentage", err.(request.ErrInvalidParams))
@@ -5468,6 +5766,12 @@ func (s *CustomLineItemChargeDetails) Validate() error {
 // SetFlat sets the Flat field's value.
 func (s *CustomLineItemChargeDetails) SetFlat(v *CustomLineItemFlatChargeDetails) *CustomLineItemChargeDetails {
 	s.Flat = v
+	return s
+}
+
+// SetLineItemFilters sets the LineItemFilters field's value.
+func (s *CustomLineItemChargeDetails) SetLineItemFilters(v []*LineItemFilter) *CustomLineItemChargeDetails {
+	s.LineItemFilters = v
 	return s
 }
 
@@ -5535,6 +5839,10 @@ func (s *CustomLineItemFlatChargeDetails) SetChargeValue(v float64) *CustomLineI
 type CustomLineItemListElement struct {
 	_ struct{} `type:"structure"`
 
+	// The Amazon Web Services account in which this custom line item will be applied
+	// to.
+	AccountId *string `type:"string"`
+
 	// The Amazon Resource Names (ARNs) for custom line items.
 	Arn *string `type:"string"`
 
@@ -5594,6 +5902,12 @@ func (s CustomLineItemListElement) String() string {
 // value will be replaced with "sensitive".
 func (s CustomLineItemListElement) GoString() string {
 	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *CustomLineItemListElement) SetAccountId(v string) *CustomLineItemListElement {
+	s.AccountId = &v
+	return s
 }
 
 // SetArn sets the Arn field's value.
@@ -5718,6 +6032,10 @@ func (s *CustomLineItemPercentageChargeDetails) SetPercentageValue(v float64) *C
 type CustomLineItemVersionListElement struct {
 	_ struct{} `type:"structure"`
 
+	// The Amazon Web Services account in which this custom line item will be applied
+	// to.
+	AccountId *string `type:"string"`
+
 	// A list of custom line item Amazon Resource Names (ARNs) to retrieve information.
 	Arn *string `type:"string"`
 
@@ -5783,6 +6101,12 @@ func (s CustomLineItemVersionListElement) String() string {
 // value will be replaced with "sensitive".
 func (s CustomLineItemVersionListElement) GoString() string {
 	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *CustomLineItemVersionListElement) SetAccountId(v string) *CustomLineItemVersionListElement {
+	s.AccountId = &v
+	return s
 }
 
 // SetArn sets the Arn field's value.
@@ -6003,7 +6327,7 @@ func (s *DeleteCustomLineItemInput) SetBillingPeriodRange(v *CustomLineItemBilli
 type DeleteCustomLineItemOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Then ARN of the deleted custom line item.
+	// The ARN of the deleted custom line item.
 	Arn *string `type:"string"`
 }
 
@@ -6453,6 +6777,139 @@ func (s *FreeTierConfig) SetActivated(v bool) *FreeTierConfig {
 	return s
 }
 
+type GetBillingGroupCostReportInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Number (ARN) that uniquely identifies the billing group.
+	//
+	// Arn is a required field
+	Arn *string `type:"string" required:"true"`
+
+	// A time range for which the margin summary is effective. You can specify up
+	// to 12 months.
+	BillingPeriodRange *BillingPeriodRange `type:"structure"`
+
+	// A list of strings that specify the attributes that are used to break down
+	// costs in the margin summary reports for the billing group. For example, you
+	// can view your costs by the Amazon Web Service name or the billing period.
+	GroupBy []*string `type:"list" enum:"GroupByAttributeName"`
+
+	// The maximum number of margin summary reports to retrieve.
+	MaxResults *int64 `min:"200" type:"integer"`
+
+	// The pagination token used on subsequent calls to get reports.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBillingGroupCostReportInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBillingGroupCostReportInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetBillingGroupCostReportInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetBillingGroupCostReportInput"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 200 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 200))
+	}
+	if s.BillingPeriodRange != nil {
+		if err := s.BillingPeriodRange.Validate(); err != nil {
+			invalidParams.AddNested("BillingPeriodRange", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetBillingGroupCostReportInput) SetArn(v string) *GetBillingGroupCostReportInput {
+	s.Arn = &v
+	return s
+}
+
+// SetBillingPeriodRange sets the BillingPeriodRange field's value.
+func (s *GetBillingGroupCostReportInput) SetBillingPeriodRange(v *BillingPeriodRange) *GetBillingGroupCostReportInput {
+	s.BillingPeriodRange = v
+	return s
+}
+
+// SetGroupBy sets the GroupBy field's value.
+func (s *GetBillingGroupCostReportInput) SetGroupBy(v []*string) *GetBillingGroupCostReportInput {
+	s.GroupBy = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetBillingGroupCostReportInput) SetMaxResults(v int64) *GetBillingGroupCostReportInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetBillingGroupCostReportInput) SetNextToken(v string) *GetBillingGroupCostReportInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetBillingGroupCostReportOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of margin summary reports.
+	BillingGroupCostReportResults []*BillingGroupCostReportResultElement `type:"list"`
+
+	// The pagination token used on subsequent calls to get reports.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBillingGroupCostReportOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetBillingGroupCostReportOutput) GoString() string {
+	return s.String()
+}
+
+// SetBillingGroupCostReportResults sets the BillingGroupCostReportResults field's value.
+func (s *GetBillingGroupCostReportOutput) SetBillingGroupCostReportResults(v []*BillingGroupCostReportResultElement) *GetBillingGroupCostReportOutput {
+	s.BillingGroupCostReportResults = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetBillingGroupCostReportOutput) SetNextToken(v string) *GetBillingGroupCostReportOutput {
+	s.NextToken = &v
+	return s
+}
+
 // An unexpected error occurred while processing a request.
 type InternalServerException struct {
 	_            struct{}                  `type:"structure"`
@@ -6518,6 +6975,91 @@ func (s *InternalServerException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// A representation of the line item filter for your custom line item. You can
+// use line item filters to include or exclude specific resource values from
+// the billing group's total cost. For example, if you create a custom line
+// item and you want to filter out a value, such as Savings Plan discounts,
+// you can update LineItemFilter to exclude it.
+type LineItemFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The attribute of the line item filter. This specifies what attribute that
+	// you can filter on.
+	//
+	// Attribute is a required field
+	Attribute *string `type:"string" required:"true" enum:"LineItemFilterAttributeName"`
+
+	// The match criteria of the line item filter. This parameter specifies whether
+	// not to include the resource value from the billing group total cost.
+	//
+	// MatchOption is a required field
+	MatchOption *string `type:"string" required:"true" enum:"MatchOption"`
+
+	// The values of the line item filter. This specifies the values to filter on.
+	// Currently, you can only exclude Savings Plan discounts.
+	//
+	// Values is a required field
+	Values []*string `min:"1" type:"list" required:"true" enum:"LineItemFilterValue"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LineItemFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LineItemFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LineItemFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LineItemFilter"}
+	if s.Attribute == nil {
+		invalidParams.Add(request.NewErrParamRequired("Attribute"))
+	}
+	if s.MatchOption == nil {
+		invalidParams.Add(request.NewErrParamRequired("MatchOption"))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil && len(s.Values) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Values", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttribute sets the Attribute field's value.
+func (s *LineItemFilter) SetAttribute(v string) *LineItemFilter {
+	s.Attribute = &v
+	return s
+}
+
+// SetMatchOption sets the MatchOption field's value.
+func (s *LineItemFilter) SetMatchOption(v string) *LineItemFilter {
+	s.MatchOption = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *LineItemFilter) SetValues(v []*string) *LineItemFilter {
+	s.Values = v
+	return s
 }
 
 // The filter on the account ID of the linked account, or any of the following:
@@ -6707,6 +7249,39 @@ func (s *ListAccountAssociationsOutput) SetNextToken(v string) *ListAccountAssoc
 	return s
 }
 
+// Specifies if the billing group has the following features enabled.
+type ListBillingGroupAccountGrouping struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies if this billing group will automatically associate newly added
+	// Amazon Web Services accounts that join your consolidated billing family.
+	AutoAssociate *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListBillingGroupAccountGrouping) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListBillingGroupAccountGrouping) GoString() string {
+	return s.String()
+}
+
+// SetAutoAssociate sets the AutoAssociate field's value.
+func (s *ListBillingGroupAccountGrouping) SetAutoAssociate(v bool) *ListBillingGroupAccountGrouping {
+	s.AutoAssociate = &v
+	return s
+}
+
 // The filter used to retrieve specific BillingGroupCostReportElements.
 type ListBillingGroupCostReportsFilter struct {
 	_ struct{} `type:"structure"`
@@ -6878,6 +7453,10 @@ type ListBillingGroupsFilter struct {
 	// The list of billing group Amazon Resource Names (ARNs) to retrieve information.
 	Arns []*string `min:"1" type:"list"`
 
+	// Specifies if this billing group will automatically associate newly added
+	// Amazon Web Services accounts that join your consolidated billing family.
+	AutoAssociate *bool `type:"boolean"`
+
 	// The pricing plan Amazon Resource Names (ARNs) to retrieve information.
 	PricingPlan *string `type:"string"`
 
@@ -6923,6 +7502,12 @@ func (s *ListBillingGroupsFilter) Validate() error {
 // SetArns sets the Arns field's value.
 func (s *ListBillingGroupsFilter) SetArns(v []*string) *ListBillingGroupsFilter {
 	s.Arns = v
+	return s
+}
+
+// SetAutoAssociate sets the AutoAssociate field's value.
+func (s *ListBillingGroupsFilter) SetAutoAssociate(v bool) *ListBillingGroupsFilter {
+	s.AutoAssociate = &v
 	return s
 }
 
@@ -7063,6 +7648,9 @@ type ListCustomLineItemChargeDetails struct {
 	// a flat custom line item.
 	Flat *ListCustomLineItemFlatChargeDetails `type:"structure"`
 
+	// A representation of the line item filter.
+	LineItemFilters []*LineItemFilter `type:"list"`
+
 	// A ListCustomLineItemPercentageChargeDetails that describes the charge details
 	// of a percentage custom line item.
 	Percentage *ListCustomLineItemPercentageChargeDetails `type:"structure"`
@@ -7095,6 +7683,12 @@ func (s ListCustomLineItemChargeDetails) GoString() string {
 // SetFlat sets the Flat field's value.
 func (s *ListCustomLineItemChargeDetails) SetFlat(v *ListCustomLineItemFlatChargeDetails) *ListCustomLineItemChargeDetails {
 	s.Flat = v
+	return s
+}
+
+// SetLineItemFilters sets the LineItemFilters field's value.
+func (s *ListCustomLineItemChargeDetails) SetLineItemFilters(v []*LineItemFilter) *ListCustomLineItemChargeDetails {
+	s.LineItemFilters = v
 	return s
 }
 
@@ -7381,6 +7975,10 @@ func (s *ListCustomLineItemVersionsOutput) SetNextToken(v string) *ListCustomLin
 type ListCustomLineItemsFilter struct {
 	_ struct{} `type:"structure"`
 
+	// The Amazon Web Services accounts in which this custom line item will be applied
+	// to.
+	AccountIds []*string `min:"1" type:"list"`
+
 	// A list of custom line item ARNs to retrieve information.
 	Arns []*string `min:"1" type:"list"`
 
@@ -7412,6 +8010,9 @@ func (s ListCustomLineItemsFilter) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListCustomLineItemsFilter) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListCustomLineItemsFilter"}
+	if s.AccountIds != nil && len(s.AccountIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountIds", 1))
+	}
 	if s.Arns != nil && len(s.Arns) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Arns", 1))
 	}
@@ -7426,6 +8027,12 @@ func (s *ListCustomLineItemsFilter) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountIds sets the AccountIds field's value.
+func (s *ListCustomLineItemsFilter) SetAccountIds(v []*string) *ListCustomLineItemsFilter {
+	s.AccountIds = v
+	return s
 }
 
 // SetArns sets the Arns field's value.
@@ -9171,8 +9778,45 @@ func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
 
+// Specifies if the billing group has the following features enabled.
+type UpdateBillingGroupAccountGrouping struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies if this billing group will automatically associate newly added
+	// Amazon Web Services accounts that join your consolidated billing family.
+	AutoAssociate *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBillingGroupAccountGrouping) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateBillingGroupAccountGrouping) GoString() string {
+	return s.String()
+}
+
+// SetAutoAssociate sets the AutoAssociate field's value.
+func (s *UpdateBillingGroupAccountGrouping) SetAutoAssociate(v bool) *UpdateBillingGroupAccountGrouping {
+	s.AutoAssociate = &v
+	return s
+}
+
 type UpdateBillingGroupInput struct {
 	_ struct{} `type:"structure"`
+
+	// Specifies if the billing group has automatic account association (AutoAssociate)
+	// enabled.
+	AccountGrouping *UpdateBillingGroupAccountGrouping `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the billing group being updated.
 	//
@@ -9240,6 +9884,12 @@ func (s *UpdateBillingGroupInput) Validate() error {
 	return nil
 }
 
+// SetAccountGrouping sets the AccountGrouping field's value.
+func (s *UpdateBillingGroupInput) SetAccountGrouping(v *UpdateBillingGroupAccountGrouping) *UpdateBillingGroupInput {
+	s.AccountGrouping = v
+	return s
+}
+
 // SetArn sets the Arn field's value.
 func (s *UpdateBillingGroupInput) SetArn(v string) *UpdateBillingGroupInput {
 	s.Arn = &v
@@ -9272,6 +9922,10 @@ func (s *UpdateBillingGroupInput) SetStatus(v string) *UpdateBillingGroupInput {
 
 type UpdateBillingGroupOutput struct {
 	_ struct{} `type:"structure"`
+
+	// Specifies if the billing group has automatic account association (AutoAssociate)
+	// enabled.
+	AccountGrouping *UpdateBillingGroupAccountGrouping `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the billing group that was updated.
 	Arn *string `type:"string"`
@@ -9326,6 +9980,12 @@ func (s UpdateBillingGroupOutput) String() string {
 // value will be replaced with "sensitive".
 func (s UpdateBillingGroupOutput) GoString() string {
 	return s.String()
+}
+
+// SetAccountGrouping sets the AccountGrouping field's value.
+func (s *UpdateBillingGroupOutput) SetAccountGrouping(v *UpdateBillingGroupAccountGrouping) *UpdateBillingGroupOutput {
+	s.AccountGrouping = v
+	return s
 }
 
 // SetArn sets the Arn field's value.
@@ -9391,6 +10051,9 @@ type UpdateCustomLineItemChargeDetails struct {
 	// of a flat custom line item.
 	Flat *UpdateCustomLineItemFlatChargeDetails `type:"structure"`
 
+	// A representation of the line item filter.
+	LineItemFilters []*LineItemFilter `type:"list"`
+
 	// An UpdateCustomLineItemPercentageChargeDetails that describes the new charge
 	// details of a percentage custom line item.
 	Percentage *UpdateCustomLineItemPercentageChargeDetails `type:"structure"`
@@ -9422,6 +10085,16 @@ func (s *UpdateCustomLineItemChargeDetails) Validate() error {
 			invalidParams.AddNested("Flat", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.LineItemFilters != nil {
+		for i, v := range s.LineItemFilters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "LineItemFilters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.Percentage != nil {
 		if err := s.Percentage.Validate(); err != nil {
 			invalidParams.AddNested("Percentage", err.(request.ErrInvalidParams))
@@ -9437,6 +10110,12 @@ func (s *UpdateCustomLineItemChargeDetails) Validate() error {
 // SetFlat sets the Flat field's value.
 func (s *UpdateCustomLineItemChargeDetails) SetFlat(v *UpdateCustomLineItemFlatChargeDetails) *UpdateCustomLineItemChargeDetails {
 	s.Flat = v
+	return s
+}
+
+// SetLineItemFilters sets the LineItemFilters field's value.
+func (s *UpdateCustomLineItemChargeDetails) SetLineItemFilters(v []*LineItemFilter) *UpdateCustomLineItemChargeDetails {
+	s.LineItemFilters = v
 	return s
 }
 
@@ -10264,8 +10943,7 @@ func (s *UpdateTieringInput_) SetFreeTier(v *UpdateFreeTierConfig) *UpdateTierin
 	return s
 }
 
-// The input doesn't match with the constraints specified by Amazon Web Services
-// services.
+// The input doesn't match with the constraints specified by Amazon Web Services.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -10501,6 +11179,58 @@ func CustomLineItemType_Values() []string {
 }
 
 const (
+	// GroupByAttributeNameProductName is a GroupByAttributeName enum value
+	GroupByAttributeNameProductName = "PRODUCT_NAME"
+
+	// GroupByAttributeNameBillingPeriod is a GroupByAttributeName enum value
+	GroupByAttributeNameBillingPeriod = "BILLING_PERIOD"
+)
+
+// GroupByAttributeName_Values returns all elements of the GroupByAttributeName enum
+func GroupByAttributeName_Values() []string {
+	return []string{
+		GroupByAttributeNameProductName,
+		GroupByAttributeNameBillingPeriod,
+	}
+}
+
+const (
+	// LineItemFilterAttributeNameLineItemType is a LineItemFilterAttributeName enum value
+	LineItemFilterAttributeNameLineItemType = "LINE_ITEM_TYPE"
+)
+
+// LineItemFilterAttributeName_Values returns all elements of the LineItemFilterAttributeName enum
+func LineItemFilterAttributeName_Values() []string {
+	return []string{
+		LineItemFilterAttributeNameLineItemType,
+	}
+}
+
+const (
+	// LineItemFilterValueSavingsPlanNegation is a LineItemFilterValue enum value
+	LineItemFilterValueSavingsPlanNegation = "SAVINGS_PLAN_NEGATION"
+)
+
+// LineItemFilterValue_Values returns all elements of the LineItemFilterValue enum
+func LineItemFilterValue_Values() []string {
+	return []string{
+		LineItemFilterValueSavingsPlanNegation,
+	}
+}
+
+const (
+	// MatchOptionNotEqual is a MatchOption enum value
+	MatchOptionNotEqual = "NOT_EQUAL"
+)
+
+// MatchOption_Values returns all elements of the MatchOption enum
+func MatchOption_Values() []string {
+	return []string{
+		MatchOptionNotEqual,
+	}
+}
+
+const (
 	// PricingRuleScopeGlobal is a PricingRuleScope enum value
 	PricingRuleScopeGlobal = "GLOBAL"
 
@@ -10715,6 +11445,15 @@ const (
 
 	// ValidationExceptionReasonInvalidFilter is a ValidationExceptionReason enum value
 	ValidationExceptionReasonInvalidFilter = "INVALID_FILTER"
+
+	// ValidationExceptionReasonTooManyAutoAssociateBillingGroups is a ValidationExceptionReason enum value
+	ValidationExceptionReasonTooManyAutoAssociateBillingGroups = "TOO_MANY_AUTO_ASSOCIATE_BILLING_GROUPS"
+
+	// ValidationExceptionReasonCannotDeleteAutoAssociateBillingGroup is a ValidationExceptionReason enum value
+	ValidationExceptionReasonCannotDeleteAutoAssociateBillingGroup = "CANNOT_DELETE_AUTO_ASSOCIATE_BILLING_GROUP"
+
+	// ValidationExceptionReasonIllegalAccountId is a ValidationExceptionReason enum value
+	ValidationExceptionReasonIllegalAccountId = "ILLEGAL_ACCOUNT_ID"
 )
 
 // ValidationExceptionReason_Values returns all elements of the ValidationExceptionReason enum
@@ -10777,5 +11516,8 @@ func ValidationExceptionReason_Values() []string {
 		ValidationExceptionReasonIllegalUsageType,
 		ValidationExceptionReasonInvalidSkuCombo,
 		ValidationExceptionReasonInvalidFilter,
+		ValidationExceptionReasonTooManyAutoAssociateBillingGroups,
+		ValidationExceptionReasonCannotDeleteAutoAssociateBillingGroup,
+		ValidationExceptionReasonIllegalAccountId,
 	}
 }

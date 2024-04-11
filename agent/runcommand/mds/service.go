@@ -76,7 +76,7 @@ type CancelSdkRequest func(trans *http.Transport, req *request.Request)
 // sdkService is an service wrapper that delegates to the ssm sdk.
 type sdkService struct {
 	context          context.T
-	sdk              ssmmdsiface.SSMMDSAPI
+	sdk              ssmmdsiface.SsmmdsAPI
 	tr               *http.Transport
 	cancelRequest    reqContext.CancelFunc
 	m                sync.Mutex
@@ -136,7 +136,7 @@ func NewService(context context.T, connectionTimeout time.Duration) Service {
 	return NewMdsSdkService(context, msgSvc, tr, sendMdsSdkRequest, cancelMdsSDKRequest)
 }
 
-func NewMdsSdkService(context context.T, msgSvc ssmmdsiface.SSMMDSAPI, tr *http.Transport, sendMdsSdkRequest SendSdkRequest, cancelMdsSDKRequest CancelSdkRequest) Service {
+func NewMdsSdkService(context context.T, msgSvc ssmmdsiface.SsmmdsAPI, tr *http.Transport, sendMdsSdkRequest SendSdkRequest, cancelMdsSDKRequest CancelSdkRequest) Service {
 	return &sdkService{context: context, sdk: msgSvc, tr: tr, sendSdkRequest: sendMdsSdkRequest, cancelSdkRequest: cancelMdsSDKRequest}
 }
 

@@ -29,14 +29,13 @@ const opAcceptDomainTransferFromAnotherAwsAccount = "AcceptDomainTransferFromAno
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AcceptDomainTransferFromAnotherAwsAccountRequest method.
+//	req, resp := client.AcceptDomainTransferFromAnotherAwsAccountRequest(params)
 //
-//    // Example sending a request using the AcceptDomainTransferFromAnotherAwsAccountRequest method.
-//    req, resp := client.AcceptDomainTransferFromAnotherAwsAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/AcceptDomainTransferFromAnotherAwsAccount
 func (c *Route53Domains) AcceptDomainTransferFromAnotherAwsAccountRequest(input *AcceptDomainTransferFromAnotherAwsAccountInput) (req *request.Request, output *AcceptDomainTransferFromAnotherAwsAccountOutput) {
@@ -80,21 +79,22 @@ func (c *Route53Domains) AcceptDomainTransferFromAnotherAwsAccountRequest(input 
 // API operation AcceptDomainTransferFromAnotherAwsAccount for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * DomainLimitExceeded
-//   The number of domains has exceeded the allowed threshold for the account.
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - DomainLimitExceeded
+//     The number of domains has exceeded the allowed threshold for the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/AcceptDomainTransferFromAnotherAwsAccount
 func (c *Route53Domains) AcceptDomainTransferFromAnotherAwsAccount(input *AcceptDomainTransferFromAnotherAwsAccountInput) (*AcceptDomainTransferFromAnotherAwsAccountOutput, error) {
@@ -134,14 +134,13 @@ const opAssociateDelegationSignerToDomain = "AssociateDelegationSignerToDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateDelegationSignerToDomainRequest method.
+//	req, resp := client.AssociateDelegationSignerToDomainRequest(params)
 //
-//    // Example sending a request using the AssociateDelegationSignerToDomainRequest method.
-//    req, resp := client.AssociateDelegationSignerToDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/AssociateDelegationSignerToDomain
 func (c *Route53Domains) AssociateDelegationSignerToDomainRequest(input *AssociateDelegationSignerToDomainInput) (req *request.Request, output *AssociateDelegationSignerToDomainOutput) {
@@ -180,29 +179,30 @@ func (c *Route53Domains) AssociateDelegationSignerToDomainRequest(input *Associa
 // API operation AssociateDelegationSignerToDomain for usage and error information.
 //
 // Returned Error Types:
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
 //
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
 //
-//   * DnssecLimitExceeded
-//   This error is returned if you call AssociateDelegationSignerToDomain when
-//   the specified domain has reached the maximum number of DS records. You can't
-//   add any additional DS records unless you delete an existing one first.
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
+//
+//   - DnssecLimitExceeded
+//     This error is returned if you call AssociateDelegationSignerToDomain when
+//     the specified domain has reached the maximum number of DS records. You can't
+//     add any additional DS records unless you delete an existing one first.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/AssociateDelegationSignerToDomain
 func (c *Route53Domains) AssociateDelegationSignerToDomain(input *AssociateDelegationSignerToDomainInput) (*AssociateDelegationSignerToDomainOutput, error) {
@@ -242,14 +242,13 @@ const opCancelDomainTransferToAnotherAwsAccount = "CancelDomainTransferToAnother
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelDomainTransferToAnotherAwsAccountRequest method.
+//	req, resp := client.CancelDomainTransferToAnotherAwsAccountRequest(params)
 //
-//    // Example sending a request using the CancelDomainTransferToAnotherAwsAccountRequest method.
-//    req, resp := client.CancelDomainTransferToAnotherAwsAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/CancelDomainTransferToAnotherAwsAccount
 func (c *Route53Domains) CancelDomainTransferToAnotherAwsAccountRequest(input *CancelDomainTransferToAnotherAwsAccountInput) (req *request.Request, output *CancelDomainTransferToAnotherAwsAccountOutput) {
@@ -291,18 +290,19 @@ func (c *Route53Domains) CancelDomainTransferToAnotherAwsAccountRequest(input *C
 // API operation CancelDomainTransferToAnotherAwsAccount for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/CancelDomainTransferToAnotherAwsAccount
 func (c *Route53Domains) CancelDomainTransferToAnotherAwsAccount(input *CancelDomainTransferToAnotherAwsAccountInput) (*CancelDomainTransferToAnotherAwsAccountOutput, error) {
@@ -342,14 +342,13 @@ const opCheckDomainAvailability = "CheckDomainAvailability"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CheckDomainAvailabilityRequest method.
+//	req, resp := client.CheckDomainAvailabilityRequest(params)
 //
-//    // Example sending a request using the CheckDomainAvailabilityRequest method.
-//    req, resp := client.CheckDomainAvailabilityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/CheckDomainAvailability
 func (c *Route53Domains) CheckDomainAvailabilityRequest(input *CheckDomainAvailabilityInput) (req *request.Request, output *CheckDomainAvailabilityOutput) {
@@ -382,14 +381,15 @@ func (c *Route53Domains) CheckDomainAvailabilityRequest(input *CheckDomainAvaila
 // API operation CheckDomainAvailability for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/CheckDomainAvailability
 func (c *Route53Domains) CheckDomainAvailability(input *CheckDomainAvailabilityInput) (*CheckDomainAvailabilityOutput, error) {
@@ -429,14 +429,13 @@ const opCheckDomainTransferability = "CheckDomainTransferability"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CheckDomainTransferabilityRequest method.
+//	req, resp := client.CheckDomainTransferabilityRequest(params)
 //
-//    // Example sending a request using the CheckDomainTransferabilityRequest method.
-//    req, resp := client.CheckDomainTransferabilityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/CheckDomainTransferability
 func (c *Route53Domains) CheckDomainTransferabilityRequest(input *CheckDomainTransferabilityInput) (req *request.Request, output *CheckDomainTransferabilityOutput) {
@@ -467,14 +466,15 @@ func (c *Route53Domains) CheckDomainTransferabilityRequest(input *CheckDomainTra
 // API operation CheckDomainTransferability for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/CheckDomainTransferability
 func (c *Route53Domains) CheckDomainTransferability(input *CheckDomainTransferabilityInput) (*CheckDomainTransferabilityOutput, error) {
@@ -514,14 +514,13 @@ const opDeleteDomain = "DeleteDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDomainRequest method.
+//	req, resp := client.DeleteDomainRequest(params)
 //
-//    // Example sending a request using the DeleteDomainRequest method.
-//    req, resp := client.DeleteDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/DeleteDomain
 func (c *Route53Domains) DeleteDomainRequest(input *DeleteDomainInput) (req *request.Request, output *DeleteDomainOutput) {
@@ -566,20 +565,21 @@ func (c *Route53Domains) DeleteDomainRequest(input *DeleteDomainInput) (req *req
 // API operation DeleteDomain for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/DeleteDomain
 func (c *Route53Domains) DeleteDomain(input *DeleteDomainInput) (*DeleteDomainOutput, error) {
@@ -619,14 +619,13 @@ const opDeleteTagsForDomain = "DeleteTagsForDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteTagsForDomainRequest method.
+//	req, resp := client.DeleteTagsForDomainRequest(params)
 //
-//    // Example sending a request using the DeleteTagsForDomainRequest method.
-//    req, resp := client.DeleteTagsForDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/DeleteTagsForDomain
 func (c *Route53Domains) DeleteTagsForDomainRequest(input *DeleteTagsForDomainInput) (req *request.Request, output *DeleteTagsForDomainOutput) {
@@ -661,18 +660,19 @@ func (c *Route53Domains) DeleteTagsForDomainRequest(input *DeleteTagsForDomainIn
 // API operation DeleteTagsForDomain for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/DeleteTagsForDomain
 func (c *Route53Domains) DeleteTagsForDomain(input *DeleteTagsForDomainInput) (*DeleteTagsForDomainOutput, error) {
@@ -712,14 +712,13 @@ const opDisableDomainAutoRenew = "DisableDomainAutoRenew"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisableDomainAutoRenewRequest method.
+//	req, resp := client.DisableDomainAutoRenewRequest(params)
 //
-//    // Example sending a request using the DisableDomainAutoRenewRequest method.
-//    req, resp := client.DisableDomainAutoRenewRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/DisableDomainAutoRenew
 func (c *Route53Domains) DisableDomainAutoRenewRequest(input *DisableDomainAutoRenewInput) (req *request.Request, output *DisableDomainAutoRenewOutput) {
@@ -752,14 +751,15 @@ func (c *Route53Domains) DisableDomainAutoRenewRequest(input *DisableDomainAutoR
 // API operation DisableDomainAutoRenew for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/DisableDomainAutoRenew
 func (c *Route53Domains) DisableDomainAutoRenew(input *DisableDomainAutoRenewInput) (*DisableDomainAutoRenewOutput, error) {
@@ -799,14 +799,13 @@ const opDisableDomainTransferLock = "DisableDomainTransferLock"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisableDomainTransferLockRequest method.
+//	req, resp := client.DisableDomainTransferLockRequest(params)
 //
-//    // Example sending a request using the DisableDomainTransferLockRequest method.
-//    req, resp := client.DisableDomainTransferLockRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/DisableDomainTransferLock
 func (c *Route53Domains) DisableDomainTransferLockRequest(input *DisableDomainTransferLockInput) (req *request.Request, output *DisableDomainTransferLockOutput) {
@@ -843,24 +842,25 @@ func (c *Route53Domains) DisableDomainTransferLockRequest(input *DisableDomainTr
 // API operation DisableDomainTransferLock for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/DisableDomainTransferLock
 func (c *Route53Domains) DisableDomainTransferLock(input *DisableDomainTransferLockInput) (*DisableDomainTransferLockOutput, error) {
@@ -900,14 +900,13 @@ const opDisassociateDelegationSignerFromDomain = "DisassociateDelegationSignerFr
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateDelegationSignerFromDomainRequest method.
+//	req, resp := client.DisassociateDelegationSignerFromDomainRequest(params)
 //
-//    // Example sending a request using the DisassociateDelegationSignerFromDomainRequest method.
-//    req, resp := client.DisassociateDelegationSignerFromDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/DisassociateDelegationSignerFromDomain
 func (c *Route53Domains) DisassociateDelegationSignerFromDomainRequest(input *DisassociateDelegationSignerFromDomainInput) (req *request.Request, output *DisassociateDelegationSignerFromDomainOutput) {
@@ -939,24 +938,25 @@ func (c *Route53Domains) DisassociateDelegationSignerFromDomainRequest(input *Di
 // API operation DisassociateDelegationSignerFromDomain for usage and error information.
 //
 // Returned Error Types:
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
 //
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/DisassociateDelegationSignerFromDomain
 func (c *Route53Domains) DisassociateDelegationSignerFromDomain(input *DisassociateDelegationSignerFromDomainInput) (*DisassociateDelegationSignerFromDomainOutput, error) {
@@ -996,14 +996,13 @@ const opEnableDomainAutoRenew = "EnableDomainAutoRenew"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EnableDomainAutoRenewRequest method.
+//	req, resp := client.EnableDomainAutoRenewRequest(params)
 //
-//    // Example sending a request using the EnableDomainAutoRenewRequest method.
-//    req, resp := client.EnableDomainAutoRenewRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/EnableDomainAutoRenew
 func (c *Route53Domains) EnableDomainAutoRenewRequest(input *EnableDomainAutoRenewInput) (req *request.Request, output *EnableDomainAutoRenewOutput) {
@@ -1044,17 +1043,18 @@ func (c *Route53Domains) EnableDomainAutoRenewRequest(input *EnableDomainAutoRen
 // API operation EnableDomainAutoRenew for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
+//
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/EnableDomainAutoRenew
 func (c *Route53Domains) EnableDomainAutoRenew(input *EnableDomainAutoRenewInput) (*EnableDomainAutoRenewOutput, error) {
@@ -1094,14 +1094,13 @@ const opEnableDomainTransferLock = "EnableDomainTransferLock"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EnableDomainTransferLockRequest method.
+//	req, resp := client.EnableDomainTransferLockRequest(params)
 //
-//    // Example sending a request using the EnableDomainTransferLockRequest method.
-//    req, resp := client.EnableDomainTransferLockRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/EnableDomainTransferLock
 func (c *Route53Domains) EnableDomainTransferLockRequest(input *EnableDomainTransferLockInput) (req *request.Request, output *EnableDomainTransferLockOutput) {
@@ -1136,24 +1135,25 @@ func (c *Route53Domains) EnableDomainTransferLockRequest(input *EnableDomainTran
 // API operation EnableDomainTransferLock for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/EnableDomainTransferLock
 func (c *Route53Domains) EnableDomainTransferLock(input *EnableDomainTransferLockInput) (*EnableDomainTransferLockOutput, error) {
@@ -1193,14 +1193,13 @@ const opGetContactReachabilityStatus = "GetContactReachabilityStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetContactReachabilityStatusRequest method.
+//	req, resp := client.GetContactReachabilityStatusRequest(params)
 //
-//    // Example sending a request using the GetContactReachabilityStatusRequest method.
-//    req, resp := client.GetContactReachabilityStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/GetContactReachabilityStatus
 func (c *Route53Domains) GetContactReachabilityStatusRequest(input *GetContactReachabilityStatusInput) (req *request.Request, output *GetContactReachabilityStatusOutput) {
@@ -1236,18 +1235,19 @@ func (c *Route53Domains) GetContactReachabilityStatusRequest(input *GetContactRe
 // API operation GetContactReachabilityStatus for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/GetContactReachabilityStatus
 func (c *Route53Domains) GetContactReachabilityStatus(input *GetContactReachabilityStatusInput) (*GetContactReachabilityStatusOutput, error) {
@@ -1287,14 +1287,13 @@ const opGetDomainDetail = "GetDomainDetail"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDomainDetailRequest method.
+//	req, resp := client.GetDomainDetailRequest(params)
 //
-//    // Example sending a request using the GetDomainDetailRequest method.
-//    req, resp := client.GetDomainDetailRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/GetDomainDetail
 func (c *Route53Domains) GetDomainDetailRequest(input *GetDomainDetailInput) (req *request.Request, output *GetDomainDetailOutput) {
@@ -1327,14 +1326,15 @@ func (c *Route53Domains) GetDomainDetailRequest(input *GetDomainDetailInput) (re
 // API operation GetDomainDetail for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/GetDomainDetail
 func (c *Route53Domains) GetDomainDetail(input *GetDomainDetailInput) (*GetDomainDetailOutput, error) {
@@ -1374,14 +1374,13 @@ const opGetDomainSuggestions = "GetDomainSuggestions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDomainSuggestionsRequest method.
+//	req, resp := client.GetDomainSuggestionsRequest(params)
 //
-//    // Example sending a request using the GetDomainSuggestionsRequest method.
-//    req, resp := client.GetDomainSuggestionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/GetDomainSuggestions
 func (c *Route53Domains) GetDomainSuggestionsRequest(input *GetDomainSuggestionsInput) (req *request.Request, output *GetDomainSuggestionsOutput) {
@@ -1412,14 +1411,15 @@ func (c *Route53Domains) GetDomainSuggestionsRequest(input *GetDomainSuggestions
 // API operation GetDomainSuggestions for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/GetDomainSuggestions
 func (c *Route53Domains) GetDomainSuggestions(input *GetDomainSuggestionsInput) (*GetDomainSuggestionsOutput, error) {
@@ -1459,14 +1459,13 @@ const opGetOperationDetail = "GetOperationDetail"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetOperationDetailRequest method.
+//	req, resp := client.GetOperationDetailRequest(params)
 //
-//    // Example sending a request using the GetOperationDetailRequest method.
-//    req, resp := client.GetOperationDetailRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/GetOperationDetail
 func (c *Route53Domains) GetOperationDetailRequest(input *GetOperationDetailInput) (req *request.Request, output *GetOperationDetailOutput) {
@@ -1497,11 +1496,11 @@ func (c *Route53Domains) GetOperationDetailRequest(input *GetOperationDetailInpu
 // API operation GetOperationDetail for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/GetOperationDetail
 func (c *Route53Domains) GetOperationDetail(input *GetOperationDetailInput) (*GetOperationDetailOutput, error) {
@@ -1541,14 +1540,13 @@ const opListDomains = "ListDomains"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDomainsRequest method.
+//	req, resp := client.ListDomainsRequest(params)
 //
-//    // Example sending a request using the ListDomainsRequest method.
-//    req, resp := client.ListDomainsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ListDomains
 func (c *Route53Domains) ListDomainsRequest(input *ListDomainsInput) (req *request.Request, output *ListDomainsOutput) {
@@ -1587,11 +1585,11 @@ func (c *Route53Domains) ListDomainsRequest(input *ListDomainsInput) (req *reque
 // API operation ListDomains for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ListDomains
 func (c *Route53Domains) ListDomains(input *ListDomainsInput) (*ListDomainsOutput, error) {
@@ -1623,15 +1621,14 @@ func (c *Route53Domains) ListDomainsWithContext(ctx aws.Context, input *ListDoma
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDomains operation.
-//    pageNum := 0
-//    err := client.ListDomainsPages(params,
-//        func(page *route53domains.ListDomainsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDomains operation.
+//	pageNum := 0
+//	err := client.ListDomainsPages(params,
+//	    func(page *route53domains.ListDomainsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Domains) ListDomainsPages(input *ListDomainsInput, fn func(*ListDomainsOutput, bool) bool) error {
 	return c.ListDomainsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1683,14 +1680,13 @@ const opListOperations = "ListOperations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListOperationsRequest method.
+//	req, resp := client.ListOperationsRequest(params)
 //
-//    // Example sending a request using the ListOperationsRequest method.
-//    req, resp := client.ListOperationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ListOperations
 func (c *Route53Domains) ListOperationsRequest(input *ListOperationsInput) (req *request.Request, output *ListOperationsOutput) {
@@ -1731,11 +1727,11 @@ func (c *Route53Domains) ListOperationsRequest(input *ListOperationsInput) (req 
 // API operation ListOperations for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ListOperations
 func (c *Route53Domains) ListOperations(input *ListOperationsInput) (*ListOperationsOutput, error) {
@@ -1767,15 +1763,14 @@ func (c *Route53Domains) ListOperationsWithContext(ctx aws.Context, input *ListO
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListOperations operation.
-//    pageNum := 0
-//    err := client.ListOperationsPages(params,
-//        func(page *route53domains.ListOperationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListOperations operation.
+//	pageNum := 0
+//	err := client.ListOperationsPages(params,
+//	    func(page *route53domains.ListOperationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Domains) ListOperationsPages(input *ListOperationsInput, fn func(*ListOperationsOutput, bool) bool) error {
 	return c.ListOperationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1827,14 +1822,13 @@ const opListPrices = "ListPrices"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPricesRequest method.
+//	req, resp := client.ListPricesRequest(params)
 //
-//    // Example sending a request using the ListPricesRequest method.
-//    req, resp := client.ListPricesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ListPrices
 func (c *Route53Domains) ListPricesRequest(input *ListPricesInput) (req *request.Request, output *ListPricesOutput) {
@@ -1864,15 +1858,15 @@ func (c *Route53Domains) ListPricesRequest(input *ListPricesInput) (req *request
 // Lists the following prices for either all the TLDs supported by Route 53,
 // or the specified TLD:
 //
-//    * Registration
+//   - Registration
 //
-//    * Transfer
+//   - Transfer
 //
-//    * Owner change
+//   - Owner change
 //
-//    * Domain renewal
+//   - Domain renewal
 //
-//    * Domain restoration
+//   - Domain restoration
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1882,14 +1876,15 @@ func (c *Route53Domains) ListPricesRequest(input *ListPricesInput) (req *request
 // API operation ListPrices for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ListPrices
 func (c *Route53Domains) ListPrices(input *ListPricesInput) (*ListPricesOutput, error) {
@@ -1921,15 +1916,14 @@ func (c *Route53Domains) ListPricesWithContext(ctx aws.Context, input *ListPrice
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPrices operation.
-//    pageNum := 0
-//    err := client.ListPricesPages(params,
-//        func(page *route53domains.ListPricesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPrices operation.
+//	pageNum := 0
+//	err := client.ListPricesPages(params,
+//	    func(page *route53domains.ListPricesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Domains) ListPricesPages(input *ListPricesInput, fn func(*ListPricesOutput, bool) bool) error {
 	return c.ListPricesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1981,14 +1975,13 @@ const opListTagsForDomain = "ListTagsForDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForDomainRequest method.
+//	req, resp := client.ListTagsForDomainRequest(params)
 //
-//    // Example sending a request using the ListTagsForDomainRequest method.
-//    req, resp := client.ListTagsForDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ListTagsForDomain
 func (c *Route53Domains) ListTagsForDomainRequest(input *ListTagsForDomainInput) (req *request.Request, output *ListTagsForDomainOutput) {
@@ -2023,18 +2016,19 @@ func (c *Route53Domains) ListTagsForDomainRequest(input *ListTagsForDomainInput)
 // API operation ListTagsForDomain for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ListTagsForDomain
 func (c *Route53Domains) ListTagsForDomain(input *ListTagsForDomainInput) (*ListTagsForDomainOutput, error) {
@@ -2074,14 +2068,13 @@ const opPushDomain = "PushDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PushDomainRequest method.
+//	req, resp := client.PushDomainRequest(params)
 //
-//    // Example sending a request using the PushDomainRequest method.
-//    req, resp := client.PushDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/PushDomain
 func (c *Route53Domains) PushDomainRequest(input *PushDomainInput) (req *request.Request, output *PushDomainOutput) {
@@ -2107,8 +2100,8 @@ func (c *Route53Domains) PushDomainRequest(input *PushDomainInput) (req *request
 //
 // Supported actions:
 //
-//    * Changes the IPS tags of a .uk domain, and pushes it to transit. Transit
-//    means that the domain is ready to be transferred to another registrar.
+//   - Changes the IPS tags of a .uk domain, and pushes it to transit. Transit
+//     means that the domain is ready to be transferred to another registrar.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2118,18 +2111,19 @@ func (c *Route53Domains) PushDomainRequest(input *PushDomainInput) (req *request
 // API operation PushDomain for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/PushDomain
 func (c *Route53Domains) PushDomain(input *PushDomainInput) (*PushDomainOutput, error) {
@@ -2169,14 +2163,13 @@ const opRegisterDomain = "RegisterDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterDomainRequest method.
+//	req, resp := client.RegisterDomainRequest(params)
 //
-//    // Example sending a request using the RegisterDomainRequest method.
-//    req, resp := client.RegisterDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/RegisterDomain
 func (c *Route53Domains) RegisterDomainRequest(input *RegisterDomainInput) (req *request.Request, output *RegisterDomainOutput) {
@@ -2197,35 +2190,33 @@ func (c *Route53Domains) RegisterDomainRequest(input *RegisterDomainInput) (req 
 
 // RegisterDomain API operation for Amazon Route 53 Domains.
 //
-// This operation registers a domain. Domains are registered either by Amazon
-// Registrar (for .com, .net, and .org domains) or by our registrar associate,
-// Gandi (for all other domains). For some top-level domains (TLDs), this operation
-// requires extra parameters.
+// This operation registers a domain. For some top-level domains (TLDs), this
+// operation requires extra parameters.
 //
 // When you register a domain, Amazon Route 53 does the following:
 //
-//    * Creates a Route 53 hosted zone that has the same name as the domain.
-//    Route 53 assigns four name servers to your hosted zone and automatically
-//    updates your domain registration with the names of these name servers.
+//   - Creates a Route 53 hosted zone that has the same name as the domain.
+//     Route 53 assigns four name servers to your hosted zone and automatically
+//     updates your domain registration with the names of these name servers.
 //
-//    * Enables auto renew, so your domain registration will renew automatically
-//    each year. We'll notify you in advance of the renewal date so you can
-//    choose whether to renew the registration.
+//   - Enables auto renew, so your domain registration will renew automatically
+//     each year. We'll notify you in advance of the renewal date so you can
+//     choose whether to renew the registration.
 //
-//    * Optionally enables privacy protection, so WHOIS queries return contact
-//    information either for Amazon Registrar (for .com, .net, and .org domains)
-//    or for our registrar associate, Gandi (for all other TLDs). If you don't
-//    enable privacy protection, WHOIS queries return the information that you
-//    entered for the administrative, registrant, and technical contacts. You
-//    must specify the same privacy setting for the administrative, registrant,
-//    and technical contacts.
+//   - Optionally enables privacy protection, so WHOIS queries return contact
+//     for the registrar or the phrase "REDACTED FOR PRIVACY", or "On behalf
+//     of <domain name> owner." If you don't enable privacy protection, WHOIS
+//     queries return the information that you entered for the administrative,
+//     registrant, and technical contacts. While some domains may allow different
+//     privacy settings per contact, we recommend specifying the same privacy
+//     setting for all contacts.
 //
-//    * If registration is successful, returns an operation ID that you can
-//    use to track the progress and completion of the action. If the request
-//    is not completed successfully, the domain registrant is notified by email.
+//   - If registration is successful, returns an operation ID that you can
+//     use to track the progress and completion of the action. If the request
+//     is not completed successfully, the domain registrant is notified by email.
 //
-//    * Charges your Amazon Web Services account an amount based on the top-level
-//    domain. For more information, see Amazon Route 53 Pricing (http://aws.amazon.com/route53/pricing/).
+//   - Charges your Amazon Web Services account an amount based on the top-level
+//     domain. For more information, see Amazon Route 53 Pricing (http://aws.amazon.com/route53/pricing/).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2235,27 +2226,28 @@ func (c *Route53Domains) RegisterDomainRequest(input *RegisterDomainInput) (req 
 // API operation RegisterDomain for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
 //
-//   * DomainLimitExceeded
-//   The number of domains has exceeded the allowed threshold for the account.
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - DomainLimitExceeded
+//     The number of domains has exceeded the allowed threshold for the account.
+//
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/RegisterDomain
 func (c *Route53Domains) RegisterDomain(input *RegisterDomainInput) (*RegisterDomainOutput, error) {
@@ -2295,14 +2287,13 @@ const opRejectDomainTransferFromAnotherAwsAccount = "RejectDomainTransferFromAno
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RejectDomainTransferFromAnotherAwsAccountRequest method.
+//	req, resp := client.RejectDomainTransferFromAnotherAwsAccountRequest(params)
 //
-//    // Example sending a request using the RejectDomainTransferFromAnotherAwsAccountRequest method.
-//    req, resp := client.RejectDomainTransferFromAnotherAwsAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/RejectDomainTransferFromAnotherAwsAccount
 func (c *Route53Domains) RejectDomainTransferFromAnotherAwsAccountRequest(input *RejectDomainTransferFromAnotherAwsAccountInput) (req *request.Request, output *RejectDomainTransferFromAnotherAwsAccountOutput) {
@@ -2341,18 +2332,19 @@ func (c *Route53Domains) RejectDomainTransferFromAnotherAwsAccountRequest(input 
 // API operation RejectDomainTransferFromAnotherAwsAccount for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/RejectDomainTransferFromAnotherAwsAccount
 func (c *Route53Domains) RejectDomainTransferFromAnotherAwsAccount(input *RejectDomainTransferFromAnotherAwsAccountInput) (*RejectDomainTransferFromAnotherAwsAccountOutput, error) {
@@ -2392,14 +2384,13 @@ const opRenewDomain = "RenewDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RenewDomainRequest method.
+//	req, resp := client.RenewDomainRequest(params)
 //
-//    // Example sending a request using the RenewDomainRequest method.
-//    req, resp := client.RenewDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/RenewDomain
 func (c *Route53Domains) RenewDomainRequest(input *RenewDomainInput) (req *request.Request, output *RenewDomainOutput) {
@@ -2437,24 +2428,25 @@ func (c *Route53Domains) RenewDomainRequest(input *RenewDomainInput) (req *reque
 // API operation RenewDomain for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
+//
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/RenewDomain
 func (c *Route53Domains) RenewDomain(input *RenewDomainInput) (*RenewDomainOutput, error) {
@@ -2494,14 +2486,13 @@ const opResendContactReachabilityEmail = "ResendContactReachabilityEmail"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ResendContactReachabilityEmailRequest method.
+//	req, resp := client.ResendContactReachabilityEmailRequest(params)
 //
-//    // Example sending a request using the ResendContactReachabilityEmailRequest method.
-//    req, resp := client.ResendContactReachabilityEmailRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ResendContactReachabilityEmail
 func (c *Route53Domains) ResendContactReachabilityEmailRequest(input *ResendContactReachabilityEmailInput) (req *request.Request, output *ResendContactReachabilityEmailOutput) {
@@ -2534,18 +2525,19 @@ func (c *Route53Domains) ResendContactReachabilityEmailRequest(input *ResendCont
 // API operation ResendContactReachabilityEmail for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ResendContactReachabilityEmail
 func (c *Route53Domains) ResendContactReachabilityEmail(input *ResendContactReachabilityEmailInput) (*ResendContactReachabilityEmailOutput, error) {
@@ -2585,14 +2577,13 @@ const opResendOperationAuthorization = "ResendOperationAuthorization"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ResendOperationAuthorizationRequest method.
+//	req, resp := client.ResendOperationAuthorizationRequest(params)
 //
-//    // Example sending a request using the ResendOperationAuthorizationRequest method.
-//    req, resp := client.ResendOperationAuthorizationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ResendOperationAuthorization
 func (c *Route53Domains) ResendOperationAuthorizationRequest(input *ResendOperationAuthorizationInput) (req *request.Request, output *ResendOperationAuthorizationOutput) {
@@ -2624,11 +2615,11 @@ func (c *Route53Domains) ResendOperationAuthorizationRequest(input *ResendOperat
 // API operation ResendOperationAuthorization for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ResendOperationAuthorization
 func (c *Route53Domains) ResendOperationAuthorization(input *ResendOperationAuthorizationInput) (*ResendOperationAuthorizationOutput, error) {
@@ -2668,14 +2659,13 @@ const opRetrieveDomainAuthCode = "RetrieveDomainAuthCode"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RetrieveDomainAuthCodeRequest method.
+//	req, resp := client.RetrieveDomainAuthCodeRequest(params)
 //
-//    // Example sending a request using the RetrieveDomainAuthCodeRequest method.
-//    req, resp := client.RetrieveDomainAuthCodeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/RetrieveDomainAuthCode
 func (c *Route53Domains) RetrieveDomainAuthCodeRequest(input *RetrieveDomainAuthCodeInput) (req *request.Request, output *RetrieveDomainAuthCodeOutput) {
@@ -2707,14 +2697,15 @@ func (c *Route53Domains) RetrieveDomainAuthCodeRequest(input *RetrieveDomainAuth
 // API operation RetrieveDomainAuthCode for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/RetrieveDomainAuthCode
 func (c *Route53Domains) RetrieveDomainAuthCode(input *RetrieveDomainAuthCodeInput) (*RetrieveDomainAuthCodeOutput, error) {
@@ -2754,14 +2745,13 @@ const opTransferDomain = "TransferDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TransferDomainRequest method.
+//	req, resp := client.TransferDomainRequest(params)
 //
-//    // Example sending a request using the TransferDomainRequest method.
-//    req, resp := client.TransferDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/TransferDomain
 func (c *Route53Domains) TransferDomainRequest(input *TransferDomainInput) (req *request.Request, output *TransferDomainOutput) {
@@ -2782,24 +2772,27 @@ func (c *Route53Domains) TransferDomainRequest(input *TransferDomainInput) (req 
 
 // TransferDomain API operation for Amazon Route 53 Domains.
 //
-// Transfers a domain from another registrar to Amazon Route 53. When the transfer
-// is complete, the domain is registered either with Amazon Registrar (for .com,
-// .net, and .org domains) or with our registrar associate, Gandi (for all other
-// TLDs).
+// Transfers a domain from another registrar to Amazon Route 53.
 //
 // For more information about transferring domains, see the following topics:
 //
-//    * For transfer requirements, a detailed procedure, and information about
-//    viewing the status of a domain that you're transferring to Route 53, see
-//    Transferring Registration for a Domain to Amazon Route 53 (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html)
-//    in the Amazon Route 53 Developer Guide.
+//   - For transfer requirements, a detailed procedure, and information about
+//     viewing the status of a domain that you're transferring to Route 53, see
+//     Transferring Registration for a Domain to Amazon Route 53 (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html)
+//     in the Amazon Route 53 Developer Guide.
 //
-//    * For information about how to transfer a domain from one Amazon Web Services
-//    account to another, see TransferDomainToAnotherAwsAccount (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_TransferDomainToAnotherAwsAccount.html).
+//   - For information about how to transfer a domain from one Amazon Web Services
+//     account to another, see TransferDomainToAnotherAwsAccount (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_TransferDomainToAnotherAwsAccount.html).
 //
-//    * For information about how to transfer a domain to another domain registrar,
-//    see Transferring a Domain from Amazon Route 53 to Another Registrar (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-from-route-53.html)
-//    in the Amazon Route 53 Developer Guide.
+//   - For information about how to transfer a domain to another domain registrar,
+//     see Transferring a Domain from Amazon Route 53 to Another Registrar (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-from-route-53.html)
+//     in the Amazon Route 53 Developer Guide.
+//
+// During the transfer of any country code top-level domains (ccTLDs) to Route
+// 53, except for .cc and .tv, updates to the owner contact are ignored and
+// the owner contact data from the registry is used. You can update the owner
+// contact after the transfer is complete. For more information, see UpdateDomainContact
+// (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_UpdateDomainContact.html).
 //
 // If the registrar for your domain is also the DNS service provider for the
 // domain, we highly recommend that you transfer your DNS service to Route 53
@@ -2825,27 +2818,28 @@ func (c *Route53Domains) TransferDomainRequest(input *TransferDomainInput) (req 
 // API operation TransferDomain for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
 //
-//   * DomainLimitExceeded
-//   The number of domains has exceeded the allowed threshold for the account.
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - DomainLimitExceeded
+//     The number of domains has exceeded the allowed threshold for the account.
+//
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/TransferDomain
 func (c *Route53Domains) TransferDomain(input *TransferDomainInput) (*TransferDomainOutput, error) {
@@ -2885,14 +2879,13 @@ const opTransferDomainToAnotherAwsAccount = "TransferDomainToAnotherAwsAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TransferDomainToAnotherAwsAccountRequest method.
+//	req, resp := client.TransferDomainToAnotherAwsAccountRequest(params)
 //
-//    // Example sending a request using the TransferDomainToAnotherAwsAccountRequest method.
-//    req, resp := client.TransferDomainToAnotherAwsAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/TransferDomainToAnotherAwsAccount
 func (c *Route53Domains) TransferDomainToAnotherAwsAccountRequest(input *TransferDomainToAnotherAwsAccountInput) (req *request.Request, output *TransferDomainToAnotherAwsAccountOutput) {
@@ -2916,16 +2909,16 @@ func (c *Route53Domains) TransferDomainToAnotherAwsAccountRequest(input *Transfe
 // Transfers a domain from the current Amazon Web Services account to another
 // Amazon Web Services account. Note the following:
 //
-//    * The Amazon Web Services account that you're transferring the domain
-//    to must accept the transfer. If the other account doesn't accept the transfer
-//    within 3 days, we cancel the transfer. See AcceptDomainTransferFromAnotherAwsAccount
-//    (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_AcceptDomainTransferFromAnotherAwsAccount.html).
+//   - The Amazon Web Services account that you're transferring the domain
+//     to must accept the transfer. If the other account doesn't accept the transfer
+//     within 3 days, we cancel the transfer. See AcceptDomainTransferFromAnotherAwsAccount
+//     (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_AcceptDomainTransferFromAnotherAwsAccount.html).
 //
-//    * You can cancel the transfer before the other account accepts it. See
-//    CancelDomainTransferToAnotherAwsAccount (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_CancelDomainTransferToAnotherAwsAccount.html).
+//   - You can cancel the transfer before the other account accepts it. See
+//     CancelDomainTransferToAnotherAwsAccount (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_CancelDomainTransferToAnotherAwsAccount.html).
 //
-//    * The other account can reject the transfer. See RejectDomainTransferFromAnotherAwsAccount
-//    (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_RejectDomainTransferFromAnotherAwsAccount.html).
+//   - The other account can reject the transfer. See RejectDomainTransferFromAnotherAwsAccount
+//     (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_RejectDomainTransferFromAnotherAwsAccount.html).
 //
 // When you transfer a domain from one Amazon Web Services account to another,
 // Route 53 doesn't transfer the hosted zone that is associated with the domain.
@@ -2949,21 +2942,22 @@ func (c *Route53Domains) TransferDomainToAnotherAwsAccountRequest(input *Transfe
 // API operation TransferDomainToAnotherAwsAccount for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/TransferDomainToAnotherAwsAccount
 func (c *Route53Domains) TransferDomainToAnotherAwsAccount(input *TransferDomainToAnotherAwsAccountInput) (*TransferDomainToAnotherAwsAccountOutput, error) {
@@ -3003,14 +2997,13 @@ const opUpdateDomainContact = "UpdateDomainContact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDomainContactRequest method.
+//	req, resp := client.UpdateDomainContactRequest(params)
 //
-//    // Example sending a request using the UpdateDomainContactRequest method.
-//    req, resp := client.UpdateDomainContactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/UpdateDomainContact
 func (c *Route53Domains) UpdateDomainContactRequest(input *UpdateDomainContactInput) (req *request.Request, output *UpdateDomainContactOutput) {
@@ -3048,24 +3041,25 @@ func (c *Route53Domains) UpdateDomainContactRequest(input *UpdateDomainContactIn
 // API operation UpdateDomainContact for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/UpdateDomainContact
 func (c *Route53Domains) UpdateDomainContact(input *UpdateDomainContactInput) (*UpdateDomainContactOutput, error) {
@@ -3105,14 +3099,13 @@ const opUpdateDomainContactPrivacy = "UpdateDomainContactPrivacy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDomainContactPrivacyRequest method.
+//	req, resp := client.UpdateDomainContactPrivacyRequest(params)
 //
-//    // Example sending a request using the UpdateDomainContactPrivacyRequest method.
-//    req, resp := client.UpdateDomainContactPrivacyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/UpdateDomainContactPrivacy
 func (c *Route53Domains) UpdateDomainContactPrivacyRequest(input *UpdateDomainContactPrivacyInput) (req *request.Request, output *UpdateDomainContactPrivacyOutput) {
@@ -3134,13 +3127,12 @@ func (c *Route53Domains) UpdateDomainContactPrivacyRequest(input *UpdateDomainCo
 // UpdateDomainContactPrivacy API operation for Amazon Route 53 Domains.
 //
 // This operation updates the specified domain contact's privacy setting. When
-// privacy protection is enabled, contact information such as email address
-// is replaced either with contact information for Amazon Registrar (for .com,
-// .net, and .org domains) or with contact information for our registrar associate,
-// Gandi.
+// privacy protection is enabled, your contact information is replaced with
+// contact information for the registrar or with the phrase "REDACTED FOR PRIVACY",
+// or "On behalf of <domain name> owner."
 //
-// You must specify the same privacy setting for the administrative, registrant,
-// and technical contacts.
+// While some domains may allow different privacy settings per contact, we recommend
+// specifying the same privacy setting for all contacts.
 //
 // This operation affects only the contact information for the specified contact
 // type (administrative, registrant, or technical). If the request succeeds,
@@ -3166,24 +3158,25 @@ func (c *Route53Domains) UpdateDomainContactPrivacyRequest(input *UpdateDomainCo
 // API operation UpdateDomainContactPrivacy for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/UpdateDomainContactPrivacy
 func (c *Route53Domains) UpdateDomainContactPrivacy(input *UpdateDomainContactPrivacyInput) (*UpdateDomainContactPrivacyOutput, error) {
@@ -3223,14 +3216,13 @@ const opUpdateDomainNameservers = "UpdateDomainNameservers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDomainNameserversRequest method.
+//	req, resp := client.UpdateDomainNameserversRequest(params)
 //
-//    // Example sending a request using the UpdateDomainNameserversRequest method.
-//    req, resp := client.UpdateDomainNameserversRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/UpdateDomainNameservers
 func (c *Route53Domains) UpdateDomainNameserversRequest(input *UpdateDomainNameserversInput) (req *request.Request, output *UpdateDomainNameserversOutput) {
@@ -3268,24 +3260,25 @@ func (c *Route53Domains) UpdateDomainNameserversRequest(input *UpdateDomainNames
 // API operation UpdateDomainNameservers for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * DuplicateRequest
-//   The request is already in progress for the domain.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * TLDRulesViolation
-//   The top-level domain does not support this operation.
+//   - DuplicateRequest
+//     The request is already in progress for the domain.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - TLDRulesViolation
+//     The top-level domain does not support this operation.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/UpdateDomainNameservers
 func (c *Route53Domains) UpdateDomainNameservers(input *UpdateDomainNameserversInput) (*UpdateDomainNameserversOutput, error) {
@@ -3325,14 +3318,13 @@ const opUpdateTagsForDomain = "UpdateTagsForDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateTagsForDomainRequest method.
+//	req, resp := client.UpdateTagsForDomainRequest(params)
 //
-//    // Example sending a request using the UpdateTagsForDomainRequest method.
-//    req, resp := client.UpdateTagsForDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/UpdateTagsForDomain
 func (c *Route53Domains) UpdateTagsForDomainRequest(input *UpdateTagsForDomainInput) (req *request.Request, output *UpdateTagsForDomainOutput) {
@@ -3367,18 +3359,19 @@ func (c *Route53Domains) UpdateTagsForDomainRequest(input *UpdateTagsForDomainIn
 // API operation UpdateTagsForDomain for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
 //
-//   * OperationLimitExceeded
-//   The number of operations or jobs running exceeded the allowed threshold for
-//   the account.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
-//   * UnsupportedTLD
-//   Amazon Route 53 does not support this top-level domain (TLD).
+//   - OperationLimitExceeded
+//     The number of operations or jobs running exceeded the allowed threshold for
+//     the account.
+//
+//   - UnsupportedTLD
+//     Amazon Route 53 does not support this top-level domain (TLD).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/UpdateTagsForDomain
 func (c *Route53Domains) UpdateTagsForDomain(input *UpdateTagsForDomainInput) (*UpdateTagsForDomainOutput, error) {
@@ -3418,14 +3411,13 @@ const opViewBilling = "ViewBilling"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ViewBillingRequest method.
+//	req, resp := client.ViewBillingRequest(params)
 //
-//    // Example sending a request using the ViewBillingRequest method.
-//    req, resp := client.ViewBillingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ViewBilling
 func (c *Route53Domains) ViewBillingRequest(input *ViewBillingInput) (req *request.Request, output *ViewBillingOutput) {
@@ -3463,11 +3455,11 @@ func (c *Route53Domains) ViewBillingRequest(input *ViewBillingInput) (req *reque
 // API operation ViewBilling for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInput
-//   The requested item is not acceptable. For example, for APIs that accept a
-//   domain name, the request might specify a domain name that doesn't belong
-//   to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
-//   the password might be invalid.
+//   - InvalidInput
+//     The requested item is not acceptable. For example, for APIs that accept a
+//     domain name, the request might specify a domain name that doesn't belong
+//     to the account that submitted the request. For AcceptDomainTransferFromAnotherAwsAccount,
+//     the password might be invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/route53domains-2014-05-15/ViewBilling
 func (c *Route53Domains) ViewBilling(input *ViewBillingInput) (*ViewBillingOutput, error) {
@@ -3499,15 +3491,14 @@ func (c *Route53Domains) ViewBillingWithContext(ctx aws.Context, input *ViewBill
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ViewBilling operation.
-//    pageNum := 0
-//    err := client.ViewBillingPages(params,
-//        func(page *route53domains.ViewBillingOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ViewBilling operation.
+//	pageNum := 0
+//	err := client.ViewBillingPages(params,
+//	    func(page *route53domains.ViewBillingOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Route53Domains) ViewBillingPages(input *ViewBillingInput, fn func(*ViewBillingOutput, bool) bool) error {
 	return c.ViewBillingPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3558,8 +3549,12 @@ type AcceptDomainTransferFromAnotherAwsAccountInput struct {
 	// The password that was returned by the TransferDomainToAnotherAwsAccount (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_TransferDomainToAnotherAwsAccount.html)
 	// request.
 	//
+	// Password is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by AcceptDomainTransferFromAnotherAwsAccountInput's
+	// String and GoString methods.
+	//
 	// Password is a required field
-	Password *string `type:"string" required:"true"`
+	Password *string `type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation.
@@ -3999,6 +3994,10 @@ type CheckDomainAvailabilityOutput struct {
 	// of reasons, for example, the registry is performing maintenance. Try again
 	// later.
 	//
+	// INVALID_NAME_FOR_TLD
+	//
+	// The TLD isn't valid. For example, it can contain characters that aren't allowed.
+	//
 	// PENDING
 	//
 	// The TLD registry didn't return a response in the expected amount of time.
@@ -4128,6 +4127,9 @@ func (s *CheckDomainTransferabilityInput) SetDomainName(v string) *CheckDomainTr
 type CheckDomainTransferabilityOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Provides an explanation for when a domain can't be transferred.
+	Message *string `type:"string"`
+
 	// A complex type that contains information about whether the specified domain
 	// can be transferred to Route 53.
 	Transferability *DomainTransferability `type:"structure"`
@@ -4149,6 +4151,12 @@ func (s CheckDomainTransferabilityOutput) String() string {
 // value will be replaced with "sensitive".
 func (s CheckDomainTransferabilityOutput) GoString() string {
 	return s.String()
+}
+
+// SetMessage sets the Message field's value.
+func (s *CheckDomainTransferabilityOutput) SetMessage(v string) *CheckDomainTransferabilityOutput {
+	s.Message = &v
+	return s
 }
 
 // SetTransferability sets the Transferability field's value.
@@ -4226,13 +4234,25 @@ type ContactDetail struct {
 	_ struct{} `type:"structure" sensitive:"true"`
 
 	// First line of the contact's address.
-	AddressLine1 *string `type:"string"`
+	//
+	// AddressLine1 is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	AddressLine1 *string `type:"string" sensitive:"true"`
 
 	// Second line of contact's address, if any.
-	AddressLine2 *string `type:"string"`
+	//
+	// AddressLine2 is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	AddressLine2 *string `type:"string" sensitive:"true"`
 
 	// The city of the contact's address.
-	City *string `type:"string"`
+	//
+	// City is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	City *string `type:"string" sensitive:"true"`
 
 	// Indicates whether the contact is a person, company, association, or public
 	// organization. Note the following:
@@ -4250,10 +4270,18 @@ type ContactDetail struct {
 	ContactType *string `type:"string" enum:"ContactType"`
 
 	// Code for the country of the contact's address.
-	CountryCode *string `type:"string" enum:"CountryCode"`
+	//
+	// CountryCode is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	CountryCode *string `type:"string" enum:"CountryCode" sensitive:"true"`
 
 	// Email address of the contact.
-	Email *string `type:"string"`
+	//
+	// Email is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	Email *string `type:"string" sensitive:"true"`
 
 	// A list of name-value pairs for parameters required by certain top-level domains.
 	ExtraParams []*ExtraParam `type:"list"`
@@ -4263,29 +4291,57 @@ type ContactDetail struct {
 	// Constraints: Phone number must be specified in the format "+[country dialing
 	// code].[number including any area code]". For example, a US phone number might
 	// appear as "+1.1234567890".
-	Fax *string `type:"string"`
+	//
+	// Fax is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	Fax *string `type:"string" sensitive:"true"`
 
 	// First name of contact.
-	FirstName *string `type:"string"`
+	//
+	// FirstName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	FirstName *string `type:"string" sensitive:"true"`
 
 	// Last name of contact.
-	LastName *string `type:"string"`
+	//
+	// LastName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	LastName *string `type:"string" sensitive:"true"`
 
 	// Name of the organization for contact types other than PERSON.
-	OrganizationName *string `type:"string"`
+	//
+	// OrganizationName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	OrganizationName *string `type:"string" sensitive:"true"`
 
 	// The phone number of the contact.
 	//
 	// Constraints: Phone number must be specified in the format "+[country dialing
 	// code].[number including any area code>]". For example, a US phone number
 	// might appear as "+1.1234567890".
-	PhoneNumber *string `type:"string"`
+	//
+	// PhoneNumber is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	PhoneNumber *string `type:"string" sensitive:"true"`
 
 	// The state or province of the contact's city.
-	State *string `type:"string"`
+	//
+	// State is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	State *string `type:"string" sensitive:"true"`
 
 	// The zip or postal code of the contact's address.
-	ZipCode *string `type:"string"`
+	//
+	// ZipCode is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ContactDetail's
+	// String and GoString methods.
+	ZipCode *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation.
@@ -5365,7 +5421,7 @@ type DomainTransferability struct {
 	//
 	// DOMAIN_IN_ANOTHER_ACCOUNT
 	//
-	// the domain exists in another Amazon Web Services account.
+	// The domain exists in another Amazon Web Services account.
 	//
 	// PREMIUM_DOMAIN
 	//
@@ -5404,6 +5460,9 @@ type DuplicateRequest struct {
 
 	// The request is already in progress for the domain.
 	Message_ *string `locationName:"message" type:"string"`
+
+	// ID of the request operation.
+	RequestId *string `locationName:"requestId" type:"string"`
 }
 
 // String returns the string representation.
@@ -5449,7 +5508,7 @@ func (s *DuplicateRequest) OrigErr() error {
 }
 
 func (s *DuplicateRequest) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
 }
 
 // Status code returns the HTTP status code for the request's response error.
@@ -5701,22 +5760,6 @@ type ExtraParam struct {
 	//
 	//    * FI_ORGANIZATION_TYPE Valid values include the following: COMPANY CORPORATION
 	//    GOVERNMENT INSTITUTION POLITICAL_PARTY PUBLIC_COMMUNITY TOWNSHIP
-	//
-	// .fr
-	//
-	//    * BIRTH_CITY
-	//
-	//    * BIRTH_COUNTRY
-	//
-	//    * BIRTH_DATE_IN_YYYY_MM_DD
-	//
-	//    * BIRTH_DEPARTMENT: Specify the INSEE code that corresponds with the department
-	//    where the contact was born. If the contact was born somewhere other than
-	//    France or its overseas departments, specify 99. For more information,
-	//    including a list of departments and the corresponding INSEE numbers, see
-	//    the Wikipedia entry Departments of France (https://en.wikipedia.org/wiki/Departments_of_France).
-	//
-	//    * BRAND_NUMBER
 	//
 	// .it
 	//
@@ -6044,10 +6087,18 @@ type GetDomainDetailOutput struct {
 	// Email address to contact to report incorrect contact information for a domain,
 	// to report that the domain is being used to send spam, to report that someone
 	// is cybersquatting on a domain name, or report some other type of abuse.
-	AbuseContactEmail *string `type:"string"`
+	//
+	// AbuseContactEmail is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetDomainDetailOutput's
+	// String and GoString methods.
+	AbuseContactEmail *string `type:"string" sensitive:"true"`
 
 	// Phone number for reporting abuse.
-	AbuseContactPhone *string `type:"string"`
+	//
+	// AbuseContactPhone is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetDomainDetailOutput's
+	// String and GoString methods.
+	AbuseContactPhone *string `type:"string" sensitive:"true"`
 
 	// Provides details about the domain administrative contact.
 	//
@@ -6058,13 +6109,27 @@ type GetDomainDetailOutput struct {
 
 	// Specifies whether contact information is concealed from WHOIS queries. If
 	// the value is true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If the value is false, WHOIS queries
-	// return the information that you entered for the admin contact.
+	// for Amazon Registrar or for our registrar associate, Gandi. If the value
+	// is false, WHOIS queries return the information that you entered for the admin
+	// contact.
 	AdminPrivacy *bool `type:"boolean"`
 
 	// Specifies whether the domain registration is set to renew automatically.
 	AutoRenew *bool `type:"boolean"`
+
+	// Provides details about the domain billing contact.
+	//
+	// BillingContact is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetDomainDetailOutput's
+	// String and GoString methods.
+	BillingContact *ContactDetail `type:"structure" sensitive:"true"`
+
+	// Specifies whether contact information is concealed from WHOIS queries. If
+	// the value is true, WHOIS ("who is") queries return contact information either
+	// for Amazon Registrar or for our registrar associate, Gandi. If the value
+	// is false, WHOIS queries return the information that you entered for the billing
+	// contact.
+	BillingPrivacy *bool `type:"boolean"`
 
 	// The date when the domain was created as found in the response to a WHOIS
 	// query. The date and time is in Unix time format and Coordinated Universal
@@ -6096,16 +6161,12 @@ type GetDomainDetailOutput struct {
 
 	// Specifies whether contact information is concealed from WHOIS queries. If
 	// the value is true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If the value is false, WHOIS queries
-	// return the information that you entered for the registrant contact (domain
-	// owner).
+	// for Amazon Registrar or for our registrar associate, Gandi. If the value
+	// is false, WHOIS queries return the information that you entered for the registrant
+	// contact (domain owner).
 	RegistrantPrivacy *bool `type:"boolean"`
 
-	// Name of the registrar of the domain as identified in the registry. Domains
-	// with a .com, .net, or .org TLD are registered by Amazon Registrar. All other
-	// domains are registered by our registrar associate, Gandi. The value for domains
-	// that are registered by Gandi is "GANDI SAS".
+	// Name of the registrar of the domain as identified in the registry.
 	RegistrarName *string `type:"string"`
 
 	// Web address of the registrar.
@@ -6143,9 +6204,9 @@ type GetDomainDetailOutput struct {
 
 	// Specifies whether contact information is concealed from WHOIS queries. If
 	// the value is true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If the value is false, WHOIS queries
-	// return the information that you entered for the technical contact.
+	// for Amazon Registrar or for our registrar associate, Gandi. If the value
+	// is false, WHOIS queries return the information that you entered for the technical
+	// contact.
 	TechPrivacy *bool `type:"boolean"`
 
 	// The last updated date of the domain as found in the response to a WHOIS query.
@@ -6202,6 +6263,18 @@ func (s *GetDomainDetailOutput) SetAdminPrivacy(v bool) *GetDomainDetailOutput {
 // SetAutoRenew sets the AutoRenew field's value.
 func (s *GetDomainDetailOutput) SetAutoRenew(v bool) *GetDomainDetailOutput {
 	s.AutoRenew = &v
+	return s
+}
+
+// SetBillingContact sets the BillingContact field's value.
+func (s *GetDomainDetailOutput) SetBillingContact(v *ContactDetail) *GetDomainDetailOutput {
+	s.BillingContact = v
+	return s
+}
+
+// SetBillingPrivacy sets the BillingPrivacy field's value.
+func (s *GetDomainDetailOutput) SetBillingPrivacy(v bool) *GetDomainDetailOutput {
+	s.BillingPrivacy = &v
 	return s
 }
 
@@ -6825,7 +6898,7 @@ type ListOperationsInput struct {
 	// The sort type for returned values.
 	SortBy *string `type:"string" enum:"ListOperationsSortAttributeName"`
 
-	// The sort order ofr returned values, either ascending or descending.
+	// The sort order for returned values, either ascending or descending.
 	SortOrder *string `type:"string" enum:"SortOrder"`
 
 	// The status of the operations.
@@ -7535,6 +7608,14 @@ type RegisterDomainInput struct {
 	// Default: true
 	AutoRenew *bool `type:"boolean"`
 
+	// Provides detailed contact information. For information about the values that
+	// you specify for each element, see ContactDetail (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_ContactDetail.html).
+	//
+	// BillingContact is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by RegisterDomainInput's
+	// String and GoString methods.
+	BillingContact *ContactDetail `type:"structure" sensitive:"true"`
+
 	// The domain name that you want to register. The top-level domain (TLD), such
 	// as .com, must be a TLD that Route 53 supports. For a list of supported TLDs,
 	// see Domains that You Can Register with Amazon Route 53 (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html)
@@ -7575,37 +7656,46 @@ type RegisterDomainInput struct {
 
 	// Whether you want to conceal contact information from WHOIS queries. If you
 	// specify true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If you specify false, WHOIS queries
-	// return the information that you entered for the admin contact.
+	// for Amazon Registrar or for our registrar associate, Gandi. If you specify
+	// false, WHOIS queries return the information that you entered for the admin
+	// contact.
 	//
-	// You must specify the same privacy setting for the administrative, registrant,
-	// and technical contacts.
+	// You must specify the same privacy setting for the administrative, billing,
+	// registrant, and technical contacts.
 	//
 	// Default: true
 	PrivacyProtectAdminContact *bool `type:"boolean"`
 
 	// Whether you want to conceal contact information from WHOIS queries. If you
 	// specify true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If you specify false, WHOIS queries
-	// return the information that you entered for the registrant contact (the domain
-	// owner).
+	// for Amazon Registrar or for our registrar associate, Gandi. If you specify
+	// false, WHOIS queries return the information that you entered for the billing
+	// contact.
 	//
-	// You must specify the same privacy setting for the administrative, registrant,
-	// and technical contacts.
+	// You must specify the same privacy setting for the administrative, billing,
+	// registrant, and technical contacts.
+	PrivacyProtectBillingContact *bool `type:"boolean"`
+
+	// Whether you want to conceal contact information from WHOIS queries. If you
+	// specify true, WHOIS ("who is") queries return contact information either
+	// for Amazon Registrar or for our registrar associate, Gandi. If you specify
+	// false, WHOIS queries return the information that you entered for the registrant
+	// contact (the domain owner).
+	//
+	// You must specify the same privacy setting for the administrative, billing,
+	// registrant, and technical contacts.
 	//
 	// Default: true
 	PrivacyProtectRegistrantContact *bool `type:"boolean"`
 
 	// Whether you want to conceal contact information from WHOIS queries. If you
 	// specify true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If you specify false, WHOIS queries
-	// return the information that you entered for the technical contact.
+	// for Amazon Registrar or for our registrar associate, Gandi. If you specify
+	// false, WHOIS queries return the information that you entered for the technical
+	// contact.
 	//
-	// You must specify the same privacy setting for the administrative, registrant,
-	// and technical contacts.
+	// You must specify the same privacy setting for the administrative, billing,
+	// registrant, and technical contacts.
 	//
 	// Default: true
 	PrivacyProtectTechContact *bool `type:"boolean"`
@@ -7675,6 +7765,11 @@ func (s *RegisterDomainInput) Validate() error {
 			invalidParams.AddNested("AdminContact", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.BillingContact != nil {
+		if err := s.BillingContact.Validate(); err != nil {
+			invalidParams.AddNested("BillingContact", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.RegistrantContact != nil {
 		if err := s.RegistrantContact.Validate(); err != nil {
 			invalidParams.AddNested("RegistrantContact", err.(request.ErrInvalidParams))
@@ -7704,6 +7799,12 @@ func (s *RegisterDomainInput) SetAutoRenew(v bool) *RegisterDomainInput {
 	return s
 }
 
+// SetBillingContact sets the BillingContact field's value.
+func (s *RegisterDomainInput) SetBillingContact(v *ContactDetail) *RegisterDomainInput {
+	s.BillingContact = v
+	return s
+}
+
 // SetDomainName sets the DomainName field's value.
 func (s *RegisterDomainInput) SetDomainName(v string) *RegisterDomainInput {
 	s.DomainName = &v
@@ -7725,6 +7826,12 @@ func (s *RegisterDomainInput) SetIdnLangCode(v string) *RegisterDomainInput {
 // SetPrivacyProtectAdminContact sets the PrivacyProtectAdminContact field's value.
 func (s *RegisterDomainInput) SetPrivacyProtectAdminContact(v bool) *RegisterDomainInput {
 	s.PrivacyProtectAdminContact = &v
+	return s
+}
+
+// SetPrivacyProtectBillingContact sets the PrivacyProtectBillingContact field's value.
+func (s *RegisterDomainInput) SetPrivacyProtectBillingContact(v bool) *RegisterDomainInput {
+	s.PrivacyProtectBillingContact = &v
 	return s
 }
 
@@ -8023,7 +8130,11 @@ type ResendContactReachabilityEmailOutput struct {
 
 	// The email address for the registrant contact at the time that we sent the
 	// verification email.
-	EmailAddress *string `locationName:"emailAddress" type:"string"`
+	//
+	// EmailAddress is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ResendContactReachabilityEmailOutput's
+	// String and GoString methods.
+	EmailAddress *string `locationName:"emailAddress" type:"string" sensitive:"true"`
 
 	// True if the email address for the registrant contact has already been verified,
 	// and false otherwise. If the email address has already been verified, we don't
@@ -8439,6 +8550,13 @@ type TransferDomainInput struct {
 	// Default: true
 	AutoRenew *bool `type:"boolean"`
 
+	// Provides detailed contact information.
+	//
+	// BillingContact is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by TransferDomainInput's
+	// String and GoString methods.
+	BillingContact *ContactDetail `type:"structure" sensitive:"true"`
+
 	// The name of the domain that you want to transfer to Route 53. The top-level
 	// domain (TLD), such as .com, must be a TLD that Route 53 supports. For a list
 	// of supported TLDs, see Domains that You Can Register with Amazon Route 53
@@ -8475,38 +8593,46 @@ type TransferDomainInput struct {
 	Nameservers []*Nameserver `type:"list"`
 
 	// Whether you want to conceal contact information from WHOIS queries. If you
-	// specify true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If you specify false, WHOIS queries
-	// return the information that you entered for the admin contact.
+	// specify true, WHOIS ("who is") queries return contact information for the
+	// registrar, the phrase "REDACTED FOR PRIVACY", or "On behalf of <domain name>
+	// owner.".
 	//
-	// You must specify the same privacy setting for the administrative, registrant,
-	// and technical contacts.
+	// While some domains may allow different privacy settings per contact, we recommend
+	// specifying the same privacy setting for all contacts.
 	//
 	// Default: true
 	PrivacyProtectAdminContact *bool `type:"boolean"`
 
 	// Whether you want to conceal contact information from WHOIS queries. If you
 	// specify true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If you specify false, WHOIS queries
-	// return the information that you entered for the registrant contact (domain
-	// owner).
+	// for Amazon Registrar or for our registrar associate, Gandi. If you specify
+	// false, WHOIS queries return the information that you entered for the billing
+	// contact.
 	//
-	// You must specify the same privacy setting for the administrative, registrant,
-	// and technical contacts.
+	// You must specify the same privacy setting for the administrative, billing,
+	// registrant, and technical contacts.
+	PrivacyProtectBillingContact *bool `type:"boolean"`
+
+	// Whether you want to conceal contact information from WHOIS queries. If you
+	// specify true, WHOIS ("who is") queries return contact information either
+	// for Amazon Registrar or for our registrar associate, Gandi. If you specify
+	// false, WHOIS queries return the information that you entered for the registrant
+	// contact (domain owner).
+	//
+	// You must specify the same privacy setting for the administrative, billing,
+	// registrant, and technical contacts.
 	//
 	// Default: true
 	PrivacyProtectRegistrantContact *bool `type:"boolean"`
 
 	// Whether you want to conceal contact information from WHOIS queries. If you
 	// specify true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If you specify false, WHOIS queries
-	// return the information that you entered for the technical contact.
+	// for Amazon Registrar or for our registrar associate, Gandi. If you specify
+	// false, WHOIS queries return the information that you entered for the technical
+	// contact.
 	//
-	// You must specify the same privacy setting for the administrative, registrant,
-	// and technical contacts.
+	// You must specify the same privacy setting for the administrative, billing,
+	// registrant, and technical contacts.
 	//
 	// Default: true
 	PrivacyProtectTechContact *bool `type:"boolean"`
@@ -8574,6 +8700,11 @@ func (s *TransferDomainInput) Validate() error {
 			invalidParams.AddNested("AdminContact", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.BillingContact != nil {
+		if err := s.BillingContact.Validate(); err != nil {
+			invalidParams.AddNested("BillingContact", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Nameservers != nil {
 		for i, v := range s.Nameservers {
 			if v == nil {
@@ -8619,6 +8750,12 @@ func (s *TransferDomainInput) SetAutoRenew(v bool) *TransferDomainInput {
 	return s
 }
 
+// SetBillingContact sets the BillingContact field's value.
+func (s *TransferDomainInput) SetBillingContact(v *ContactDetail) *TransferDomainInput {
+	s.BillingContact = v
+	return s
+}
+
 // SetDomainName sets the DomainName field's value.
 func (s *TransferDomainInput) SetDomainName(v string) *TransferDomainInput {
 	s.DomainName = &v
@@ -8646,6 +8783,12 @@ func (s *TransferDomainInput) SetNameservers(v []*Nameserver) *TransferDomainInp
 // SetPrivacyProtectAdminContact sets the PrivacyProtectAdminContact field's value.
 func (s *TransferDomainInput) SetPrivacyProtectAdminContact(v bool) *TransferDomainInput {
 	s.PrivacyProtectAdminContact = &v
+	return s
+}
+
+// SetPrivacyProtectBillingContact sets the PrivacyProtectBillingContact field's value.
+func (s *TransferDomainInput) SetPrivacyProtectBillingContact(v bool) *TransferDomainInput {
+	s.PrivacyProtectBillingContact = &v
 	return s
 }
 
@@ -8785,7 +8928,11 @@ type TransferDomainToAnotherAwsAccountOutput struct {
 	// (https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_AcceptDomainTransferFromAnotherAwsAccount.html)
 	// request. The request must include the value of the Password element that
 	// was returned in the TransferDomainToAnotherAwsAccount response.
-	Password *string `type:"string"`
+	//
+	// Password is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by TransferDomainToAnotherAwsAccountOutput's
+	// String and GoString methods.
+	Password *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation.
@@ -8894,7 +9041,15 @@ type UpdateDomainContactInput struct {
 	// String and GoString methods.
 	AdminContact *ContactDetail `type:"structure" sensitive:"true"`
 
-	// Customer's consent for the owner change request.
+	// Provides detailed contact information.
+	//
+	// BillingContact is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateDomainContactInput's
+	// String and GoString methods.
+	BillingContact *ContactDetail `type:"structure" sensitive:"true"`
+
+	// Customer's consent for the owner change request. Required if the domain is
+	// not free (consent price is more than $0.00).
 	Consent *Consent `type:"structure"`
 
 	// The name of the domain that you want to update contact information for.
@@ -8946,6 +9101,11 @@ func (s *UpdateDomainContactInput) Validate() error {
 			invalidParams.AddNested("AdminContact", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.BillingContact != nil {
+		if err := s.BillingContact.Validate(); err != nil {
+			invalidParams.AddNested("BillingContact", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Consent != nil {
 		if err := s.Consent.Validate(); err != nil {
 			invalidParams.AddNested("Consent", err.(request.ErrInvalidParams))
@@ -8971,6 +9131,12 @@ func (s *UpdateDomainContactInput) Validate() error {
 // SetAdminContact sets the AdminContact field's value.
 func (s *UpdateDomainContactInput) SetAdminContact(v *ContactDetail) *UpdateDomainContactInput {
 	s.AdminContact = v
+	return s
+}
+
+// SetBillingContact sets the BillingContact field's value.
+func (s *UpdateDomainContactInput) SetBillingContact(v *ContactDetail) *UpdateDomainContactInput {
+	s.BillingContact = v
 	return s
 }
 
@@ -9037,13 +9203,23 @@ type UpdateDomainContactPrivacyInput struct {
 
 	// Whether you want to conceal contact information from WHOIS queries. If you
 	// specify true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If you specify false, WHOIS queries
-	// return the information that you entered for the admin contact.
+	// for Amazon Registrar or for our registrar associate, Gandi. If you specify
+	// false, WHOIS queries return the information that you entered for the admin
+	// contact.
 	//
-	// You must specify the same privacy setting for the administrative, registrant,
-	// and technical contacts.
+	// You must specify the same privacy setting for the administrative, billing,
+	// registrant, and technical contacts.
 	AdminPrivacy *bool `type:"boolean"`
+
+	// Whether you want to conceal contact information from WHOIS queries. If you
+	// specify true, WHOIS ("who is") queries return contact information either
+	// for Amazon Registrar or for our registrar associate, Gandi. If you specify
+	// false, WHOIS queries return the information that you entered for the billing
+	// contact.
+	//
+	// You must specify the same privacy setting for the administrative, billing,
+	// registrant, and technical contacts.
+	BillingPrivacy *bool `type:"boolean"`
 
 	// The name of the domain that you want to update the privacy setting for.
 	//
@@ -9052,23 +9228,22 @@ type UpdateDomainContactPrivacyInput struct {
 
 	// Whether you want to conceal contact information from WHOIS queries. If you
 	// specify true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If you specify false, WHOIS queries
-	// return the information that you entered for the registrant contact (domain
-	// owner).
+	// for Amazon Registrar or for our registrar associate, Gandi. If you specify
+	// false, WHOIS queries return the information that you entered for the registrant
+	// contact (domain owner).
 	//
-	// You must specify the same privacy setting for the administrative, registrant,
-	// and technical contacts.
+	// You must specify the same privacy setting for the administrative, billing,
+	// registrant, and technical contacts.
 	RegistrantPrivacy *bool `type:"boolean"`
 
 	// Whether you want to conceal contact information from WHOIS queries. If you
 	// specify true, WHOIS ("who is") queries return contact information either
-	// for Amazon Registrar (for .com, .net, and .org domains) or for our registrar
-	// associate, Gandi (for all other TLDs). If you specify false, WHOIS queries
-	// return the information that you entered for the technical contact.
+	// for Amazon Registrar or for our registrar associate, Gandi. If you specify
+	// false, WHOIS queries return the information that you entered for the technical
+	// contact.
 	//
-	// You must specify the same privacy setting for the administrative, registrant,
-	// and technical contacts.
+	// You must specify the same privacy setting for the administrative, billing,
+	// registrant, and technical contacts.
 	TechPrivacy *bool `type:"boolean"`
 }
 
@@ -9106,6 +9281,12 @@ func (s *UpdateDomainContactPrivacyInput) Validate() error {
 // SetAdminPrivacy sets the AdminPrivacy field's value.
 func (s *UpdateDomainContactPrivacyInput) SetAdminPrivacy(v bool) *UpdateDomainContactPrivacyInput {
 	s.AdminPrivacy = &v
+	return s
+}
+
+// SetBillingPrivacy sets the BillingPrivacy field's value.
+func (s *UpdateDomainContactPrivacyInput) SetBillingPrivacy(v bool) *UpdateDomainContactPrivacyInput {
+	s.BillingPrivacy = &v
 	return s
 }
 
@@ -10555,6 +10736,12 @@ const (
 
 	// DomainAvailabilityDontKnow is a DomainAvailability enum value
 	DomainAvailabilityDontKnow = "DONT_KNOW"
+
+	// DomainAvailabilityInvalidNameForTld is a DomainAvailability enum value
+	DomainAvailabilityInvalidNameForTld = "INVALID_NAME_FOR_TLD"
+
+	// DomainAvailabilityPending is a DomainAvailability enum value
+	DomainAvailabilityPending = "PENDING"
 )
 
 // DomainAvailability_Values returns all elements of the DomainAvailability enum
@@ -10568,6 +10755,8 @@ func DomainAvailability_Values() []string {
 		DomainAvailabilityUnavailableRestricted,
 		DomainAvailabilityReserved,
 		DomainAvailabilityDontKnow,
+		DomainAvailabilityInvalidNameForTld,
+		DomainAvailabilityPending,
 	}
 }
 
@@ -10813,6 +11002,12 @@ const (
 
 	// OperationTypeInternalTransferInDomain is a OperationType enum value
 	OperationTypeInternalTransferInDomain = "INTERNAL_TRANSFER_IN_DOMAIN"
+
+	// OperationTypeReleaseToGandi is a OperationType enum value
+	OperationTypeReleaseToGandi = "RELEASE_TO_GANDI"
+
+	// OperationTypeTransferOnRenew is a OperationType enum value
+	OperationTypeTransferOnRenew = "TRANSFER_ON_RENEW"
 )
 
 // OperationType_Values returns all elements of the OperationType enum
@@ -10836,6 +11031,8 @@ func OperationType_Values() []string {
 		OperationTypePushDomain,
 		OperationTypeInternalTransferOutDomain,
 		OperationTypeInternalTransferInDomain,
+		OperationTypeReleaseToGandi,
+		OperationTypeTransferOnRenew,
 	}
 }
 
@@ -10929,11 +11126,11 @@ func StatusFlag_Values() []string {
 //
 // Valid values:
 //
-// TRANSFERABLE
+// # TRANSFERABLE
 //
 // The domain name can be transferred to Route 53.
 //
-// UNTRANSFERRABLE
+// # UNTRANSFERRABLE
 //
 // The domain name can't be transferred to Route 53.
 //
@@ -10947,7 +11144,7 @@ func StatusFlag_Values() []string {
 //
 // DOMAIN_IN_ANOTHER_ACCOUNT
 //
-// the domain exists in another Amazon Web Services account.
+// The domain exists in another Amazon Web Services account.
 //
 // PREMIUM_DOMAIN
 //

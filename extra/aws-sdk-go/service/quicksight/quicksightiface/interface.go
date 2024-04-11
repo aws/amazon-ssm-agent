@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon QuickSight.
-//    func myFunc(svc quicksightiface.QuickSightAPI) bool {
-//        // Make svc.CancelIngestion request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon QuickSight.
+//	func myFunc(svc quicksightiface.QuickSightAPI) bool {
+//	    // Make svc.CancelIngestion request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := quicksight.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := quicksight.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockQuickSightClient struct {
-//        quicksightiface.QuickSightAPI
-//    }
-//    func (m *mockQuickSightClient) CancelIngestion(input *quicksight.CancelIngestionInput) (*quicksight.CancelIngestionOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockQuickSightClient struct {
+//	    quicksightiface.QuickSightAPI
+//	}
+//	func (m *mockQuickSightClient) CancelIngestion(input *quicksight.CancelIngestionInput) (*quicksight.CancelIngestionOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockQuickSightClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockQuickSightClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -119,6 +119,10 @@ type QuickSightAPI interface {
 	CreateRefreshSchedule(*quicksight.CreateRefreshScheduleInput) (*quicksight.CreateRefreshScheduleOutput, error)
 	CreateRefreshScheduleWithContext(aws.Context, *quicksight.CreateRefreshScheduleInput, ...request.Option) (*quicksight.CreateRefreshScheduleOutput, error)
 	CreateRefreshScheduleRequest(*quicksight.CreateRefreshScheduleInput) (*request.Request, *quicksight.CreateRefreshScheduleOutput)
+
+	CreateRoleMembership(*quicksight.CreateRoleMembershipInput) (*quicksight.CreateRoleMembershipOutput, error)
+	CreateRoleMembershipWithContext(aws.Context, *quicksight.CreateRoleMembershipInput, ...request.Option) (*quicksight.CreateRoleMembershipOutput, error)
+	CreateRoleMembershipRequest(*quicksight.CreateRoleMembershipInput) (*request.Request, *quicksight.CreateRoleMembershipOutput)
 
 	CreateTemplate(*quicksight.CreateTemplateInput) (*quicksight.CreateTemplateOutput, error)
 	CreateTemplateWithContext(aws.Context, *quicksight.CreateTemplateInput, ...request.Option) (*quicksight.CreateTemplateOutput, error)
@@ -196,6 +200,10 @@ type QuickSightAPI interface {
 	DeleteIAMPolicyAssignmentWithContext(aws.Context, *quicksight.DeleteIAMPolicyAssignmentInput, ...request.Option) (*quicksight.DeleteIAMPolicyAssignmentOutput, error)
 	DeleteIAMPolicyAssignmentRequest(*quicksight.DeleteIAMPolicyAssignmentInput) (*request.Request, *quicksight.DeleteIAMPolicyAssignmentOutput)
 
+	DeleteIdentityPropagationConfig(*quicksight.DeleteIdentityPropagationConfigInput) (*quicksight.DeleteIdentityPropagationConfigOutput, error)
+	DeleteIdentityPropagationConfigWithContext(aws.Context, *quicksight.DeleteIdentityPropagationConfigInput, ...request.Option) (*quicksight.DeleteIdentityPropagationConfigOutput, error)
+	DeleteIdentityPropagationConfigRequest(*quicksight.DeleteIdentityPropagationConfigInput) (*request.Request, *quicksight.DeleteIdentityPropagationConfigOutput)
+
 	DeleteNamespace(*quicksight.DeleteNamespaceInput) (*quicksight.DeleteNamespaceOutput, error)
 	DeleteNamespaceWithContext(aws.Context, *quicksight.DeleteNamespaceInput, ...request.Option) (*quicksight.DeleteNamespaceOutput, error)
 	DeleteNamespaceRequest(*quicksight.DeleteNamespaceInput) (*request.Request, *quicksight.DeleteNamespaceOutput)
@@ -203,6 +211,14 @@ type QuickSightAPI interface {
 	DeleteRefreshSchedule(*quicksight.DeleteRefreshScheduleInput) (*quicksight.DeleteRefreshScheduleOutput, error)
 	DeleteRefreshScheduleWithContext(aws.Context, *quicksight.DeleteRefreshScheduleInput, ...request.Option) (*quicksight.DeleteRefreshScheduleOutput, error)
 	DeleteRefreshScheduleRequest(*quicksight.DeleteRefreshScheduleInput) (*request.Request, *quicksight.DeleteRefreshScheduleOutput)
+
+	DeleteRoleCustomPermission(*quicksight.DeleteRoleCustomPermissionInput) (*quicksight.DeleteRoleCustomPermissionOutput, error)
+	DeleteRoleCustomPermissionWithContext(aws.Context, *quicksight.DeleteRoleCustomPermissionInput, ...request.Option) (*quicksight.DeleteRoleCustomPermissionOutput, error)
+	DeleteRoleCustomPermissionRequest(*quicksight.DeleteRoleCustomPermissionInput) (*request.Request, *quicksight.DeleteRoleCustomPermissionOutput)
+
+	DeleteRoleMembership(*quicksight.DeleteRoleMembershipInput) (*quicksight.DeleteRoleMembershipOutput, error)
+	DeleteRoleMembershipWithContext(aws.Context, *quicksight.DeleteRoleMembershipInput, ...request.Option) (*quicksight.DeleteRoleMembershipOutput, error)
+	DeleteRoleMembershipRequest(*quicksight.DeleteRoleMembershipInput) (*request.Request, *quicksight.DeleteRoleMembershipOutput)
 
 	DeleteTemplate(*quicksight.DeleteTemplateInput) (*quicksight.DeleteTemplateOutput, error)
 	DeleteTemplateWithContext(aws.Context, *quicksight.DeleteTemplateInput, ...request.Option) (*quicksight.DeleteTemplateOutput, error)
@@ -264,6 +280,14 @@ type QuickSightAPI interface {
 	DescribeAnalysisPermissionsWithContext(aws.Context, *quicksight.DescribeAnalysisPermissionsInput, ...request.Option) (*quicksight.DescribeAnalysisPermissionsOutput, error)
 	DescribeAnalysisPermissionsRequest(*quicksight.DescribeAnalysisPermissionsInput) (*request.Request, *quicksight.DescribeAnalysisPermissionsOutput)
 
+	DescribeAssetBundleExportJob(*quicksight.DescribeAssetBundleExportJobInput) (*quicksight.DescribeAssetBundleExportJobOutput, error)
+	DescribeAssetBundleExportJobWithContext(aws.Context, *quicksight.DescribeAssetBundleExportJobInput, ...request.Option) (*quicksight.DescribeAssetBundleExportJobOutput, error)
+	DescribeAssetBundleExportJobRequest(*quicksight.DescribeAssetBundleExportJobInput) (*request.Request, *quicksight.DescribeAssetBundleExportJobOutput)
+
+	DescribeAssetBundleImportJob(*quicksight.DescribeAssetBundleImportJobInput) (*quicksight.DescribeAssetBundleImportJobOutput, error)
+	DescribeAssetBundleImportJobWithContext(aws.Context, *quicksight.DescribeAssetBundleImportJobInput, ...request.Option) (*quicksight.DescribeAssetBundleImportJobOutput, error)
+	DescribeAssetBundleImportJobRequest(*quicksight.DescribeAssetBundleImportJobInput) (*request.Request, *quicksight.DescribeAssetBundleImportJobOutput)
+
 	DescribeDashboard(*quicksight.DescribeDashboardInput) (*quicksight.DescribeDashboardOutput, error)
 	DescribeDashboardWithContext(aws.Context, *quicksight.DescribeDashboardInput, ...request.Option) (*quicksight.DescribeDashboardOutput, error)
 	DescribeDashboardRequest(*quicksight.DescribeDashboardInput) (*request.Request, *quicksight.DescribeDashboardOutput)
@@ -275,6 +299,14 @@ type QuickSightAPI interface {
 	DescribeDashboardPermissions(*quicksight.DescribeDashboardPermissionsInput) (*quicksight.DescribeDashboardPermissionsOutput, error)
 	DescribeDashboardPermissionsWithContext(aws.Context, *quicksight.DescribeDashboardPermissionsInput, ...request.Option) (*quicksight.DescribeDashboardPermissionsOutput, error)
 	DescribeDashboardPermissionsRequest(*quicksight.DescribeDashboardPermissionsInput) (*request.Request, *quicksight.DescribeDashboardPermissionsOutput)
+
+	DescribeDashboardSnapshotJob(*quicksight.DescribeDashboardSnapshotJobInput) (*quicksight.DescribeDashboardSnapshotJobOutput, error)
+	DescribeDashboardSnapshotJobWithContext(aws.Context, *quicksight.DescribeDashboardSnapshotJobInput, ...request.Option) (*quicksight.DescribeDashboardSnapshotJobOutput, error)
+	DescribeDashboardSnapshotJobRequest(*quicksight.DescribeDashboardSnapshotJobInput) (*request.Request, *quicksight.DescribeDashboardSnapshotJobOutput)
+
+	DescribeDashboardSnapshotJobResult(*quicksight.DescribeDashboardSnapshotJobResultInput) (*quicksight.DescribeDashboardSnapshotJobResultOutput, error)
+	DescribeDashboardSnapshotJobResultWithContext(aws.Context, *quicksight.DescribeDashboardSnapshotJobResultInput, ...request.Option) (*quicksight.DescribeDashboardSnapshotJobResultOutput, error)
+	DescribeDashboardSnapshotJobResultRequest(*quicksight.DescribeDashboardSnapshotJobResultInput) (*request.Request, *quicksight.DescribeDashboardSnapshotJobResultOutput)
 
 	DescribeDataSet(*quicksight.DescribeDataSetInput) (*quicksight.DescribeDataSetOutput, error)
 	DescribeDataSetWithContext(aws.Context, *quicksight.DescribeDataSetInput, ...request.Option) (*quicksight.DescribeDataSetOutput, error)
@@ -304,9 +336,15 @@ type QuickSightAPI interface {
 	DescribeFolderPermissionsWithContext(aws.Context, *quicksight.DescribeFolderPermissionsInput, ...request.Option) (*quicksight.DescribeFolderPermissionsOutput, error)
 	DescribeFolderPermissionsRequest(*quicksight.DescribeFolderPermissionsInput) (*request.Request, *quicksight.DescribeFolderPermissionsOutput)
 
+	DescribeFolderPermissionsPages(*quicksight.DescribeFolderPermissionsInput, func(*quicksight.DescribeFolderPermissionsOutput, bool) bool) error
+	DescribeFolderPermissionsPagesWithContext(aws.Context, *quicksight.DescribeFolderPermissionsInput, func(*quicksight.DescribeFolderPermissionsOutput, bool) bool, ...request.Option) error
+
 	DescribeFolderResolvedPermissions(*quicksight.DescribeFolderResolvedPermissionsInput) (*quicksight.DescribeFolderResolvedPermissionsOutput, error)
 	DescribeFolderResolvedPermissionsWithContext(aws.Context, *quicksight.DescribeFolderResolvedPermissionsInput, ...request.Option) (*quicksight.DescribeFolderResolvedPermissionsOutput, error)
 	DescribeFolderResolvedPermissionsRequest(*quicksight.DescribeFolderResolvedPermissionsInput) (*request.Request, *quicksight.DescribeFolderResolvedPermissionsOutput)
+
+	DescribeFolderResolvedPermissionsPages(*quicksight.DescribeFolderResolvedPermissionsInput, func(*quicksight.DescribeFolderResolvedPermissionsOutput, bool) bool) error
+	DescribeFolderResolvedPermissionsPagesWithContext(aws.Context, *quicksight.DescribeFolderResolvedPermissionsInput, func(*quicksight.DescribeFolderResolvedPermissionsOutput, bool) bool, ...request.Option) error
 
 	DescribeGroup(*quicksight.DescribeGroupInput) (*quicksight.DescribeGroupOutput, error)
 	DescribeGroupWithContext(aws.Context, *quicksight.DescribeGroupInput, ...request.Option) (*quicksight.DescribeGroupOutput, error)
@@ -335,6 +373,10 @@ type QuickSightAPI interface {
 	DescribeRefreshSchedule(*quicksight.DescribeRefreshScheduleInput) (*quicksight.DescribeRefreshScheduleOutput, error)
 	DescribeRefreshScheduleWithContext(aws.Context, *quicksight.DescribeRefreshScheduleInput, ...request.Option) (*quicksight.DescribeRefreshScheduleOutput, error)
 	DescribeRefreshScheduleRequest(*quicksight.DescribeRefreshScheduleInput) (*request.Request, *quicksight.DescribeRefreshScheduleOutput)
+
+	DescribeRoleCustomPermission(*quicksight.DescribeRoleCustomPermissionInput) (*quicksight.DescribeRoleCustomPermissionOutput, error)
+	DescribeRoleCustomPermissionWithContext(aws.Context, *quicksight.DescribeRoleCustomPermissionInput, ...request.Option) (*quicksight.DescribeRoleCustomPermissionOutput, error)
+	DescribeRoleCustomPermissionRequest(*quicksight.DescribeRoleCustomPermissionInput) (*request.Request, *quicksight.DescribeRoleCustomPermissionOutput)
 
 	DescribeTemplate(*quicksight.DescribeTemplateInput) (*quicksight.DescribeTemplateOutput, error)
 	DescribeTemplateWithContext(aws.Context, *quicksight.DescribeTemplateInput, ...request.Option) (*quicksight.DescribeTemplateOutput, error)
@@ -411,6 +453,20 @@ type QuickSightAPI interface {
 	ListAnalysesPages(*quicksight.ListAnalysesInput, func(*quicksight.ListAnalysesOutput, bool) bool) error
 	ListAnalysesPagesWithContext(aws.Context, *quicksight.ListAnalysesInput, func(*quicksight.ListAnalysesOutput, bool) bool, ...request.Option) error
 
+	ListAssetBundleExportJobs(*quicksight.ListAssetBundleExportJobsInput) (*quicksight.ListAssetBundleExportJobsOutput, error)
+	ListAssetBundleExportJobsWithContext(aws.Context, *quicksight.ListAssetBundleExportJobsInput, ...request.Option) (*quicksight.ListAssetBundleExportJobsOutput, error)
+	ListAssetBundleExportJobsRequest(*quicksight.ListAssetBundleExportJobsInput) (*request.Request, *quicksight.ListAssetBundleExportJobsOutput)
+
+	ListAssetBundleExportJobsPages(*quicksight.ListAssetBundleExportJobsInput, func(*quicksight.ListAssetBundleExportJobsOutput, bool) bool) error
+	ListAssetBundleExportJobsPagesWithContext(aws.Context, *quicksight.ListAssetBundleExportJobsInput, func(*quicksight.ListAssetBundleExportJobsOutput, bool) bool, ...request.Option) error
+
+	ListAssetBundleImportJobs(*quicksight.ListAssetBundleImportJobsInput) (*quicksight.ListAssetBundleImportJobsOutput, error)
+	ListAssetBundleImportJobsWithContext(aws.Context, *quicksight.ListAssetBundleImportJobsInput, ...request.Option) (*quicksight.ListAssetBundleImportJobsOutput, error)
+	ListAssetBundleImportJobsRequest(*quicksight.ListAssetBundleImportJobsInput) (*request.Request, *quicksight.ListAssetBundleImportJobsOutput)
+
+	ListAssetBundleImportJobsPages(*quicksight.ListAssetBundleImportJobsInput, func(*quicksight.ListAssetBundleImportJobsOutput, bool) bool) error
+	ListAssetBundleImportJobsPagesWithContext(aws.Context, *quicksight.ListAssetBundleImportJobsInput, func(*quicksight.ListAssetBundleImportJobsOutput, bool) bool, ...request.Option) error
+
 	ListDashboardVersions(*quicksight.ListDashboardVersionsInput) (*quicksight.ListDashboardVersionsOutput, error)
 	ListDashboardVersionsWithContext(aws.Context, *quicksight.ListDashboardVersionsInput, ...request.Option) (*quicksight.ListDashboardVersionsOutput, error)
 	ListDashboardVersionsRequest(*quicksight.ListDashboardVersionsInput) (*request.Request, *quicksight.ListDashboardVersionsOutput)
@@ -443,25 +499,47 @@ type QuickSightAPI interface {
 	ListFolderMembersWithContext(aws.Context, *quicksight.ListFolderMembersInput, ...request.Option) (*quicksight.ListFolderMembersOutput, error)
 	ListFolderMembersRequest(*quicksight.ListFolderMembersInput) (*request.Request, *quicksight.ListFolderMembersOutput)
 
+	ListFolderMembersPages(*quicksight.ListFolderMembersInput, func(*quicksight.ListFolderMembersOutput, bool) bool) error
+	ListFolderMembersPagesWithContext(aws.Context, *quicksight.ListFolderMembersInput, func(*quicksight.ListFolderMembersOutput, bool) bool, ...request.Option) error
+
 	ListFolders(*quicksight.ListFoldersInput) (*quicksight.ListFoldersOutput, error)
 	ListFoldersWithContext(aws.Context, *quicksight.ListFoldersInput, ...request.Option) (*quicksight.ListFoldersOutput, error)
 	ListFoldersRequest(*quicksight.ListFoldersInput) (*request.Request, *quicksight.ListFoldersOutput)
+
+	ListFoldersPages(*quicksight.ListFoldersInput, func(*quicksight.ListFoldersOutput, bool) bool) error
+	ListFoldersPagesWithContext(aws.Context, *quicksight.ListFoldersInput, func(*quicksight.ListFoldersOutput, bool) bool, ...request.Option) error
 
 	ListGroupMemberships(*quicksight.ListGroupMembershipsInput) (*quicksight.ListGroupMembershipsOutput, error)
 	ListGroupMembershipsWithContext(aws.Context, *quicksight.ListGroupMembershipsInput, ...request.Option) (*quicksight.ListGroupMembershipsOutput, error)
 	ListGroupMembershipsRequest(*quicksight.ListGroupMembershipsInput) (*request.Request, *quicksight.ListGroupMembershipsOutput)
 
+	ListGroupMembershipsPages(*quicksight.ListGroupMembershipsInput, func(*quicksight.ListGroupMembershipsOutput, bool) bool) error
+	ListGroupMembershipsPagesWithContext(aws.Context, *quicksight.ListGroupMembershipsInput, func(*quicksight.ListGroupMembershipsOutput, bool) bool, ...request.Option) error
+
 	ListGroups(*quicksight.ListGroupsInput) (*quicksight.ListGroupsOutput, error)
 	ListGroupsWithContext(aws.Context, *quicksight.ListGroupsInput, ...request.Option) (*quicksight.ListGroupsOutput, error)
 	ListGroupsRequest(*quicksight.ListGroupsInput) (*request.Request, *quicksight.ListGroupsOutput)
+
+	ListGroupsPages(*quicksight.ListGroupsInput, func(*quicksight.ListGroupsOutput, bool) bool) error
+	ListGroupsPagesWithContext(aws.Context, *quicksight.ListGroupsInput, func(*quicksight.ListGroupsOutput, bool) bool, ...request.Option) error
 
 	ListIAMPolicyAssignments(*quicksight.ListIAMPolicyAssignmentsInput) (*quicksight.ListIAMPolicyAssignmentsOutput, error)
 	ListIAMPolicyAssignmentsWithContext(aws.Context, *quicksight.ListIAMPolicyAssignmentsInput, ...request.Option) (*quicksight.ListIAMPolicyAssignmentsOutput, error)
 	ListIAMPolicyAssignmentsRequest(*quicksight.ListIAMPolicyAssignmentsInput) (*request.Request, *quicksight.ListIAMPolicyAssignmentsOutput)
 
+	ListIAMPolicyAssignmentsPages(*quicksight.ListIAMPolicyAssignmentsInput, func(*quicksight.ListIAMPolicyAssignmentsOutput, bool) bool) error
+	ListIAMPolicyAssignmentsPagesWithContext(aws.Context, *quicksight.ListIAMPolicyAssignmentsInput, func(*quicksight.ListIAMPolicyAssignmentsOutput, bool) bool, ...request.Option) error
+
 	ListIAMPolicyAssignmentsForUser(*quicksight.ListIAMPolicyAssignmentsForUserInput) (*quicksight.ListIAMPolicyAssignmentsForUserOutput, error)
 	ListIAMPolicyAssignmentsForUserWithContext(aws.Context, *quicksight.ListIAMPolicyAssignmentsForUserInput, ...request.Option) (*quicksight.ListIAMPolicyAssignmentsForUserOutput, error)
 	ListIAMPolicyAssignmentsForUserRequest(*quicksight.ListIAMPolicyAssignmentsForUserInput) (*request.Request, *quicksight.ListIAMPolicyAssignmentsForUserOutput)
+
+	ListIAMPolicyAssignmentsForUserPages(*quicksight.ListIAMPolicyAssignmentsForUserInput, func(*quicksight.ListIAMPolicyAssignmentsForUserOutput, bool) bool) error
+	ListIAMPolicyAssignmentsForUserPagesWithContext(aws.Context, *quicksight.ListIAMPolicyAssignmentsForUserInput, func(*quicksight.ListIAMPolicyAssignmentsForUserOutput, bool) bool, ...request.Option) error
+
+	ListIdentityPropagationConfigs(*quicksight.ListIdentityPropagationConfigsInput) (*quicksight.ListIdentityPropagationConfigsOutput, error)
+	ListIdentityPropagationConfigsWithContext(aws.Context, *quicksight.ListIdentityPropagationConfigsInput, ...request.Option) (*quicksight.ListIdentityPropagationConfigsOutput, error)
+	ListIdentityPropagationConfigsRequest(*quicksight.ListIdentityPropagationConfigsInput) (*request.Request, *quicksight.ListIdentityPropagationConfigsOutput)
 
 	ListIngestions(*quicksight.ListIngestionsInput) (*quicksight.ListIngestionsOutput, error)
 	ListIngestionsWithContext(aws.Context, *quicksight.ListIngestionsInput, ...request.Option) (*quicksight.ListIngestionsOutput, error)
@@ -480,6 +558,13 @@ type QuickSightAPI interface {
 	ListRefreshSchedules(*quicksight.ListRefreshSchedulesInput) (*quicksight.ListRefreshSchedulesOutput, error)
 	ListRefreshSchedulesWithContext(aws.Context, *quicksight.ListRefreshSchedulesInput, ...request.Option) (*quicksight.ListRefreshSchedulesOutput, error)
 	ListRefreshSchedulesRequest(*quicksight.ListRefreshSchedulesInput) (*request.Request, *quicksight.ListRefreshSchedulesOutput)
+
+	ListRoleMemberships(*quicksight.ListRoleMembershipsInput) (*quicksight.ListRoleMembershipsOutput, error)
+	ListRoleMembershipsWithContext(aws.Context, *quicksight.ListRoleMembershipsInput, ...request.Option) (*quicksight.ListRoleMembershipsOutput, error)
+	ListRoleMembershipsRequest(*quicksight.ListRoleMembershipsInput) (*request.Request, *quicksight.ListRoleMembershipsOutput)
+
+	ListRoleMembershipsPages(*quicksight.ListRoleMembershipsInput, func(*quicksight.ListRoleMembershipsOutput, bool) bool) error
+	ListRoleMembershipsPagesWithContext(aws.Context, *quicksight.ListRoleMembershipsInput, func(*quicksight.ListRoleMembershipsOutput, bool) bool, ...request.Option) error
 
 	ListTagsForResource(*quicksight.ListTagsForResourceInput) (*quicksight.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *quicksight.ListTagsForResourceInput, ...request.Option) (*quicksight.ListTagsForResourceOutput, error)
@@ -539,9 +624,15 @@ type QuickSightAPI interface {
 	ListUserGroupsWithContext(aws.Context, *quicksight.ListUserGroupsInput, ...request.Option) (*quicksight.ListUserGroupsOutput, error)
 	ListUserGroupsRequest(*quicksight.ListUserGroupsInput) (*request.Request, *quicksight.ListUserGroupsOutput)
 
+	ListUserGroupsPages(*quicksight.ListUserGroupsInput, func(*quicksight.ListUserGroupsOutput, bool) bool) error
+	ListUserGroupsPagesWithContext(aws.Context, *quicksight.ListUserGroupsInput, func(*quicksight.ListUserGroupsOutput, bool) bool, ...request.Option) error
+
 	ListUsers(*quicksight.ListUsersInput) (*quicksight.ListUsersOutput, error)
 	ListUsersWithContext(aws.Context, *quicksight.ListUsersInput, ...request.Option) (*quicksight.ListUsersOutput, error)
 	ListUsersRequest(*quicksight.ListUsersInput) (*request.Request, *quicksight.ListUsersOutput)
+
+	ListUsersPages(*quicksight.ListUsersInput, func(*quicksight.ListUsersOutput, bool) bool) error
+	ListUsersPagesWithContext(aws.Context, *quicksight.ListUsersInput, func(*quicksight.ListUsersOutput, bool) bool, ...request.Option) error
 
 	ListVPCConnections(*quicksight.ListVPCConnectionsInput) (*quicksight.ListVPCConnectionsOutput, error)
 	ListVPCConnectionsWithContext(aws.Context, *quicksight.ListVPCConnectionsInput, ...request.Option) (*quicksight.ListVPCConnectionsOutput, error)
@@ -594,9 +685,27 @@ type QuickSightAPI interface {
 	SearchFoldersWithContext(aws.Context, *quicksight.SearchFoldersInput, ...request.Option) (*quicksight.SearchFoldersOutput, error)
 	SearchFoldersRequest(*quicksight.SearchFoldersInput) (*request.Request, *quicksight.SearchFoldersOutput)
 
+	SearchFoldersPages(*quicksight.SearchFoldersInput, func(*quicksight.SearchFoldersOutput, bool) bool) error
+	SearchFoldersPagesWithContext(aws.Context, *quicksight.SearchFoldersInput, func(*quicksight.SearchFoldersOutput, bool) bool, ...request.Option) error
+
 	SearchGroups(*quicksight.SearchGroupsInput) (*quicksight.SearchGroupsOutput, error)
 	SearchGroupsWithContext(aws.Context, *quicksight.SearchGroupsInput, ...request.Option) (*quicksight.SearchGroupsOutput, error)
 	SearchGroupsRequest(*quicksight.SearchGroupsInput) (*request.Request, *quicksight.SearchGroupsOutput)
+
+	SearchGroupsPages(*quicksight.SearchGroupsInput, func(*quicksight.SearchGroupsOutput, bool) bool) error
+	SearchGroupsPagesWithContext(aws.Context, *quicksight.SearchGroupsInput, func(*quicksight.SearchGroupsOutput, bool) bool, ...request.Option) error
+
+	StartAssetBundleExportJob(*quicksight.StartAssetBundleExportJobInput) (*quicksight.StartAssetBundleExportJobOutput, error)
+	StartAssetBundleExportJobWithContext(aws.Context, *quicksight.StartAssetBundleExportJobInput, ...request.Option) (*quicksight.StartAssetBundleExportJobOutput, error)
+	StartAssetBundleExportJobRequest(*quicksight.StartAssetBundleExportJobInput) (*request.Request, *quicksight.StartAssetBundleExportJobOutput)
+
+	StartAssetBundleImportJob(*quicksight.StartAssetBundleImportJobInput) (*quicksight.StartAssetBundleImportJobOutput, error)
+	StartAssetBundleImportJobWithContext(aws.Context, *quicksight.StartAssetBundleImportJobInput, ...request.Option) (*quicksight.StartAssetBundleImportJobOutput, error)
+	StartAssetBundleImportJobRequest(*quicksight.StartAssetBundleImportJobInput) (*request.Request, *quicksight.StartAssetBundleImportJobOutput)
+
+	StartDashboardSnapshotJob(*quicksight.StartDashboardSnapshotJobInput) (*quicksight.StartDashboardSnapshotJobOutput, error)
+	StartDashboardSnapshotJobWithContext(aws.Context, *quicksight.StartDashboardSnapshotJobInput, ...request.Option) (*quicksight.StartDashboardSnapshotJobOutput, error)
+	StartDashboardSnapshotJobRequest(*quicksight.StartDashboardSnapshotJobInput) (*request.Request, *quicksight.StartDashboardSnapshotJobOutput)
 
 	TagResource(*quicksight.TagResourceInput) (*quicksight.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *quicksight.TagResourceInput, ...request.Option) (*quicksight.TagResourceOutput, error)
@@ -625,6 +734,10 @@ type QuickSightAPI interface {
 	UpdateDashboard(*quicksight.UpdateDashboardInput) (*quicksight.UpdateDashboardOutput, error)
 	UpdateDashboardWithContext(aws.Context, *quicksight.UpdateDashboardInput, ...request.Option) (*quicksight.UpdateDashboardOutput, error)
 	UpdateDashboardRequest(*quicksight.UpdateDashboardInput) (*request.Request, *quicksight.UpdateDashboardOutput)
+
+	UpdateDashboardLinks(*quicksight.UpdateDashboardLinksInput) (*quicksight.UpdateDashboardLinksOutput, error)
+	UpdateDashboardLinksWithContext(aws.Context, *quicksight.UpdateDashboardLinksInput, ...request.Option) (*quicksight.UpdateDashboardLinksOutput, error)
+	UpdateDashboardLinksRequest(*quicksight.UpdateDashboardLinksInput) (*request.Request, *quicksight.UpdateDashboardLinksOutput)
 
 	UpdateDashboardPermissions(*quicksight.UpdateDashboardPermissionsInput) (*quicksight.UpdateDashboardPermissionsOutput, error)
 	UpdateDashboardPermissionsWithContext(aws.Context, *quicksight.UpdateDashboardPermissionsInput, ...request.Option) (*quicksight.UpdateDashboardPermissionsOutput, error)
@@ -666,6 +779,10 @@ type QuickSightAPI interface {
 	UpdateIAMPolicyAssignmentWithContext(aws.Context, *quicksight.UpdateIAMPolicyAssignmentInput, ...request.Option) (*quicksight.UpdateIAMPolicyAssignmentOutput, error)
 	UpdateIAMPolicyAssignmentRequest(*quicksight.UpdateIAMPolicyAssignmentInput) (*request.Request, *quicksight.UpdateIAMPolicyAssignmentOutput)
 
+	UpdateIdentityPropagationConfig(*quicksight.UpdateIdentityPropagationConfigInput) (*quicksight.UpdateIdentityPropagationConfigOutput, error)
+	UpdateIdentityPropagationConfigWithContext(aws.Context, *quicksight.UpdateIdentityPropagationConfigInput, ...request.Option) (*quicksight.UpdateIdentityPropagationConfigOutput, error)
+	UpdateIdentityPropagationConfigRequest(*quicksight.UpdateIdentityPropagationConfigInput) (*request.Request, *quicksight.UpdateIdentityPropagationConfigOutput)
+
 	UpdateIpRestriction(*quicksight.UpdateIpRestrictionInput) (*quicksight.UpdateIpRestrictionOutput, error)
 	UpdateIpRestrictionWithContext(aws.Context, *quicksight.UpdateIpRestrictionInput, ...request.Option) (*quicksight.UpdateIpRestrictionOutput, error)
 	UpdateIpRestrictionRequest(*quicksight.UpdateIpRestrictionInput) (*request.Request, *quicksight.UpdateIpRestrictionOutput)
@@ -677,6 +794,10 @@ type QuickSightAPI interface {
 	UpdateRefreshSchedule(*quicksight.UpdateRefreshScheduleInput) (*quicksight.UpdateRefreshScheduleOutput, error)
 	UpdateRefreshScheduleWithContext(aws.Context, *quicksight.UpdateRefreshScheduleInput, ...request.Option) (*quicksight.UpdateRefreshScheduleOutput, error)
 	UpdateRefreshScheduleRequest(*quicksight.UpdateRefreshScheduleInput) (*request.Request, *quicksight.UpdateRefreshScheduleOutput)
+
+	UpdateRoleCustomPermission(*quicksight.UpdateRoleCustomPermissionInput) (*quicksight.UpdateRoleCustomPermissionOutput, error)
+	UpdateRoleCustomPermissionWithContext(aws.Context, *quicksight.UpdateRoleCustomPermissionInput, ...request.Option) (*quicksight.UpdateRoleCustomPermissionOutput, error)
+	UpdateRoleCustomPermissionRequest(*quicksight.UpdateRoleCustomPermissionInput) (*request.Request, *quicksight.UpdateRoleCustomPermissionOutput)
 
 	UpdateTemplate(*quicksight.UpdateTemplateInput) (*quicksight.UpdateTemplateOutput, error)
 	UpdateTemplateWithContext(aws.Context, *quicksight.UpdateTemplateInput, ...request.Option) (*quicksight.UpdateTemplateOutput, error)

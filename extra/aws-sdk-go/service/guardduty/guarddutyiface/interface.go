@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon GuardDuty.
-//    func myFunc(svc guarddutyiface.GuardDutyAPI) bool {
-//        // Make svc.AcceptAdministratorInvitation request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon GuardDuty.
+//	func myFunc(svc guarddutyiface.GuardDutyAPI) bool {
+//	    // Make svc.AcceptAdministratorInvitation request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := guardduty.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := guardduty.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockGuardDutyClient struct {
-//        guarddutyiface.GuardDutyAPI
-//    }
-//    func (m *mockGuardDutyClient) AcceptAdministratorInvitation(input *guardduty.AcceptAdministratorInvitationInput) (*guardduty.AcceptAdministratorInvitationOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockGuardDutyClient struct {
+//	    guarddutyiface.GuardDutyAPI
+//	}
+//	func (m *mockGuardDutyClient) AcceptAdministratorInvitation(input *guardduty.AcceptAdministratorInvitationInput) (*guardduty.AcceptAdministratorInvitationOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockGuardDutyClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockGuardDutyClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -217,6 +217,10 @@ type GuardDutyAPI interface {
 	GetMembers(*guardduty.GetMembersInput) (*guardduty.GetMembersOutput, error)
 	GetMembersWithContext(aws.Context, *guardduty.GetMembersInput, ...request.Option) (*guardduty.GetMembersOutput, error)
 	GetMembersRequest(*guardduty.GetMembersInput) (*request.Request, *guardduty.GetMembersOutput)
+
+	GetOrganizationStatistics(*guardduty.GetOrganizationStatisticsInput) (*guardduty.GetOrganizationStatisticsOutput, error)
+	GetOrganizationStatisticsWithContext(aws.Context, *guardduty.GetOrganizationStatisticsInput, ...request.Option) (*guardduty.GetOrganizationStatisticsOutput, error)
+	GetOrganizationStatisticsRequest(*guardduty.GetOrganizationStatisticsInput) (*request.Request, *guardduty.GetOrganizationStatisticsOutput)
 
 	GetRemainingFreeTrialDays(*guardduty.GetRemainingFreeTrialDaysInput) (*guardduty.GetRemainingFreeTrialDaysOutput, error)
 	GetRemainingFreeTrialDaysWithContext(aws.Context, *guardduty.GetRemainingFreeTrialDaysInput, ...request.Option) (*guardduty.GetRemainingFreeTrialDaysOutput, error)

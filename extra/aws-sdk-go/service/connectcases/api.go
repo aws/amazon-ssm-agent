@@ -29,14 +29,13 @@ const opBatchGetField = "BatchGetField"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetFieldRequest method.
+//	req, resp := client.BatchGetFieldRequest(params)
 //
-//    // Example sending a request using the BatchGetFieldRequest method.
-//    req, resp := client.BatchGetFieldRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/BatchGetField
 func (c *ConnectCases) BatchGetFieldRequest(input *BatchGetFieldInput) (req *request.Request, output *BatchGetFieldOutput) {
@@ -67,23 +66,24 @@ func (c *ConnectCases) BatchGetFieldRequest(input *BatchGetFieldInput) (req *req
 // API operation BatchGetField for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/BatchGetField
 func (c *ConnectCases) BatchGetField(input *BatchGetFieldInput) (*BatchGetFieldOutput, error) {
@@ -123,14 +123,13 @@ const opBatchPutFieldOptions = "BatchPutFieldOptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchPutFieldOptionsRequest method.
+//	req, resp := client.BatchPutFieldOptionsRequest(params)
 //
-//    // Example sending a request using the BatchPutFieldOptionsRequest method.
-//    req, resp := client.BatchPutFieldOptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/BatchPutFieldOptions
 func (c *ConnectCases) BatchPutFieldOptionsRequest(input *BatchPutFieldOptionsInput) (req *request.Request, output *BatchPutFieldOptionsOutput) {
@@ -162,28 +161,29 @@ func (c *ConnectCases) BatchPutFieldOptionsRequest(input *BatchPutFieldOptionsIn
 // API operation BatchPutFieldOptions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
 //
-//   * ServiceQuotaExceededException
-//   The service quota has been exceeded. For a list of service quotas, see Amazon
-//   Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
-//   in the Amazon Connect Administrator Guide.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - ServiceQuotaExceededException
+//     The service quota has been exceeded. For a list of service quotas, see Amazon
+//     Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
+//     in the Amazon Connect Administrator Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/BatchPutFieldOptions
 func (c *ConnectCases) BatchPutFieldOptions(input *BatchPutFieldOptionsInput) (*BatchPutFieldOptionsOutput, error) {
@@ -223,14 +223,13 @@ const opCreateCase = "CreateCase"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateCaseRequest method.
+//	req, resp := client.CreateCaseRequest(params)
 //
-//    // Example sending a request using the CreateCaseRequest method.
-//    req, resp := client.CreateCaseRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateCase
 func (c *ConnectCases) CreateCaseRequest(input *CreateCaseInput) (req *request.Request, output *CreateCaseOutput) {
@@ -251,15 +250,17 @@ func (c *ConnectCases) CreateCaseRequest(input *CreateCaseInput) (req *request.R
 
 // CreateCase API operation for Amazon Connect Cases.
 //
-// Creates a case in the specified Cases domain. Case system and custom fields
-// are taken as an array id/value pairs with a declared data types.
+// If you provide a value for PerformedBy.UserArn you must also have connect:DescribeUser
+// (https://docs.aws.amazon.com/connect/latest/APIReference/API_DescribeUser.html)
+// permission on the User ARN resource that you provide
 //
-// The following fields are required when creating a case:
-//
-//    <ul> <li> <p> <code>customer_id</code> - You must provide the full customer
-//    profile ARN in this format: <code>arn:aws:profile:your AWS Region:your
-//    AWS account ID:domains/profiles domain name/profiles/profile ID</code>
-//    </p> </li> <li> <p> <code>title</code> </p> </li> </ul> </note>
+//	<p>Creates a case in the specified Cases domain. Case system and custom
+//	fields are taken as an array id/value pairs with a declared data types.</p>
+//	<p>The following fields are required when creating a case:</p> <ul> <li>
+//	<p> <code>customer_id</code> - You must provide the full customer profile
+//	ARN in this format: <code>arn:aws:profile:your_AWS_Region:your_AWS_account
+//	ID:domains/your_profiles_domain_name/profiles/profile_ID</code> </p> </li>
+//	<li> <p> <code>title</code> </p> </li> </ul>
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -269,28 +270,29 @@ func (c *ConnectCases) CreateCaseRequest(input *CreateCaseInput) (req *request.R
 // API operation CreateCase for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
 //
-//   * ConflictException
-//   The requested operation would cause a conflict with the current state of
-//   a service resource associated with the request. Resolve the conflict before
-//   retrying this request. See the accompanying error message for details.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - ConflictException
+//     The requested operation would cause a conflict with the current state of
+//     a service resource associated with the request. Resolve the conflict before
+//     retrying this request. See the accompanying error message for details.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateCase
 func (c *ConnectCases) CreateCase(input *CreateCaseInput) (*CreateCaseOutput, error) {
@@ -330,14 +332,13 @@ const opCreateDomain = "CreateDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDomainRequest method.
+//	req, resp := client.CreateDomainRequest(params)
 //
-//    // Example sending a request using the CreateDomainRequest method.
-//    req, resp := client.CreateDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateDomain
 func (c *ConnectCases) CreateDomainRequest(input *CreateDomainInput) (req *request.Request, output *CreateDomainOutput) {
@@ -367,6 +368,8 @@ func (c *ConnectCases) CreateDomainRequest(input *CreateDomainInput) (req *reque
 // API. You need specific IAM permissions to successfully associate the Cases
 // domain. For more information, see Onboard to Cases (https://docs.aws.amazon.com/connect/latest/adminguide/required-permissions-iam-cases.html#onboard-cases-iam).
 //
+//	</important>
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -375,28 +378,29 @@ func (c *ConnectCases) CreateDomainRequest(input *CreateDomainInput) (req *reque
 // API operation CreateDomain for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
 //
-//   * ConflictException
-//   The requested operation would cause a conflict with the current state of
-//   a service resource associated with the request. Resolve the conflict before
-//   retrying this request. See the accompanying error message for details.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   The service quota has been exceeded. For a list of service quotas, see Amazon
-//   Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
-//   in the Amazon Connect Administrator Guide.
+//   - ConflictException
+//     The requested operation would cause a conflict with the current state of
+//     a service resource associated with the request. Resolve the conflict before
+//     retrying this request. See the accompanying error message for details.
+//
+//   - ServiceQuotaExceededException
+//     The service quota has been exceeded. For a list of service quotas, see Amazon
+//     Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
+//     in the Amazon Connect Administrator Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateDomain
 func (c *ConnectCases) CreateDomain(input *CreateDomainInput) (*CreateDomainOutput, error) {
@@ -436,14 +440,13 @@ const opCreateField = "CreateField"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFieldRequest method.
+//	req, resp := client.CreateFieldRequest(params)
 //
-//    // Example sending a request using the CreateFieldRequest method.
-//    req, resp := client.CreateFieldRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateField
 func (c *ConnectCases) CreateFieldRequest(input *CreateFieldInput) (req *request.Request, output *CreateFieldOutput) {
@@ -476,33 +479,34 @@ func (c *ConnectCases) CreateFieldRequest(input *CreateFieldInput) (req *request
 // API operation CreateField for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
 //
-//   * ConflictException
-//   The requested operation would cause a conflict with the current state of
-//   a service resource associated with the request. Resolve the conflict before
-//   retrying this request. See the accompanying error message for details.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   The service quota has been exceeded. For a list of service quotas, see Amazon
-//   Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
-//   in the Amazon Connect Administrator Guide.
+//   - ConflictException
+//     The requested operation would cause a conflict with the current state of
+//     a service resource associated with the request. Resolve the conflict before
+//     retrying this request. See the accompanying error message for details.
+//
+//   - ServiceQuotaExceededException
+//     The service quota has been exceeded. For a list of service quotas, see Amazon
+//     Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
+//     in the Amazon Connect Administrator Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateField
 func (c *ConnectCases) CreateField(input *CreateFieldInput) (*CreateFieldOutput, error) {
@@ -542,14 +546,13 @@ const opCreateLayout = "CreateLayout"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateLayoutRequest method.
+//	req, resp := client.CreateLayoutRequest(params)
 //
-//    // Example sending a request using the CreateLayoutRequest method.
-//    req, resp := client.CreateLayoutRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateLayout
 func (c *ConnectCases) CreateLayoutRequest(input *CreateLayoutInput) (req *request.Request, output *CreateLayoutOutput) {
@@ -573,9 +576,9 @@ func (c *ConnectCases) CreateLayoutRequest(input *CreateLayoutInput) (req *reque
 // Creates a layout in the Cases domain. Layouts define the following configuration
 // in the top section and More Info tab of the Cases user interface:
 //
-//    * Fields to display to the users
+//   - Fields to display to the users
 //
-//    * Field ordering
+//   - Field ordering
 //
 // Title and Status fields cannot be part of layouts since they are not configurable.
 //
@@ -587,33 +590,34 @@ func (c *ConnectCases) CreateLayoutRequest(input *CreateLayoutInput) (req *reque
 // API operation CreateLayout for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
 //
-//   * ConflictException
-//   The requested operation would cause a conflict with the current state of
-//   a service resource associated with the request. Resolve the conflict before
-//   retrying this request. See the accompanying error message for details.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   The service quota has been exceeded. For a list of service quotas, see Amazon
-//   Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
-//   in the Amazon Connect Administrator Guide.
+//   - ConflictException
+//     The requested operation would cause a conflict with the current state of
+//     a service resource associated with the request. Resolve the conflict before
+//     retrying this request. See the accompanying error message for details.
+//
+//   - ServiceQuotaExceededException
+//     The service quota has been exceeded. For a list of service quotas, see Amazon
+//     Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
+//     in the Amazon Connect Administrator Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateLayout
 func (c *ConnectCases) CreateLayout(input *CreateLayoutInput) (*CreateLayoutOutput, error) {
@@ -653,14 +657,13 @@ const opCreateRelatedItem = "CreateRelatedItem"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRelatedItemRequest method.
+//	req, resp := client.CreateRelatedItemRequest(params)
 //
-//    // Example sending a request using the CreateRelatedItemRequest method.
-//    req, resp := client.CreateRelatedItemRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateRelatedItem
 func (c *ConnectCases) CreateRelatedItemRequest(input *CreateRelatedItemInput) (req *request.Request, output *CreateRelatedItemOutput) {
@@ -684,10 +687,17 @@ func (c *ConnectCases) CreateRelatedItemRequest(input *CreateRelatedItemInput) (
 // Creates a related item (comments, tasks, and contacts) and associates it
 // with a case.
 //
-// A Related Item is a resource that is associated with a case. It may or may
-// not have an external identifier linking it to an external resource (for example,
-// a contactArn). All Related Items have their own internal identifier, the
-// relatedItemArn. Examples of related items include comments and contacts.
+//   - A Related Item is a resource that is associated with a case. It may
+//     or may not have an external identifier linking it to an external resource
+//     (for example, a contactArn). All Related Items have their own internal
+//     identifier, the relatedItemArn. Examples of related items include comments
+//     and contacts.
+//
+//   - If you provide a value for performedBy.userArn you must also have DescribeUser
+//     (https://docs.aws.amazon.com/connect/latest/APIReference/API_DescribeUser.html)
+//     permission on the ARN of the user that you provide.
+//
+//     </note>
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -697,28 +707,29 @@ func (c *ConnectCases) CreateRelatedItemRequest(input *CreateRelatedItemInput) (
 // API operation CreateRelatedItem for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
 //
-//   * ServiceQuotaExceededException
-//   The service quota has been exceeded. For a list of service quotas, see Amazon
-//   Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
-//   in the Amazon Connect Administrator Guide.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - ServiceQuotaExceededException
+//     The service quota has been exceeded. For a list of service quotas, see Amazon
+//     Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
+//     in the Amazon Connect Administrator Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateRelatedItem
 func (c *ConnectCases) CreateRelatedItem(input *CreateRelatedItemInput) (*CreateRelatedItemOutput, error) {
@@ -758,14 +769,13 @@ const opCreateTemplate = "CreateTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateTemplateRequest method.
+//	req, resp := client.CreateTemplateRequest(params)
 //
-//    // Example sending a request using the CreateTemplateRequest method.
-//    req, resp := client.CreateTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateTemplate
 func (c *ConnectCases) CreateTemplateRequest(input *CreateTemplateInput) (req *request.Request, output *CreateTemplateOutput) {
@@ -802,33 +812,34 @@ func (c *ConnectCases) CreateTemplateRequest(input *CreateTemplateInput) (req *r
 // API operation CreateTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
 //
-//   * ConflictException
-//   The requested operation would cause a conflict with the current state of
-//   a service resource associated with the request. Resolve the conflict before
-//   retrying this request. See the accompanying error message for details.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   The service quota has been exceeded. For a list of service quotas, see Amazon
-//   Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
-//   in the Amazon Connect Administrator Guide.
+//   - ConflictException
+//     The requested operation would cause a conflict with the current state of
+//     a service resource associated with the request. Resolve the conflict before
+//     retrying this request. See the accompanying error message for details.
+//
+//   - ServiceQuotaExceededException
+//     The service quota has been exceeded. For a list of service quotas, see Amazon
+//     Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
+//     in the Amazon Connect Administrator Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/CreateTemplate
 func (c *ConnectCases) CreateTemplate(input *CreateTemplateInput) (*CreateTemplateOutput, error) {
@@ -868,14 +879,13 @@ const opDeleteDomain = "DeleteDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDomainRequest method.
+//	req, resp := client.DeleteDomainRequest(params)
 //
-//    // Example sending a request using the DeleteDomainRequest method.
-//    req, resp := client.DeleteDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/DeleteDomain
 func (c *ConnectCases) DeleteDomainRequest(input *DeleteDomainInput) (req *request.Request, output *DeleteDomainOutput) {
@@ -897,7 +907,13 @@ func (c *ConnectCases) DeleteDomainRequest(input *DeleteDomainInput) (req *reque
 
 // DeleteDomain API operation for Amazon Connect Cases.
 //
-// Deletes a domain.
+// Deletes a Cases domain.
+//
+//	<note> <p>After deleting your domain you must disassociate the deleted
+//	domain from your Amazon Connect instance with another API call before
+//	being able to use Cases again with this Amazon Connect instance. See <a
+//	href="https://docs.aws.amazon.com/connect/latest/APIReference/API_DeleteIntegrationAssociation.html">DeleteIntegrationAssociation</a>.</p>
+//	</note>
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -907,28 +923,29 @@ func (c *ConnectCases) DeleteDomainRequest(input *DeleteDomainInput) (req *reque
 // API operation DeleteDomain for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
 //
-//   * ConflictException
-//   The requested operation would cause a conflict with the current state of
-//   a service resource associated with the request. Resolve the conflict before
-//   retrying this request. See the accompanying error message for details.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - ConflictException
+//     The requested operation would cause a conflict with the current state of
+//     a service resource associated with the request. Resolve the conflict before
+//     retrying this request. See the accompanying error message for details.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/DeleteDomain
 func (c *ConnectCases) DeleteDomain(input *DeleteDomainInput) (*DeleteDomainOutput, error) {
@@ -968,14 +985,13 @@ const opGetCase = "GetCase"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetCaseRequest method.
+//	req, resp := client.GetCaseRequest(params)
 //
-//    // Example sending a request using the GetCaseRequest method.
-//    req, resp := client.GetCaseRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetCase
 func (c *ConnectCases) GetCaseRequest(input *GetCaseInput) (req *request.Request, output *GetCaseOutput) {
@@ -1012,23 +1028,24 @@ func (c *ConnectCases) GetCaseRequest(input *GetCaseInput) (req *request.Request
 // API operation GetCase for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetCase
 func (c *ConnectCases) GetCase(input *GetCaseInput) (*GetCaseOutput, error) {
@@ -1060,15 +1077,14 @@ func (c *ConnectCases) GetCaseWithContext(ctx aws.Context, input *GetCaseInput, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetCase operation.
-//    pageNum := 0
-//    err := client.GetCasePages(params,
-//        func(page *connectcases.GetCaseOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetCase operation.
+//	pageNum := 0
+//	err := client.GetCasePages(params,
+//	    func(page *connectcases.GetCaseOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ConnectCases) GetCasePages(input *GetCaseInput, fn func(*GetCaseOutput, bool) bool) error {
 	return c.GetCasePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1104,6 +1120,157 @@ func (c *ConnectCases) GetCasePagesWithContext(ctx aws.Context, input *GetCaseIn
 	return p.Err()
 }
 
+const opGetCaseAuditEvents = "GetCaseAuditEvents"
+
+// GetCaseAuditEventsRequest generates a "aws/request.Request" representing the
+// client's request for the GetCaseAuditEvents operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCaseAuditEvents for more information on using the GetCaseAuditEvents
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetCaseAuditEventsRequest method.
+//	req, resp := client.GetCaseAuditEventsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetCaseAuditEvents
+func (c *ConnectCases) GetCaseAuditEventsRequest(input *GetCaseAuditEventsInput) (req *request.Request, output *GetCaseAuditEventsOutput) {
+	op := &request.Operation{
+		Name:       opGetCaseAuditEvents,
+		HTTPMethod: "POST",
+		HTTPPath:   "/domains/{domainId}/cases/{caseId}/audit-history",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetCaseAuditEventsInput{}
+	}
+
+	output = &GetCaseAuditEventsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCaseAuditEvents API operation for Amazon Connect Cases.
+//
+// Returns the audit history about a specific case if it exists.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Cases's
+// API operation GetCaseAuditEvents for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
+//
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
+//
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
+//
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetCaseAuditEvents
+func (c *ConnectCases) GetCaseAuditEvents(input *GetCaseAuditEventsInput) (*GetCaseAuditEventsOutput, error) {
+	req, out := c.GetCaseAuditEventsRequest(input)
+	return out, req.Send()
+}
+
+// GetCaseAuditEventsWithContext is the same as GetCaseAuditEvents with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCaseAuditEvents for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConnectCases) GetCaseAuditEventsWithContext(ctx aws.Context, input *GetCaseAuditEventsInput, opts ...request.Option) (*GetCaseAuditEventsOutput, error) {
+	req, out := c.GetCaseAuditEventsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetCaseAuditEventsPages iterates over the pages of a GetCaseAuditEvents operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetCaseAuditEvents method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a GetCaseAuditEvents operation.
+//	pageNum := 0
+//	err := client.GetCaseAuditEventsPages(params,
+//	    func(page *connectcases.GetCaseAuditEventsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *ConnectCases) GetCaseAuditEventsPages(input *GetCaseAuditEventsInput, fn func(*GetCaseAuditEventsOutput, bool) bool) error {
+	return c.GetCaseAuditEventsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetCaseAuditEventsPagesWithContext same as GetCaseAuditEventsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConnectCases) GetCaseAuditEventsPagesWithContext(ctx aws.Context, input *GetCaseAuditEventsInput, fn func(*GetCaseAuditEventsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetCaseAuditEventsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetCaseAuditEventsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetCaseAuditEventsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opGetCaseEventConfiguration = "GetCaseEventConfiguration"
 
 // GetCaseEventConfigurationRequest generates a "aws/request.Request" representing the
@@ -1120,14 +1287,13 @@ const opGetCaseEventConfiguration = "GetCaseEventConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetCaseEventConfigurationRequest method.
+//	req, resp := client.GetCaseEventConfigurationRequest(params)
 //
-//    // Example sending a request using the GetCaseEventConfigurationRequest method.
-//    req, resp := client.GetCaseEventConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetCaseEventConfiguration
 func (c *ConnectCases) GetCaseEventConfigurationRequest(input *GetCaseEventConfigurationInput) (req *request.Request, output *GetCaseEventConfigurationOutput) {
@@ -1158,23 +1324,24 @@ func (c *ConnectCases) GetCaseEventConfigurationRequest(input *GetCaseEventConfi
 // API operation GetCaseEventConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetCaseEventConfiguration
 func (c *ConnectCases) GetCaseEventConfiguration(input *GetCaseEventConfigurationInput) (*GetCaseEventConfigurationOutput, error) {
@@ -1214,14 +1381,13 @@ const opGetDomain = "GetDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDomainRequest method.
+//	req, resp := client.GetDomainRequest(params)
 //
-//    // Example sending a request using the GetDomainRequest method.
-//    req, resp := client.GetDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetDomain
 func (c *ConnectCases) GetDomainRequest(input *GetDomainInput) (req *request.Request, output *GetDomainOutput) {
@@ -1252,23 +1418,24 @@ func (c *ConnectCases) GetDomainRequest(input *GetDomainInput) (req *request.Req
 // API operation GetDomain for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetDomain
 func (c *ConnectCases) GetDomain(input *GetDomainInput) (*GetDomainOutput, error) {
@@ -1308,14 +1475,13 @@ const opGetLayout = "GetLayout"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLayoutRequest method.
+//	req, resp := client.GetLayoutRequest(params)
 //
-//    // Example sending a request using the GetLayoutRequest method.
-//    req, resp := client.GetLayoutRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetLayout
 func (c *ConnectCases) GetLayoutRequest(input *GetLayoutInput) (req *request.Request, output *GetLayoutOutput) {
@@ -1346,23 +1512,24 @@ func (c *ConnectCases) GetLayoutRequest(input *GetLayoutInput) (req *request.Req
 // API operation GetLayout for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetLayout
 func (c *ConnectCases) GetLayout(input *GetLayoutInput) (*GetLayoutOutput, error) {
@@ -1402,14 +1569,13 @@ const opGetTemplate = "GetTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTemplateRequest method.
+//	req, resp := client.GetTemplateRequest(params)
 //
-//    // Example sending a request using the GetTemplateRequest method.
-//    req, resp := client.GetTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetTemplate
 func (c *ConnectCases) GetTemplateRequest(input *GetTemplateInput) (req *request.Request, output *GetTemplateOutput) {
@@ -1440,23 +1606,24 @@ func (c *ConnectCases) GetTemplateRequest(input *GetTemplateInput) (req *request
 // API operation GetTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/GetTemplate
 func (c *ConnectCases) GetTemplate(input *GetTemplateInput) (*GetTemplateOutput, error) {
@@ -1496,14 +1663,13 @@ const opListCasesForContact = "ListCasesForContact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCasesForContactRequest method.
+//	req, resp := client.ListCasesForContactRequest(params)
 //
-//    // Example sending a request using the ListCasesForContactRequest method.
-//    req, resp := client.ListCasesForContactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListCasesForContact
 func (c *ConnectCases) ListCasesForContactRequest(input *ListCasesForContactInput) (req *request.Request, output *ListCasesForContactOutput) {
@@ -1540,23 +1706,24 @@ func (c *ConnectCases) ListCasesForContactRequest(input *ListCasesForContactInpu
 // API operation ListCasesForContact for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListCasesForContact
 func (c *ConnectCases) ListCasesForContact(input *ListCasesForContactInput) (*ListCasesForContactOutput, error) {
@@ -1588,15 +1755,14 @@ func (c *ConnectCases) ListCasesForContactWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCasesForContact operation.
-//    pageNum := 0
-//    err := client.ListCasesForContactPages(params,
-//        func(page *connectcases.ListCasesForContactOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCasesForContact operation.
+//	pageNum := 0
+//	err := client.ListCasesForContactPages(params,
+//	    func(page *connectcases.ListCasesForContactOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ConnectCases) ListCasesForContactPages(input *ListCasesForContactInput, fn func(*ListCasesForContactOutput, bool) bool) error {
 	return c.ListCasesForContactPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1648,14 +1814,13 @@ const opListDomains = "ListDomains"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDomainsRequest method.
+//	req, resp := client.ListDomainsRequest(params)
 //
-//    // Example sending a request using the ListDomainsRequest method.
-//    req, resp := client.ListDomainsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListDomains
 func (c *ConnectCases) ListDomainsRequest(input *ListDomainsInput) (req *request.Request, output *ListDomainsOutput) {
@@ -1693,18 +1858,19 @@ func (c *ConnectCases) ListDomainsRequest(input *ListDomainsInput) (req *request
 // API operation ListDomains for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListDomains
 func (c *ConnectCases) ListDomains(input *ListDomainsInput) (*ListDomainsOutput, error) {
@@ -1736,15 +1902,14 @@ func (c *ConnectCases) ListDomainsWithContext(ctx aws.Context, input *ListDomain
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDomains operation.
-//    pageNum := 0
-//    err := client.ListDomainsPages(params,
-//        func(page *connectcases.ListDomainsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDomains operation.
+//	pageNum := 0
+//	err := client.ListDomainsPages(params,
+//	    func(page *connectcases.ListDomainsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ConnectCases) ListDomainsPages(input *ListDomainsInput, fn func(*ListDomainsOutput, bool) bool) error {
 	return c.ListDomainsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1796,14 +1961,13 @@ const opListFieldOptions = "ListFieldOptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFieldOptionsRequest method.
+//	req, resp := client.ListFieldOptionsRequest(params)
 //
-//    // Example sending a request using the ListFieldOptionsRequest method.
-//    req, resp := client.ListFieldOptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListFieldOptions
 func (c *ConnectCases) ListFieldOptionsRequest(input *ListFieldOptionsInput) (req *request.Request, output *ListFieldOptionsOutput) {
@@ -1840,23 +2004,24 @@ func (c *ConnectCases) ListFieldOptionsRequest(input *ListFieldOptionsInput) (re
 // API operation ListFieldOptions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListFieldOptions
 func (c *ConnectCases) ListFieldOptions(input *ListFieldOptionsInput) (*ListFieldOptionsOutput, error) {
@@ -1888,15 +2053,14 @@ func (c *ConnectCases) ListFieldOptionsWithContext(ctx aws.Context, input *ListF
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFieldOptions operation.
-//    pageNum := 0
-//    err := client.ListFieldOptionsPages(params,
-//        func(page *connectcases.ListFieldOptionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFieldOptions operation.
+//	pageNum := 0
+//	err := client.ListFieldOptionsPages(params,
+//	    func(page *connectcases.ListFieldOptionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ConnectCases) ListFieldOptionsPages(input *ListFieldOptionsInput, fn func(*ListFieldOptionsOutput, bool) bool) error {
 	return c.ListFieldOptionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1948,14 +2112,13 @@ const opListFields = "ListFields"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFieldsRequest method.
+//	req, resp := client.ListFieldsRequest(params)
 //
-//    // Example sending a request using the ListFieldsRequest method.
-//    req, resp := client.ListFieldsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListFields
 func (c *ConnectCases) ListFieldsRequest(input *ListFieldsInput) (req *request.Request, output *ListFieldsOutput) {
@@ -1992,23 +2155,24 @@ func (c *ConnectCases) ListFieldsRequest(input *ListFieldsInput) (req *request.R
 // API operation ListFields for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListFields
 func (c *ConnectCases) ListFields(input *ListFieldsInput) (*ListFieldsOutput, error) {
@@ -2040,15 +2204,14 @@ func (c *ConnectCases) ListFieldsWithContext(ctx aws.Context, input *ListFieldsI
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFields operation.
-//    pageNum := 0
-//    err := client.ListFieldsPages(params,
-//        func(page *connectcases.ListFieldsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFields operation.
+//	pageNum := 0
+//	err := client.ListFieldsPages(params,
+//	    func(page *connectcases.ListFieldsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ConnectCases) ListFieldsPages(input *ListFieldsInput, fn func(*ListFieldsOutput, bool) bool) error {
 	return c.ListFieldsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2100,14 +2263,13 @@ const opListLayouts = "ListLayouts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLayoutsRequest method.
+//	req, resp := client.ListLayoutsRequest(params)
 //
-//    // Example sending a request using the ListLayoutsRequest method.
-//    req, resp := client.ListLayoutsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListLayouts
 func (c *ConnectCases) ListLayoutsRequest(input *ListLayoutsInput) (req *request.Request, output *ListLayoutsOutput) {
@@ -2145,23 +2307,24 @@ func (c *ConnectCases) ListLayoutsRequest(input *ListLayoutsInput) (req *request
 // API operation ListLayouts for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListLayouts
 func (c *ConnectCases) ListLayouts(input *ListLayoutsInput) (*ListLayoutsOutput, error) {
@@ -2193,15 +2356,14 @@ func (c *ConnectCases) ListLayoutsWithContext(ctx aws.Context, input *ListLayout
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLayouts operation.
-//    pageNum := 0
-//    err := client.ListLayoutsPages(params,
-//        func(page *connectcases.ListLayoutsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLayouts operation.
+//	pageNum := 0
+//	err := client.ListLayoutsPages(params,
+//	    func(page *connectcases.ListLayoutsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ConnectCases) ListLayoutsPages(input *ListLayoutsInput, fn func(*ListLayoutsOutput, bool) bool) error {
 	return c.ListLayoutsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2253,14 +2415,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListTagsForResource
 func (c *ConnectCases) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2291,23 +2452,24 @@ func (c *ConnectCases) ListTagsForResourceRequest(input *ListTagsForResourceInpu
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListTagsForResource
 func (c *ConnectCases) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2347,14 +2509,13 @@ const opListTemplates = "ListTemplates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTemplatesRequest method.
+//	req, resp := client.ListTemplatesRequest(params)
 //
-//    // Example sending a request using the ListTemplatesRequest method.
-//    req, resp := client.ListTemplatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListTemplates
 func (c *ConnectCases) ListTemplatesRequest(input *ListTemplatesInput) (req *request.Request, output *ListTemplatesOutput) {
@@ -2392,23 +2553,24 @@ func (c *ConnectCases) ListTemplatesRequest(input *ListTemplatesInput) (req *req
 // API operation ListTemplates for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/ListTemplates
 func (c *ConnectCases) ListTemplates(input *ListTemplatesInput) (*ListTemplatesOutput, error) {
@@ -2440,15 +2602,14 @@ func (c *ConnectCases) ListTemplatesWithContext(ctx aws.Context, input *ListTemp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTemplates operation.
-//    pageNum := 0
-//    err := client.ListTemplatesPages(params,
-//        func(page *connectcases.ListTemplatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTemplates operation.
+//	pageNum := 0
+//	err := client.ListTemplatesPages(params,
+//	    func(page *connectcases.ListTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ConnectCases) ListTemplatesPages(input *ListTemplatesInput, fn func(*ListTemplatesOutput, bool) bool) error {
 	return c.ListTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2500,14 +2661,13 @@ const opPutCaseEventConfiguration = "PutCaseEventConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutCaseEventConfigurationRequest method.
+//	req, resp := client.PutCaseEventConfigurationRequest(params)
 //
-//    // Example sending a request using the PutCaseEventConfigurationRequest method.
-//    req, resp := client.PutCaseEventConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/PutCaseEventConfiguration
 func (c *ConnectCases) PutCaseEventConfigurationRequest(input *PutCaseEventConfigurationInput) (req *request.Request, output *PutCaseEventConfigurationOutput) {
@@ -2529,7 +2689,9 @@ func (c *ConnectCases) PutCaseEventConfigurationRequest(input *PutCaseEventConfi
 
 // PutCaseEventConfiguration API operation for Amazon Connect Cases.
 //
-// API for adding case event publishing configuration
+// Adds case event publishing configuration. For a complete list of fields you
+// can add to the event message, see Create case fields (https://docs.aws.amazon.com/connect/latest/adminguide/case-fields.html)
+// in the Amazon Connect Administrator Guide
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2539,23 +2701,24 @@ func (c *ConnectCases) PutCaseEventConfigurationRequest(input *PutCaseEventConfi
 // API operation PutCaseEventConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/PutCaseEventConfiguration
 func (c *ConnectCases) PutCaseEventConfiguration(input *PutCaseEventConfigurationInput) (*PutCaseEventConfigurationOutput, error) {
@@ -2595,14 +2758,13 @@ const opSearchCases = "SearchCases"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchCasesRequest method.
+//	req, resp := client.SearchCasesRequest(params)
 //
-//    // Example sending a request using the SearchCasesRequest method.
-//    req, resp := client.SearchCasesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/SearchCases
 func (c *ConnectCases) SearchCasesRequest(input *SearchCasesInput) (req *request.Request, output *SearchCasesOutput) {
@@ -2644,23 +2806,24 @@ func (c *ConnectCases) SearchCasesRequest(input *SearchCasesInput) (req *request
 // API operation SearchCases for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/SearchCases
 func (c *ConnectCases) SearchCases(input *SearchCasesInput) (*SearchCasesOutput, error) {
@@ -2692,15 +2855,14 @@ func (c *ConnectCases) SearchCasesWithContext(ctx aws.Context, input *SearchCase
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchCases operation.
-//    pageNum := 0
-//    err := client.SearchCasesPages(params,
-//        func(page *connectcases.SearchCasesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchCases operation.
+//	pageNum := 0
+//	err := client.SearchCasesPages(params,
+//	    func(page *connectcases.SearchCasesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ConnectCases) SearchCasesPages(input *SearchCasesInput, fn func(*SearchCasesOutput, bool) bool) error {
 	return c.SearchCasesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2752,14 +2914,13 @@ const opSearchRelatedItems = "SearchRelatedItems"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchRelatedItemsRequest method.
+//	req, resp := client.SearchRelatedItemsRequest(params)
 //
-//    // Example sending a request using the SearchRelatedItemsRequest method.
-//    req, resp := client.SearchRelatedItemsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/SearchRelatedItems
 func (c *ConnectCases) SearchRelatedItemsRequest(input *SearchRelatedItemsInput) (req *request.Request, output *SearchRelatedItemsOutput) {
@@ -2799,23 +2960,24 @@ func (c *ConnectCases) SearchRelatedItemsRequest(input *SearchRelatedItemsInput)
 // API operation SearchRelatedItems for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/SearchRelatedItems
 func (c *ConnectCases) SearchRelatedItems(input *SearchRelatedItemsInput) (*SearchRelatedItemsOutput, error) {
@@ -2847,15 +3009,14 @@ func (c *ConnectCases) SearchRelatedItemsWithContext(ctx aws.Context, input *Sea
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchRelatedItems operation.
-//    pageNum := 0
-//    err := client.SearchRelatedItemsPages(params,
-//        func(page *connectcases.SearchRelatedItemsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchRelatedItems operation.
+//	pageNum := 0
+//	err := client.SearchRelatedItemsPages(params,
+//	    func(page *connectcases.SearchRelatedItemsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ConnectCases) SearchRelatedItemsPages(input *SearchRelatedItemsInput, fn func(*SearchRelatedItemsOutput, bool) bool) error {
 	return c.SearchRelatedItemsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2907,14 +3068,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/TagResource
 func (c *ConnectCases) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2946,23 +3106,24 @@ func (c *ConnectCases) TagResourceRequest(input *TagResourceInput) (req *request
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/TagResource
 func (c *ConnectCases) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -3002,14 +3163,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/UntagResource
 func (c *ConnectCases) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -3041,23 +3201,24 @@ func (c *ConnectCases) UntagResourceRequest(input *UntagResourceInput) (req *req
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/UntagResource
 func (c *ConnectCases) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -3097,14 +3258,13 @@ const opUpdateCase = "UpdateCase"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateCaseRequest method.
+//	req, resp := client.UpdateCaseRequest(params)
 //
-//    // Example sending a request using the UpdateCaseRequest method.
-//    req, resp := client.UpdateCaseRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/UpdateCase
 func (c *ConnectCases) UpdateCaseRequest(input *UpdateCaseInput) (req *request.Request, output *UpdateCaseOutput) {
@@ -3126,11 +3286,14 @@ func (c *ConnectCases) UpdateCaseRequest(input *UpdateCaseInput) (req *request.R
 
 // UpdateCase API operation for Amazon Connect Cases.
 //
-// Updates the values of fields on a case. Fields to be updated are received
-// as an array of id/value pairs identical to the CreateCase input .
+// If you provide a value for PerformedBy.UserArn you must also have connect:DescribeUser
+// (https://docs.aws.amazon.com/connect/latest/APIReference/API_DescribeUser.html)
+// permission on the User ARN resource that you provide
 //
-// If the action is successful, the service sends back an HTTP 200 response
-// with an empty HTTP body.
+//	<p>Updates the values of fields on a case. Fields to be updated are received
+//	as an array of id/value pairs identical to the <code>CreateCase</code>
+//	input .</p> <p>If the action is successful, the service sends back an
+//	HTTP 200 response with an empty HTTP body.</p>
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3140,23 +3303,24 @@ func (c *ConnectCases) UpdateCaseRequest(input *UpdateCaseInput) (req *request.R
 // API operation UpdateCase for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/UpdateCase
 func (c *ConnectCases) UpdateCase(input *UpdateCaseInput) (*UpdateCaseOutput, error) {
@@ -3196,14 +3360,13 @@ const opUpdateField = "UpdateField"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFieldRequest method.
+//	req, resp := client.UpdateFieldRequest(params)
 //
-//    // Example sending a request using the UpdateFieldRequest method.
-//    req, resp := client.UpdateFieldRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/UpdateField
 func (c *ConnectCases) UpdateFieldRequest(input *UpdateFieldInput) (req *request.Request, output *UpdateFieldOutput) {
@@ -3235,28 +3398,29 @@ func (c *ConnectCases) UpdateFieldRequest(input *UpdateFieldInput) (req *request
 // API operation UpdateField for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
 //
-//   * ConflictException
-//   The requested operation would cause a conflict with the current state of
-//   a service resource associated with the request. Resolve the conflict before
-//   retrying this request. See the accompanying error message for details.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - ConflictException
+//     The requested operation would cause a conflict with the current state of
+//     a service resource associated with the request. Resolve the conflict before
+//     retrying this request. See the accompanying error message for details.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/UpdateField
 func (c *ConnectCases) UpdateField(input *UpdateFieldInput) (*UpdateFieldOutput, error) {
@@ -3296,14 +3460,13 @@ const opUpdateLayout = "UpdateLayout"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateLayoutRequest method.
+//	req, resp := client.UpdateLayoutRequest(params)
 //
-//    // Example sending a request using the UpdateLayoutRequest method.
-//    req, resp := client.UpdateLayoutRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/UpdateLayout
 func (c *ConnectCases) UpdateLayoutRequest(input *UpdateLayoutInput) (req *request.Request, output *UpdateLayoutOutput) {
@@ -3343,33 +3506,34 @@ func (c *ConnectCases) UpdateLayoutRequest(input *UpdateLayoutInput) (req *reque
 // API operation UpdateLayout for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
 //
-//   * ConflictException
-//   The requested operation would cause a conflict with the current state of
-//   a service resource associated with the request. Resolve the conflict before
-//   retrying this request. See the accompanying error message for details.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ServiceQuotaExceededException
-//   The service quota has been exceeded. For a list of service quotas, see Amazon
-//   Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
-//   in the Amazon Connect Administrator Guide.
+//   - ConflictException
+//     The requested operation would cause a conflict with the current state of
+//     a service resource associated with the request. Resolve the conflict before
+//     retrying this request. See the accompanying error message for details.
+//
+//   - ServiceQuotaExceededException
+//     The service quota has been exceeded. For a list of service quotas, see Amazon
+//     Connect Service Quotas (https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html)
+//     in the Amazon Connect Administrator Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/UpdateLayout
 func (c *ConnectCases) UpdateLayout(input *UpdateLayoutInput) (*UpdateLayoutOutput, error) {
@@ -3409,14 +3573,13 @@ const opUpdateTemplate = "UpdateTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateTemplateRequest method.
+//	req, resp := client.UpdateTemplateRequest(params)
 //
-//    // Example sending a request using the UpdateTemplateRequest method.
-//    req, resp := client.UpdateTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/UpdateTemplate
 func (c *ConnectCases) UpdateTemplateRequest(input *UpdateTemplateInput) (req *request.Request, output *UpdateTemplateOutput) {
@@ -3452,28 +3615,29 @@ func (c *ConnectCases) UpdateTemplateRequest(input *UpdateTemplateInput) (req *r
 // API operation UpdateTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We couldn't process your request because of an issue with the server. Try
-//   again later.
 //
-//   * ResourceNotFoundException
-//   We couldn't find the requested resource. Check that your resources exists
-//   and were created in the same Amazon Web Services Region as your request,
-//   and try your request again.
+//   - InternalServerException
+//     We couldn't process your request because of an issue with the server. Try
+//     again later.
 //
-//   * ValidationException
-//   The request isn't valid. Check the syntax and try again.
+//   - ResourceNotFoundException
+//     We couldn't find the requested resource. Check that your resources exists
+//     and were created in the same Amazon Web Services Region as your request,
+//     and try your request again.
 //
-//   * ThrottlingException
-//   The rate has been exceeded for this API. Please try again after a few minutes.
+//   - ValidationException
+//     The request isn't valid. Check the syntax and try again.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ThrottlingException
+//     The rate has been exceeded for this API. Please try again after a few minutes.
 //
-//   * ConflictException
-//   The requested operation would cause a conflict with the current state of
-//   a service resource associated with the request. Resolve the conflict before
-//   retrying this request. See the accompanying error message for details.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - ConflictException
+//     The requested operation would cause a conflict with the current state of
+//     a service resource associated with the request. Resolve the conflict before
+//     retrying this request. See the accompanying error message for details.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectcases-2022-10-03/UpdateTemplate
 func (c *ConnectCases) UpdateTemplate(input *UpdateTemplateInput) (*UpdateTemplateOutput, error) {
@@ -3559,6 +3723,264 @@ func (s *AccessDeniedException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Represents the content of a particular audit event.
+type AuditEvent struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier of a case audit history event.
+	//
+	// EventId is a required field
+	EventId *string `locationName:"eventId" min:"1" type:"string" required:"true"`
+
+	// A list of Case Audit History event fields.
+	//
+	// Fields is a required field
+	Fields []*AuditEventField `locationName:"fields" type:"list" required:"true"`
+
+	// Information of the user which performed the audit.
+	PerformedBy *AuditEventPerformedBy `locationName:"performedBy" type:"structure"`
+
+	// Time at which an Audit History event took place.
+	//
+	// PerformedTime is a required field
+	PerformedTime *time.Time `locationName:"performedTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The Type of the related item.
+	RelatedItemType *string `locationName:"relatedItemType" type:"string" enum:"RelatedItemType"`
+
+	// The Type of an audit history event.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"AuditEventType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditEvent) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditEvent) GoString() string {
+	return s.String()
+}
+
+// SetEventId sets the EventId field's value.
+func (s *AuditEvent) SetEventId(v string) *AuditEvent {
+	s.EventId = &v
+	return s
+}
+
+// SetFields sets the Fields field's value.
+func (s *AuditEvent) SetFields(v []*AuditEventField) *AuditEvent {
+	s.Fields = v
+	return s
+}
+
+// SetPerformedBy sets the PerformedBy field's value.
+func (s *AuditEvent) SetPerformedBy(v *AuditEventPerformedBy) *AuditEvent {
+	s.PerformedBy = v
+	return s
+}
+
+// SetPerformedTime sets the PerformedTime field's value.
+func (s *AuditEvent) SetPerformedTime(v time.Time) *AuditEvent {
+	s.PerformedTime = &v
+	return s
+}
+
+// SetRelatedItemType sets the RelatedItemType field's value.
+func (s *AuditEvent) SetRelatedItemType(v string) *AuditEvent {
+	s.RelatedItemType = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AuditEvent) SetType(v string) *AuditEvent {
+	s.Type = &v
+	return s
+}
+
+// Fields for audit event.
+type AuditEventField struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier of field in an Audit History entry.
+	//
+	// EventFieldId is a required field
+	EventFieldId *string `locationName:"eventFieldId" min:"1" type:"string" required:"true"`
+
+	// Union of potential field value types.
+	//
+	// NewValue is a required field
+	NewValue *AuditEventFieldValueUnion `locationName:"newValue" type:"structure" required:"true"`
+
+	// Union of potential field value types.
+	OldValue *AuditEventFieldValueUnion `locationName:"oldValue" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditEventField) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditEventField) GoString() string {
+	return s.String()
+}
+
+// SetEventFieldId sets the EventFieldId field's value.
+func (s *AuditEventField) SetEventFieldId(v string) *AuditEventField {
+	s.EventFieldId = &v
+	return s
+}
+
+// SetNewValue sets the NewValue field's value.
+func (s *AuditEventField) SetNewValue(v *AuditEventFieldValueUnion) *AuditEventField {
+	s.NewValue = v
+	return s
+}
+
+// SetOldValue sets the OldValue field's value.
+func (s *AuditEventField) SetOldValue(v *AuditEventFieldValueUnion) *AuditEventField {
+	s.OldValue = v
+	return s
+}
+
+// Object to store union of Field values.
+//
+// This data type is a UNION, so only one of the following members can be specified
+// when used or returned.
+type AuditEventFieldValueUnion struct {
+	_ struct{} `type:"structure"`
+
+	// Can be either null, or have a Boolean value type. Only one value can be provided.
+	BooleanValue *bool `locationName:"booleanValue" type:"boolean"`
+
+	// Can be either null, or have a Double value type. Only one value can be provided.
+	DoubleValue *float64 `locationName:"doubleValue" type:"double"`
+
+	// An empty value. You cannot set EmptyFieldValue on a field that is required
+	// on a case template.
+	//
+	// This structure will never have any data members. It signifies an empty value
+	// on a case field.
+	EmptyValue *EmptyFieldValue `locationName:"emptyValue" type:"structure"`
+
+	// Can be either null, or have a String value type. Only one value can be provided.
+	StringValue *string `locationName:"stringValue" type:"string"`
+
+	// Can be either null, or have a String value type formatted as an ARN. Only
+	// one value can be provided.
+	UserArnValue *string `locationName:"userArnValue" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditEventFieldValueUnion) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditEventFieldValueUnion) GoString() string {
+	return s.String()
+}
+
+// SetBooleanValue sets the BooleanValue field's value.
+func (s *AuditEventFieldValueUnion) SetBooleanValue(v bool) *AuditEventFieldValueUnion {
+	s.BooleanValue = &v
+	return s
+}
+
+// SetDoubleValue sets the DoubleValue field's value.
+func (s *AuditEventFieldValueUnion) SetDoubleValue(v float64) *AuditEventFieldValueUnion {
+	s.DoubleValue = &v
+	return s
+}
+
+// SetEmptyValue sets the EmptyValue field's value.
+func (s *AuditEventFieldValueUnion) SetEmptyValue(v *EmptyFieldValue) *AuditEventFieldValueUnion {
+	s.EmptyValue = v
+	return s
+}
+
+// SetStringValue sets the StringValue field's value.
+func (s *AuditEventFieldValueUnion) SetStringValue(v string) *AuditEventFieldValueUnion {
+	s.StringValue = &v
+	return s
+}
+
+// SetUserArnValue sets the UserArnValue field's value.
+func (s *AuditEventFieldValueUnion) SetUserArnValue(v string) *AuditEventFieldValueUnion {
+	s.UserArnValue = &v
+	return s
+}
+
+// Information of the user which performed the audit.
+type AuditEventPerformedBy struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier of an IAM role.
+	//
+	// IamPrincipalArn is a required field
+	IamPrincipalArn *string `locationName:"iamPrincipalArn" min:"1" type:"string" required:"true"`
+
+	// Represents the identity of the person who performed the action.
+	User *UserUnion `locationName:"user" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditEventPerformedBy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AuditEventPerformedBy) GoString() string {
+	return s.String()
+}
+
+// SetIamPrincipalArn sets the IamPrincipalArn field's value.
+func (s *AuditEventPerformedBy) SetIamPrincipalArn(v string) *AuditEventPerformedBy {
+	s.IamPrincipalArn = &v
+	return s
+}
+
+// SetUser sets the User field's value.
+func (s *AuditEventPerformedBy) SetUser(v *UserUnion) *AuditEventPerformedBy {
+	s.User = v
+	return s
 }
 
 // Content specific to BasicLayout type. It configures fields in the top panel
@@ -3933,6 +4355,9 @@ type CaseFilter struct {
 
 	// A filter for cases. Only one value can be provided.
 	Not *CaseFilter `locationName:"not" type:"structure"`
+
+	// Provides "or all" filtering.
+	OrAll []*CaseFilter `locationName:"orAll" type:"list"`
 }
 
 // String returns the string representation.
@@ -3966,6 +4391,16 @@ func (s *CaseFilter) Validate() error {
 			invalidParams.AddNested("Not", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.OrAll != nil {
+		for i, v := range s.OrAll {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OrAll", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -3988,6 +4423,12 @@ func (s *CaseFilter) SetField(v *FieldFilter) *CaseFilter {
 // SetNot sets the Not field's value.
 func (s *CaseFilter) SetNot(v *CaseFilter) *CaseFilter {
 	s.Not = v
+	return s
+}
+
+// SetOrAll sets the OrAll field's value.
+func (s *CaseFilter) SetOrAll(v []*CaseFilter) *CaseFilter {
+	s.OrAll = v
 	return s
 }
 
@@ -4370,6 +4811,9 @@ type CreateCaseInput struct {
 	// Fields is a required field
 	Fields []*FieldValue `locationName:"fields" type:"list" required:"true"`
 
+	// Represents the identity of the person who performed the action.
+	PerformedBy *UserUnion `locationName:"performedBy" type:"structure"`
+
 	// A unique identifier of a template.
 	//
 	// TemplateId is a required field
@@ -4422,6 +4866,11 @@ func (s *CreateCaseInput) Validate() error {
 			}
 		}
 	}
+	if s.PerformedBy != nil {
+		if err := s.PerformedBy.Validate(); err != nil {
+			invalidParams.AddNested("PerformedBy", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4444,6 +4893,12 @@ func (s *CreateCaseInput) SetDomainId(v string) *CreateCaseInput {
 // SetFields sets the Fields field's value.
 func (s *CreateCaseInput) SetFields(v []*FieldValue) *CreateCaseInput {
 	s.Fields = v
+	return s
+}
+
+// SetPerformedBy sets the PerformedBy field's value.
+func (s *CreateCaseInput) SetPerformedBy(v *UserUnion) *CreateCaseInput {
+	s.PerformedBy = v
 	return s
 }
 
@@ -4884,6 +5339,9 @@ type CreateRelatedItemInput struct {
 	// DomainId is a required field
 	DomainId *string `location:"uri" locationName:"domainId" min:"1" type:"string" required:"true"`
 
+	// Represents the creator of the related item.
+	PerformedBy *UserUnion `locationName:"performedBy" type:"structure"`
+
 	// The type of a related item.
 	//
 	// Type is a required field
@@ -4934,6 +5392,11 @@ func (s *CreateRelatedItemInput) Validate() error {
 			invalidParams.AddNested("Content", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.PerformedBy != nil {
+		if err := s.PerformedBy.Validate(); err != nil {
+			invalidParams.AddNested("PerformedBy", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4956,6 +5419,12 @@ func (s *CreateRelatedItemInput) SetContent(v *RelatedItemInputContent) *CreateR
 // SetDomainId sets the DomainId field's value.
 func (s *CreateRelatedItemInput) SetDomainId(v string) *CreateRelatedItemInput {
 	s.DomainId = &v
+	return s
+}
+
+// SetPerformedBy sets the PerformedBy field's value.
+func (s *CreateRelatedItemInput) SetPerformedBy(v *UserUnion) *CreateRelatedItemInput {
+	s.PerformedBy = v
 	return s
 }
 
@@ -5296,6 +5765,33 @@ func (s *DomainSummary) SetDomainId(v string) *DomainSummary {
 func (s *DomainSummary) SetName(v string) *DomainSummary {
 	s.Name = &v
 	return s
+}
+
+// An empty value. You cannot set EmptyFieldValue on a field that is required
+// on a case template.
+//
+// This structure will never have any data members. It signifies an empty value
+// on a case field.
+type EmptyFieldValue struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EmptyFieldValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EmptyFieldValue) GoString() string {
+	return s.String()
 }
 
 // Configuration to enable EventBridge case event delivery and determine what
@@ -6041,6 +6537,9 @@ func (s *FieldValue) SetValue(v *FieldValueUnion) *FieldValue {
 }
 
 // Object to store union of Field values.
+//
+// The Summary system field accepts 1500 characters while all other fields accept
+// 500 characters.
 type FieldValueUnion struct {
 	_ struct{} `type:"structure"`
 
@@ -6051,8 +6550,14 @@ type FieldValueUnion struct {
 	// be provided.
 	DoubleValue *float64 `locationName:"doubleValue" type:"double"`
 
+	// An empty value.
+	EmptyValue *EmptyFieldValue `locationName:"emptyValue" type:"structure"`
+
 	// String value type.
 	StringValue *string `locationName:"stringValue" type:"string"`
+
+	// Represents the user that performed the audit.
+	UserArnValue *string `locationName:"userArnValue" type:"string"`
 }
 
 // String returns the string representation.
@@ -6085,9 +6590,153 @@ func (s *FieldValueUnion) SetDoubleValue(v float64) *FieldValueUnion {
 	return s
 }
 
+// SetEmptyValue sets the EmptyValue field's value.
+func (s *FieldValueUnion) SetEmptyValue(v *EmptyFieldValue) *FieldValueUnion {
+	s.EmptyValue = v
+	return s
+}
+
 // SetStringValue sets the StringValue field's value.
 func (s *FieldValueUnion) SetStringValue(v string) *FieldValueUnion {
 	s.StringValue = &v
+	return s
+}
+
+// SetUserArnValue sets the UserArnValue field's value.
+func (s *FieldValueUnion) SetUserArnValue(v string) *FieldValueUnion {
+	s.UserArnValue = &v
+	return s
+}
+
+type GetCaseAuditEventsInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier of the case.
+	//
+	// CaseId is a required field
+	CaseId *string `location:"uri" locationName:"caseId" min:"1" type:"string" required:"true"`
+
+	// The unique identifier of the Cases domain.
+	//
+	// DomainId is a required field
+	DomainId *string `location:"uri" locationName:"domainId" min:"1" type:"string" required:"true"`
+
+	// The maximum number of audit events to return. The current maximum supported
+	// value is 25. This is also the default when no other value is provided.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCaseAuditEventsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCaseAuditEventsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCaseAuditEventsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCaseAuditEventsInput"}
+	if s.CaseId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CaseId"))
+	}
+	if s.CaseId != nil && len(*s.CaseId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CaseId", 1))
+	}
+	if s.DomainId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainId"))
+	}
+	if s.DomainId != nil && len(*s.DomainId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCaseId sets the CaseId field's value.
+func (s *GetCaseAuditEventsInput) SetCaseId(v string) *GetCaseAuditEventsInput {
+	s.CaseId = &v
+	return s
+}
+
+// SetDomainId sets the DomainId field's value.
+func (s *GetCaseAuditEventsInput) SetDomainId(v string) *GetCaseAuditEventsInput {
+	s.DomainId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetCaseAuditEventsInput) SetMaxResults(v int64) *GetCaseAuditEventsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetCaseAuditEventsInput) SetNextToken(v string) *GetCaseAuditEventsInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetCaseAuditEventsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of case audits where each represents a particular edit of the case.
+	//
+	// AuditEvents is a required field
+	AuditEvents []*AuditEvent `locationName:"auditEvents" type:"list" required:"true"`
+
+	// The token for the next set of results. This is null if there are no more
+	// results to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCaseAuditEventsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCaseAuditEventsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAuditEvents sets the AuditEvents field's value.
+func (s *GetCaseAuditEventsOutput) SetAuditEvents(v []*AuditEvent) *GetCaseAuditEventsOutput {
+	s.AuditEvents = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetCaseAuditEventsOutput) SetNextToken(v string) *GetCaseAuditEventsOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -8790,6 +9439,9 @@ type SearchRelatedItemsResponseItem struct {
 	// Content is a required field
 	Content *RelatedItemContent `locationName:"content" type:"structure" required:"true"`
 
+	// Represents the creator of the related item.
+	PerformedBy *UserUnion `locationName:"performedBy" type:"structure"`
+
 	// Unique identifier of a related item.
 	//
 	// RelatedItemId is a required field
@@ -8832,6 +9484,12 @@ func (s *SearchRelatedItemsResponseItem) SetAssociationTime(v time.Time) *Search
 // SetContent sets the Content field's value.
 func (s *SearchRelatedItemsResponseItem) SetContent(v *RelatedItemContent) *SearchRelatedItemsResponseItem {
 	s.Content = v
+	return s
+}
+
+// SetPerformedBy sets the PerformedBy field's value.
+func (s *SearchRelatedItemsResponseItem) SetPerformedBy(v *UserUnion) *SearchRelatedItemsResponseItem {
+	s.PerformedBy = v
 	return s
 }
 
@@ -9350,6 +10008,9 @@ type UpdateCaseInput struct {
 	//
 	// Fields is a required field
 	Fields []*FieldValue `locationName:"fields" type:"list" required:"true"`
+
+	// Represents the identity of the person who performed the action.
+	PerformedBy *UserUnion `locationName:"performedBy" type:"structure"`
 }
 
 // String returns the string representation.
@@ -9398,6 +10059,11 @@ func (s *UpdateCaseInput) Validate() error {
 			}
 		}
 	}
+	if s.PerformedBy != nil {
+		if err := s.PerformedBy.Validate(); err != nil {
+			invalidParams.AddNested("PerformedBy", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -9420,6 +10086,12 @@ func (s *UpdateCaseInput) SetDomainId(v string) *UpdateCaseInput {
 // SetFields sets the Fields field's value.
 func (s *UpdateCaseInput) SetFields(v []*FieldValue) *UpdateCaseInput {
 	s.Fields = v
+	return s
+}
+
+// SetPerformedBy sets the PerformedBy field's value.
+func (s *UpdateCaseInput) SetPerformedBy(v *UserUnion) *UpdateCaseInput {
+	s.PerformedBy = v
 	return s
 }
 
@@ -9558,7 +10230,7 @@ type UpdateLayoutInput struct {
 	_ struct{} `type:"structure"`
 
 	// Information about which fields will be present in the layout, the order of
-	// the fields, and a read-only attribute of the field.
+	// the fields.
 	Content *LayoutContent `locationName:"content" type:"structure"`
 
 	// The unique identifier of the Cases domain.
@@ -9821,6 +10493,51 @@ func (s UpdateTemplateOutput) GoString() string {
 	return s.String()
 }
 
+// Represents the identity of the person who performed the action.
+type UserUnion struct {
+	_ struct{} `type:"structure"`
+
+	// Represents the Amazon Connect ARN of the user.
+	UserArn *string `locationName:"userArn" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserUnion) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UserUnion) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UserUnion) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UserUnion"}
+	if s.UserArn != nil && len(*s.UserArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetUserArn sets the UserArn field's value.
+func (s *UserUnion) SetUserArn(v string) *UserUnion {
+	s.UserArn = &v
+	return s
+}
+
 // The request isn't valid. Check the syntax and try again.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
@@ -9886,6 +10603,26 @@ func (s *ValidationException) RequestID() string {
 }
 
 const (
+	// AuditEventTypeCaseCreated is a AuditEventType enum value
+	AuditEventTypeCaseCreated = "Case.Created"
+
+	// AuditEventTypeCaseUpdated is a AuditEventType enum value
+	AuditEventTypeCaseUpdated = "Case.Updated"
+
+	// AuditEventTypeRelatedItemCreated is a AuditEventType enum value
+	AuditEventTypeRelatedItemCreated = "RelatedItem.Created"
+)
+
+// AuditEventType_Values returns all elements of the AuditEventType enum
+func AuditEventType_Values() []string {
+	return []string{
+		AuditEventTypeCaseCreated,
+		AuditEventTypeCaseUpdated,
+		AuditEventTypeRelatedItemCreated,
+	}
+}
+
+const (
 	// CommentBodyTextTypeTextPlain is a CommentBodyTextType enum value
 	CommentBodyTextTypeTextPlain = "Text/Plain"
 )
@@ -9948,6 +10685,12 @@ const (
 
 	// FieldTypeSingleSelect is a FieldType enum value
 	FieldTypeSingleSelect = "SingleSelect"
+
+	// FieldTypeUrl is a FieldType enum value
+	FieldTypeUrl = "Url"
+
+	// FieldTypeUser is a FieldType enum value
+	FieldTypeUser = "User"
 )
 
 // FieldType_Values returns all elements of the FieldType enum
@@ -9958,6 +10701,8 @@ func FieldType_Values() []string {
 		FieldTypeBoolean,
 		FieldTypeDateTime,
 		FieldTypeSingleSelect,
+		FieldTypeUrl,
+		FieldTypeUser,
 	}
 }
 

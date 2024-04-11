@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon Lightsail.
-//    func myFunc(svc lightsailiface.LightsailAPI) bool {
-//        // Make svc.AllocateStaticIp request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon Lightsail.
+//	func myFunc(svc lightsailiface.LightsailAPI) bool {
+//	    // Make svc.AllocateStaticIp request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := lightsail.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := lightsail.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockLightsailClient struct {
-//        lightsailiface.LightsailAPI
-//    }
-//    func (m *mockLightsailClient) AllocateStaticIp(input *lightsail.AllocateStaticIpInput) (*lightsail.AllocateStaticIpOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockLightsailClient struct {
+//	    lightsailiface.LightsailAPI
+//	}
+//	func (m *mockLightsailClient) AllocateStaticIp(input *lightsail.AllocateStaticIpInput) (*lightsail.AllocateStaticIpOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockLightsailClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockLightsailClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -552,6 +552,10 @@ type LightsailAPI interface {
 	GetRelationalDatabasesWithContext(aws.Context, *lightsail.GetRelationalDatabasesInput, ...request.Option) (*lightsail.GetRelationalDatabasesOutput, error)
 	GetRelationalDatabasesRequest(*lightsail.GetRelationalDatabasesInput) (*request.Request, *lightsail.GetRelationalDatabasesOutput)
 
+	GetSetupHistory(*lightsail.GetSetupHistoryInput) (*lightsail.GetSetupHistoryOutput, error)
+	GetSetupHistoryWithContext(aws.Context, *lightsail.GetSetupHistoryInput, ...request.Option) (*lightsail.GetSetupHistoryOutput, error)
+	GetSetupHistoryRequest(*lightsail.GetSetupHistoryInput) (*request.Request, *lightsail.GetSetupHistoryOutput)
+
 	GetStaticIp(*lightsail.GetStaticIpInput) (*lightsail.GetStaticIpOutput, error)
 	GetStaticIpWithContext(aws.Context, *lightsail.GetStaticIpInput, ...request.Option) (*lightsail.GetStaticIpOutput, error)
 	GetStaticIpRequest(*lightsail.GetStaticIpInput) (*request.Request, *lightsail.GetStaticIpOutput)
@@ -615,6 +619,10 @@ type LightsailAPI interface {
 	SetResourceAccessForBucket(*lightsail.SetResourceAccessForBucketInput) (*lightsail.SetResourceAccessForBucketOutput, error)
 	SetResourceAccessForBucketWithContext(aws.Context, *lightsail.SetResourceAccessForBucketInput, ...request.Option) (*lightsail.SetResourceAccessForBucketOutput, error)
 	SetResourceAccessForBucketRequest(*lightsail.SetResourceAccessForBucketInput) (*request.Request, *lightsail.SetResourceAccessForBucketOutput)
+
+	SetupInstanceHttps(*lightsail.SetupInstanceHttpsInput) (*lightsail.SetupInstanceHttpsOutput, error)
+	SetupInstanceHttpsWithContext(aws.Context, *lightsail.SetupInstanceHttpsInput, ...request.Option) (*lightsail.SetupInstanceHttpsOutput, error)
+	SetupInstanceHttpsRequest(*lightsail.SetupInstanceHttpsInput) (*request.Request, *lightsail.SetupInstanceHttpsOutput)
 
 	StartGUISession(*lightsail.StartGUISessionInput) (*lightsail.StartGUISessionOutput, error)
 	StartGUISessionWithContext(aws.Context, *lightsail.StartGUISessionInput, ...request.Option) (*lightsail.StartGUISessionOutput, error)

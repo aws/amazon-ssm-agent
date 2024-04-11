@@ -23,43 +23,47 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon Rekognition.
-//    func myFunc(svc rekognitioniface.RekognitionAPI) bool {
-//        // Make svc.CompareFaces request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon Rekognition.
+//	func myFunc(svc rekognitioniface.RekognitionAPI) bool {
+//	    // Make svc.AssociateFaces request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := rekognition.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := rekognition.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockRekognitionClient struct {
-//        rekognitioniface.RekognitionAPI
-//    }
-//    func (m *mockRekognitionClient) CompareFaces(input *rekognition.CompareFacesInput) (*rekognition.CompareFacesOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockRekognitionClient struct {
+//	    rekognitioniface.RekognitionAPI
+//	}
+//	func (m *mockRekognitionClient) AssociateFaces(input *rekognition.AssociateFacesInput) (*rekognition.AssociateFacesOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockRekognitionClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockRekognitionClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type RekognitionAPI interface {
+	AssociateFaces(*rekognition.AssociateFacesInput) (*rekognition.AssociateFacesOutput, error)
+	AssociateFacesWithContext(aws.Context, *rekognition.AssociateFacesInput, ...request.Option) (*rekognition.AssociateFacesOutput, error)
+	AssociateFacesRequest(*rekognition.AssociateFacesInput) (*request.Request, *rekognition.AssociateFacesOutput)
+
 	CompareFaces(*rekognition.CompareFacesInput) (*rekognition.CompareFacesOutput, error)
 	CompareFacesWithContext(aws.Context, *rekognition.CompareFacesInput, ...request.Option) (*rekognition.CompareFacesOutput, error)
 	CompareFacesRequest(*rekognition.CompareFacesInput) (*request.Request, *rekognition.CompareFacesOutput)
@@ -92,6 +96,10 @@ type RekognitionAPI interface {
 	CreateStreamProcessorWithContext(aws.Context, *rekognition.CreateStreamProcessorInput, ...request.Option) (*rekognition.CreateStreamProcessorOutput, error)
 	CreateStreamProcessorRequest(*rekognition.CreateStreamProcessorInput) (*request.Request, *rekognition.CreateStreamProcessorOutput)
 
+	CreateUser(*rekognition.CreateUserInput) (*rekognition.CreateUserOutput, error)
+	CreateUserWithContext(aws.Context, *rekognition.CreateUserInput, ...request.Option) (*rekognition.CreateUserOutput, error)
+	CreateUserRequest(*rekognition.CreateUserInput) (*request.Request, *rekognition.CreateUserOutput)
+
 	DeleteCollection(*rekognition.DeleteCollectionInput) (*rekognition.DeleteCollectionOutput, error)
 	DeleteCollectionWithContext(aws.Context, *rekognition.DeleteCollectionInput, ...request.Option) (*rekognition.DeleteCollectionOutput, error)
 	DeleteCollectionRequest(*rekognition.DeleteCollectionInput) (*request.Request, *rekognition.DeleteCollectionOutput)
@@ -119,6 +127,10 @@ type RekognitionAPI interface {
 	DeleteStreamProcessor(*rekognition.DeleteStreamProcessorInput) (*rekognition.DeleteStreamProcessorOutput, error)
 	DeleteStreamProcessorWithContext(aws.Context, *rekognition.DeleteStreamProcessorInput, ...request.Option) (*rekognition.DeleteStreamProcessorOutput, error)
 	DeleteStreamProcessorRequest(*rekognition.DeleteStreamProcessorInput) (*request.Request, *rekognition.DeleteStreamProcessorOutput)
+
+	DeleteUser(*rekognition.DeleteUserInput) (*rekognition.DeleteUserOutput, error)
+	DeleteUserWithContext(aws.Context, *rekognition.DeleteUserInput, ...request.Option) (*rekognition.DeleteUserOutput, error)
+	DeleteUserRequest(*rekognition.DeleteUserInput) (*request.Request, *rekognition.DeleteUserOutput)
 
 	DescribeCollection(*rekognition.DescribeCollectionInput) (*rekognition.DescribeCollectionOutput, error)
 	DescribeCollectionWithContext(aws.Context, *rekognition.DescribeCollectionInput, ...request.Option) (*rekognition.DescribeCollectionOutput, error)
@@ -170,6 +182,10 @@ type RekognitionAPI interface {
 	DetectTextWithContext(aws.Context, *rekognition.DetectTextInput, ...request.Option) (*rekognition.DetectTextOutput, error)
 	DetectTextRequest(*rekognition.DetectTextInput) (*request.Request, *rekognition.DetectTextOutput)
 
+	DisassociateFaces(*rekognition.DisassociateFacesInput) (*rekognition.DisassociateFacesOutput, error)
+	DisassociateFacesWithContext(aws.Context, *rekognition.DisassociateFacesInput, ...request.Option) (*rekognition.DisassociateFacesOutput, error)
+	DisassociateFacesRequest(*rekognition.DisassociateFacesInput) (*request.Request, *rekognition.DisassociateFacesOutput)
+
 	DistributeDatasetEntries(*rekognition.DistributeDatasetEntriesInput) (*rekognition.DistributeDatasetEntriesOutput, error)
 	DistributeDatasetEntriesWithContext(aws.Context, *rekognition.DistributeDatasetEntriesInput, ...request.Option) (*rekognition.DistributeDatasetEntriesOutput, error)
 	DistributeDatasetEntriesRequest(*rekognition.DistributeDatasetEntriesInput) (*request.Request, *rekognition.DistributeDatasetEntriesOutput)
@@ -216,6 +232,10 @@ type RekognitionAPI interface {
 
 	GetLabelDetectionPages(*rekognition.GetLabelDetectionInput, func(*rekognition.GetLabelDetectionOutput, bool) bool) error
 	GetLabelDetectionPagesWithContext(aws.Context, *rekognition.GetLabelDetectionInput, func(*rekognition.GetLabelDetectionOutput, bool) bool, ...request.Option) error
+
+	GetMediaAnalysisJob(*rekognition.GetMediaAnalysisJobInput) (*rekognition.GetMediaAnalysisJobOutput, error)
+	GetMediaAnalysisJobWithContext(aws.Context, *rekognition.GetMediaAnalysisJobInput, ...request.Option) (*rekognition.GetMediaAnalysisJobOutput, error)
+	GetMediaAnalysisJobRequest(*rekognition.GetMediaAnalysisJobInput) (*request.Request, *rekognition.GetMediaAnalysisJobOutput)
 
 	GetPersonTracking(*rekognition.GetPersonTrackingInput) (*rekognition.GetPersonTrackingOutput, error)
 	GetPersonTrackingWithContext(aws.Context, *rekognition.GetPersonTrackingInput, ...request.Option) (*rekognition.GetPersonTrackingOutput, error)
@@ -270,6 +290,13 @@ type RekognitionAPI interface {
 	ListFacesPages(*rekognition.ListFacesInput, func(*rekognition.ListFacesOutput, bool) bool) error
 	ListFacesPagesWithContext(aws.Context, *rekognition.ListFacesInput, func(*rekognition.ListFacesOutput, bool) bool, ...request.Option) error
 
+	ListMediaAnalysisJobs(*rekognition.ListMediaAnalysisJobsInput) (*rekognition.ListMediaAnalysisJobsOutput, error)
+	ListMediaAnalysisJobsWithContext(aws.Context, *rekognition.ListMediaAnalysisJobsInput, ...request.Option) (*rekognition.ListMediaAnalysisJobsOutput, error)
+	ListMediaAnalysisJobsRequest(*rekognition.ListMediaAnalysisJobsInput) (*request.Request, *rekognition.ListMediaAnalysisJobsOutput)
+
+	ListMediaAnalysisJobsPages(*rekognition.ListMediaAnalysisJobsInput, func(*rekognition.ListMediaAnalysisJobsOutput, bool) bool) error
+	ListMediaAnalysisJobsPagesWithContext(aws.Context, *rekognition.ListMediaAnalysisJobsInput, func(*rekognition.ListMediaAnalysisJobsOutput, bool) bool, ...request.Option) error
+
 	ListProjectPolicies(*rekognition.ListProjectPoliciesInput) (*rekognition.ListProjectPoliciesOutput, error)
 	ListProjectPoliciesWithContext(aws.Context, *rekognition.ListProjectPoliciesInput, ...request.Option) (*rekognition.ListProjectPoliciesOutput, error)
 	ListProjectPoliciesRequest(*rekognition.ListProjectPoliciesInput) (*request.Request, *rekognition.ListProjectPoliciesOutput)
@@ -288,6 +315,13 @@ type RekognitionAPI interface {
 	ListTagsForResourceWithContext(aws.Context, *rekognition.ListTagsForResourceInput, ...request.Option) (*rekognition.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*rekognition.ListTagsForResourceInput) (*request.Request, *rekognition.ListTagsForResourceOutput)
 
+	ListUsers(*rekognition.ListUsersInput) (*rekognition.ListUsersOutput, error)
+	ListUsersWithContext(aws.Context, *rekognition.ListUsersInput, ...request.Option) (*rekognition.ListUsersOutput, error)
+	ListUsersRequest(*rekognition.ListUsersInput) (*request.Request, *rekognition.ListUsersOutput)
+
+	ListUsersPages(*rekognition.ListUsersInput, func(*rekognition.ListUsersOutput, bool) bool) error
+	ListUsersPagesWithContext(aws.Context, *rekognition.ListUsersInput, func(*rekognition.ListUsersOutput, bool) bool, ...request.Option) error
+
 	PutProjectPolicy(*rekognition.PutProjectPolicyInput) (*rekognition.PutProjectPolicyOutput, error)
 	PutProjectPolicyWithContext(aws.Context, *rekognition.PutProjectPolicyInput, ...request.Option) (*rekognition.PutProjectPolicyOutput, error)
 	PutProjectPolicyRequest(*rekognition.PutProjectPolicyInput) (*request.Request, *rekognition.PutProjectPolicyOutput)
@@ -303,6 +337,14 @@ type RekognitionAPI interface {
 	SearchFacesByImage(*rekognition.SearchFacesByImageInput) (*rekognition.SearchFacesByImageOutput, error)
 	SearchFacesByImageWithContext(aws.Context, *rekognition.SearchFacesByImageInput, ...request.Option) (*rekognition.SearchFacesByImageOutput, error)
 	SearchFacesByImageRequest(*rekognition.SearchFacesByImageInput) (*request.Request, *rekognition.SearchFacesByImageOutput)
+
+	SearchUsers(*rekognition.SearchUsersInput) (*rekognition.SearchUsersOutput, error)
+	SearchUsersWithContext(aws.Context, *rekognition.SearchUsersInput, ...request.Option) (*rekognition.SearchUsersOutput, error)
+	SearchUsersRequest(*rekognition.SearchUsersInput) (*request.Request, *rekognition.SearchUsersOutput)
+
+	SearchUsersByImage(*rekognition.SearchUsersByImageInput) (*rekognition.SearchUsersByImageOutput, error)
+	SearchUsersByImageWithContext(aws.Context, *rekognition.SearchUsersByImageInput, ...request.Option) (*rekognition.SearchUsersByImageOutput, error)
+	SearchUsersByImageRequest(*rekognition.SearchUsersByImageInput) (*request.Request, *rekognition.SearchUsersByImageOutput)
 
 	StartCelebrityRecognition(*rekognition.StartCelebrityRecognitionInput) (*rekognition.StartCelebrityRecognitionOutput, error)
 	StartCelebrityRecognitionWithContext(aws.Context, *rekognition.StartCelebrityRecognitionInput, ...request.Option) (*rekognition.StartCelebrityRecognitionOutput, error)
@@ -323,6 +365,10 @@ type RekognitionAPI interface {
 	StartLabelDetection(*rekognition.StartLabelDetectionInput) (*rekognition.StartLabelDetectionOutput, error)
 	StartLabelDetectionWithContext(aws.Context, *rekognition.StartLabelDetectionInput, ...request.Option) (*rekognition.StartLabelDetectionOutput, error)
 	StartLabelDetectionRequest(*rekognition.StartLabelDetectionInput) (*request.Request, *rekognition.StartLabelDetectionOutput)
+
+	StartMediaAnalysisJob(*rekognition.StartMediaAnalysisJobInput) (*rekognition.StartMediaAnalysisJobOutput, error)
+	StartMediaAnalysisJobWithContext(aws.Context, *rekognition.StartMediaAnalysisJobInput, ...request.Option) (*rekognition.StartMediaAnalysisJobOutput, error)
+	StartMediaAnalysisJobRequest(*rekognition.StartMediaAnalysisJobInput) (*request.Request, *rekognition.StartMediaAnalysisJobOutput)
 
 	StartPersonTracking(*rekognition.StartPersonTrackingInput) (*rekognition.StartPersonTrackingOutput, error)
 	StartPersonTrackingWithContext(aws.Context, *rekognition.StartPersonTrackingInput, ...request.Option) (*rekognition.StartPersonTrackingOutput, error)

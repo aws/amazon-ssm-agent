@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWS DataSync.
-//    func myFunc(svc datasynciface.DataSyncAPI) bool {
-//        // Make svc.AddStorageSystem request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWS DataSync.
+//	func myFunc(svc datasynciface.DataSyncAPI) bool {
+//	    // Make svc.AddStorageSystem request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := datasync.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := datasync.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockDataSyncClient struct {
-//        datasynciface.DataSyncAPI
-//    }
-//    func (m *mockDataSyncClient) AddStorageSystem(input *datasync.AddStorageSystemInput) (*datasync.AddStorageSystemOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockDataSyncClient struct {
+//	    datasynciface.DataSyncAPI
+//	}
+//	func (m *mockDataSyncClient) AddStorageSystem(input *datasync.AddStorageSystemInput) (*datasync.AddStorageSystemOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockDataSyncClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockDataSyncClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -71,6 +71,10 @@ type DataSyncAPI interface {
 	CreateAgent(*datasync.CreateAgentInput) (*datasync.CreateAgentOutput, error)
 	CreateAgentWithContext(aws.Context, *datasync.CreateAgentInput, ...request.Option) (*datasync.CreateAgentOutput, error)
 	CreateAgentRequest(*datasync.CreateAgentInput) (*request.Request, *datasync.CreateAgentOutput)
+
+	CreateLocationAzureBlob(*datasync.CreateLocationAzureBlobInput) (*datasync.CreateLocationAzureBlobOutput, error)
+	CreateLocationAzureBlobWithContext(aws.Context, *datasync.CreateLocationAzureBlobInput, ...request.Option) (*datasync.CreateLocationAzureBlobOutput, error)
+	CreateLocationAzureBlobRequest(*datasync.CreateLocationAzureBlobInput) (*request.Request, *datasync.CreateLocationAzureBlobOutput)
 
 	CreateLocationEfs(*datasync.CreateLocationEfsInput) (*datasync.CreateLocationEfsOutput, error)
 	CreateLocationEfsWithContext(aws.Context, *datasync.CreateLocationEfsInput, ...request.Option) (*datasync.CreateLocationEfsOutput, error)
@@ -135,6 +139,10 @@ type DataSyncAPI interface {
 	DescribeDiscoveryJob(*datasync.DescribeDiscoveryJobInput) (*datasync.DescribeDiscoveryJobOutput, error)
 	DescribeDiscoveryJobWithContext(aws.Context, *datasync.DescribeDiscoveryJobInput, ...request.Option) (*datasync.DescribeDiscoveryJobOutput, error)
 	DescribeDiscoveryJobRequest(*datasync.DescribeDiscoveryJobInput) (*request.Request, *datasync.DescribeDiscoveryJobOutput)
+
+	DescribeLocationAzureBlob(*datasync.DescribeLocationAzureBlobInput) (*datasync.DescribeLocationAzureBlobOutput, error)
+	DescribeLocationAzureBlobWithContext(aws.Context, *datasync.DescribeLocationAzureBlobInput, ...request.Option) (*datasync.DescribeLocationAzureBlobOutput, error)
+	DescribeLocationAzureBlobRequest(*datasync.DescribeLocationAzureBlobInput) (*request.Request, *datasync.DescribeLocationAzureBlobOutput)
 
 	DescribeLocationEfs(*datasync.DescribeLocationEfsInput) (*datasync.DescribeLocationEfsOutput, error)
 	DescribeLocationEfsWithContext(aws.Context, *datasync.DescribeLocationEfsInput, ...request.Option) (*datasync.DescribeLocationEfsOutput, error)
@@ -286,6 +294,10 @@ type DataSyncAPI interface {
 	UpdateDiscoveryJob(*datasync.UpdateDiscoveryJobInput) (*datasync.UpdateDiscoveryJobOutput, error)
 	UpdateDiscoveryJobWithContext(aws.Context, *datasync.UpdateDiscoveryJobInput, ...request.Option) (*datasync.UpdateDiscoveryJobOutput, error)
 	UpdateDiscoveryJobRequest(*datasync.UpdateDiscoveryJobInput) (*request.Request, *datasync.UpdateDiscoveryJobOutput)
+
+	UpdateLocationAzureBlob(*datasync.UpdateLocationAzureBlobInput) (*datasync.UpdateLocationAzureBlobOutput, error)
+	UpdateLocationAzureBlobWithContext(aws.Context, *datasync.UpdateLocationAzureBlobInput, ...request.Option) (*datasync.UpdateLocationAzureBlobOutput, error)
+	UpdateLocationAzureBlobRequest(*datasync.UpdateLocationAzureBlobInput) (*request.Request, *datasync.UpdateLocationAzureBlobOutput)
 
 	UpdateLocationHdfs(*datasync.UpdateLocationHdfsInput) (*datasync.UpdateLocationHdfsOutput, error)
 	UpdateLocationHdfsWithContext(aws.Context, *datasync.UpdateLocationHdfsInput, ...request.Option) (*datasync.UpdateLocationHdfsOutput, error)

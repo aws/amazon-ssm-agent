@@ -11,18 +11,21 @@ const (
 	// ErrCodeARNInvalidException for service response error code
 	// "CloudTrailARNInvalidException".
 	//
-	// This exception is thrown when an operation is called with a trail ARN that
-	// is not valid. The following is the format of a trail ARN.
+	// This exception is thrown when an operation is called with an ARN that is
+	// not valid.
 	//
-	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+	// The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
-	// This exception is also thrown when you call AddTags or RemoveTags on a trail,
-	// event data store, or channel with a resource ARN that is not valid.
-	//
-	// The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+	// The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 	//
 	// The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 	ErrCodeARNInvalidException = "CloudTrailARNInvalidException"
+
+	// ErrCodeAccessDeniedException for service response error code
+	// "AccessDeniedException".
+	//
+	// You do not have sufficient access to perform this action.
+	ErrCodeAccessDeniedException = "AccessDeniedException"
 
 	// ErrCodeAccessNotEnabledException for service response error code
 	// "CloudTrailAccessNotEnabledException".
@@ -111,8 +114,16 @@ const (
 	// ErrCodeCloudWatchLogsDeliveryUnavailableException for service response error code
 	// "CloudWatchLogsDeliveryUnavailableException".
 	//
-	// Cannot set a CloudWatch Logs delivery for this region.
+	// Cannot set a CloudWatch Logs delivery for this Region.
 	ErrCodeCloudWatchLogsDeliveryUnavailableException = "CloudWatchLogsDeliveryUnavailableException"
+
+	// ErrCodeConcurrentModificationException for service response error code
+	// "ConcurrentModificationException".
+	//
+	// You are trying to update a resource when another request is in progress.
+	// Allow sufficient wait time for the previous request to complete, then retry
+	// your request.
+	ErrCodeConcurrentModificationException = "ConcurrentModificationException"
 
 	// ErrCodeConflictException for service response error code
 	// "ConflictException".
@@ -143,6 +154,14 @@ const (
 	//
 	// An event data store with that name already exists.
 	ErrCodeEventDataStoreAlreadyExistsException = "EventDataStoreAlreadyExistsException"
+
+	// ErrCodeEventDataStoreFederationEnabledException for service response error code
+	// "EventDataStoreFederationEnabledException".
+	//
+	// You cannot delete the event data store because Lake query federation is enabled.
+	// To delete the event data store, run the DisableFederation operation to disable
+	// Lake query federation on the event data store.
+	ErrCodeEventDataStoreFederationEnabledException = "EventDataStoreFederationEnabledException"
 
 	// ErrCodeEventDataStoreHasOngoingImportException for service response error code
 	// "EventDataStoreHasOngoingImportException".
@@ -192,15 +211,15 @@ const (
 	// ErrCodeInsightNotEnabledException for service response error code
 	// "InsightNotEnabledException".
 	//
-	// If you run GetInsightSelectors on a trail that does not have Insights events
-	// enabled, the operation throws the exception InsightNotEnabledException.
+	// If you run GetInsightSelectors on a trail or event data store that does not
+	// have Insights events enabled, the operation throws the exception InsightNotEnabledException.
 	ErrCodeInsightNotEnabledException = "InsightNotEnabledException"
 
 	// ErrCodeInsufficientDependencyServiceAccessPermissionException for service response error code
 	// "InsufficientDependencyServiceAccessPermissionException".
 	//
-	// This exception is thrown when the IAM user or role that is used to create
-	// the organization resource lacks one or more required permissions for creating
+	// This exception is thrown when the IAM identity that is used to create the
+	// organization resource lacks one or more required permissions for creating
 	// an organization resource in a required service.
 	ErrCodeInsufficientDependencyServiceAccessPermissionException = "InsufficientDependencyServiceAccessPermissionException"
 
@@ -297,8 +316,8 @@ const (
 	// ErrCodeInvalidHomeRegionException for service response error code
 	// "InvalidHomeRegionException".
 	//
-	// This exception is thrown when an operation is called on a trail from a region
-	// other than the region in which the trail was created.
+	// This exception is thrown when an operation is called on a trail from a Region
+	// other than the Region in which the trail was created.
 	ErrCodeInvalidHomeRegionException = "InvalidHomeRegionException"
 
 	// ErrCodeInvalidImportSourceException for service response error code
@@ -311,9 +330,21 @@ const (
 	// ErrCodeInvalidInsightSelectorsException for service response error code
 	// "InvalidInsightSelectorsException".
 	//
-	// The formatting or syntax of the InsightSelectors JSON statement in your PutInsightSelectors
-	// or GetInsightSelectors request is not valid, or the specified insight type
-	// in the InsightSelectors statement is not a valid insight type.
+	// For PutInsightSelectors, this exception is thrown when the formatting or
+	// syntax of the InsightSelectors JSON statement is not valid, or the specified
+	// InsightType in the InsightSelectors statement is not valid. Valid values
+	// for InsightType are ApiCallRateInsight and ApiErrorRateInsight. To enable
+	// Insights on an event data store, the destination event data store specified
+	// by the InsightsDestination parameter must log Insights events and the source
+	// event data store specified by the EventDataStore parameter must log management
+	// events.
+	//
+	// For UpdateEventDataStore, this exception is thrown if Insights are enabled
+	// on the event data store and the updated advanced event selectors are not
+	// compatible with the configured InsightSelectors. If the InsightSelectors
+	// includes an InsightType of ApiCallRateInsight, the source event data store
+	// must log write management events. If the InsightSelectors includes an InsightType
+	// of ApiErrorRateInsight, the source event data store must log management events.
 	ErrCodeInvalidInsightSelectorsException = "InvalidInsightSelectorsException"
 
 	// ErrCodeInvalidKmsKeyIdException for service response error code
@@ -449,15 +480,16 @@ const (
 	// "KmsKeyNotFoundException".
 	//
 	// This exception is thrown when the KMS key does not exist, when the S3 bucket
-	// and the KMS key are not in the same region, or when the KMS key associated
-	// with the Amazon SNS topic either does not exist or is not in the same region.
+	// and the KMS key are not in the same Region, or when the KMS key associated
+	// with the Amazon SNS topic either does not exist or is not in the same Region.
 	ErrCodeKmsKeyNotFoundException = "KmsKeyNotFoundException"
 
 	// ErrCodeMaxConcurrentQueriesException for service response error code
 	// "MaxConcurrentQueriesException".
 	//
-	// You are already running the maximum number of concurrent queries. Wait a
-	// minute for some queries to finish, and then run the query again.
+	// You are already running the maximum number of concurrent queries. The maximum
+	// number of concurrent queries is 10. Wait a minute for some queries to finish,
+	// and then run the query again.
 	ErrCodeMaxConcurrentQueriesException = "MaxConcurrentQueriesException"
 
 	// ErrCodeMaximumNumberOfTrailsExceededException for service response error code
@@ -575,6 +607,12 @@ const (
 	// permitted amount. Currently, the limit is 50.
 	ErrCodeTagsLimitExceededException = "TagsLimitExceededException"
 
+	// ErrCodeThrottlingException for service response error code
+	// "ThrottlingException".
+	//
+	// This exception is thrown when the request rate exceeds the limit.
+	ErrCodeThrottlingException = "ThrottlingException"
+
 	// ErrCodeTrailAlreadyExistsException for service response error code
 	// "TrailAlreadyExistsException".
 	//
@@ -602,6 +640,7 @@ const (
 
 var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"CloudTrailARNInvalidException":                          newErrorARNInvalidException,
+	"AccessDeniedException":                                  newErrorAccessDeniedException,
 	"CloudTrailAccessNotEnabledException":                    newErrorAccessNotEnabledException,
 	"AccountHasOngoingImportException":                       newErrorAccountHasOngoingImportException,
 	"AccountNotFoundException":                               newErrorAccountNotFoundException,
@@ -615,10 +654,12 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"ChannelNotFoundException":                               newErrorChannelNotFoundException,
 	"CloudTrailInvalidClientTokenIdException":                newErrorCloudTrailInvalidClientTokenIdException,
 	"CloudWatchLogsDeliveryUnavailableException":             newErrorCloudWatchLogsDeliveryUnavailableException,
+	"ConcurrentModificationException":                        newErrorConcurrentModificationException,
 	"ConflictException":                                      newErrorConflictException,
 	"DelegatedAdminAccountLimitExceededException":            newErrorDelegatedAdminAccountLimitExceededException,
 	"EventDataStoreARNInvalidException":                      newErrorEventDataStoreARNInvalidException,
 	"EventDataStoreAlreadyExistsException":                   newErrorEventDataStoreAlreadyExistsException,
+	"EventDataStoreFederationEnabledException":               newErrorEventDataStoreFederationEnabledException,
 	"EventDataStoreHasOngoingImportException":                newErrorEventDataStoreHasOngoingImportException,
 	"EventDataStoreMaxLimitExceededException":                newErrorEventDataStoreMaxLimitExceededException,
 	"EventDataStoreNotFoundException":                        newErrorEventDataStoreNotFoundException,
@@ -676,6 +717,7 @@ var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
 	"ResourceTypeNotSupportedException":                      newErrorResourceTypeNotSupportedException,
 	"S3BucketDoesNotExistException":                          newErrorS3BucketDoesNotExistException,
 	"TagsLimitExceededException":                             newErrorTagsLimitExceededException,
+	"ThrottlingException":                                    newErrorThrottlingException,
 	"TrailAlreadyExistsException":                            newErrorTrailAlreadyExistsException,
 	"TrailNotFoundException":                                 newErrorTrailNotFoundException,
 	"TrailNotProvidedException":                              newErrorTrailNotProvidedException,

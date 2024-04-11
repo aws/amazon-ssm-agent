@@ -51,7 +51,7 @@ import (
 type SendFailedReplyTestSuite struct {
 	suite.Suite
 	ssmAgent   agent.ISSMAgent
-	mdsSdkMock *mdssdkmock.SSMMDSAPI
+	mdsSdkMock *mdssdkmock.SsmmdsAPI
 	context    context.T
 }
 

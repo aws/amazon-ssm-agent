@@ -29,14 +29,13 @@ const opAssociateDelegateToResource = "AssociateDelegateToResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateDelegateToResourceRequest method.
+//	req, resp := client.AssociateDelegateToResourceRequest(params)
 //
-//    // Example sending a request using the AssociateDelegateToResourceRequest method.
-//    req, resp := client.AssociateDelegateToResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/AssociateDelegateToResource
 func (c *WorkMail) AssociateDelegateToResourceRequest(input *AssociateDelegateToResourceInput) (req *request.Request, output *AssociateDelegateToResourceOutput) {
@@ -68,24 +67,28 @@ func (c *WorkMail) AssociateDelegateToResourceRequest(input *AssociateDelegateTo
 // API operation AssociateDelegateToResource for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/AssociateDelegateToResource
 func (c *WorkMail) AssociateDelegateToResource(input *AssociateDelegateToResourceInput) (*AssociateDelegateToResourceOutput, error) {
@@ -125,14 +128,13 @@ const opAssociateMemberToGroup = "AssociateMemberToGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateMemberToGroupRequest method.
+//	req, resp := client.AssociateMemberToGroupRequest(params)
 //
-//    // Example sending a request using the AssociateMemberToGroupRequest method.
-//    req, resp := client.AssociateMemberToGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/AssociateMemberToGroup
 func (c *WorkMail) AssociateMemberToGroupRequest(input *AssociateMemberToGroupInput) (req *request.Request, output *AssociateMemberToGroupOutput) {
@@ -164,33 +166,34 @@ func (c *WorkMail) AssociateMemberToGroupRequest(input *AssociateMemberToGroupIn
 // API operation AssociateMemberToGroup for usage and error information.
 //
 // Returned Error Types:
-//   * DirectoryServiceAuthenticationFailedException
-//   The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
+//   - DirectoryServiceAuthenticationFailedException
+//     The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * UnsupportedOperationException
-//   You can't perform a write operation against a read-only directory.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/AssociateMemberToGroup
 func (c *WorkMail) AssociateMemberToGroup(input *AssociateMemberToGroupInput) (*AssociateMemberToGroupOutput, error) {
@@ -230,14 +233,13 @@ const opAssumeImpersonationRole = "AssumeImpersonationRole"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssumeImpersonationRoleRequest method.
+//	req, resp := client.AssumeImpersonationRoleRequest(params)
 //
-//    // Example sending a request using the AssumeImpersonationRoleRequest method.
-//    req, resp := client.AssumeImpersonationRoleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/AssumeImpersonationRole
 func (c *WorkMail) AssumeImpersonationRoleRequest(input *AssumeImpersonationRoleInput) (req *request.Request, output *AssumeImpersonationRoleOutput) {
@@ -269,19 +271,20 @@ func (c *WorkMail) AssumeImpersonationRoleRequest(input *AssumeImpersonationRole
 // API operation AssumeImpersonationRole for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * ResourceNotFoundException
-//   The resource cannot be found.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - ResourceNotFoundException
+//     The resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/AssumeImpersonationRole
 func (c *WorkMail) AssumeImpersonationRole(input *AssumeImpersonationRoleInput) (*AssumeImpersonationRoleOutput, error) {
@@ -321,14 +324,13 @@ const opCancelMailboxExportJob = "CancelMailboxExportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelMailboxExportJobRequest method.
+//	req, resp := client.CancelMailboxExportJobRequest(params)
 //
-//    // Example sending a request using the CancelMailboxExportJobRequest method.
-//    req, resp := client.CancelMailboxExportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CancelMailboxExportJob
 func (c *WorkMail) CancelMailboxExportJobRequest(input *CancelMailboxExportJobInput) (req *request.Request, output *CancelMailboxExportJobOutput) {
@@ -363,20 +365,21 @@ func (c *WorkMail) CancelMailboxExportJobRequest(input *CancelMailboxExportJobIn
 // API operation CancelMailboxExportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CancelMailboxExportJob
 func (c *WorkMail) CancelMailboxExportJob(input *CancelMailboxExportJobInput) (*CancelMailboxExportJobOutput, error) {
@@ -416,14 +419,13 @@ const opCreateAlias = "CreateAlias"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAliasRequest method.
+//	req, resp := client.CreateAliasRequest(params)
 //
-//    // Example sending a request using the CreateAliasRequest method.
-//    req, resp := client.CreateAliasRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateAlias
 func (c *WorkMail) CreateAliasRequest(input *CreateAliasInput) (req *request.Request, output *CreateAliasOutput) {
@@ -455,38 +457,39 @@ func (c *WorkMail) CreateAliasRequest(input *CreateAliasInput) (req *request.Req
 // API operation CreateAlias for usage and error information.
 //
 // Returned Error Types:
-//   * EmailAddressInUseException
-//   The email address that you're trying to assign is already created for a different
-//   user, group, or resource.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - EmailAddressInUseException
+//     The email address that you're trying to assign is already created for a different
+//     user, group, or resource.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * MailDomainNotFoundException
-//   The domain specified is not found in your organization.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * MailDomainStateException
-//   After a domain has been added to the organization, it must be verified. The
-//   domain is not yet verified.
+//   - MailDomainNotFoundException
+//     The domain specified is not found in your organization.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - MailDomainStateException
+//     After a domain has been added to the organization, it must be verified. The
+//     domain is not yet verified.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * LimitExceededException
-//   The request exceeds the limit of the resource.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - LimitExceededException
+//     The request exceeds the limit of the resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateAlias
 func (c *WorkMail) CreateAlias(input *CreateAliasInput) (*CreateAliasOutput, error) {
@@ -526,14 +529,13 @@ const opCreateAvailabilityConfiguration = "CreateAvailabilityConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAvailabilityConfigurationRequest method.
+//	req, resp := client.CreateAvailabilityConfigurationRequest(params)
 //
-//    // Example sending a request using the CreateAvailabilityConfigurationRequest method.
-//    req, resp := client.CreateAvailabilityConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateAvailabilityConfiguration
 func (c *WorkMail) CreateAvailabilityConfigurationRequest(input *CreateAvailabilityConfigurationInput) (req *request.Request, output *CreateAvailabilityConfigurationOutput) {
@@ -566,22 +568,23 @@ func (c *WorkMail) CreateAvailabilityConfigurationRequest(input *CreateAvailabil
 // API operation CreateAvailabilityConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * NameAvailabilityException
-//   The user, group, or resource name isn't unique in WorkMail.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - NameAvailabilityException
+//     The user, group, or resource name isn't unique in WorkMail.
 //
-//   * LimitExceededException
-//   The request exceeds the limit of the resource.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
+//
+//   - LimitExceededException
+//     The request exceeds the limit of the resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateAvailabilityConfiguration
 func (c *WorkMail) CreateAvailabilityConfiguration(input *CreateAvailabilityConfigurationInput) (*CreateAvailabilityConfigurationOutput, error) {
@@ -621,14 +624,13 @@ const opCreateGroup = "CreateGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateGroupRequest method.
+//	req, resp := client.CreateGroupRequest(params)
 //
-//    // Example sending a request using the CreateGroupRequest method.
-//    req, resp := client.CreateGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateGroup
 func (c *WorkMail) CreateGroupRequest(input *CreateGroupInput) (req *request.Request, output *CreateGroupOutput) {
@@ -660,31 +662,32 @@ func (c *WorkMail) CreateGroupRequest(input *CreateGroupInput) (req *request.Req
 // API operation CreateGroup for usage and error information.
 //
 // Returned Error Types:
-//   * DirectoryServiceAuthenticationFailedException
-//   The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
+//   - DirectoryServiceAuthenticationFailedException
+//     The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * NameAvailabilityException
-//   The user, group, or resource name isn't unique in WorkMail.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - NameAvailabilityException
+//     The user, group, or resource name isn't unique in WorkMail.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * ReservedNameException
-//   This user, group, or resource name is not allowed in WorkMail.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * UnsupportedOperationException
-//   You can't perform a write operation against a read-only directory.
+//   - ReservedNameException
+//     This user, group, or resource name is not allowed in WorkMail.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateGroup
 func (c *WorkMail) CreateGroup(input *CreateGroupInput) (*CreateGroupOutput, error) {
@@ -724,14 +727,13 @@ const opCreateImpersonationRole = "CreateImpersonationRole"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateImpersonationRoleRequest method.
+//	req, resp := client.CreateImpersonationRoleRequest(params)
 //
-//    // Example sending a request using the CreateImpersonationRoleRequest method.
-//    req, resp := client.CreateImpersonationRoleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateImpersonationRole
 func (c *WorkMail) CreateImpersonationRoleRequest(input *CreateImpersonationRoleInput) (req *request.Request, output *CreateImpersonationRoleOutput) {
@@ -767,27 +769,28 @@ func (c *WorkMail) CreateImpersonationRoleRequest(input *CreateImpersonationRole
 // API operation CreateImpersonationRole for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * LimitExceededException
-//   The request exceeds the limit of the resource.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
+//
+//   - LimitExceededException
+//     The request exceeds the limit of the resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateImpersonationRole
 func (c *WorkMail) CreateImpersonationRole(input *CreateImpersonationRoleInput) (*CreateImpersonationRoleOutput, error) {
@@ -827,14 +830,13 @@ const opCreateMobileDeviceAccessRule = "CreateMobileDeviceAccessRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateMobileDeviceAccessRuleRequest method.
+//	req, resp := client.CreateMobileDeviceAccessRuleRequest(params)
 //
-//    // Example sending a request using the CreateMobileDeviceAccessRuleRequest method.
-//    req, resp := client.CreateMobileDeviceAccessRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateMobileDeviceAccessRule
 func (c *WorkMail) CreateMobileDeviceAccessRuleRequest(input *CreateMobileDeviceAccessRuleInput) (req *request.Request, output *CreateMobileDeviceAccessRuleOutput) {
@@ -865,19 +867,20 @@ func (c *WorkMail) CreateMobileDeviceAccessRuleRequest(input *CreateMobileDevice
 // API operation CreateMobileDeviceAccessRule for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * LimitExceededException
-//   The request exceeds the limit of the resource.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - LimitExceededException
+//     The request exceeds the limit of the resource.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateMobileDeviceAccessRule
 func (c *WorkMail) CreateMobileDeviceAccessRule(input *CreateMobileDeviceAccessRuleInput) (*CreateMobileDeviceAccessRuleOutput, error) {
@@ -917,14 +920,13 @@ const opCreateOrganization = "CreateOrganization"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateOrganizationRequest method.
+//	req, resp := client.CreateOrganizationRequest(params)
 //
-//    // Example sending a request using the CreateOrganizationRequest method.
-//    req, resp := client.CreateOrganizationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateOrganization
 func (c *WorkMail) CreateOrganizationRequest(input *CreateOrganizationInput) (req *request.Request, output *CreateOrganizationOutput) {
@@ -972,21 +974,22 @@ func (c *WorkMail) CreateOrganizationRequest(input *CreateOrganizationInput) (re
 // API operation CreateOrganization for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * DirectoryInUseException
-//   The directory is already in use by another WorkMail organization in the same
-//   account and Region.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
+//   - DirectoryInUseException
+//     The directory is already in use by another WorkMail organization in the same
+//     account and Region.
 //
-//   * LimitExceededException
-//   The request exceeds the limit of the resource.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * NameAvailabilityException
-//   The user, group, or resource name isn't unique in WorkMail.
+//   - LimitExceededException
+//     The request exceeds the limit of the resource.
+//
+//   - NameAvailabilityException
+//     The user, group, or resource name isn't unique in WorkMail.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateOrganization
 func (c *WorkMail) CreateOrganization(input *CreateOrganizationInput) (*CreateOrganizationOutput, error) {
@@ -1026,14 +1029,13 @@ const opCreateResource = "CreateResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateResourceRequest method.
+//	req, resp := client.CreateResourceRequest(params)
 //
-//    // Example sending a request using the CreateResourceRequest method.
-//    req, resp := client.CreateResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateResource
 func (c *WorkMail) CreateResourceRequest(input *CreateResourceInput) (req *request.Request, output *CreateResourceOutput) {
@@ -1064,28 +1066,32 @@ func (c *WorkMail) CreateResourceRequest(input *CreateResourceInput) (req *reque
 // API operation CreateResource for usage and error information.
 //
 // Returned Error Types:
-//   * DirectoryServiceAuthenticationFailedException
-//   The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
+//   - DirectoryServiceAuthenticationFailedException
+//     The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * NameAvailabilityException
-//   The user, group, or resource name isn't unique in WorkMail.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - NameAvailabilityException
+//     The user, group, or resource name isn't unique in WorkMail.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * ReservedNameException
-//   This user, group, or resource name is not allowed in WorkMail.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - ReservedNameException
+//     This user, group, or resource name is not allowed in WorkMail.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateResource
 func (c *WorkMail) CreateResource(input *CreateResourceInput) (*CreateResourceOutput, error) {
@@ -1125,14 +1131,13 @@ const opCreateUser = "CreateUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateUserRequest method.
+//	req, resp := client.CreateUserRequest(params)
 //
-//    // Example sending a request using the CreateUserRequest method.
-//    req, resp := client.CreateUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateUser
 func (c *WorkMail) CreateUserRequest(input *CreateUserInput) (req *request.Request, output *CreateUserOutput) {
@@ -1164,35 +1169,36 @@ func (c *WorkMail) CreateUserRequest(input *CreateUserInput) (req *request.Reque
 // API operation CreateUser for usage and error information.
 //
 // Returned Error Types:
-//   * DirectoryServiceAuthenticationFailedException
-//   The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
+//   - DirectoryServiceAuthenticationFailedException
+//     The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * InvalidPasswordException
-//   The supplied password doesn't match the minimum security constraints, such
-//   as length or use of special characters.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * NameAvailabilityException
-//   The user, group, or resource name isn't unique in WorkMail.
+//   - InvalidPasswordException
+//     The supplied password doesn't match the minimum security constraints, such
+//     as length or use of special characters.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - NameAvailabilityException
+//     The user, group, or resource name isn't unique in WorkMail.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * ReservedNameException
-//   This user, group, or resource name is not allowed in WorkMail.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * UnsupportedOperationException
-//   You can't perform a write operation against a read-only directory.
+//   - ReservedNameException
+//     This user, group, or resource name is not allowed in WorkMail.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/CreateUser
 func (c *WorkMail) CreateUser(input *CreateUserInput) (*CreateUserOutput, error) {
@@ -1232,14 +1238,13 @@ const opDeleteAccessControlRule = "DeleteAccessControlRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAccessControlRuleRequest method.
+//	req, resp := client.DeleteAccessControlRuleRequest(params)
 //
-//    // Example sending a request using the DeleteAccessControlRuleRequest method.
-//    req, resp := client.DeleteAccessControlRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteAccessControlRule
 func (c *WorkMail) DeleteAccessControlRuleRequest(input *DeleteAccessControlRuleInput) (req *request.Request, output *DeleteAccessControlRuleOutput) {
@@ -1275,13 +1280,14 @@ func (c *WorkMail) DeleteAccessControlRuleRequest(input *DeleteAccessControlRule
 // API operation DeleteAccessControlRule for usage and error information.
 //
 // Returned Error Types:
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteAccessControlRule
 func (c *WorkMail) DeleteAccessControlRule(input *DeleteAccessControlRuleInput) (*DeleteAccessControlRuleOutput, error) {
@@ -1321,14 +1327,13 @@ const opDeleteAlias = "DeleteAlias"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAliasRequest method.
+//	req, resp := client.DeleteAliasRequest(params)
 //
-//    // Example sending a request using the DeleteAliasRequest method.
-//    req, resp := client.DeleteAliasRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteAlias
 func (c *WorkMail) DeleteAliasRequest(input *DeleteAliasInput) (req *request.Request, output *DeleteAliasOutput) {
@@ -1360,24 +1365,25 @@ func (c *WorkMail) DeleteAliasRequest(input *DeleteAliasInput) (req *request.Req
 // API operation DeleteAlias for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteAlias
 func (c *WorkMail) DeleteAlias(input *DeleteAliasInput) (*DeleteAliasOutput, error) {
@@ -1417,14 +1423,13 @@ const opDeleteAvailabilityConfiguration = "DeleteAvailabilityConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAvailabilityConfigurationRequest method.
+//	req, resp := client.DeleteAvailabilityConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteAvailabilityConfigurationRequest method.
-//    req, resp := client.DeleteAvailabilityConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteAvailabilityConfiguration
 func (c *WorkMail) DeleteAvailabilityConfigurationRequest(input *DeleteAvailabilityConfigurationInput) (req *request.Request, output *DeleteAvailabilityConfigurationOutput) {
@@ -1457,13 +1462,14 @@ func (c *WorkMail) DeleteAvailabilityConfigurationRequest(input *DeleteAvailabil
 // API operation DeleteAvailabilityConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteAvailabilityConfiguration
 func (c *WorkMail) DeleteAvailabilityConfiguration(input *DeleteAvailabilityConfigurationInput) (*DeleteAvailabilityConfigurationOutput, error) {
@@ -1503,14 +1509,13 @@ const opDeleteEmailMonitoringConfiguration = "DeleteEmailMonitoringConfiguration
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteEmailMonitoringConfigurationRequest method.
+//	req, resp := client.DeleteEmailMonitoringConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteEmailMonitoringConfigurationRequest method.
-//    req, resp := client.DeleteEmailMonitoringConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteEmailMonitoringConfiguration
 func (c *WorkMail) DeleteEmailMonitoringConfigurationRequest(input *DeleteEmailMonitoringConfigurationInput) (req *request.Request, output *DeleteEmailMonitoringConfigurationOutput) {
@@ -1542,16 +1547,17 @@ func (c *WorkMail) DeleteEmailMonitoringConfigurationRequest(input *DeleteEmailM
 // API operation DeleteEmailMonitoringConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteEmailMonitoringConfiguration
 func (c *WorkMail) DeleteEmailMonitoringConfiguration(input *DeleteEmailMonitoringConfigurationInput) (*DeleteEmailMonitoringConfigurationOutput, error) {
@@ -1591,14 +1597,13 @@ const opDeleteGroup = "DeleteGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteGroupRequest method.
+//	req, resp := client.DeleteGroupRequest(params)
 //
-//    // Example sending a request using the DeleteGroupRequest method.
-//    req, resp := client.DeleteGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteGroup
 func (c *WorkMail) DeleteGroupRequest(input *DeleteGroupInput) (req *request.Request, output *DeleteGroupOutput) {
@@ -1630,29 +1635,30 @@ func (c *WorkMail) DeleteGroupRequest(input *DeleteGroupInput) (req *request.Req
 // API operation DeleteGroup for usage and error information.
 //
 // Returned Error Types:
-//   * DirectoryServiceAuthenticationFailedException
-//   The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
+//   - DirectoryServiceAuthenticationFailedException
+//     The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * UnsupportedOperationException
-//   You can't perform a write operation against a read-only directory.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteGroup
 func (c *WorkMail) DeleteGroup(input *DeleteGroupInput) (*DeleteGroupOutput, error) {
@@ -1692,14 +1698,13 @@ const opDeleteImpersonationRole = "DeleteImpersonationRole"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteImpersonationRoleRequest method.
+//	req, resp := client.DeleteImpersonationRoleRequest(params)
 //
-//    // Example sending a request using the DeleteImpersonationRoleRequest method.
-//    req, resp := client.DeleteImpersonationRoleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteImpersonationRole
 func (c *WorkMail) DeleteImpersonationRoleRequest(input *DeleteImpersonationRoleInput) (req *request.Request, output *DeleteImpersonationRoleOutput) {
@@ -1731,16 +1736,17 @@ func (c *WorkMail) DeleteImpersonationRoleRequest(input *DeleteImpersonationRole
 // API operation DeleteImpersonationRole for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteImpersonationRole
 func (c *WorkMail) DeleteImpersonationRole(input *DeleteImpersonationRoleInput) (*DeleteImpersonationRoleOutput, error) {
@@ -1780,14 +1786,13 @@ const opDeleteMailboxPermissions = "DeleteMailboxPermissions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMailboxPermissionsRequest method.
+//	req, resp := client.DeleteMailboxPermissionsRequest(params)
 //
-//    // Example sending a request using the DeleteMailboxPermissionsRequest method.
-//    req, resp := client.DeleteMailboxPermissionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteMailboxPermissions
 func (c *WorkMail) DeleteMailboxPermissionsRequest(input *DeleteMailboxPermissionsInput) (req *request.Request, output *DeleteMailboxPermissionsOutput) {
@@ -1819,24 +1824,25 @@ func (c *WorkMail) DeleteMailboxPermissionsRequest(input *DeleteMailboxPermissio
 // API operation DeleteMailboxPermissions for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteMailboxPermissions
 func (c *WorkMail) DeleteMailboxPermissions(input *DeleteMailboxPermissionsInput) (*DeleteMailboxPermissionsOutput, error) {
@@ -1876,14 +1882,13 @@ const opDeleteMobileDeviceAccessOverride = "DeleteMobileDeviceAccessOverride"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMobileDeviceAccessOverrideRequest method.
+//	req, resp := client.DeleteMobileDeviceAccessOverrideRequest(params)
 //
-//    // Example sending a request using the DeleteMobileDeviceAccessOverrideRequest method.
-//    req, resp := client.DeleteMobileDeviceAccessOverrideRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteMobileDeviceAccessOverride
 func (c *WorkMail) DeleteMobileDeviceAccessOverrideRequest(input *DeleteMobileDeviceAccessOverrideInput) (req *request.Request, output *DeleteMobileDeviceAccessOverrideOutput) {
@@ -1920,20 +1925,21 @@ func (c *WorkMail) DeleteMobileDeviceAccessOverrideRequest(input *DeleteMobileDe
 // API operation DeleteMobileDeviceAccessOverride for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteMobileDeviceAccessOverride
 func (c *WorkMail) DeleteMobileDeviceAccessOverride(input *DeleteMobileDeviceAccessOverrideInput) (*DeleteMobileDeviceAccessOverrideOutput, error) {
@@ -1973,14 +1979,13 @@ const opDeleteMobileDeviceAccessRule = "DeleteMobileDeviceAccessRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMobileDeviceAccessRuleRequest method.
+//	req, resp := client.DeleteMobileDeviceAccessRuleRequest(params)
 //
-//    // Example sending a request using the DeleteMobileDeviceAccessRuleRequest method.
-//    req, resp := client.DeleteMobileDeviceAccessRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteMobileDeviceAccessRule
 func (c *WorkMail) DeleteMobileDeviceAccessRuleRequest(input *DeleteMobileDeviceAccessRuleInput) (req *request.Request, output *DeleteMobileDeviceAccessRuleOutput) {
@@ -2016,16 +2021,17 @@ func (c *WorkMail) DeleteMobileDeviceAccessRuleRequest(input *DeleteMobileDevice
 // API operation DeleteMobileDeviceAccessRule for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteMobileDeviceAccessRule
 func (c *WorkMail) DeleteMobileDeviceAccessRule(input *DeleteMobileDeviceAccessRuleInput) (*DeleteMobileDeviceAccessRuleOutput, error) {
@@ -2065,14 +2071,13 @@ const opDeleteOrganization = "DeleteOrganization"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteOrganizationRequest method.
+//	req, resp := client.DeleteOrganizationRequest(params)
 //
-//    // Example sending a request using the DeleteOrganizationRequest method.
-//    req, resp := client.DeleteOrganizationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteOrganization
 func (c *WorkMail) DeleteOrganizationRequest(input *DeleteOrganizationInput) (req *request.Request, output *DeleteOrganizationOutput) {
@@ -2107,16 +2112,17 @@ func (c *WorkMail) DeleteOrganizationRequest(input *DeleteOrganizationInput) (re
 // API operation DeleteOrganization for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteOrganization
 func (c *WorkMail) DeleteOrganization(input *DeleteOrganizationInput) (*DeleteOrganizationOutput, error) {
@@ -2156,14 +2162,13 @@ const opDeleteResource = "DeleteResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResourceRequest method.
+//	req, resp := client.DeleteResourceRequest(params)
 //
-//    // Example sending a request using the DeleteResourceRequest method.
-//    req, resp := client.DeleteResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteResource
 func (c *WorkMail) DeleteResourceRequest(input *DeleteResourceInput) (req *request.Request, output *DeleteResourceOutput) {
@@ -2195,20 +2200,24 @@ func (c *WorkMail) DeleteResourceRequest(input *DeleteResourceInput) (req *reque
 // API operation DeleteResource for usage and error information.
 //
 // Returned Error Types:
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteResource
 func (c *WorkMail) DeleteResource(input *DeleteResourceInput) (*DeleteResourceOutput, error) {
@@ -2248,14 +2257,13 @@ const opDeleteRetentionPolicy = "DeleteRetentionPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRetentionPolicyRequest method.
+//	req, resp := client.DeleteRetentionPolicyRequest(params)
 //
-//    // Example sending a request using the DeleteRetentionPolicyRequest method.
-//    req, resp := client.DeleteRetentionPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteRetentionPolicy
 func (c *WorkMail) DeleteRetentionPolicyRequest(input *DeleteRetentionPolicyInput) (req *request.Request, output *DeleteRetentionPolicyOutput) {
@@ -2287,16 +2295,17 @@ func (c *WorkMail) DeleteRetentionPolicyRequest(input *DeleteRetentionPolicyInpu
 // API operation DeleteRetentionPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteRetentionPolicy
 func (c *WorkMail) DeleteRetentionPolicy(input *DeleteRetentionPolicyInput) (*DeleteRetentionPolicyOutput, error) {
@@ -2336,14 +2345,13 @@ const opDeleteUser = "DeleteUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteUserRequest method.
+//	req, resp := client.DeleteUserRequest(params)
 //
-//    // Example sending a request using the DeleteUserRequest method.
-//    req, resp := client.DeleteUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteUser
 func (c *WorkMail) DeleteUserRequest(input *DeleteUserInput) (req *request.Request, output *DeleteUserOutput) {
@@ -2380,29 +2388,30 @@ func (c *WorkMail) DeleteUserRequest(input *DeleteUserInput) (req *request.Reque
 // API operation DeleteUser for usage and error information.
 //
 // Returned Error Types:
-//   * DirectoryServiceAuthenticationFailedException
-//   The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
+//   - DirectoryServiceAuthenticationFailedException
+//     The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * UnsupportedOperationException
-//   You can't perform a write operation against a read-only directory.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeleteUser
 func (c *WorkMail) DeleteUser(input *DeleteUserInput) (*DeleteUserOutput, error) {
@@ -2442,14 +2451,13 @@ const opDeregisterFromWorkMail = "DeregisterFromWorkMail"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeregisterFromWorkMailRequest method.
+//	req, resp := client.DeregisterFromWorkMailRequest(params)
 //
-//    // Example sending a request using the DeregisterFromWorkMailRequest method.
-//    req, resp := client.DeregisterFromWorkMailRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeregisterFromWorkMail
 func (c *WorkMail) DeregisterFromWorkMailRequest(input *DeregisterFromWorkMailInput) (req *request.Request, output *DeregisterFromWorkMailOutput) {
@@ -2484,24 +2492,25 @@ func (c *WorkMail) DeregisterFromWorkMailRequest(input *DeregisterFromWorkMailIn
 // API operation DeregisterFromWorkMail for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeregisterFromWorkMail
 func (c *WorkMail) DeregisterFromWorkMail(input *DeregisterFromWorkMailInput) (*DeregisterFromWorkMailOutput, error) {
@@ -2541,14 +2550,13 @@ const opDeregisterMailDomain = "DeregisterMailDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeregisterMailDomainRequest method.
+//	req, resp := client.DeregisterMailDomainRequest(params)
 //
-//    // Example sending a request using the DeregisterMailDomainRequest method.
-//    req, resp := client.DeregisterMailDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeregisterMailDomain
 func (c *WorkMail) DeregisterMailDomainRequest(input *DeregisterMailDomainInput) (req *request.Request, output *DeregisterMailDomainOutput) {
@@ -2583,25 +2591,26 @@ func (c *WorkMail) DeregisterMailDomainRequest(input *DeregisterMailDomainInput)
 // API operation DeregisterMailDomain for usage and error information.
 //
 // Returned Error Types:
-//   * MailDomainInUseException
-//   The domain you're trying to change is in use by another user or organization
-//   in your account. See the error message for details.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - MailDomainInUseException
+//     The domain you're trying to change is in use by another user or organization
+//     in your account. See the error message for details.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * InvalidCustomSesConfigurationException
-//   You SES configuration has customizations that WorkMail cannot save. The error
-//   message lists the invalid setting. For examples of invalid settings, refer
-//   to CreateReceiptRule (https://docs.aws.amazon.com/ses/latest/APIReference/API_CreateReceiptRule.html).
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
+//
+//   - InvalidCustomSesConfigurationException
+//     You SES configuration has customizations that WorkMail cannot save. The error
+//     message lists the invalid setting. For examples of invalid settings, refer
+//     to CreateReceiptRule (https://docs.aws.amazon.com/ses/latest/APIReference/API_CreateReceiptRule.html).
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DeregisterMailDomain
 func (c *WorkMail) DeregisterMailDomain(input *DeregisterMailDomainInput) (*DeregisterMailDomainOutput, error) {
@@ -2641,14 +2650,13 @@ const opDescribeEmailMonitoringConfiguration = "DescribeEmailMonitoringConfigura
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeEmailMonitoringConfigurationRequest method.
+//	req, resp := client.DescribeEmailMonitoringConfigurationRequest(params)
 //
-//    // Example sending a request using the DescribeEmailMonitoringConfigurationRequest method.
-//    req, resp := client.DescribeEmailMonitoringConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeEmailMonitoringConfiguration
 func (c *WorkMail) DescribeEmailMonitoringConfigurationRequest(input *DescribeEmailMonitoringConfigurationInput) (req *request.Request, output *DescribeEmailMonitoringConfigurationOutput) {
@@ -2679,19 +2687,20 @@ func (c *WorkMail) DescribeEmailMonitoringConfigurationRequest(input *DescribeEm
 // API operation DescribeEmailMonitoringConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource cannot be found.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - ResourceNotFoundException
+//     The resource cannot be found.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeEmailMonitoringConfiguration
 func (c *WorkMail) DescribeEmailMonitoringConfiguration(input *DescribeEmailMonitoringConfigurationInput) (*DescribeEmailMonitoringConfigurationOutput, error) {
@@ -2715,6 +2724,97 @@ func (c *WorkMail) DescribeEmailMonitoringConfigurationWithContext(ctx aws.Conte
 	return out, req.Send()
 }
 
+const opDescribeEntity = "DescribeEntity"
+
+// DescribeEntityRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeEntity operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeEntity for more information on using the DescribeEntity
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DescribeEntityRequest method.
+//	req, resp := client.DescribeEntityRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeEntity
+func (c *WorkMail) DescribeEntityRequest(input *DescribeEntityInput) (req *request.Request, output *DescribeEntityOutput) {
+	op := &request.Operation{
+		Name:       opDescribeEntity,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeEntityInput{}
+	}
+
+	output = &DescribeEntityOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeEntity API operation for Amazon WorkMail.
+//
+// Returns basic details about an entity in WorkMail.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkMail's
+// API operation DescribeEntity for usage and error information.
+//
+// Returned Error Types:
+//
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
+//
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
+//
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeEntity
+func (c *WorkMail) DescribeEntity(input *DescribeEntityInput) (*DescribeEntityOutput, error) {
+	req, out := c.DescribeEntityRequest(input)
+	return out, req.Send()
+}
+
+// DescribeEntityWithContext is the same as DescribeEntity with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeEntity for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkMail) DescribeEntityWithContext(ctx aws.Context, input *DescribeEntityInput, opts ...request.Option) (*DescribeEntityOutput, error) {
+	req, out := c.DescribeEntityRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeGroup = "DescribeGroup"
 
 // DescribeGroupRequest generates a "aws/request.Request" representing the
@@ -2731,14 +2831,13 @@ const opDescribeGroup = "DescribeGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeGroupRequest method.
+//	req, resp := client.DescribeGroupRequest(params)
 //
-//    // Example sending a request using the DescribeGroupRequest method.
-//    req, resp := client.DescribeGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeGroup
 func (c *WorkMail) DescribeGroupRequest(input *DescribeGroupInput) (req *request.Request, output *DescribeGroupOutput) {
@@ -2769,20 +2868,21 @@ func (c *WorkMail) DescribeGroupRequest(input *DescribeGroupInput) (req *request
 // API operation DescribeGroup for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeGroup
 func (c *WorkMail) DescribeGroup(input *DescribeGroupInput) (*DescribeGroupOutput, error) {
@@ -2822,14 +2922,13 @@ const opDescribeInboundDmarcSettings = "DescribeInboundDmarcSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeInboundDmarcSettingsRequest method.
+//	req, resp := client.DescribeInboundDmarcSettingsRequest(params)
 //
-//    // Example sending a request using the DescribeInboundDmarcSettingsRequest method.
-//    req, resp := client.DescribeInboundDmarcSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeInboundDmarcSettings
 func (c *WorkMail) DescribeInboundDmarcSettingsRequest(input *DescribeInboundDmarcSettingsInput) (req *request.Request, output *DescribeInboundDmarcSettingsOutput) {
@@ -2860,13 +2959,14 @@ func (c *WorkMail) DescribeInboundDmarcSettingsRequest(input *DescribeInboundDma
 // API operation DescribeInboundDmarcSettings for usage and error information.
 //
 // Returned Error Types:
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeInboundDmarcSettings
 func (c *WorkMail) DescribeInboundDmarcSettings(input *DescribeInboundDmarcSettingsInput) (*DescribeInboundDmarcSettingsOutput, error) {
@@ -2906,14 +3006,13 @@ const opDescribeMailboxExportJob = "DescribeMailboxExportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeMailboxExportJobRequest method.
+//	req, resp := client.DescribeMailboxExportJobRequest(params)
 //
-//    // Example sending a request using the DescribeMailboxExportJobRequest method.
-//    req, resp := client.DescribeMailboxExportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeMailboxExportJob
 func (c *WorkMail) DescribeMailboxExportJobRequest(input *DescribeMailboxExportJobInput) (req *request.Request, output *DescribeMailboxExportJobOutput) {
@@ -2944,20 +3043,21 @@ func (c *WorkMail) DescribeMailboxExportJobRequest(input *DescribeMailboxExportJ
 // API operation DescribeMailboxExportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeMailboxExportJob
 func (c *WorkMail) DescribeMailboxExportJob(input *DescribeMailboxExportJobInput) (*DescribeMailboxExportJobOutput, error) {
@@ -2997,14 +3097,13 @@ const opDescribeOrganization = "DescribeOrganization"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeOrganizationRequest method.
+//	req, resp := client.DescribeOrganizationRequest(params)
 //
-//    // Example sending a request using the DescribeOrganizationRequest method.
-//    req, resp := client.DescribeOrganizationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeOrganization
 func (c *WorkMail) DescribeOrganizationRequest(input *DescribeOrganizationInput) (req *request.Request, output *DescribeOrganizationOutput) {
@@ -3035,12 +3134,13 @@ func (c *WorkMail) DescribeOrganizationRequest(input *DescribeOrganizationInput)
 // API operation DescribeOrganization for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
+//
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeOrganization
 func (c *WorkMail) DescribeOrganization(input *DescribeOrganizationInput) (*DescribeOrganizationOutput, error) {
@@ -3080,14 +3180,13 @@ const opDescribeResource = "DescribeResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeResourceRequest method.
+//	req, resp := client.DescribeResourceRequest(params)
 //
-//    // Example sending a request using the DescribeResourceRequest method.
-//    req, resp := client.DescribeResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeResource
 func (c *WorkMail) DescribeResourceRequest(input *DescribeResourceInput) (req *request.Request, output *DescribeResourceOutput) {
@@ -3118,20 +3217,24 @@ func (c *WorkMail) DescribeResourceRequest(input *DescribeResourceInput) (req *r
 // API operation DescribeResource for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeResource
 func (c *WorkMail) DescribeResource(input *DescribeResourceInput) (*DescribeResourceOutput, error) {
@@ -3171,14 +3274,13 @@ const opDescribeUser = "DescribeUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeUserRequest method.
+//	req, resp := client.DescribeUserRequest(params)
 //
-//    // Example sending a request using the DescribeUserRequest method.
-//    req, resp := client.DescribeUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeUser
 func (c *WorkMail) DescribeUserRequest(input *DescribeUserInput) (req *request.Request, output *DescribeUserOutput) {
@@ -3209,20 +3311,21 @@ func (c *WorkMail) DescribeUserRequest(input *DescribeUserInput) (req *request.R
 // API operation DescribeUser for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DescribeUser
 func (c *WorkMail) DescribeUser(input *DescribeUserInput) (*DescribeUserOutput, error) {
@@ -3262,14 +3365,13 @@ const opDisassociateDelegateFromResource = "DisassociateDelegateFromResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateDelegateFromResourceRequest method.
+//	req, resp := client.DisassociateDelegateFromResourceRequest(params)
 //
-//    // Example sending a request using the DisassociateDelegateFromResourceRequest method.
-//    req, resp := client.DisassociateDelegateFromResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DisassociateDelegateFromResource
 func (c *WorkMail) DisassociateDelegateFromResourceRequest(input *DisassociateDelegateFromResourceInput) (req *request.Request, output *DisassociateDelegateFromResourceOutput) {
@@ -3301,24 +3403,28 @@ func (c *WorkMail) DisassociateDelegateFromResourceRequest(input *DisassociateDe
 // API operation DisassociateDelegateFromResource for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DisassociateDelegateFromResource
 func (c *WorkMail) DisassociateDelegateFromResource(input *DisassociateDelegateFromResourceInput) (*DisassociateDelegateFromResourceOutput, error) {
@@ -3358,14 +3464,13 @@ const opDisassociateMemberFromGroup = "DisassociateMemberFromGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateMemberFromGroupRequest method.
+//	req, resp := client.DisassociateMemberFromGroupRequest(params)
 //
-//    // Example sending a request using the DisassociateMemberFromGroupRequest method.
-//    req, resp := client.DisassociateMemberFromGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DisassociateMemberFromGroup
 func (c *WorkMail) DisassociateMemberFromGroupRequest(input *DisassociateMemberFromGroupInput) (req *request.Request, output *DisassociateMemberFromGroupOutput) {
@@ -3397,33 +3502,34 @@ func (c *WorkMail) DisassociateMemberFromGroupRequest(input *DisassociateMemberF
 // API operation DisassociateMemberFromGroup for usage and error information.
 //
 // Returned Error Types:
-//   * DirectoryServiceAuthenticationFailedException
-//   The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
+//   - DirectoryServiceAuthenticationFailedException
+//     The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * UnsupportedOperationException
-//   You can't perform a write operation against a read-only directory.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/DisassociateMemberFromGroup
 func (c *WorkMail) DisassociateMemberFromGroup(input *DisassociateMemberFromGroupInput) (*DisassociateMemberFromGroupOutput, error) {
@@ -3463,14 +3569,13 @@ const opGetAccessControlEffect = "GetAccessControlEffect"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAccessControlEffectRequest method.
+//	req, resp := client.GetAccessControlEffectRequest(params)
 //
-//    // Example sending a request using the GetAccessControlEffectRequest method.
-//    req, resp := client.GetAccessControlEffectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetAccessControlEffect
 func (c *WorkMail) GetAccessControlEffectRequest(input *GetAccessControlEffectInput) (req *request.Request, output *GetAccessControlEffectOutput) {
@@ -3504,23 +3609,24 @@ func (c *WorkMail) GetAccessControlEffectRequest(input *GetAccessControlEffectIn
 // API operation GetAccessControlEffect for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * ResourceNotFoundException
-//   The resource cannot be found.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - ResourceNotFoundException
+//     The resource cannot be found.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetAccessControlEffect
 func (c *WorkMail) GetAccessControlEffect(input *GetAccessControlEffectInput) (*GetAccessControlEffectOutput, error) {
@@ -3560,14 +3666,13 @@ const opGetDefaultRetentionPolicy = "GetDefaultRetentionPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDefaultRetentionPolicyRequest method.
+//	req, resp := client.GetDefaultRetentionPolicyRequest(params)
 //
-//    // Example sending a request using the GetDefaultRetentionPolicyRequest method.
-//    req, resp := client.GetDefaultRetentionPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetDefaultRetentionPolicy
 func (c *WorkMail) GetDefaultRetentionPolicyRequest(input *GetDefaultRetentionPolicyInput) (req *request.Request, output *GetDefaultRetentionPolicyOutput) {
@@ -3598,20 +3703,21 @@ func (c *WorkMail) GetDefaultRetentionPolicyRequest(input *GetDefaultRetentionPo
 // API operation GetDefaultRetentionPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetDefaultRetentionPolicy
 func (c *WorkMail) GetDefaultRetentionPolicy(input *GetDefaultRetentionPolicyInput) (*GetDefaultRetentionPolicyOutput, error) {
@@ -3651,14 +3757,13 @@ const opGetImpersonationRole = "GetImpersonationRole"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetImpersonationRoleRequest method.
+//	req, resp := client.GetImpersonationRoleRequest(params)
 //
-//    // Example sending a request using the GetImpersonationRoleRequest method.
-//    req, resp := client.GetImpersonationRoleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetImpersonationRole
 func (c *WorkMail) GetImpersonationRoleRequest(input *GetImpersonationRoleInput) (req *request.Request, output *GetImpersonationRoleOutput) {
@@ -3689,19 +3794,20 @@ func (c *WorkMail) GetImpersonationRoleRequest(input *GetImpersonationRoleInput)
 // API operation GetImpersonationRole for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * ResourceNotFoundException
-//   The resource cannot be found.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - ResourceNotFoundException
+//     The resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetImpersonationRole
 func (c *WorkMail) GetImpersonationRole(input *GetImpersonationRoleInput) (*GetImpersonationRoleOutput, error) {
@@ -3741,14 +3847,13 @@ const opGetImpersonationRoleEffect = "GetImpersonationRoleEffect"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetImpersonationRoleEffectRequest method.
+//	req, resp := client.GetImpersonationRoleEffectRequest(params)
 //
-//    // Example sending a request using the GetImpersonationRoleEffectRequest method.
-//    req, resp := client.GetImpersonationRoleEffectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetImpersonationRoleEffect
 func (c *WorkMail) GetImpersonationRoleEffectRequest(input *GetImpersonationRoleEffectInput) (req *request.Request, output *GetImpersonationRoleEffectOutput) {
@@ -3779,27 +3884,28 @@ func (c *WorkMail) GetImpersonationRoleEffectRequest(input *GetImpersonationRole
 // API operation GetImpersonationRoleEffect for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * ResourceNotFoundException
-//   The resource cannot be found.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - ResourceNotFoundException
+//     The resource cannot be found.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
+//
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetImpersonationRoleEffect
 func (c *WorkMail) GetImpersonationRoleEffect(input *GetImpersonationRoleEffectInput) (*GetImpersonationRoleEffectOutput, error) {
@@ -3839,14 +3945,13 @@ const opGetMailDomain = "GetMailDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMailDomainRequest method.
+//	req, resp := client.GetMailDomainRequest(params)
 //
-//    // Example sending a request using the GetMailDomainRequest method.
-//    req, resp := client.GetMailDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetMailDomain
 func (c *WorkMail) GetMailDomainRequest(input *GetMailDomainInput) (req *request.Request, output *GetMailDomainOutput) {
@@ -3878,19 +3983,20 @@ func (c *WorkMail) GetMailDomainRequest(input *GetMailDomainInput) (req *request
 // API operation GetMailDomain for usage and error information.
 //
 // Returned Error Types:
-//   * MailDomainNotFoundException
-//   The domain specified is not found in your organization.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - MailDomainNotFoundException
+//     The domain specified is not found in your organization.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetMailDomain
 func (c *WorkMail) GetMailDomain(input *GetMailDomainInput) (*GetMailDomainOutput, error) {
@@ -3930,14 +4036,13 @@ const opGetMailboxDetails = "GetMailboxDetails"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMailboxDetailsRequest method.
+//	req, resp := client.GetMailboxDetailsRequest(params)
 //
-//    // Example sending a request using the GetMailboxDetailsRequest method.
-//    req, resp := client.GetMailboxDetailsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetMailboxDetails
 func (c *WorkMail) GetMailboxDetailsRequest(input *GetMailboxDetailsInput) (req *request.Request, output *GetMailboxDetailsOutput) {
@@ -3968,17 +4073,21 @@ func (c *WorkMail) GetMailboxDetailsRequest(input *GetMailboxDetailsInput) (req 
 // API operation GetMailboxDetails for usage and error information.
 //
 // Returned Error Types:
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetMailboxDetails
 func (c *WorkMail) GetMailboxDetails(input *GetMailboxDetailsInput) (*GetMailboxDetailsOutput, error) {
@@ -4018,14 +4127,13 @@ const opGetMobileDeviceAccessEffect = "GetMobileDeviceAccessEffect"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMobileDeviceAccessEffectRequest method.
+//	req, resp := client.GetMobileDeviceAccessEffectRequest(params)
 //
-//    // Example sending a request using the GetMobileDeviceAccessEffectRequest method.
-//    req, resp := client.GetMobileDeviceAccessEffectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetMobileDeviceAccessEffect
 func (c *WorkMail) GetMobileDeviceAccessEffectRequest(input *GetMobileDeviceAccessEffectInput) (req *request.Request, output *GetMobileDeviceAccessEffectOutput) {
@@ -4059,16 +4167,17 @@ func (c *WorkMail) GetMobileDeviceAccessEffectRequest(input *GetMobileDeviceAcce
 // API operation GetMobileDeviceAccessEffect for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetMobileDeviceAccessEffect
 func (c *WorkMail) GetMobileDeviceAccessEffect(input *GetMobileDeviceAccessEffectInput) (*GetMobileDeviceAccessEffectOutput, error) {
@@ -4108,14 +4217,13 @@ const opGetMobileDeviceAccessOverride = "GetMobileDeviceAccessOverride"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMobileDeviceAccessOverrideRequest method.
+//	req, resp := client.GetMobileDeviceAccessOverrideRequest(params)
 //
-//    // Example sending a request using the GetMobileDeviceAccessOverrideRequest method.
-//    req, resp := client.GetMobileDeviceAccessOverrideRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetMobileDeviceAccessOverride
 func (c *WorkMail) GetMobileDeviceAccessOverrideRequest(input *GetMobileDeviceAccessOverrideInput) (req *request.Request, output *GetMobileDeviceAccessOverrideOutput) {
@@ -4147,23 +4255,24 @@ func (c *WorkMail) GetMobileDeviceAccessOverrideRequest(input *GetMobileDeviceAc
 // API operation GetMobileDeviceAccessOverride for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * ResourceNotFoundException
-//   The resource cannot be found.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
+//
+//   - ResourceNotFoundException
+//     The resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/GetMobileDeviceAccessOverride
 func (c *WorkMail) GetMobileDeviceAccessOverride(input *GetMobileDeviceAccessOverrideInput) (*GetMobileDeviceAccessOverrideOutput, error) {
@@ -4203,14 +4312,13 @@ const opListAccessControlRules = "ListAccessControlRules"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAccessControlRulesRequest method.
+//	req, resp := client.ListAccessControlRulesRequest(params)
 //
-//    // Example sending a request using the ListAccessControlRulesRequest method.
-//    req, resp := client.ListAccessControlRulesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListAccessControlRules
 func (c *WorkMail) ListAccessControlRulesRequest(input *ListAccessControlRulesInput) (req *request.Request, output *ListAccessControlRulesOutput) {
@@ -4241,13 +4349,14 @@ func (c *WorkMail) ListAccessControlRulesRequest(input *ListAccessControlRulesIn
 // API operation ListAccessControlRules for usage and error information.
 //
 // Returned Error Types:
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListAccessControlRules
 func (c *WorkMail) ListAccessControlRules(input *ListAccessControlRulesInput) (*ListAccessControlRulesOutput, error) {
@@ -4287,14 +4396,13 @@ const opListAliases = "ListAliases"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAliasesRequest method.
+//	req, resp := client.ListAliasesRequest(params)
 //
-//    // Example sending a request using the ListAliasesRequest method.
-//    req, resp := client.ListAliasesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListAliases
 func (c *WorkMail) ListAliasesRequest(input *ListAliasesInput) (req *request.Request, output *ListAliasesOutput) {
@@ -4331,24 +4439,25 @@ func (c *WorkMail) ListAliasesRequest(input *ListAliasesInput) (req *request.Req
 // API operation ListAliases for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListAliases
 func (c *WorkMail) ListAliases(input *ListAliasesInput) (*ListAliasesOutput, error) {
@@ -4380,15 +4489,14 @@ func (c *WorkMail) ListAliasesWithContext(ctx aws.Context, input *ListAliasesInp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAliases operation.
-//    pageNum := 0
-//    err := client.ListAliasesPages(params,
-//        func(page *workmail.ListAliasesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAliases operation.
+//	pageNum := 0
+//	err := client.ListAliasesPages(params,
+//	    func(page *workmail.ListAliasesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListAliasesPages(input *ListAliasesInput, fn func(*ListAliasesOutput, bool) bool) error {
 	return c.ListAliasesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4440,14 +4548,13 @@ const opListAvailabilityConfigurations = "ListAvailabilityConfigurations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAvailabilityConfigurationsRequest method.
+//	req, resp := client.ListAvailabilityConfigurationsRequest(params)
 //
-//    // Example sending a request using the ListAvailabilityConfigurationsRequest method.
-//    req, resp := client.ListAvailabilityConfigurationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListAvailabilityConfigurations
 func (c *WorkMail) ListAvailabilityConfigurationsRequest(input *ListAvailabilityConfigurationsInput) (req *request.Request, output *ListAvailabilityConfigurationsOutput) {
@@ -4484,13 +4591,14 @@ func (c *WorkMail) ListAvailabilityConfigurationsRequest(input *ListAvailability
 // API operation ListAvailabilityConfigurations for usage and error information.
 //
 // Returned Error Types:
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListAvailabilityConfigurations
 func (c *WorkMail) ListAvailabilityConfigurations(input *ListAvailabilityConfigurationsInput) (*ListAvailabilityConfigurationsOutput, error) {
@@ -4522,15 +4630,14 @@ func (c *WorkMail) ListAvailabilityConfigurationsWithContext(ctx aws.Context, in
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAvailabilityConfigurations operation.
-//    pageNum := 0
-//    err := client.ListAvailabilityConfigurationsPages(params,
-//        func(page *workmail.ListAvailabilityConfigurationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAvailabilityConfigurations operation.
+//	pageNum := 0
+//	err := client.ListAvailabilityConfigurationsPages(params,
+//	    func(page *workmail.ListAvailabilityConfigurationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListAvailabilityConfigurationsPages(input *ListAvailabilityConfigurationsInput, fn func(*ListAvailabilityConfigurationsOutput, bool) bool) error {
 	return c.ListAvailabilityConfigurationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4582,14 +4689,13 @@ const opListGroupMembers = "ListGroupMembers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListGroupMembersRequest method.
+//	req, resp := client.ListGroupMembersRequest(params)
 //
-//    // Example sending a request using the ListGroupMembersRequest method.
-//    req, resp := client.ListGroupMembersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListGroupMembers
 func (c *WorkMail) ListGroupMembersRequest(input *ListGroupMembersInput) (req *request.Request, output *ListGroupMembersOutput) {
@@ -4627,24 +4733,25 @@ func (c *WorkMail) ListGroupMembersRequest(input *ListGroupMembersInput) (req *r
 // API operation ListGroupMembers for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListGroupMembers
 func (c *WorkMail) ListGroupMembers(input *ListGroupMembersInput) (*ListGroupMembersOutput, error) {
@@ -4676,15 +4783,14 @@ func (c *WorkMail) ListGroupMembersWithContext(ctx aws.Context, input *ListGroup
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListGroupMembers operation.
-//    pageNum := 0
-//    err := client.ListGroupMembersPages(params,
-//        func(page *workmail.ListGroupMembersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListGroupMembers operation.
+//	pageNum := 0
+//	err := client.ListGroupMembersPages(params,
+//	    func(page *workmail.ListGroupMembersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListGroupMembersPages(input *ListGroupMembersInput, fn func(*ListGroupMembersOutput, bool) bool) error {
 	return c.ListGroupMembersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4736,14 +4842,13 @@ const opListGroups = "ListGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListGroupsRequest method.
+//	req, resp := client.ListGroupsRequest(params)
 //
-//    // Example sending a request using the ListGroupsRequest method.
-//    req, resp := client.ListGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListGroups
 func (c *WorkMail) ListGroupsRequest(input *ListGroupsInput) (req *request.Request, output *ListGroupsOutput) {
@@ -4780,20 +4885,21 @@ func (c *WorkMail) ListGroupsRequest(input *ListGroupsInput) (req *request.Reque
 // API operation ListGroups for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListGroups
 func (c *WorkMail) ListGroups(input *ListGroupsInput) (*ListGroupsOutput, error) {
@@ -4825,15 +4931,14 @@ func (c *WorkMail) ListGroupsWithContext(ctx aws.Context, input *ListGroupsInput
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListGroups operation.
-//    pageNum := 0
-//    err := client.ListGroupsPages(params,
-//        func(page *workmail.ListGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListGroups operation.
+//	pageNum := 0
+//	err := client.ListGroupsPages(params,
+//	    func(page *workmail.ListGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListGroupsPages(input *ListGroupsInput, fn func(*ListGroupsOutput, bool) bool) error {
 	return c.ListGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4869,6 +4974,158 @@ func (c *WorkMail) ListGroupsPagesWithContext(ctx aws.Context, input *ListGroups
 	return p.Err()
 }
 
+const opListGroupsForEntity = "ListGroupsForEntity"
+
+// ListGroupsForEntityRequest generates a "aws/request.Request" representing the
+// client's request for the ListGroupsForEntity operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListGroupsForEntity for more information on using the ListGroupsForEntity
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListGroupsForEntityRequest method.
+//	req, resp := client.ListGroupsForEntityRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListGroupsForEntity
+func (c *WorkMail) ListGroupsForEntityRequest(input *ListGroupsForEntityInput) (req *request.Request, output *ListGroupsForEntityOutput) {
+	op := &request.Operation{
+		Name:       opListGroupsForEntity,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListGroupsForEntityInput{}
+	}
+
+	output = &ListGroupsForEntityOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListGroupsForEntity API operation for Amazon WorkMail.
+//
+// Returns all the groups to which an entity belongs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkMail's
+// API operation ListGroupsForEntity for usage and error information.
+//
+// Returned Error Types:
+//
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
+//
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
+//
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListGroupsForEntity
+func (c *WorkMail) ListGroupsForEntity(input *ListGroupsForEntityInput) (*ListGroupsForEntityOutput, error) {
+	req, out := c.ListGroupsForEntityRequest(input)
+	return out, req.Send()
+}
+
+// ListGroupsForEntityWithContext is the same as ListGroupsForEntity with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListGroupsForEntity for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkMail) ListGroupsForEntityWithContext(ctx aws.Context, input *ListGroupsForEntityInput, opts ...request.Option) (*ListGroupsForEntityOutput, error) {
+	req, out := c.ListGroupsForEntityRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListGroupsForEntityPages iterates over the pages of a ListGroupsForEntity operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListGroupsForEntity method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListGroupsForEntity operation.
+//	pageNum := 0
+//	err := client.ListGroupsForEntityPages(params,
+//	    func(page *workmail.ListGroupsForEntityOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *WorkMail) ListGroupsForEntityPages(input *ListGroupsForEntityInput, fn func(*ListGroupsForEntityOutput, bool) bool) error {
+	return c.ListGroupsForEntityPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListGroupsForEntityPagesWithContext same as ListGroupsForEntityPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkMail) ListGroupsForEntityPagesWithContext(ctx aws.Context, input *ListGroupsForEntityInput, fn func(*ListGroupsForEntityOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListGroupsForEntityInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListGroupsForEntityRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListGroupsForEntityOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListImpersonationRoles = "ListImpersonationRoles"
 
 // ListImpersonationRolesRequest generates a "aws/request.Request" representing the
@@ -4885,14 +5142,13 @@ const opListImpersonationRoles = "ListImpersonationRoles"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListImpersonationRolesRequest method.
+//	req, resp := client.ListImpersonationRolesRequest(params)
 //
-//    // Example sending a request using the ListImpersonationRolesRequest method.
-//    req, resp := client.ListImpersonationRolesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListImpersonationRoles
 func (c *WorkMail) ListImpersonationRolesRequest(input *ListImpersonationRolesInput) (req *request.Request, output *ListImpersonationRolesOutput) {
@@ -4929,16 +5185,17 @@ func (c *WorkMail) ListImpersonationRolesRequest(input *ListImpersonationRolesIn
 // API operation ListImpersonationRoles for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListImpersonationRoles
 func (c *WorkMail) ListImpersonationRoles(input *ListImpersonationRolesInput) (*ListImpersonationRolesOutput, error) {
@@ -4970,15 +5227,14 @@ func (c *WorkMail) ListImpersonationRolesWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListImpersonationRoles operation.
-//    pageNum := 0
-//    err := client.ListImpersonationRolesPages(params,
-//        func(page *workmail.ListImpersonationRolesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListImpersonationRoles operation.
+//	pageNum := 0
+//	err := client.ListImpersonationRolesPages(params,
+//	    func(page *workmail.ListImpersonationRolesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListImpersonationRolesPages(input *ListImpersonationRolesInput, fn func(*ListImpersonationRolesOutput, bool) bool) error {
 	return c.ListImpersonationRolesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5030,14 +5286,13 @@ const opListMailDomains = "ListMailDomains"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMailDomainsRequest method.
+//	req, resp := client.ListMailDomainsRequest(params)
 //
-//    // Example sending a request using the ListMailDomainsRequest method.
-//    req, resp := client.ListMailDomainsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListMailDomains
 func (c *WorkMail) ListMailDomainsRequest(input *ListMailDomainsInput) (req *request.Request, output *ListMailDomainsOutput) {
@@ -5074,16 +5329,17 @@ func (c *WorkMail) ListMailDomainsRequest(input *ListMailDomainsInput) (req *req
 // API operation ListMailDomains for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListMailDomains
 func (c *WorkMail) ListMailDomains(input *ListMailDomainsInput) (*ListMailDomainsOutput, error) {
@@ -5115,15 +5371,14 @@ func (c *WorkMail) ListMailDomainsWithContext(ctx aws.Context, input *ListMailDo
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMailDomains operation.
-//    pageNum := 0
-//    err := client.ListMailDomainsPages(params,
-//        func(page *workmail.ListMailDomainsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMailDomains operation.
+//	pageNum := 0
+//	err := client.ListMailDomainsPages(params,
+//	    func(page *workmail.ListMailDomainsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListMailDomainsPages(input *ListMailDomainsInput, fn func(*ListMailDomainsOutput, bool) bool) error {
 	return c.ListMailDomainsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5175,14 +5430,13 @@ const opListMailboxExportJobs = "ListMailboxExportJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMailboxExportJobsRequest method.
+//	req, resp := client.ListMailboxExportJobsRequest(params)
 //
-//    // Example sending a request using the ListMailboxExportJobsRequest method.
-//    req, resp := client.ListMailboxExportJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListMailboxExportJobs
 func (c *WorkMail) ListMailboxExportJobsRequest(input *ListMailboxExportJobsInput) (req *request.Request, output *ListMailboxExportJobsOutput) {
@@ -5220,16 +5474,17 @@ func (c *WorkMail) ListMailboxExportJobsRequest(input *ListMailboxExportJobsInpu
 // API operation ListMailboxExportJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListMailboxExportJobs
 func (c *WorkMail) ListMailboxExportJobs(input *ListMailboxExportJobsInput) (*ListMailboxExportJobsOutput, error) {
@@ -5261,15 +5516,14 @@ func (c *WorkMail) ListMailboxExportJobsWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMailboxExportJobs operation.
-//    pageNum := 0
-//    err := client.ListMailboxExportJobsPages(params,
-//        func(page *workmail.ListMailboxExportJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMailboxExportJobs operation.
+//	pageNum := 0
+//	err := client.ListMailboxExportJobsPages(params,
+//	    func(page *workmail.ListMailboxExportJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListMailboxExportJobsPages(input *ListMailboxExportJobsInput, fn func(*ListMailboxExportJobsOutput, bool) bool) error {
 	return c.ListMailboxExportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5321,14 +5575,13 @@ const opListMailboxPermissions = "ListMailboxPermissions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMailboxPermissionsRequest method.
+//	req, resp := client.ListMailboxPermissionsRequest(params)
 //
-//    // Example sending a request using the ListMailboxPermissionsRequest method.
-//    req, resp := client.ListMailboxPermissionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListMailboxPermissions
 func (c *WorkMail) ListMailboxPermissionsRequest(input *ListMailboxPermissionsInput) (req *request.Request, output *ListMailboxPermissionsOutput) {
@@ -5366,20 +5619,21 @@ func (c *WorkMail) ListMailboxPermissionsRequest(input *ListMailboxPermissionsIn
 // API operation ListMailboxPermissions for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListMailboxPermissions
 func (c *WorkMail) ListMailboxPermissions(input *ListMailboxPermissionsInput) (*ListMailboxPermissionsOutput, error) {
@@ -5411,15 +5665,14 @@ func (c *WorkMail) ListMailboxPermissionsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMailboxPermissions operation.
-//    pageNum := 0
-//    err := client.ListMailboxPermissionsPages(params,
-//        func(page *workmail.ListMailboxPermissionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMailboxPermissions operation.
+//	pageNum := 0
+//	err := client.ListMailboxPermissionsPages(params,
+//	    func(page *workmail.ListMailboxPermissionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListMailboxPermissionsPages(input *ListMailboxPermissionsInput, fn func(*ListMailboxPermissionsOutput, bool) bool) error {
 	return c.ListMailboxPermissionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5471,14 +5724,13 @@ const opListMobileDeviceAccessOverrides = "ListMobileDeviceAccessOverrides"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMobileDeviceAccessOverridesRequest method.
+//	req, resp := client.ListMobileDeviceAccessOverridesRequest(params)
 //
-//    // Example sending a request using the ListMobileDeviceAccessOverridesRequest method.
-//    req, resp := client.ListMobileDeviceAccessOverridesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListMobileDeviceAccessOverrides
 func (c *WorkMail) ListMobileDeviceAccessOverridesRequest(input *ListMobileDeviceAccessOverridesInput) (req *request.Request, output *ListMobileDeviceAccessOverridesOutput) {
@@ -5516,20 +5768,21 @@ func (c *WorkMail) ListMobileDeviceAccessOverridesRequest(input *ListMobileDevic
 // API operation ListMobileDeviceAccessOverrides for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListMobileDeviceAccessOverrides
 func (c *WorkMail) ListMobileDeviceAccessOverrides(input *ListMobileDeviceAccessOverridesInput) (*ListMobileDeviceAccessOverridesOutput, error) {
@@ -5561,15 +5814,14 @@ func (c *WorkMail) ListMobileDeviceAccessOverridesWithContext(ctx aws.Context, i
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMobileDeviceAccessOverrides operation.
-//    pageNum := 0
-//    err := client.ListMobileDeviceAccessOverridesPages(params,
-//        func(page *workmail.ListMobileDeviceAccessOverridesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMobileDeviceAccessOverrides operation.
+//	pageNum := 0
+//	err := client.ListMobileDeviceAccessOverridesPages(params,
+//	    func(page *workmail.ListMobileDeviceAccessOverridesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListMobileDeviceAccessOverridesPages(input *ListMobileDeviceAccessOverridesInput, fn func(*ListMobileDeviceAccessOverridesOutput, bool) bool) error {
 	return c.ListMobileDeviceAccessOverridesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5621,14 +5873,13 @@ const opListMobileDeviceAccessRules = "ListMobileDeviceAccessRules"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMobileDeviceAccessRulesRequest method.
+//	req, resp := client.ListMobileDeviceAccessRulesRequest(params)
 //
-//    // Example sending a request using the ListMobileDeviceAccessRulesRequest method.
-//    req, resp := client.ListMobileDeviceAccessRulesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListMobileDeviceAccessRules
 func (c *WorkMail) ListMobileDeviceAccessRulesRequest(input *ListMobileDeviceAccessRulesInput) (req *request.Request, output *ListMobileDeviceAccessRulesOutput) {
@@ -5659,16 +5910,17 @@ func (c *WorkMail) ListMobileDeviceAccessRulesRequest(input *ListMobileDeviceAcc
 // API operation ListMobileDeviceAccessRules for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListMobileDeviceAccessRules
 func (c *WorkMail) ListMobileDeviceAccessRules(input *ListMobileDeviceAccessRulesInput) (*ListMobileDeviceAccessRulesOutput, error) {
@@ -5708,14 +5960,13 @@ const opListOrganizations = "ListOrganizations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListOrganizationsRequest method.
+//	req, resp := client.ListOrganizationsRequest(params)
 //
-//    // Example sending a request using the ListOrganizationsRequest method.
-//    req, resp := client.ListOrganizationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListOrganizations
 func (c *WorkMail) ListOrganizationsRequest(input *ListOrganizationsInput) (req *request.Request, output *ListOrganizationsOutput) {
@@ -5752,8 +6003,8 @@ func (c *WorkMail) ListOrganizationsRequest(input *ListOrganizationsInput) (req 
 // API operation ListOrganizations for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListOrganizations
 func (c *WorkMail) ListOrganizations(input *ListOrganizationsInput) (*ListOrganizationsOutput, error) {
@@ -5785,15 +6036,14 @@ func (c *WorkMail) ListOrganizationsWithContext(ctx aws.Context, input *ListOrga
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListOrganizations operation.
-//    pageNum := 0
-//    err := client.ListOrganizationsPages(params,
-//        func(page *workmail.ListOrganizationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListOrganizations operation.
+//	pageNum := 0
+//	err := client.ListOrganizationsPages(params,
+//	    func(page *workmail.ListOrganizationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListOrganizationsPages(input *ListOrganizationsInput, fn func(*ListOrganizationsOutput, bool) bool) error {
 	return c.ListOrganizationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5845,14 +6095,13 @@ const opListResourceDelegates = "ListResourceDelegates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResourceDelegatesRequest method.
+//	req, resp := client.ListResourceDelegatesRequest(params)
 //
-//    // Example sending a request using the ListResourceDelegatesRequest method.
-//    req, resp := client.ListResourceDelegatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListResourceDelegates
 func (c *WorkMail) ListResourceDelegatesRequest(input *ListResourceDelegatesInput) (req *request.Request, output *ListResourceDelegatesOutput) {
@@ -5890,24 +6139,28 @@ func (c *WorkMail) ListResourceDelegatesRequest(input *ListResourceDelegatesInpu
 // API operation ListResourceDelegates for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListResourceDelegates
 func (c *WorkMail) ListResourceDelegates(input *ListResourceDelegatesInput) (*ListResourceDelegatesOutput, error) {
@@ -5939,15 +6192,14 @@ func (c *WorkMail) ListResourceDelegatesWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResourceDelegates operation.
-//    pageNum := 0
-//    err := client.ListResourceDelegatesPages(params,
-//        func(page *workmail.ListResourceDelegatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResourceDelegates operation.
+//	pageNum := 0
+//	err := client.ListResourceDelegatesPages(params,
+//	    func(page *workmail.ListResourceDelegatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListResourceDelegatesPages(input *ListResourceDelegatesInput, fn func(*ListResourceDelegatesOutput, bool) bool) error {
 	return c.ListResourceDelegatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5999,14 +6251,13 @@ const opListResources = "ListResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResourcesRequest method.
+//	req, resp := client.ListResourcesRequest(params)
 //
-//    // Example sending a request using the ListResourcesRequest method.
-//    req, resp := client.ListResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListResources
 func (c *WorkMail) ListResourcesRequest(input *ListResourcesInput) (req *request.Request, output *ListResourcesOutput) {
@@ -6043,16 +6294,20 @@ func (c *WorkMail) ListResourcesRequest(input *ListResourcesInput) (req *request
 // API operation ListResources for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListResources
 func (c *WorkMail) ListResources(input *ListResourcesInput) (*ListResourcesOutput, error) {
@@ -6084,15 +6339,14 @@ func (c *WorkMail) ListResourcesWithContext(ctx aws.Context, input *ListResource
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResources operation.
-//    pageNum := 0
-//    err := client.ListResourcesPages(params,
-//        func(page *workmail.ListResourcesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResources operation.
+//	pageNum := 0
+//	err := client.ListResourcesPages(params,
+//	    func(page *workmail.ListResourcesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListResourcesPages(input *ListResourcesInput, fn func(*ListResourcesOutput, bool) bool) error {
 	return c.ListResourcesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6144,14 +6398,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListTagsForResource
 func (c *WorkMail) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -6182,8 +6435,8 @@ func (c *WorkMail) ListTagsForResourceRequest(input *ListTagsForResourceInput) (
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource cannot be found.
+//   - ResourceNotFoundException
+//     The resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListTagsForResource
 func (c *WorkMail) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -6223,14 +6476,13 @@ const opListUsers = "ListUsers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListUsersRequest method.
+//	req, resp := client.ListUsersRequest(params)
 //
-//    // Example sending a request using the ListUsersRequest method.
-//    req, resp := client.ListUsersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListUsers
 func (c *WorkMail) ListUsersRequest(input *ListUsersInput) (req *request.Request, output *ListUsersOutput) {
@@ -6267,16 +6519,17 @@ func (c *WorkMail) ListUsersRequest(input *ListUsersInput) (req *request.Request
 // API operation ListUsers for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ListUsers
 func (c *WorkMail) ListUsers(input *ListUsersInput) (*ListUsersOutput, error) {
@@ -6308,15 +6561,14 @@ func (c *WorkMail) ListUsersWithContext(ctx aws.Context, input *ListUsersInput, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListUsers operation.
-//    pageNum := 0
-//    err := client.ListUsersPages(params,
-//        func(page *workmail.ListUsersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListUsers operation.
+//	pageNum := 0
+//	err := client.ListUsersPages(params,
+//	    func(page *workmail.ListUsersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkMail) ListUsersPages(input *ListUsersInput, fn func(*ListUsersOutput, bool) bool) error {
 	return c.ListUsersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6368,14 +6620,13 @@ const opPutAccessControlRule = "PutAccessControlRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutAccessControlRuleRequest method.
+//	req, resp := client.PutAccessControlRuleRequest(params)
 //
-//    // Example sending a request using the PutAccessControlRuleRequest method.
-//    req, resp := client.PutAccessControlRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutAccessControlRule
 func (c *WorkMail) PutAccessControlRuleRequest(input *PutAccessControlRuleInput) (req *request.Request, output *PutAccessControlRuleOutput) {
@@ -6410,26 +6661,27 @@ func (c *WorkMail) PutAccessControlRuleRequest(input *PutAccessControlRuleInput)
 // API operation PutAccessControlRule for usage and error information.
 //
 // Returned Error Types:
-//   * LimitExceededException
-//   The request exceeds the limit of the resource.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - LimitExceededException
+//     The request exceeds the limit of the resource.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * ResourceNotFoundException
-//   The resource cannot be found.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - ResourceNotFoundException
+//     The resource cannot be found.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutAccessControlRule
 func (c *WorkMail) PutAccessControlRule(input *PutAccessControlRuleInput) (*PutAccessControlRuleOutput, error) {
@@ -6469,14 +6721,13 @@ const opPutEmailMonitoringConfiguration = "PutEmailMonitoringConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutEmailMonitoringConfigurationRequest method.
+//	req, resp := client.PutEmailMonitoringConfigurationRequest(params)
 //
-//    // Example sending a request using the PutEmailMonitoringConfigurationRequest method.
-//    req, resp := client.PutEmailMonitoringConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutEmailMonitoringConfiguration
 func (c *WorkMail) PutEmailMonitoringConfigurationRequest(input *PutEmailMonitoringConfigurationInput) (req *request.Request, output *PutEmailMonitoringConfigurationOutput) {
@@ -6508,19 +6759,20 @@ func (c *WorkMail) PutEmailMonitoringConfigurationRequest(input *PutEmailMonitor
 // API operation PutEmailMonitoringConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource cannot be found.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - ResourceNotFoundException
+//     The resource cannot be found.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutEmailMonitoringConfiguration
 func (c *WorkMail) PutEmailMonitoringConfiguration(input *PutEmailMonitoringConfigurationInput) (*PutEmailMonitoringConfigurationOutput, error) {
@@ -6560,14 +6812,13 @@ const opPutInboundDmarcSettings = "PutInboundDmarcSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutInboundDmarcSettingsRequest method.
+//	req, resp := client.PutInboundDmarcSettingsRequest(params)
 //
-//    // Example sending a request using the PutInboundDmarcSettingsRequest method.
-//    req, resp := client.PutInboundDmarcSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutInboundDmarcSettings
 func (c *WorkMail) PutInboundDmarcSettingsRequest(input *PutInboundDmarcSettingsInput) (req *request.Request, output *PutInboundDmarcSettingsOutput) {
@@ -6599,13 +6850,14 @@ func (c *WorkMail) PutInboundDmarcSettingsRequest(input *PutInboundDmarcSettings
 // API operation PutInboundDmarcSettings for usage and error information.
 //
 // Returned Error Types:
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutInboundDmarcSettings
 func (c *WorkMail) PutInboundDmarcSettings(input *PutInboundDmarcSettingsInput) (*PutInboundDmarcSettingsOutput, error) {
@@ -6645,14 +6897,13 @@ const opPutMailboxPermissions = "PutMailboxPermissions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutMailboxPermissionsRequest method.
+//	req, resp := client.PutMailboxPermissionsRequest(params)
 //
-//    // Example sending a request using the PutMailboxPermissionsRequest method.
-//    req, resp := client.PutMailboxPermissionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutMailboxPermissions
 func (c *WorkMail) PutMailboxPermissionsRequest(input *PutMailboxPermissionsInput) (req *request.Request, output *PutMailboxPermissionsOutput) {
@@ -6685,24 +6936,25 @@ func (c *WorkMail) PutMailboxPermissionsRequest(input *PutMailboxPermissionsInpu
 // API operation PutMailboxPermissions for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutMailboxPermissions
 func (c *WorkMail) PutMailboxPermissions(input *PutMailboxPermissionsInput) (*PutMailboxPermissionsOutput, error) {
@@ -6742,14 +6994,13 @@ const opPutMobileDeviceAccessOverride = "PutMobileDeviceAccessOverride"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutMobileDeviceAccessOverrideRequest method.
+//	req, resp := client.PutMobileDeviceAccessOverrideRequest(params)
 //
-//    // Example sending a request using the PutMobileDeviceAccessOverrideRequest method.
-//    req, resp := client.PutMobileDeviceAccessOverrideRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutMobileDeviceAccessOverride
 func (c *WorkMail) PutMobileDeviceAccessOverrideRequest(input *PutMobileDeviceAccessOverrideInput) (req *request.Request, output *PutMobileDeviceAccessOverrideOutput) {
@@ -6782,24 +7033,25 @@ func (c *WorkMail) PutMobileDeviceAccessOverrideRequest(input *PutMobileDeviceAc
 // API operation PutMobileDeviceAccessOverride for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
+//
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutMobileDeviceAccessOverride
 func (c *WorkMail) PutMobileDeviceAccessOverride(input *PutMobileDeviceAccessOverrideInput) (*PutMobileDeviceAccessOverrideOutput, error) {
@@ -6839,14 +7091,13 @@ const opPutRetentionPolicy = "PutRetentionPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutRetentionPolicyRequest method.
+//	req, resp := client.PutRetentionPolicyRequest(params)
 //
-//    // Example sending a request using the PutRetentionPolicyRequest method.
-//    req, resp := client.PutRetentionPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutRetentionPolicy
 func (c *WorkMail) PutRetentionPolicyRequest(input *PutRetentionPolicyInput) (req *request.Request, output *PutRetentionPolicyOutput) {
@@ -6878,19 +7129,20 @@ func (c *WorkMail) PutRetentionPolicyRequest(input *PutRetentionPolicyInput) (re
 // API operation PutRetentionPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * LimitExceededException
-//   The request exceeds the limit of the resource.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - LimitExceededException
+//     The request exceeds the limit of the resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/PutRetentionPolicy
 func (c *WorkMail) PutRetentionPolicy(input *PutRetentionPolicyInput) (*PutRetentionPolicyOutput, error) {
@@ -6930,14 +7182,13 @@ const opRegisterMailDomain = "RegisterMailDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterMailDomainRequest method.
+//	req, resp := client.RegisterMailDomainRequest(params)
 //
-//    // Example sending a request using the RegisterMailDomainRequest method.
-//    req, resp := client.RegisterMailDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/RegisterMailDomain
 func (c *WorkMail) RegisterMailDomainRequest(input *RegisterMailDomainInput) (req *request.Request, output *RegisterMailDomainOutput) {
@@ -6972,23 +7223,24 @@ func (c *WorkMail) RegisterMailDomainRequest(input *RegisterMailDomainInput) (re
 // API operation RegisterMailDomain for usage and error information.
 //
 // Returned Error Types:
-//   * MailDomainInUseException
-//   The domain you're trying to change is in use by another user or organization
-//   in your account. See the error message for details.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - MailDomainInUseException
+//     The domain you're trying to change is in use by another user or organization
+//     in your account. See the error message for details.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * LimitExceededException
-//   The request exceeds the limit of the resource.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - LimitExceededException
+//     The request exceeds the limit of the resource.
+//
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/RegisterMailDomain
 func (c *WorkMail) RegisterMailDomain(input *RegisterMailDomainInput) (*RegisterMailDomainOutput, error) {
@@ -7028,14 +7280,13 @@ const opRegisterToWorkMail = "RegisterToWorkMail"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterToWorkMailRequest method.
+//	req, resp := client.RegisterToWorkMailRequest(params)
 //
-//    // Example sending a request using the RegisterToWorkMailRequest method.
-//    req, resp := client.RegisterToWorkMailRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/RegisterToWorkMail
 func (c *WorkMail) RegisterToWorkMailRequest(input *RegisterToWorkMailInput) (req *request.Request, output *RegisterToWorkMailOutput) {
@@ -7075,44 +7326,45 @@ func (c *WorkMail) RegisterToWorkMailRequest(input *RegisterToWorkMailInput) (re
 // API operation RegisterToWorkMail for usage and error information.
 //
 // Returned Error Types:
-//   * DirectoryServiceAuthenticationFailedException
-//   The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
+//   - DirectoryServiceAuthenticationFailedException
+//     The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * EmailAddressInUseException
-//   The email address that you're trying to assign is already created for a different
-//   user, group, or resource.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - EmailAddressInUseException
+//     The email address that you're trying to assign is already created for a different
+//     user, group, or resource.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * EntityAlreadyRegisteredException
-//   The user, group, or resource that you're trying to register is already registered.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityAlreadyRegisteredException
+//     The user, group, or resource that you're trying to register is already registered.
 //
-//   * MailDomainNotFoundException
-//   The domain specified is not found in your organization.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * MailDomainStateException
-//   After a domain has been added to the organization, it must be verified. The
-//   domain is not yet verified.
+//   - MailDomainNotFoundException
+//     The domain specified is not found in your organization.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - MailDomainStateException
+//     After a domain has been added to the organization, it must be verified. The
+//     domain is not yet verified.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/RegisterToWorkMail
 func (c *WorkMail) RegisterToWorkMail(input *RegisterToWorkMailInput) (*RegisterToWorkMailOutput, error) {
@@ -7152,14 +7404,13 @@ const opResetPassword = "ResetPassword"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ResetPasswordRequest method.
+//	req, resp := client.ResetPasswordRequest(params)
 //
-//    // Example sending a request using the ResetPasswordRequest method.
-//    req, resp := client.ResetPasswordRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ResetPassword
 func (c *WorkMail) ResetPasswordRequest(input *ResetPasswordInput) (req *request.Request, output *ResetPasswordOutput) {
@@ -7191,37 +7442,38 @@ func (c *WorkMail) ResetPasswordRequest(input *ResetPasswordInput) (req *request
 // API operation ResetPassword for usage and error information.
 //
 // Returned Error Types:
-//   * DirectoryServiceAuthenticationFailedException
-//   The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
+//   - DirectoryServiceAuthenticationFailedException
+//     The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * InvalidPasswordException
-//   The supplied password doesn't match the minimum security constraints, such
-//   as length or use of special characters.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidPasswordException
+//     The supplied password doesn't match the minimum security constraints, such
+//     as length or use of special characters.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * UnsupportedOperationException
-//   You can't perform a write operation against a read-only directory.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/ResetPassword
 func (c *WorkMail) ResetPassword(input *ResetPasswordInput) (*ResetPasswordOutput, error) {
@@ -7261,14 +7513,13 @@ const opStartMailboxExportJob = "StartMailboxExportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartMailboxExportJobRequest method.
+//	req, resp := client.StartMailboxExportJobRequest(params)
 //
-//    // Example sending a request using the StartMailboxExportJobRequest method.
-//    req, resp := client.StartMailboxExportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/StartMailboxExportJob
 func (c *WorkMail) StartMailboxExportJobRequest(input *StartMailboxExportJobInput) (req *request.Request, output *StartMailboxExportJobOutput) {
@@ -7302,23 +7553,24 @@ func (c *WorkMail) StartMailboxExportJobRequest(input *StartMailboxExportJobInpu
 // API operation StartMailboxExportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * LimitExceededException
-//   The request exceeds the limit of the resource.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
+//
+//   - LimitExceededException
+//     The request exceeds the limit of the resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/StartMailboxExportJob
 func (c *WorkMail) StartMailboxExportJob(input *StartMailboxExportJobInput) (*StartMailboxExportJobOutput, error) {
@@ -7358,14 +7610,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/TagResource
 func (c *WorkMail) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -7397,15 +7648,19 @@ func (c *WorkMail) TagResourceRequest(input *TagResourceInput) (req *request.Req
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource cannot be found.
 //
-//   * TooManyTagsException
-//   The resource can have up to 50 user-applied tags.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - ResourceNotFoundException
+//     The resource cannot be found.
+//
+//   - TooManyTagsException
+//     The resource can have up to 50 user-applied tags.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/TagResource
 func (c *WorkMail) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -7445,14 +7700,13 @@ const opTestAvailabilityConfiguration = "TestAvailabilityConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TestAvailabilityConfigurationRequest method.
+//	req, resp := client.TestAvailabilityConfigurationRequest(params)
 //
-//    // Example sending a request using the TestAvailabilityConfigurationRequest method.
-//    req, resp := client.TestAvailabilityConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/TestAvailabilityConfiguration
 func (c *WorkMail) TestAvailabilityConfigurationRequest(input *TestAvailabilityConfigurationInput) (req *request.Request, output *TestAvailabilityConfigurationOutput) {
@@ -7492,19 +7746,20 @@ func (c *WorkMail) TestAvailabilityConfigurationRequest(input *TestAvailabilityC
 // API operation TestAvailabilityConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * ResourceNotFoundException
-//   The resource cannot be found.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - ResourceNotFoundException
+//     The resource cannot be found.
+//
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/TestAvailabilityConfiguration
 func (c *WorkMail) TestAvailabilityConfiguration(input *TestAvailabilityConfigurationInput) (*TestAvailabilityConfigurationOutput, error) {
@@ -7544,14 +7799,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UntagResource
 func (c *WorkMail) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -7583,8 +7837,8 @@ func (c *WorkMail) UntagResourceRequest(input *UntagResourceInput) (req *request
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource cannot be found.
+//   - ResourceNotFoundException
+//     The resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UntagResource
 func (c *WorkMail) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -7624,14 +7878,13 @@ const opUpdateAvailabilityConfiguration = "UpdateAvailabilityConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAvailabilityConfigurationRequest method.
+//	req, resp := client.UpdateAvailabilityConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateAvailabilityConfigurationRequest method.
-//    req, resp := client.UpdateAvailabilityConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateAvailabilityConfiguration
 func (c *WorkMail) UpdateAvailabilityConfigurationRequest(input *UpdateAvailabilityConfigurationInput) (req *request.Request, output *UpdateAvailabilityConfigurationOutput) {
@@ -7664,19 +7917,20 @@ func (c *WorkMail) UpdateAvailabilityConfigurationRequest(input *UpdateAvailabil
 // API operation UpdateAvailabilityConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * ResourceNotFoundException
-//   The resource cannot be found.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - ResourceNotFoundException
+//     The resource cannot be found.
+//
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateAvailabilityConfiguration
 func (c *WorkMail) UpdateAvailabilityConfiguration(input *UpdateAvailabilityConfigurationInput) (*UpdateAvailabilityConfigurationOutput, error) {
@@ -7716,14 +7970,13 @@ const opUpdateDefaultMailDomain = "UpdateDefaultMailDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDefaultMailDomainRequest method.
+//	req, resp := client.UpdateDefaultMailDomainRequest(params)
 //
-//    // Example sending a request using the UpdateDefaultMailDomainRequest method.
-//    req, resp := client.UpdateDefaultMailDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateDefaultMailDomain
 func (c *WorkMail) UpdateDefaultMailDomainRequest(input *UpdateDefaultMailDomainInput) (req *request.Request, output *UpdateDefaultMailDomainOutput) {
@@ -7757,23 +8010,24 @@ func (c *WorkMail) UpdateDefaultMailDomainRequest(input *UpdateDefaultMailDomain
 // API operation UpdateDefaultMailDomain for usage and error information.
 //
 // Returned Error Types:
-//   * MailDomainNotFoundException
-//   The domain specified is not found in your organization.
 //
-//   * MailDomainStateException
-//   After a domain has been added to the organization, it must be verified. The
-//   domain is not yet verified.
+//   - MailDomainNotFoundException
+//     The domain specified is not found in your organization.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - MailDomainStateException
+//     After a domain has been added to the organization, it must be verified. The
+//     domain is not yet verified.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateDefaultMailDomain
 func (c *WorkMail) UpdateDefaultMailDomain(input *UpdateDefaultMailDomainInput) (*UpdateDefaultMailDomainOutput, error) {
@@ -7797,6 +8051,105 @@ func (c *WorkMail) UpdateDefaultMailDomainWithContext(ctx aws.Context, input *Up
 	return out, req.Send()
 }
 
+const opUpdateGroup = "UpdateGroup"
+
+// UpdateGroupRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateGroup for more information on using the UpdateGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateGroupRequest method.
+//	req, resp := client.UpdateGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateGroup
+func (c *WorkMail) UpdateGroupRequest(input *UpdateGroupInput) (req *request.Request, output *UpdateGroupOutput) {
+	op := &request.Operation{
+		Name:       opUpdateGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateGroupInput{}
+	}
+
+	output = &UpdateGroupOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateGroup API operation for Amazon WorkMail.
+//
+// Updates attibutes in a group.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkMail's
+// API operation UpdateGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
+//
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
+//
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
+//
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateGroup
+func (c *WorkMail) UpdateGroup(input *UpdateGroupInput) (*UpdateGroupOutput, error) {
+	req, out := c.UpdateGroupRequest(input)
+	return out, req.Send()
+}
+
+// UpdateGroupWithContext is the same as UpdateGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkMail) UpdateGroupWithContext(ctx aws.Context, input *UpdateGroupInput, opts ...request.Option) (*UpdateGroupOutput, error) {
+	req, out := c.UpdateGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateImpersonationRole = "UpdateImpersonationRole"
 
 // UpdateImpersonationRoleRequest generates a "aws/request.Request" representing the
@@ -7813,14 +8166,13 @@ const opUpdateImpersonationRole = "UpdateImpersonationRole"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateImpersonationRoleRequest method.
+//	req, resp := client.UpdateImpersonationRoleRequest(params)
 //
-//    // Example sending a request using the UpdateImpersonationRoleRequest method.
-//    req, resp := client.UpdateImpersonationRoleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateImpersonationRole
 func (c *WorkMail) UpdateImpersonationRoleRequest(input *UpdateImpersonationRoleInput) (req *request.Request, output *UpdateImpersonationRoleOutput) {
@@ -7852,30 +8204,31 @@ func (c *WorkMail) UpdateImpersonationRoleRequest(input *UpdateImpersonationRole
 // API operation UpdateImpersonationRole for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * ResourceNotFoundException
-//   The resource cannot be found.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - ResourceNotFoundException
+//     The resource cannot be found.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * LimitExceededException
-//   The request exceeds the limit of the resource.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
+//
+//   - LimitExceededException
+//     The request exceeds the limit of the resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateImpersonationRole
 func (c *WorkMail) UpdateImpersonationRole(input *UpdateImpersonationRoleInput) (*UpdateImpersonationRoleOutput, error) {
@@ -7915,14 +8268,13 @@ const opUpdateMailboxQuota = "UpdateMailboxQuota"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateMailboxQuotaRequest method.
+//	req, resp := client.UpdateMailboxQuotaRequest(params)
 //
-//    // Example sending a request using the UpdateMailboxQuotaRequest method.
-//    req, resp := client.UpdateMailboxQuotaRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateMailboxQuota
 func (c *WorkMail) UpdateMailboxQuotaRequest(input *UpdateMailboxQuotaInput) (req *request.Request, output *UpdateMailboxQuotaOutput) {
@@ -7954,24 +8306,25 @@ func (c *WorkMail) UpdateMailboxQuotaRequest(input *UpdateMailboxQuotaInput) (re
 // API operation UpdateMailboxQuota for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
+//
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateMailboxQuota
 func (c *WorkMail) UpdateMailboxQuota(input *UpdateMailboxQuotaInput) (*UpdateMailboxQuotaOutput, error) {
@@ -8011,14 +8364,13 @@ const opUpdateMobileDeviceAccessRule = "UpdateMobileDeviceAccessRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateMobileDeviceAccessRuleRequest method.
+//	req, resp := client.UpdateMobileDeviceAccessRuleRequest(params)
 //
-//    // Example sending a request using the UpdateMobileDeviceAccessRuleRequest method.
-//    req, resp := client.UpdateMobileDeviceAccessRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateMobileDeviceAccessRule
 func (c *WorkMail) UpdateMobileDeviceAccessRuleRequest(input *UpdateMobileDeviceAccessRuleInput) (req *request.Request, output *UpdateMobileDeviceAccessRuleOutput) {
@@ -8050,20 +8402,21 @@ func (c *WorkMail) UpdateMobileDeviceAccessRuleRequest(input *UpdateMobileDevice
 // API operation UpdateMobileDeviceAccessRule for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateMobileDeviceAccessRule
 func (c *WorkMail) UpdateMobileDeviceAccessRule(input *UpdateMobileDeviceAccessRuleInput) (*UpdateMobileDeviceAccessRuleOutput, error) {
@@ -8103,14 +8456,13 @@ const opUpdatePrimaryEmailAddress = "UpdatePrimaryEmailAddress"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdatePrimaryEmailAddressRequest method.
+//	req, resp := client.UpdatePrimaryEmailAddressRequest(params)
 //
-//    // Example sending a request using the UpdatePrimaryEmailAddressRequest method.
-//    req, resp := client.UpdatePrimaryEmailAddressRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdatePrimaryEmailAddress
 func (c *WorkMail) UpdatePrimaryEmailAddressRequest(input *UpdatePrimaryEmailAddressInput) (req *request.Request, output *UpdatePrimaryEmailAddressOutput) {
@@ -8145,47 +8497,48 @@ func (c *WorkMail) UpdatePrimaryEmailAddressRequest(input *UpdatePrimaryEmailAdd
 // API operation UpdatePrimaryEmailAddress for usage and error information.
 //
 // Returned Error Types:
-//   * DirectoryServiceAuthenticationFailedException
-//   The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
+//   - DirectoryServiceAuthenticationFailedException
+//     The directory service doesn't recognize the credentials supplied by WorkMail.
 //
-//   * EmailAddressInUseException
-//   The email address that you're trying to assign is already created for a different
-//   user, group, or resource.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - EmailAddressInUseException
+//     The email address that you're trying to assign is already created for a different
+//     user, group, or resource.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * MailDomainNotFoundException
-//   The domain specified is not found in your organization.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * MailDomainStateException
-//   After a domain has been added to the organization, it must be verified. The
-//   domain is not yet verified.
+//   - MailDomainNotFoundException
+//     The domain specified is not found in your organization.
 //
-//   * InvalidParameterException
-//   One or more of the input parameters don't match the service's restrictions.
+//   - MailDomainStateException
+//     After a domain has been added to the organization, it must be verified. The
+//     domain is not yet verified.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
 //
-//   * UnsupportedOperationException
-//   You can't perform a write operation against a read-only directory.
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdatePrimaryEmailAddress
 func (c *WorkMail) UpdatePrimaryEmailAddress(input *UpdatePrimaryEmailAddressInput) (*UpdatePrimaryEmailAddressOutput, error) {
@@ -8225,14 +8578,13 @@ const opUpdateResource = "UpdateResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateResourceRequest method.
+//	req, resp := client.UpdateResourceRequest(params)
 //
-//    // Example sending a request using the UpdateResourceRequest method.
-//    req, resp := client.UpdateResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateResource
 func (c *WorkMail) UpdateResourceRequest(input *UpdateResourceInput) (req *request.Request, output *UpdateResourceOutput) {
@@ -8266,43 +8618,50 @@ func (c *WorkMail) UpdateResourceRequest(input *UpdateResourceInput) (req *reque
 // API operation UpdateResource for usage and error information.
 //
 // Returned Error Types:
-//   * DirectoryUnavailableException
-//   The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * EntityNotFoundException
-//   The identifier supplied for the user, group, or resource does not exist in
-//   your organization.
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
 //
-//   * EntityStateException
-//   You are performing an operation on a user, group, or resource that isn't
-//   in the expected state, such as trying to delete an active user.
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
 //
-//   * InvalidConfigurationException
-//   The configuration for a resource isn't valid. A resource must either be able
-//   to auto-respond to requests or have at least one delegate associated that
-//   can do so on its behalf.
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
 //
-//   * EmailAddressInUseException
-//   The email address that you're trying to assign is already created for a different
-//   user, group, or resource.
+//   - InvalidConfigurationException
+//     The configuration for a resource isn't valid. A resource must either be able
+//     to auto-respond to requests or have at least one delegate associated that
+//     can do so on its behalf.
 //
-//   * MailDomainNotFoundException
-//   The domain specified is not found in your organization.
+//   - EmailAddressInUseException
+//     The email address that you're trying to assign is already created for a different
+//     user, group, or resource.
 //
-//   * MailDomainStateException
-//   After a domain has been added to the organization, it must be verified. The
-//   domain is not yet verified.
+//   - MailDomainNotFoundException
+//     The domain specified is not found in your organization.
 //
-//   * NameAvailabilityException
-//   The user, group, or resource name isn't unique in WorkMail.
+//   - MailDomainStateException
+//     After a domain has been added to the organization, it must be verified. The
+//     domain is not yet verified.
 //
-//   * OrganizationNotFoundException
-//   An operation received a valid organization identifier that either doesn't
-//   belong or exist in the system.
+//   - NameAvailabilityException
+//     The user, group, or resource name isn't unique in WorkMail.
 //
-//   * OrganizationStateException
-//   The organization must have a valid state to perform certain operations on
-//   the organization or its members.
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
+//
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateResource
 func (c *WorkMail) UpdateResource(input *UpdateResourceInput) (*UpdateResourceOutput, error) {
@@ -8321,6 +8680,113 @@ func (c *WorkMail) UpdateResource(input *UpdateResourceInput) (*UpdateResourceOu
 // for more information on using Contexts.
 func (c *WorkMail) UpdateResourceWithContext(ctx aws.Context, input *UpdateResourceInput, opts ...request.Option) (*UpdateResourceOutput, error) {
 	req, out := c.UpdateResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateUser = "UpdateUser"
+
+// UpdateUserRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateUser operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateUser for more information on using the UpdateUser
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateUserRequest method.
+//	req, resp := client.UpdateUserRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateUser
+func (c *WorkMail) UpdateUserRequest(input *UpdateUserInput) (req *request.Request, output *UpdateUserOutput) {
+	op := &request.Operation{
+		Name:       opUpdateUser,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateUserInput{}
+	}
+
+	output = &UpdateUserOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateUser API operation for Amazon WorkMail.
+//
+// Updates data for the user. To have the latest information, it must be preceded
+// by a DescribeUser call. The dataset in the request should be the one expected
+// when performing another DescribeUser call.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon WorkMail's
+// API operation UpdateUser for usage and error information.
+//
+// Returned Error Types:
+//
+//   - DirectoryServiceAuthenticationFailedException
+//     The directory service doesn't recognize the credentials supplied by WorkMail.
+//
+//   - DirectoryUnavailableException
+//     The directory is unavailable. It might be located in another Region or deleted.
+//
+//   - EntityNotFoundException
+//     The identifier supplied for the user, group, or resource does not exist in
+//     your organization.
+//
+//   - InvalidParameterException
+//     One or more of the input parameters don't match the service's restrictions.
+//
+//   - OrganizationNotFoundException
+//     An operation received a valid organization identifier that either doesn't
+//     belong or exist in the system.
+//
+//   - OrganizationStateException
+//     The organization must have a valid state to perform certain operations on
+//     the organization or its members.
+//
+//   - UnsupportedOperationException
+//     You can't perform a write operation against a read-only directory.
+//
+//   - EntityStateException
+//     You are performing an operation on a user, group, or resource that isn't
+//     in the expected state, such as trying to delete an active user.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/workmail-2017-10-01/UpdateUser
+func (c *WorkMail) UpdateUser(input *UpdateUserInput) (*UpdateUserOutput, error) {
+	req, out := c.UpdateUserRequest(input)
+	return out, req.Send()
+}
+
+// UpdateUserWithContext is the same as UpdateUser with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateUser for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WorkMail) UpdateUserWithContext(ctx aws.Context, input *UpdateUserInput, opts ...request.Option) (*UpdateUserOutput, error) {
+	req, out := c.UpdateUserRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -8473,8 +8939,16 @@ type AssociateDelegateToResourceInput struct {
 
 	// The member (user or group) to associate to the resource.
 	//
+	// The entity ID can accept UserId or GroupID, Username or Groupname, or email.
+	//
+	//    * Entity: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: entity@domain.tld
+	//
+	//    * Entity: entity
+	//
 	// EntityId is a required field
-	EntityId *string `min:"12" type:"string" required:"true"`
+	EntityId *string `min:"1" type:"string" required:"true"`
 
 	// The organization under which the resource exists.
 	//
@@ -8483,8 +8957,17 @@ type AssociateDelegateToResourceInput struct {
 
 	// The resource for which members (users or groups) are associated.
 	//
+	// The identifier can accept ResourceId, Resourcename, or email. The following
+	// identity formats are available:
+	//
+	//    * Resource ID: r-0123456789a0123456789b0123456789
+	//
+	//    * Email address: resource@domain.tld
+	//
+	//    * Resource name: resource
+	//
 	// ResourceId is a required field
-	ResourceId *string `min:"34" type:"string" required:"true"`
+	ResourceId *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -8511,8 +8994,8 @@ func (s *AssociateDelegateToResourceInput) Validate() error {
 	if s.EntityId == nil {
 		invalidParams.Add(request.NewErrParamRequired("EntityId"))
 	}
-	if s.EntityId != nil && len(*s.EntityId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("EntityId", 12))
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
 	}
 	if s.OrganizationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
@@ -8523,8 +9006,8 @@ func (s *AssociateDelegateToResourceInput) Validate() error {
 	if s.ResourceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
 	}
-	if s.ResourceId != nil && len(*s.ResourceId) < 34 {
-		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 34))
+	if s.ResourceId != nil && len(*s.ResourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8578,13 +9061,30 @@ type AssociateMemberToGroupInput struct {
 
 	// The group to which the member (user or group) is associated.
 	//
+	// The identifier can accept GroupId, Groupname, or email. The following identity
+	// formats are available:
+	//
+	//    * Group ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: group@domain.tld
+	//
+	//    * Group name: group
+	//
 	// GroupId is a required field
-	GroupId *string `min:"12" type:"string" required:"true"`
+	GroupId *string `min:"1" type:"string" required:"true"`
 
 	// The member (user or group) to associate to the group.
 	//
+	// The member ID can accept UserID or GroupId, Username or Groupname, or email.
+	//
+	//    * Member: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: member@domain.tld
+	//
+	//    * Member name: member
+	//
 	// MemberId is a required field
-	MemberId *string `min:"12" type:"string" required:"true"`
+	MemberId *string `min:"1" type:"string" required:"true"`
 
 	// The organization under which the group exists.
 	//
@@ -8616,14 +9116,14 @@ func (s *AssociateMemberToGroupInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
-	if s.GroupId != nil && len(*s.GroupId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("GroupId", 12))
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 	if s.MemberId == nil {
 		invalidParams.Add(request.NewErrParamRequired("MemberId"))
 	}
-	if s.MemberId != nil && len(*s.MemberId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("MemberId", 12))
+	if s.MemberId != nil && len(*s.MemberId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MemberId", 1))
 	}
 	if s.OrganizationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
@@ -9254,6 +9754,9 @@ func (s CreateAvailabilityConfigurationOutput) GoString() string {
 type CreateGroupInput struct {
 	_ struct{} `type:"structure"`
 
+	// If this parameter is enabled, the group will be hidden from the address book.
+	HiddenFromGlobalAddressList *bool `type:"boolean"`
+
 	// The name of the group.
 	//
 	// Name is a required field
@@ -9303,6 +9806,12 @@ func (s *CreateGroupInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetHiddenFromGlobalAddressList sets the HiddenFromGlobalAddressList field's value.
+func (s *CreateGroupInput) SetHiddenFromGlobalAddressList(v bool) *CreateGroupInput {
+	s.HiddenFromGlobalAddressList = &v
+	return s
 }
 
 // SetName sets the Name field's value.
@@ -9890,6 +10399,13 @@ func (s *CreateOrganizationOutput) SetOrganizationId(v string) *CreateOrganizati
 type CreateResourceInput struct {
 	_ struct{} `type:"structure"`
 
+	// Resource description.
+	Description *string `min:"1" type:"string"`
+
+	// If this parameter is enabled, the resource will be hidden from the address
+	// book.
+	HiddenFromGlobalAddressList *bool `type:"boolean"`
+
 	// The name of the new resource.
 	//
 	// Name is a required field
@@ -9928,6 +10444,9 @@ func (s CreateResourceInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateResourceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateResourceInput"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
@@ -9948,6 +10467,18 @@ func (s *CreateResourceInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateResourceInput) SetDescription(v string) *CreateResourceInput {
+	s.Description = &v
+	return s
+}
+
+// SetHiddenFromGlobalAddressList sets the HiddenFromGlobalAddressList field's value.
+func (s *CreateResourceInput) SetHiddenFromGlobalAddressList(v bool) *CreateResourceInput {
+	s.HiddenFromGlobalAddressList = &v
+	return s
 }
 
 // SetName sets the Name field's value.
@@ -10004,8 +10535,29 @@ type CreateUserInput struct {
 
 	// The display name for the new user.
 	//
+	// DisplayName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateUserInput's
+	// String and GoString methods.
+	//
 	// DisplayName is a required field
-	DisplayName *string `type:"string" required:"true"`
+	DisplayName *string `type:"string" required:"true" sensitive:"true"`
+
+	// The first name of the new user.
+	//
+	// FirstName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateUserInput's
+	// String and GoString methods.
+	FirstName *string `type:"string" sensitive:"true"`
+
+	// If this parameter is enabled, the user will be hidden from the address book.
+	HiddenFromGlobalAddressList *bool `type:"boolean"`
+
+	// The last name of the new user.
+	//
+	// LastName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateUserInput's
+	// String and GoString methods.
+	LastName *string `type:"string" sensitive:"true"`
 
 	// The name for the new user. WorkMail directory user names have a maximum length
 	// of 64. All others have a maximum length of 20.
@@ -10023,9 +10575,13 @@ type CreateUserInput struct {
 	// Password is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by CreateUserInput's
 	// String and GoString methods.
+	Password *string `type:"string" sensitive:"true"`
+
+	// The role of the new user.
 	//
-	// Password is a required field
-	Password *string `type:"string" required:"true" sensitive:"true"`
+	// You cannot pass SYSTEM_USER or RESOURCE role in a single request. When a
+	// user role is not selected, the default role of USER is selected.
+	Role *string `type:"string" enum:"UserRole"`
 }
 
 // String returns the string representation.
@@ -10064,9 +10620,6 @@ func (s *CreateUserInput) Validate() error {
 	if s.OrganizationId != nil && len(*s.OrganizationId) < 34 {
 		invalidParams.Add(request.NewErrParamMinLen("OrganizationId", 34))
 	}
-	if s.Password == nil {
-		invalidParams.Add(request.NewErrParamRequired("Password"))
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -10077,6 +10630,24 @@ func (s *CreateUserInput) Validate() error {
 // SetDisplayName sets the DisplayName field's value.
 func (s *CreateUserInput) SetDisplayName(v string) *CreateUserInput {
 	s.DisplayName = &v
+	return s
+}
+
+// SetFirstName sets the FirstName field's value.
+func (s *CreateUserInput) SetFirstName(v string) *CreateUserInput {
+	s.FirstName = &v
+	return s
+}
+
+// SetHiddenFromGlobalAddressList sets the HiddenFromGlobalAddressList field's value.
+func (s *CreateUserInput) SetHiddenFromGlobalAddressList(v bool) *CreateUserInput {
+	s.HiddenFromGlobalAddressList = &v
+	return s
+}
+
+// SetLastName sets the LastName field's value.
+func (s *CreateUserInput) SetLastName(v string) *CreateUserInput {
+	s.LastName = &v
 	return s
 }
 
@@ -10095,6 +10666,12 @@ func (s *CreateUserInput) SetOrganizationId(v string) *CreateUserInput {
 // SetPassword sets the Password field's value.
 func (s *CreateUserInput) SetPassword(v string) *CreateUserInput {
 	s.Password = &v
+	return s
+}
+
+// SetRole sets the Role field's value.
+func (s *CreateUserInput) SetRole(v string) *CreateUserInput {
+	s.Role = &v
 	return s
 }
 
@@ -10537,8 +11114,15 @@ type DeleteGroupInput struct {
 
 	// The identifier of the group to be deleted.
 	//
+	// The identifier can be the GroupId, or Groupname. The following identity formats
+	// are available:
+	//
+	//    * Group ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Group name: group
+	//
 	// GroupId is a required field
-	GroupId *string `min:"12" type:"string" required:"true"`
+	GroupId *string `min:"1" type:"string" required:"true"`
 
 	// The organization that contains the group.
 	//
@@ -10570,8 +11154,8 @@ func (s *DeleteGroupInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
-	if s.GroupId != nil && len(*s.GroupId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("GroupId", 12))
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 	if s.OrganizationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
@@ -10711,16 +11295,34 @@ func (s DeleteImpersonationRoleOutput) GoString() string {
 type DeleteMailboxPermissionsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the member (user or group) that owns the mailbox.
+	// The identifier of the entity that owns the mailbox.
+	//
+	// The identifier can be UserId or Group Id, Username or Groupname, or email.
+	//
+	//    * Entity ID: 12345678-1234-1234-1234-123456789012, r-0123456789a0123456789b0123456789,
+	//    or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: entity@domain.tld
+	//
+	//    * Entity name: entity
 	//
 	// EntityId is a required field
-	EntityId *string `min:"12" type:"string" required:"true"`
+	EntityId *string `min:"1" type:"string" required:"true"`
 
-	// The identifier of the member (user or group) for which to delete granted
-	// permissions.
+	// The identifier of the entity for which to delete granted permissions.
+	//
+	// The identifier can be UserId, ResourceID, or Group Id, Username or Groupname,
+	// or email.
+	//
+	//    * Grantee ID: 12345678-1234-1234-1234-123456789012,r-0123456789a0123456789b0123456789,
+	//    or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: grantee@domain.tld
+	//
+	//    * Grantee name: grantee
 	//
 	// GranteeId is a required field
-	GranteeId *string `min:"12" type:"string" required:"true"`
+	GranteeId *string `min:"1" type:"string" required:"true"`
 
 	// The identifier of the organization under which the member (user or group)
 	// exists.
@@ -10753,14 +11355,14 @@ func (s *DeleteMailboxPermissionsInput) Validate() error {
 	if s.EntityId == nil {
 		invalidParams.Add(request.NewErrParamRequired("EntityId"))
 	}
-	if s.EntityId != nil && len(*s.EntityId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("EntityId", 12))
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
 	}
 	if s.GranteeId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GranteeId"))
 	}
-	if s.GranteeId != nil && len(*s.GranteeId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("GranteeId", 12))
+	if s.GranteeId != nil && len(*s.GranteeId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GranteeId", 1))
 	}
 	if s.OrganizationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
@@ -11027,6 +11629,9 @@ type DeleteOrganizationInput struct {
 	// DeleteDirectory is a required field
 	DeleteDirectory *bool `type:"boolean" required:"true"`
 
+	// Deletes a WorkMail organization even if the organization has enabled users.
+	ForceDelete *bool `type:"boolean"`
+
 	// The organization ID.
 	//
 	// OrganizationId is a required field
@@ -11082,6 +11687,12 @@ func (s *DeleteOrganizationInput) SetClientToken(v string) *DeleteOrganizationIn
 // SetDeleteDirectory sets the DeleteDirectory field's value.
 func (s *DeleteOrganizationInput) SetDeleteDirectory(v bool) *DeleteOrganizationInput {
 	s.DeleteDirectory = &v
+	return s
+}
+
+// SetForceDelete sets the ForceDelete field's value.
+func (s *DeleteOrganizationInput) SetForceDelete(v bool) *DeleteOrganizationInput {
+	s.ForceDelete = &v
 	return s
 }
 
@@ -11142,8 +11753,15 @@ type DeleteResourceInput struct {
 
 	// The identifier of the resource to be deleted.
 	//
+	// The identifier can accept ResourceId, or Resourcename. The following identity
+	// formats are available:
+	//
+	//    * Resource ID: r-0123456789a0123456789b0123456789
+	//
+	//    * Resource name: resource
+	//
 	// ResourceId is a required field
-	ResourceId *string `min:"34" type:"string" required:"true"`
+	ResourceId *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -11176,8 +11794,8 @@ func (s *DeleteResourceInput) Validate() error {
 	if s.ResourceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
 	}
-	if s.ResourceId != nil && len(*s.ResourceId) < 34 {
-		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 34))
+	if s.ResourceId != nil && len(*s.ResourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -11318,8 +11936,15 @@ type DeleteUserInput struct {
 
 	// The identifier of the user to be deleted.
 	//
+	// The identifier can be the UserId or Username. The following identity formats
+	// are available:
+	//
+	//    * User ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * User name: user
+	//
 	// UserId is a required field
-	UserId *string `min:"12" type:"string" required:"true"`
+	UserId *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -11352,8 +11977,8 @@ func (s *DeleteUserInput) Validate() error {
 	if s.UserId == nil {
 		invalidParams.Add(request.NewErrParamRequired("UserId"))
 	}
-	if s.UserId != nil && len(*s.UserId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("UserId", 12))
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -11399,10 +12024,20 @@ func (s DeleteUserOutput) GoString() string {
 type DeregisterFromWorkMailInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier for the member (user or group) to be updated.
+	// The identifier for the member to be updated.
+	//
+	// The identifier can be UserId, ResourceId, or Group Id, Username, Resourcename,
+	// or Groupname, or email.
+	//
+	//    * Entity ID: 12345678-1234-1234-1234-123456789012, r-0123456789a0123456789b0123456789,
+	//    or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: entity@domain.tld
+	//
+	//    * Entity name: entity
 	//
 	// EntityId is a required field
-	EntityId *string `min:"12" type:"string" required:"true"`
+	EntityId *string `min:"1" type:"string" required:"true"`
 
 	// The identifier for the organization under which the WorkMail entity exists.
 	//
@@ -11434,8 +12069,8 @@ func (s *DeregisterFromWorkMailInput) Validate() error {
 	if s.EntityId == nil {
 		invalidParams.Add(request.NewErrParamRequired("EntityId"))
 	}
-	if s.EntityId != nil && len(*s.EntityId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("EntityId", 12))
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
 	}
 	if s.OrganizationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
@@ -11664,13 +12299,137 @@ func (s *DescribeEmailMonitoringConfigurationOutput) SetRoleArn(v string) *Descr
 	return s
 }
 
+type DescribeEntityInput struct {
+	_ struct{} `type:"structure"`
+
+	// The email under which the entity exists.
+	//
+	// Email is a required field
+	Email *string `min:"1" type:"string" required:"true"`
+
+	// The identifier for the organization under which the entity exists.
+	//
+	// OrganizationId is a required field
+	OrganizationId *string `min:"34" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeEntityInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeEntityInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeEntityInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeEntityInput"}
+	if s.Email == nil {
+		invalidParams.Add(request.NewErrParamRequired("Email"))
+	}
+	if s.Email != nil && len(*s.Email) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Email", 1))
+	}
+	if s.OrganizationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
+	}
+	if s.OrganizationId != nil && len(*s.OrganizationId) < 34 {
+		invalidParams.Add(request.NewErrParamMinLen("OrganizationId", 34))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEmail sets the Email field's value.
+func (s *DescribeEntityInput) SetEmail(v string) *DescribeEntityInput {
+	s.Email = &v
+	return s
+}
+
+// SetOrganizationId sets the OrganizationId field's value.
+func (s *DescribeEntityInput) SetOrganizationId(v string) *DescribeEntityInput {
+	s.OrganizationId = &v
+	return s
+}
+
+type DescribeEntityOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The entity ID under which the entity exists.
+	EntityId *string `min:"12" type:"string"`
+
+	// Username, GroupName, or ResourceName based on entity type.
+	Name *string `type:"string"`
+
+	// Entity type.
+	Type *string `type:"string" enum:"EntityType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeEntityOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeEntityOutput) GoString() string {
+	return s.String()
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *DescribeEntityOutput) SetEntityId(v string) *DescribeEntityOutput {
+	s.EntityId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DescribeEntityOutput) SetName(v string) *DescribeEntityOutput {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *DescribeEntityOutput) SetType(v string) *DescribeEntityOutput {
+	s.Type = &v
+	return s
+}
+
 type DescribeGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The identifier for the group to be described.
 	//
+	// The identifier can accept GroupId, Groupname, or email. The following identity
+	// formats are available:
+	//
+	//    * Group ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: group@domain.tld
+	//
+	//    * Group name: group
+	//
 	// GroupId is a required field
-	GroupId *string `min:"12" type:"string" required:"true"`
+	GroupId *string `min:"1" type:"string" required:"true"`
 
 	// The identifier for the organization under which the group exists.
 	//
@@ -11702,8 +12461,8 @@ func (s *DescribeGroupInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
-	if s.GroupId != nil && len(*s.GroupId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("GroupId", 12))
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 	if s.OrganizationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
@@ -11746,6 +12505,9 @@ type DescribeGroupOutput struct {
 
 	// The identifier of the described group.
 	GroupId *string `min:"12" type:"string"`
+
+	// If the value is set to true, the group is hidden from the address book.
+	HiddenFromGlobalAddressList *bool `type:"boolean"`
 
 	// The name of the described group.
 	Name *string `min:"1" type:"string"`
@@ -11794,6 +12556,12 @@ func (s *DescribeGroupOutput) SetEnabledDate(v time.Time) *DescribeGroupOutput {
 // SetGroupId sets the GroupId field's value.
 func (s *DescribeGroupOutput) SetGroupId(v string) *DescribeGroupOutput {
 	s.GroupId = &v
+	return s
+}
+
+// SetHiddenFromGlobalAddressList sets the HiddenFromGlobalAddressList field's value.
+func (s *DescribeGroupOutput) SetHiddenFromGlobalAddressList(v bool) *DescribeGroupOutput {
+	s.HiddenFromGlobalAddressList = &v
 	return s
 }
 
@@ -12163,6 +12931,12 @@ type DescribeOrganizationOutput struct {
 	// with regards to the organization.
 	ErrorMessage *string `type:"string"`
 
+	// Indicates if interoperability is enabled for this organization.
+	InteroperabilityEnabled *bool `type:"boolean"`
+
+	// The user ID of the migration admin if migration is enabled for the organization.
+	MigrationAdmin *string `min:"12" type:"string"`
+
 	// The identifier of an organization.
 	OrganizationId *string `min:"34" type:"string"`
 
@@ -12230,6 +13004,18 @@ func (s *DescribeOrganizationOutput) SetErrorMessage(v string) *DescribeOrganiza
 	return s
 }
 
+// SetInteroperabilityEnabled sets the InteroperabilityEnabled field's value.
+func (s *DescribeOrganizationOutput) SetInteroperabilityEnabled(v bool) *DescribeOrganizationOutput {
+	s.InteroperabilityEnabled = &v
+	return s
+}
+
+// SetMigrationAdmin sets the MigrationAdmin field's value.
+func (s *DescribeOrganizationOutput) SetMigrationAdmin(v string) *DescribeOrganizationOutput {
+	s.MigrationAdmin = &v
+	return s
+}
+
 // SetOrganizationId sets the OrganizationId field's value.
 func (s *DescribeOrganizationOutput) SetOrganizationId(v string) *DescribeOrganizationOutput {
 	s.OrganizationId = &v
@@ -12253,8 +13039,17 @@ type DescribeResourceInput struct {
 
 	// The identifier of the resource to be described.
 	//
+	// The identifier can accept ResourceId, Resourcename, or email. The following
+	// identity formats are available:
+	//
+	//    * Resource ID: r-0123456789a0123456789b0123456789
+	//
+	//    * Email address: resource@domain.tld
+	//
+	//    * Resource name: resource
+	//
 	// ResourceId is a required field
-	ResourceId *string `min:"34" type:"string" required:"true"`
+	ResourceId *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -12287,8 +13082,8 @@ func (s *DescribeResourceInput) Validate() error {
 	if s.ResourceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
 	}
-	if s.ResourceId != nil && len(*s.ResourceId) < 34 {
-		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 34))
+	if s.ResourceId != nil && len(*s.ResourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -12315,6 +13110,9 @@ type DescribeResourceOutput struct {
 	// The booking options for the described resource.
 	BookingOptions *BookingOptions `type:"structure"`
 
+	// Description of the resource.
+	Description *string `min:"1" type:"string"`
+
 	// The date and time when a resource was disabled from WorkMail, in UNIX epoch
 	// time format.
 	DisabledDate *time.Time `type:"timestamp"`
@@ -12325,6 +13123,9 @@ type DescribeResourceOutput struct {
 	// The date and time when a resource was enabled for WorkMail, in UNIX epoch
 	// time format.
 	EnabledDate *time.Time `type:"timestamp"`
+
+	// If enabled, the resource is hidden from the global address list.
+	HiddenFromGlobalAddressList *bool `type:"boolean"`
 
 	// The name of the described resource.
 	Name *string `min:"1" type:"string"`
@@ -12364,6 +13165,12 @@ func (s *DescribeResourceOutput) SetBookingOptions(v *BookingOptions) *DescribeR
 	return s
 }
 
+// SetDescription sets the Description field's value.
+func (s *DescribeResourceOutput) SetDescription(v string) *DescribeResourceOutput {
+	s.Description = &v
+	return s
+}
+
 // SetDisabledDate sets the DisabledDate field's value.
 func (s *DescribeResourceOutput) SetDisabledDate(v time.Time) *DescribeResourceOutput {
 	s.DisabledDate = &v
@@ -12379,6 +13186,12 @@ func (s *DescribeResourceOutput) SetEmail(v string) *DescribeResourceOutput {
 // SetEnabledDate sets the EnabledDate field's value.
 func (s *DescribeResourceOutput) SetEnabledDate(v time.Time) *DescribeResourceOutput {
 	s.EnabledDate = &v
+	return s
+}
+
+// SetHiddenFromGlobalAddressList sets the HiddenFromGlobalAddressList field's value.
+func (s *DescribeResourceOutput) SetHiddenFromGlobalAddressList(v bool) *DescribeResourceOutput {
+	s.HiddenFromGlobalAddressList = &v
 	return s
 }
 
@@ -12416,8 +13229,17 @@ type DescribeUserInput struct {
 
 	// The identifier for the user to be described.
 	//
+	// The identifier can be the UserId, Username, or email. The following identity
+	// formats are available:
+	//
+	//    * User ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: user@domain.tld
+	//
+	//    * User name: user
+	//
 	// UserId is a required field
-	UserId *string `min:"12" type:"string" required:"true"`
+	UserId *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -12450,8 +13272,8 @@ func (s *DescribeUserInput) Validate() error {
 	if s.UserId == nil {
 		invalidParams.Add(request.NewErrParamRequired("UserId"))
 	}
-	if s.UserId != nil && len(*s.UserId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("UserId", 12))
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -12475,12 +13297,44 @@ func (s *DescribeUserInput) SetUserId(v string) *DescribeUserInput {
 type DescribeUserOutput struct {
 	_ struct{} `type:"structure"`
 
+	// City where the user is located.
+	//
+	// City is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	City *string `type:"string" sensitive:"true"`
+
+	// Company of the user.
+	//
+	// Company is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	Company *string `type:"string" sensitive:"true"`
+
+	// Country where the user is located.
+	//
+	// Country is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	Country *string `type:"string" sensitive:"true"`
+
+	// Department of the user.
+	//
+	// Department is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	Department *string `type:"string" sensitive:"true"`
+
 	// The date and time at which the user was disabled for WorkMail usage, in UNIX
 	// epoch time format.
 	DisabledDate *time.Time `type:"timestamp"`
 
 	// The display name of the user.
-	DisplayName *string `type:"string"`
+	//
+	// DisplayName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	DisplayName *string `type:"string" sensitive:"true"`
 
 	// The email of the user.
 	Email *string `min:"1" type:"string"`
@@ -12489,12 +13343,70 @@ type DescribeUserOutput struct {
 	// epoch time format.
 	EnabledDate *time.Time `type:"timestamp"`
 
+	// First name of the user.
+	//
+	// FirstName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	FirstName *string `type:"string" sensitive:"true"`
+
+	// If enabled, the user is hidden from the global address list.
+	HiddenFromGlobalAddressList *bool `type:"boolean"`
+
+	// Initials of the user.
+	//
+	// Initials is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	Initials *string `type:"string" sensitive:"true"`
+
+	// Job title of the user.
+	//
+	// JobTitle is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	JobTitle *string `type:"string" sensitive:"true"`
+
+	// Last name of the user.
+	//
+	// LastName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	LastName *string `type:"string" sensitive:"true"`
+
+	// The date when the mailbox was removed for the user.
+	MailboxDeprovisionedDate *time.Time `type:"timestamp"`
+
+	// The date when the mailbox was created for the user.
+	MailboxProvisionedDate *time.Time `type:"timestamp"`
+
 	// The name for the user.
 	Name *string `min:"1" type:"string"`
+
+	// Office where the user is located.
+	//
+	// Office is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	Office *string `type:"string" sensitive:"true"`
 
 	// The state of a user: enabled (registered to WorkMail) or disabled (deregistered
 	// or never registered to WorkMail).
 	State *string `type:"string" enum:"EntityState"`
+
+	// Street where the user is located.
+	//
+	// Street is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	Street *string `type:"string" sensitive:"true"`
+
+	// User's contact number.
+	//
+	// Telephone is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	Telephone *string `type:"string" sensitive:"true"`
 
 	// The identifier for the described user.
 	UserId *string `min:"12" type:"string"`
@@ -12504,8 +13416,15 @@ type DescribeUserOutput struct {
 	// WorkMail organizations rely on different directory types, administrators
 	// can distinguish between an unregistered user (account is disabled and has
 	// a user role) and the directory administrators. The values are USER, RESOURCE,
-	// and SYSTEM_USER.
+	// SYSTEM_USER, and REMOTE_USER.
 	UserRole *string `type:"string" enum:"UserRole"`
+
+	// Zip code of the user.
+	//
+	// ZipCode is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by DescribeUserOutput's
+	// String and GoString methods.
+	ZipCode *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation.
@@ -12524,6 +13443,30 @@ func (s DescribeUserOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DescribeUserOutput) GoString() string {
 	return s.String()
+}
+
+// SetCity sets the City field's value.
+func (s *DescribeUserOutput) SetCity(v string) *DescribeUserOutput {
+	s.City = &v
+	return s
+}
+
+// SetCompany sets the Company field's value.
+func (s *DescribeUserOutput) SetCompany(v string) *DescribeUserOutput {
+	s.Company = &v
+	return s
+}
+
+// SetCountry sets the Country field's value.
+func (s *DescribeUserOutput) SetCountry(v string) *DescribeUserOutput {
+	s.Country = &v
+	return s
+}
+
+// SetDepartment sets the Department field's value.
+func (s *DescribeUserOutput) SetDepartment(v string) *DescribeUserOutput {
+	s.Department = &v
+	return s
 }
 
 // SetDisabledDate sets the DisabledDate field's value.
@@ -12550,15 +13493,75 @@ func (s *DescribeUserOutput) SetEnabledDate(v time.Time) *DescribeUserOutput {
 	return s
 }
 
+// SetFirstName sets the FirstName field's value.
+func (s *DescribeUserOutput) SetFirstName(v string) *DescribeUserOutput {
+	s.FirstName = &v
+	return s
+}
+
+// SetHiddenFromGlobalAddressList sets the HiddenFromGlobalAddressList field's value.
+func (s *DescribeUserOutput) SetHiddenFromGlobalAddressList(v bool) *DescribeUserOutput {
+	s.HiddenFromGlobalAddressList = &v
+	return s
+}
+
+// SetInitials sets the Initials field's value.
+func (s *DescribeUserOutput) SetInitials(v string) *DescribeUserOutput {
+	s.Initials = &v
+	return s
+}
+
+// SetJobTitle sets the JobTitle field's value.
+func (s *DescribeUserOutput) SetJobTitle(v string) *DescribeUserOutput {
+	s.JobTitle = &v
+	return s
+}
+
+// SetLastName sets the LastName field's value.
+func (s *DescribeUserOutput) SetLastName(v string) *DescribeUserOutput {
+	s.LastName = &v
+	return s
+}
+
+// SetMailboxDeprovisionedDate sets the MailboxDeprovisionedDate field's value.
+func (s *DescribeUserOutput) SetMailboxDeprovisionedDate(v time.Time) *DescribeUserOutput {
+	s.MailboxDeprovisionedDate = &v
+	return s
+}
+
+// SetMailboxProvisionedDate sets the MailboxProvisionedDate field's value.
+func (s *DescribeUserOutput) SetMailboxProvisionedDate(v time.Time) *DescribeUserOutput {
+	s.MailboxProvisionedDate = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *DescribeUserOutput) SetName(v string) *DescribeUserOutput {
 	s.Name = &v
 	return s
 }
 
+// SetOffice sets the Office field's value.
+func (s *DescribeUserOutput) SetOffice(v string) *DescribeUserOutput {
+	s.Office = &v
+	return s
+}
+
 // SetState sets the State field's value.
 func (s *DescribeUserOutput) SetState(v string) *DescribeUserOutput {
 	s.State = &v
+	return s
+}
+
+// SetStreet sets the Street field's value.
+func (s *DescribeUserOutput) SetStreet(v string) *DescribeUserOutput {
+	s.Street = &v
+	return s
+}
+
+// SetTelephone sets the Telephone field's value.
+func (s *DescribeUserOutput) SetTelephone(v string) *DescribeUserOutput {
+	s.Telephone = &v
 	return s
 }
 
@@ -12571,6 +13574,12 @@ func (s *DescribeUserOutput) SetUserId(v string) *DescribeUserOutput {
 // SetUserRole sets the UserRole field's value.
 func (s *DescribeUserOutput) SetUserRole(v string) *DescribeUserOutput {
 	s.UserRole = &v
+	return s
+}
+
+// SetZipCode sets the ZipCode field's value.
+func (s *DescribeUserOutput) SetZipCode(v string) *DescribeUserOutput {
+	s.ZipCode = &v
 	return s
 }
 
@@ -12773,8 +13782,16 @@ type DisassociateDelegateFromResourceInput struct {
 	// The identifier for the member (user, group) to be removed from the resource's
 	// delegates.
 	//
+	// The entity ID can accept UserId or GroupID, Username or Groupname, or email.
+	//
+	//    * Entity: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: entity@domain.tld
+	//
+	//    * Entity: entity
+	//
 	// EntityId is a required field
-	EntityId *string `min:"12" type:"string" required:"true"`
+	EntityId *string `min:"1" type:"string" required:"true"`
 
 	// The identifier for the organization under which the resource exists.
 	//
@@ -12783,8 +13800,17 @@ type DisassociateDelegateFromResourceInput struct {
 
 	// The identifier of the resource from which delegates' set members are removed.
 	//
+	// The identifier can accept ResourceId, Resourcename, or email. The following
+	// identity formats are available:
+	//
+	//    * Resource ID: r-0123456789a0123456789b0123456789
+	//
+	//    * Email address: resource@domain.tld
+	//
+	//    * Resource name: resource
+	//
 	// ResourceId is a required field
-	ResourceId *string `min:"34" type:"string" required:"true"`
+	ResourceId *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -12811,8 +13837,8 @@ func (s *DisassociateDelegateFromResourceInput) Validate() error {
 	if s.EntityId == nil {
 		invalidParams.Add(request.NewErrParamRequired("EntityId"))
 	}
-	if s.EntityId != nil && len(*s.EntityId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("EntityId", 12))
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
 	}
 	if s.OrganizationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
@@ -12823,8 +13849,8 @@ func (s *DisassociateDelegateFromResourceInput) Validate() error {
 	if s.ResourceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
 	}
-	if s.ResourceId != nil && len(*s.ResourceId) < 34 {
-		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 34))
+	if s.ResourceId != nil && len(*s.ResourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -12878,13 +13904,30 @@ type DisassociateMemberFromGroupInput struct {
 
 	// The identifier for the group from which members are removed.
 	//
+	// The identifier can accept GroupId, Groupname, or email. The following identity
+	// formats are available:
+	//
+	//    * Group ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: group@domain.tld
+	//
+	//    * Group name: group
+	//
 	// GroupId is a required field
-	GroupId *string `min:"12" type:"string" required:"true"`
+	GroupId *string `min:"1" type:"string" required:"true"`
 
-	// The identifier for the member to be removed to the group.
+	// The identifier for the member to be removed from the group.
+	//
+	// The member ID can accept UserID or GroupId, Username or Groupname, or email.
+	//
+	//    * Member ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: member@domain.tld
+	//
+	//    * Member name: member
 	//
 	// MemberId is a required field
-	MemberId *string `min:"12" type:"string" required:"true"`
+	MemberId *string `min:"1" type:"string" required:"true"`
 
 	// The identifier for the organization under which the group exists.
 	//
@@ -12916,14 +13959,14 @@ func (s *DisassociateMemberFromGroupInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
-	if s.GroupId != nil && len(*s.GroupId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("GroupId", 12))
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 	if s.MemberId == nil {
 		invalidParams.Add(request.NewErrParamRequired("MemberId"))
 	}
-	if s.MemberId != nil && len(*s.MemberId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("MemberId", 12))
+	if s.MemberId != nil && len(*s.MemberId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MemberId", 1))
 	}
 	if s.OrganizationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
@@ -13038,7 +14081,9 @@ type Domain struct {
 	_ struct{} `type:"structure"`
 
 	// The fully qualified domain name.
-	DomainName *string `min:"3" type:"string"`
+	//
+	// DomainName is a required field
+	DomainName *string `min:"3" type:"string" required:"true"`
 
 	// The hosted zone ID for a domain hosted in Route 53. Required when configuring
 	// a domain hosted in Route 53.
@@ -13066,6 +14111,9 @@ func (s Domain) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Domain) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Domain"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
 	if s.DomainName != nil && len(*s.DomainName) < 3 {
 		invalidParams.Add(request.NewErrParamMinLen("DomainName", 3))
 	}
@@ -14198,8 +15246,17 @@ type GetMailboxDetailsInput struct {
 
 	// The identifier for the user whose mailbox details are being requested.
 	//
+	// The identifier can be the UserId, Username, or email. The following identity
+	// formats are available:
+	//
+	//    * User ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: user@domain.tld
+	//
+	//    * User name: user
+	//
 	// UserId is a required field
-	UserId *string `min:"12" type:"string" required:"true"`
+	UserId *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -14232,8 +15289,8 @@ func (s *GetMailboxDetailsInput) Validate() error {
 	if s.UserId == nil {
 		invalidParams.Add(request.NewErrParamRequired("UserId"))
 	}
-	if s.UserId != nil && len(*s.UserId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("UserId", 12))
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -14673,6 +15730,47 @@ func (s *Group) SetName(v string) *Group {
 // SetState sets the State field's value.
 func (s *Group) SetState(v string) *Group {
 	s.State = &v
+	return s
+}
+
+// The identifier that contains the Group ID and name of a group.
+type GroupIdentifier struct {
+	_ struct{} `type:"structure"`
+
+	// Group ID that matched the group.
+	GroupId *string `min:"12" type:"string"`
+
+	// Group name that matched the group.
+	GroupName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GroupIdentifier) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GroupIdentifier) GoString() string {
+	return s.String()
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *GroupIdentifier) SetGroupId(v string) *GroupIdentifier {
+	s.GroupId = &v
+	return s
+}
+
+// SetGroupName sets the GroupName field's value.
+func (s *GroupIdentifier) SetGroupName(v string) *GroupIdentifier {
+	s.GroupName = &v
 	return s
 }
 
@@ -15608,8 +16706,17 @@ type ListGroupMembersInput struct {
 
 	// The identifier for the group to which the members (users or groups) are associated.
 	//
+	// The identifier can accept GroupId, Groupname, or email. The following identity
+	// formats are available:
+	//
+	//    * Group ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: group@domain.tld
+	//
+	//    * Group name: group
+	//
 	// GroupId is a required field
-	GroupId *string `min:"12" type:"string" required:"true"`
+	GroupId *string `min:"1" type:"string" required:"true"`
 
 	// The maximum number of results to return in a single call.
 	MaxResults *int64 `min:"1" type:"integer"`
@@ -15648,8 +16755,8 @@ func (s *ListGroupMembersInput) Validate() error {
 	if s.GroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GroupId"))
 	}
-	if s.GroupId != nil && len(*s.GroupId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("GroupId", 12))
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
 	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
@@ -15735,8 +16842,245 @@ func (s *ListGroupMembersOutput) SetNextToken(v string) *ListGroupMembersOutput 
 	return s
 }
 
+// Filtering options for ListGroups operation. This is only used as input to
+// Operation.
+type ListGroupsFilters struct {
+	_ struct{} `type:"structure"`
+
+	// Filters only groups with the provided name prefix.
+	NamePrefix *string `type:"string"`
+
+	// Filters only groups with the provided primary email prefix.
+	PrimaryEmailPrefix *string `type:"string"`
+
+	// Filters only groups with the provided state.
+	State *string `type:"string" enum:"EntityState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsFilters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsFilters) GoString() string {
+	return s.String()
+}
+
+// SetNamePrefix sets the NamePrefix field's value.
+func (s *ListGroupsFilters) SetNamePrefix(v string) *ListGroupsFilters {
+	s.NamePrefix = &v
+	return s
+}
+
+// SetPrimaryEmailPrefix sets the PrimaryEmailPrefix field's value.
+func (s *ListGroupsFilters) SetPrimaryEmailPrefix(v string) *ListGroupsFilters {
+	s.PrimaryEmailPrefix = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ListGroupsFilters) SetState(v string) *ListGroupsFilters {
+	s.State = &v
+	return s
+}
+
+// Filtering options for ListGroupsForEntity operation. This is only used as
+// input to Operation.
+type ListGroupsForEntityFilters struct {
+	_ struct{} `type:"structure"`
+
+	// Filters only group names that start with the provided name prefix.
+	GroupNamePrefix *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsForEntityFilters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsForEntityFilters) GoString() string {
+	return s.String()
+}
+
+// SetGroupNamePrefix sets the GroupNamePrefix field's value.
+func (s *ListGroupsForEntityFilters) SetGroupNamePrefix(v string) *ListGroupsForEntityFilters {
+	s.GroupNamePrefix = &v
+	return s
+}
+
+type ListGroupsForEntityInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier for the entity.
+	//
+	// The entity ID can accept UserId or GroupID, Username or Groupname, or email.
+	//
+	//    * Entity ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: entity@domain.tld
+	//
+	//    * Entity name: entity
+	//
+	// EntityId is a required field
+	EntityId *string `min:"1" type:"string" required:"true"`
+
+	// Limit the search results based on the filter criteria.
+	Filters *ListGroupsForEntityFilters `type:"structure"`
+
+	// The maximum number of results to return in a single call.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token to use to retrieve the next page of results. The first call does
+	// not contain any tokens.
+	NextToken *string `min:"1" type:"string"`
+
+	// The identifier for the organization under which the entity exists.
+	//
+	// OrganizationId is a required field
+	OrganizationId *string `min:"34" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsForEntityInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsForEntityInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListGroupsForEntityInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListGroupsForEntityInput"}
+	if s.EntityId == nil {
+		invalidParams.Add(request.NewErrParamRequired("EntityId"))
+	}
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.OrganizationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
+	}
+	if s.OrganizationId != nil && len(*s.OrganizationId) < 34 {
+		invalidParams.Add(request.NewErrParamMinLen("OrganizationId", 34))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEntityId sets the EntityId field's value.
+func (s *ListGroupsForEntityInput) SetEntityId(v string) *ListGroupsForEntityInput {
+	s.EntityId = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListGroupsForEntityInput) SetFilters(v *ListGroupsForEntityFilters) *ListGroupsForEntityInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListGroupsForEntityInput) SetMaxResults(v int64) *ListGroupsForEntityInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListGroupsForEntityInput) SetNextToken(v string) *ListGroupsForEntityInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOrganizationId sets the OrganizationId field's value.
+func (s *ListGroupsForEntityInput) SetOrganizationId(v string) *ListGroupsForEntityInput {
+	s.OrganizationId = &v
+	return s
+}
+
+type ListGroupsForEntityOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The overview of groups in an organization.
+	Groups []*GroupIdentifier `type:"list"`
+
+	// The token to use to retrieve the next page of results. This value is `null`
+	// when there are no more results to return.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsForEntityOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListGroupsForEntityOutput) GoString() string {
+	return s.String()
+}
+
+// SetGroups sets the Groups field's value.
+func (s *ListGroupsForEntityOutput) SetGroups(v []*GroupIdentifier) *ListGroupsForEntityOutput {
+	s.Groups = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListGroupsForEntityOutput) SetNextToken(v string) *ListGroupsForEntityOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListGroupsInput struct {
 	_ struct{} `type:"structure"`
+
+	// Limit the search results based on the filter criteria. Only one filter per
+	// request is supported.
+	Filters *ListGroupsFilters `type:"structure"`
 
 	// The maximum number of results to return in a single call.
 	MaxResults *int64 `min:"1" type:"integer"`
@@ -15789,6 +17133,12 @@ func (s *ListGroupsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListGroupsInput) SetFilters(v *ListGroupsFilters) *ListGroupsInput {
+	s.Filters = v
+	return s
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -16198,11 +17548,19 @@ func (s *ListMailboxExportJobsOutput) SetNextToken(v string) *ListMailboxExportJ
 type ListMailboxPermissionsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the user, group, or resource for which to list mailbox
-	// permissions.
+	// The identifier of the user, or resource for which to list mailbox permissions.
+	//
+	// The entity ID can accept UserId or ResourceId, Username or Resourcename,
+	// or email.
+	//
+	//    * Entity ID: 12345678-1234-1234-1234-123456789012, or r-0123456789a0123456789b0123456789
+	//
+	//    * Email address: entity@domain.tld
+	//
+	//    * Entity name: entity
 	//
 	// EntityId is a required field
-	EntityId *string `min:"12" type:"string" required:"true"`
+	EntityId *string `min:"1" type:"string" required:"true"`
 
 	// The maximum number of results to return in a single call.
 	MaxResults *int64 `min:"1" type:"integer"`
@@ -16242,8 +17600,8 @@ func (s *ListMailboxPermissionsInput) Validate() error {
 	if s.EntityId == nil {
 		invalidParams.Add(request.NewErrParamRequired("EntityId"))
 	}
-	if s.EntityId != nil && len(*s.EntityId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("EntityId", 12))
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
 	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
@@ -16672,8 +18030,17 @@ type ListResourceDelegatesInput struct {
 
 	// The identifier for the resource whose delegates are listed.
 	//
+	// The identifier can accept ResourceId, Resourcename, or email. The following
+	// identity formats are available:
+	//
+	//    * Resource ID: r-0123456789a0123456789b0123456789
+	//
+	//    * Email address: resource@domain.tld
+	//
+	//    * Resource name: resource
+	//
 	// ResourceId is a required field
-	ResourceId *string `min:"12" type:"string" required:"true"`
+	ResourceId *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -16712,8 +18079,8 @@ func (s *ListResourceDelegatesInput) Validate() error {
 	if s.ResourceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
 	}
-	if s.ResourceId != nil && len(*s.ResourceId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 12))
+	if s.ResourceId != nil && len(*s.ResourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -16788,8 +18155,63 @@ func (s *ListResourceDelegatesOutput) SetNextToken(v string) *ListResourceDelega
 	return s
 }
 
+// Filtering options for ListResources operation. This is only used as input
+// to Operation.
+type ListResourcesFilters struct {
+	_ struct{} `type:"structure"`
+
+	// Filters only resource that start with the entered name prefix .
+	NamePrefix *string `type:"string"`
+
+	// Filters only resource with the provided primary email prefix.
+	PrimaryEmailPrefix *string `type:"string"`
+
+	// Filters only resource with the provided state.
+	State *string `type:"string" enum:"EntityState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListResourcesFilters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListResourcesFilters) GoString() string {
+	return s.String()
+}
+
+// SetNamePrefix sets the NamePrefix field's value.
+func (s *ListResourcesFilters) SetNamePrefix(v string) *ListResourcesFilters {
+	s.NamePrefix = &v
+	return s
+}
+
+// SetPrimaryEmailPrefix sets the PrimaryEmailPrefix field's value.
+func (s *ListResourcesFilters) SetPrimaryEmailPrefix(v string) *ListResourcesFilters {
+	s.PrimaryEmailPrefix = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ListResourcesFilters) SetState(v string) *ListResourcesFilters {
+	s.State = &v
+	return s
+}
+
 type ListResourcesInput struct {
 	_ struct{} `type:"structure"`
+
+	// Limit the resource search results based on the filter criteria. You can only
+	// use one filter per request.
+	Filters *ListResourcesFilters `type:"structure"`
 
 	// The maximum number of results to return in a single call.
 	MaxResults *int64 `min:"1" type:"integer"`
@@ -16842,6 +18264,12 @@ func (s *ListResourcesInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListResourcesInput) SetFilters(v *ListResourcesFilters) *ListResourcesInput {
+	s.Filters = v
+	return s
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -16984,8 +18412,76 @@ func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput
 	return s
 }
 
+// Filtering options for ListUsers operation. This is only used as input to
+// Operation.
+type ListUsersFilters struct {
+	_ struct{} `type:"structure"`
+
+	// Filters only users with the provided display name prefix.
+	//
+	// DisplayNamePrefix is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ListUsersFilters's
+	// String and GoString methods.
+	DisplayNamePrefix *string `type:"string" sensitive:"true"`
+
+	// Filters only users with the provided email prefix.
+	PrimaryEmailPrefix *string `type:"string"`
+
+	// Filters only users with the provided state.
+	State *string `type:"string" enum:"EntityState"`
+
+	// Filters only users with the provided username prefix.
+	UsernamePrefix *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListUsersFilters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListUsersFilters) GoString() string {
+	return s.String()
+}
+
+// SetDisplayNamePrefix sets the DisplayNamePrefix field's value.
+func (s *ListUsersFilters) SetDisplayNamePrefix(v string) *ListUsersFilters {
+	s.DisplayNamePrefix = &v
+	return s
+}
+
+// SetPrimaryEmailPrefix sets the PrimaryEmailPrefix field's value.
+func (s *ListUsersFilters) SetPrimaryEmailPrefix(v string) *ListUsersFilters {
+	s.PrimaryEmailPrefix = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ListUsersFilters) SetState(v string) *ListUsersFilters {
+	s.State = &v
+	return s
+}
+
+// SetUsernamePrefix sets the UsernamePrefix field's value.
+func (s *ListUsersFilters) SetUsernamePrefix(v string) *ListUsersFilters {
+	s.UsernamePrefix = &v
+	return s
+}
+
 type ListUsersInput struct {
 	_ struct{} `type:"structure"`
+
+	// Limit the user search results based on the filter criteria. You can only
+	// use one filter per request.
+	Filters *ListUsersFilters `type:"structure"`
 
 	// The maximum number of results to return in a single call.
 	MaxResults *int64 `min:"1" type:"integer"`
@@ -17038,6 +18534,12 @@ func (s *ListUsersInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListUsersInput) SetFilters(v *ListUsersFilters) *ListUsersInput {
+	s.Filters = v
+	return s
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -18499,16 +20001,35 @@ func (s PutInboundDmarcSettingsOutput) GoString() string {
 type PutMailboxPermissionsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the user, group, or resource for which to update mailbox
-	// permissions.
+	// The identifier of the user or resource for which to update mailbox permissions.
+	//
+	// The identifier can be UserId, ResourceID, or Group Id, Username, Resourcename,
+	// or Groupname, or email.
+	//
+	//    * Entity ID: 12345678-1234-1234-1234-123456789012, r-0123456789a0123456789b0123456789,
+	//    or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: entity@domain.tld
+	//
+	//    * Entity name: entity
 	//
 	// EntityId is a required field
-	EntityId *string `min:"12" type:"string" required:"true"`
+	EntityId *string `min:"1" type:"string" required:"true"`
 
 	// The identifier of the user, group, or resource to which to grant the permissions.
 	//
+	// The identifier can be UserId, ResourceID, or Group Id, Username, Resourcename,
+	// or Groupname, or email.
+	//
+	//    * Grantee ID: 12345678-1234-1234-1234-123456789012, r-0123456789a0123456789b0123456789,
+	//    or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: grantee@domain.tld
+	//
+	//    * Grantee name: grantee
+	//
 	// GranteeId is a required field
-	GranteeId *string `min:"12" type:"string" required:"true"`
+	GranteeId *string `min:"1" type:"string" required:"true"`
 
 	// The identifier of the organization under which the user, group, or resource
 	// exists.
@@ -18551,14 +20072,14 @@ func (s *PutMailboxPermissionsInput) Validate() error {
 	if s.EntityId == nil {
 		invalidParams.Add(request.NewErrParamRequired("EntityId"))
 	}
-	if s.EntityId != nil && len(*s.EntityId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("EntityId", 12))
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
 	}
 	if s.GranteeId == nil {
 		invalidParams.Add(request.NewErrParamRequired("GranteeId"))
 	}
-	if s.GranteeId != nil && len(*s.GranteeId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("GranteeId", 12))
+	if s.GranteeId != nil && len(*s.GranteeId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GranteeId", 1))
 	}
 	if s.OrganizationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
@@ -19049,8 +20570,16 @@ type RegisterToWorkMailInput struct {
 
 	// The identifier for the user, group, or resource to be updated.
 	//
+	// The identifier can accept UserId, ResourceId, or GroupId, or Username, Resourcename,
+	// or Groupname. The following identity formats are available:
+	//
+	//    * Entity ID: 12345678-1234-1234-1234-123456789012, r-0123456789a0123456789b0123456789,
+	//    or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Entity name: entity
+	//
 	// EntityId is a required field
-	EntityId *string `min:"12" type:"string" required:"true"`
+	EntityId *string `min:"1" type:"string" required:"true"`
 
 	// The identifier for the organization under which the user, group, or resource
 	// exists.
@@ -19089,8 +20618,8 @@ func (s *RegisterToWorkMailInput) Validate() error {
 	if s.EntityId == nil {
 		invalidParams.Add(request.NewErrParamRequired("EntityId"))
 	}
-	if s.EntityId != nil && len(*s.EntityId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("EntityId", 12))
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
 	}
 	if s.OrganizationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
@@ -19320,6 +20849,9 @@ func (s ResetPasswordOutput) GoString() string {
 type Resource struct {
 	_ struct{} `type:"structure"`
 
+	// Resource description.
+	Description *string `min:"1" type:"string"`
+
 	// The date indicating when the resource was disabled from WorkMail use.
 	DisabledDate *time.Time `type:"timestamp"`
 
@@ -19358,6 +20890,12 @@ func (s Resource) String() string {
 // value will be replaced with "sensitive".
 func (s Resource) GoString() string {
 	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *Resource) SetDescription(v string) *Resource {
+	s.Description = &v
+	return s
 }
 
 // SetDisabledDate sets the DisabledDate field's value.
@@ -19477,8 +21015,18 @@ type StartMailboxExportJobInput struct {
 
 	// The identifier of the user or resource associated with the mailbox.
 	//
+	// The identifier can accept UserId or ResourceId, Username or Resourcename,
+	// or email. The following identity formats are available:
+	//
+	//    * Entity ID: 12345678-1234-1234-1234-123456789012, r-0123456789a0123456789b0123456789
+	//    , or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: entity@domain.tld
+	//
+	//    * Entity name: entity
+	//
 	// EntityId is a required field
-	EntityId *string `min:"12" type:"string" required:"true"`
+	EntityId *string `min:"1" type:"string" required:"true"`
 
 	// The Amazon Resource Name (ARN) of the symmetric AWS Key Management Service
 	// (AWS KMS) key that encrypts the exported mailbox content.
@@ -19535,8 +21083,8 @@ func (s *StartMailboxExportJobInput) Validate() error {
 	if s.EntityId == nil {
 		invalidParams.Add(request.NewErrParamRequired("EntityId"))
 	}
-	if s.EntityId != nil && len(*s.EntityId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("EntityId", 12))
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
 	}
 	if s.KmsKeyArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("KmsKeyArn"))
@@ -20366,6 +21914,112 @@ func (s UpdateDefaultMailDomainOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier for the group to be updated.
+	//
+	// The identifier can accept GroupId, Groupname, or email. The following identity
+	// formats are available:
+	//
+	//    * Group ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: group@domain.tld
+	//
+	//    * Group name: group
+	//
+	// GroupId is a required field
+	GroupId *string `min:"1" type:"string" required:"true"`
+
+	// If enabled, the group is hidden from the global address list.
+	HiddenFromGlobalAddressList *bool `type:"boolean"`
+
+	// The identifier for the organization under which the group exists.
+	//
+	// OrganizationId is a required field
+	OrganizationId *string `min:"34" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateGroupInput"}
+	if s.GroupId == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupId"))
+	}
+	if s.GroupId != nil && len(*s.GroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupId", 1))
+	}
+	if s.OrganizationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
+	}
+	if s.OrganizationId != nil && len(*s.OrganizationId) < 34 {
+		invalidParams.Add(request.NewErrParamMinLen("OrganizationId", 34))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *UpdateGroupInput) SetGroupId(v string) *UpdateGroupInput {
+	s.GroupId = &v
+	return s
+}
+
+// SetHiddenFromGlobalAddressList sets the HiddenFromGlobalAddressList field's value.
+func (s *UpdateGroupInput) SetHiddenFromGlobalAddressList(v bool) *UpdateGroupInput {
+	s.HiddenFromGlobalAddressList = &v
+	return s
+}
+
+// SetOrganizationId sets the OrganizationId field's value.
+func (s *UpdateGroupInput) SetOrganizationId(v string) *UpdateGroupInput {
+	s.OrganizationId = &v
+	return s
+}
+
+type UpdateGroupOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateGroupOutput) GoString() string {
+	return s.String()
+}
+
 type UpdateImpersonationRoleInput struct {
 	_ struct{} `type:"structure"`
 
@@ -20537,8 +22191,17 @@ type UpdateMailboxQuotaInput struct {
 
 	// The identifer for the user for whom to update the mailbox quota.
 	//
+	// The identifier can be the UserId, Username, or email. The following identity
+	// formats are available:
+	//
+	//    * User ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: user@domain.tld
+	//
+	//    * User name: user
+	//
 	// UserId is a required field
-	UserId *string `min:"12" type:"string" required:"true"`
+	UserId *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -20577,8 +22240,8 @@ func (s *UpdateMailboxQuotaInput) Validate() error {
 	if s.UserId == nil {
 		invalidParams.Add(request.NewErrParamRequired("UserId"))
 	}
-	if s.UserId != nil && len(*s.UserId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("UserId", 12))
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -20868,8 +22531,18 @@ type UpdatePrimaryEmailAddressInput struct {
 
 	// The user, group, or resource to update.
 	//
+	// The identifier can accept UseriD, ResourceId, or GroupId, Username, Resourcename,
+	// or Groupname, or email. The following identity formats are available:
+	//
+	//    * Entity ID: 12345678-1234-1234-1234-123456789012, r-0123456789a0123456789b0123456789,
+	//    or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: entity@domain.tld
+	//
+	//    * Entity name: entity
+	//
 	// EntityId is a required field
-	EntityId *string `min:"12" type:"string" required:"true"`
+	EntityId *string `min:"1" type:"string" required:"true"`
 
 	// The organization that contains the user, group, or resource to update.
 	//
@@ -20907,8 +22580,8 @@ func (s *UpdatePrimaryEmailAddressInput) Validate() error {
 	if s.EntityId == nil {
 		invalidParams.Add(request.NewErrParamRequired("EntityId"))
 	}
-	if s.EntityId != nil && len(*s.EntityId) < 12 {
-		invalidParams.Add(request.NewErrParamMinLen("EntityId", 12))
+	if s.EntityId != nil && len(*s.EntityId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EntityId", 1))
 	}
 	if s.OrganizationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
@@ -20969,6 +22642,12 @@ type UpdateResourceInput struct {
 	// The resource's booking options to be updated.
 	BookingOptions *BookingOptions `type:"structure"`
 
+	// Updates the resource description.
+	Description *string `type:"string"`
+
+	// If enabled, the resource is hidden from the global address list.
+	HiddenFromGlobalAddressList *bool `type:"boolean"`
+
 	// The name of the resource to be updated.
 	Name *string `min:"1" type:"string"`
 
@@ -20980,8 +22659,20 @@ type UpdateResourceInput struct {
 
 	// The identifier of the resource to be updated.
 	//
+	// The identifier can accept ResourceId, Resourcename, or email. The following
+	// identity formats are available:
+	//
+	//    * Resource ID: r-0123456789a0123456789b0123456789
+	//
+	//    * Email address: resource@domain.tld
+	//
+	//    * Resource name: resource
+	//
 	// ResourceId is a required field
-	ResourceId *string `min:"34" type:"string" required:"true"`
+	ResourceId *string `min:"1" type:"string" required:"true"`
+
+	// Updates the resource type.
+	Type *string `type:"string" enum:"ResourceType"`
 }
 
 // String returns the string representation.
@@ -21017,8 +22708,8 @@ func (s *UpdateResourceInput) Validate() error {
 	if s.ResourceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
 	}
-	if s.ResourceId != nil && len(*s.ResourceId) < 34 {
-		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 34))
+	if s.ResourceId != nil && len(*s.ResourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -21030,6 +22721,18 @@ func (s *UpdateResourceInput) Validate() error {
 // SetBookingOptions sets the BookingOptions field's value.
 func (s *UpdateResourceInput) SetBookingOptions(v *BookingOptions) *UpdateResourceInput {
 	s.BookingOptions = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateResourceInput) SetDescription(v string) *UpdateResourceInput {
+	s.Description = &v
+	return s
+}
+
+// SetHiddenFromGlobalAddressList sets the HiddenFromGlobalAddressList field's value.
+func (s *UpdateResourceInput) SetHiddenFromGlobalAddressList(v bool) *UpdateResourceInput {
+	s.HiddenFromGlobalAddressList = &v
 	return s
 }
 
@@ -21048,6 +22751,12 @@ func (s *UpdateResourceInput) SetOrganizationId(v string) *UpdateResourceInput {
 // SetResourceId sets the ResourceId field's value.
 func (s *UpdateResourceInput) SetResourceId(v string) *UpdateResourceInput {
 	s.ResourceId = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *UpdateResourceInput) SetType(v string) *UpdateResourceInput {
+	s.Type = &v
 	return s
 }
 
@@ -21070,6 +22779,292 @@ func (s UpdateResourceOutput) String() string {
 // be included in the string output. The member name will be present, but the
 // value will be replaced with "sensitive".
 func (s UpdateResourceOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateUserInput struct {
+	_ struct{} `type:"structure"`
+
+	// Updates the user's city.
+	//
+	// City is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	City *string `type:"string" sensitive:"true"`
+
+	// Updates the user's company.
+	//
+	// Company is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	Company *string `type:"string" sensitive:"true"`
+
+	// Updates the user's country.
+	//
+	// Country is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	Country *string `type:"string" sensitive:"true"`
+
+	// Updates the user's department.
+	//
+	// Department is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	Department *string `type:"string" sensitive:"true"`
+
+	// Updates the display name of the user.
+	//
+	// DisplayName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	DisplayName *string `type:"string" sensitive:"true"`
+
+	// Updates the user's first name.
+	//
+	// FirstName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	FirstName *string `type:"string" sensitive:"true"`
+
+	// If enabled, the user is hidden from the global address list.
+	HiddenFromGlobalAddressList *bool `type:"boolean"`
+
+	// Updates the user's initials.
+	//
+	// Initials is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	Initials *string `type:"string" sensitive:"true"`
+
+	// Updates the user's job title.
+	//
+	// JobTitle is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	JobTitle *string `type:"string" sensitive:"true"`
+
+	// Updates the user's last name.
+	//
+	// LastName is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	LastName *string `type:"string" sensitive:"true"`
+
+	// Updates the user's office.
+	//
+	// Office is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	Office *string `type:"string" sensitive:"true"`
+
+	// The identifier for the organization under which the user exists.
+	//
+	// OrganizationId is a required field
+	OrganizationId *string `min:"34" type:"string" required:"true"`
+
+	// Updates the user role.
+	//
+	// You cannot pass SYSTEM_USER or RESOURCE.
+	Role *string `type:"string" enum:"UserRole"`
+
+	// Updates the user's street address.
+	//
+	// Street is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	Street *string `type:"string" sensitive:"true"`
+
+	// Updates the user's contact details.
+	//
+	// Telephone is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	Telephone *string `type:"string" sensitive:"true"`
+
+	// The identifier for the user to be updated.
+	//
+	// The identifier can be the UserId, Username, or email. The following identity
+	// formats are available:
+	//
+	//    * User ID: 12345678-1234-1234-1234-123456789012 or S-1-1-12-1234567890-123456789-123456789-1234
+	//
+	//    * Email address: user@domain.tld
+	//
+	//    * User name: user
+	//
+	// UserId is a required field
+	UserId *string `min:"1" type:"string" required:"true"`
+
+	// Updates the user's zipcode.
+	//
+	// ZipCode is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateUserInput's
+	// String and GoString methods.
+	ZipCode *string `type:"string" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateUserInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateUserInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateUserInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateUserInput"}
+	if s.OrganizationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationId"))
+	}
+	if s.OrganizationId != nil && len(*s.OrganizationId) < 34 {
+		invalidParams.Add(request.NewErrParamMinLen("OrganizationId", 34))
+	}
+	if s.UserId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserId"))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCity sets the City field's value.
+func (s *UpdateUserInput) SetCity(v string) *UpdateUserInput {
+	s.City = &v
+	return s
+}
+
+// SetCompany sets the Company field's value.
+func (s *UpdateUserInput) SetCompany(v string) *UpdateUserInput {
+	s.Company = &v
+	return s
+}
+
+// SetCountry sets the Country field's value.
+func (s *UpdateUserInput) SetCountry(v string) *UpdateUserInput {
+	s.Country = &v
+	return s
+}
+
+// SetDepartment sets the Department field's value.
+func (s *UpdateUserInput) SetDepartment(v string) *UpdateUserInput {
+	s.Department = &v
+	return s
+}
+
+// SetDisplayName sets the DisplayName field's value.
+func (s *UpdateUserInput) SetDisplayName(v string) *UpdateUserInput {
+	s.DisplayName = &v
+	return s
+}
+
+// SetFirstName sets the FirstName field's value.
+func (s *UpdateUserInput) SetFirstName(v string) *UpdateUserInput {
+	s.FirstName = &v
+	return s
+}
+
+// SetHiddenFromGlobalAddressList sets the HiddenFromGlobalAddressList field's value.
+func (s *UpdateUserInput) SetHiddenFromGlobalAddressList(v bool) *UpdateUserInput {
+	s.HiddenFromGlobalAddressList = &v
+	return s
+}
+
+// SetInitials sets the Initials field's value.
+func (s *UpdateUserInput) SetInitials(v string) *UpdateUserInput {
+	s.Initials = &v
+	return s
+}
+
+// SetJobTitle sets the JobTitle field's value.
+func (s *UpdateUserInput) SetJobTitle(v string) *UpdateUserInput {
+	s.JobTitle = &v
+	return s
+}
+
+// SetLastName sets the LastName field's value.
+func (s *UpdateUserInput) SetLastName(v string) *UpdateUserInput {
+	s.LastName = &v
+	return s
+}
+
+// SetOffice sets the Office field's value.
+func (s *UpdateUserInput) SetOffice(v string) *UpdateUserInput {
+	s.Office = &v
+	return s
+}
+
+// SetOrganizationId sets the OrganizationId field's value.
+func (s *UpdateUserInput) SetOrganizationId(v string) *UpdateUserInput {
+	s.OrganizationId = &v
+	return s
+}
+
+// SetRole sets the Role field's value.
+func (s *UpdateUserInput) SetRole(v string) *UpdateUserInput {
+	s.Role = &v
+	return s
+}
+
+// SetStreet sets the Street field's value.
+func (s *UpdateUserInput) SetStreet(v string) *UpdateUserInput {
+	s.Street = &v
+	return s
+}
+
+// SetTelephone sets the Telephone field's value.
+func (s *UpdateUserInput) SetTelephone(v string) *UpdateUserInput {
+	s.Telephone = &v
+	return s
+}
+
+// SetUserId sets the UserId field's value.
+func (s *UpdateUserInput) SetUserId(v string) *UpdateUserInput {
+	s.UserId = &v
+	return s
+}
+
+// SetZipCode sets the ZipCode field's value.
+func (s *UpdateUserInput) SetZipCode(v string) *UpdateUserInput {
+	s.ZipCode = &v
+	return s
+}
+
+type UpdateUserOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateUserOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateUserOutput) GoString() string {
 	return s.String()
 }
 
@@ -21257,6 +23252,26 @@ func EntityState_Values() []string {
 }
 
 const (
+	// EntityTypeGroup is a EntityType enum value
+	EntityTypeGroup = "GROUP"
+
+	// EntityTypeUser is a EntityType enum value
+	EntityTypeUser = "USER"
+
+	// EntityTypeResource is a EntityType enum value
+	EntityTypeResource = "RESOURCE"
+)
+
+// EntityType_Values returns all elements of the EntityType enum
+func EntityType_Values() []string {
+	return []string{
+		EntityTypeGroup,
+		EntityTypeUser,
+		EntityTypeResource,
+	}
+}
+
+const (
 	// FolderNameInbox is a FolderName enum value
 	FolderNameInbox = "INBOX"
 
@@ -21421,6 +23436,9 @@ const (
 
 	// UserRoleSystemUser is a UserRole enum value
 	UserRoleSystemUser = "SYSTEM_USER"
+
+	// UserRoleRemoteUser is a UserRole enum value
+	UserRoleRemoteUser = "REMOTE_USER"
 )
 
 // UserRole_Values returns all elements of the UserRole enum
@@ -21429,5 +23447,6 @@ func UserRole_Values() []string {
 		UserRoleUser,
 		UserRoleResource,
 		UserRoleSystemUser,
+		UserRoleRemoteUser,
 	}
 }

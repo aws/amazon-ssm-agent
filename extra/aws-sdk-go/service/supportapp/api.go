@@ -28,14 +28,13 @@ const opCreateSlackChannelConfiguration = "CreateSlackChannelConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSlackChannelConfigurationRequest method.
+//	req, resp := client.CreateSlackChannelConfigurationRequest(params)
 //
-//    // Example sending a request using the CreateSlackChannelConfigurationRequest method.
-//    req, resp := client.CreateSlackChannelConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/CreateSlackChannelConfiguration
 func (c *SupportApp) CreateSlackChannelConfigurationRequest(input *CreateSlackChannelConfigurationInput) (req *request.Request, output *CreateSlackChannelConfigurationOutput) {
@@ -59,9 +58,9 @@ func (c *SupportApp) CreateSlackChannelConfigurationRequest(input *CreateSlackCh
 //
 // Creates a Slack channel configuration for your Amazon Web Services account.
 //
-//    * You can add up to 5 Slack workspaces for your account.
+//   - You can add up to 5 Slack workspaces for your account.
 //
-//    * You can add up to 20 Slack channels for your account.
+//   - You can add up to 20 Slack channels for your account.
 //
 // A Slack channel can have up to 100 Amazon Web Services accounts. This means
 // that only 100 accounts can add the same Slack channel to the Amazon Web Services
@@ -82,44 +81,45 @@ func (c *SupportApp) CreateSlackChannelConfigurationRequest(input *CreateSlackCh
 // API operation CreateSlackChannelConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceQuotaExceededException
-//   Your Service Quotas request exceeds the quota for the service. For example,
-//   your Service Quotas request to Amazon Web Services Support App might exceed
-//   the maximum number of workspaces or channels per account, or the maximum
-//   number of accounts per Slack channel.
 //
-//   * ConflictException
-//   Your request has a conflict. For example, you might receive this error if
-//   you try the following:
+//   - ServiceQuotaExceededException
+//     Your Service Quotas request exceeds the quota for the service. For example,
+//     your Service Quotas request to Amazon Web Services Support App might exceed
+//     the maximum number of workspaces or channels per account, or the maximum
+//     number of accounts per Slack channel.
 //
-//      * Add, update, or delete a Slack channel configuration before you add
-//      a Slack workspace to your Amazon Web Services account.
+//   - ConflictException
+//     Your request has a conflict. For example, you might receive this error if
+//     you try the following:
 //
-//      * Add a Slack channel configuration that already exists in your Amazon
-//      Web Services account.
+//   - Add, update, or delete a Slack channel configuration before you add
+//     a Slack workspace to your Amazon Web Services account.
 //
-//      * Delete a Slack channel configuration for a live chat channel.
+//   - Add a Slack channel configuration that already exists in your Amazon
+//     Web Services account.
 //
-//      * Delete a Slack workspace from your Amazon Web Services account that
-//      has an active live chat channel.
+//   - Delete a Slack channel configuration for a live chat channel.
 //
-//      * Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
-//      Services account that doesn't belong to an organization.
+//   - Delete a Slack workspace from your Amazon Web Services account that
+//     has an active live chat channel.
 //
-//      * Call the RegisterSlackWorkspaceForOrganization API from a member account,
-//      but the management account hasn't registered that workspace yet for the
-//      organization.
+//   - Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
+//     Services account that doesn't belong to an organization.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - Call the RegisterSlackWorkspaceForOrganization API from a member account,
+//     but the management account hasn't registered that workspace yet for the
+//     organization.
 //
-//   * InternalServerException
-//   We can’t process your request right now because of a server issue. Try
-//   again later.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ValidationException
-//   Your request input doesn't meet the constraints that the Amazon Web Services
-//   Support App specifies.
+//   - InternalServerException
+//     We can’t process your request right now because of a server issue. Try
+//     again later.
+//
+//   - ValidationException
+//     Your request input doesn't meet the constraints that the Amazon Web Services
+//     Support App specifies.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/CreateSlackChannelConfiguration
 func (c *SupportApp) CreateSlackChannelConfiguration(input *CreateSlackChannelConfigurationInput) (*CreateSlackChannelConfigurationOutput, error) {
@@ -159,14 +159,13 @@ const opDeleteAccountAlias = "DeleteAccountAlias"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAccountAliasRequest method.
+//	req, resp := client.DeleteAccountAliasRequest(params)
 //
-//    // Example sending a request using the DeleteAccountAliasRequest method.
-//    req, resp := client.DeleteAccountAliasRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/DeleteAccountAlias
 func (c *SupportApp) DeleteAccountAliasRequest(input *DeleteAccountAliasInput) (req *request.Request, output *DeleteAccountAliasOutput) {
@@ -201,16 +200,17 @@ func (c *SupportApp) DeleteAccountAliasRequest(input *DeleteAccountAliasInput) (
 // API operation DeleteAccountAlias for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource is missing or doesn't exist, such as an account alias,
-//   Slack channel configuration, or Slack workspace configuration.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ResourceNotFoundException
+//     The specified resource is missing or doesn't exist, such as an account alias,
+//     Slack channel configuration, or Slack workspace configuration.
 //
-//   * InternalServerException
-//   We can’t process your request right now because of a server issue. Try
-//   again later.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
+//
+//   - InternalServerException
+//     We can’t process your request right now because of a server issue. Try
+//     again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/DeleteAccountAlias
 func (c *SupportApp) DeleteAccountAlias(input *DeleteAccountAliasInput) (*DeleteAccountAliasOutput, error) {
@@ -250,14 +250,13 @@ const opDeleteSlackChannelConfiguration = "DeleteSlackChannelConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSlackChannelConfigurationRequest method.
+//	req, resp := client.DeleteSlackChannelConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteSlackChannelConfigurationRequest method.
-//    req, resp := client.DeleteSlackChannelConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/DeleteSlackChannelConfiguration
 func (c *SupportApp) DeleteSlackChannelConfigurationRequest(input *DeleteSlackChannelConfigurationInput) (req *request.Request, output *DeleteSlackChannelConfigurationOutput) {
@@ -290,42 +289,43 @@ func (c *SupportApp) DeleteSlackChannelConfigurationRequest(input *DeleteSlackCh
 // API operation DeleteSlackChannelConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Your request has a conflict. For example, you might receive this error if
-//   you try the following:
 //
-//      * Add, update, or delete a Slack channel configuration before you add
-//      a Slack workspace to your Amazon Web Services account.
+//   - ConflictException
+//     Your request has a conflict. For example, you might receive this error if
+//     you try the following:
 //
-//      * Add a Slack channel configuration that already exists in your Amazon
-//      Web Services account.
+//   - Add, update, or delete a Slack channel configuration before you add
+//     a Slack workspace to your Amazon Web Services account.
 //
-//      * Delete a Slack channel configuration for a live chat channel.
+//   - Add a Slack channel configuration that already exists in your Amazon
+//     Web Services account.
 //
-//      * Delete a Slack workspace from your Amazon Web Services account that
-//      has an active live chat channel.
+//   - Delete a Slack channel configuration for a live chat channel.
 //
-//      * Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
-//      Services account that doesn't belong to an organization.
+//   - Delete a Slack workspace from your Amazon Web Services account that
+//     has an active live chat channel.
 //
-//      * Call the RegisterSlackWorkspaceForOrganization API from a member account,
-//      but the management account hasn't registered that workspace yet for the
-//      organization.
+//   - Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
+//     Services account that doesn't belong to an organization.
 //
-//   * ResourceNotFoundException
-//   The specified resource is missing or doesn't exist, such as an account alias,
-//   Slack channel configuration, or Slack workspace configuration.
+//   - Call the RegisterSlackWorkspaceForOrganization API from a member account,
+//     but the management account hasn't registered that workspace yet for the
+//     organization.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ResourceNotFoundException
+//     The specified resource is missing or doesn't exist, such as an account alias,
+//     Slack channel configuration, or Slack workspace configuration.
 //
-//   * InternalServerException
-//   We can’t process your request right now because of a server issue. Try
-//   again later.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ValidationException
-//   Your request input doesn't meet the constraints that the Amazon Web Services
-//   Support App specifies.
+//   - InternalServerException
+//     We can’t process your request right now because of a server issue. Try
+//     again later.
+//
+//   - ValidationException
+//     Your request input doesn't meet the constraints that the Amazon Web Services
+//     Support App specifies.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/DeleteSlackChannelConfiguration
 func (c *SupportApp) DeleteSlackChannelConfiguration(input *DeleteSlackChannelConfigurationInput) (*DeleteSlackChannelConfigurationOutput, error) {
@@ -365,14 +365,13 @@ const opDeleteSlackWorkspaceConfiguration = "DeleteSlackWorkspaceConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSlackWorkspaceConfigurationRequest method.
+//	req, resp := client.DeleteSlackWorkspaceConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteSlackWorkspaceConfigurationRequest method.
-//    req, resp := client.DeleteSlackWorkspaceConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/DeleteSlackWorkspaceConfiguration
 func (c *SupportApp) DeleteSlackWorkspaceConfigurationRequest(input *DeleteSlackWorkspaceConfigurationInput) (req *request.Request, output *DeleteSlackWorkspaceConfigurationOutput) {
@@ -405,42 +404,43 @@ func (c *SupportApp) DeleteSlackWorkspaceConfigurationRequest(input *DeleteSlack
 // API operation DeleteSlackWorkspaceConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Your request has a conflict. For example, you might receive this error if
-//   you try the following:
 //
-//      * Add, update, or delete a Slack channel configuration before you add
-//      a Slack workspace to your Amazon Web Services account.
+//   - ConflictException
+//     Your request has a conflict. For example, you might receive this error if
+//     you try the following:
 //
-//      * Add a Slack channel configuration that already exists in your Amazon
-//      Web Services account.
+//   - Add, update, or delete a Slack channel configuration before you add
+//     a Slack workspace to your Amazon Web Services account.
 //
-//      * Delete a Slack channel configuration for a live chat channel.
+//   - Add a Slack channel configuration that already exists in your Amazon
+//     Web Services account.
 //
-//      * Delete a Slack workspace from your Amazon Web Services account that
-//      has an active live chat channel.
+//   - Delete a Slack channel configuration for a live chat channel.
 //
-//      * Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
-//      Services account that doesn't belong to an organization.
+//   - Delete a Slack workspace from your Amazon Web Services account that
+//     has an active live chat channel.
 //
-//      * Call the RegisterSlackWorkspaceForOrganization API from a member account,
-//      but the management account hasn't registered that workspace yet for the
-//      organization.
+//   - Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
+//     Services account that doesn't belong to an organization.
 //
-//   * ResourceNotFoundException
-//   The specified resource is missing or doesn't exist, such as an account alias,
-//   Slack channel configuration, or Slack workspace configuration.
+//   - Call the RegisterSlackWorkspaceForOrganization API from a member account,
+//     but the management account hasn't registered that workspace yet for the
+//     organization.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ResourceNotFoundException
+//     The specified resource is missing or doesn't exist, such as an account alias,
+//     Slack channel configuration, or Slack workspace configuration.
 //
-//   * InternalServerException
-//   We can’t process your request right now because of a server issue. Try
-//   again later.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ValidationException
-//   Your request input doesn't meet the constraints that the Amazon Web Services
-//   Support App specifies.
+//   - InternalServerException
+//     We can’t process your request right now because of a server issue. Try
+//     again later.
+//
+//   - ValidationException
+//     Your request input doesn't meet the constraints that the Amazon Web Services
+//     Support App specifies.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/DeleteSlackWorkspaceConfiguration
 func (c *SupportApp) DeleteSlackWorkspaceConfiguration(input *DeleteSlackWorkspaceConfigurationInput) (*DeleteSlackWorkspaceConfigurationOutput, error) {
@@ -480,14 +480,13 @@ const opGetAccountAlias = "GetAccountAlias"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAccountAliasRequest method.
+//	req, resp := client.GetAccountAliasRequest(params)
 //
-//    // Example sending a request using the GetAccountAliasRequest method.
-//    req, resp := client.GetAccountAliasRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/GetAccountAlias
 func (c *SupportApp) GetAccountAliasRequest(input *GetAccountAliasInput) (req *request.Request, output *GetAccountAliasOutput) {
@@ -521,9 +520,9 @@ func (c *SupportApp) GetAccountAliasRequest(input *GetAccountAliasInput) (req *r
 // API operation GetAccountAlias for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   We can’t process your request right now because of a server issue. Try
-//   again later.
+//   - InternalServerException
+//     We can’t process your request right now because of a server issue. Try
+//     again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/GetAccountAlias
 func (c *SupportApp) GetAccountAlias(input *GetAccountAliasInput) (*GetAccountAliasOutput, error) {
@@ -563,14 +562,13 @@ const opListSlackChannelConfigurations = "ListSlackChannelConfigurations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSlackChannelConfigurationsRequest method.
+//	req, resp := client.ListSlackChannelConfigurationsRequest(params)
 //
-//    // Example sending a request using the ListSlackChannelConfigurationsRequest method.
-//    req, resp := client.ListSlackChannelConfigurationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/ListSlackChannelConfigurations
 func (c *SupportApp) ListSlackChannelConfigurationsRequest(input *ListSlackChannelConfigurationsInput) (req *request.Request, output *ListSlackChannelConfigurationsOutput) {
@@ -607,12 +605,13 @@ func (c *SupportApp) ListSlackChannelConfigurationsRequest(input *ListSlackChann
 // API operation ListSlackChannelConfigurations for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
 //
-//   * InternalServerException
-//   We can’t process your request right now because of a server issue. Try
-//   again later.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
+//
+//   - InternalServerException
+//     We can’t process your request right now because of a server issue. Try
+//     again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/ListSlackChannelConfigurations
 func (c *SupportApp) ListSlackChannelConfigurations(input *ListSlackChannelConfigurationsInput) (*ListSlackChannelConfigurationsOutput, error) {
@@ -644,15 +643,14 @@ func (c *SupportApp) ListSlackChannelConfigurationsWithContext(ctx aws.Context, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSlackChannelConfigurations operation.
-//    pageNum := 0
-//    err := client.ListSlackChannelConfigurationsPages(params,
-//        func(page *supportapp.ListSlackChannelConfigurationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSlackChannelConfigurations operation.
+//	pageNum := 0
+//	err := client.ListSlackChannelConfigurationsPages(params,
+//	    func(page *supportapp.ListSlackChannelConfigurationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SupportApp) ListSlackChannelConfigurationsPages(input *ListSlackChannelConfigurationsInput, fn func(*ListSlackChannelConfigurationsOutput, bool) bool) error {
 	return c.ListSlackChannelConfigurationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -704,14 +702,13 @@ const opListSlackWorkspaceConfigurations = "ListSlackWorkspaceConfigurations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSlackWorkspaceConfigurationsRequest method.
+//	req, resp := client.ListSlackWorkspaceConfigurationsRequest(params)
 //
-//    // Example sending a request using the ListSlackWorkspaceConfigurationsRequest method.
-//    req, resp := client.ListSlackWorkspaceConfigurationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/ListSlackWorkspaceConfigurations
 func (c *SupportApp) ListSlackWorkspaceConfigurationsRequest(input *ListSlackWorkspaceConfigurationsInput) (req *request.Request, output *ListSlackWorkspaceConfigurationsOutput) {
@@ -748,12 +745,13 @@ func (c *SupportApp) ListSlackWorkspaceConfigurationsRequest(input *ListSlackWor
 // API operation ListSlackWorkspaceConfigurations for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
 //
-//   * InternalServerException
-//   We can’t process your request right now because of a server issue. Try
-//   again later.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
+//
+//   - InternalServerException
+//     We can’t process your request right now because of a server issue. Try
+//     again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/ListSlackWorkspaceConfigurations
 func (c *SupportApp) ListSlackWorkspaceConfigurations(input *ListSlackWorkspaceConfigurationsInput) (*ListSlackWorkspaceConfigurationsOutput, error) {
@@ -785,15 +783,14 @@ func (c *SupportApp) ListSlackWorkspaceConfigurationsWithContext(ctx aws.Context
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSlackWorkspaceConfigurations operation.
-//    pageNum := 0
-//    err := client.ListSlackWorkspaceConfigurationsPages(params,
-//        func(page *supportapp.ListSlackWorkspaceConfigurationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSlackWorkspaceConfigurations operation.
+//	pageNum := 0
+//	err := client.ListSlackWorkspaceConfigurationsPages(params,
+//	    func(page *supportapp.ListSlackWorkspaceConfigurationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SupportApp) ListSlackWorkspaceConfigurationsPages(input *ListSlackWorkspaceConfigurationsInput, fn func(*ListSlackWorkspaceConfigurationsOutput, bool) bool) error {
 	return c.ListSlackWorkspaceConfigurationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -845,14 +842,13 @@ const opPutAccountAlias = "PutAccountAlias"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutAccountAliasRequest method.
+//	req, resp := client.PutAccountAliasRequest(params)
 //
-//    // Example sending a request using the PutAccountAliasRequest method.
-//    req, resp := client.PutAccountAliasRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/PutAccountAlias
 func (c *SupportApp) PutAccountAliasRequest(input *PutAccountAliasInput) (req *request.Request, output *PutAccountAliasOutput) {
@@ -887,16 +883,17 @@ func (c *SupportApp) PutAccountAliasRequest(input *PutAccountAliasInput) (req *r
 // API operation PutAccountAlias for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
 //
-//   * InternalServerException
-//   We can’t process your request right now because of a server issue. Try
-//   again later.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ValidationException
-//   Your request input doesn't meet the constraints that the Amazon Web Services
-//   Support App specifies.
+//   - InternalServerException
+//     We can’t process your request right now because of a server issue. Try
+//     again later.
+//
+//   - ValidationException
+//     Your request input doesn't meet the constraints that the Amazon Web Services
+//     Support App specifies.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/PutAccountAlias
 func (c *SupportApp) PutAccountAlias(input *PutAccountAliasInput) (*PutAccountAliasOutput, error) {
@@ -936,14 +933,13 @@ const opRegisterSlackWorkspaceForOrganization = "RegisterSlackWorkspaceForOrgani
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterSlackWorkspaceForOrganizationRequest method.
+//	req, resp := client.RegisterSlackWorkspaceForOrganizationRequest(params)
 //
-//    // Example sending a request using the RegisterSlackWorkspaceForOrganizationRequest method.
-//    req, resp := client.RegisterSlackWorkspaceForOrganizationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/RegisterSlackWorkspaceForOrganization
 func (c *SupportApp) RegisterSlackWorkspaceForOrganizationRequest(input *RegisterSlackWorkspaceForOrganizationInput) (req *request.Request, output *RegisterSlackWorkspaceForOrganizationOutput) {
@@ -986,13 +982,13 @@ func (c *SupportApp) RegisterSlackWorkspaceForOrganizationRequest(input *Registe
 // To use the Amazon Web Services Support App, each account must then complete
 // the following tasks:
 //
-//    * Create an Identity and Access Management (IAM) role with the required
-//    permission. For more information, see Managing access to the Amazon Web
-//    Services Support App (https://docs.aws.amazon.com/awssupport/latest/user/support-app-permissions.html).
+//   - Create an Identity and Access Management (IAM) role with the required
+//     permission. For more information, see Managing access to the Amazon Web
+//     Services Support App (https://docs.aws.amazon.com/awssupport/latest/user/support-app-permissions.html).
 //
-//    * Configure a Slack channel to use the Amazon Web Services Support App
-//    for support cases for that account. For more information, see Configuring
-//    a Slack channel (https://docs.aws.amazon.com/awssupport/latest/user/add-your-slack-channel.html).
+//   - Configure a Slack channel to use the Amazon Web Services Support App
+//     for support cases for that account. For more information, see Configuring
+//     a Slack channel (https://docs.aws.amazon.com/awssupport/latest/user/add-your-slack-channel.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1002,42 +998,43 @@ func (c *SupportApp) RegisterSlackWorkspaceForOrganizationRequest(input *Registe
 // API operation RegisterSlackWorkspaceForOrganization for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Your request has a conflict. For example, you might receive this error if
-//   you try the following:
 //
-//      * Add, update, or delete a Slack channel configuration before you add
-//      a Slack workspace to your Amazon Web Services account.
+//   - ConflictException
+//     Your request has a conflict. For example, you might receive this error if
+//     you try the following:
 //
-//      * Add a Slack channel configuration that already exists in your Amazon
-//      Web Services account.
+//   - Add, update, or delete a Slack channel configuration before you add
+//     a Slack workspace to your Amazon Web Services account.
 //
-//      * Delete a Slack channel configuration for a live chat channel.
+//   - Add a Slack channel configuration that already exists in your Amazon
+//     Web Services account.
 //
-//      * Delete a Slack workspace from your Amazon Web Services account that
-//      has an active live chat channel.
+//   - Delete a Slack channel configuration for a live chat channel.
 //
-//      * Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
-//      Services account that doesn't belong to an organization.
+//   - Delete a Slack workspace from your Amazon Web Services account that
+//     has an active live chat channel.
 //
-//      * Call the RegisterSlackWorkspaceForOrganization API from a member account,
-//      but the management account hasn't registered that workspace yet for the
-//      organization.
+//   - Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
+//     Services account that doesn't belong to an organization.
 //
-//   * ResourceNotFoundException
-//   The specified resource is missing or doesn't exist, such as an account alias,
-//   Slack channel configuration, or Slack workspace configuration.
+//   - Call the RegisterSlackWorkspaceForOrganization API from a member account,
+//     but the management account hasn't registered that workspace yet for the
+//     organization.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ResourceNotFoundException
+//     The specified resource is missing or doesn't exist, such as an account alias,
+//     Slack channel configuration, or Slack workspace configuration.
 //
-//   * InternalServerException
-//   We can’t process your request right now because of a server issue. Try
-//   again later.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ValidationException
-//   Your request input doesn't meet the constraints that the Amazon Web Services
-//   Support App specifies.
+//   - InternalServerException
+//     We can’t process your request right now because of a server issue. Try
+//     again later.
+//
+//   - ValidationException
+//     Your request input doesn't meet the constraints that the Amazon Web Services
+//     Support App specifies.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/RegisterSlackWorkspaceForOrganization
 func (c *SupportApp) RegisterSlackWorkspaceForOrganization(input *RegisterSlackWorkspaceForOrganizationInput) (*RegisterSlackWorkspaceForOrganizationOutput, error) {
@@ -1077,14 +1074,13 @@ const opUpdateSlackChannelConfiguration = "UpdateSlackChannelConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSlackChannelConfigurationRequest method.
+//	req, resp := client.UpdateSlackChannelConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateSlackChannelConfigurationRequest method.
-//    req, resp := client.UpdateSlackChannelConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/UpdateSlackChannelConfiguration
 func (c *SupportApp) UpdateSlackChannelConfigurationRequest(input *UpdateSlackChannelConfigurationInput) (req *request.Request, output *UpdateSlackChannelConfigurationOutput) {
@@ -1115,42 +1111,43 @@ func (c *SupportApp) UpdateSlackChannelConfigurationRequest(input *UpdateSlackCh
 // API operation UpdateSlackChannelConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ConflictException
-//   Your request has a conflict. For example, you might receive this error if
-//   you try the following:
 //
-//      * Add, update, or delete a Slack channel configuration before you add
-//      a Slack workspace to your Amazon Web Services account.
+//   - ConflictException
+//     Your request has a conflict. For example, you might receive this error if
+//     you try the following:
 //
-//      * Add a Slack channel configuration that already exists in your Amazon
-//      Web Services account.
+//   - Add, update, or delete a Slack channel configuration before you add
+//     a Slack workspace to your Amazon Web Services account.
 //
-//      * Delete a Slack channel configuration for a live chat channel.
+//   - Add a Slack channel configuration that already exists in your Amazon
+//     Web Services account.
 //
-//      * Delete a Slack workspace from your Amazon Web Services account that
-//      has an active live chat channel.
+//   - Delete a Slack channel configuration for a live chat channel.
 //
-//      * Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
-//      Services account that doesn't belong to an organization.
+//   - Delete a Slack workspace from your Amazon Web Services account that
+//     has an active live chat channel.
 //
-//      * Call the RegisterSlackWorkspaceForOrganization API from a member account,
-//      but the management account hasn't registered that workspace yet for the
-//      organization.
+//   - Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
+//     Services account that doesn't belong to an organization.
 //
-//   * ResourceNotFoundException
-//   The specified resource is missing or doesn't exist, such as an account alias,
-//   Slack channel configuration, or Slack workspace configuration.
+//   - Call the RegisterSlackWorkspaceForOrganization API from a member account,
+//     but the management account hasn't registered that workspace yet for the
+//     organization.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ResourceNotFoundException
+//     The specified resource is missing or doesn't exist, such as an account alias,
+//     Slack channel configuration, or Slack workspace configuration.
 //
-//   * InternalServerException
-//   We can’t process your request right now because of a server issue. Try
-//   again later.
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
-//   * ValidationException
-//   Your request input doesn't meet the constraints that the Amazon Web Services
-//   Support App specifies.
+//   - InternalServerException
+//     We can’t process your request right now because of a server issue. Try
+//     again later.
+//
+//   - ValidationException
+//     Your request input doesn't meet the constraints that the Amazon Web Services
+//     Support App specifies.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/support-app-2021-08-20/UpdateSlackChannelConfiguration
 func (c *SupportApp) UpdateSlackChannelConfiguration(input *UpdateSlackChannelConfigurationInput) (*UpdateSlackChannelConfigurationOutput, error) {
@@ -1241,23 +1238,23 @@ func (s *AccessDeniedException) RequestID() string {
 // Your request has a conflict. For example, you might receive this error if
 // you try the following:
 //
-//    * Add, update, or delete a Slack channel configuration before you add
-//    a Slack workspace to your Amazon Web Services account.
+//   - Add, update, or delete a Slack channel configuration before you add
+//     a Slack workspace to your Amazon Web Services account.
 //
-//    * Add a Slack channel configuration that already exists in your Amazon
-//    Web Services account.
+//   - Add a Slack channel configuration that already exists in your Amazon
+//     Web Services account.
 //
-//    * Delete a Slack channel configuration for a live chat channel.
+//   - Delete a Slack channel configuration for a live chat channel.
 //
-//    * Delete a Slack workspace from your Amazon Web Services account that
-//    has an active live chat channel.
+//   - Delete a Slack workspace from your Amazon Web Services account that
+//     has an active live chat channel.
 //
-//    * Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
-//    Services account that doesn't belong to an organization.
+//   - Call the RegisterSlackWorkspaceForOrganization API from an Amazon Web
+//     Services account that doesn't belong to an organization.
 //
-//    * Call the RegisterSlackWorkspaceForOrganization API from a member account,
-//    but the management account hasn't registered that workspace yet for the
-//    organization.
+//   - Call the RegisterSlackWorkspaceForOrganization API from a member account,
+//     but the management account hasn't registered that workspace yet for the
+//     organization.
 type ConflictException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`

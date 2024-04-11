@@ -29,14 +29,13 @@ const opAcknowledgeOrderReceipt = "AcknowledgeOrderReceipt"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AcknowledgeOrderReceiptRequest method.
+//	req, resp := client.AcknowledgeOrderReceiptRequest(params)
 //
-//    // Example sending a request using the AcknowledgeOrderReceiptRequest method.
-//    req, resp := client.AcknowledgeOrderReceiptRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/AcknowledgeOrderReceipt
 func (c *PrivateNetworks) AcknowledgeOrderReceiptRequest(input *AcknowledgeOrderReceiptInput) (req *request.Request, output *AcknowledgeOrderReceiptOutput) {
@@ -67,14 +66,15 @@ func (c *PrivateNetworks) AcknowledgeOrderReceiptRequest(input *AcknowledgeOrder
 // API operation AcknowledgeOrderReceipt for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/AcknowledgeOrderReceipt
 func (c *PrivateNetworks) AcknowledgeOrderReceipt(input *AcknowledgeOrderReceiptInput) (*AcknowledgeOrderReceiptOutput, error) {
@@ -114,14 +114,13 @@ const opActivateDeviceIdentifier = "ActivateDeviceIdentifier"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ActivateDeviceIdentifierRequest method.
+//	req, resp := client.ActivateDeviceIdentifierRequest(params)
 //
-//    // Example sending a request using the ActivateDeviceIdentifierRequest method.
-//    req, resp := client.ActivateDeviceIdentifierRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ActivateDeviceIdentifier
 func (c *PrivateNetworks) ActivateDeviceIdentifierRequest(input *ActivateDeviceIdentifierInput) (req *request.Request, output *ActivateDeviceIdentifierOutput) {
@@ -152,14 +151,15 @@ func (c *PrivateNetworks) ActivateDeviceIdentifierRequest(input *ActivateDeviceI
 // API operation ActivateDeviceIdentifier for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ActivateDeviceIdentifier
 func (c *PrivateNetworks) ActivateDeviceIdentifier(input *ActivateDeviceIdentifierInput) (*ActivateDeviceIdentifierOutput, error) {
@@ -199,14 +199,13 @@ const opActivateNetworkSite = "ActivateNetworkSite"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ActivateNetworkSiteRequest method.
+//	req, resp := client.ActivateNetworkSiteRequest(params)
 //
-//    // Example sending a request using the ActivateNetworkSiteRequest method.
-//    req, resp := client.ActivateNetworkSiteRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ActivateNetworkSite
 func (c *PrivateNetworks) ActivateNetworkSiteRequest(input *ActivateNetworkSiteInput) (req *request.Request, output *ActivateNetworkSiteOutput) {
@@ -237,14 +236,15 @@ func (c *PrivateNetworks) ActivateNetworkSiteRequest(input *ActivateNetworkSiteI
 // API operation ActivateNetworkSite for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ActivateNetworkSite
 func (c *PrivateNetworks) ActivateNetworkSite(input *ActivateNetworkSiteInput) (*ActivateNetworkSiteOutput, error) {
@@ -284,14 +284,13 @@ const opConfigureAccessPoint = "ConfigureAccessPoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ConfigureAccessPointRequest method.
+//	req, resp := client.ConfigureAccessPointRequest(params)
 //
-//    // Example sending a request using the ConfigureAccessPointRequest method.
-//    req, resp := client.ConfigureAccessPointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ConfigureAccessPoint
 func (c *PrivateNetworks) ConfigureAccessPointRequest(input *ConfigureAccessPointInput) (req *request.Request, output *ConfigureAccessPointOutput) {
@@ -328,14 +327,15 @@ func (c *PrivateNetworks) ConfigureAccessPointRequest(input *ConfigureAccessPoin
 // API operation ConfigureAccessPoint for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ConfigureAccessPoint
 func (c *PrivateNetworks) ConfigureAccessPoint(input *ConfigureAccessPointInput) (*ConfigureAccessPointOutput, error) {
@@ -375,14 +375,13 @@ const opCreateNetwork = "CreateNetwork"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateNetworkRequest method.
+//	req, resp := client.CreateNetworkRequest(params)
 //
-//    // Example sending a request using the CreateNetworkRequest method.
-//    req, resp := client.CreateNetworkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/CreateNetwork
 func (c *PrivateNetworks) CreateNetworkRequest(input *CreateNetworkInput) (req *request.Request, output *CreateNetworkOutput) {
@@ -413,14 +412,15 @@ func (c *PrivateNetworks) CreateNetworkRequest(input *CreateNetworkInput) (req *
 // API operation CreateNetwork for usage and error information.
 //
 // Returned Error Types:
-//   * LimitExceededException
-//   The limit was exceeded.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - LimitExceededException
+//     The limit was exceeded.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/CreateNetwork
 func (c *PrivateNetworks) CreateNetwork(input *CreateNetworkInput) (*CreateNetworkOutput, error) {
@@ -460,14 +460,13 @@ const opCreateNetworkSite = "CreateNetworkSite"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateNetworkSiteRequest method.
+//	req, resp := client.CreateNetworkSiteRequest(params)
 //
-//    // Example sending a request using the CreateNetworkSiteRequest method.
-//    req, resp := client.CreateNetworkSiteRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/CreateNetworkSite
 func (c *PrivateNetworks) CreateNetworkSiteRequest(input *CreateNetworkSiteInput) (req *request.Request, output *CreateNetworkSiteOutput) {
@@ -498,14 +497,15 @@ func (c *PrivateNetworks) CreateNetworkSiteRequest(input *CreateNetworkSiteInput
 // API operation CreateNetworkSite for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/CreateNetworkSite
 func (c *PrivateNetworks) CreateNetworkSite(input *CreateNetworkSiteInput) (*CreateNetworkSiteOutput, error) {
@@ -545,14 +545,13 @@ const opDeactivateDeviceIdentifier = "DeactivateDeviceIdentifier"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeactivateDeviceIdentifierRequest method.
+//	req, resp := client.DeactivateDeviceIdentifierRequest(params)
 //
-//    // Example sending a request using the DeactivateDeviceIdentifierRequest method.
-//    req, resp := client.DeactivateDeviceIdentifierRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/DeactivateDeviceIdentifier
 func (c *PrivateNetworks) DeactivateDeviceIdentifierRequest(input *DeactivateDeviceIdentifierInput) (req *request.Request, output *DeactivateDeviceIdentifierOutput) {
@@ -583,14 +582,15 @@ func (c *PrivateNetworks) DeactivateDeviceIdentifierRequest(input *DeactivateDev
 // API operation DeactivateDeviceIdentifier for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/DeactivateDeviceIdentifier
 func (c *PrivateNetworks) DeactivateDeviceIdentifier(input *DeactivateDeviceIdentifierInput) (*DeactivateDeviceIdentifierOutput, error) {
@@ -630,14 +630,13 @@ const opDeleteNetwork = "DeleteNetwork"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteNetworkRequest method.
+//	req, resp := client.DeleteNetworkRequest(params)
 //
-//    // Example sending a request using the DeleteNetworkRequest method.
-//    req, resp := client.DeleteNetworkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/DeleteNetwork
 func (c *PrivateNetworks) DeleteNetworkRequest(input *DeleteNetworkInput) (req *request.Request, output *DeleteNetworkOutput) {
@@ -670,17 +669,18 @@ func (c *PrivateNetworks) DeleteNetworkRequest(input *DeleteNetworkInput) (req *
 // API operation DeleteNetwork for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * AccessDeniedException
-//   You do not have permission to perform this operation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - AccessDeniedException
+//     You do not have permission to perform this operation.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/DeleteNetwork
 func (c *PrivateNetworks) DeleteNetwork(input *DeleteNetworkInput) (*DeleteNetworkOutput, error) {
@@ -720,14 +720,13 @@ const opDeleteNetworkSite = "DeleteNetworkSite"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteNetworkSiteRequest method.
+//	req, resp := client.DeleteNetworkSiteRequest(params)
 //
-//    // Example sending a request using the DeleteNetworkSiteRequest method.
-//    req, resp := client.DeleteNetworkSiteRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/DeleteNetworkSite
 func (c *PrivateNetworks) DeleteNetworkSiteRequest(input *DeleteNetworkSiteInput) (req *request.Request, output *DeleteNetworkSiteOutput) {
@@ -761,17 +760,18 @@ func (c *PrivateNetworks) DeleteNetworkSiteRequest(input *DeleteNetworkSiteInput
 // API operation DeleteNetworkSite for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * AccessDeniedException
-//   You do not have permission to perform this operation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - AccessDeniedException
+//     You do not have permission to perform this operation.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/DeleteNetworkSite
 func (c *PrivateNetworks) DeleteNetworkSite(input *DeleteNetworkSiteInput) (*DeleteNetworkSiteOutput, error) {
@@ -811,14 +811,13 @@ const opGetDeviceIdentifier = "GetDeviceIdentifier"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDeviceIdentifierRequest method.
+//	req, resp := client.GetDeviceIdentifierRequest(params)
 //
-//    // Example sending a request using the GetDeviceIdentifierRequest method.
-//    req, resp := client.GetDeviceIdentifierRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/GetDeviceIdentifier
 func (c *PrivateNetworks) GetDeviceIdentifierRequest(input *GetDeviceIdentifierInput) (req *request.Request, output *GetDeviceIdentifierOutput) {
@@ -849,14 +848,15 @@ func (c *PrivateNetworks) GetDeviceIdentifierRequest(input *GetDeviceIdentifierI
 // API operation GetDeviceIdentifier for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/GetDeviceIdentifier
 func (c *PrivateNetworks) GetDeviceIdentifier(input *GetDeviceIdentifierInput) (*GetDeviceIdentifierOutput, error) {
@@ -896,14 +896,13 @@ const opGetNetwork = "GetNetwork"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetNetworkRequest method.
+//	req, resp := client.GetNetworkRequest(params)
 //
-//    // Example sending a request using the GetNetworkRequest method.
-//    req, resp := client.GetNetworkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/GetNetwork
 func (c *PrivateNetworks) GetNetworkRequest(input *GetNetworkInput) (req *request.Request, output *GetNetworkOutput) {
@@ -934,14 +933,15 @@ func (c *PrivateNetworks) GetNetworkRequest(input *GetNetworkInput) (req *reques
 // API operation GetNetwork for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/GetNetwork
 func (c *PrivateNetworks) GetNetwork(input *GetNetworkInput) (*GetNetworkOutput, error) {
@@ -981,14 +981,13 @@ const opGetNetworkResource = "GetNetworkResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetNetworkResourceRequest method.
+//	req, resp := client.GetNetworkResourceRequest(params)
 //
-//    // Example sending a request using the GetNetworkResourceRequest method.
-//    req, resp := client.GetNetworkResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/GetNetworkResource
 func (c *PrivateNetworks) GetNetworkResourceRequest(input *GetNetworkResourceInput) (req *request.Request, output *GetNetworkResourceOutput) {
@@ -1019,14 +1018,15 @@ func (c *PrivateNetworks) GetNetworkResourceRequest(input *GetNetworkResourceInp
 // API operation GetNetworkResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/GetNetworkResource
 func (c *PrivateNetworks) GetNetworkResource(input *GetNetworkResourceInput) (*GetNetworkResourceOutput, error) {
@@ -1066,14 +1066,13 @@ const opGetNetworkSite = "GetNetworkSite"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetNetworkSiteRequest method.
+//	req, resp := client.GetNetworkSiteRequest(params)
 //
-//    // Example sending a request using the GetNetworkSiteRequest method.
-//    req, resp := client.GetNetworkSiteRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/GetNetworkSite
 func (c *PrivateNetworks) GetNetworkSiteRequest(input *GetNetworkSiteInput) (req *request.Request, output *GetNetworkSiteOutput) {
@@ -1104,14 +1103,15 @@ func (c *PrivateNetworks) GetNetworkSiteRequest(input *GetNetworkSiteInput) (req
 // API operation GetNetworkSite for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/GetNetworkSite
 func (c *PrivateNetworks) GetNetworkSite(input *GetNetworkSiteInput) (*GetNetworkSiteOutput, error) {
@@ -1151,14 +1151,13 @@ const opGetOrder = "GetOrder"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetOrderRequest method.
+//	req, resp := client.GetOrderRequest(params)
 //
-//    // Example sending a request using the GetOrderRequest method.
-//    req, resp := client.GetOrderRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/GetOrder
 func (c *PrivateNetworks) GetOrderRequest(input *GetOrderInput) (req *request.Request, output *GetOrderOutput) {
@@ -1189,14 +1188,15 @@ func (c *PrivateNetworks) GetOrderRequest(input *GetOrderInput) (req *request.Re
 // API operation GetOrder for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/GetOrder
 func (c *PrivateNetworks) GetOrder(input *GetOrderInput) (*GetOrderOutput, error) {
@@ -1236,14 +1236,13 @@ const opListDeviceIdentifiers = "ListDeviceIdentifiers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDeviceIdentifiersRequest method.
+//	req, resp := client.ListDeviceIdentifiersRequest(params)
 //
-//    // Example sending a request using the ListDeviceIdentifiersRequest method.
-//    req, resp := client.ListDeviceIdentifiersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListDeviceIdentifiers
 func (c *PrivateNetworks) ListDeviceIdentifiersRequest(input *ListDeviceIdentifiersInput) (req *request.Request, output *ListDeviceIdentifiersOutput) {
@@ -1285,14 +1284,15 @@ func (c *PrivateNetworks) ListDeviceIdentifiersRequest(input *ListDeviceIdentifi
 // API operation ListDeviceIdentifiers for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListDeviceIdentifiers
 func (c *PrivateNetworks) ListDeviceIdentifiers(input *ListDeviceIdentifiersInput) (*ListDeviceIdentifiersOutput, error) {
@@ -1324,15 +1324,14 @@ func (c *PrivateNetworks) ListDeviceIdentifiersWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDeviceIdentifiers operation.
-//    pageNum := 0
-//    err := client.ListDeviceIdentifiersPages(params,
-//        func(page *privatenetworks.ListDeviceIdentifiersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDeviceIdentifiers operation.
+//	pageNum := 0
+//	err := client.ListDeviceIdentifiersPages(params,
+//	    func(page *privatenetworks.ListDeviceIdentifiersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *PrivateNetworks) ListDeviceIdentifiersPages(input *ListDeviceIdentifiersInput, fn func(*ListDeviceIdentifiersOutput, bool) bool) error {
 	return c.ListDeviceIdentifiersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1384,14 +1383,13 @@ const opListNetworkResources = "ListNetworkResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListNetworkResourcesRequest method.
+//	req, resp := client.ListNetworkResourcesRequest(params)
 //
-//    // Example sending a request using the ListNetworkResourcesRequest method.
-//    req, resp := client.ListNetworkResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListNetworkResources
 func (c *PrivateNetworks) ListNetworkResourcesRequest(input *ListNetworkResourcesInput) (req *request.Request, output *ListNetworkResourcesOutput) {
@@ -1433,14 +1431,15 @@ func (c *PrivateNetworks) ListNetworkResourcesRequest(input *ListNetworkResource
 // API operation ListNetworkResources for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListNetworkResources
 func (c *PrivateNetworks) ListNetworkResources(input *ListNetworkResourcesInput) (*ListNetworkResourcesOutput, error) {
@@ -1472,15 +1471,14 @@ func (c *PrivateNetworks) ListNetworkResourcesWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListNetworkResources operation.
-//    pageNum := 0
-//    err := client.ListNetworkResourcesPages(params,
-//        func(page *privatenetworks.ListNetworkResourcesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListNetworkResources operation.
+//	pageNum := 0
+//	err := client.ListNetworkResourcesPages(params,
+//	    func(page *privatenetworks.ListNetworkResourcesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *PrivateNetworks) ListNetworkResourcesPages(input *ListNetworkResourcesInput, fn func(*ListNetworkResourcesOutput, bool) bool) error {
 	return c.ListNetworkResourcesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1532,14 +1530,13 @@ const opListNetworkSites = "ListNetworkSites"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListNetworkSitesRequest method.
+//	req, resp := client.ListNetworkSitesRequest(params)
 //
-//    // Example sending a request using the ListNetworkSitesRequest method.
-//    req, resp := client.ListNetworkSitesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListNetworkSites
 func (c *PrivateNetworks) ListNetworkSitesRequest(input *ListNetworkSitesInput) (req *request.Request, output *ListNetworkSitesOutput) {
@@ -1577,14 +1574,15 @@ func (c *PrivateNetworks) ListNetworkSitesRequest(input *ListNetworkSitesInput) 
 // API operation ListNetworkSites for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListNetworkSites
 func (c *PrivateNetworks) ListNetworkSites(input *ListNetworkSitesInput) (*ListNetworkSitesOutput, error) {
@@ -1616,15 +1614,14 @@ func (c *PrivateNetworks) ListNetworkSitesWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListNetworkSites operation.
-//    pageNum := 0
-//    err := client.ListNetworkSitesPages(params,
-//        func(page *privatenetworks.ListNetworkSitesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListNetworkSites operation.
+//	pageNum := 0
+//	err := client.ListNetworkSitesPages(params,
+//	    func(page *privatenetworks.ListNetworkSitesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *PrivateNetworks) ListNetworkSitesPages(input *ListNetworkSitesInput, fn func(*ListNetworkSitesOutput, bool) bool) error {
 	return c.ListNetworkSitesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1676,14 +1673,13 @@ const opListNetworks = "ListNetworks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListNetworksRequest method.
+//	req, resp := client.ListNetworksRequest(params)
 //
-//    // Example sending a request using the ListNetworksRequest method.
-//    req, resp := client.ListNetworksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListNetworks
 func (c *PrivateNetworks) ListNetworksRequest(input *ListNetworksInput) (req *request.Request, output *ListNetworksOutput) {
@@ -1721,14 +1717,15 @@ func (c *PrivateNetworks) ListNetworksRequest(input *ListNetworksInput) (req *re
 // API operation ListNetworks for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListNetworks
 func (c *PrivateNetworks) ListNetworks(input *ListNetworksInput) (*ListNetworksOutput, error) {
@@ -1760,15 +1757,14 @@ func (c *PrivateNetworks) ListNetworksWithContext(ctx aws.Context, input *ListNe
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListNetworks operation.
-//    pageNum := 0
-//    err := client.ListNetworksPages(params,
-//        func(page *privatenetworks.ListNetworksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListNetworks operation.
+//	pageNum := 0
+//	err := client.ListNetworksPages(params,
+//	    func(page *privatenetworks.ListNetworksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *PrivateNetworks) ListNetworksPages(input *ListNetworksInput, fn func(*ListNetworksOutput, bool) bool) error {
 	return c.ListNetworksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1820,14 +1816,13 @@ const opListOrders = "ListOrders"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListOrdersRequest method.
+//	req, resp := client.ListOrdersRequest(params)
 //
-//    // Example sending a request using the ListOrdersRequest method.
-//    req, resp := client.ListOrdersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListOrders
 func (c *PrivateNetworks) ListOrdersRequest(input *ListOrdersInput) (req *request.Request, output *ListOrdersOutput) {
@@ -1869,14 +1864,15 @@ func (c *PrivateNetworks) ListOrdersRequest(input *ListOrdersInput) (req *reques
 // API operation ListOrders for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListOrders
 func (c *PrivateNetworks) ListOrders(input *ListOrdersInput) (*ListOrdersOutput, error) {
@@ -1908,15 +1904,14 @@ func (c *PrivateNetworks) ListOrdersWithContext(ctx aws.Context, input *ListOrde
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListOrders operation.
-//    pageNum := 0
-//    err := client.ListOrdersPages(params,
-//        func(page *privatenetworks.ListOrdersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListOrders operation.
+//	pageNum := 0
+//	err := client.ListOrdersPages(params,
+//	    func(page *privatenetworks.ListOrdersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *PrivateNetworks) ListOrdersPages(input *ListOrdersInput, fn func(*ListOrdersOutput, bool) bool) error {
 	return c.ListOrdersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1968,14 +1963,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListTagsForResource
 func (c *PrivateNetworks) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2006,20 +2000,21 @@ func (c *PrivateNetworks) ListTagsForResourceRequest(input *ListTagsForResourceI
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * AccessDeniedException
-//   You do not have permission to perform this operation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - AccessDeniedException
+//     You do not have permission to perform this operation.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     Information about an internal error.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/ListTagsForResource
 func (c *PrivateNetworks) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2059,14 +2054,13 @@ const opPing = "Ping"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PingRequest method.
+//	req, resp := client.PingRequest(params)
 //
-//    // Example sending a request using the PingRequest method.
-//    req, resp := client.PingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/Ping
 func (c *PrivateNetworks) PingRequest(input *PingInput) (req *request.Request, output *PingOutput) {
@@ -2097,8 +2091,8 @@ func (c *PrivateNetworks) PingRequest(input *PingInput) (req *request.Request, o
 // API operation Ping for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Information about an internal error.
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/Ping
 func (c *PrivateNetworks) Ping(input *PingInput) (*PingOutput, error) {
@@ -2138,14 +2132,13 @@ const opStartNetworkResourceUpdate = "StartNetworkResourceUpdate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartNetworkResourceUpdateRequest method.
+//	req, resp := client.StartNetworkResourceUpdateRequest(params)
 //
-//    // Example sending a request using the StartNetworkResourceUpdateRequest method.
-//    req, resp := client.StartNetworkResourceUpdateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/StartNetworkResourceUpdate
 func (c *PrivateNetworks) StartNetworkResourceUpdateRequest(input *StartNetworkResourceUpdateInput) (req *request.Request, output *StartNetworkResourceUpdateOutput) {
@@ -2166,13 +2159,20 @@ func (c *PrivateNetworks) StartNetworkResourceUpdateRequest(input *StartNetworkR
 
 // StartNetworkResourceUpdate API operation for AWS Private 5G.
 //
-// Starts an update of the specified network resource.
+// Use this action to do the following tasks:
+//
+//   - Update the duration and renewal status of the commitment period for
+//     a radio unit. The update goes into effect immediately.
+//
+//   - Request a replacement for a network resource.
+//
+//   - Request that you return a network resource.
 //
 // After you submit a request to replace or return a network resource, the status
-// of the network resource is CREATING_SHIPPING_LABEL. The shipping label is
-// available when the status of the network resource is PENDING_RETURN. After
-// the network resource is successfully returned, its status is DELETED. For
-// more information, see Return a radio unit (https://docs.aws.amazon.com/private-networks/latest/userguide/radio-units.html#return-radio-unit).
+// of the network resource changes to CREATING_SHIPPING_LABEL. The shipping
+// label is available when the status of the network resource is PENDING_RETURN.
+// After the network resource is successfully returned, its status changes to
+// DELETED. For more information, see Return a radio unit (https://docs.aws.amazon.com/private-networks/latest/userguide/radio-units.html#return-radio-unit).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2182,14 +2182,15 @@ func (c *PrivateNetworks) StartNetworkResourceUpdateRequest(input *StartNetworkR
 // API operation StartNetworkResourceUpdate for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/StartNetworkResourceUpdate
 func (c *PrivateNetworks) StartNetworkResourceUpdate(input *StartNetworkResourceUpdateInput) (*StartNetworkResourceUpdateOutput, error) {
@@ -2229,14 +2230,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/TagResource
 func (c *PrivateNetworks) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2268,20 +2268,21 @@ func (c *PrivateNetworks) TagResourceRequest(input *TagResourceInput) (req *requ
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * AccessDeniedException
-//   You do not have permission to perform this operation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - AccessDeniedException
+//     You do not have permission to perform this operation.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     Information about an internal error.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/TagResource
 func (c *PrivateNetworks) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2321,14 +2322,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/UntagResource
 func (c *PrivateNetworks) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2360,20 +2360,21 @@ func (c *PrivateNetworks) UntagResourceRequest(input *UntagResourceInput) (req *
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * AccessDeniedException
-//   You do not have permission to perform this operation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - AccessDeniedException
+//     You do not have permission to perform this operation.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     Information about an internal error.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/UntagResource
 func (c *PrivateNetworks) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2413,14 +2414,13 @@ const opUpdateNetworkSite = "UpdateNetworkSite"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateNetworkSiteRequest method.
+//	req, resp := client.UpdateNetworkSiteRequest(params)
 //
-//    // Example sending a request using the UpdateNetworkSiteRequest method.
-//    req, resp := client.UpdateNetworkSiteRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/UpdateNetworkSite
 func (c *PrivateNetworks) UpdateNetworkSiteRequest(input *UpdateNetworkSiteInput) (req *request.Request, output *UpdateNetworkSiteOutput) {
@@ -2451,14 +2451,15 @@ func (c *PrivateNetworks) UpdateNetworkSiteRequest(input *UpdateNetworkSiteInput
 // API operation UpdateNetworkSite for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/UpdateNetworkSite
 func (c *PrivateNetworks) UpdateNetworkSite(input *UpdateNetworkSiteInput) (*UpdateNetworkSiteOutput, error) {
@@ -2498,14 +2499,13 @@ const opUpdateNetworkSitePlan = "UpdateNetworkSitePlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateNetworkSitePlanRequest method.
+//	req, resp := client.UpdateNetworkSitePlanRequest(params)
 //
-//    // Example sending a request using the UpdateNetworkSitePlanRequest method.
-//    req, resp := client.UpdateNetworkSitePlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/UpdateNetworkSitePlan
 func (c *PrivateNetworks) UpdateNetworkSitePlanRequest(input *UpdateNetworkSitePlanInput) (req *request.Request, output *UpdateNetworkSitePlanOutput) {
@@ -2536,14 +2536,15 @@ func (c *PrivateNetworks) UpdateNetworkSitePlanRequest(input *UpdateNetworkSiteP
 // API operation UpdateNetworkSitePlan for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource was not found.
 //
-//   * ValidationException
-//   The request failed validation.
+//   - ResourceNotFoundException
+//     The resource was not found.
 //
-//   * InternalServerException
-//   Information about an internal error.
+//   - ValidationException
+//     The request failed validation.
+//
+//   - InternalServerException
+//     Information about an internal error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/privatenetworks-2021-12-03/UpdateNetworkSitePlan
 func (c *PrivateNetworks) UpdateNetworkSitePlan(input *UpdateNetworkSitePlanInput) (*UpdateNetworkSitePlanOutput, error) {
@@ -2822,6 +2823,24 @@ type ActivateNetworkSiteInput struct {
 	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html).
 	ClientToken *string `locationName:"clientToken" min:"1" type:"string"`
 
+	// Determines the duration and renewal status of the commitment period for all
+	// pending radio units.
+	//
+	// If you include commitmentConfiguration in the ActivateNetworkSiteRequest
+	// action, you must specify the following:
+	//
+	//    * The commitment period for the radio unit. You can choose a 60-day, 1-year,
+	//    or 3-year period.
+	//
+	//    * Whether you want your commitment period to automatically renew for one
+	//    more year after your current commitment period expires.
+	//
+	// For pricing, see Amazon Web Services Private 5G Pricing (http://aws.amazon.com/private5g/pricing).
+	//
+	// If you do not include commitmentConfiguration in the ActivateNetworkSiteRequest
+	// action, the commitment period is set to 60-days.
+	CommitmentConfiguration *CommitmentConfiguration `locationName:"commitmentConfiguration" type:"structure"`
+
 	// The Amazon Resource Name (ARN) of the network site.
 	//
 	// NetworkSiteArn is a required field
@@ -2863,6 +2882,11 @@ func (s *ActivateNetworkSiteInput) Validate() error {
 	if s.ShippingAddress == nil {
 		invalidParams.Add(request.NewErrParamRequired("ShippingAddress"))
 	}
+	if s.CommitmentConfiguration != nil {
+		if err := s.CommitmentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("CommitmentConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.ShippingAddress != nil {
 		if err := s.ShippingAddress.Validate(); err != nil {
 			invalidParams.AddNested("ShippingAddress", err.(request.ErrInvalidParams))
@@ -2878,6 +2902,12 @@ func (s *ActivateNetworkSiteInput) Validate() error {
 // SetClientToken sets the ClientToken field's value.
 func (s *ActivateNetworkSiteInput) SetClientToken(v string) *ActivateNetworkSiteInput {
 	s.ClientToken = &v
+	return s
+}
+
+// SetCommitmentConfiguration sets the CommitmentConfiguration field's value.
+func (s *ActivateNetworkSiteInput) SetCommitmentConfiguration(v *CommitmentConfiguration) *ActivateNetworkSiteInput {
+	s.CommitmentConfiguration = v
 	return s
 }
 
@@ -2953,6 +2983,13 @@ type Address struct {
 	// Country is a required field
 	Country *string `locationName:"country" min:"1" type:"string" required:"true" sensitive:"true"`
 
+	// The recipient's email address.
+	//
+	// EmailAddress is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Address's
+	// String and GoString methods.
+	EmailAddress *string `locationName:"emailAddress" min:"1" type:"string" sensitive:"true"`
+
 	// The recipient's name for this address.
 	//
 	// Name is a sensitive parameter and its value will be
@@ -2962,7 +2999,7 @@ type Address struct {
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true" sensitive:"true"`
 
-	// The phone number for this address.
+	// The recipient's phone number.
 	//
 	// PhoneNumber is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by Address's
@@ -3047,6 +3084,9 @@ func (s *Address) Validate() error {
 	if s.Country != nil && len(*s.Country) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Country", 1))
 	}
+	if s.EmailAddress != nil && len(*s.EmailAddress) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailAddress", 1))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
@@ -3105,6 +3145,12 @@ func (s *Address) SetCountry(v string) *Address {
 	return s
 }
 
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *Address) SetEmailAddress(v string) *Address {
+	s.EmailAddress = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *Address) SetName(v string) *Address {
 	s.Name = &v
@@ -3144,6 +3190,145 @@ func (s *Address) SetStreet2(v string) *Address {
 // SetStreet3 sets the Street3 field's value.
 func (s *Address) SetStreet3(v string) *Address {
 	s.Street3 = &v
+	return s
+}
+
+// Determines the duration and renewal status of the commitment period for a
+// radio unit.
+//
+// For pricing, see Amazon Web Services Private 5G Pricing (http://aws.amazon.com/private5g/pricing).
+type CommitmentConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Determines whether the commitment period for a radio unit is set to automatically
+	// renew for an additional 1 year after your current commitment period expires.
+	//
+	// Set to True, if you want your commitment period to automatically renew. Set
+	// to False if you do not want your commitment to automatically renew.
+	//
+	// You can do the following:
+	//
+	//    * Set a 1-year commitment to automatically renew for an additional 1 year.
+	//    The hourly rate for the additional year will continue to be the same as
+	//    your existing 1-year rate.
+	//
+	//    * Set a 3-year commitment to automatically renew for an additional 1 year.
+	//    The hourly rate for the additional year will continue to be the same as
+	//    your existing 3-year rate.
+	//
+	//    * Turn off a previously-enabled automatic renewal on a 1-year or 3-year
+	//    commitment.
+	//
+	// You cannot use the automatic-renewal option for a 60-day commitment.
+	//
+	// AutomaticRenewal is a required field
+	AutomaticRenewal *bool `locationName:"automaticRenewal" type:"boolean" required:"true"`
+
+	// The duration of the commitment period for the radio unit. You can choose
+	// a 60-day, 1-year, or 3-year period.
+	//
+	// CommitmentLength is a required field
+	CommitmentLength *string `locationName:"commitmentLength" type:"string" required:"true" enum:"CommitmentLength"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CommitmentConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CommitmentConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CommitmentConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CommitmentConfiguration"}
+	if s.AutomaticRenewal == nil {
+		invalidParams.Add(request.NewErrParamRequired("AutomaticRenewal"))
+	}
+	if s.CommitmentLength == nil {
+		invalidParams.Add(request.NewErrParamRequired("CommitmentLength"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAutomaticRenewal sets the AutomaticRenewal field's value.
+func (s *CommitmentConfiguration) SetAutomaticRenewal(v bool) *CommitmentConfiguration {
+	s.AutomaticRenewal = &v
+	return s
+}
+
+// SetCommitmentLength sets the CommitmentLength field's value.
+func (s *CommitmentConfiguration) SetCommitmentLength(v string) *CommitmentConfiguration {
+	s.CommitmentLength = &v
+	return s
+}
+
+// Shows the duration, the date and time that the contract started and ends,
+// and the renewal status of the commitment period for the radio unit.
+type CommitmentInformation struct {
+	_ struct{} `type:"structure"`
+
+	// The duration and renewal status of the commitment period for the radio unit.
+	//
+	// CommitmentConfiguration is a required field
+	CommitmentConfiguration *CommitmentConfiguration `locationName:"commitmentConfiguration" type:"structure" required:"true"`
+
+	// The date and time that the commitment period ends. If you do not cancel or
+	// renew the commitment before the expiration date, you will be billed at the
+	// 60-day-commitment rate.
+	ExpiresOn *time.Time `locationName:"expiresOn" type:"timestamp" timestampFormat:"iso8601"`
+
+	// The date and time that the commitment period started.
+	StartAt *time.Time `locationName:"startAt" type:"timestamp" timestampFormat:"iso8601"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CommitmentInformation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CommitmentInformation) GoString() string {
+	return s.String()
+}
+
+// SetCommitmentConfiguration sets the CommitmentConfiguration field's value.
+func (s *CommitmentInformation) SetCommitmentConfiguration(v *CommitmentConfiguration) *CommitmentInformation {
+	s.CommitmentConfiguration = v
+	return s
+}
+
+// SetExpiresOn sets the ExpiresOn field's value.
+func (s *CommitmentInformation) SetExpiresOn(v time.Time) *CommitmentInformation {
+	s.ExpiresOn = &v
+	return s
+}
+
+// SetStartAt sets the StartAt field's value.
+func (s *CommitmentInformation) SetStartAt(v time.Time) *CommitmentInformation {
+	s.StartAt = &v
 	return s
 }
 
@@ -5445,6 +5630,11 @@ type NetworkResource struct {
 	// The attributes of the network resource.
 	Attributes []*NameValuePair `locationName:"attributes" type:"list"`
 
+	// Information about the commitment period for the radio unit. Shows the duration,
+	// the date and time that the contract started and ends, and the renewal status
+	// of the commitment period.
+	CommitmentInformation *CommitmentInformation `locationName:"commitmentInformation" type:"structure"`
+
 	// The creation time of the network resource.
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
 
@@ -5515,6 +5705,12 @@ func (s NetworkResource) GoString() string {
 // SetAttributes sets the Attributes field's value.
 func (s *NetworkResource) SetAttributes(v []*NameValuePair) *NetworkResource {
 	s.Attributes = v
+	return s
+}
+
+// SetCommitmentInformation sets the CommitmentInformation field's value.
+func (s *NetworkResource) SetCommitmentInformation(v *CommitmentInformation) *NetworkResource {
+	s.CommitmentInformation = v
 	return s
 }
 
@@ -5837,6 +6033,9 @@ type Order struct {
 	// The Amazon Resource Name (ARN) of the order.
 	OrderArn *string `locationName:"orderArn" type:"string"`
 
+	// A list of the network resources placed in the order.
+	OrderedResources []*OrderedResourceDefinition `locationName:"orderedResources" type:"list"`
+
 	// The shipping address of the order.
 	ShippingAddress *Address `locationName:"shippingAddress" type:"structure"`
 
@@ -5892,6 +6091,12 @@ func (s *Order) SetOrderArn(v string) *Order {
 	return s
 }
 
+// SetOrderedResources sets the OrderedResources field's value.
+func (s *Order) SetOrderedResources(v []*OrderedResourceDefinition) *Order {
+	s.OrderedResources = v
+	return s
+}
+
 // SetShippingAddress sets the ShippingAddress field's value.
 func (s *Order) SetShippingAddress(v *Address) *Order {
 	s.ShippingAddress = v
@@ -5901,6 +6106,61 @@ func (s *Order) SetShippingAddress(v *Address) *Order {
 // SetTrackingInformation sets the TrackingInformation field's value.
 func (s *Order) SetTrackingInformation(v []*TrackingInformation) *Order {
 	s.TrackingInformation = v
+	return s
+}
+
+// Details of the network resources in the order.
+type OrderedResourceDefinition struct {
+	_ struct{} `type:"structure"`
+
+	// The duration and renewal status of the commitment period for each radio unit
+	// in the order. Does not show details if the resource type is DEVICE_IDENTIFIER.
+	CommitmentConfiguration *CommitmentConfiguration `locationName:"commitmentConfiguration" type:"structure"`
+
+	// The number of network resources in the order.
+	//
+	// Count is a required field
+	Count *int64 `locationName:"count" type:"integer" required:"true"`
+
+	// The type of network resource in the order.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true" enum:"NetworkResourceDefinitionType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrderedResourceDefinition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OrderedResourceDefinition) GoString() string {
+	return s.String()
+}
+
+// SetCommitmentConfiguration sets the CommitmentConfiguration field's value.
+func (s *OrderedResourceDefinition) SetCommitmentConfiguration(v *CommitmentConfiguration) *OrderedResourceDefinition {
+	s.CommitmentConfiguration = v
+	return s
+}
+
+// SetCount sets the Count field's value.
+func (s *OrderedResourceDefinition) SetCount(v int64) *OrderedResourceDefinition {
+	s.Count = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *OrderedResourceDefinition) SetType(v string) *OrderedResourceDefinition {
+	s.Type = &v
 	return s
 }
 
@@ -6236,6 +6496,30 @@ func (s *SitePlan) SetResourceDefinitions(v []*NetworkResourceDefinition) *SiteP
 type StartNetworkResourceUpdateInput struct {
 	_ struct{} `type:"structure"`
 
+	// Use this action to extend and automatically renew the commitment period for
+	// the radio unit. You can do the following:
+	//
+	//    * Change a 60-day commitment to a 1-year or 3-year commitment. The change
+	//    is immediate and the hourly rate decreases to the rate for the new commitment
+	//    period.
+	//
+	//    * Change a 1-year commitment to a 3-year commitment. The change is immediate
+	//    and the hourly rate decreases to the rate for the 3-year commitment period.
+	//
+	//    * Set a 1-year commitment to automatically renew for an additional 1 year.
+	//    The hourly rate for the additional year will continue to be the same as
+	//    your existing 1-year rate.
+	//
+	//    * Set a 3-year commitment to automatically renew for an additional 1 year.
+	//    The hourly rate for the additional year will continue to be the same as
+	//    your existing 3-year rate.
+	//
+	//    * Turn off a previously-enabled automatic renewal on a 1-year or 3-year
+	//    commitment. You cannot use the automatic-renewal option for a 60-day commitment.
+	//
+	// For pricing, see Amazon Web Services Private 5G Pricing (http://aws.amazon.com/private5g/pricing).
+	CommitmentConfiguration *CommitmentConfiguration `locationName:"commitmentConfiguration" type:"structure"`
+
 	// The Amazon Resource Name (ARN) of the network resource.
 	//
 	// NetworkResourceArn is a required field
@@ -6255,8 +6539,11 @@ type StartNetworkResourceUpdateInput struct {
 	//    a shipping label that you can use for the return process and we ship a
 	//    replacement radio unit to you.
 	//
-	//    * RETURN - Submits a request to replace a radio unit that you no longer
+	//    * RETURN - Submits a request to return a radio unit that you no longer
 	//    need. We provide a shipping label that you can use for the return process.
+	//
+	//    * COMMITMENT - Submits a request to change or renew the commitment period.
+	//    If you choose this value, then you must set commitmentConfiguration (https://docs.aws.amazon.com/private-networks/latest/APIReference/API_StartNetworkResourceUpdate.html#privatenetworks-StartNetworkResourceUpdate-request-commitmentConfiguration).
 	//
 	// UpdateType is a required field
 	UpdateType *string `locationName:"updateType" type:"string" required:"true" enum:"UpdateType"`
@@ -6289,6 +6576,11 @@ func (s *StartNetworkResourceUpdateInput) Validate() error {
 	if s.UpdateType == nil {
 		invalidParams.Add(request.NewErrParamRequired("UpdateType"))
 	}
+	if s.CommitmentConfiguration != nil {
+		if err := s.CommitmentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("CommitmentConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.ShippingAddress != nil {
 		if err := s.ShippingAddress.Validate(); err != nil {
 			invalidParams.AddNested("ShippingAddress", err.(request.ErrInvalidParams))
@@ -6299,6 +6591,12 @@ func (s *StartNetworkResourceUpdateInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCommitmentConfiguration sets the CommitmentConfiguration field's value.
+func (s *StartNetworkResourceUpdateInput) SetCommitmentConfiguration(v *CommitmentConfiguration) *StartNetworkResourceUpdateInput {
+	s.CommitmentConfiguration = v
+	return s
 }
 
 // SetNetworkResourceArn sets the NetworkResourceArn field's value.
@@ -7009,6 +7307,26 @@ func AcknowledgmentStatus_Values() []string {
 }
 
 const (
+	// CommitmentLengthSixtyDays is a CommitmentLength enum value
+	CommitmentLengthSixtyDays = "SIXTY_DAYS"
+
+	// CommitmentLengthOneYear is a CommitmentLength enum value
+	CommitmentLengthOneYear = "ONE_YEAR"
+
+	// CommitmentLengthThreeYears is a CommitmentLength enum value
+	CommitmentLengthThreeYears = "THREE_YEARS"
+)
+
+// CommitmentLength_Values returns all elements of the CommitmentLength enum
+func CommitmentLength_Values() []string {
+	return []string{
+		CommitmentLengthSixtyDays,
+		CommitmentLengthOneYear,
+		CommitmentLengthThreeYears,
+	}
+}
+
+const (
 	// DeviceIdentifierFilterKeysStatus is a DeviceIdentifierFilterKeys enum value
 	DeviceIdentifierFilterKeysStatus = "STATUS"
 
@@ -7282,6 +7600,9 @@ const (
 
 	// UpdateTypeReturn is a UpdateType enum value
 	UpdateTypeReturn = "RETURN"
+
+	// UpdateTypeCommitment is a UpdateType enum value
+	UpdateTypeCommitment = "COMMITMENT"
 )
 
 // UpdateType_Values returns all elements of the UpdateType enum
@@ -7289,6 +7610,7 @@ func UpdateType_Values() []string {
 	return []string{
 		UpdateTypeReplace,
 		UpdateTypeReturn,
+		UpdateTypeCommitment,
 	}
 }
 

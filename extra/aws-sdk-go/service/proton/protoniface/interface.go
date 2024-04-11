@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWS Proton.
-//    func myFunc(svc protoniface.ProtonAPI) bool {
-//        // Make svc.AcceptEnvironmentAccountConnection request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWS Proton.
+//	func myFunc(svc protoniface.ProtonAPI) bool {
+//	    // Make svc.AcceptEnvironmentAccountConnection request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := proton.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := proton.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockProtonClient struct {
-//        protoniface.ProtonAPI
-//    }
-//    func (m *mockProtonClient) AcceptEnvironmentAccountConnection(input *proton.AcceptEnvironmentAccountConnectionInput) (*proton.AcceptEnvironmentAccountConnectionOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockProtonClient struct {
+//	    protoniface.ProtonAPI
+//	}
+//	func (m *mockProtonClient) AcceptEnvironmentAccountConnection(input *proton.AcceptEnvironmentAccountConnectionInput) (*proton.AcceptEnvironmentAccountConnectionOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockProtonClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockProtonClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -132,6 +132,10 @@ type ProtonAPI interface {
 	DeleteComponentWithContext(aws.Context, *proton.DeleteComponentInput, ...request.Option) (*proton.DeleteComponentOutput, error)
 	DeleteComponentRequest(*proton.DeleteComponentInput) (*request.Request, *proton.DeleteComponentOutput)
 
+	DeleteDeployment(*proton.DeleteDeploymentInput) (*proton.DeleteDeploymentOutput, error)
+	DeleteDeploymentWithContext(aws.Context, *proton.DeleteDeploymentInput, ...request.Option) (*proton.DeleteDeploymentOutput, error)
+	DeleteDeploymentRequest(*proton.DeleteDeploymentInput) (*request.Request, *proton.DeleteDeploymentOutput)
+
 	DeleteEnvironment(*proton.DeleteEnvironmentInput) (*proton.DeleteEnvironmentOutput, error)
 	DeleteEnvironmentWithContext(aws.Context, *proton.DeleteEnvironmentInput, ...request.Option) (*proton.DeleteEnvironmentOutput, error)
 	DeleteEnvironmentRequest(*proton.DeleteEnvironmentInput) (*request.Request, *proton.DeleteEnvironmentOutput)
@@ -179,6 +183,10 @@ type ProtonAPI interface {
 	GetComponent(*proton.GetComponentInput) (*proton.GetComponentOutput, error)
 	GetComponentWithContext(aws.Context, *proton.GetComponentInput, ...request.Option) (*proton.GetComponentOutput, error)
 	GetComponentRequest(*proton.GetComponentInput) (*request.Request, *proton.GetComponentOutput)
+
+	GetDeployment(*proton.GetDeploymentInput) (*proton.GetDeploymentOutput, error)
+	GetDeploymentWithContext(aws.Context, *proton.GetDeploymentInput, ...request.Option) (*proton.GetDeploymentOutput, error)
+	GetDeploymentRequest(*proton.GetDeploymentInput) (*request.Request, *proton.GetDeploymentOutput)
 
 	GetEnvironment(*proton.GetEnvironmentInput) (*proton.GetEnvironmentOutput, error)
 	GetEnvironmentWithContext(aws.Context, *proton.GetEnvironmentInput, ...request.Option) (*proton.GetEnvironmentOutput, error)
@@ -264,6 +272,13 @@ type ProtonAPI interface {
 
 	ListComponentsPages(*proton.ListComponentsInput, func(*proton.ListComponentsOutput, bool) bool) error
 	ListComponentsPagesWithContext(aws.Context, *proton.ListComponentsInput, func(*proton.ListComponentsOutput, bool) bool, ...request.Option) error
+
+	ListDeployments(*proton.ListDeploymentsInput) (*proton.ListDeploymentsOutput, error)
+	ListDeploymentsWithContext(aws.Context, *proton.ListDeploymentsInput, ...request.Option) (*proton.ListDeploymentsOutput, error)
+	ListDeploymentsRequest(*proton.ListDeploymentsInput) (*request.Request, *proton.ListDeploymentsOutput)
+
+	ListDeploymentsPages(*proton.ListDeploymentsInput, func(*proton.ListDeploymentsOutput, bool) bool) error
+	ListDeploymentsPagesWithContext(aws.Context, *proton.ListDeploymentsInput, func(*proton.ListDeploymentsOutput, bool) bool, ...request.Option) error
 
 	ListEnvironmentAccountConnections(*proton.ListEnvironmentAccountConnectionsInput) (*proton.ListEnvironmentAccountConnectionsOutput, error)
 	ListEnvironmentAccountConnectionsWithContext(aws.Context, *proton.ListEnvironmentAccountConnectionsInput, ...request.Option) (*proton.ListEnvironmentAccountConnectionsOutput, error)

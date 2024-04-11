@@ -29,14 +29,13 @@ const opAcceptPortfolioShare = "AcceptPortfolioShare"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AcceptPortfolioShareRequest method.
+//	req, resp := client.AcceptPortfolioShareRequest(params)
 //
-//    // Example sending a request using the AcceptPortfolioShareRequest method.
-//    req, resp := client.AcceptPortfolioShareRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AcceptPortfolioShare
 func (c *ServiceCatalog) AcceptPortfolioShareRequest(input *AcceptPortfolioShareInput) (req *request.Request, output *AcceptPortfolioShareOutput) {
@@ -68,16 +67,17 @@ func (c *ServiceCatalog) AcceptPortfolioShareRequest(input *AcceptPortfolioShare
 // API operation AcceptPortfolioShare for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AcceptPortfolioShare
 func (c *ServiceCatalog) AcceptPortfolioShare(input *AcceptPortfolioShareInput) (*AcceptPortfolioShareOutput, error) {
@@ -117,14 +117,13 @@ const opAssociateBudgetWithResource = "AssociateBudgetWithResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateBudgetWithResourceRequest method.
+//	req, resp := client.AssociateBudgetWithResourceRequest(params)
 //
-//    // Example sending a request using the AssociateBudgetWithResourceRequest method.
-//    req, resp := client.AssociateBudgetWithResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AssociateBudgetWithResource
 func (c *ServiceCatalog) AssociateBudgetWithResourceRequest(input *AssociateBudgetWithResourceInput) (req *request.Request, output *AssociateBudgetWithResourceOutput) {
@@ -156,19 +155,20 @@ func (c *ServiceCatalog) AssociateBudgetWithResourceRequest(input *AssociateBudg
 // API operation AssociateBudgetWithResource for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * DuplicateResourceException
-//   The specified resource is a duplicate.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - DuplicateResourceException
+//     The specified resource is a duplicate.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AssociateBudgetWithResource
 func (c *ServiceCatalog) AssociateBudgetWithResource(input *AssociateBudgetWithResourceInput) (*AssociateBudgetWithResourceOutput, error) {
@@ -208,14 +208,13 @@ const opAssociatePrincipalWithPortfolio = "AssociatePrincipalWithPortfolio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociatePrincipalWithPortfolioRequest method.
+//	req, resp := client.AssociatePrincipalWithPortfolioRequest(params)
 //
-//    // Example sending a request using the AssociatePrincipalWithPortfolioRequest method.
-//    req, resp := client.AssociatePrincipalWithPortfolioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AssociatePrincipalWithPortfolio
 func (c *ServiceCatalog) AssociatePrincipalWithPortfolioRequest(input *AssociatePrincipalWithPortfolioInput) (req *request.Request, output *AssociatePrincipalWithPortfolioOutput) {
@@ -245,7 +244,7 @@ func (c *ServiceCatalog) AssociatePrincipalWithPortfolioRequest(input *Associate
 // The PortfolioID, PrincipalARN, and PrincipalType parameters are required.
 //
 // You can associate a maximum of 10 Principals with a portfolio using PrincipalType
-// as IAM_PATTERN
+// as IAM_PATTERN.
 //
 // When you associate a principal with portfolio, a potential privilege escalation
 // path may occur when that portfolio is then shared with other accounts. For
@@ -266,16 +265,17 @@ func (c *ServiceCatalog) AssociatePrincipalWithPortfolioRequest(input *Associate
 // API operation AssociatePrincipalWithPortfolio for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AssociatePrincipalWithPortfolio
 func (c *ServiceCatalog) AssociatePrincipalWithPortfolio(input *AssociatePrincipalWithPortfolioInput) (*AssociatePrincipalWithPortfolioOutput, error) {
@@ -315,14 +315,13 @@ const opAssociateProductWithPortfolio = "AssociateProductWithPortfolio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateProductWithPortfolioRequest method.
+//	req, resp := client.AssociateProductWithPortfolioRequest(params)
 //
-//    // Example sending a request using the AssociateProductWithPortfolioRequest method.
-//    req, resp := client.AssociateProductWithPortfolioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AssociateProductWithPortfolio
 func (c *ServiceCatalog) AssociateProductWithPortfolioRequest(input *AssociateProductWithPortfolioInput) (req *request.Request, output *AssociateProductWithPortfolioOutput) {
@@ -356,16 +355,17 @@ func (c *ServiceCatalog) AssociateProductWithPortfolioRequest(input *AssociatePr
 // API operation AssociateProductWithPortfolio for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AssociateProductWithPortfolio
 func (c *ServiceCatalog) AssociateProductWithPortfolio(input *AssociateProductWithPortfolioInput) (*AssociateProductWithPortfolioOutput, error) {
@@ -405,14 +405,13 @@ const opAssociateServiceActionWithProvisioningArtifact = "AssociateServiceAction
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateServiceActionWithProvisioningArtifactRequest method.
+//	req, resp := client.AssociateServiceActionWithProvisioningArtifactRequest(params)
 //
-//    // Example sending a request using the AssociateServiceActionWithProvisioningArtifactRequest method.
-//    req, resp := client.AssociateServiceActionWithProvisioningArtifactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AssociateServiceActionWithProvisioningArtifact
 func (c *ServiceCatalog) AssociateServiceActionWithProvisioningArtifactRequest(input *AssociateServiceActionWithProvisioningArtifactInput) (req *request.Request, output *AssociateServiceActionWithProvisioningArtifactOutput) {
@@ -444,19 +443,20 @@ func (c *ServiceCatalog) AssociateServiceActionWithProvisioningArtifactRequest(i
 // API operation AssociateServiceActionWithProvisioningArtifact for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * DuplicateResourceException
-//   The specified resource is a duplicate.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - DuplicateResourceException
+//     The specified resource is a duplicate.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AssociateServiceActionWithProvisioningArtifact
 func (c *ServiceCatalog) AssociateServiceActionWithProvisioningArtifact(input *AssociateServiceActionWithProvisioningArtifactInput) (*AssociateServiceActionWithProvisioningArtifactOutput, error) {
@@ -496,14 +496,13 @@ const opAssociateTagOptionWithResource = "AssociateTagOptionWithResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateTagOptionWithResourceRequest method.
+//	req, resp := client.AssociateTagOptionWithResourceRequest(params)
 //
-//    // Example sending a request using the AssociateTagOptionWithResourceRequest method.
-//    req, resp := client.AssociateTagOptionWithResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AssociateTagOptionWithResource
 func (c *ServiceCatalog) AssociateTagOptionWithResourceRequest(input *AssociateTagOptionWithResourceInput) (req *request.Request, output *AssociateTagOptionWithResourceOutput) {
@@ -535,29 +534,30 @@ func (c *ServiceCatalog) AssociateTagOptionWithResourceRequest(input *AssociateT
 // API operation AssociateTagOptionWithResource for usage and error information.
 //
 // Returned Error Types:
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * DuplicateResourceException
-//   The specified resource is a duplicate.
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
 //
-//   * InvalidStateException
-//   An attempt was made to modify a resource that is in a state that is not valid.
-//   Check your resources to ensure that they are in valid states before retrying
-//   the operation.
+//   - DuplicateResourceException
+//     The specified resource is a duplicate.
+//
+//   - InvalidStateException
+//     An attempt was made to modify a resource that is in a state that is not valid.
+//     Check your resources to ensure that they are in valid states before retrying
+//     the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/AssociateTagOptionWithResource
 func (c *ServiceCatalog) AssociateTagOptionWithResource(input *AssociateTagOptionWithResourceInput) (*AssociateTagOptionWithResourceOutput, error) {
@@ -597,14 +597,13 @@ const opBatchAssociateServiceActionWithProvisioningArtifact = "BatchAssociateSer
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchAssociateServiceActionWithProvisioningArtifactRequest method.
+//	req, resp := client.BatchAssociateServiceActionWithProvisioningArtifactRequest(params)
 //
-//    // Example sending a request using the BatchAssociateServiceActionWithProvisioningArtifactRequest method.
-//    req, resp := client.BatchAssociateServiceActionWithProvisioningArtifactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/BatchAssociateServiceActionWithProvisioningArtifact
 func (c *ServiceCatalog) BatchAssociateServiceActionWithProvisioningArtifactRequest(input *BatchAssociateServiceActionWithProvisioningArtifactInput) (req *request.Request, output *BatchAssociateServiceActionWithProvisioningArtifactOutput) {
@@ -635,8 +634,8 @@ func (c *ServiceCatalog) BatchAssociateServiceActionWithProvisioningArtifactRequ
 // API operation BatchAssociateServiceActionWithProvisioningArtifact for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/BatchAssociateServiceActionWithProvisioningArtifact
 func (c *ServiceCatalog) BatchAssociateServiceActionWithProvisioningArtifact(input *BatchAssociateServiceActionWithProvisioningArtifactInput) (*BatchAssociateServiceActionWithProvisioningArtifactOutput, error) {
@@ -676,14 +675,13 @@ const opBatchDisassociateServiceActionFromProvisioningArtifact = "BatchDisassoci
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchDisassociateServiceActionFromProvisioningArtifactRequest method.
+//	req, resp := client.BatchDisassociateServiceActionFromProvisioningArtifactRequest(params)
 //
-//    // Example sending a request using the BatchDisassociateServiceActionFromProvisioningArtifactRequest method.
-//    req, resp := client.BatchDisassociateServiceActionFromProvisioningArtifactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/BatchDisassociateServiceActionFromProvisioningArtifact
 func (c *ServiceCatalog) BatchDisassociateServiceActionFromProvisioningArtifactRequest(input *BatchDisassociateServiceActionFromProvisioningArtifactInput) (req *request.Request, output *BatchDisassociateServiceActionFromProvisioningArtifactOutput) {
@@ -715,8 +713,8 @@ func (c *ServiceCatalog) BatchDisassociateServiceActionFromProvisioningArtifactR
 // API operation BatchDisassociateServiceActionFromProvisioningArtifact for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/BatchDisassociateServiceActionFromProvisioningArtifact
 func (c *ServiceCatalog) BatchDisassociateServiceActionFromProvisioningArtifact(input *BatchDisassociateServiceActionFromProvisioningArtifactInput) (*BatchDisassociateServiceActionFromProvisioningArtifactOutput, error) {
@@ -756,14 +754,13 @@ const opCopyProduct = "CopyProduct"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CopyProductRequest method.
+//	req, resp := client.CopyProductRequest(params)
 //
-//    // Example sending a request using the CopyProductRequest method.
-//    req, resp := client.CopyProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CopyProduct
 func (c *ServiceCatalog) CopyProductRequest(input *CopyProductInput) (req *request.Request, output *CopyProductOutput) {
@@ -802,11 +799,12 @@ func (c *ServiceCatalog) CopyProductRequest(input *CopyProductInput) (req *reque
 // API operation CopyProduct for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CopyProduct
 func (c *ServiceCatalog) CopyProduct(input *CopyProductInput) (*CopyProductOutput, error) {
@@ -846,14 +844,13 @@ const opCreateConstraint = "CreateConstraint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateConstraintRequest method.
+//	req, resp := client.CreateConstraintRequest(params)
 //
-//    // Example sending a request using the CreateConstraintRequest method.
-//    req, resp := client.CreateConstraintRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateConstraint
 func (c *ServiceCatalog) CreateConstraintRequest(input *CreateConstraintInput) (req *request.Request, output *CreateConstraintOutput) {
@@ -886,19 +883,20 @@ func (c *ServiceCatalog) CreateConstraintRequest(input *CreateConstraintInput) (
 // API operation CreateConstraint for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * DuplicateResourceException
-//   The specified resource is a duplicate.
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
+//
+//   - DuplicateResourceException
+//     The specified resource is a duplicate.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateConstraint
 func (c *ServiceCatalog) CreateConstraint(input *CreateConstraintInput) (*CreateConstraintOutput, error) {
@@ -938,14 +936,13 @@ const opCreatePortfolio = "CreatePortfolio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreatePortfolioRequest method.
+//	req, resp := client.CreatePortfolioRequest(params)
 //
-//    // Example sending a request using the CreatePortfolioRequest method.
-//    req, resp := client.CreatePortfolioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreatePortfolio
 func (c *ServiceCatalog) CreatePortfolioRequest(input *CreatePortfolioInput) (req *request.Request, output *CreatePortfolioOutput) {
@@ -978,18 +975,19 @@ func (c *ServiceCatalog) CreatePortfolioRequest(input *CreatePortfolioInput) (re
 // API operation CreatePortfolio for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
+//
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreatePortfolio
 func (c *ServiceCatalog) CreatePortfolio(input *CreatePortfolioInput) (*CreatePortfolioOutput, error) {
@@ -1029,14 +1027,13 @@ const opCreatePortfolioShare = "CreatePortfolioShare"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreatePortfolioShareRequest method.
+//	req, resp := client.CreatePortfolioShareRequest(params)
 //
-//    // Example sending a request using the CreatePortfolioShareRequest method.
-//    req, resp := client.CreatePortfolioShareRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreatePortfolioShare
 func (c *ServiceCatalog) CreatePortfolioShareRequest(input *CreatePortfolioShareInput) (req *request.Request, output *CreatePortfolioShareOutput) {
@@ -1094,24 +1091,25 @@ func (c *ServiceCatalog) CreatePortfolioShareRequest(input *CreatePortfolioShare
 // API operation CreatePortfolioShare for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
 //
-//   * OperationNotSupportedException
-//   The operation is not supported.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * InvalidStateException
-//   An attempt was made to modify a resource that is in a state that is not valid.
-//   Check your resources to ensure that they are in valid states before retrying
-//   the operation.
+//   - OperationNotSupportedException
+//     The operation is not supported.
+//
+//   - InvalidStateException
+//     An attempt was made to modify a resource that is in a state that is not valid.
+//     Check your resources to ensure that they are in valid states before retrying
+//     the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreatePortfolioShare
 func (c *ServiceCatalog) CreatePortfolioShare(input *CreatePortfolioShareInput) (*CreatePortfolioShareOutput, error) {
@@ -1151,14 +1149,13 @@ const opCreateProduct = "CreateProduct"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProductRequest method.
+//	req, resp := client.CreateProductRequest(params)
 //
-//    // Example sending a request using the CreateProductRequest method.
-//    req, resp := client.CreateProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateProduct
 func (c *ServiceCatalog) CreateProductRequest(input *CreateProductInput) (req *request.Request, output *CreateProductOutput) {
@@ -1195,18 +1192,19 @@ func (c *ServiceCatalog) CreateProductRequest(input *CreateProductInput) (req *r
 // API operation CreateProduct for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
+//
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateProduct
 func (c *ServiceCatalog) CreateProduct(input *CreateProductInput) (*CreateProductOutput, error) {
@@ -1246,14 +1244,13 @@ const opCreateProvisionedProductPlan = "CreateProvisionedProductPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProvisionedProductPlanRequest method.
+//	req, resp := client.CreateProvisionedProductPlanRequest(params)
 //
-//    // Example sending a request using the CreateProvisionedProductPlanRequest method.
-//    req, resp := client.CreateProvisionedProductPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateProvisionedProductPlan
 func (c *ServiceCatalog) CreateProvisionedProductPlanRequest(input *CreateProvisionedProductPlanInput) (req *request.Request, output *CreateProvisionedProductPlanOutput) {
@@ -1295,16 +1292,17 @@ func (c *ServiceCatalog) CreateProvisionedProductPlanRequest(input *CreateProvis
 // API operation CreateProvisionedProductPlan for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * InvalidStateException
-//   An attempt was made to modify a resource that is in a state that is not valid.
-//   Check your resources to ensure that they are in valid states before retrying
-//   the operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidStateException
+//     An attempt was made to modify a resource that is in a state that is not valid.
+//     Check your resources to ensure that they are in valid states before retrying
+//     the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateProvisionedProductPlan
 func (c *ServiceCatalog) CreateProvisionedProductPlan(input *CreateProvisionedProductPlanInput) (*CreateProvisionedProductPlanOutput, error) {
@@ -1344,14 +1342,13 @@ const opCreateProvisioningArtifact = "CreateProvisioningArtifact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProvisioningArtifactRequest method.
+//	req, resp := client.CreateProvisioningArtifactRequest(params)
 //
-//    // Example sending a request using the CreateProvisioningArtifactRequest method.
-//    req, resp := client.CreateProvisioningArtifactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateProvisioningArtifact
 func (c *ServiceCatalog) CreateProvisioningArtifactRequest(input *CreateProvisioningArtifactInput) (req *request.Request, output *CreateProvisioningArtifactOutput) {
@@ -1390,16 +1387,17 @@ func (c *ServiceCatalog) CreateProvisioningArtifactRequest(input *CreateProvisio
 // API operation CreateProvisioningArtifact for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateProvisioningArtifact
 func (c *ServiceCatalog) CreateProvisioningArtifact(input *CreateProvisioningArtifactInput) (*CreateProvisioningArtifactOutput, error) {
@@ -1439,14 +1437,13 @@ const opCreateServiceAction = "CreateServiceAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateServiceActionRequest method.
+//	req, resp := client.CreateServiceActionRequest(params)
 //
-//    // Example sending a request using the CreateServiceActionRequest method.
-//    req, resp := client.CreateServiceActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateServiceAction
 func (c *ServiceCatalog) CreateServiceActionRequest(input *CreateServiceActionInput) (req *request.Request, output *CreateServiceActionOutput) {
@@ -1477,13 +1474,14 @@ func (c *ServiceCatalog) CreateServiceActionRequest(input *CreateServiceActionIn
 // API operation CreateServiceAction for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateServiceAction
 func (c *ServiceCatalog) CreateServiceAction(input *CreateServiceActionInput) (*CreateServiceActionOutput, error) {
@@ -1523,14 +1521,13 @@ const opCreateTagOption = "CreateTagOption"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateTagOptionRequest method.
+//	req, resp := client.CreateTagOptionRequest(params)
 //
-//    // Example sending a request using the CreateTagOptionRequest method.
-//    req, resp := client.CreateTagOptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateTagOption
 func (c *ServiceCatalog) CreateTagOptionRequest(input *CreateTagOptionInput) (req *request.Request, output *CreateTagOptionOutput) {
@@ -1561,18 +1558,19 @@ func (c *ServiceCatalog) CreateTagOptionRequest(input *CreateTagOptionInput) (re
 // API operation CreateTagOption for usage and error information.
 //
 // Returned Error Types:
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
 //
-//   * DuplicateResourceException
-//   The specified resource is a duplicate.
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - DuplicateResourceException
+//     The specified resource is a duplicate.
+//
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/CreateTagOption
 func (c *ServiceCatalog) CreateTagOption(input *CreateTagOptionInput) (*CreateTagOptionOutput, error) {
@@ -1612,14 +1610,13 @@ const opDeleteConstraint = "DeleteConstraint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteConstraintRequest method.
+//	req, resp := client.DeleteConstraintRequest(params)
 //
-//    // Example sending a request using the DeleteConstraintRequest method.
-//    req, resp := client.DeleteConstraintRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteConstraint
 func (c *ServiceCatalog) DeleteConstraintRequest(input *DeleteConstraintInput) (req *request.Request, output *DeleteConstraintOutput) {
@@ -1653,11 +1650,12 @@ func (c *ServiceCatalog) DeleteConstraintRequest(input *DeleteConstraintInput) (
 // API operation DeleteConstraint for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteConstraint
 func (c *ServiceCatalog) DeleteConstraint(input *DeleteConstraintInput) (*DeleteConstraintOutput, error) {
@@ -1697,14 +1695,13 @@ const opDeletePortfolio = "DeletePortfolio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePortfolioRequest method.
+//	req, resp := client.DeletePortfolioRequest(params)
 //
-//    // Example sending a request using the DeletePortfolioRequest method.
-//    req, resp := client.DeletePortfolioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeletePortfolio
 func (c *ServiceCatalog) DeletePortfolioRequest(input *DeletePortfolioInput) (req *request.Request, output *DeletePortfolioOutput) {
@@ -1741,20 +1738,21 @@ func (c *ServiceCatalog) DeletePortfolioRequest(input *DeletePortfolioInput) (re
 // API operation DeletePortfolio for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * ResourceInUseException
-//   A resource that is currently in use. Ensure that the resource is not in use
-//   and retry the operation.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
+//   - ResourceInUseException
+//     A resource that is currently in use. Ensure that the resource is not in use
+//     and retry the operation.
+//
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeletePortfolio
 func (c *ServiceCatalog) DeletePortfolio(input *DeletePortfolioInput) (*DeletePortfolioOutput, error) {
@@ -1794,14 +1792,13 @@ const opDeletePortfolioShare = "DeletePortfolioShare"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePortfolioShareRequest method.
+//	req, resp := client.DeletePortfolioShareRequest(params)
 //
-//    // Example sending a request using the DeletePortfolioShareRequest method.
-//    req, resp := client.DeletePortfolioShareRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeletePortfolioShare
 func (c *ServiceCatalog) DeletePortfolioShareRequest(input *DeletePortfolioShareInput) (req *request.Request, output *DeletePortfolioShareOutput) {
@@ -1837,19 +1834,20 @@ func (c *ServiceCatalog) DeletePortfolioShareRequest(input *DeletePortfolioShare
 // API operation DeletePortfolioShare for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * OperationNotSupportedException
-//   The operation is not supported.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * InvalidStateException
-//   An attempt was made to modify a resource that is in a state that is not valid.
-//   Check your resources to ensure that they are in valid states before retrying
-//   the operation.
+//   - OperationNotSupportedException
+//     The operation is not supported.
+//
+//   - InvalidStateException
+//     An attempt was made to modify a resource that is in a state that is not valid.
+//     Check your resources to ensure that they are in valid states before retrying
+//     the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeletePortfolioShare
 func (c *ServiceCatalog) DeletePortfolioShare(input *DeletePortfolioShareInput) (*DeletePortfolioShareOutput, error) {
@@ -1889,14 +1887,13 @@ const opDeleteProduct = "DeleteProduct"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProductRequest method.
+//	req, resp := client.DeleteProductRequest(params)
 //
-//    // Example sending a request using the DeleteProductRequest method.
-//    req, resp := client.DeleteProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteProduct
 func (c *ServiceCatalog) DeleteProductRequest(input *DeleteProductInput) (req *request.Request, output *DeleteProductOutput) {
@@ -1933,20 +1930,21 @@ func (c *ServiceCatalog) DeleteProductRequest(input *DeleteProductInput) (req *r
 // API operation DeleteProduct for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * ResourceInUseException
-//   A resource that is currently in use. Ensure that the resource is not in use
-//   and retry the operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceInUseException
+//     A resource that is currently in use. Ensure that the resource is not in use
+//     and retry the operation.
 //
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteProduct
 func (c *ServiceCatalog) DeleteProduct(input *DeleteProductInput) (*DeleteProductOutput, error) {
@@ -1986,14 +1984,13 @@ const opDeleteProvisionedProductPlan = "DeleteProvisionedProductPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProvisionedProductPlanRequest method.
+//	req, resp := client.DeleteProvisionedProductPlanRequest(params)
 //
-//    // Example sending a request using the DeleteProvisionedProductPlanRequest method.
-//    req, resp := client.DeleteProvisionedProductPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteProvisionedProductPlan
 func (c *ServiceCatalog) DeleteProvisionedProductPlanRequest(input *DeleteProvisionedProductPlanInput) (req *request.Request, output *DeleteProvisionedProductPlanOutput) {
@@ -2025,11 +2022,12 @@ func (c *ServiceCatalog) DeleteProvisionedProductPlanRequest(input *DeleteProvis
 // API operation DeleteProvisionedProductPlan for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteProvisionedProductPlan
 func (c *ServiceCatalog) DeleteProvisionedProductPlan(input *DeleteProvisionedProductPlanInput) (*DeleteProvisionedProductPlanOutput, error) {
@@ -2069,14 +2067,13 @@ const opDeleteProvisioningArtifact = "DeleteProvisioningArtifact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProvisioningArtifactRequest method.
+//	req, resp := client.DeleteProvisioningArtifactRequest(params)
 //
-//    // Example sending a request using the DeleteProvisioningArtifactRequest method.
-//    req, resp := client.DeleteProvisioningArtifactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteProvisioningArtifact
 func (c *ServiceCatalog) DeleteProvisioningArtifactRequest(input *DeleteProvisioningArtifactInput) (req *request.Request, output *DeleteProvisioningArtifactOutput) {
@@ -2113,15 +2110,16 @@ func (c *ServiceCatalog) DeleteProvisioningArtifactRequest(input *DeleteProvisio
 // API operation DeleteProvisioningArtifact for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * ResourceInUseException
-//   A resource that is currently in use. Ensure that the resource is not in use
-//   and retry the operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceInUseException
+//     A resource that is currently in use. Ensure that the resource is not in use
+//     and retry the operation.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteProvisioningArtifact
 func (c *ServiceCatalog) DeleteProvisioningArtifact(input *DeleteProvisioningArtifactInput) (*DeleteProvisioningArtifactOutput, error) {
@@ -2161,14 +2159,13 @@ const opDeleteServiceAction = "DeleteServiceAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteServiceActionRequest method.
+//	req, resp := client.DeleteServiceActionRequest(params)
 //
-//    // Example sending a request using the DeleteServiceActionRequest method.
-//    req, resp := client.DeleteServiceActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteServiceAction
 func (c *ServiceCatalog) DeleteServiceActionRequest(input *DeleteServiceActionInput) (req *request.Request, output *DeleteServiceActionOutput) {
@@ -2200,12 +2197,13 @@ func (c *ServiceCatalog) DeleteServiceActionRequest(input *DeleteServiceActionIn
 // API operation DeleteServiceAction for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * ResourceInUseException
-//   A resource that is currently in use. Ensure that the resource is not in use
-//   and retry the operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - ResourceInUseException
+//     A resource that is currently in use. Ensure that the resource is not in use
+//     and retry the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteServiceAction
 func (c *ServiceCatalog) DeleteServiceAction(input *DeleteServiceActionInput) (*DeleteServiceActionOutput, error) {
@@ -2245,14 +2243,13 @@ const opDeleteTagOption = "DeleteTagOption"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteTagOptionRequest method.
+//	req, resp := client.DeleteTagOptionRequest(params)
 //
-//    // Example sending a request using the DeleteTagOptionRequest method.
-//    req, resp := client.DeleteTagOptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteTagOption
 func (c *ServiceCatalog) DeleteTagOptionRequest(input *DeleteTagOptionInput) (req *request.Request, output *DeleteTagOptionOutput) {
@@ -2286,17 +2283,18 @@ func (c *ServiceCatalog) DeleteTagOptionRequest(input *DeleteTagOptionInput) (re
 // API operation DeleteTagOption for usage and error information.
 //
 // Returned Error Types:
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
 //
-//   * ResourceInUseException
-//   A resource that is currently in use. Ensure that the resource is not in use
-//   and retry the operation.
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ResourceInUseException
+//     A resource that is currently in use. Ensure that the resource is not in use
+//     and retry the operation.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DeleteTagOption
 func (c *ServiceCatalog) DeleteTagOption(input *DeleteTagOptionInput) (*DeleteTagOptionOutput, error) {
@@ -2336,14 +2334,13 @@ const opDescribeConstraint = "DescribeConstraint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeConstraintRequest method.
+//	req, resp := client.DescribeConstraintRequest(params)
 //
-//    // Example sending a request using the DescribeConstraintRequest method.
-//    req, resp := client.DescribeConstraintRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeConstraint
 func (c *ServiceCatalog) DescribeConstraintRequest(input *DescribeConstraintInput) (req *request.Request, output *DescribeConstraintOutput) {
@@ -2374,8 +2371,8 @@ func (c *ServiceCatalog) DescribeConstraintRequest(input *DescribeConstraintInpu
 // API operation DescribeConstraint for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeConstraint
 func (c *ServiceCatalog) DescribeConstraint(input *DescribeConstraintInput) (*DescribeConstraintOutput, error) {
@@ -2415,14 +2412,13 @@ const opDescribeCopyProductStatus = "DescribeCopyProductStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeCopyProductStatusRequest method.
+//	req, resp := client.DescribeCopyProductStatusRequest(params)
 //
-//    // Example sending a request using the DescribeCopyProductStatusRequest method.
-//    req, resp := client.DescribeCopyProductStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeCopyProductStatus
 func (c *ServiceCatalog) DescribeCopyProductStatusRequest(input *DescribeCopyProductStatusInput) (req *request.Request, output *DescribeCopyProductStatusOutput) {
@@ -2453,8 +2449,8 @@ func (c *ServiceCatalog) DescribeCopyProductStatusRequest(input *DescribeCopyPro
 // API operation DescribeCopyProductStatus for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeCopyProductStatus
 func (c *ServiceCatalog) DescribeCopyProductStatus(input *DescribeCopyProductStatusInput) (*DescribeCopyProductStatusOutput, error) {
@@ -2494,14 +2490,13 @@ const opDescribePortfolio = "DescribePortfolio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribePortfolioRequest method.
+//	req, resp := client.DescribePortfolioRequest(params)
 //
-//    // Example sending a request using the DescribePortfolioRequest method.
-//    req, resp := client.DescribePortfolioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribePortfolio
 func (c *ServiceCatalog) DescribePortfolioRequest(input *DescribePortfolioInput) (req *request.Request, output *DescribePortfolioOutput) {
@@ -2534,8 +2529,8 @@ func (c *ServiceCatalog) DescribePortfolioRequest(input *DescribePortfolioInput)
 // API operation DescribePortfolio for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribePortfolio
 func (c *ServiceCatalog) DescribePortfolio(input *DescribePortfolioInput) (*DescribePortfolioOutput, error) {
@@ -2575,14 +2570,13 @@ const opDescribePortfolioShareStatus = "DescribePortfolioShareStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribePortfolioShareStatusRequest method.
+//	req, resp := client.DescribePortfolioShareStatusRequest(params)
 //
-//    // Example sending a request using the DescribePortfolioShareStatusRequest method.
-//    req, resp := client.DescribePortfolioShareStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribePortfolioShareStatus
 func (c *ServiceCatalog) DescribePortfolioShareStatusRequest(input *DescribePortfolioShareStatusInput) (req *request.Request, output *DescribePortfolioShareStatusOutput) {
@@ -2615,14 +2609,15 @@ func (c *ServiceCatalog) DescribePortfolioShareStatusRequest(input *DescribePort
 // API operation DescribePortfolioShareStatus for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * OperationNotSupportedException
-//   The operation is not supported.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - OperationNotSupportedException
+//     The operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribePortfolioShareStatus
 func (c *ServiceCatalog) DescribePortfolioShareStatus(input *DescribePortfolioShareStatusInput) (*DescribePortfolioShareStatusOutput, error) {
@@ -2662,14 +2657,13 @@ const opDescribePortfolioShares = "DescribePortfolioShares"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribePortfolioSharesRequest method.
+//	req, resp := client.DescribePortfolioSharesRequest(params)
 //
-//    // Example sending a request using the DescribePortfolioSharesRequest method.
-//    req, resp := client.DescribePortfolioSharesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribePortfolioShares
 func (c *ServiceCatalog) DescribePortfolioSharesRequest(input *DescribePortfolioSharesInput) (req *request.Request, output *DescribePortfolioSharesOutput) {
@@ -2713,11 +2707,12 @@ func (c *ServiceCatalog) DescribePortfolioSharesRequest(input *DescribePortfolio
 // API operation DescribePortfolioShares for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribePortfolioShares
 func (c *ServiceCatalog) DescribePortfolioShares(input *DescribePortfolioSharesInput) (*DescribePortfolioSharesOutput, error) {
@@ -2749,15 +2744,14 @@ func (c *ServiceCatalog) DescribePortfolioSharesWithContext(ctx aws.Context, inp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribePortfolioShares operation.
-//    pageNum := 0
-//    err := client.DescribePortfolioSharesPages(params,
-//        func(page *servicecatalog.DescribePortfolioSharesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribePortfolioShares operation.
+//	pageNum := 0
+//	err := client.DescribePortfolioSharesPages(params,
+//	    func(page *servicecatalog.DescribePortfolioSharesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) DescribePortfolioSharesPages(input *DescribePortfolioSharesInput, fn func(*DescribePortfolioSharesOutput, bool) bool) error {
 	return c.DescribePortfolioSharesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2809,14 +2803,13 @@ const opDescribeProduct = "DescribeProduct"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProductRequest method.
+//	req, resp := client.DescribeProductRequest(params)
 //
-//    // Example sending a request using the DescribeProductRequest method.
-//    req, resp := client.DescribeProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProduct
 func (c *ServiceCatalog) DescribeProductRequest(input *DescribeProductInput) (req *request.Request, output *DescribeProductOutput) {
@@ -2850,11 +2843,12 @@ func (c *ServiceCatalog) DescribeProductRequest(input *DescribeProductInput) (re
 // API operation DescribeProduct for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProduct
 func (c *ServiceCatalog) DescribeProduct(input *DescribeProductInput) (*DescribeProductOutput, error) {
@@ -2894,14 +2888,13 @@ const opDescribeProductAsAdmin = "DescribeProductAsAdmin"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProductAsAdminRequest method.
+//	req, resp := client.DescribeProductAsAdminRequest(params)
 //
-//    // Example sending a request using the DescribeProductAsAdminRequest method.
-//    req, resp := client.DescribeProductAsAdminRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProductAsAdmin
 func (c *ServiceCatalog) DescribeProductAsAdminRequest(input *DescribeProductAsAdminInput) (req *request.Request, output *DescribeProductAsAdminOutput) {
@@ -2933,11 +2926,12 @@ func (c *ServiceCatalog) DescribeProductAsAdminRequest(input *DescribeProductAsA
 // API operation DescribeProductAsAdmin for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProductAsAdmin
 func (c *ServiceCatalog) DescribeProductAsAdmin(input *DescribeProductAsAdminInput) (*DescribeProductAsAdminOutput, error) {
@@ -2977,14 +2971,13 @@ const opDescribeProductView = "DescribeProductView"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProductViewRequest method.
+//	req, resp := client.DescribeProductViewRequest(params)
 //
-//    // Example sending a request using the DescribeProductViewRequest method.
-//    req, resp := client.DescribeProductViewRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProductView
 func (c *ServiceCatalog) DescribeProductViewRequest(input *DescribeProductViewInput) (req *request.Request, output *DescribeProductViewOutput) {
@@ -3015,11 +3008,12 @@ func (c *ServiceCatalog) DescribeProductViewRequest(input *DescribeProductViewIn
 // API operation DescribeProductView for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProductView
 func (c *ServiceCatalog) DescribeProductView(input *DescribeProductViewInput) (*DescribeProductViewOutput, error) {
@@ -3059,14 +3053,13 @@ const opDescribeProvisionedProduct = "DescribeProvisionedProduct"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProvisionedProductRequest method.
+//	req, resp := client.DescribeProvisionedProductRequest(params)
 //
-//    // Example sending a request using the DescribeProvisionedProductRequest method.
-//    req, resp := client.DescribeProvisionedProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProvisionedProduct
 func (c *ServiceCatalog) DescribeProvisionedProductRequest(input *DescribeProvisionedProductInput) (req *request.Request, output *DescribeProvisionedProductOutput) {
@@ -3097,11 +3090,12 @@ func (c *ServiceCatalog) DescribeProvisionedProductRequest(input *DescribeProvis
 // API operation DescribeProvisionedProduct for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProvisionedProduct
 func (c *ServiceCatalog) DescribeProvisionedProduct(input *DescribeProvisionedProductInput) (*DescribeProvisionedProductOutput, error) {
@@ -3141,14 +3135,13 @@ const opDescribeProvisionedProductPlan = "DescribeProvisionedProductPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProvisionedProductPlanRequest method.
+//	req, resp := client.DescribeProvisionedProductPlanRequest(params)
 //
-//    // Example sending a request using the DescribeProvisionedProductPlanRequest method.
-//    req, resp := client.DescribeProvisionedProductPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProvisionedProductPlan
 func (c *ServiceCatalog) DescribeProvisionedProductPlanRequest(input *DescribeProvisionedProductPlanInput) (req *request.Request, output *DescribeProvisionedProductPlanOutput) {
@@ -3179,11 +3172,12 @@ func (c *ServiceCatalog) DescribeProvisionedProductPlanRequest(input *DescribePr
 // API operation DescribeProvisionedProductPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProvisionedProductPlan
 func (c *ServiceCatalog) DescribeProvisionedProductPlan(input *DescribeProvisionedProductPlanInput) (*DescribeProvisionedProductPlanOutput, error) {
@@ -3223,14 +3217,13 @@ const opDescribeProvisioningArtifact = "DescribeProvisioningArtifact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProvisioningArtifactRequest method.
+//	req, resp := client.DescribeProvisioningArtifactRequest(params)
 //
-//    // Example sending a request using the DescribeProvisioningArtifactRequest method.
-//    req, resp := client.DescribeProvisioningArtifactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProvisioningArtifact
 func (c *ServiceCatalog) DescribeProvisioningArtifactRequest(input *DescribeProvisioningArtifactInput) (req *request.Request, output *DescribeProvisioningArtifactOutput) {
@@ -3262,11 +3255,12 @@ func (c *ServiceCatalog) DescribeProvisioningArtifactRequest(input *DescribeProv
 // API operation DescribeProvisioningArtifact for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProvisioningArtifact
 func (c *ServiceCatalog) DescribeProvisioningArtifact(input *DescribeProvisioningArtifactInput) (*DescribeProvisioningArtifactOutput, error) {
@@ -3306,14 +3300,13 @@ const opDescribeProvisioningParameters = "DescribeProvisioningParameters"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProvisioningParametersRequest method.
+//	req, resp := client.DescribeProvisioningParametersRequest(params)
 //
-//    // Example sending a request using the DescribeProvisioningParametersRequest method.
-//    req, resp := client.DescribeProvisioningParametersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProvisioningParameters
 func (c *ServiceCatalog) DescribeProvisioningParametersRequest(input *DescribeProvisioningParametersInput) (req *request.Request, output *DescribeProvisioningParametersOutput) {
@@ -3352,11 +3345,12 @@ func (c *ServiceCatalog) DescribeProvisioningParametersRequest(input *DescribePr
 // API operation DescribeProvisioningParameters for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeProvisioningParameters
 func (c *ServiceCatalog) DescribeProvisioningParameters(input *DescribeProvisioningParametersInput) (*DescribeProvisioningParametersOutput, error) {
@@ -3396,14 +3390,13 @@ const opDescribeRecord = "DescribeRecord"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeRecordRequest method.
+//	req, resp := client.DescribeRecordRequest(params)
 //
-//    // Example sending a request using the DescribeRecordRequest method.
-//    req, resp := client.DescribeRecordRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeRecord
 func (c *ServiceCatalog) DescribeRecordRequest(input *DescribeRecordInput) (req *request.Request, output *DescribeRecordOutput) {
@@ -3443,8 +3436,8 @@ func (c *ServiceCatalog) DescribeRecordRequest(input *DescribeRecordInput) (req 
 // API operation DescribeRecord for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeRecord
 func (c *ServiceCatalog) DescribeRecord(input *DescribeRecordInput) (*DescribeRecordOutput, error) {
@@ -3484,14 +3477,13 @@ const opDescribeServiceAction = "DescribeServiceAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeServiceActionRequest method.
+//	req, resp := client.DescribeServiceActionRequest(params)
 //
-//    // Example sending a request using the DescribeServiceActionRequest method.
-//    req, resp := client.DescribeServiceActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeServiceAction
 func (c *ServiceCatalog) DescribeServiceActionRequest(input *DescribeServiceActionInput) (req *request.Request, output *DescribeServiceActionOutput) {
@@ -3522,8 +3514,8 @@ func (c *ServiceCatalog) DescribeServiceActionRequest(input *DescribeServiceActi
 // API operation DescribeServiceAction for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeServiceAction
 func (c *ServiceCatalog) DescribeServiceAction(input *DescribeServiceActionInput) (*DescribeServiceActionOutput, error) {
@@ -3563,14 +3555,13 @@ const opDescribeServiceActionExecutionParameters = "DescribeServiceActionExecuti
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeServiceActionExecutionParametersRequest method.
+//	req, resp := client.DescribeServiceActionExecutionParametersRequest(params)
 //
-//    // Example sending a request using the DescribeServiceActionExecutionParametersRequest method.
-//    req, resp := client.DescribeServiceActionExecutionParametersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeServiceActionExecutionParameters
 func (c *ServiceCatalog) DescribeServiceActionExecutionParametersRequest(input *DescribeServiceActionExecutionParametersInput) (req *request.Request, output *DescribeServiceActionExecutionParametersOutput) {
@@ -3602,11 +3593,12 @@ func (c *ServiceCatalog) DescribeServiceActionExecutionParametersRequest(input *
 // API operation DescribeServiceActionExecutionParameters for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeServiceActionExecutionParameters
 func (c *ServiceCatalog) DescribeServiceActionExecutionParameters(input *DescribeServiceActionExecutionParametersInput) (*DescribeServiceActionExecutionParametersOutput, error) {
@@ -3646,14 +3638,13 @@ const opDescribeTagOption = "DescribeTagOption"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeTagOptionRequest method.
+//	req, resp := client.DescribeTagOptionRequest(params)
 //
-//    // Example sending a request using the DescribeTagOptionRequest method.
-//    req, resp := client.DescribeTagOptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeTagOption
 func (c *ServiceCatalog) DescribeTagOptionRequest(input *DescribeTagOptionInput) (req *request.Request, output *DescribeTagOptionOutput) {
@@ -3684,13 +3675,14 @@ func (c *ServiceCatalog) DescribeTagOptionRequest(input *DescribeTagOptionInput)
 // API operation DescribeTagOption for usage and error information.
 //
 // Returned Error Types:
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DescribeTagOption
 func (c *ServiceCatalog) DescribeTagOption(input *DescribeTagOptionInput) (*DescribeTagOptionOutput, error) {
@@ -3730,14 +3722,13 @@ const opDisableAWSOrganizationsAccess = "DisableAWSOrganizationsAccess"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisableAWSOrganizationsAccessRequest method.
+//	req, resp := client.DisableAWSOrganizationsAccessRequest(params)
 //
-//    // Example sending a request using the DisableAWSOrganizationsAccessRequest method.
-//    req, resp := client.DisableAWSOrganizationsAccessRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisableAWSOrganizationsAccess
 func (c *ServiceCatalog) DisableAWSOrganizationsAccessRequest(input *DisableAWSOrganizationsAccessInput) (req *request.Request, output *DisableAWSOrganizationsAccessOutput) {
@@ -3785,16 +3776,17 @@ func (c *ServiceCatalog) DisableAWSOrganizationsAccessRequest(input *DisableAWSO
 // API operation DisableAWSOrganizationsAccess for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidStateException
-//   An attempt was made to modify a resource that is in a state that is not valid.
-//   Check your resources to ensure that they are in valid states before retrying
-//   the operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * OperationNotSupportedException
-//   The operation is not supported.
+//   - InvalidStateException
+//     An attempt was made to modify a resource that is in a state that is not valid.
+//     Check your resources to ensure that they are in valid states before retrying
+//     the operation.
+//
+//   - OperationNotSupportedException
+//     The operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisableAWSOrganizationsAccess
 func (c *ServiceCatalog) DisableAWSOrganizationsAccess(input *DisableAWSOrganizationsAccessInput) (*DisableAWSOrganizationsAccessOutput, error) {
@@ -3834,14 +3826,13 @@ const opDisassociateBudgetFromResource = "DisassociateBudgetFromResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateBudgetFromResourceRequest method.
+//	req, resp := client.DisassociateBudgetFromResourceRequest(params)
 //
-//    // Example sending a request using the DisassociateBudgetFromResourceRequest method.
-//    req, resp := client.DisassociateBudgetFromResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociateBudgetFromResource
 func (c *ServiceCatalog) DisassociateBudgetFromResourceRequest(input *DisassociateBudgetFromResourceInput) (req *request.Request, output *DisassociateBudgetFromResourceOutput) {
@@ -3873,8 +3864,8 @@ func (c *ServiceCatalog) DisassociateBudgetFromResourceRequest(input *Disassocia
 // API operation DisassociateBudgetFromResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociateBudgetFromResource
 func (c *ServiceCatalog) DisassociateBudgetFromResource(input *DisassociateBudgetFromResourceInput) (*DisassociateBudgetFromResourceOutput, error) {
@@ -3914,14 +3905,13 @@ const opDisassociatePrincipalFromPortfolio = "DisassociatePrincipalFromPortfolio
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociatePrincipalFromPortfolioRequest method.
+//	req, resp := client.DisassociatePrincipalFromPortfolioRequest(params)
 //
-//    // Example sending a request using the DisassociatePrincipalFromPortfolioRequest method.
-//    req, resp := client.DisassociatePrincipalFromPortfolioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociatePrincipalFromPortfolio
 func (c *ServiceCatalog) DisassociatePrincipalFromPortfolioRequest(input *DisassociatePrincipalFromPortfolioInput) (req *request.Request, output *DisassociatePrincipalFromPortfolioOutput) {
@@ -3955,6 +3945,16 @@ func (c *ServiceCatalog) DisassociatePrincipalFromPortfolioRequest(input *Disass
 // be able to provision products in this portfolio using a role matching the
 // name of the associated principal.
 //
+// For more information, review associate-principal-with-portfolio (https://docs.aws.amazon.com/cli/latest/reference/servicecatalog/associate-principal-with-portfolio.html#options)
+// in the Amazon Web Services CLI Command Reference.
+//
+// If you disassociate a principal from a portfolio, with PrincipalType as IAM,
+// the same principal will still have access to the portfolio if it matches
+// one of the associated principals of type IAM_PATTERN. To fully remove access
+// for a principal, verify all the associated Principals of type IAM_PATTERN,
+// and then ensure you disassociate any IAM_PATTERN principals that match the
+// principal whose access you are removing.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -3963,11 +3963,12 @@ func (c *ServiceCatalog) DisassociatePrincipalFromPortfolioRequest(input *Disass
 // API operation DisassociatePrincipalFromPortfolio for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociatePrincipalFromPortfolio
 func (c *ServiceCatalog) DisassociatePrincipalFromPortfolio(input *DisassociatePrincipalFromPortfolioInput) (*DisassociatePrincipalFromPortfolioOutput, error) {
@@ -4007,14 +4008,13 @@ const opDisassociateProductFromPortfolio = "DisassociateProductFromPortfolio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateProductFromPortfolioRequest method.
+//	req, resp := client.DisassociateProductFromPortfolioRequest(params)
 //
-//    // Example sending a request using the DisassociateProductFromPortfolioRequest method.
-//    req, resp := client.DisassociateProductFromPortfolioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociateProductFromPortfolio
 func (c *ServiceCatalog) DisassociateProductFromPortfolioRequest(input *DisassociateProductFromPortfolioInput) (req *request.Request, output *DisassociateProductFromPortfolioOutput) {
@@ -4048,15 +4048,16 @@ func (c *ServiceCatalog) DisassociateProductFromPortfolioRequest(input *Disassoc
 // API operation DisassociateProductFromPortfolio for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * ResourceInUseException
-//   A resource that is currently in use. Ensure that the resource is not in use
-//   and retry the operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceInUseException
+//     A resource that is currently in use. Ensure that the resource is not in use
+//     and retry the operation.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociateProductFromPortfolio
 func (c *ServiceCatalog) DisassociateProductFromPortfolio(input *DisassociateProductFromPortfolioInput) (*DisassociateProductFromPortfolioOutput, error) {
@@ -4096,14 +4097,13 @@ const opDisassociateServiceActionFromProvisioningArtifact = "DisassociateService
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateServiceActionFromProvisioningArtifactRequest method.
+//	req, resp := client.DisassociateServiceActionFromProvisioningArtifactRequest(params)
 //
-//    // Example sending a request using the DisassociateServiceActionFromProvisioningArtifactRequest method.
-//    req, resp := client.DisassociateServiceActionFromProvisioningArtifactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociateServiceActionFromProvisioningArtifact
 func (c *ServiceCatalog) DisassociateServiceActionFromProvisioningArtifactRequest(input *DisassociateServiceActionFromProvisioningArtifactInput) (req *request.Request, output *DisassociateServiceActionFromProvisioningArtifactOutput) {
@@ -4136,8 +4136,8 @@ func (c *ServiceCatalog) DisassociateServiceActionFromProvisioningArtifactReques
 // API operation DisassociateServiceActionFromProvisioningArtifact for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociateServiceActionFromProvisioningArtifact
 func (c *ServiceCatalog) DisassociateServiceActionFromProvisioningArtifact(input *DisassociateServiceActionFromProvisioningArtifactInput) (*DisassociateServiceActionFromProvisioningArtifactOutput, error) {
@@ -4177,14 +4177,13 @@ const opDisassociateTagOptionFromResource = "DisassociateTagOptionFromResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateTagOptionFromResourceRequest method.
+//	req, resp := client.DisassociateTagOptionFromResourceRequest(params)
 //
-//    // Example sending a request using the DisassociateTagOptionFromResourceRequest method.
-//    req, resp := client.DisassociateTagOptionFromResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociateTagOptionFromResource
 func (c *ServiceCatalog) DisassociateTagOptionFromResourceRequest(input *DisassociateTagOptionFromResourceInput) (req *request.Request, output *DisassociateTagOptionFromResourceOutput) {
@@ -4216,13 +4215,14 @@ func (c *ServiceCatalog) DisassociateTagOptionFromResourceRequest(input *Disasso
 // API operation DisassociateTagOptionFromResource for usage and error information.
 //
 // Returned Error Types:
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/DisassociateTagOptionFromResource
 func (c *ServiceCatalog) DisassociateTagOptionFromResource(input *DisassociateTagOptionFromResourceInput) (*DisassociateTagOptionFromResourceOutput, error) {
@@ -4262,14 +4262,13 @@ const opEnableAWSOrganizationsAccess = "EnableAWSOrganizationsAccess"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the EnableAWSOrganizationsAccessRequest method.
+//	req, resp := client.EnableAWSOrganizationsAccessRequest(params)
 //
-//    // Example sending a request using the EnableAWSOrganizationsAccessRequest method.
-//    req, resp := client.EnableAWSOrganizationsAccessRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/EnableAWSOrganizationsAccess
 func (c *ServiceCatalog) EnableAWSOrganizationsAccessRequest(input *EnableAWSOrganizationsAccessInput) (req *request.Request, output *EnableAWSOrganizationsAccessOutput) {
@@ -4320,16 +4319,17 @@ func (c *ServiceCatalog) EnableAWSOrganizationsAccessRequest(input *EnableAWSOrg
 // API operation EnableAWSOrganizationsAccess for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidStateException
-//   An attempt was made to modify a resource that is in a state that is not valid.
-//   Check your resources to ensure that they are in valid states before retrying
-//   the operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * OperationNotSupportedException
-//   The operation is not supported.
+//   - InvalidStateException
+//     An attempt was made to modify a resource that is in a state that is not valid.
+//     Check your resources to ensure that they are in valid states before retrying
+//     the operation.
+//
+//   - OperationNotSupportedException
+//     The operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/EnableAWSOrganizationsAccess
 func (c *ServiceCatalog) EnableAWSOrganizationsAccess(input *EnableAWSOrganizationsAccessInput) (*EnableAWSOrganizationsAccessOutput, error) {
@@ -4369,14 +4369,13 @@ const opExecuteProvisionedProductPlan = "ExecuteProvisionedProductPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ExecuteProvisionedProductPlanRequest method.
+//	req, resp := client.ExecuteProvisionedProductPlanRequest(params)
 //
-//    // Example sending a request using the ExecuteProvisionedProductPlanRequest method.
-//    req, resp := client.ExecuteProvisionedProductPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ExecuteProvisionedProductPlan
 func (c *ServiceCatalog) ExecuteProvisionedProductPlanRequest(input *ExecuteProvisionedProductPlanInput) (req *request.Request, output *ExecuteProvisionedProductPlanOutput) {
@@ -4408,16 +4407,17 @@ func (c *ServiceCatalog) ExecuteProvisionedProductPlanRequest(input *ExecuteProv
 // API operation ExecuteProvisionedProductPlan for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * InvalidStateException
-//   An attempt was made to modify a resource that is in a state that is not valid.
-//   Check your resources to ensure that they are in valid states before retrying
-//   the operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidStateException
+//     An attempt was made to modify a resource that is in a state that is not valid.
+//     Check your resources to ensure that they are in valid states before retrying
+//     the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ExecuteProvisionedProductPlan
 func (c *ServiceCatalog) ExecuteProvisionedProductPlan(input *ExecuteProvisionedProductPlanInput) (*ExecuteProvisionedProductPlanOutput, error) {
@@ -4457,14 +4457,13 @@ const opExecuteProvisionedProductServiceAction = "ExecuteProvisionedProductServi
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ExecuteProvisionedProductServiceActionRequest method.
+//	req, resp := client.ExecuteProvisionedProductServiceActionRequest(params)
 //
-//    // Example sending a request using the ExecuteProvisionedProductServiceActionRequest method.
-//    req, resp := client.ExecuteProvisionedProductServiceActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ExecuteProvisionedProductServiceAction
 func (c *ServiceCatalog) ExecuteProvisionedProductServiceActionRequest(input *ExecuteProvisionedProductServiceActionInput) (req *request.Request, output *ExecuteProvisionedProductServiceActionOutput) {
@@ -4495,16 +4494,17 @@ func (c *ServiceCatalog) ExecuteProvisionedProductServiceActionRequest(input *Ex
 // API operation ExecuteProvisionedProductServiceAction for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * InvalidStateException
-//   An attempt was made to modify a resource that is in a state that is not valid.
-//   Check your resources to ensure that they are in valid states before retrying
-//   the operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidStateException
+//     An attempt was made to modify a resource that is in a state that is not valid.
+//     Check your resources to ensure that they are in valid states before retrying
+//     the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ExecuteProvisionedProductServiceAction
 func (c *ServiceCatalog) ExecuteProvisionedProductServiceAction(input *ExecuteProvisionedProductServiceActionInput) (*ExecuteProvisionedProductServiceActionOutput, error) {
@@ -4544,14 +4544,13 @@ const opGetAWSOrganizationsAccessStatus = "GetAWSOrganizationsAccessStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAWSOrganizationsAccessStatusRequest method.
+//	req, resp := client.GetAWSOrganizationsAccessStatusRequest(params)
 //
-//    // Example sending a request using the GetAWSOrganizationsAccessStatusRequest method.
-//    req, resp := client.GetAWSOrganizationsAccessStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/GetAWSOrganizationsAccessStatus
 func (c *ServiceCatalog) GetAWSOrganizationsAccessStatusRequest(input *GetAWSOrganizationsAccessStatusInput) (req *request.Request, output *GetAWSOrganizationsAccessStatusOutput) {
@@ -4584,11 +4583,12 @@ func (c *ServiceCatalog) GetAWSOrganizationsAccessStatusRequest(input *GetAWSOrg
 // API operation GetAWSOrganizationsAccessStatus for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * OperationNotSupportedException
-//   The operation is not supported.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - OperationNotSupportedException
+//     The operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/GetAWSOrganizationsAccessStatus
 func (c *ServiceCatalog) GetAWSOrganizationsAccessStatus(input *GetAWSOrganizationsAccessStatusInput) (*GetAWSOrganizationsAccessStatusOutput, error) {
@@ -4628,14 +4628,13 @@ const opGetProvisionedProductOutputs = "GetProvisionedProductOutputs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetProvisionedProductOutputsRequest method.
+//	req, resp := client.GetProvisionedProductOutputsRequest(params)
 //
-//    // Example sending a request using the GetProvisionedProductOutputsRequest method.
-//    req, resp := client.GetProvisionedProductOutputsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/GetProvisionedProductOutputs
 func (c *ServiceCatalog) GetProvisionedProductOutputsRequest(input *GetProvisionedProductOutputsInput) (req *request.Request, output *GetProvisionedProductOutputsOutput) {
@@ -4674,11 +4673,12 @@ func (c *ServiceCatalog) GetProvisionedProductOutputsRequest(input *GetProvision
 // API operation GetProvisionedProductOutputs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/GetProvisionedProductOutputs
 func (c *ServiceCatalog) GetProvisionedProductOutputs(input *GetProvisionedProductOutputsInput) (*GetProvisionedProductOutputsOutput, error) {
@@ -4710,15 +4710,14 @@ func (c *ServiceCatalog) GetProvisionedProductOutputsWithContext(ctx aws.Context
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetProvisionedProductOutputs operation.
-//    pageNum := 0
-//    err := client.GetProvisionedProductOutputsPages(params,
-//        func(page *servicecatalog.GetProvisionedProductOutputsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetProvisionedProductOutputs operation.
+//	pageNum := 0
+//	err := client.GetProvisionedProductOutputsPages(params,
+//	    func(page *servicecatalog.GetProvisionedProductOutputsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) GetProvisionedProductOutputsPages(input *GetProvisionedProductOutputsInput, fn func(*GetProvisionedProductOutputsOutput, bool) bool) error {
 	return c.GetProvisionedProductOutputsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4770,14 +4769,13 @@ const opImportAsProvisionedProduct = "ImportAsProvisionedProduct"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ImportAsProvisionedProductRequest method.
+//	req, resp := client.ImportAsProvisionedProductRequest(params)
 //
-//    // Example sending a request using the ImportAsProvisionedProductRequest method.
-//    req, resp := client.ImportAsProvisionedProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ImportAsProvisionedProduct
 func (c *ServiceCatalog) ImportAsProvisionedProductRequest(input *ImportAsProvisionedProductInput) (req *request.Request, output *ImportAsProvisionedProductOutput) {
@@ -4804,7 +4802,7 @@ func (c *ServiceCatalog) ImportAsProvisionedProductRequest(input *ImportAsProvis
 // product.
 //
 // Resource import only supports CloudFormation stack ARNs. CloudFormation StackSets,
-// and non-root nested stacks are not supported.
+// and non-root nested stacks, are not supported.
 //
 // The CloudFormation stack must have one of the following statuses to be imported:
 // CREATE_COMPLETE, UPDATE_COMPLETE, UPDATE_ROLLBACK_COMPLETE, IMPORT_COMPLETE,
@@ -4813,13 +4811,16 @@ func (c *ServiceCatalog) ImportAsProvisionedProductRequest(input *ImportAsProvis
 // Import of the resource requires that the CloudFormation stack template matches
 // the associated Service Catalog product provisioning artifact.
 //
-// When you import an existing CloudFormation stack into a portfolio, constraints
-// that are associated with the product aren't applied during the import process.
-// The constraints are applied after you call UpdateProvisionedProduct for the
-// provisioned product.
+// When you import an existing CloudFormation stack into a portfolio, Service
+// Catalog does not apply the product's associated constraints during the import
+// process. Service Catalog applies the constraints after you call UpdateProvisionedProduct
+// for the provisioned product.
 //
 // The user or role that performs this operation must have the cloudformation:GetTemplate
 // and cloudformation:DescribeStacks IAM policy permissions.
+//
+// You can only import one provisioned product at a time. The product's CloudFormation
+// stack must have the IMPORT_COMPLETE status before you import another.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4829,19 +4830,20 @@ func (c *ServiceCatalog) ImportAsProvisionedProductRequest(input *ImportAsProvis
 // API operation ImportAsProvisionedProduct for usage and error information.
 //
 // Returned Error Types:
-//   * DuplicateResourceException
-//   The specified resource is a duplicate.
 //
-//   * InvalidStateException
-//   An attempt was made to modify a resource that is in a state that is not valid.
-//   Check your resources to ensure that they are in valid states before retrying
-//   the operation.
+//   - DuplicateResourceException
+//     The specified resource is a duplicate.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidStateException
+//     An attempt was made to modify a resource that is in a state that is not valid.
+//     Check your resources to ensure that they are in valid states before retrying
+//     the operation.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ImportAsProvisionedProduct
 func (c *ServiceCatalog) ImportAsProvisionedProduct(input *ImportAsProvisionedProductInput) (*ImportAsProvisionedProductOutput, error) {
@@ -4881,14 +4883,13 @@ const opListAcceptedPortfolioShares = "ListAcceptedPortfolioShares"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAcceptedPortfolioSharesRequest method.
+//	req, resp := client.ListAcceptedPortfolioSharesRequest(params)
 //
-//    // Example sending a request using the ListAcceptedPortfolioSharesRequest method.
-//    req, resp := client.ListAcceptedPortfolioSharesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListAcceptedPortfolioShares
 func (c *ServiceCatalog) ListAcceptedPortfolioSharesRequest(input *ListAcceptedPortfolioSharesInput) (req *request.Request, output *ListAcceptedPortfolioSharesOutput) {
@@ -4927,11 +4928,12 @@ func (c *ServiceCatalog) ListAcceptedPortfolioSharesRequest(input *ListAcceptedP
 // API operation ListAcceptedPortfolioShares for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * OperationNotSupportedException
-//   The operation is not supported.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - OperationNotSupportedException
+//     The operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListAcceptedPortfolioShares
 func (c *ServiceCatalog) ListAcceptedPortfolioShares(input *ListAcceptedPortfolioSharesInput) (*ListAcceptedPortfolioSharesOutput, error) {
@@ -4963,15 +4965,14 @@ func (c *ServiceCatalog) ListAcceptedPortfolioSharesWithContext(ctx aws.Context,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAcceptedPortfolioShares operation.
-//    pageNum := 0
-//    err := client.ListAcceptedPortfolioSharesPages(params,
-//        func(page *servicecatalog.ListAcceptedPortfolioSharesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAcceptedPortfolioShares operation.
+//	pageNum := 0
+//	err := client.ListAcceptedPortfolioSharesPages(params,
+//	    func(page *servicecatalog.ListAcceptedPortfolioSharesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListAcceptedPortfolioSharesPages(input *ListAcceptedPortfolioSharesInput, fn func(*ListAcceptedPortfolioSharesOutput, bool) bool) error {
 	return c.ListAcceptedPortfolioSharesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5023,14 +5024,13 @@ const opListBudgetsForResource = "ListBudgetsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBudgetsForResourceRequest method.
+//	req, resp := client.ListBudgetsForResourceRequest(params)
 //
-//    // Example sending a request using the ListBudgetsForResourceRequest method.
-//    req, resp := client.ListBudgetsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListBudgetsForResource
 func (c *ServiceCatalog) ListBudgetsForResourceRequest(input *ListBudgetsForResourceInput) (req *request.Request, output *ListBudgetsForResourceOutput) {
@@ -5067,11 +5067,12 @@ func (c *ServiceCatalog) ListBudgetsForResourceRequest(input *ListBudgetsForReso
 // API operation ListBudgetsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListBudgetsForResource
 func (c *ServiceCatalog) ListBudgetsForResource(input *ListBudgetsForResourceInput) (*ListBudgetsForResourceOutput, error) {
@@ -5103,15 +5104,14 @@ func (c *ServiceCatalog) ListBudgetsForResourceWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBudgetsForResource operation.
-//    pageNum := 0
-//    err := client.ListBudgetsForResourcePages(params,
-//        func(page *servicecatalog.ListBudgetsForResourceOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBudgetsForResource operation.
+//	pageNum := 0
+//	err := client.ListBudgetsForResourcePages(params,
+//	    func(page *servicecatalog.ListBudgetsForResourceOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListBudgetsForResourcePages(input *ListBudgetsForResourceInput, fn func(*ListBudgetsForResourceOutput, bool) bool) error {
 	return c.ListBudgetsForResourcePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5163,14 +5163,13 @@ const opListConstraintsForPortfolio = "ListConstraintsForPortfolio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListConstraintsForPortfolioRequest method.
+//	req, resp := client.ListConstraintsForPortfolioRequest(params)
 //
-//    // Example sending a request using the ListConstraintsForPortfolioRequest method.
-//    req, resp := client.ListConstraintsForPortfolioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListConstraintsForPortfolio
 func (c *ServiceCatalog) ListConstraintsForPortfolioRequest(input *ListConstraintsForPortfolioInput) (req *request.Request, output *ListConstraintsForPortfolioOutput) {
@@ -5207,11 +5206,12 @@ func (c *ServiceCatalog) ListConstraintsForPortfolioRequest(input *ListConstrain
 // API operation ListConstraintsForPortfolio for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListConstraintsForPortfolio
 func (c *ServiceCatalog) ListConstraintsForPortfolio(input *ListConstraintsForPortfolioInput) (*ListConstraintsForPortfolioOutput, error) {
@@ -5243,15 +5243,14 @@ func (c *ServiceCatalog) ListConstraintsForPortfolioWithContext(ctx aws.Context,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListConstraintsForPortfolio operation.
-//    pageNum := 0
-//    err := client.ListConstraintsForPortfolioPages(params,
-//        func(page *servicecatalog.ListConstraintsForPortfolioOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListConstraintsForPortfolio operation.
+//	pageNum := 0
+//	err := client.ListConstraintsForPortfolioPages(params,
+//	    func(page *servicecatalog.ListConstraintsForPortfolioOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListConstraintsForPortfolioPages(input *ListConstraintsForPortfolioInput, fn func(*ListConstraintsForPortfolioOutput, bool) bool) error {
 	return c.ListConstraintsForPortfolioPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5303,14 +5302,13 @@ const opListLaunchPaths = "ListLaunchPaths"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLaunchPathsRequest method.
+//	req, resp := client.ListLaunchPathsRequest(params)
 //
-//    // Example sending a request using the ListLaunchPathsRequest method.
-//    req, resp := client.ListLaunchPathsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListLaunchPaths
 func (c *ServiceCatalog) ListLaunchPathsRequest(input *ListLaunchPathsInput) (req *request.Request, output *ListLaunchPathsOutput) {
@@ -5355,11 +5353,12 @@ func (c *ServiceCatalog) ListLaunchPathsRequest(input *ListLaunchPathsInput) (re
 // API operation ListLaunchPaths for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListLaunchPaths
 func (c *ServiceCatalog) ListLaunchPaths(input *ListLaunchPathsInput) (*ListLaunchPathsOutput, error) {
@@ -5391,15 +5390,14 @@ func (c *ServiceCatalog) ListLaunchPathsWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLaunchPaths operation.
-//    pageNum := 0
-//    err := client.ListLaunchPathsPages(params,
-//        func(page *servicecatalog.ListLaunchPathsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLaunchPaths operation.
+//	pageNum := 0
+//	err := client.ListLaunchPathsPages(params,
+//	    func(page *servicecatalog.ListLaunchPathsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListLaunchPathsPages(input *ListLaunchPathsInput, fn func(*ListLaunchPathsOutput, bool) bool) error {
 	return c.ListLaunchPathsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5451,14 +5449,13 @@ const opListOrganizationPortfolioAccess = "ListOrganizationPortfolioAccess"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListOrganizationPortfolioAccessRequest method.
+//	req, resp := client.ListOrganizationPortfolioAccessRequest(params)
 //
-//    // Example sending a request using the ListOrganizationPortfolioAccessRequest method.
-//    req, resp := client.ListOrganizationPortfolioAccessRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListOrganizationPortfolioAccess
 func (c *ServiceCatalog) ListOrganizationPortfolioAccessRequest(input *ListOrganizationPortfolioAccessInput) (req *request.Request, output *ListOrganizationPortfolioAccessOutput) {
@@ -5499,14 +5496,15 @@ func (c *ServiceCatalog) ListOrganizationPortfolioAccessRequest(input *ListOrgan
 // API operation ListOrganizationPortfolioAccess for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * OperationNotSupportedException
-//   The operation is not supported.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - OperationNotSupportedException
+//     The operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListOrganizationPortfolioAccess
 func (c *ServiceCatalog) ListOrganizationPortfolioAccess(input *ListOrganizationPortfolioAccessInput) (*ListOrganizationPortfolioAccessOutput, error) {
@@ -5538,15 +5536,14 @@ func (c *ServiceCatalog) ListOrganizationPortfolioAccessWithContext(ctx aws.Cont
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListOrganizationPortfolioAccess operation.
-//    pageNum := 0
-//    err := client.ListOrganizationPortfolioAccessPages(params,
-//        func(page *servicecatalog.ListOrganizationPortfolioAccessOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListOrganizationPortfolioAccess operation.
+//	pageNum := 0
+//	err := client.ListOrganizationPortfolioAccessPages(params,
+//	    func(page *servicecatalog.ListOrganizationPortfolioAccessOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListOrganizationPortfolioAccessPages(input *ListOrganizationPortfolioAccessInput, fn func(*ListOrganizationPortfolioAccessOutput, bool) bool) error {
 	return c.ListOrganizationPortfolioAccessPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5598,14 +5595,13 @@ const opListPortfolioAccess = "ListPortfolioAccess"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPortfolioAccessRequest method.
+//	req, resp := client.ListPortfolioAccessRequest(params)
 //
-//    // Example sending a request using the ListPortfolioAccessRequest method.
-//    req, resp := client.ListPortfolioAccessRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPortfolioAccess
 func (c *ServiceCatalog) ListPortfolioAccessRequest(input *ListPortfolioAccessInput) (req *request.Request, output *ListPortfolioAccessOutput) {
@@ -5646,11 +5642,12 @@ func (c *ServiceCatalog) ListPortfolioAccessRequest(input *ListPortfolioAccessIn
 // API operation ListPortfolioAccess for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPortfolioAccess
 func (c *ServiceCatalog) ListPortfolioAccess(input *ListPortfolioAccessInput) (*ListPortfolioAccessOutput, error) {
@@ -5682,15 +5679,14 @@ func (c *ServiceCatalog) ListPortfolioAccessWithContext(ctx aws.Context, input *
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPortfolioAccess operation.
-//    pageNum := 0
-//    err := client.ListPortfolioAccessPages(params,
-//        func(page *servicecatalog.ListPortfolioAccessOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPortfolioAccess operation.
+//	pageNum := 0
+//	err := client.ListPortfolioAccessPages(params,
+//	    func(page *servicecatalog.ListPortfolioAccessOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListPortfolioAccessPages(input *ListPortfolioAccessInput, fn func(*ListPortfolioAccessOutput, bool) bool) error {
 	return c.ListPortfolioAccessPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5742,14 +5738,13 @@ const opListPortfolios = "ListPortfolios"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPortfoliosRequest method.
+//	req, resp := client.ListPortfoliosRequest(params)
 //
-//    // Example sending a request using the ListPortfoliosRequest method.
-//    req, resp := client.ListPortfoliosRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPortfolios
 func (c *ServiceCatalog) ListPortfoliosRequest(input *ListPortfoliosInput) (req *request.Request, output *ListPortfoliosOutput) {
@@ -5786,8 +5781,8 @@ func (c *ServiceCatalog) ListPortfoliosRequest(input *ListPortfoliosInput) (req 
 // API operation ListPortfolios for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPortfolios
 func (c *ServiceCatalog) ListPortfolios(input *ListPortfoliosInput) (*ListPortfoliosOutput, error) {
@@ -5819,15 +5814,14 @@ func (c *ServiceCatalog) ListPortfoliosWithContext(ctx aws.Context, input *ListP
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPortfolios operation.
-//    pageNum := 0
-//    err := client.ListPortfoliosPages(params,
-//        func(page *servicecatalog.ListPortfoliosOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPortfolios operation.
+//	pageNum := 0
+//	err := client.ListPortfoliosPages(params,
+//	    func(page *servicecatalog.ListPortfoliosOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListPortfoliosPages(input *ListPortfoliosInput, fn func(*ListPortfoliosOutput, bool) bool) error {
 	return c.ListPortfoliosPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5879,14 +5873,13 @@ const opListPortfoliosForProduct = "ListPortfoliosForProduct"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPortfoliosForProductRequest method.
+//	req, resp := client.ListPortfoliosForProductRequest(params)
 //
-//    // Example sending a request using the ListPortfoliosForProductRequest method.
-//    req, resp := client.ListPortfoliosForProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPortfoliosForProduct
 func (c *ServiceCatalog) ListPortfoliosForProductRequest(input *ListPortfoliosForProductInput) (req *request.Request, output *ListPortfoliosForProductOutput) {
@@ -5923,11 +5916,12 @@ func (c *ServiceCatalog) ListPortfoliosForProductRequest(input *ListPortfoliosFo
 // API operation ListPortfoliosForProduct for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPortfoliosForProduct
 func (c *ServiceCatalog) ListPortfoliosForProduct(input *ListPortfoliosForProductInput) (*ListPortfoliosForProductOutput, error) {
@@ -5959,15 +5953,14 @@ func (c *ServiceCatalog) ListPortfoliosForProductWithContext(ctx aws.Context, in
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPortfoliosForProduct operation.
-//    pageNum := 0
-//    err := client.ListPortfoliosForProductPages(params,
-//        func(page *servicecatalog.ListPortfoliosForProductOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPortfoliosForProduct operation.
+//	pageNum := 0
+//	err := client.ListPortfoliosForProductPages(params,
+//	    func(page *servicecatalog.ListPortfoliosForProductOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListPortfoliosForProductPages(input *ListPortfoliosForProductInput, fn func(*ListPortfoliosForProductOutput, bool) bool) error {
 	return c.ListPortfoliosForProductPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6019,14 +6012,13 @@ const opListPrincipalsForPortfolio = "ListPrincipalsForPortfolio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPrincipalsForPortfolioRequest method.
+//	req, resp := client.ListPrincipalsForPortfolioRequest(params)
 //
-//    // Example sending a request using the ListPrincipalsForPortfolioRequest method.
-//    req, resp := client.ListPrincipalsForPortfolioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPrincipalsForPortfolio
 func (c *ServiceCatalog) ListPrincipalsForPortfolioRequest(input *ListPrincipalsForPortfolioInput) (req *request.Request, output *ListPrincipalsForPortfolioOutput) {
@@ -6064,11 +6056,12 @@ func (c *ServiceCatalog) ListPrincipalsForPortfolioRequest(input *ListPrincipals
 // API operation ListPrincipalsForPortfolio for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListPrincipalsForPortfolio
 func (c *ServiceCatalog) ListPrincipalsForPortfolio(input *ListPrincipalsForPortfolioInput) (*ListPrincipalsForPortfolioOutput, error) {
@@ -6100,15 +6093,14 @@ func (c *ServiceCatalog) ListPrincipalsForPortfolioWithContext(ctx aws.Context, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPrincipalsForPortfolio operation.
-//    pageNum := 0
-//    err := client.ListPrincipalsForPortfolioPages(params,
-//        func(page *servicecatalog.ListPrincipalsForPortfolioOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPrincipalsForPortfolio operation.
+//	pageNum := 0
+//	err := client.ListPrincipalsForPortfolioPages(params,
+//	    func(page *servicecatalog.ListPrincipalsForPortfolioOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListPrincipalsForPortfolioPages(input *ListPrincipalsForPortfolioInput, fn func(*ListPrincipalsForPortfolioOutput, bool) bool) error {
 	return c.ListPrincipalsForPortfolioPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6160,14 +6152,13 @@ const opListProvisionedProductPlans = "ListProvisionedProductPlans"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProvisionedProductPlansRequest method.
+//	req, resp := client.ListProvisionedProductPlansRequest(params)
 //
-//    // Example sending a request using the ListProvisionedProductPlansRequest method.
-//    req, resp := client.ListProvisionedProductPlansRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListProvisionedProductPlans
 func (c *ServiceCatalog) ListProvisionedProductPlansRequest(input *ListProvisionedProductPlansInput) (req *request.Request, output *ListProvisionedProductPlansOutput) {
@@ -6199,11 +6190,12 @@ func (c *ServiceCatalog) ListProvisionedProductPlansRequest(input *ListProvision
 // API operation ListProvisionedProductPlans for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListProvisionedProductPlans
 func (c *ServiceCatalog) ListProvisionedProductPlans(input *ListProvisionedProductPlansInput) (*ListProvisionedProductPlansOutput, error) {
@@ -6243,14 +6235,13 @@ const opListProvisioningArtifacts = "ListProvisioningArtifacts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProvisioningArtifactsRequest method.
+//	req, resp := client.ListProvisioningArtifactsRequest(params)
 //
-//    // Example sending a request using the ListProvisioningArtifactsRequest method.
-//    req, resp := client.ListProvisioningArtifactsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListProvisioningArtifacts
 func (c *ServiceCatalog) ListProvisioningArtifactsRequest(input *ListProvisioningArtifactsInput) (req *request.Request, output *ListProvisioningArtifactsOutput) {
@@ -6282,11 +6273,12 @@ func (c *ServiceCatalog) ListProvisioningArtifactsRequest(input *ListProvisionin
 // API operation ListProvisioningArtifacts for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListProvisioningArtifacts
 func (c *ServiceCatalog) ListProvisioningArtifacts(input *ListProvisioningArtifactsInput) (*ListProvisioningArtifactsOutput, error) {
@@ -6326,14 +6318,13 @@ const opListProvisioningArtifactsForServiceAction = "ListProvisioningArtifactsFo
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProvisioningArtifactsForServiceActionRequest method.
+//	req, resp := client.ListProvisioningArtifactsForServiceActionRequest(params)
 //
-//    // Example sending a request using the ListProvisioningArtifactsForServiceActionRequest method.
-//    req, resp := client.ListProvisioningArtifactsForServiceActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListProvisioningArtifactsForServiceAction
 func (c *ServiceCatalog) ListProvisioningArtifactsForServiceActionRequest(input *ListProvisioningArtifactsForServiceActionInput) (req *request.Request, output *ListProvisioningArtifactsForServiceActionOutput) {
@@ -6371,11 +6362,12 @@ func (c *ServiceCatalog) ListProvisioningArtifactsForServiceActionRequest(input 
 // API operation ListProvisioningArtifactsForServiceAction for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListProvisioningArtifactsForServiceAction
 func (c *ServiceCatalog) ListProvisioningArtifactsForServiceAction(input *ListProvisioningArtifactsForServiceActionInput) (*ListProvisioningArtifactsForServiceActionOutput, error) {
@@ -6407,15 +6399,14 @@ func (c *ServiceCatalog) ListProvisioningArtifactsForServiceActionWithContext(ct
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListProvisioningArtifactsForServiceAction operation.
-//    pageNum := 0
-//    err := client.ListProvisioningArtifactsForServiceActionPages(params,
-//        func(page *servicecatalog.ListProvisioningArtifactsForServiceActionOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListProvisioningArtifactsForServiceAction operation.
+//	pageNum := 0
+//	err := client.ListProvisioningArtifactsForServiceActionPages(params,
+//	    func(page *servicecatalog.ListProvisioningArtifactsForServiceActionOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListProvisioningArtifactsForServiceActionPages(input *ListProvisioningArtifactsForServiceActionInput, fn func(*ListProvisioningArtifactsForServiceActionOutput, bool) bool) error {
 	return c.ListProvisioningArtifactsForServiceActionPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6467,14 +6458,13 @@ const opListRecordHistory = "ListRecordHistory"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRecordHistoryRequest method.
+//	req, resp := client.ListRecordHistoryRequest(params)
 //
-//    // Example sending a request using the ListRecordHistoryRequest method.
-//    req, resp := client.ListRecordHistoryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListRecordHistory
 func (c *ServiceCatalog) ListRecordHistoryRequest(input *ListRecordHistoryInput) (req *request.Request, output *ListRecordHistoryOutput) {
@@ -6505,8 +6495,8 @@ func (c *ServiceCatalog) ListRecordHistoryRequest(input *ListRecordHistoryInput)
 // API operation ListRecordHistory for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListRecordHistory
 func (c *ServiceCatalog) ListRecordHistory(input *ListRecordHistoryInput) (*ListRecordHistoryOutput, error) {
@@ -6546,14 +6536,13 @@ const opListResourcesForTagOption = "ListResourcesForTagOption"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListResourcesForTagOptionRequest method.
+//	req, resp := client.ListResourcesForTagOptionRequest(params)
 //
-//    // Example sending a request using the ListResourcesForTagOptionRequest method.
-//    req, resp := client.ListResourcesForTagOptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListResourcesForTagOption
 func (c *ServiceCatalog) ListResourcesForTagOptionRequest(input *ListResourcesForTagOptionInput) (req *request.Request, output *ListResourcesForTagOptionOutput) {
@@ -6590,16 +6579,17 @@ func (c *ServiceCatalog) ListResourcesForTagOptionRequest(input *ListResourcesFo
 // API operation ListResourcesForTagOption for usage and error information.
 //
 // Returned Error Types:
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListResourcesForTagOption
 func (c *ServiceCatalog) ListResourcesForTagOption(input *ListResourcesForTagOptionInput) (*ListResourcesForTagOptionOutput, error) {
@@ -6631,15 +6621,14 @@ func (c *ServiceCatalog) ListResourcesForTagOptionWithContext(ctx aws.Context, i
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListResourcesForTagOption operation.
-//    pageNum := 0
-//    err := client.ListResourcesForTagOptionPages(params,
-//        func(page *servicecatalog.ListResourcesForTagOptionOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListResourcesForTagOption operation.
+//	pageNum := 0
+//	err := client.ListResourcesForTagOptionPages(params,
+//	    func(page *servicecatalog.ListResourcesForTagOptionOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListResourcesForTagOptionPages(input *ListResourcesForTagOptionInput, fn func(*ListResourcesForTagOptionOutput, bool) bool) error {
 	return c.ListResourcesForTagOptionPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6691,14 +6680,13 @@ const opListServiceActions = "ListServiceActions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListServiceActionsRequest method.
+//	req, resp := client.ListServiceActionsRequest(params)
 //
-//    // Example sending a request using the ListServiceActionsRequest method.
-//    req, resp := client.ListServiceActionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListServiceActions
 func (c *ServiceCatalog) ListServiceActionsRequest(input *ListServiceActionsInput) (req *request.Request, output *ListServiceActionsOutput) {
@@ -6735,8 +6723,8 @@ func (c *ServiceCatalog) ListServiceActionsRequest(input *ListServiceActionsInpu
 // API operation ListServiceActions for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListServiceActions
 func (c *ServiceCatalog) ListServiceActions(input *ListServiceActionsInput) (*ListServiceActionsOutput, error) {
@@ -6768,15 +6756,14 @@ func (c *ServiceCatalog) ListServiceActionsWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListServiceActions operation.
-//    pageNum := 0
-//    err := client.ListServiceActionsPages(params,
-//        func(page *servicecatalog.ListServiceActionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListServiceActions operation.
+//	pageNum := 0
+//	err := client.ListServiceActionsPages(params,
+//	    func(page *servicecatalog.ListServiceActionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListServiceActionsPages(input *ListServiceActionsInput, fn func(*ListServiceActionsOutput, bool) bool) error {
 	return c.ListServiceActionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6828,14 +6815,13 @@ const opListServiceActionsForProvisioningArtifact = "ListServiceActionsForProvis
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListServiceActionsForProvisioningArtifactRequest method.
+//	req, resp := client.ListServiceActionsForProvisioningArtifactRequest(params)
 //
-//    // Example sending a request using the ListServiceActionsForProvisioningArtifactRequest method.
-//    req, resp := client.ListServiceActionsForProvisioningArtifactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListServiceActionsForProvisioningArtifact
 func (c *ServiceCatalog) ListServiceActionsForProvisioningArtifactRequest(input *ListServiceActionsForProvisioningArtifactInput) (req *request.Request, output *ListServiceActionsForProvisioningArtifactOutput) {
@@ -6873,11 +6859,12 @@ func (c *ServiceCatalog) ListServiceActionsForProvisioningArtifactRequest(input 
 // API operation ListServiceActionsForProvisioningArtifact for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListServiceActionsForProvisioningArtifact
 func (c *ServiceCatalog) ListServiceActionsForProvisioningArtifact(input *ListServiceActionsForProvisioningArtifactInput) (*ListServiceActionsForProvisioningArtifactOutput, error) {
@@ -6909,15 +6896,14 @@ func (c *ServiceCatalog) ListServiceActionsForProvisioningArtifactWithContext(ct
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListServiceActionsForProvisioningArtifact operation.
-//    pageNum := 0
-//    err := client.ListServiceActionsForProvisioningArtifactPages(params,
-//        func(page *servicecatalog.ListServiceActionsForProvisioningArtifactOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListServiceActionsForProvisioningArtifact operation.
+//	pageNum := 0
+//	err := client.ListServiceActionsForProvisioningArtifactPages(params,
+//	    func(page *servicecatalog.ListServiceActionsForProvisioningArtifactOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListServiceActionsForProvisioningArtifactPages(input *ListServiceActionsForProvisioningArtifactInput, fn func(*ListServiceActionsForProvisioningArtifactOutput, bool) bool) error {
 	return c.ListServiceActionsForProvisioningArtifactPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6969,14 +6955,13 @@ const opListStackInstancesForProvisionedProduct = "ListStackInstancesForProvisio
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListStackInstancesForProvisionedProductRequest method.
+//	req, resp := client.ListStackInstancesForProvisionedProductRequest(params)
 //
-//    // Example sending a request using the ListStackInstancesForProvisionedProductRequest method.
-//    req, resp := client.ListStackInstancesForProvisionedProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListStackInstancesForProvisionedProduct
 func (c *ServiceCatalog) ListStackInstancesForProvisionedProductRequest(input *ListStackInstancesForProvisionedProductInput) (req *request.Request, output *ListStackInstancesForProvisionedProductOutput) {
@@ -7010,11 +6995,12 @@ func (c *ServiceCatalog) ListStackInstancesForProvisionedProductRequest(input *L
 // API operation ListStackInstancesForProvisionedProduct for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListStackInstancesForProvisionedProduct
 func (c *ServiceCatalog) ListStackInstancesForProvisionedProduct(input *ListStackInstancesForProvisionedProductInput) (*ListStackInstancesForProvisionedProductOutput, error) {
@@ -7054,14 +7040,13 @@ const opListTagOptions = "ListTagOptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagOptionsRequest method.
+//	req, resp := client.ListTagOptionsRequest(params)
 //
-//    // Example sending a request using the ListTagOptionsRequest method.
-//    req, resp := client.ListTagOptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListTagOptions
 func (c *ServiceCatalog) ListTagOptionsRequest(input *ListTagOptionsInput) (req *request.Request, output *ListTagOptionsOutput) {
@@ -7098,13 +7083,14 @@ func (c *ServiceCatalog) ListTagOptionsRequest(input *ListTagOptionsInput) (req 
 // API operation ListTagOptions for usage and error information.
 //
 // Returned Error Types:
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ListTagOptions
 func (c *ServiceCatalog) ListTagOptions(input *ListTagOptionsInput) (*ListTagOptionsOutput, error) {
@@ -7136,15 +7122,14 @@ func (c *ServiceCatalog) ListTagOptionsWithContext(ctx aws.Context, input *ListT
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTagOptions operation.
-//    pageNum := 0
-//    err := client.ListTagOptionsPages(params,
-//        func(page *servicecatalog.ListTagOptionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTagOptions operation.
+//	pageNum := 0
+//	err := client.ListTagOptionsPages(params,
+//	    func(page *servicecatalog.ListTagOptionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) ListTagOptionsPages(input *ListTagOptionsInput, fn func(*ListTagOptionsOutput, bool) bool) error {
 	return c.ListTagOptionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -7196,14 +7181,13 @@ const opNotifyProvisionProductEngineWorkflowResult = "NotifyProvisionProductEngi
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the NotifyProvisionProductEngineWorkflowResultRequest method.
+//	req, resp := client.NotifyProvisionProductEngineWorkflowResultRequest(params)
 //
-//    // Example sending a request using the NotifyProvisionProductEngineWorkflowResultRequest method.
-//    req, resp := client.NotifyProvisionProductEngineWorkflowResultRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyProvisionProductEngineWorkflowResult
 func (c *ServiceCatalog) NotifyProvisionProductEngineWorkflowResultRequest(input *NotifyProvisionProductEngineWorkflowResultInput) (req *request.Request, output *NotifyProvisionProductEngineWorkflowResultOutput) {
@@ -7235,11 +7219,12 @@ func (c *ServiceCatalog) NotifyProvisionProductEngineWorkflowResultRequest(input
 // API operation NotifyProvisionProductEngineWorkflowResult for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyProvisionProductEngineWorkflowResult
 func (c *ServiceCatalog) NotifyProvisionProductEngineWorkflowResult(input *NotifyProvisionProductEngineWorkflowResultInput) (*NotifyProvisionProductEngineWorkflowResultOutput, error) {
@@ -7279,14 +7264,13 @@ const opNotifyTerminateProvisionedProductEngineWorkflowResult = "NotifyTerminate
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the NotifyTerminateProvisionedProductEngineWorkflowResultRequest method.
+//	req, resp := client.NotifyTerminateProvisionedProductEngineWorkflowResultRequest(params)
 //
-//    // Example sending a request using the NotifyTerminateProvisionedProductEngineWorkflowResultRequest method.
-//    req, resp := client.NotifyTerminateProvisionedProductEngineWorkflowResultRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyTerminateProvisionedProductEngineWorkflowResult
 func (c *ServiceCatalog) NotifyTerminateProvisionedProductEngineWorkflowResultRequest(input *NotifyTerminateProvisionedProductEngineWorkflowResultInput) (req *request.Request, output *NotifyTerminateProvisionedProductEngineWorkflowResultOutput) {
@@ -7318,11 +7302,12 @@ func (c *ServiceCatalog) NotifyTerminateProvisionedProductEngineWorkflowResultRe
 // API operation NotifyTerminateProvisionedProductEngineWorkflowResult for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyTerminateProvisionedProductEngineWorkflowResult
 func (c *ServiceCatalog) NotifyTerminateProvisionedProductEngineWorkflowResult(input *NotifyTerminateProvisionedProductEngineWorkflowResultInput) (*NotifyTerminateProvisionedProductEngineWorkflowResultOutput, error) {
@@ -7362,14 +7347,13 @@ const opNotifyUpdateProvisionedProductEngineWorkflowResult = "NotifyUpdateProvis
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the NotifyUpdateProvisionedProductEngineWorkflowResultRequest method.
+//	req, resp := client.NotifyUpdateProvisionedProductEngineWorkflowResultRequest(params)
 //
-//    // Example sending a request using the NotifyUpdateProvisionedProductEngineWorkflowResultRequest method.
-//    req, resp := client.NotifyUpdateProvisionedProductEngineWorkflowResultRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyUpdateProvisionedProductEngineWorkflowResult
 func (c *ServiceCatalog) NotifyUpdateProvisionedProductEngineWorkflowResultRequest(input *NotifyUpdateProvisionedProductEngineWorkflowResultInput) (req *request.Request, output *NotifyUpdateProvisionedProductEngineWorkflowResultOutput) {
@@ -7401,11 +7385,12 @@ func (c *ServiceCatalog) NotifyUpdateProvisionedProductEngineWorkflowResultReque
 // API operation NotifyUpdateProvisionedProductEngineWorkflowResult for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/NotifyUpdateProvisionedProductEngineWorkflowResult
 func (c *ServiceCatalog) NotifyUpdateProvisionedProductEngineWorkflowResult(input *NotifyUpdateProvisionedProductEngineWorkflowResultInput) (*NotifyUpdateProvisionedProductEngineWorkflowResultOutput, error) {
@@ -7445,14 +7430,13 @@ const opProvisionProduct = "ProvisionProduct"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ProvisionProductRequest method.
+//	req, resp := client.ProvisionProductRequest(params)
 //
-//    // Example sending a request using the ProvisionProductRequest method.
-//    req, resp := client.ProvisionProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ProvisionProduct
 func (c *ServiceCatalog) ProvisionProductRequest(input *ProvisionProductInput) (req *request.Request, output *ProvisionProductOutput) {
@@ -7498,14 +7482,15 @@ func (c *ServiceCatalog) ProvisionProductRequest(input *ProvisionProductInput) (
 // API operation ProvisionProduct for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * DuplicateResourceException
-//   The specified resource is a duplicate.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - DuplicateResourceException
+//     The specified resource is a duplicate.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ProvisionProduct
 func (c *ServiceCatalog) ProvisionProduct(input *ProvisionProductInput) (*ProvisionProductOutput, error) {
@@ -7545,14 +7530,13 @@ const opRejectPortfolioShare = "RejectPortfolioShare"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RejectPortfolioShareRequest method.
+//	req, resp := client.RejectPortfolioShareRequest(params)
 //
-//    // Example sending a request using the RejectPortfolioShareRequest method.
-//    req, resp := client.RejectPortfolioShareRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/RejectPortfolioShare
 func (c *ServiceCatalog) RejectPortfolioShareRequest(input *RejectPortfolioShareInput) (req *request.Request, output *RejectPortfolioShareOutput) {
@@ -7584,8 +7568,8 @@ func (c *ServiceCatalog) RejectPortfolioShareRequest(input *RejectPortfolioShare
 // API operation RejectPortfolioShare for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/RejectPortfolioShare
 func (c *ServiceCatalog) RejectPortfolioShare(input *RejectPortfolioShareInput) (*RejectPortfolioShareOutput, error) {
@@ -7625,14 +7609,13 @@ const opScanProvisionedProducts = "ScanProvisionedProducts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ScanProvisionedProductsRequest method.
+//	req, resp := client.ScanProvisionedProductsRequest(params)
 //
-//    // Example sending a request using the ScanProvisionedProductsRequest method.
-//    req, resp := client.ScanProvisionedProductsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ScanProvisionedProducts
 func (c *ServiceCatalog) ScanProvisionedProductsRequest(input *ScanProvisionedProductsInput) (req *request.Request, output *ScanProvisionedProductsOutput) {
@@ -7665,8 +7648,8 @@ func (c *ServiceCatalog) ScanProvisionedProductsRequest(input *ScanProvisionedPr
 // API operation ScanProvisionedProducts for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/ScanProvisionedProducts
 func (c *ServiceCatalog) ScanProvisionedProducts(input *ScanProvisionedProductsInput) (*ScanProvisionedProductsOutput, error) {
@@ -7706,14 +7689,13 @@ const opSearchProducts = "SearchProducts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchProductsRequest method.
+//	req, resp := client.SearchProductsRequest(params)
 //
-//    // Example sending a request using the SearchProductsRequest method.
-//    req, resp := client.SearchProductsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/SearchProducts
 func (c *ServiceCatalog) SearchProductsRequest(input *SearchProductsInput) (req *request.Request, output *SearchProductsOutput) {
@@ -7750,8 +7732,8 @@ func (c *ServiceCatalog) SearchProductsRequest(input *SearchProductsInput) (req 
 // API operation SearchProducts for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/SearchProducts
 func (c *ServiceCatalog) SearchProducts(input *SearchProductsInput) (*SearchProductsOutput, error) {
@@ -7783,15 +7765,14 @@ func (c *ServiceCatalog) SearchProductsWithContext(ctx aws.Context, input *Searc
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchProducts operation.
-//    pageNum := 0
-//    err := client.SearchProductsPages(params,
-//        func(page *servicecatalog.SearchProductsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchProducts operation.
+//	pageNum := 0
+//	err := client.SearchProductsPages(params,
+//	    func(page *servicecatalog.SearchProductsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) SearchProductsPages(input *SearchProductsInput, fn func(*SearchProductsOutput, bool) bool) error {
 	return c.SearchProductsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -7843,14 +7824,13 @@ const opSearchProductsAsAdmin = "SearchProductsAsAdmin"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchProductsAsAdminRequest method.
+//	req, resp := client.SearchProductsAsAdminRequest(params)
 //
-//    // Example sending a request using the SearchProductsAsAdminRequest method.
-//    req, resp := client.SearchProductsAsAdminRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/SearchProductsAsAdmin
 func (c *ServiceCatalog) SearchProductsAsAdminRequest(input *SearchProductsAsAdminInput) (req *request.Request, output *SearchProductsAsAdminOutput) {
@@ -7887,11 +7867,12 @@ func (c *ServiceCatalog) SearchProductsAsAdminRequest(input *SearchProductsAsAdm
 // API operation SearchProductsAsAdmin for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/SearchProductsAsAdmin
 func (c *ServiceCatalog) SearchProductsAsAdmin(input *SearchProductsAsAdminInput) (*SearchProductsAsAdminOutput, error) {
@@ -7923,15 +7904,14 @@ func (c *ServiceCatalog) SearchProductsAsAdminWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchProductsAsAdmin operation.
-//    pageNum := 0
-//    err := client.SearchProductsAsAdminPages(params,
-//        func(page *servicecatalog.SearchProductsAsAdminOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchProductsAsAdmin operation.
+//	pageNum := 0
+//	err := client.SearchProductsAsAdminPages(params,
+//	    func(page *servicecatalog.SearchProductsAsAdminOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) SearchProductsAsAdminPages(input *SearchProductsAsAdminInput, fn func(*SearchProductsAsAdminOutput, bool) bool) error {
 	return c.SearchProductsAsAdminPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -7983,14 +7963,13 @@ const opSearchProvisionedProducts = "SearchProvisionedProducts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchProvisionedProductsRequest method.
+//	req, resp := client.SearchProvisionedProductsRequest(params)
 //
-//    // Example sending a request using the SearchProvisionedProductsRequest method.
-//    req, resp := client.SearchProvisionedProductsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/SearchProvisionedProducts
 func (c *ServiceCatalog) SearchProvisionedProductsRequest(input *SearchProvisionedProductsInput) (req *request.Request, output *SearchProvisionedProductsOutput) {
@@ -8027,8 +8006,8 @@ func (c *ServiceCatalog) SearchProvisionedProductsRequest(input *SearchProvision
 // API operation SearchProvisionedProducts for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/SearchProvisionedProducts
 func (c *ServiceCatalog) SearchProvisionedProducts(input *SearchProvisionedProductsInput) (*SearchProvisionedProductsOutput, error) {
@@ -8060,15 +8039,14 @@ func (c *ServiceCatalog) SearchProvisionedProductsWithContext(ctx aws.Context, i
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchProvisionedProducts operation.
-//    pageNum := 0
-//    err := client.SearchProvisionedProductsPages(params,
-//        func(page *servicecatalog.SearchProvisionedProductsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchProvisionedProducts operation.
+//	pageNum := 0
+//	err := client.SearchProvisionedProductsPages(params,
+//	    func(page *servicecatalog.SearchProvisionedProductsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ServiceCatalog) SearchProvisionedProductsPages(input *SearchProvisionedProductsInput, fn func(*SearchProvisionedProductsOutput, bool) bool) error {
 	return c.SearchProvisionedProductsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -8120,14 +8098,13 @@ const opTerminateProvisionedProduct = "TerminateProvisionedProduct"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TerminateProvisionedProductRequest method.
+//	req, resp := client.TerminateProvisionedProductRequest(params)
 //
-//    // Example sending a request using the TerminateProvisionedProductRequest method.
-//    req, resp := client.TerminateProvisionedProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/TerminateProvisionedProduct
 func (c *ServiceCatalog) TerminateProvisionedProductRequest(input *TerminateProvisionedProductInput) (req *request.Request, output *TerminateProvisionedProductOutput) {
@@ -8163,8 +8140,8 @@ func (c *ServiceCatalog) TerminateProvisionedProductRequest(input *TerminateProv
 // API operation TerminateProvisionedProduct for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/TerminateProvisionedProduct
 func (c *ServiceCatalog) TerminateProvisionedProduct(input *TerminateProvisionedProductInput) (*TerminateProvisionedProductOutput, error) {
@@ -8204,14 +8181,13 @@ const opUpdateConstraint = "UpdateConstraint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateConstraintRequest method.
+//	req, resp := client.UpdateConstraintRequest(params)
 //
-//    // Example sending a request using the UpdateConstraintRequest method.
-//    req, resp := client.UpdateConstraintRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateConstraint
 func (c *ServiceCatalog) UpdateConstraintRequest(input *UpdateConstraintInput) (req *request.Request, output *UpdateConstraintOutput) {
@@ -8242,11 +8218,12 @@ func (c *ServiceCatalog) UpdateConstraintRequest(input *UpdateConstraintInput) (
 // API operation UpdateConstraint for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateConstraint
 func (c *ServiceCatalog) UpdateConstraint(input *UpdateConstraintInput) (*UpdateConstraintOutput, error) {
@@ -8286,14 +8263,13 @@ const opUpdatePortfolio = "UpdatePortfolio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdatePortfolioRequest method.
+//	req, resp := client.UpdatePortfolioRequest(params)
 //
-//    // Example sending a request using the UpdatePortfolioRequest method.
-//    req, resp := client.UpdatePortfolioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdatePortfolio
 func (c *ServiceCatalog) UpdatePortfolioRequest(input *UpdatePortfolioInput) (req *request.Request, output *UpdatePortfolioOutput) {
@@ -8326,21 +8302,22 @@ func (c *ServiceCatalog) UpdatePortfolioRequest(input *UpdatePortfolioInput) (re
 // API operation UpdatePortfolio for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * LimitExceededException
-//   The current limits of the service would have been exceeded by this operation.
-//   Decrease your resource use or increase your service limits and retry the
-//   operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
+//   - LimitExceededException
+//     The current limits of the service would have been exceeded by this operation.
+//     Decrease your resource use or increase your service limits and retry the
+//     operation.
+//
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdatePortfolio
 func (c *ServiceCatalog) UpdatePortfolio(input *UpdatePortfolioInput) (*UpdatePortfolioOutput, error) {
@@ -8380,14 +8357,13 @@ const opUpdatePortfolioShare = "UpdatePortfolioShare"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdatePortfolioShareRequest method.
+//	req, resp := client.UpdatePortfolioShareRequest(params)
 //
-//    // Example sending a request using the UpdatePortfolioShareRequest method.
-//    req, resp := client.UpdatePortfolioShareRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdatePortfolioShare
 func (c *ServiceCatalog) UpdatePortfolioShareRequest(input *UpdatePortfolioShareInput) (req *request.Request, output *UpdatePortfolioShareOutput) {
@@ -8414,7 +8390,7 @@ func (c *ServiceCatalog) UpdatePortfolioShareRequest(input *UpdatePortfolioShare
 //
 // The portfolio share cannot be updated if the CreatePortfolioShare operation
 // is IN_PROGRESS, as the share is not available to recipient entities. In this
-// case, you must wait for the portfolio share to be COMPLETED.
+// case, you must wait for the portfolio share to be completed.
 //
 // You must provide the accountId or organization node in the input, but not
 // both.
@@ -8445,19 +8421,20 @@ func (c *ServiceCatalog) UpdatePortfolioShareRequest(input *UpdatePortfolioShare
 // API operation UpdatePortfolioShare for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * OperationNotSupportedException
-//   The operation is not supported.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * InvalidStateException
-//   An attempt was made to modify a resource that is in a state that is not valid.
-//   Check your resources to ensure that they are in valid states before retrying
-//   the operation.
+//   - OperationNotSupportedException
+//     The operation is not supported.
+//
+//   - InvalidStateException
+//     An attempt was made to modify a resource that is in a state that is not valid.
+//     Check your resources to ensure that they are in valid states before retrying
+//     the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdatePortfolioShare
 func (c *ServiceCatalog) UpdatePortfolioShare(input *UpdatePortfolioShareInput) (*UpdatePortfolioShareOutput, error) {
@@ -8497,14 +8474,13 @@ const opUpdateProduct = "UpdateProduct"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProductRequest method.
+//	req, resp := client.UpdateProductRequest(params)
 //
-//    // Example sending a request using the UpdateProductRequest method.
-//    req, resp := client.UpdateProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateProduct
 func (c *ServiceCatalog) UpdateProductRequest(input *UpdateProductInput) (req *request.Request, output *UpdateProductOutput) {
@@ -8535,16 +8511,17 @@ func (c *ServiceCatalog) UpdateProductRequest(input *UpdateProductInput) (req *r
 // API operation UpdateProduct for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateProduct
 func (c *ServiceCatalog) UpdateProduct(input *UpdateProductInput) (*UpdateProductOutput, error) {
@@ -8584,14 +8561,13 @@ const opUpdateProvisionedProduct = "UpdateProvisionedProduct"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProvisionedProductRequest method.
+//	req, resp := client.UpdateProvisionedProductRequest(params)
 //
-//    // Example sending a request using the UpdateProvisionedProductRequest method.
-//    req, resp := client.UpdateProvisionedProductRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateProvisionedProduct
 func (c *ServiceCatalog) UpdateProvisionedProductRequest(input *UpdateProvisionedProductInput) (req *request.Request, output *UpdateProvisionedProductOutput) {
@@ -8629,11 +8605,12 @@ func (c *ServiceCatalog) UpdateProvisionedProductRequest(input *UpdateProvisione
 // API operation UpdateProvisionedProduct for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateProvisionedProduct
 func (c *ServiceCatalog) UpdateProvisionedProduct(input *UpdateProvisionedProductInput) (*UpdateProvisionedProductOutput, error) {
@@ -8673,14 +8650,13 @@ const opUpdateProvisionedProductProperties = "UpdateProvisionedProductProperties
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProvisionedProductPropertiesRequest method.
+//	req, resp := client.UpdateProvisionedProductPropertiesRequest(params)
 //
-//    // Example sending a request using the UpdateProvisionedProductPropertiesRequest method.
-//    req, resp := client.UpdateProvisionedProductPropertiesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateProvisionedProductProperties
 func (c *ServiceCatalog) UpdateProvisionedProductPropertiesRequest(input *UpdateProvisionedProductPropertiesInput) (req *request.Request, output *UpdateProvisionedProductPropertiesOutput) {
@@ -8711,16 +8687,17 @@ func (c *ServiceCatalog) UpdateProvisionedProductPropertiesRequest(input *Update
 // API operation UpdateProvisionedProductProperties for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
-//   * InvalidStateException
-//   An attempt was made to modify a resource that is in a state that is not valid.
-//   Check your resources to ensure that they are in valid states before retrying
-//   the operation.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidStateException
+//     An attempt was made to modify a resource that is in a state that is not valid.
+//     Check your resources to ensure that they are in valid states before retrying
+//     the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateProvisionedProductProperties
 func (c *ServiceCatalog) UpdateProvisionedProductProperties(input *UpdateProvisionedProductPropertiesInput) (*UpdateProvisionedProductPropertiesOutput, error) {
@@ -8760,14 +8737,13 @@ const opUpdateProvisioningArtifact = "UpdateProvisioningArtifact"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProvisioningArtifactRequest method.
+//	req, resp := client.UpdateProvisioningArtifactRequest(params)
 //
-//    // Example sending a request using the UpdateProvisioningArtifactRequest method.
-//    req, resp := client.UpdateProvisioningArtifactRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateProvisioningArtifact
 func (c *ServiceCatalog) UpdateProvisioningArtifactRequest(input *UpdateProvisioningArtifactInput) (req *request.Request, output *UpdateProvisioningArtifactOutput) {
@@ -8802,11 +8778,12 @@ func (c *ServiceCatalog) UpdateProvisioningArtifactRequest(input *UpdateProvisio
 // API operation UpdateProvisioningArtifact for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateProvisioningArtifact
 func (c *ServiceCatalog) UpdateProvisioningArtifact(input *UpdateProvisioningArtifactInput) (*UpdateProvisioningArtifactOutput, error) {
@@ -8846,14 +8823,13 @@ const opUpdateServiceAction = "UpdateServiceAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateServiceActionRequest method.
+//	req, resp := client.UpdateServiceActionRequest(params)
 //
-//    // Example sending a request using the UpdateServiceActionRequest method.
-//    req, resp := client.UpdateServiceActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateServiceAction
 func (c *ServiceCatalog) UpdateServiceActionRequest(input *UpdateServiceActionInput) (req *request.Request, output *UpdateServiceActionOutput) {
@@ -8884,11 +8860,12 @@ func (c *ServiceCatalog) UpdateServiceActionRequest(input *UpdateServiceActionIn
 // API operation UpdateServiceAction for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateServiceAction
 func (c *ServiceCatalog) UpdateServiceAction(input *UpdateServiceActionInput) (*UpdateServiceActionOutput, error) {
@@ -8928,14 +8905,13 @@ const opUpdateTagOption = "UpdateTagOption"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateTagOptionRequest method.
+//	req, resp := client.UpdateTagOptionRequest(params)
 //
-//    // Example sending a request using the UpdateTagOptionRequest method.
-//    req, resp := client.UpdateTagOptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateTagOption
 func (c *ServiceCatalog) UpdateTagOptionRequest(input *UpdateTagOptionInput) (req *request.Request, output *UpdateTagOptionOutput) {
@@ -8966,19 +8942,20 @@ func (c *ServiceCatalog) UpdateTagOptionRequest(input *UpdateTagOptionInput) (re
 // API operation UpdateTagOption for usage and error information.
 //
 // Returned Error Types:
-//   * TagOptionNotMigratedException
-//   An operation requiring TagOptions failed because the TagOptions migration
-//   process has not been performed for this account. Use the Amazon Web Services
-//   Management Console to perform the migration process before retrying the operation.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - TagOptionNotMigratedException
+//     An operation requiring TagOptions failed because the TagOptions migration
+//     process has not been performed for this account. Use the Amazon Web Services
+//     Management Console to perform the migration process before retrying the operation.
 //
-//   * DuplicateResourceException
-//   The specified resource is a duplicate.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
-//   * InvalidParametersException
-//   One or more parameters provided to the operation are not valid.
+//   - DuplicateResourceException
+//     The specified resource is a duplicate.
+//
+//   - InvalidParametersException
+//     One or more parameters provided to the operation are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/servicecatalog-2015-12-10/UpdateTagOption
 func (c *ServiceCatalog) UpdateTagOption(input *UpdateTagOptionInput) (*UpdateTagOptionOutput, error) {
@@ -9119,7 +9096,7 @@ type AccessLevelFilter struct {
 	//    * User - Filter results based on the specified user.
 	Key *string `type:"string" enum:"AccessLevelFilterKey"`
 
-	// The user to which the access level applies. The only supported value is Self.
+	// The user to which the access level applies. The only supported value is self.
 	Value *string `type:"string"`
 }
 
@@ -9256,18 +9233,57 @@ type AssociatePrincipalWithPortfolioInput struct {
 	// PortfolioId is a required field
 	PortfolioId *string `min:"1" type:"string" required:"true"`
 
-	// The ARN of the principal (user, role, or group). This field allows an ARN
-	// with no accountID if PrincipalType is IAM_PATTERN.
+	// The ARN of the principal (user, role, or group). If the PrincipalType is
+	// IAM, the supported value is a fully defined IAM Amazon Resource Name (ARN)
+	// (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-arns).
+	// If the PrincipalType is IAM_PATTERN, the supported value is an IAM ARN without
+	// an AccountID in the following format:
 	//
-	// You can associate multiple IAM patterns even if the account has no principal
-	// with that name. This is useful in Principal Name Sharing if you want to share
-	// a principal without creating it in the account that owns the portfolio.
+	// arn:partition:iam:::resource-type/resource-id
+	//
+	// The ARN resource-id can be either:
+	//
+	//    * A fully formed resource-id. For example, arn:aws:iam:::role/resource-name
+	//    or arn:aws:iam:::role/resource-path/resource-name
+	//
+	//    * A wildcard ARN. The wildcard ARN accepts IAM_PATTERN values with a "*"
+	//    or "?" in the resource-id segment of the ARN. For example arn:partition:service:::resource-type/resource-path/resource-name.
+	//    The new symbols are exclusive to the resource-path and resource-name and
+	//    cannot replace the resource-type or other ARN values. The ARN path and
+	//    principal name allow unlimited wildcard characters.
+	//
+	// Examples of an acceptable wildcard ARN:
+	//
+	//    * arn:aws:iam:::role/ResourceName_*
+	//
+	//    * arn:aws:iam:::role/*/ResourceName_?
+	//
+	// Examples of an unacceptable wildcard ARN:
+	//
+	//    * arn:aws:iam:::*/ResourceName
+	//
+	// You can associate multiple IAM_PATTERNs even if the account has no principal
+	// with that name.
+	//
+	// The "?" wildcard character matches zero or one of any character. This is
+	// similar to ".?" in regular regex context. The "*" wildcard character matches
+	// any number of any characters. This is similar to ".*" in regular regex context.
+	//
+	// In the IAM Principal ARN format (arn:partition:iam:::resource-type/resource-path/resource-name),
+	// valid resource-type values include user/, group/, or role/. The "?" and "*"
+	// characters are allowed only after the resource-type in the resource-id segment.
+	// You can use special characters anywhere within the resource-id.
+	//
+	// The "*" character also matches the "/" character, allowing paths to be formed
+	// within the resource-id. For example, arn:aws:iam:::role/*/ResourceName_?
+	// matches both arn:aws:iam:::role/pathA/pathB/ResourceName_1 and arn:aws:iam:::role/pathA/ResourceName_1.
 	//
 	// PrincipalARN is a required field
 	PrincipalARN *string `min:"1" type:"string" required:"true"`
 
 	// The principal type. The supported value is IAM if you use a fully defined
-	// ARN, or IAM_PATTERN if you use an ARN with no accountID.
+	// Amazon Resource Name (ARN), or IAM_PATTERN if you use an ARN with no accountID,
+	// with or without wildcard characters.
 	//
 	// PrincipalType is a required field
 	PrincipalType *string `type:"string" required:"true" enum:"PrincipalType"`
@@ -9485,6 +9501,11 @@ type AssociateServiceActionWithProvisioningArtifactInput struct {
 	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
+	// A unique identifier that you provide to ensure idempotency. If multiple requests
+	// from the same Amazon Web Services account use the same idempotency token,
+	// the same response is returned for each repeated request.
+	IdempotencyToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
 	// The product identifier. For example, prod-abcdzk7xy33qa.
 	//
 	// ProductId is a required field
@@ -9522,6 +9543,9 @@ func (s AssociateServiceActionWithProvisioningArtifactInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *AssociateServiceActionWithProvisioningArtifactInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "AssociateServiceActionWithProvisioningArtifactInput"}
+	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
+	}
 	if s.ProductId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ProductId"))
 	}
@@ -9550,6 +9574,12 @@ func (s *AssociateServiceActionWithProvisioningArtifactInput) Validate() error {
 // SetAcceptLanguage sets the AcceptLanguage field's value.
 func (s *AssociateServiceActionWithProvisioningArtifactInput) SetAcceptLanguage(v string) *AssociateServiceActionWithProvisioningArtifactInput {
 	s.AcceptLanguage = &v
+	return s
+}
+
+// SetIdempotencyToken sets the IdempotencyToken field's value.
+func (s *AssociateServiceActionWithProvisioningArtifactInput) SetIdempotencyToken(v string) *AssociateServiceActionWithProvisioningArtifactInput {
+	s.IdempotencyToken = &v
 	return s
 }
 
@@ -10777,8 +10807,11 @@ type CreatePortfolioShareInput struct {
 	// PortfolioId is a required field
 	PortfolioId *string `min:"1" type:"string" required:"true"`
 
+	// This parameter is only supported for portfolios with an OrganizationalNode
+	// Type of ORGANIZATION or ORGANIZATIONAL_UNIT.
+	//
 	// Enables or disables Principal sharing when creating the portfolio share.
-	// If this flag is not provided, principal sharing is disabled.
+	// If you do not provide this flag, principal sharing is disabled.
 	//
 	// When you enable Principal Name Sharing for a portfolio share, the share recipient
 	// account end users with a principal that matches any of the associated IAM
@@ -12421,6 +12454,11 @@ type DeleteServiceActionInput struct {
 	//
 	// Id is a required field
 	Id *string `min:"1" type:"string" required:"true"`
+
+	// A unique identifier that you provide to ensure idempotency. If multiple requests
+	// from the same Amazon Web Services account use the same idempotency token,
+	// the same response is returned for each repeated request.
+	IdempotencyToken *string `min:"1" type:"string" idempotencyToken:"true"`
 }
 
 // String returns the string representation.
@@ -12450,6 +12488,9 @@ func (s *DeleteServiceActionInput) Validate() error {
 	if s.Id != nil && len(*s.Id) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
 	}
+	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -12466,6 +12507,12 @@ func (s *DeleteServiceActionInput) SetAcceptLanguage(v string) *DeleteServiceAct
 // SetId sets the Id field's value.
 func (s *DeleteServiceActionInput) SetId(v string) *DeleteServiceActionInput {
 	s.Id = &v
+	return s
+}
+
+// SetIdempotencyToken sets the IdempotencyToken field's value.
+func (s *DeleteServiceActionInput) SetIdempotencyToken(v string) *DeleteServiceActionInput {
+	s.IdempotencyToken = &v
 	return s
 }
 
@@ -13797,6 +13844,10 @@ type DescribeProvisioningArtifactInput struct {
 	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
+	// Indicates if the API call response does or does not include additional details
+	// about the provisioning parameters.
+	IncludeProvisioningArtifactParameters *bool `type:"boolean"`
+
 	// The product identifier.
 	ProductId *string `min:"1" type:"string"`
 
@@ -13853,6 +13904,12 @@ func (s *DescribeProvisioningArtifactInput) SetAcceptLanguage(v string) *Describ
 	return s
 }
 
+// SetIncludeProvisioningArtifactParameters sets the IncludeProvisioningArtifactParameters field's value.
+func (s *DescribeProvisioningArtifactInput) SetIncludeProvisioningArtifactParameters(v bool) *DescribeProvisioningArtifactInput {
+	s.IncludeProvisioningArtifactParameters = &v
+	return s
+}
+
 // SetProductId sets the ProductId field's value.
 func (s *DescribeProvisioningArtifactInput) SetProductId(v string) *DescribeProvisioningArtifactInput {
 	s.ProductId = &v
@@ -13892,6 +13949,9 @@ type DescribeProvisioningArtifactOutput struct {
 	// Information about the provisioning artifact.
 	ProvisioningArtifactDetail *ProvisioningArtifactDetail `type:"structure"`
 
+	// Information about the parameters used to provision the product.
+	ProvisioningArtifactParameters []*ProvisioningArtifactParameter `type:"list"`
+
 	// The status of the current request.
 	Status *string `type:"string" enum:"Status"`
 }
@@ -13923,6 +13983,12 @@ func (s *DescribeProvisioningArtifactOutput) SetInfo(v map[string]*string) *Desc
 // SetProvisioningArtifactDetail sets the ProvisioningArtifactDetail field's value.
 func (s *DescribeProvisioningArtifactOutput) SetProvisioningArtifactDetail(v *ProvisioningArtifactDetail) *DescribeProvisioningArtifactOutput {
 	s.ProvisioningArtifactDetail = v
+	return s
+}
+
+// SetProvisioningArtifactParameters sets the ProvisioningArtifactParameters field's value.
+func (s *DescribeProvisioningArtifactOutput) SetProvisioningArtifactParameters(v []*ProvisioningArtifactParameter) *DescribeProvisioningArtifactOutput {
+	s.ProvisioningArtifactParameters = v
 	return s
 }
 
@@ -14705,13 +14771,14 @@ type DisassociatePrincipalFromPortfolioInput struct {
 	PortfolioId *string `min:"1" type:"string" required:"true"`
 
 	// The ARN of the principal (user, role, or group). This field allows an ARN
-	// with no accountID if PrincipalType is IAM_PATTERN.
+	// with no accountID with or without wildcard characters if PrincipalType is
+	// IAM_PATTERN.
 	//
 	// PrincipalARN is a required field
 	PrincipalARN *string `min:"1" type:"string" required:"true"`
 
 	// The supported value is IAM if you use a fully defined ARN, or IAM_PATTERN
-	// if you use no accountID.
+	// if you specify an IAM ARN with no AccountId, with or without wildcard characters.
 	PrincipalType *string `type:"string" enum:"PrincipalType"`
 }
 
@@ -14912,6 +14979,11 @@ type DisassociateServiceActionFromProvisioningArtifactInput struct {
 	//    * zh - Chinese
 	AcceptLanguage *string `type:"string"`
 
+	// A unique identifier that you provide to ensure idempotency. If multiple requests
+	// from the same Amazon Web Services account use the same idempotency token,
+	// the same response is returned for each repeated request.
+	IdempotencyToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
 	// The product identifier. For example, prod-abcdzk7xy33qa.
 	//
 	// ProductId is a required field
@@ -14949,6 +15021,9 @@ func (s DisassociateServiceActionFromProvisioningArtifactInput) GoString() strin
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DisassociateServiceActionFromProvisioningArtifactInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DisassociateServiceActionFromProvisioningArtifactInput"}
+	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
+	}
 	if s.ProductId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ProductId"))
 	}
@@ -14977,6 +15052,12 @@ func (s *DisassociateServiceActionFromProvisioningArtifactInput) Validate() erro
 // SetAcceptLanguage sets the AcceptLanguage field's value.
 func (s *DisassociateServiceActionFromProvisioningArtifactInput) SetAcceptLanguage(v string) *DisassociateServiceActionFromProvisioningArtifactInput {
 	s.AcceptLanguage = &v
+	return s
+}
+
+// SetIdempotencyToken sets the IdempotencyToken field's value.
+func (s *DisassociateServiceActionFromProvisioningArtifactInput) SetIdempotencyToken(v string) *DisassociateServiceActionFromProvisioningArtifactInput {
+	s.IdempotencyToken = &v
 	return s
 }
 
@@ -16112,15 +16193,15 @@ func (s *InvalidStateException) RequestID() string {
 // Provides details about the product's connection sync and contains the following
 // sub-fields.
 //
-//    * LastSyncTime
+//   - LastSyncTime
 //
-//    * LastSyncStatus
+//   - LastSyncStatus
 //
-//    * LastSyncStatusMessage
+//   - LastSyncStatusMessage
 //
-//    * LastSuccessfulSyncTime
+//   - LastSuccessfulSyncTime
 //
-//    * LastSuccessfulSyncProvisioningArtifactID
+//   - LastSuccessfulSyncProvisioningArtifactID
 type LastSync struct {
 	_ struct{} `type:"structure"`
 
@@ -19412,11 +19493,16 @@ type Principal struct {
 	_ struct{} `type:"structure"`
 
 	// The ARN of the principal (user, role, or group). This field allows for an
-	// ARN with no accountID if the PrincipalType is an IAM_PATTERN.
+	// ARN with no accountID, with or without wildcard characters if the PrincipalType
+	// is an IAM_PATTERN.
+	//
+	// For more information, review associate-principal-with-portfolio (https://docs.aws.amazon.com/cli/latest/reference/servicecatalog/associate-principal-with-portfolio.html#options)
+	// in the Amazon Web Services CLI Command Reference.
 	PrincipalARN *string `min:"1" type:"string"`
 
 	// The principal type. The supported value is IAM if you use a fully defined
-	// ARN, or IAM_PATTERN if you use an ARN with no accountID.
+	// ARN, or IAM_PATTERN if you use an ARN with no accountID, with or without
+	// wildcard characters.
 	PrincipalType *string `type:"string" enum:"PrincipalType"`
 }
 
@@ -19963,7 +20049,7 @@ type ProvisionedProductAttribute struct {
 	// The record identifier of the last request performed on this provisioned product
 	// of the following types:
 	//
-	//    * ProvisionedProduct
+	//    * ProvisionProduct
 	//
 	//    * UpdateProvisionedProduct
 	//
@@ -19978,7 +20064,7 @@ type ProvisionedProductAttribute struct {
 	// The record identifier of the last successful request performed on this provisioned
 	// product of the following types:
 	//
-	//    * ProvisionedProduct
+	//    * ProvisionProduct
 	//
 	//    * UpdateProvisionedProduct
 	//
@@ -20035,7 +20121,8 @@ type ProvisionedProductAttribute struct {
 	// One or more tags.
 	Tags []*Tag `type:"list"`
 
-	// The type of provisioned product. The supported values are CFN_STACK and CFN_STACKSET.
+	// The type of provisioned product. The supported values are CFN_STACK, CFN_STACKSET,
+	// TERRAFORM_OPEN_SOURCE, TERRAFORM_CLOUD, and EXTERNAL.
 	Type *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the user.
@@ -20198,7 +20285,7 @@ type ProvisionedProductDetail struct {
 	// The record identifier of the last request performed on this provisioned product
 	// of the following types:
 	//
-	//    * ProvisionedProduct
+	//    * ProvisionProduct
 	//
 	//    * UpdateProvisionedProduct
 	//
@@ -20213,7 +20300,7 @@ type ProvisionedProductDetail struct {
 	// The record identifier of the last successful request performed on this provisioned
 	// product of the following types:
 	//
-	//    * ProvisionedProduct
+	//    * ProvisionProduct
 	//
 	//    * UpdateProvisionedProduct
 	//
@@ -20260,7 +20347,8 @@ type ProvisionedProductDetail struct {
 	// The current status message of the provisioned product.
 	StatusMessage *string `type:"string"`
 
-	// The type of provisioned product. The supported values are CFN_STACK and CFN_STACKSET.
+	// The type of provisioned product. The supported values are CFN_STACK, CFN_STACKSET,
+	// TERRAFORM_OPEN_SOURCE, TERRAFORM_CLOUD, and EXTERNAL.
 	Type *string `type:"string"`
 }
 
@@ -20713,10 +20801,11 @@ type ProvisioningArtifactDetail struct {
 	//
 	//    * CLOUD_FORMATION_TEMPLATE - CloudFormation template
 	//
-	//    * MARKETPLACE_AMI - Amazon Web Services Marketplace AMI
+	//    * TERRAFORM_OPEN_SOURCE - Terraform Open Source configuration file
 	//
-	//    * MARKETPLACE_CAR - Amazon Web Services Marketplace Clusters and Amazon
-	//    Web Services Resources
+	//    * TERRAFORM_CLOUD - Terraform Cloud configuration file
+	//
+	//    * EXTERNAL - External configuration file
 	Type *string `type:"string" enum:"ProvisioningArtifactType"`
 }
 
@@ -20971,6 +21060,9 @@ type ProvisioningArtifactProperties struct {
 
 	// If set to true, Service Catalog stops validating the specified provisioning
 	// artifact even if it is invalid.
+	//
+	// Service Catalog does not support template validation for the TERRAFORM_OS
+	// product type.
 	DisableTemplateValidation *bool `type:"boolean"`
 
 	// Specify the template source with one of the following options, but not both.
@@ -20994,12 +21086,11 @@ type ProvisioningArtifactProperties struct {
 	//
 	//    * CLOUD_FORMATION_TEMPLATE - CloudFormation template
 	//
-	//    * MARKETPLACE_AMI - Amazon Web Services Marketplace AMI
+	//    * TERRAFORM_OPEN_SOURCE - Terraform Open Source configuration file
 	//
-	//    * MARKETPLACE_CAR - Amazon Web Services Marketplace Clusters and Amazon
-	//    Web Services Resources
+	//    * TERRAFORM_CLOUD - Terraform Cloud configuration file
 	//
-	//    * TERRAFORM_OPEN_SOURCE - Terraform open source configuration file
+	//    * EXTERNAL - External configuration file
 	Type *string `type:"string" enum:"ProvisioningArtifactType"`
 }
 
@@ -21426,7 +21517,8 @@ type RecordDetail struct {
 	// The user-friendly name of the provisioned product.
 	ProvisionedProductName *string `min:"1" type:"string"`
 
-	// The type of provisioned product. The supported values are CFN_STACK and CFN_STACKSET.
+	// The type of provisioned product. The supported values are CFN_STACK, CFN_STACKSET,
+	// TERRAFORM_OPEN_SOURCE, TERRAFORM_CLOUD, and EXTERNAL.
 	ProvisionedProductType *string `type:"string"`
 
 	// The identifier of the provisioning artifact.
@@ -22604,7 +22696,7 @@ type SearchProvisionedProductsInput struct {
 	// The search filters.
 	//
 	// When the key is SearchQuery, the searchable fields are arn, createdTime,
-	// id, lastRecordId, idempotencyToken, name, physicalId, productId, provisioningArtifact,
+	// id, lastRecordId, idempotencyToken, name, physicalId, productId, provisioningArtifactId,
 	// type, status, tags, userArn, userArnSession, lastProvisioningRecordId, lastSuccessfulProvisioningRecordId,
 	// productName, and provisioningArtifactName.
 	//
@@ -25757,6 +25849,12 @@ const (
 
 	// ProductTypeTerraformOpenSource is a ProductType enum value
 	ProductTypeTerraformOpenSource = "TERRAFORM_OPEN_SOURCE"
+
+	// ProductTypeTerraformCloud is a ProductType enum value
+	ProductTypeTerraformCloud = "TERRAFORM_CLOUD"
+
+	// ProductTypeExternal is a ProductType enum value
+	ProductTypeExternal = "EXTERNAL"
 )
 
 // ProductType_Values returns all elements of the ProductType enum
@@ -25765,6 +25863,8 @@ func ProductType_Values() []string {
 		ProductTypeCloudFormationTemplate,
 		ProductTypeMarketplace,
 		ProductTypeTerraformOpenSource,
+		ProductTypeTerraformCloud,
+		ProductTypeExternal,
 	}
 }
 
@@ -25952,6 +26052,12 @@ const (
 
 	// ProvisioningArtifactTypeTerraformOpenSource is a ProvisioningArtifactType enum value
 	ProvisioningArtifactTypeTerraformOpenSource = "TERRAFORM_OPEN_SOURCE"
+
+	// ProvisioningArtifactTypeTerraformCloud is a ProvisioningArtifactType enum value
+	ProvisioningArtifactTypeTerraformCloud = "TERRAFORM_CLOUD"
+
+	// ProvisioningArtifactTypeExternal is a ProvisioningArtifactType enum value
+	ProvisioningArtifactTypeExternal = "EXTERNAL"
 )
 
 // ProvisioningArtifactType_Values returns all elements of the ProvisioningArtifactType enum
@@ -25961,6 +26067,8 @@ func ProvisioningArtifactType_Values() []string {
 		ProvisioningArtifactTypeMarketplaceAmi,
 		ProvisioningArtifactTypeMarketplaceCar,
 		ProvisioningArtifactTypeTerraformOpenSource,
+		ProvisioningArtifactTypeTerraformCloud,
+		ProvisioningArtifactTypeExternal,
 	}
 }
 

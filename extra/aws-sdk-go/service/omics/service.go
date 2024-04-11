@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a Omics client from just a session.
-//     svc := omics.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a Omics client with additional configuration
-//     svc := omics.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a Omics client from just a session.
+//	svc := omics.New(mySession)
+//
+//	// Create a Omics client with additional configuration
+//	svc := omics.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *Omics {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

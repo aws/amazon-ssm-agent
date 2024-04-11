@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a ARCZonalShift client from just a session.
-//     svc := arczonalshift.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a ARCZonalShift client with additional configuration
-//     svc := arczonalshift.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a ARCZonalShift client from just a session.
+//	svc := arczonalshift.New(mySession)
+//
+//	// Create a ARCZonalShift client with additional configuration
+//	svc := arczonalshift.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *ARCZonalShift {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

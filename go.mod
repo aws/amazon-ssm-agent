@@ -9,7 +9,7 @@ replace github.com/nightlyone/lockfile => ./extra/lockfile
 require (
 	github.com/Jeffail/gabs v1.0.0
 	github.com/Workiva/go-datastructures v1.0.53
-	github.com/aws/aws-sdk-go v1.44.261
+	github.com/aws/aws-sdk-go v1.51.20
 	github.com/carlescere/scheduler v0.0.0-20150615230211-9b78eac89dfb
 	github.com/cenkalti/backoff/v4 v4.0.2
 	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575

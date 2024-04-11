@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon SageMaker Service.
-//    func myFunc(svc sagemakeriface.SageMakerAPI) bool {
-//        // Make svc.AddAssociation request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon SageMaker Service.
+//	func myFunc(svc sagemakeriface.SageMakerAPI) bool {
+//	    // Make svc.AddAssociation request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := sagemaker.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := sagemaker.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockSageMakerClient struct {
-//        sagemakeriface.SageMakerAPI
-//    }
-//    func (m *mockSageMakerClient) AddAssociation(input *sagemaker.AddAssociationInput) (*sagemaker.AddAssociationOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockSageMakerClient struct {
+//	    sagemakeriface.SageMakerAPI
+//	}
+//	func (m *mockSageMakerClient) AddAssociation(input *sagemaker.AddAssociationInput) (*sagemaker.AddAssociationOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockSageMakerClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockSageMakerClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -103,6 +103,10 @@ type SageMakerAPI interface {
 	CreateAutoMLJobV2(*sagemaker.CreateAutoMLJobV2Input) (*sagemaker.CreateAutoMLJobV2Output, error)
 	CreateAutoMLJobV2WithContext(aws.Context, *sagemaker.CreateAutoMLJobV2Input, ...request.Option) (*sagemaker.CreateAutoMLJobV2Output, error)
 	CreateAutoMLJobV2Request(*sagemaker.CreateAutoMLJobV2Input) (*request.Request, *sagemaker.CreateAutoMLJobV2Output)
+
+	CreateCluster(*sagemaker.CreateClusterInput) (*sagemaker.CreateClusterOutput, error)
+	CreateClusterWithContext(aws.Context, *sagemaker.CreateClusterInput, ...request.Option) (*sagemaker.CreateClusterOutput, error)
+	CreateClusterRequest(*sagemaker.CreateClusterInput) (*request.Request, *sagemaker.CreateClusterOutput)
 
 	CreateCodeRepository(*sagemaker.CreateCodeRepositoryInput) (*sagemaker.CreateCodeRepositoryOutput, error)
 	CreateCodeRepositoryWithContext(aws.Context, *sagemaker.CreateCodeRepositoryInput, ...request.Option) (*sagemaker.CreateCodeRepositoryOutput, error)
@@ -179,6 +183,10 @@ type SageMakerAPI interface {
 	CreateImageVersion(*sagemaker.CreateImageVersionInput) (*sagemaker.CreateImageVersionOutput, error)
 	CreateImageVersionWithContext(aws.Context, *sagemaker.CreateImageVersionInput, ...request.Option) (*sagemaker.CreateImageVersionOutput, error)
 	CreateImageVersionRequest(*sagemaker.CreateImageVersionInput) (*request.Request, *sagemaker.CreateImageVersionOutput)
+
+	CreateInferenceComponent(*sagemaker.CreateInferenceComponentInput) (*sagemaker.CreateInferenceComponentOutput, error)
+	CreateInferenceComponentWithContext(aws.Context, *sagemaker.CreateInferenceComponentInput, ...request.Option) (*sagemaker.CreateInferenceComponentOutput, error)
+	CreateInferenceComponentRequest(*sagemaker.CreateInferenceComponentInput) (*request.Request, *sagemaker.CreateInferenceComponentOutput)
 
 	CreateInferenceExperiment(*sagemaker.CreateInferenceExperimentInput) (*sagemaker.CreateInferenceExperimentOutput, error)
 	CreateInferenceExperimentWithContext(aws.Context, *sagemaker.CreateInferenceExperimentInput, ...request.Option) (*sagemaker.CreateInferenceExperimentOutput, error)
@@ -316,9 +324,17 @@ type SageMakerAPI interface {
 	DeleteAssociationWithContext(aws.Context, *sagemaker.DeleteAssociationInput, ...request.Option) (*sagemaker.DeleteAssociationOutput, error)
 	DeleteAssociationRequest(*sagemaker.DeleteAssociationInput) (*request.Request, *sagemaker.DeleteAssociationOutput)
 
+	DeleteCluster(*sagemaker.DeleteClusterInput) (*sagemaker.DeleteClusterOutput, error)
+	DeleteClusterWithContext(aws.Context, *sagemaker.DeleteClusterInput, ...request.Option) (*sagemaker.DeleteClusterOutput, error)
+	DeleteClusterRequest(*sagemaker.DeleteClusterInput) (*request.Request, *sagemaker.DeleteClusterOutput)
+
 	DeleteCodeRepository(*sagemaker.DeleteCodeRepositoryInput) (*sagemaker.DeleteCodeRepositoryOutput, error)
 	DeleteCodeRepositoryWithContext(aws.Context, *sagemaker.DeleteCodeRepositoryInput, ...request.Option) (*sagemaker.DeleteCodeRepositoryOutput, error)
 	DeleteCodeRepositoryRequest(*sagemaker.DeleteCodeRepositoryInput) (*request.Request, *sagemaker.DeleteCodeRepositoryOutput)
+
+	DeleteCompilationJob(*sagemaker.DeleteCompilationJobInput) (*sagemaker.DeleteCompilationJobOutput, error)
+	DeleteCompilationJobWithContext(aws.Context, *sagemaker.DeleteCompilationJobInput, ...request.Option) (*sagemaker.DeleteCompilationJobOutput, error)
+	DeleteCompilationJobRequest(*sagemaker.DeleteCompilationJobInput) (*request.Request, *sagemaker.DeleteCompilationJobOutput)
 
 	DeleteContext(*sagemaker.DeleteContextInput) (*sagemaker.DeleteContextOutput, error)
 	DeleteContextWithContext(aws.Context, *sagemaker.DeleteContextInput, ...request.Option) (*sagemaker.DeleteContextOutput, error)
@@ -376,6 +392,10 @@ type SageMakerAPI interface {
 	DeleteHumanTaskUiWithContext(aws.Context, *sagemaker.DeleteHumanTaskUiInput, ...request.Option) (*sagemaker.DeleteHumanTaskUiOutput, error)
 	DeleteHumanTaskUiRequest(*sagemaker.DeleteHumanTaskUiInput) (*request.Request, *sagemaker.DeleteHumanTaskUiOutput)
 
+	DeleteHyperParameterTuningJob(*sagemaker.DeleteHyperParameterTuningJobInput) (*sagemaker.DeleteHyperParameterTuningJobOutput, error)
+	DeleteHyperParameterTuningJobWithContext(aws.Context, *sagemaker.DeleteHyperParameterTuningJobInput, ...request.Option) (*sagemaker.DeleteHyperParameterTuningJobOutput, error)
+	DeleteHyperParameterTuningJobRequest(*sagemaker.DeleteHyperParameterTuningJobInput) (*request.Request, *sagemaker.DeleteHyperParameterTuningJobOutput)
+
 	DeleteImage(*sagemaker.DeleteImageInput) (*sagemaker.DeleteImageOutput, error)
 	DeleteImageWithContext(aws.Context, *sagemaker.DeleteImageInput, ...request.Option) (*sagemaker.DeleteImageOutput, error)
 	DeleteImageRequest(*sagemaker.DeleteImageInput) (*request.Request, *sagemaker.DeleteImageOutput)
@@ -383,6 +403,10 @@ type SageMakerAPI interface {
 	DeleteImageVersion(*sagemaker.DeleteImageVersionInput) (*sagemaker.DeleteImageVersionOutput, error)
 	DeleteImageVersionWithContext(aws.Context, *sagemaker.DeleteImageVersionInput, ...request.Option) (*sagemaker.DeleteImageVersionOutput, error)
 	DeleteImageVersionRequest(*sagemaker.DeleteImageVersionInput) (*request.Request, *sagemaker.DeleteImageVersionOutput)
+
+	DeleteInferenceComponent(*sagemaker.DeleteInferenceComponentInput) (*sagemaker.DeleteInferenceComponentOutput, error)
+	DeleteInferenceComponentWithContext(aws.Context, *sagemaker.DeleteInferenceComponentInput, ...request.Option) (*sagemaker.DeleteInferenceComponentOutput, error)
+	DeleteInferenceComponentRequest(*sagemaker.DeleteInferenceComponentInput) (*request.Request, *sagemaker.DeleteInferenceComponentOutput)
 
 	DeleteInferenceExperiment(*sagemaker.DeleteInferenceExperimentInput) (*sagemaker.DeleteInferenceExperimentOutput, error)
 	DeleteInferenceExperimentWithContext(aws.Context, *sagemaker.DeleteInferenceExperimentInput, ...request.Option) (*sagemaker.DeleteInferenceExperimentOutput, error)
@@ -504,6 +528,14 @@ type SageMakerAPI interface {
 	DescribeAutoMLJobV2WithContext(aws.Context, *sagemaker.DescribeAutoMLJobV2Input, ...request.Option) (*sagemaker.DescribeAutoMLJobV2Output, error)
 	DescribeAutoMLJobV2Request(*sagemaker.DescribeAutoMLJobV2Input) (*request.Request, *sagemaker.DescribeAutoMLJobV2Output)
 
+	DescribeCluster(*sagemaker.DescribeClusterInput) (*sagemaker.DescribeClusterOutput, error)
+	DescribeClusterWithContext(aws.Context, *sagemaker.DescribeClusterInput, ...request.Option) (*sagemaker.DescribeClusterOutput, error)
+	DescribeClusterRequest(*sagemaker.DescribeClusterInput) (*request.Request, *sagemaker.DescribeClusterOutput)
+
+	DescribeClusterNode(*sagemaker.DescribeClusterNodeInput) (*sagemaker.DescribeClusterNodeOutput, error)
+	DescribeClusterNodeWithContext(aws.Context, *sagemaker.DescribeClusterNodeInput, ...request.Option) (*sagemaker.DescribeClusterNodeOutput, error)
+	DescribeClusterNodeRequest(*sagemaker.DescribeClusterNodeInput) (*request.Request, *sagemaker.DescribeClusterNodeOutput)
+
 	DescribeCodeRepository(*sagemaker.DescribeCodeRepositoryInput) (*sagemaker.DescribeCodeRepositoryOutput, error)
 	DescribeCodeRepositoryWithContext(aws.Context, *sagemaker.DescribeCodeRepositoryInput, ...request.Option) (*sagemaker.DescribeCodeRepositoryOutput, error)
 	DescribeCodeRepositoryRequest(*sagemaker.DescribeCodeRepositoryInput) (*request.Request, *sagemaker.DescribeCodeRepositoryOutput)
@@ -587,6 +619,10 @@ type SageMakerAPI interface {
 	DescribeImageVersion(*sagemaker.DescribeImageVersionInput) (*sagemaker.DescribeImageVersionOutput, error)
 	DescribeImageVersionWithContext(aws.Context, *sagemaker.DescribeImageVersionInput, ...request.Option) (*sagemaker.DescribeImageVersionOutput, error)
 	DescribeImageVersionRequest(*sagemaker.DescribeImageVersionInput) (*request.Request, *sagemaker.DescribeImageVersionOutput)
+
+	DescribeInferenceComponent(*sagemaker.DescribeInferenceComponentInput) (*sagemaker.DescribeInferenceComponentOutput, error)
+	DescribeInferenceComponentWithContext(aws.Context, *sagemaker.DescribeInferenceComponentInput, ...request.Option) (*sagemaker.DescribeInferenceComponentOutput, error)
+	DescribeInferenceComponentRequest(*sagemaker.DescribeInferenceComponentInput) (*request.Request, *sagemaker.DescribeInferenceComponentOutput)
 
 	DescribeInferenceExperiment(*sagemaker.DescribeInferenceExperimentInput) (*sagemaker.DescribeInferenceExperimentOutput, error)
 	DescribeInferenceExperimentWithContext(aws.Context, *sagemaker.DescribeInferenceExperimentInput, ...request.Option) (*sagemaker.DescribeInferenceExperimentOutput, error)
@@ -736,6 +772,10 @@ type SageMakerAPI interface {
 	GetSagemakerServicecatalogPortfolioStatusWithContext(aws.Context, *sagemaker.GetSagemakerServicecatalogPortfolioStatusInput, ...request.Option) (*sagemaker.GetSagemakerServicecatalogPortfolioStatusOutput, error)
 	GetSagemakerServicecatalogPortfolioStatusRequest(*sagemaker.GetSagemakerServicecatalogPortfolioStatusInput) (*request.Request, *sagemaker.GetSagemakerServicecatalogPortfolioStatusOutput)
 
+	GetScalingConfigurationRecommendation(*sagemaker.GetScalingConfigurationRecommendationInput) (*sagemaker.GetScalingConfigurationRecommendationOutput, error)
+	GetScalingConfigurationRecommendationWithContext(aws.Context, *sagemaker.GetScalingConfigurationRecommendationInput, ...request.Option) (*sagemaker.GetScalingConfigurationRecommendationOutput, error)
+	GetScalingConfigurationRecommendationRequest(*sagemaker.GetScalingConfigurationRecommendationInput) (*request.Request, *sagemaker.GetScalingConfigurationRecommendationOutput)
+
 	GetSearchSuggestions(*sagemaker.GetSearchSuggestionsInput) (*sagemaker.GetSearchSuggestionsOutput, error)
 	GetSearchSuggestionsWithContext(aws.Context, *sagemaker.GetSearchSuggestionsInput, ...request.Option) (*sagemaker.GetSearchSuggestionsOutput, error)
 	GetSearchSuggestionsRequest(*sagemaker.GetSearchSuggestionsInput) (*request.Request, *sagemaker.GetSearchSuggestionsOutput)
@@ -806,6 +846,20 @@ type SageMakerAPI interface {
 
 	ListCandidatesForAutoMLJobPages(*sagemaker.ListCandidatesForAutoMLJobInput, func(*sagemaker.ListCandidatesForAutoMLJobOutput, bool) bool) error
 	ListCandidatesForAutoMLJobPagesWithContext(aws.Context, *sagemaker.ListCandidatesForAutoMLJobInput, func(*sagemaker.ListCandidatesForAutoMLJobOutput, bool) bool, ...request.Option) error
+
+	ListClusterNodes(*sagemaker.ListClusterNodesInput) (*sagemaker.ListClusterNodesOutput, error)
+	ListClusterNodesWithContext(aws.Context, *sagemaker.ListClusterNodesInput, ...request.Option) (*sagemaker.ListClusterNodesOutput, error)
+	ListClusterNodesRequest(*sagemaker.ListClusterNodesInput) (*request.Request, *sagemaker.ListClusterNodesOutput)
+
+	ListClusterNodesPages(*sagemaker.ListClusterNodesInput, func(*sagemaker.ListClusterNodesOutput, bool) bool) error
+	ListClusterNodesPagesWithContext(aws.Context, *sagemaker.ListClusterNodesInput, func(*sagemaker.ListClusterNodesOutput, bool) bool, ...request.Option) error
+
+	ListClusters(*sagemaker.ListClustersInput) (*sagemaker.ListClustersOutput, error)
+	ListClustersWithContext(aws.Context, *sagemaker.ListClustersInput, ...request.Option) (*sagemaker.ListClustersOutput, error)
+	ListClustersRequest(*sagemaker.ListClustersInput) (*request.Request, *sagemaker.ListClustersOutput)
+
+	ListClustersPages(*sagemaker.ListClustersInput, func(*sagemaker.ListClustersOutput, bool) bool) error
+	ListClustersPagesWithContext(aws.Context, *sagemaker.ListClustersInput, func(*sagemaker.ListClustersOutput, bool) bool, ...request.Option) error
 
 	ListCodeRepositories(*sagemaker.ListCodeRepositoriesInput) (*sagemaker.ListCodeRepositoriesOutput, error)
 	ListCodeRepositoriesWithContext(aws.Context, *sagemaker.ListCodeRepositoriesInput, ...request.Option) (*sagemaker.ListCodeRepositoriesOutput, error)
@@ -944,6 +998,13 @@ type SageMakerAPI interface {
 
 	ListImagesPages(*sagemaker.ListImagesInput, func(*sagemaker.ListImagesOutput, bool) bool) error
 	ListImagesPagesWithContext(aws.Context, *sagemaker.ListImagesInput, func(*sagemaker.ListImagesOutput, bool) bool, ...request.Option) error
+
+	ListInferenceComponents(*sagemaker.ListInferenceComponentsInput) (*sagemaker.ListInferenceComponentsOutput, error)
+	ListInferenceComponentsWithContext(aws.Context, *sagemaker.ListInferenceComponentsInput, ...request.Option) (*sagemaker.ListInferenceComponentsOutput, error)
+	ListInferenceComponentsRequest(*sagemaker.ListInferenceComponentsInput) (*request.Request, *sagemaker.ListInferenceComponentsOutput)
+
+	ListInferenceComponentsPages(*sagemaker.ListInferenceComponentsInput, func(*sagemaker.ListInferenceComponentsOutput, bool) bool) error
+	ListInferenceComponentsPagesWithContext(aws.Context, *sagemaker.ListInferenceComponentsInput, func(*sagemaker.ListInferenceComponentsOutput, bool) bool, ...request.Option) error
 
 	ListInferenceExperiments(*sagemaker.ListInferenceExperimentsInput) (*sagemaker.ListInferenceExperimentsOutput, error)
 	ListInferenceExperimentsWithContext(aws.Context, *sagemaker.ListInferenceExperimentsInput, ...request.Option) (*sagemaker.ListInferenceExperimentsOutput, error)
@@ -1140,6 +1201,13 @@ type SageMakerAPI interface {
 
 	ListProjectsPages(*sagemaker.ListProjectsInput, func(*sagemaker.ListProjectsOutput, bool) bool) error
 	ListProjectsPagesWithContext(aws.Context, *sagemaker.ListProjectsInput, func(*sagemaker.ListProjectsOutput, bool) bool, ...request.Option) error
+
+	ListResourceCatalogs(*sagemaker.ListResourceCatalogsInput) (*sagemaker.ListResourceCatalogsOutput, error)
+	ListResourceCatalogsWithContext(aws.Context, *sagemaker.ListResourceCatalogsInput, ...request.Option) (*sagemaker.ListResourceCatalogsOutput, error)
+	ListResourceCatalogsRequest(*sagemaker.ListResourceCatalogsInput) (*request.Request, *sagemaker.ListResourceCatalogsOutput)
+
+	ListResourceCatalogsPages(*sagemaker.ListResourceCatalogsInput, func(*sagemaker.ListResourceCatalogsOutput, bool) bool) error
+	ListResourceCatalogsPagesWithContext(aws.Context, *sagemaker.ListResourceCatalogsInput, func(*sagemaker.ListResourceCatalogsOutput, bool) bool, ...request.Option) error
 
 	ListSpaces(*sagemaker.ListSpacesInput) (*sagemaker.ListSpacesOutput, error)
 	ListSpacesWithContext(aws.Context, *sagemaker.ListSpacesInput, ...request.Option) (*sagemaker.ListSpacesOutput, error)
@@ -1358,6 +1426,14 @@ type SageMakerAPI interface {
 	UpdateArtifactWithContext(aws.Context, *sagemaker.UpdateArtifactInput, ...request.Option) (*sagemaker.UpdateArtifactOutput, error)
 	UpdateArtifactRequest(*sagemaker.UpdateArtifactInput) (*request.Request, *sagemaker.UpdateArtifactOutput)
 
+	UpdateCluster(*sagemaker.UpdateClusterInput) (*sagemaker.UpdateClusterOutput, error)
+	UpdateClusterWithContext(aws.Context, *sagemaker.UpdateClusterInput, ...request.Option) (*sagemaker.UpdateClusterOutput, error)
+	UpdateClusterRequest(*sagemaker.UpdateClusterInput) (*request.Request, *sagemaker.UpdateClusterOutput)
+
+	UpdateClusterSoftware(*sagemaker.UpdateClusterSoftwareInput) (*sagemaker.UpdateClusterSoftwareOutput, error)
+	UpdateClusterSoftwareWithContext(aws.Context, *sagemaker.UpdateClusterSoftwareInput, ...request.Option) (*sagemaker.UpdateClusterSoftwareOutput, error)
+	UpdateClusterSoftwareRequest(*sagemaker.UpdateClusterSoftwareInput) (*request.Request, *sagemaker.UpdateClusterSoftwareOutput)
+
 	UpdateCodeRepository(*sagemaker.UpdateCodeRepositoryInput) (*sagemaker.UpdateCodeRepositoryOutput, error)
 	UpdateCodeRepositoryWithContext(aws.Context, *sagemaker.UpdateCodeRepositoryInput, ...request.Option) (*sagemaker.UpdateCodeRepositoryOutput, error)
 	UpdateCodeRepositoryRequest(*sagemaker.UpdateCodeRepositoryInput) (*request.Request, *sagemaker.UpdateCodeRepositoryOutput)
@@ -1409,6 +1485,14 @@ type SageMakerAPI interface {
 	UpdateImageVersion(*sagemaker.UpdateImageVersionInput) (*sagemaker.UpdateImageVersionOutput, error)
 	UpdateImageVersionWithContext(aws.Context, *sagemaker.UpdateImageVersionInput, ...request.Option) (*sagemaker.UpdateImageVersionOutput, error)
 	UpdateImageVersionRequest(*sagemaker.UpdateImageVersionInput) (*request.Request, *sagemaker.UpdateImageVersionOutput)
+
+	UpdateInferenceComponent(*sagemaker.UpdateInferenceComponentInput) (*sagemaker.UpdateInferenceComponentOutput, error)
+	UpdateInferenceComponentWithContext(aws.Context, *sagemaker.UpdateInferenceComponentInput, ...request.Option) (*sagemaker.UpdateInferenceComponentOutput, error)
+	UpdateInferenceComponentRequest(*sagemaker.UpdateInferenceComponentInput) (*request.Request, *sagemaker.UpdateInferenceComponentOutput)
+
+	UpdateInferenceComponentRuntimeConfig(*sagemaker.UpdateInferenceComponentRuntimeConfigInput) (*sagemaker.UpdateInferenceComponentRuntimeConfigOutput, error)
+	UpdateInferenceComponentRuntimeConfigWithContext(aws.Context, *sagemaker.UpdateInferenceComponentRuntimeConfigInput, ...request.Option) (*sagemaker.UpdateInferenceComponentRuntimeConfigOutput, error)
+	UpdateInferenceComponentRuntimeConfigRequest(*sagemaker.UpdateInferenceComponentRuntimeConfigInput) (*request.Request, *sagemaker.UpdateInferenceComponentRuntimeConfigOutput)
 
 	UpdateInferenceExperiment(*sagemaker.UpdateInferenceExperimentInput) (*sagemaker.UpdateInferenceExperimentOutput, error)
 	UpdateInferenceExperimentWithContext(aws.Context, *sagemaker.UpdateInferenceExperimentInput, ...request.Option) (*sagemaker.UpdateInferenceExperimentOutput, error)

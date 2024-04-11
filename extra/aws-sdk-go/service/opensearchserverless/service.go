@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a OpenSearchServerless client from just a session.
-//     svc := opensearchserverless.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a OpenSearchServerless client with additional configuration
-//     svc := opensearchserverless.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a OpenSearchServerless client from just a session.
+//	svc := opensearchserverless.New(mySession)
+//
+//	// Create a OpenSearchServerless client with additional configuration
+//	svc := opensearchserverless.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *OpenSearchServerless {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

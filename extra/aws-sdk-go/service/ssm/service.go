@@ -13,7 +13,7 @@ import (
 )
 
 // SSM provides the API operation methods for making requests to
-// Amazon Simple Systems Manager (SSM). See this package's package overview docs
+// Amazon Simple Systems Management Service. See this package's package overview docs
 // for details on the service.
 //
 // SSM methods are safe to use concurrently. It is not safe to
@@ -32,7 +32,7 @@ var initRequest func(*request.Request)
 const (
 	ServiceName = "ssm"       // Name of service.
 	EndpointsID = ServiceName // ID to lookup a service endpoint with.
-	ServiceID   = "SSM"       // ServiceID is a unique identifier of a specific service.
+	ServiceID   = "ssm"       // ServiceID is a unique identifier of a specific service.
 )
 
 // New creates a new instance of the SSM client with a session.
@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a SSM client from just a session.
-//     svc := ssm.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a SSM client with additional configuration
-//     svc := ssm.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a SSM client from just a session.
+//	svc := ssm.New(mySession)
+//
+//	// Create a SSM client with additional configuration
+//	svc := ssm.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *SSM {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

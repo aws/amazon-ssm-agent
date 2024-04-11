@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Managed Streaming for Kafka.
-//    func myFunc(svc kafkaiface.KafkaAPI) bool {
-//        // Make svc.BatchAssociateScramSecret request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Managed Streaming for Kafka.
+//	func myFunc(svc kafkaiface.KafkaAPI) bool {
+//	    // Make svc.BatchAssociateScramSecret request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := kafka.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := kafka.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockKafkaClient struct {
-//        kafkaiface.KafkaAPI
-//    }
-//    func (m *mockKafkaClient) BatchAssociateScramSecret(input *kafka.BatchAssociateScramSecretInput) (*kafka.BatchAssociateScramSecretOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockKafkaClient struct {
+//	    kafkaiface.KafkaAPI
+//	}
+//	func (m *mockKafkaClient) BatchAssociateScramSecret(input *kafka.BatchAssociateScramSecretInput) (*kafka.BatchAssociateScramSecretOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockKafkaClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockKafkaClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -80,6 +80,10 @@ type KafkaAPI interface {
 	CreateConfigurationWithContext(aws.Context, *kafka.CreateConfigurationInput, ...request.Option) (*kafka.CreateConfigurationOutput, error)
 	CreateConfigurationRequest(*kafka.CreateConfigurationInput) (*request.Request, *kafka.CreateConfigurationOutput)
 
+	CreateReplicator(*kafka.CreateReplicatorInput) (*kafka.CreateReplicatorOutput, error)
+	CreateReplicatorWithContext(aws.Context, *kafka.CreateReplicatorInput, ...request.Option) (*kafka.CreateReplicatorOutput, error)
+	CreateReplicatorRequest(*kafka.CreateReplicatorInput) (*request.Request, *kafka.CreateReplicatorOutput)
+
 	CreateVpcConnection(*kafka.CreateVpcConnectionInput) (*kafka.CreateVpcConnectionOutput, error)
 	CreateVpcConnectionWithContext(aws.Context, *kafka.CreateVpcConnectionInput, ...request.Option) (*kafka.CreateVpcConnectionOutput, error)
 	CreateVpcConnectionRequest(*kafka.CreateVpcConnectionInput) (*request.Request, *kafka.CreateVpcConnectionOutput)
@@ -96,6 +100,10 @@ type KafkaAPI interface {
 	DeleteConfigurationWithContext(aws.Context, *kafka.DeleteConfigurationInput, ...request.Option) (*kafka.DeleteConfigurationOutput, error)
 	DeleteConfigurationRequest(*kafka.DeleteConfigurationInput) (*request.Request, *kafka.DeleteConfigurationOutput)
 
+	DeleteReplicator(*kafka.DeleteReplicatorInput) (*kafka.DeleteReplicatorOutput, error)
+	DeleteReplicatorWithContext(aws.Context, *kafka.DeleteReplicatorInput, ...request.Option) (*kafka.DeleteReplicatorOutput, error)
+	DeleteReplicatorRequest(*kafka.DeleteReplicatorInput) (*request.Request, *kafka.DeleteReplicatorOutput)
+
 	DeleteVpcConnection(*kafka.DeleteVpcConnectionInput) (*kafka.DeleteVpcConnectionOutput, error)
 	DeleteVpcConnectionWithContext(aws.Context, *kafka.DeleteVpcConnectionInput, ...request.Option) (*kafka.DeleteVpcConnectionOutput, error)
 	DeleteVpcConnectionRequest(*kafka.DeleteVpcConnectionInput) (*request.Request, *kafka.DeleteVpcConnectionOutput)
@@ -108,6 +116,10 @@ type KafkaAPI interface {
 	DescribeClusterOperationWithContext(aws.Context, *kafka.DescribeClusterOperationInput, ...request.Option) (*kafka.DescribeClusterOperationOutput, error)
 	DescribeClusterOperationRequest(*kafka.DescribeClusterOperationInput) (*request.Request, *kafka.DescribeClusterOperationOutput)
 
+	DescribeClusterOperationV2(*kafka.DescribeClusterOperationV2Input) (*kafka.DescribeClusterOperationV2Output, error)
+	DescribeClusterOperationV2WithContext(aws.Context, *kafka.DescribeClusterOperationV2Input, ...request.Option) (*kafka.DescribeClusterOperationV2Output, error)
+	DescribeClusterOperationV2Request(*kafka.DescribeClusterOperationV2Input) (*request.Request, *kafka.DescribeClusterOperationV2Output)
+
 	DescribeClusterV2(*kafka.DescribeClusterV2Input) (*kafka.DescribeClusterV2Output, error)
 	DescribeClusterV2WithContext(aws.Context, *kafka.DescribeClusterV2Input, ...request.Option) (*kafka.DescribeClusterV2Output, error)
 	DescribeClusterV2Request(*kafka.DescribeClusterV2Input) (*request.Request, *kafka.DescribeClusterV2Output)
@@ -119,6 +131,10 @@ type KafkaAPI interface {
 	DescribeConfigurationRevision(*kafka.DescribeConfigurationRevisionInput) (*kafka.DescribeConfigurationRevisionOutput, error)
 	DescribeConfigurationRevisionWithContext(aws.Context, *kafka.DescribeConfigurationRevisionInput, ...request.Option) (*kafka.DescribeConfigurationRevisionOutput, error)
 	DescribeConfigurationRevisionRequest(*kafka.DescribeConfigurationRevisionInput) (*request.Request, *kafka.DescribeConfigurationRevisionOutput)
+
+	DescribeReplicator(*kafka.DescribeReplicatorInput) (*kafka.DescribeReplicatorOutput, error)
+	DescribeReplicatorWithContext(aws.Context, *kafka.DescribeReplicatorInput, ...request.Option) (*kafka.DescribeReplicatorOutput, error)
+	DescribeReplicatorRequest(*kafka.DescribeReplicatorInput) (*request.Request, *kafka.DescribeReplicatorOutput)
 
 	DescribeVpcConnection(*kafka.DescribeVpcConnectionInput) (*kafka.DescribeVpcConnectionOutput, error)
 	DescribeVpcConnectionWithContext(aws.Context, *kafka.DescribeVpcConnectionInput, ...request.Option) (*kafka.DescribeVpcConnectionOutput, error)
@@ -149,6 +165,13 @@ type KafkaAPI interface {
 
 	ListClusterOperationsPages(*kafka.ListClusterOperationsInput, func(*kafka.ListClusterOperationsOutput, bool) bool) error
 	ListClusterOperationsPagesWithContext(aws.Context, *kafka.ListClusterOperationsInput, func(*kafka.ListClusterOperationsOutput, bool) bool, ...request.Option) error
+
+	ListClusterOperationsV2(*kafka.ListClusterOperationsV2Input) (*kafka.ListClusterOperationsV2Output, error)
+	ListClusterOperationsV2WithContext(aws.Context, *kafka.ListClusterOperationsV2Input, ...request.Option) (*kafka.ListClusterOperationsV2Output, error)
+	ListClusterOperationsV2Request(*kafka.ListClusterOperationsV2Input) (*request.Request, *kafka.ListClusterOperationsV2Output)
+
+	ListClusterOperationsV2Pages(*kafka.ListClusterOperationsV2Input, func(*kafka.ListClusterOperationsV2Output, bool) bool) error
+	ListClusterOperationsV2PagesWithContext(aws.Context, *kafka.ListClusterOperationsV2Input, func(*kafka.ListClusterOperationsV2Output, bool) bool, ...request.Option) error
 
 	ListClusters(*kafka.ListClustersInput) (*kafka.ListClustersOutput, error)
 	ListClustersWithContext(aws.Context, *kafka.ListClustersInput, ...request.Option) (*kafka.ListClustersOutput, error)
@@ -191,6 +214,13 @@ type KafkaAPI interface {
 
 	ListNodesPages(*kafka.ListNodesInput, func(*kafka.ListNodesOutput, bool) bool) error
 	ListNodesPagesWithContext(aws.Context, *kafka.ListNodesInput, func(*kafka.ListNodesOutput, bool) bool, ...request.Option) error
+
+	ListReplicators(*kafka.ListReplicatorsInput) (*kafka.ListReplicatorsOutput, error)
+	ListReplicatorsWithContext(aws.Context, *kafka.ListReplicatorsInput, ...request.Option) (*kafka.ListReplicatorsOutput, error)
+	ListReplicatorsRequest(*kafka.ListReplicatorsInput) (*request.Request, *kafka.ListReplicatorsOutput)
+
+	ListReplicatorsPages(*kafka.ListReplicatorsInput, func(*kafka.ListReplicatorsOutput, bool) bool) error
+	ListReplicatorsPagesWithContext(aws.Context, *kafka.ListReplicatorsInput, func(*kafka.ListReplicatorsOutput, bool) bool, ...request.Option) error
 
 	ListScramSecrets(*kafka.ListScramSecretsInput) (*kafka.ListScramSecretsOutput, error)
 	ListScramSecretsWithContext(aws.Context, *kafka.ListScramSecretsInput, ...request.Option) (*kafka.ListScramSecretsOutput, error)
@@ -261,6 +291,10 @@ type KafkaAPI interface {
 	UpdateMonitoring(*kafka.UpdateMonitoringInput) (*kafka.UpdateMonitoringOutput, error)
 	UpdateMonitoringWithContext(aws.Context, *kafka.UpdateMonitoringInput, ...request.Option) (*kafka.UpdateMonitoringOutput, error)
 	UpdateMonitoringRequest(*kafka.UpdateMonitoringInput) (*request.Request, *kafka.UpdateMonitoringOutput)
+
+	UpdateReplicationInfo(*kafka.UpdateReplicationInfoInput) (*kafka.UpdateReplicationInfoOutput, error)
+	UpdateReplicationInfoWithContext(aws.Context, *kafka.UpdateReplicationInfoInput, ...request.Option) (*kafka.UpdateReplicationInfoOutput, error)
+	UpdateReplicationInfoRequest(*kafka.UpdateReplicationInfoInput) (*request.Request, *kafka.UpdateReplicationInfoOutput)
 
 	UpdateSecurity(*kafka.UpdateSecurityInput) (*kafka.UpdateSecurityOutput, error)
 	UpdateSecurityWithContext(aws.Context, *kafka.UpdateSecurityInput, ...request.Option) (*kafka.UpdateSecurityOutput, error)

@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon Kinesis Video Streams.
-//    func myFunc(svc kinesisvideoiface.KinesisVideoAPI) bool {
-//        // Make svc.CreateSignalingChannel request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon Kinesis Video Streams.
+//	func myFunc(svc kinesisvideoiface.KinesisVideoAPI) bool {
+//	    // Make svc.CreateSignalingChannel request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := kinesisvideo.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := kinesisvideo.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockKinesisVideoClient struct {
-//        kinesisvideoiface.KinesisVideoAPI
-//    }
-//    func (m *mockKinesisVideoClient) CreateSignalingChannel(input *kinesisvideo.CreateSignalingChannelInput) (*kinesisvideo.CreateSignalingChannelOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockKinesisVideoClient struct {
+//	    kinesisvideoiface.KinesisVideoAPI
+//	}
+//	func (m *mockKinesisVideoClient) CreateSignalingChannel(input *kinesisvideo.CreateSignalingChannelInput) (*kinesisvideo.CreateSignalingChannelOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockKinesisVideoClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockKinesisVideoClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -67,6 +67,10 @@ type KinesisVideoAPI interface {
 	CreateStream(*kinesisvideo.CreateStreamInput) (*kinesisvideo.CreateStreamOutput, error)
 	CreateStreamWithContext(aws.Context, *kinesisvideo.CreateStreamInput, ...request.Option) (*kinesisvideo.CreateStreamOutput, error)
 	CreateStreamRequest(*kinesisvideo.CreateStreamInput) (*request.Request, *kinesisvideo.CreateStreamOutput)
+
+	DeleteEdgeConfiguration(*kinesisvideo.DeleteEdgeConfigurationInput) (*kinesisvideo.DeleteEdgeConfigurationOutput, error)
+	DeleteEdgeConfigurationWithContext(aws.Context, *kinesisvideo.DeleteEdgeConfigurationInput, ...request.Option) (*kinesisvideo.DeleteEdgeConfigurationOutput, error)
+	DeleteEdgeConfigurationRequest(*kinesisvideo.DeleteEdgeConfigurationInput) (*request.Request, *kinesisvideo.DeleteEdgeConfigurationOutput)
 
 	DeleteSignalingChannel(*kinesisvideo.DeleteSignalingChannelInput) (*kinesisvideo.DeleteSignalingChannelOutput, error)
 	DeleteSignalingChannelWithContext(aws.Context, *kinesisvideo.DeleteSignalingChannelInput, ...request.Option) (*kinesisvideo.DeleteSignalingChannelOutput, error)
@@ -114,6 +118,13 @@ type KinesisVideoAPI interface {
 	GetSignalingChannelEndpoint(*kinesisvideo.GetSignalingChannelEndpointInput) (*kinesisvideo.GetSignalingChannelEndpointOutput, error)
 	GetSignalingChannelEndpointWithContext(aws.Context, *kinesisvideo.GetSignalingChannelEndpointInput, ...request.Option) (*kinesisvideo.GetSignalingChannelEndpointOutput, error)
 	GetSignalingChannelEndpointRequest(*kinesisvideo.GetSignalingChannelEndpointInput) (*request.Request, *kinesisvideo.GetSignalingChannelEndpointOutput)
+
+	ListEdgeAgentConfigurations(*kinesisvideo.ListEdgeAgentConfigurationsInput) (*kinesisvideo.ListEdgeAgentConfigurationsOutput, error)
+	ListEdgeAgentConfigurationsWithContext(aws.Context, *kinesisvideo.ListEdgeAgentConfigurationsInput, ...request.Option) (*kinesisvideo.ListEdgeAgentConfigurationsOutput, error)
+	ListEdgeAgentConfigurationsRequest(*kinesisvideo.ListEdgeAgentConfigurationsInput) (*request.Request, *kinesisvideo.ListEdgeAgentConfigurationsOutput)
+
+	ListEdgeAgentConfigurationsPages(*kinesisvideo.ListEdgeAgentConfigurationsInput, func(*kinesisvideo.ListEdgeAgentConfigurationsOutput, bool) bool) error
+	ListEdgeAgentConfigurationsPagesWithContext(aws.Context, *kinesisvideo.ListEdgeAgentConfigurationsInput, func(*kinesisvideo.ListEdgeAgentConfigurationsOutput, bool) bool, ...request.Option) error
 
 	ListSignalingChannels(*kinesisvideo.ListSignalingChannelsInput) (*kinesisvideo.ListSignalingChannelsOutput, error)
 	ListSignalingChannelsWithContext(aws.Context, *kinesisvideo.ListSignalingChannelsInput, ...request.Option) (*kinesisvideo.ListSignalingChannelsOutput, error)

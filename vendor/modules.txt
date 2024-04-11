@@ -35,10 +35,11 @@ github.com/ProtonMail/go-crypto/openpgp/s2k
 ## explicit; go 1.15
 github.com/Workiva/go-datastructures/cache
 github.com/Workiva/go-datastructures/queue
-# github.com/aws/aws-sdk-go v1.44.261 => ./extra/aws-sdk-go
-## explicit; go 1.11
+# github.com/aws/aws-sdk-go v1.51.20 => ./extra/aws-sdk-go
+## explicit; go 1.19
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/arn
+github.com/aws/aws-sdk-go/aws/auth/bearer
 github.com/aws/aws-sdk-go/aws/awserr
 github.com/aws/aws-sdk-go/aws/awsutil
 github.com/aws/aws-sdk-go/aws/client
@@ -102,6 +103,7 @@ github.com/aws/aws-sdk-go/service/ssmmds/ssmmdsiface
 github.com/aws/aws-sdk-go/service/ssmmds/ssmmdsiface/mocks
 github.com/aws/aws-sdk-go/service/sso
 github.com/aws/aws-sdk-go/service/sso/ssoiface
+github.com/aws/aws-sdk-go/service/ssooidc
 github.com/aws/aws-sdk-go/service/sts
 github.com/aws/aws-sdk-go/service/sts/stsiface
 # github.com/carlescere/scheduler v0.0.0-20150615230211-9b78eac89dfb

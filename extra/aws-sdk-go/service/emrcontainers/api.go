@@ -29,14 +29,13 @@ const opCancelJobRun = "CancelJobRun"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelJobRunRequest method.
+//	req, resp := client.CancelJobRunRequest(params)
 //
-//    // Example sending a request using the CancelJobRunRequest method.
-//    req, resp := client.CancelJobRunRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/CancelJobRun
 func (c *EMRContainers) CancelJobRunRequest(input *CancelJobRunInput) (req *request.Request, output *CancelJobRunOutput) {
@@ -68,11 +67,12 @@ func (c *EMRContainers) CancelJobRunRequest(input *CancelJobRunInput) (req *requ
 // API operation CancelJobRun for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ValidationException
+//     There are invalid parameters in the client request.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/CancelJobRun
 func (c *EMRContainers) CancelJobRun(input *CancelJobRunInput) (*CancelJobRunOutput, error) {
@@ -112,14 +112,13 @@ const opCreateJobTemplate = "CreateJobTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateJobTemplateRequest method.
+//	req, resp := client.CreateJobTemplateRequest(params)
 //
-//    // Example sending a request using the CreateJobTemplateRequest method.
-//    req, resp := client.CreateJobTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/CreateJobTemplate
 func (c *EMRContainers) CreateJobTemplateRequest(input *CreateJobTemplateInput) (req *request.Request, output *CreateJobTemplateOutput) {
@@ -153,14 +152,15 @@ func (c *EMRContainers) CreateJobTemplateRequest(input *CreateJobTemplateInput) 
 // API operation CreateJobTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/CreateJobTemplate
 func (c *EMRContainers) CreateJobTemplate(input *CreateJobTemplateInput) (*CreateJobTemplateOutput, error) {
@@ -200,14 +200,13 @@ const opCreateManagedEndpoint = "CreateManagedEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateManagedEndpointRequest method.
+//	req, resp := client.CreateManagedEndpointRequest(params)
 //
-//    // Example sending a request using the CreateManagedEndpointRequest method.
-//    req, resp := client.CreateManagedEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/CreateManagedEndpoint
 func (c *EMRContainers) CreateManagedEndpointRequest(input *CreateManagedEndpointInput) (req *request.Request, output *CreateManagedEndpointOutput) {
@@ -240,14 +239,15 @@ func (c *EMRContainers) CreateManagedEndpointRequest(input *CreateManagedEndpoin
 // API operation CreateManagedEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/CreateManagedEndpoint
 func (c *EMRContainers) CreateManagedEndpoint(input *CreateManagedEndpointInput) (*CreateManagedEndpointOutput, error) {
@@ -287,14 +287,13 @@ const opCreateVirtualCluster = "CreateVirtualCluster"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateVirtualClusterRequest method.
+//	req, resp := client.CreateVirtualClusterRequest(params)
 //
-//    // Example sending a request using the CreateVirtualClusterRequest method.
-//    req, resp := client.CreateVirtualClusterRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/CreateVirtualCluster
 func (c *EMRContainers) CreateVirtualClusterRequest(input *CreateVirtualClusterInput) (req *request.Request, output *CreateVirtualClusterOutput) {
@@ -330,14 +329,18 @@ func (c *EMRContainers) CreateVirtualClusterRequest(input *CreateVirtualClusterI
 // API operation CreateVirtualCluster for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalServerException
+//     This is an internal server exception.
+//
+//   - EKSRequestThrottledException
+//     The request exceeded the Amazon EKS API operation limits.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/CreateVirtualCluster
 func (c *EMRContainers) CreateVirtualCluster(input *CreateVirtualClusterInput) (*CreateVirtualClusterOutput, error) {
@@ -377,14 +380,13 @@ const opDeleteJobTemplate = "DeleteJobTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteJobTemplateRequest method.
+//	req, resp := client.DeleteJobTemplateRequest(params)
 //
-//    // Example sending a request using the DeleteJobTemplateRequest method.
-//    req, resp := client.DeleteJobTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DeleteJobTemplate
 func (c *EMRContainers) DeleteJobTemplateRequest(input *DeleteJobTemplateInput) (req *request.Request, output *DeleteJobTemplateOutput) {
@@ -418,11 +420,12 @@ func (c *EMRContainers) DeleteJobTemplateRequest(input *DeleteJobTemplateInput) 
 // API operation DeleteJobTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ValidationException
+//     There are invalid parameters in the client request.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DeleteJobTemplate
 func (c *EMRContainers) DeleteJobTemplate(input *DeleteJobTemplateInput) (*DeleteJobTemplateOutput, error) {
@@ -462,14 +465,13 @@ const opDeleteManagedEndpoint = "DeleteManagedEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteManagedEndpointRequest method.
+//	req, resp := client.DeleteManagedEndpointRequest(params)
 //
-//    // Example sending a request using the DeleteManagedEndpointRequest method.
-//    req, resp := client.DeleteManagedEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DeleteManagedEndpoint
 func (c *EMRContainers) DeleteManagedEndpointRequest(input *DeleteManagedEndpointInput) (req *request.Request, output *DeleteManagedEndpointOutput) {
@@ -502,11 +504,12 @@ func (c *EMRContainers) DeleteManagedEndpointRequest(input *DeleteManagedEndpoin
 // API operation DeleteManagedEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ValidationException
+//     There are invalid parameters in the client request.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DeleteManagedEndpoint
 func (c *EMRContainers) DeleteManagedEndpoint(input *DeleteManagedEndpointInput) (*DeleteManagedEndpointOutput, error) {
@@ -546,14 +549,13 @@ const opDeleteVirtualCluster = "DeleteVirtualCluster"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteVirtualClusterRequest method.
+//	req, resp := client.DeleteVirtualClusterRequest(params)
 //
-//    // Example sending a request using the DeleteVirtualClusterRequest method.
-//    req, resp := client.DeleteVirtualClusterRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DeleteVirtualCluster
 func (c *EMRContainers) DeleteVirtualClusterRequest(input *DeleteVirtualClusterInput) (req *request.Request, output *DeleteVirtualClusterOutput) {
@@ -589,11 +591,12 @@ func (c *EMRContainers) DeleteVirtualClusterRequest(input *DeleteVirtualClusterI
 // API operation DeleteVirtualCluster for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ValidationException
+//     There are invalid parameters in the client request.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DeleteVirtualCluster
 func (c *EMRContainers) DeleteVirtualCluster(input *DeleteVirtualClusterInput) (*DeleteVirtualClusterOutput, error) {
@@ -633,14 +636,13 @@ const opDescribeJobRun = "DescribeJobRun"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeJobRunRequest method.
+//	req, resp := client.DescribeJobRunRequest(params)
 //
-//    // Example sending a request using the DescribeJobRunRequest method.
-//    req, resp := client.DescribeJobRunRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DescribeJobRun
 func (c *EMRContainers) DescribeJobRunRequest(input *DescribeJobRunInput) (req *request.Request, output *DescribeJobRunOutput) {
@@ -673,14 +675,15 @@ func (c *EMRContainers) DescribeJobRunRequest(input *DescribeJobRunInput) (req *
 // API operation DescribeJobRun for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DescribeJobRun
 func (c *EMRContainers) DescribeJobRun(input *DescribeJobRunInput) (*DescribeJobRunOutput, error) {
@@ -720,14 +723,13 @@ const opDescribeJobTemplate = "DescribeJobTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeJobTemplateRequest method.
+//	req, resp := client.DescribeJobTemplateRequest(params)
 //
-//    // Example sending a request using the DescribeJobTemplateRequest method.
-//    req, resp := client.DescribeJobTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DescribeJobTemplate
 func (c *EMRContainers) DescribeJobTemplateRequest(input *DescribeJobTemplateInput) (req *request.Request, output *DescribeJobTemplateOutput) {
@@ -762,14 +764,15 @@ func (c *EMRContainers) DescribeJobTemplateRequest(input *DescribeJobTemplateInp
 // API operation DescribeJobTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DescribeJobTemplate
 func (c *EMRContainers) DescribeJobTemplate(input *DescribeJobTemplateInput) (*DescribeJobTemplateOutput, error) {
@@ -809,14 +812,13 @@ const opDescribeManagedEndpoint = "DescribeManagedEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeManagedEndpointRequest method.
+//	req, resp := client.DescribeManagedEndpointRequest(params)
 //
-//    // Example sending a request using the DescribeManagedEndpointRequest method.
-//    req, resp := client.DescribeManagedEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DescribeManagedEndpoint
 func (c *EMRContainers) DescribeManagedEndpointRequest(input *DescribeManagedEndpointInput) (req *request.Request, output *DescribeManagedEndpointOutput) {
@@ -849,14 +851,15 @@ func (c *EMRContainers) DescribeManagedEndpointRequest(input *DescribeManagedEnd
 // API operation DescribeManagedEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DescribeManagedEndpoint
 func (c *EMRContainers) DescribeManagedEndpoint(input *DescribeManagedEndpointInput) (*DescribeManagedEndpointOutput, error) {
@@ -896,14 +899,13 @@ const opDescribeVirtualCluster = "DescribeVirtualCluster"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeVirtualClusterRequest method.
+//	req, resp := client.DescribeVirtualClusterRequest(params)
 //
-//    // Example sending a request using the DescribeVirtualClusterRequest method.
-//    req, resp := client.DescribeVirtualClusterRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DescribeVirtualCluster
 func (c *EMRContainers) DescribeVirtualClusterRequest(input *DescribeVirtualClusterInput) (req *request.Request, output *DescribeVirtualClusterOutput) {
@@ -939,14 +941,15 @@ func (c *EMRContainers) DescribeVirtualClusterRequest(input *DescribeVirtualClus
 // API operation DescribeVirtualCluster for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/DescribeVirtualCluster
 func (c *EMRContainers) DescribeVirtualCluster(input *DescribeVirtualClusterInput) (*DescribeVirtualClusterOutput, error) {
@@ -986,14 +989,13 @@ const opGetManagedEndpointSessionCredentials = "GetManagedEndpointSessionCredent
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetManagedEndpointSessionCredentialsRequest method.
+//	req, resp := client.GetManagedEndpointSessionCredentialsRequest(params)
 //
-//    // Example sending a request using the GetManagedEndpointSessionCredentialsRequest method.
-//    req, resp := client.GetManagedEndpointSessionCredentialsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/GetManagedEndpointSessionCredentials
 func (c *EMRContainers) GetManagedEndpointSessionCredentialsRequest(input *GetManagedEndpointSessionCredentialsInput) (req *request.Request, output *GetManagedEndpointSessionCredentialsOutput) {
@@ -1024,17 +1026,18 @@ func (c *EMRContainers) GetManagedEndpointSessionCredentialsRequest(input *GetMa
 // API operation GetManagedEndpointSessionCredentials for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * RequestThrottledException
-//   The request throttled.
+//   - ValidationException
+//     There are invalid parameters in the client request.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - RequestThrottledException
+//     The request throttled.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/GetManagedEndpointSessionCredentials
 func (c *EMRContainers) GetManagedEndpointSessionCredentials(input *GetManagedEndpointSessionCredentialsInput) (*GetManagedEndpointSessionCredentialsOutput, error) {
@@ -1074,14 +1077,13 @@ const opListJobRuns = "ListJobRuns"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListJobRunsRequest method.
+//	req, resp := client.ListJobRunsRequest(params)
 //
-//    // Example sending a request using the ListJobRunsRequest method.
-//    req, resp := client.ListJobRunsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/ListJobRuns
 func (c *EMRContainers) ListJobRunsRequest(input *ListJobRunsInput) (req *request.Request, output *ListJobRunsOutput) {
@@ -1120,11 +1122,12 @@ func (c *EMRContainers) ListJobRunsRequest(input *ListJobRunsInput) (req *reques
 // API operation ListJobRuns for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ValidationException
+//     There are invalid parameters in the client request.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/ListJobRuns
 func (c *EMRContainers) ListJobRuns(input *ListJobRunsInput) (*ListJobRunsOutput, error) {
@@ -1156,15 +1159,14 @@ func (c *EMRContainers) ListJobRunsWithContext(ctx aws.Context, input *ListJobRu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListJobRuns operation.
-//    pageNum := 0
-//    err := client.ListJobRunsPages(params,
-//        func(page *emrcontainers.ListJobRunsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListJobRuns operation.
+//	pageNum := 0
+//	err := client.ListJobRunsPages(params,
+//	    func(page *emrcontainers.ListJobRunsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMRContainers) ListJobRunsPages(input *ListJobRunsInput, fn func(*ListJobRunsOutput, bool) bool) error {
 	return c.ListJobRunsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1216,14 +1218,13 @@ const opListJobTemplates = "ListJobTemplates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListJobTemplatesRequest method.
+//	req, resp := client.ListJobTemplatesRequest(params)
 //
-//    // Example sending a request using the ListJobTemplatesRequest method.
-//    req, resp := client.ListJobTemplatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/ListJobTemplates
 func (c *EMRContainers) ListJobTemplatesRequest(input *ListJobTemplatesInput) (req *request.Request, output *ListJobTemplatesOutput) {
@@ -1263,11 +1264,12 @@ func (c *EMRContainers) ListJobTemplatesRequest(input *ListJobTemplatesInput) (r
 // API operation ListJobTemplates for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ValidationException
+//     There are invalid parameters in the client request.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/ListJobTemplates
 func (c *EMRContainers) ListJobTemplates(input *ListJobTemplatesInput) (*ListJobTemplatesOutput, error) {
@@ -1299,15 +1301,14 @@ func (c *EMRContainers) ListJobTemplatesWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListJobTemplates operation.
-//    pageNum := 0
-//    err := client.ListJobTemplatesPages(params,
-//        func(page *emrcontainers.ListJobTemplatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListJobTemplates operation.
+//	pageNum := 0
+//	err := client.ListJobTemplatesPages(params,
+//	    func(page *emrcontainers.ListJobTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMRContainers) ListJobTemplatesPages(input *ListJobTemplatesInput, fn func(*ListJobTemplatesOutput, bool) bool) error {
 	return c.ListJobTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1359,14 +1360,13 @@ const opListManagedEndpoints = "ListManagedEndpoints"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListManagedEndpointsRequest method.
+//	req, resp := client.ListManagedEndpointsRequest(params)
 //
-//    // Example sending a request using the ListManagedEndpointsRequest method.
-//    req, resp := client.ListManagedEndpointsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/ListManagedEndpoints
 func (c *EMRContainers) ListManagedEndpointsRequest(input *ListManagedEndpointsInput) (req *request.Request, output *ListManagedEndpointsOutput) {
@@ -1405,11 +1405,12 @@ func (c *EMRContainers) ListManagedEndpointsRequest(input *ListManagedEndpointsI
 // API operation ListManagedEndpoints for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ValidationException
+//     There are invalid parameters in the client request.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/ListManagedEndpoints
 func (c *EMRContainers) ListManagedEndpoints(input *ListManagedEndpointsInput) (*ListManagedEndpointsOutput, error) {
@@ -1441,15 +1442,14 @@ func (c *EMRContainers) ListManagedEndpointsWithContext(ctx aws.Context, input *
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListManagedEndpoints operation.
-//    pageNum := 0
-//    err := client.ListManagedEndpointsPages(params,
-//        func(page *emrcontainers.ListManagedEndpointsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListManagedEndpoints operation.
+//	pageNum := 0
+//	err := client.ListManagedEndpointsPages(params,
+//	    func(page *emrcontainers.ListManagedEndpointsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMRContainers) ListManagedEndpointsPages(input *ListManagedEndpointsInput, fn func(*ListManagedEndpointsOutput, bool) bool) error {
 	return c.ListManagedEndpointsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1501,14 +1501,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/ListTagsForResource
 func (c *EMRContainers) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1539,14 +1538,15 @@ func (c *EMRContainers) ListTagsForResourceRequest(input *ListTagsForResourceInp
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This is an internal server exception.
 //
-//   * ValidationException
-//   There are invalid parameters in the client request.
+//   - InternalServerException
+//     This is an internal server exception.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     There are invalid parameters in the client request.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/ListTagsForResource
 func (c *EMRContainers) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1586,14 +1586,13 @@ const opListVirtualClusters = "ListVirtualClusters"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListVirtualClustersRequest method.
+//	req, resp := client.ListVirtualClustersRequest(params)
 //
-//    // Example sending a request using the ListVirtualClustersRequest method.
-//    req, resp := client.ListVirtualClustersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/ListVirtualClusters
 func (c *EMRContainers) ListVirtualClustersRequest(input *ListVirtualClustersInput) (req *request.Request, output *ListVirtualClustersOutput) {
@@ -1635,11 +1634,12 @@ func (c *EMRContainers) ListVirtualClustersRequest(input *ListVirtualClustersInp
 // API operation ListVirtualClusters for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ValidationException
+//     There are invalid parameters in the client request.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/ListVirtualClusters
 func (c *EMRContainers) ListVirtualClusters(input *ListVirtualClustersInput) (*ListVirtualClustersOutput, error) {
@@ -1671,15 +1671,14 @@ func (c *EMRContainers) ListVirtualClustersWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListVirtualClusters operation.
-//    pageNum := 0
-//    err := client.ListVirtualClustersPages(params,
-//        func(page *emrcontainers.ListVirtualClustersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListVirtualClusters operation.
+//	pageNum := 0
+//	err := client.ListVirtualClustersPages(params,
+//	    func(page *emrcontainers.ListVirtualClustersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMRContainers) ListVirtualClustersPages(input *ListVirtualClustersInput, fn func(*ListVirtualClustersOutput, bool) bool) error {
 	return c.ListVirtualClustersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1731,14 +1730,13 @@ const opStartJobRun = "StartJobRun"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartJobRunRequest method.
+//	req, resp := client.StartJobRunRequest(params)
 //
-//    // Example sending a request using the StartJobRunRequest method.
-//    req, resp := client.StartJobRunRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/StartJobRun
 func (c *EMRContainers) StartJobRunRequest(input *StartJobRunInput) (req *request.Request, output *StartJobRunOutput) {
@@ -1770,14 +1768,15 @@ func (c *EMRContainers) StartJobRunRequest(input *StartJobRunInput) (req *reques
 // API operation StartJobRun for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   There are invalid parameters in the client request.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     There are invalid parameters in the client request.
 //
-//   * InternalServerException
-//   This is an internal server exception.
+//   - ResourceNotFoundException
+//     The specified resource was not found.
+//
+//   - InternalServerException
+//     This is an internal server exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/StartJobRun
 func (c *EMRContainers) StartJobRun(input *StartJobRunInput) (*StartJobRunOutput, error) {
@@ -1817,14 +1816,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/TagResource
 func (c *EMRContainers) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1865,14 +1863,15 @@ func (c *EMRContainers) TagResourceRequest(input *TagResourceInput) (req *reques
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This is an internal server exception.
 //
-//   * ValidationException
-//   There are invalid parameters in the client request.
+//   - InternalServerException
+//     This is an internal server exception.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     There are invalid parameters in the client request.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/TagResource
 func (c *EMRContainers) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1912,14 +1911,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/UntagResource
 func (c *EMRContainers) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -1951,14 +1949,15 @@ func (c *EMRContainers) UntagResourceRequest(input *UntagResourceInput) (req *re
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This is an internal server exception.
 //
-//   * ValidationException
-//   There are invalid parameters in the client request.
+//   - InternalServerException
+//     This is an internal server exception.
 //
-//   * ResourceNotFoundException
-//   The specified resource was not found.
+//   - ValidationException
+//     There are invalid parameters in the client request.
+//
+//   - ResourceNotFoundException
+//     The specified resource was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/emr-containers-2020-10-01/UntagResource
 func (c *EMRContainers) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2389,6 +2388,73 @@ func (s *ContainerInfo) Validate() error {
 // SetEksInfo sets the EksInfo field's value.
 func (s *ContainerInfo) SetEksInfo(v *EksInfo) *ContainerInfo {
 	s.EksInfo = v
+	return s
+}
+
+// The settings for container log rotation.
+type ContainerLogRotationConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The number of files to keep in container after rotation.
+	//
+	// MaxFilesToKeep is a required field
+	MaxFilesToKeep *int64 `locationName:"maxFilesToKeep" min:"1" type:"integer" required:"true"`
+
+	// The file size at which to rotate logs. Minimum of 2KB, Maximum of 2GB.
+	//
+	// RotationSize is a required field
+	RotationSize *string `locationName:"rotationSize" min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerLogRotationConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContainerLogRotationConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ContainerLogRotationConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ContainerLogRotationConfiguration"}
+	if s.MaxFilesToKeep == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxFilesToKeep"))
+	}
+	if s.MaxFilesToKeep != nil && *s.MaxFilesToKeep < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxFilesToKeep", 1))
+	}
+	if s.RotationSize == nil {
+		invalidParams.Add(request.NewErrParamRequired("RotationSize"))
+	}
+	if s.RotationSize != nil && len(*s.RotationSize) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("RotationSize", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxFilesToKeep sets the MaxFilesToKeep field's value.
+func (s *ContainerLogRotationConfiguration) SetMaxFilesToKeep(v int64) *ContainerLogRotationConfiguration {
+	s.MaxFilesToKeep = &v
+	return s
+}
+
+// SetRotationSize sets the RotationSize field's value.
+func (s *ContainerLogRotationConfiguration) SetRotationSize(v string) *ContainerLogRotationConfiguration {
+	s.RotationSize = &v
 	return s
 }
 
@@ -3647,6 +3713,70 @@ func (s DescribeVirtualClusterOutput) GoString() string {
 func (s *DescribeVirtualClusterOutput) SetVirtualCluster(v *VirtualCluster) *DescribeVirtualClusterOutput {
 	s.VirtualCluster = v
 	return s
+}
+
+// The request exceeded the Amazon EKS API operation limits.
+type EKSRequestThrottledException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EKSRequestThrottledException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EKSRequestThrottledException) GoString() string {
+	return s.String()
+}
+
+func newErrorEKSRequestThrottledException(v protocol.ResponseMetadata) error {
+	return &EKSRequestThrottledException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *EKSRequestThrottledException) Code() string {
+	return "EKSRequestThrottledException"
+}
+
+// Message returns the exception's message.
+func (s *EKSRequestThrottledException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *EKSRequestThrottledException) OrigErr() error {
+	return nil
+}
+
+func (s *EKSRequestThrottledException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *EKSRequestThrottledException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *EKSRequestThrottledException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // The information about the Amazon EKS cluster.
@@ -5123,6 +5253,11 @@ type ListVirtualClustersInput struct {
 	// The date and time before which the virtual clusters are created.
 	CreatedBefore *time.Time `location:"querystring" locationName:"createdBefore" type:"timestamp" timestampFormat:"iso8601"`
 
+	// Optional Boolean that specifies whether the operation should return the virtual
+	// clusters that have the access entry integration enabled or disabled. If not
+	// specified, the operation returns all applicable virtual clusters.
+	EksAccessEntryIntegrated *bool `location:"querystring" locationName:"eksAccessEntryIntegrated" type:"boolean"`
+
 	// The maximum number of virtual clusters that can be listed.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
 
@@ -5191,6 +5326,12 @@ func (s *ListVirtualClustersInput) SetCreatedBefore(v time.Time) *ListVirtualClu
 	return s
 }
 
+// SetEksAccessEntryIntegrated sets the EksAccessEntryIntegrated field's value.
+func (s *ListVirtualClustersInput) SetEksAccessEntryIntegrated(v bool) *ListVirtualClustersInput {
+	s.EksAccessEntryIntegrated = &v
+	return s
+}
+
 // SetMaxResults sets the MaxResults field's value.
 func (s *ListVirtualClustersInput) SetMaxResults(v int64) *ListVirtualClustersInput {
 	s.MaxResults = &v
@@ -5256,6 +5397,9 @@ type MonitoringConfiguration struct {
 	// Monitoring configurations for CloudWatch.
 	CloudWatchMonitoringConfiguration *CloudWatchMonitoringConfiguration `locationName:"cloudWatchMonitoringConfiguration" type:"structure"`
 
+	// Enable or disable container log rotation.
+	ContainerLogRotationConfiguration *ContainerLogRotationConfiguration `locationName:"containerLogRotationConfiguration" type:"structure"`
+
 	// Monitoring configurations for the persistent application UI.
 	PersistentAppUI *string `locationName:"persistentAppUI" type:"string" enum:"PersistentAppUI"`
 
@@ -5289,6 +5433,11 @@ func (s *MonitoringConfiguration) Validate() error {
 			invalidParams.AddNested("CloudWatchMonitoringConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.ContainerLogRotationConfiguration != nil {
+		if err := s.ContainerLogRotationConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ContainerLogRotationConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.S3MonitoringConfiguration != nil {
 		if err := s.S3MonitoringConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("S3MonitoringConfiguration", err.(request.ErrInvalidParams))
@@ -5304,6 +5453,12 @@ func (s *MonitoringConfiguration) Validate() error {
 // SetCloudWatchMonitoringConfiguration sets the CloudWatchMonitoringConfiguration field's value.
 func (s *MonitoringConfiguration) SetCloudWatchMonitoringConfiguration(v *CloudWatchMonitoringConfiguration) *MonitoringConfiguration {
 	s.CloudWatchMonitoringConfiguration = v
+	return s
+}
+
+// SetContainerLogRotationConfiguration sets the ContainerLogRotationConfiguration field's value.
+func (s *MonitoringConfiguration) SetContainerLogRotationConfiguration(v *ContainerLogRotationConfiguration) *MonitoringConfiguration {
+	s.ContainerLogRotationConfiguration = v
 	return s
 }
 

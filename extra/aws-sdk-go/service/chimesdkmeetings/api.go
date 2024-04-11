@@ -28,14 +28,13 @@ const opBatchCreateAttendee = "BatchCreateAttendee"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchCreateAttendeeRequest method.
+//	req, resp := client.BatchCreateAttendeeRequest(params)
 //
-//    // Example sending a request using the BatchCreateAttendeeRequest method.
-//    req, resp := client.BatchCreateAttendeeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/BatchCreateAttendee
 func (c *ChimeSDKMeetings) BatchCreateAttendeeRequest(input *BatchCreateAttendeeInput) (req *request.Request, output *BatchCreateAttendeeOutput) {
@@ -68,33 +67,34 @@ func (c *ChimeSDKMeetings) BatchCreateAttendeeRequest(input *BatchCreateAttendee
 // API operation BatchCreateAttendee for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * NotFoundException
-//   One or more of the resources in the request does not exist in the system.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - NotFoundException
+//     One or more of the resources in the request does not exist in the system.
 //
-//   * UnprocessableEntityException
-//   The request was well-formed but was unable to be followed due to semantic
-//   errors.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * LimitExceededException
-//   The request exceeds the resource limit.
+//   - UnprocessableEntityException
+//     The request was well-formed but was unable to be followed due to semantic
+//     errors.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - LimitExceededException
+//     The request exceeds the resource limit.
 //
-//   * ServiceFailureException
-//   The service encountered an unexpected error.
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
 //
-//   * ThrottlingException
-//   The number of customer requests exceeds the request rate limit.
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/BatchCreateAttendee
 func (c *ChimeSDKMeetings) BatchCreateAttendee(input *BatchCreateAttendeeInput) (*BatchCreateAttendeeOutput, error) {
@@ -134,14 +134,13 @@ const opBatchUpdateAttendeeCapabilitiesExcept = "BatchUpdateAttendeeCapabilities
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchUpdateAttendeeCapabilitiesExceptRequest method.
+//	req, resp := client.BatchUpdateAttendeeCapabilitiesExceptRequest(params)
 //
-//    // Example sending a request using the BatchUpdateAttendeeCapabilitiesExceptRequest method.
-//    req, resp := client.BatchUpdateAttendeeCapabilitiesExceptRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/BatchUpdateAttendeeCapabilitiesExcept
 func (c *ChimeSDKMeetings) BatchUpdateAttendeeCapabilitiesExceptRequest(input *BatchUpdateAttendeeCapabilitiesExceptInput) (req *request.Request, output *BatchUpdateAttendeeCapabilitiesExceptOutput) {
@@ -172,20 +171,29 @@ func (c *ChimeSDKMeetings) BatchUpdateAttendeeCapabilitiesExceptRequest(input *B
 //
 // When using capabilities, be aware of these corner cases:
 //
-//    * You can't set content capabilities to SendReceive or Receive unless
-//    you also set video capabilities to SendReceive or Receive. If you don't
-//    set the video capability to receive, the response will contain an HTTP
-//    400 Bad Request status code. However, you can set your video capability
-//    to receive and you set your content capability to not receive.
+//   - If you specify MeetingFeatures:Video:MaxResolution:None when you create
+//     a meeting, all API requests that include SendReceive, Send, or Receive
+//     for AttendeeCapabilities:Video will be rejected with ValidationError 400.
 //
-//    * When you change an audio capability from None or Receive to Send or
-//    SendReceive , and if the attendee left their microphone unmuted, audio
-//    will flow from the attendee to the other meeting participants.
+//   - If you specify MeetingFeatures:Content:MaxResolution:None when you create
+//     a meeting, all API requests that include SendReceive, Send, or Receive
+//     for AttendeeCapabilities:Content will be rejected with ValidationError
+//     400.
 //
-//    * When you change a video or content capability from None or Receive to
-//    Send or SendReceive , and if the attendee turned on their video or content
-//    streams, remote attendees can receive those streams, but only after media
-//    renegotiation between the client and the Amazon Chime back-end server.
+//   - You can't set content capabilities to SendReceive or Receive unless
+//     you also set video capabilities to SendReceive or Receive. If you don't
+//     set the video capability to receive, the response will contain an HTTP
+//     400 Bad Request status code. However, you can set your video capability
+//     to receive and you set your content capability to not receive.
+//
+//   - When you change an audio capability from None or Receive to Send or
+//     SendReceive , and if the attendee left their microphone unmuted, audio
+//     will flow from the attendee to the other meeting participants.
+//
+//   - When you change a video or content capability from None or Receive to
+//     Send or SendReceive , and if the attendee turned on their video or content
+//     streams, remote attendees can receive those streams, but only after media
+//     renegotiation between the client and the Amazon Chime back-end server.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -195,23 +203,30 @@ func (c *ChimeSDKMeetings) BatchUpdateAttendeeCapabilitiesExceptRequest(input *B
 // API operation BatchUpdateAttendeeCapabilitiesExcept for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ConflictException
-//   Multiple instances of the same request have been made simultaneously.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - ConflictException
+//     Multiple instances of the same request have been made simultaneously.
 //
-//   * NotFoundException
-//   One or more of the resources in the request does not exist in the system.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - NotFoundException
+//     One or more of the resources in the request does not exist in the system.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
+//
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
+//
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/BatchUpdateAttendeeCapabilitiesExcept
 func (c *ChimeSDKMeetings) BatchUpdateAttendeeCapabilitiesExcept(input *BatchUpdateAttendeeCapabilitiesExceptInput) (*BatchUpdateAttendeeCapabilitiesExceptOutput, error) {
@@ -251,14 +266,13 @@ const opCreateAttendee = "CreateAttendee"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAttendeeRequest method.
+//	req, resp := client.CreateAttendeeRequest(params)
 //
-//    // Example sending a request using the CreateAttendeeRequest method.
-//    req, resp := client.CreateAttendeeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/CreateAttendee
 func (c *ChimeSDKMeetings) CreateAttendeeRequest(input *CreateAttendeeInput) (req *request.Request, output *CreateAttendeeOutput) {
@@ -291,33 +305,34 @@ func (c *ChimeSDKMeetings) CreateAttendeeRequest(input *CreateAttendeeInput) (re
 // API operation CreateAttendee for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * NotFoundException
-//   One or more of the resources in the request does not exist in the system.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - NotFoundException
+//     One or more of the resources in the request does not exist in the system.
 //
-//   * UnprocessableEntityException
-//   The request was well-formed but was unable to be followed due to semantic
-//   errors.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * LimitExceededException
-//   The request exceeds the resource limit.
+//   - UnprocessableEntityException
+//     The request was well-formed but was unable to be followed due to semantic
+//     errors.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - LimitExceededException
+//     The request exceeds the resource limit.
 //
-//   * ServiceFailureException
-//   The service encountered an unexpected error.
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
 //
-//   * ThrottlingException
-//   The number of customer requests exceeds the request rate limit.
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/CreateAttendee
 func (c *ChimeSDKMeetings) CreateAttendee(input *CreateAttendeeInput) (*CreateAttendeeOutput, error) {
@@ -357,14 +372,13 @@ const opCreateMeeting = "CreateMeeting"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateMeetingRequest method.
+//	req, resp := client.CreateMeetingRequest(params)
 //
-//    // Example sending a request using the CreateMeetingRequest method.
-//    req, resp := client.CreateMeetingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/CreateMeeting
 func (c *ChimeSDKMeetings) CreateMeetingRequest(input *CreateMeetingInput) (req *request.Request, output *CreateMeetingOutput) {
@@ -400,26 +414,30 @@ func (c *ChimeSDKMeetings) CreateMeetingRequest(input *CreateMeetingInput) (req 
 // API operation CreateMeeting for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - ConflictException
+//     Multiple instances of the same request have been made simultaneously.
 //
-//   * ThrottlingException
-//   The number of customer requests exceeds the request rate limit.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
 //
-//   * ServiceFailureException
-//   The service encountered an unexpected error.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
-//   * LimitExceededException
-//   The request exceeds the resource limit.
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
+//
+//   - LimitExceededException
+//     The request exceeds the resource limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/CreateMeeting
 func (c *ChimeSDKMeetings) CreateMeeting(input *CreateMeetingInput) (*CreateMeetingOutput, error) {
@@ -459,14 +477,13 @@ const opCreateMeetingWithAttendees = "CreateMeetingWithAttendees"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateMeetingWithAttendeesRequest method.
+//	req, resp := client.CreateMeetingWithAttendeesRequest(params)
 //
-//    // Example sending a request using the CreateMeetingWithAttendeesRequest method.
-//    req, resp := client.CreateMeetingWithAttendeesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/CreateMeetingWithAttendees
 func (c *ChimeSDKMeetings) CreateMeetingWithAttendeesRequest(input *CreateMeetingWithAttendeesInput) (req *request.Request, output *CreateMeetingWithAttendeesOutput) {
@@ -502,26 +519,30 @@ func (c *ChimeSDKMeetings) CreateMeetingWithAttendeesRequest(input *CreateMeetin
 // API operation CreateMeetingWithAttendees for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - ConflictException
+//     Multiple instances of the same request have been made simultaneously.
 //
-//   * ThrottlingException
-//   The number of customer requests exceeds the request rate limit.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
 //
-//   * ServiceFailureException
-//   The service encountered an unexpected error.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
-//   * LimitExceededException
-//   The request exceeds the resource limit.
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
+//
+//   - LimitExceededException
+//     The request exceeds the resource limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/CreateMeetingWithAttendees
 func (c *ChimeSDKMeetings) CreateMeetingWithAttendees(input *CreateMeetingWithAttendeesInput) (*CreateMeetingWithAttendeesOutput, error) {
@@ -561,14 +582,13 @@ const opDeleteAttendee = "DeleteAttendee"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAttendeeRequest method.
+//	req, resp := client.DeleteAttendeeRequest(params)
 //
-//    // Example sending a request using the DeleteAttendeeRequest method.
-//    req, resp := client.DeleteAttendeeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/DeleteAttendee
 func (c *ChimeSDKMeetings) DeleteAttendeeRequest(input *DeleteAttendeeInput) (req *request.Request, output *DeleteAttendeeOutput) {
@@ -604,26 +624,27 @@ func (c *ChimeSDKMeetings) DeleteAttendeeRequest(input *DeleteAttendeeInput) (re
 // API operation DeleteAttendee for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * NotFoundException
-//   One or more of the resources in the request does not exist in the system.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - NotFoundException
+//     One or more of the resources in the request does not exist in the system.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * ServiceFailureException
-//   The service encountered an unexpected error.
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
 //
-//   * ThrottlingException
-//   The number of customer requests exceeds the request rate limit.
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/DeleteAttendee
 func (c *ChimeSDKMeetings) DeleteAttendee(input *DeleteAttendeeInput) (*DeleteAttendeeOutput, error) {
@@ -663,14 +684,13 @@ const opDeleteMeeting = "DeleteMeeting"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMeetingRequest method.
+//	req, resp := client.DeleteMeetingRequest(params)
 //
-//    // Example sending a request using the DeleteMeetingRequest method.
-//    req, resp := client.DeleteMeetingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/DeleteMeeting
 func (c *ChimeSDKMeetings) DeleteMeetingRequest(input *DeleteMeetingInput) (req *request.Request, output *DeleteMeetingOutput) {
@@ -706,26 +726,27 @@ func (c *ChimeSDKMeetings) DeleteMeetingRequest(input *DeleteMeetingInput) (req 
 // API operation DeleteMeeting for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
 //
-//   * NotFoundException
-//   One or more of the resources in the request does not exist in the system.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - NotFoundException
+//     One or more of the resources in the request does not exist in the system.
 //
-//   * ServiceFailureException
-//   The service encountered an unexpected error.
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
 //
-//   * ThrottlingException
-//   The number of customer requests exceeds the request rate limit.
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/DeleteMeeting
 func (c *ChimeSDKMeetings) DeleteMeeting(input *DeleteMeetingInput) (*DeleteMeetingOutput, error) {
@@ -765,14 +786,13 @@ const opGetAttendee = "GetAttendee"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAttendeeRequest method.
+//	req, resp := client.GetAttendeeRequest(params)
 //
-//    // Example sending a request using the GetAttendeeRequest method.
-//    req, resp := client.GetAttendeeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/GetAttendee
 func (c *ChimeSDKMeetings) GetAttendeeRequest(input *GetAttendeeInput) (req *request.Request, output *GetAttendeeOutput) {
@@ -806,26 +826,27 @@ func (c *ChimeSDKMeetings) GetAttendeeRequest(input *GetAttendeeInput) (req *req
 // API operation GetAttendee for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * NotFoundException
-//   One or more of the resources in the request does not exist in the system.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - NotFoundException
+//     One or more of the resources in the request does not exist in the system.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * ServiceFailureException
-//   The service encountered an unexpected error.
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
 //
-//   * ThrottlingException
-//   The number of customer requests exceeds the request rate limit.
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/GetAttendee
 func (c *ChimeSDKMeetings) GetAttendee(input *GetAttendeeInput) (*GetAttendeeOutput, error) {
@@ -865,14 +886,13 @@ const opGetMeeting = "GetMeeting"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetMeetingRequest method.
+//	req, resp := client.GetMeetingRequest(params)
 //
-//    // Example sending a request using the GetMeetingRequest method.
-//    req, resp := client.GetMeetingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/GetMeeting
 func (c *ChimeSDKMeetings) GetMeetingRequest(input *GetMeetingInput) (req *request.Request, output *GetMeetingOutput) {
@@ -906,26 +926,27 @@ func (c *ChimeSDKMeetings) GetMeetingRequest(input *GetMeetingInput) (req *reque
 // API operation GetMeeting for usage and error information.
 //
 // Returned Error Types:
-//   * NotFoundException
-//   One or more of the resources in the request does not exist in the system.
 //
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
+//   - NotFoundException
+//     One or more of the resources in the request does not exist in the system.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * ServiceFailureException
-//   The service encountered an unexpected error.
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
 //
-//   * ThrottlingException
-//   The number of customer requests exceeds the request rate limit.
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/GetMeeting
 func (c *ChimeSDKMeetings) GetMeeting(input *GetMeetingInput) (*GetMeetingOutput, error) {
@@ -965,14 +986,13 @@ const opListAttendees = "ListAttendees"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAttendeesRequest method.
+//	req, resp := client.ListAttendeesRequest(params)
 //
-//    // Example sending a request using the ListAttendeesRequest method.
-//    req, resp := client.ListAttendeesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/ListAttendees
 func (c *ChimeSDKMeetings) ListAttendeesRequest(input *ListAttendeesInput) (req *request.Request, output *ListAttendeesOutput) {
@@ -1011,26 +1031,27 @@ func (c *ChimeSDKMeetings) ListAttendeesRequest(input *ListAttendeesInput) (req 
 // API operation ListAttendees for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * NotFoundException
-//   One or more of the resources in the request does not exist in the system.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - NotFoundException
+//     One or more of the resources in the request does not exist in the system.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * ServiceFailureException
-//   The service encountered an unexpected error.
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
 //
-//   * ThrottlingException
-//   The number of customer requests exceeds the request rate limit.
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/ListAttendees
 func (c *ChimeSDKMeetings) ListAttendees(input *ListAttendeesInput) (*ListAttendeesOutput, error) {
@@ -1062,15 +1083,14 @@ func (c *ChimeSDKMeetings) ListAttendeesWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAttendees operation.
-//    pageNum := 0
-//    err := client.ListAttendeesPages(params,
-//        func(page *chimesdkmeetings.ListAttendeesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAttendees operation.
+//	pageNum := 0
+//	err := client.ListAttendeesPages(params,
+//	    func(page *chimesdkmeetings.ListAttendeesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ChimeSDKMeetings) ListAttendeesPages(input *ListAttendeesInput, fn func(*ListAttendeesOutput, bool) bool) error {
 	return c.ListAttendeesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1122,14 +1142,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/ListTagsForResource
 func (c *ChimeSDKMeetings) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1160,8 +1179,30 @@ func (c *ChimeSDKMeetings) ListTagsForResourceRequest(input *ListTagsForResource
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource that you want to tag couldn't be found.
+//
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
+//
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
+//
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
+//
+//   - LimitExceededException
+//     The request exceeds the resource limit.
+//
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
+//
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
+//
+//   - ResourceNotFoundException
+//     The resource that you want to tag couldn't be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/ListTagsForResource
 func (c *ChimeSDKMeetings) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1201,14 +1242,13 @@ const opStartMeetingTranscription = "StartMeetingTranscription"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartMeetingTranscriptionRequest method.
+//	req, resp := client.StartMeetingTranscriptionRequest(params)
 //
-//    // Example sending a request using the StartMeetingTranscriptionRequest method.
-//    req, resp := client.StartMeetingTranscriptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/StartMeetingTranscription
 func (c *ChimeSDKMeetings) StartMeetingTranscriptionRequest(input *StartMeetingTranscriptionInput) (req *request.Request, output *StartMeetingTranscriptionOutput) {
@@ -1240,10 +1280,18 @@ func (c *ChimeSDKMeetings) StartMeetingTranscriptionRequest(input *StartMeetingT
 // refer to the StartStreamTranscription (https://docs.aws.amazon.com/transcribe/latest/APIReference/API_streaming_StartStreamTranscription.html)
 // API in the Amazon Transcribe Developer Guide.
 //
-// Amazon Chime SDK live transcription is powered by Amazon Transcribe. Use
-// of Amazon Transcribe is subject to the AWS Service Terms (https://aws.amazon.com/service-terms/),
-// including the terms specific to the AWS Machine Learning and Artificial Intelligence
-// Services.
+// By default, Amazon Transcribe may use and store audio content processed by
+// the service to develop and improve Amazon Web Services AI/ML services as
+// further described in section 50 of the Amazon Web Services Service Terms
+// (https://aws.amazon.com/service-terms/). Using Amazon Transcribe may be subject
+// to federal and state laws or regulations regarding the recording or interception
+// of electronic communications. It is your and your end users’ responsibility
+// to comply with all applicable laws regarding the recording, including properly
+// notifying all participants in a recorded session or communication that the
+// session or communication is being recorded, and obtaining all necessary consents.
+// You can opt out from Amazon Web Services using audio content to develop and
+// improve AWS AI/ML services by configuring an AI services opt out policy using
+// Amazon Web Services Organizations.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1253,33 +1301,34 @@ func (c *ChimeSDKMeetings) StartMeetingTranscriptionRequest(input *StartMeetingT
 // API operation StartMeetingTranscription for usage and error information.
 //
 // Returned Error Types:
-//   * NotFoundException
-//   One or more of the resources in the request does not exist in the system.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - NotFoundException
+//     One or more of the resources in the request does not exist in the system.
 //
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * LimitExceededException
-//   The request exceeds the resource limit.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * UnprocessableEntityException
-//   The request was well-formed but was unable to be followed due to semantic
-//   errors.
+//   - LimitExceededException
+//     The request exceeds the resource limit.
 //
-//   * ThrottlingException
-//   The number of customer requests exceeds the request rate limit.
+//   - UnprocessableEntityException
+//     The request was well-formed but was unable to be followed due to semantic
+//     errors.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
-//   * ServiceFailureException
-//   The service encountered an unexpected error.
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
+//
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/StartMeetingTranscription
 func (c *ChimeSDKMeetings) StartMeetingTranscription(input *StartMeetingTranscriptionInput) (*StartMeetingTranscriptionOutput, error) {
@@ -1319,14 +1368,13 @@ const opStopMeetingTranscription = "StopMeetingTranscription"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopMeetingTranscriptionRequest method.
+//	req, resp := client.StopMeetingTranscriptionRequest(params)
 //
-//    // Example sending a request using the StopMeetingTranscriptionRequest method.
-//    req, resp := client.StopMeetingTranscriptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/StopMeetingTranscription
 func (c *ChimeSDKMeetings) StopMeetingTranscriptionRequest(input *StopMeetingTranscriptionInput) (req *request.Request, output *StopMeetingTranscriptionOutput) {
@@ -1352,10 +1400,18 @@ func (c *ChimeSDKMeetings) StopMeetingTranscriptionRequest(input *StopMeetingTra
 // to Using Amazon Chime SDK live transcription (https://docs.aws.amazon.com/chime-sdk/latest/dg/meeting-transcription.html)
 // in the Amazon Chime SDK Developer Guide.
 //
-// Amazon Chime SDK live transcription is powered by Amazon Transcribe. Use
-// of Amazon Transcribe is subject to the AWS Service Terms (https://aws.amazon.com/service-terms/),
-// including the terms specific to the AWS Machine Learning and Artificial Intelligence
-// Services.
+// By default, Amazon Transcribe may use and store audio content processed by
+// the service to develop and improve Amazon Web Services AI/ML services as
+// further described in section 50 of the Amazon Web Services Service Terms
+// (https://aws.amazon.com/service-terms/). Using Amazon Transcribe may be subject
+// to federal and state laws or regulations regarding the recording or interception
+// of electronic communications. It is your and your end users’ responsibility
+// to comply with all applicable laws regarding the recording, including properly
+// notifying all participants in a recorded session or communication that the
+// session or communication is being recorded, and obtaining all necessary consents.
+// You can opt out from Amazon Web Services using audio content to develop and
+// improve Amazon Web Services AI/ML services by configuring an AI services
+// opt out policy using Amazon Web Services Organizations.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1365,30 +1421,31 @@ func (c *ChimeSDKMeetings) StopMeetingTranscriptionRequest(input *StopMeetingTra
 // API operation StopMeetingTranscription for usage and error information.
 //
 // Returned Error Types:
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
 //
-//   * NotFoundException
-//   One or more of the resources in the request does not exist in the system.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
 //
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
+//   - NotFoundException
+//     One or more of the resources in the request does not exist in the system.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * UnprocessableEntityException
-//   The request was well-formed but was unable to be followed due to semantic
-//   errors.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * ThrottlingException
-//   The number of customer requests exceeds the request rate limit.
+//   - UnprocessableEntityException
+//     The request was well-formed but was unable to be followed due to semantic
+//     errors.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
-//   * ServiceFailureException
-//   The service encountered an unexpected error.
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
+//
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/StopMeetingTranscription
 func (c *ChimeSDKMeetings) StopMeetingTranscription(input *StopMeetingTranscriptionInput) (*StopMeetingTranscriptionOutput, error) {
@@ -1428,14 +1485,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/TagResource
 func (c *ChimeSDKMeetings) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1467,14 +1523,33 @@ func (c *ChimeSDKMeetings) TagResourceRequest(input *TagResourceInput) (req *req
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ResourceNotFoundException
-//   The resource that you want to tag couldn't be found.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * TooManyTagsException
-//   Too many tags were added to the specified resource.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
+//
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
+//
+//   - LimitExceededException
+//     The request exceeds the resource limit.
+//
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
+//
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
+//
+//   - ResourceNotFoundException
+//     The resource that you want to tag couldn't be found.
+//
+//   - TooManyTagsException
+//     Too many tags were added to the specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/TagResource
 func (c *ChimeSDKMeetings) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1514,14 +1589,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/UntagResource
 func (c *ChimeSDKMeetings) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -1548,15 +1622,15 @@ func (c *ChimeSDKMeetings) UntagResourceRequest(input *UntagResourceInput) (req 
 // operation succeeds even if you attempt to remove tags from a resource that
 // were already removed. Note the following:
 //
-//    * To remove tags from a resource, you need the necessary permissions for
-//    the service that the resource belongs to as well as permissions for removing
-//    tags. For more information, see the documentation for the service whose
-//    resource you want to untag.
+//   - To remove tags from a resource, you need the necessary permissions for
+//     the service that the resource belongs to as well as permissions for removing
+//     tags. For more information, see the documentation for the service whose
+//     resource you want to untag.
 //
-//    * You can only tag resources that are located in the specified AWS Region
-//    for the calling AWS account.
+//   - You can only tag resources that are located in the specified Amazon
+//     Web Services Region for the calling Amazon Web Services account.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // In addition to the tag:UntagResources permission required by this operation,
 // you must also have the remove tags permission defined by the service that
@@ -1576,11 +1650,30 @@ func (c *ChimeSDKMeetings) UntagResourceRequest(input *UntagResourceInput) (req 
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ResourceNotFoundException
-//   The resource that you want to tag couldn't be found.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
+//
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
+//
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
+//
+//   - LimitExceededException
+//     The request exceeds the resource limit.
+//
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
+//
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
+//
+//   - ResourceNotFoundException
+//     The resource that you want to tag couldn't be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/UntagResource
 func (c *ChimeSDKMeetings) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -1620,14 +1713,13 @@ const opUpdateAttendeeCapabilities = "UpdateAttendeeCapabilities"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAttendeeCapabilitiesRequest method.
+//	req, resp := client.UpdateAttendeeCapabilitiesRequest(params)
 //
-//    // Example sending a request using the UpdateAttendeeCapabilitiesRequest method.
-//    req, resp := client.UpdateAttendeeCapabilitiesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/UpdateAttendeeCapabilities
 func (c *ChimeSDKMeetings) UpdateAttendeeCapabilitiesRequest(input *UpdateAttendeeCapabilitiesInput) (req *request.Request, output *UpdateAttendeeCapabilitiesOutput) {
@@ -1656,20 +1748,29 @@ func (c *ChimeSDKMeetings) UpdateAttendeeCapabilitiesRequest(input *UpdateAttend
 //
 // When using capabilities, be aware of these corner cases:
 //
-//    * You can't set content capabilities to SendReceive or Receive unless
-//    you also set video capabilities to SendReceive or Receive. If you don't
-//    set the video capability to receive, the response will contain an HTTP
-//    400 Bad Request status code. However, you can set your video capability
-//    to receive and you set your content capability to not receive.
+//   - If you specify MeetingFeatures:Video:MaxResolution:None when you create
+//     a meeting, all API requests that include SendReceive, Send, or Receive
+//     for AttendeeCapabilities:Video will be rejected with ValidationError 400.
 //
-//    * When you change an audio capability from None or Receive to Send or
-//    SendReceive , and if the attendee left their microphone unmuted, audio
-//    will flow from the attendee to the other meeting participants.
+//   - If you specify MeetingFeatures:Content:MaxResolution:None when you create
+//     a meeting, all API requests that include SendReceive, Send, or Receive
+//     for AttendeeCapabilities:Content will be rejected with ValidationError
+//     400.
 //
-//    * When you change a video or content capability from None or Receive to
-//    Send or SendReceive , and if the attendee turned on their video or content
-//    streams, remote attendees can receive those streams, but only after media
-//    renegotiation between the client and the Amazon Chime back-end server.
+//   - You can't set content capabilities to SendReceive or Receive unless
+//     you also set video capabilities to SendReceive or Receive. If you don't
+//     set the video capability to receive, the response will contain an HTTP
+//     400 Bad Request status code. However, you can set your video capability
+//     to receive and you set your content capability to not receive.
+//
+//   - When you change an audio capability from None or Receive to Send or
+//     SendReceive , and if the attendee left their microphone unmuted, audio
+//     will flow from the attendee to the other meeting participants.
+//
+//   - When you change a video or content capability from None or Receive to
+//     Send or SendReceive , and if the attendee turned on their video or content
+//     streams, remote attendees can receive those streams, but only after media
+//     renegotiation between the client and the Amazon Chime back-end server.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1679,23 +1780,30 @@ func (c *ChimeSDKMeetings) UpdateAttendeeCapabilitiesRequest(input *UpdateAttend
 // API operation UpdateAttendeeCapabilities for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The input parameters don't match the service's restrictions.
 //
-//   * ConflictException
-//   Multiple instances of the same request have been made simultaneously.
+//   - BadRequestException
+//     The input parameters don't match the service's restrictions.
 //
-//   * UnauthorizedException
-//   The user isn't authorized to request a resource.
+//   - ConflictException
+//     Multiple instances of the same request have been made simultaneously.
 //
-//   * NotFoundException
-//   One or more of the resources in the request does not exist in the system.
+//   - UnauthorizedException
+//     The user isn't authorized to request a resource.
 //
-//   * ForbiddenException
-//   The client is permanently forbidden from making the request.
+//   - NotFoundException
+//     One or more of the resources in the request does not exist in the system.
 //
-//   * ServiceUnavailableException
-//   The service is currently unavailable.
+//   - ForbiddenException
+//     The client is permanently forbidden from making the request.
+//
+//   - ServiceUnavailableException
+//     The service is currently unavailable.
+//
+//   - ServiceFailureException
+//     The service encountered an unexpected error.
+//
+//   - ThrottlingException
+//     The number of customer requests exceeds the request rate limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/chime-sdk-meetings-2021-07-15/UpdateAttendeeCapabilities
 func (c *ChimeSDKMeetings) UpdateAttendeeCapabilities(input *UpdateAttendeeCapabilitiesInput) (*UpdateAttendeeCapabilitiesOutput, error) {
@@ -1740,6 +1848,15 @@ type Attendee struct {
 	// see .
 	//
 	// When using capabilities, be aware of these corner cases:
+	//
+	//    * If you specify MeetingFeatures:Video:MaxResolution:None when you create
+	//    a meeting, all API requests that include SendReceive, Send, or Receive
+	//    for AttendeeCapabilities:Video will be rejected with ValidationError 400.
+	//
+	//    * If you specify MeetingFeatures:Content:MaxResolution:None when you create
+	//    a meeting, all API requests that include SendReceive, Send, or Receive
+	//    for AttendeeCapabilities:Content will be rejected with ValidationError
+	//    400.
 	//
 	//    * You can't set content capabilities to SendReceive or Receive unless
 	//    you also set video capabilities to SendReceive or Receive. If you don't
@@ -1823,25 +1940,33 @@ func (s *Attendee) SetJoinToken(v string) *Attendee {
 // The media capabilities of an attendee: audio, video, or content.
 //
 // You use the capabilities with a set of values that control what the capabilities
-// can do, such as SendReceive data. For more information about those values,
-// see .
+// can do, such as SendReceive data. For more information, refer to and .
 //
 // When using capabilities, be aware of these corner cases:
 //
-//    * You can't set content capabilities to SendReceive or Receive unless
-//    you also set video capabilities to SendReceive or Receive. If you don't
-//    set the video capability to receive, the response will contain an HTTP
-//    400 Bad Request status code. However, you can set your video capability
-//    to receive and you set your content capability to not receive.
+//   - If you specify MeetingFeatures:Video:MaxResolution:None when you create
+//     a meeting, all API requests that include SendReceive, Send, or Receive
+//     for AttendeeCapabilities:Video will be rejected with ValidationError 400.
 //
-//    * When you change an audio capability from None or Receive to Send or
-//    SendReceive , and if the attendee left their microphone unmuted, audio
-//    will flow from the attendee to the other meeting participants.
+//   - If you specify MeetingFeatures:Content:MaxResolution:None when you create
+//     a meeting, all API requests that include SendReceive, Send, or Receive
+//     for AttendeeCapabilities:Content will be rejected with ValidationError
+//     400.
 //
-//    * When you change a video or content capability from None or Receive to
-//    Send or SendReceive , and if the attendee turned on their video or content
-//    streams, remote attendees can receive those streams, but only after media
-//    renegotiation between the client and the Amazon Chime back-end server.
+//   - You can't set content capabilities to SendReceive or Receive unless
+//     you also set video capabilities to SendReceive or Receive. If you don't
+//     set the video capability to receive, the response will contain an HTTP
+//     400 Bad Request status code. However, you can set your video capability
+//     to receive and you set your content capability to not receive.
+//
+//   - When you change an audio capability from None or Receive to Send or
+//     SendReceive , and an attendee unmutes their microphone, audio flows from
+//     the attendee to the other meeting participants.
+//
+//   - When you change a video or content capability from None or Receive to
+//     Send or SendReceive , and the attendee turns on their video or content
+//     streams, remote attendees can receive those streams, but only after media
+//     renegotiation between the client and the Amazon Chime back-end server.
 type AttendeeCapabilities struct {
 	_ struct{} `type:"structure"`
 
@@ -1913,6 +2038,55 @@ func (s *AttendeeCapabilities) SetContent(v string) *AttendeeCapabilities {
 // SetVideo sets the Video field's value.
 func (s *AttendeeCapabilities) SetVideo(v string) *AttendeeCapabilities {
 	s.Video = &v
+	return s
+}
+
+// Lists the maximum number of attendees allowed into the meeting.
+//
+// If you specify FHD for MeetingFeatures:Video:MaxResolution, or if you specify
+// UHD for MeetingFeatures:Content:MaxResolution, the maximum number of attendees
+// changes from the default of 250 to 25.
+type AttendeeFeatures struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of attendees allowed into the meeting.
+	MaxCount *int64 `min:"1" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttendeeFeatures) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AttendeeFeatures) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AttendeeFeatures) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AttendeeFeatures"}
+	if s.MaxCount != nil && *s.MaxCount < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxCount", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxCount sets the MaxCount field's value.
+func (s *AttendeeFeatures) SetMaxCount(v int64) *AttendeeFeatures {
+	s.MaxCount = &v
 	return s
 }
 
@@ -2368,6 +2542,46 @@ func (s *ConflictException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Lists the content (screen share) features for the meeting. Applies to all
+// attendees.
+//
+// If you specify MeetingFeatures:Content:MaxResolution:None when you create
+// a meeting, all API requests that include SendReceive, Send, or Receive for
+// AttendeeCapabilities:Content will be rejected with ValidationError 400.
+type ContentFeatures struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum resolution for the meeting content.
+	//
+	// Defaults to FHD. To use UHD, you must also provide a MeetingFeatures:Attendee:MaxCount
+	// value and override the default size limit of 250 attendees.
+	MaxResolution *string `type:"string" enum:"ContentResolution"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContentFeatures) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ContentFeatures) GoString() string {
+	return s.String()
+}
+
+// SetMaxResolution sets the MaxResolution field's value.
+func (s *ContentFeatures) SetMaxResolution(v string) *ContentFeatures {
+	s.MaxResolution = &v
+	return s
+}
+
 // The list of errors returned when errors are encountered during the BatchCreateAttendee
 // and CreateAttendee actions. This includes external user IDs, error codes,
 // and error messages.
@@ -2442,6 +2656,15 @@ type CreateAttendeeInput struct {
 	// see .
 	//
 	// When using capabilities, be aware of these corner cases:
+	//
+	//    * If you specify MeetingFeatures:Video:MaxResolution:None when you create
+	//    a meeting, all API requests that include SendReceive, Send, or Receive
+	//    for AttendeeCapabilities:Video will be rejected with ValidationError 400.
+	//
+	//    * If you specify MeetingFeatures:Content:MaxResolution:None when you create
+	//    a meeting, all API requests that include SendReceive, Send, or Receive
+	//    for AttendeeCapabilities:Content will be rejected with ValidationError
+	//    400.
 	//
 	//    * You can't set content capabilities to SendReceive or Receive unless
 	//    you also set video capabilities to SendReceive or Receive. If you don't
@@ -2681,7 +2904,8 @@ type CreateMeetingInput struct {
 	// eu-west-1, eu-west-2, eu-west-3, sa-east-1, us-east-1, us-east-2, us-west-1,
 	// us-west-2.
 	//
-	// Available values in AWS GovCloud (US) Regions: us-gov-east-1, us-gov-west-1.
+	// Available values in Amazon Web Services GovCloud (US) Regions: us-gov-east-1,
+	// us-gov-west-1.
 	//
 	// MediaRegion is a required field
 	MediaRegion *string `min:"2" type:"string" required:"true"`
@@ -2717,8 +2941,8 @@ type CreateMeetingInput struct {
 	//    and Usage Conventions (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions)
 	//    in the AWS General Reference.
 	//
-	//    * You can only tag resources that are located in the specified AWS Region
-	//    for the AWS account.
+	//    * You can only tag resources that are located in the specified Amazon
+	//    Web Services Region for the Amazon Web Services account.
 	//
 	//    * To add tags to a resource, you need the necessary permissions for the
 	//    service that the resource belongs to as well as permissions for adding
@@ -2795,6 +3019,11 @@ func (s *CreateMeetingInput) Validate() error {
 	}
 	if s.TenantIds != nil && len(s.TenantIds) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("TenantIds", 1))
+	}
+	if s.MeetingFeatures != nil {
+		if err := s.MeetingFeatures.Validate(); err != nil {
+			invalidParams.AddNested("MeetingFeatures", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.NotificationsConfiguration != nil {
 		if err := s.NotificationsConfiguration.Validate(); err != nil {
@@ -2940,7 +3169,8 @@ type CreateMeetingWithAttendeesInput struct {
 	// eu-west-1, eu-west-2, eu-west-3, sa-east-1, us-east-1, us-east-2, us-west-1,
 	// us-west-2.
 	//
-	// Available values in AWS GovCloud (US) Regions: us-gov-east-1, us-gov-west-1.
+	// Available values in Amazon Web Services GovCloud (US) Regions: us-gov-east-1,
+	// us-gov-west-1.
 	//
 	// MediaRegion is a required field
 	MediaRegion *string `min:"2" type:"string" required:"true"`
@@ -3030,6 +3260,11 @@ func (s *CreateMeetingWithAttendeesInput) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Attendees", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.MeetingFeatures != nil {
+		if err := s.MeetingFeatures.Validate(); err != nil {
+			invalidParams.AddNested("MeetingFeatures", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.NotificationsConfiguration != nil {
@@ -3336,8 +3571,8 @@ type EngineTranscribeMedicalSettings struct {
 	// LanguageCode is a required field
 	LanguageCode *string `type:"string" required:"true" enum:"TranscribeMedicalLanguageCode"`
 
-	// The AWS Region passed to Amazon Transcribe Medical. If you don't specify
-	// a Region, Amazon Chime uses the meeting's Region.
+	// The Amazon Web Services Region passed to Amazon Transcribe Medical. If you
+	// don't specify a Region, Amazon Chime uses the meeting's Region.
 	Region *string `type:"string" enum:"TranscribeMedicalRegion"`
 
 	// The specialty specified for the Amazon Transcribe Medical engine.
@@ -3525,7 +3760,7 @@ type EngineTranscribeSettings struct {
 	// You can only use this parameter if you include IdentifyLanguage and LanguageOptions.
 	PreferredLanguage *string `type:"string" enum:"TranscribeLanguageCode"`
 
-	// The AWS Region in which to use Amazon Transcribe.
+	// The Amazon Web Services Region in which to use Amazon Transcribe.
 	//
 	// If you don't specify a Region, then the MediaRegion (https://docs.aws.amazon.com/chime-sdk/latest/APIReference/API_meeting-chime_CreateMeeting.html)
 	// of the meeting is used. However, if Amazon Transcribe is not available in
@@ -4247,18 +4482,26 @@ type MediaPlacement struct {
 	EventIngestionUrl *string `type:"string"`
 
 	// The screen data URL.
+	//
+	// This parameter is deprecated and no longer used by the Amazon Chime SDK.
 	ScreenDataUrl *string `type:"string"`
 
 	// The screen sharing URL.
+	//
+	// This parameter is deprecated and no longer used by the Amazon Chime SDK.
 	ScreenSharingUrl *string `type:"string"`
 
 	// The screen viewing URL.
+	//
+	// This parameter is deprecated and no longer used by the Amazon Chime SDK.
 	ScreenViewingUrl *string `type:"string"`
 
 	// The signaling URL.
 	SignalingUrl *string `type:"string"`
 
 	// The turn control URL.
+	//
+	// This parameter is deprecated and no longer used by the Amazon Chime SDK.
 	TurnControlUrl *string `type:"string"`
 }
 
@@ -4352,7 +4595,8 @@ type Meeting struct {
 	// ca-central-1, eu-central-1, eu-north-1, eu-south-1, eu-west-1, eu-west-2,
 	// eu-west-3, sa-east-1, us-east-1, us-east-2, us-west-1, us-west-2.
 	//
-	// Available values in AWS GovCloud (US) Regions: us-gov-east-1, us-gov-west-1.
+	// Available values in Amazon Web Services GovCloud (US) Regions: us-gov-east-1,
+	// us-gov-west-1.
 	MediaRegion *string `min:"2" type:"string"`
 
 	// The ARN of the meeting.
@@ -4454,8 +4698,17 @@ func (s *Meeting) SetTenantIds(v []*string) *Meeting {
 type MeetingFeaturesConfiguration struct {
 	_ struct{} `type:"structure"`
 
+	// The configuration settings for the attendee features available to a meeting.
+	Attendee *AttendeeFeatures `type:"structure"`
+
 	// The configuration settings for the audio features available to a meeting.
 	Audio *AudioFeatures `type:"structure"`
+
+	// The configuration settings for the content features available to a meeting.
+	Content *ContentFeatures `type:"structure"`
+
+	// The configuration settings for the video features available to a meeting.
+	Video *VideoFeatures `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4476,9 +4729,42 @@ func (s MeetingFeaturesConfiguration) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MeetingFeaturesConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MeetingFeaturesConfiguration"}
+	if s.Attendee != nil {
+		if err := s.Attendee.Validate(); err != nil {
+			invalidParams.AddNested("Attendee", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttendee sets the Attendee field's value.
+func (s *MeetingFeaturesConfiguration) SetAttendee(v *AttendeeFeatures) *MeetingFeaturesConfiguration {
+	s.Attendee = v
+	return s
+}
+
 // SetAudio sets the Audio field's value.
 func (s *MeetingFeaturesConfiguration) SetAudio(v *AudioFeatures) *MeetingFeaturesConfiguration {
 	s.Audio = v
+	return s
+}
+
+// SetContent sets the Content field's value.
+func (s *MeetingFeaturesConfiguration) SetContent(v *ContentFeatures) *MeetingFeaturesConfiguration {
+	s.Content = v
+	return s
+}
+
+// SetVideo sets the Video field's value.
+func (s *MeetingFeaturesConfiguration) SetVideo(v *VideoFeatures) *MeetingFeaturesConfiguration {
+	s.Video = v
 	return s
 }
 
@@ -4556,7 +4842,7 @@ func (s *NotFoundException) RequestID() string {
 type NotificationsConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the AWS Lambda function in the notifications configuration.
+	// The ARN of the Amazon Web Services Lambda function in the notifications configuration.
 	//
 	// LambdaFunctionArn is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by NotificationsConfiguration's
@@ -5710,6 +5996,65 @@ func (s *UpdateAttendeeCapabilitiesOutput) SetAttendee(v *Attendee) *UpdateAtten
 	return s
 }
 
+// The video features set for the meeting. Applies to all attendees.
+//
+// If you specify MeetingFeatures:Video:MaxResolution:None when you create a
+// meeting, all API requests that include SendReceive, Send, or Receive for
+// AttendeeCapabilities:Video will be rejected with ValidationError 400.
+type VideoFeatures struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum video resolution for the meeting. Applies to all attendees.
+	//
+	// Defaults to HD. To use FHD, you must also provide a MeetingFeatures:Attendee:MaxCount
+	// value and override the default size limit of 250 attendees.
+	MaxResolution *string `type:"string" enum:"VideoResolution"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VideoFeatures) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VideoFeatures) GoString() string {
+	return s.String()
+}
+
+// SetMaxResolution sets the MaxResolution field's value.
+func (s *VideoFeatures) SetMaxResolution(v string) *VideoFeatures {
+	s.MaxResolution = &v
+	return s
+}
+
+const (
+	// ContentResolutionNone is a ContentResolution enum value
+	ContentResolutionNone = "None"
+
+	// ContentResolutionFhd is a ContentResolution enum value
+	ContentResolutionFhd = "FHD"
+
+	// ContentResolutionUhd is a ContentResolution enum value
+	ContentResolutionUhd = "UHD"
+)
+
+// ContentResolution_Values returns all elements of the ContentResolution enum
+func ContentResolution_Values() []string {
+	return []string{
+		ContentResolutionNone,
+		ContentResolutionFhd,
+		ContentResolutionUhd,
+	}
+}
+
 const (
 	// MediaCapabilitiesSendReceive is a MediaCapabilities enum value
 	MediaCapabilitiesSendReceive = "SendReceive"
@@ -6043,5 +6388,25 @@ func TranscribeVocabularyFilterMethod_Values() []string {
 		TranscribeVocabularyFilterMethodRemove,
 		TranscribeVocabularyFilterMethodMask,
 		TranscribeVocabularyFilterMethodTag,
+	}
+}
+
+const (
+	// VideoResolutionNone is a VideoResolution enum value
+	VideoResolutionNone = "None"
+
+	// VideoResolutionHd is a VideoResolution enum value
+	VideoResolutionHd = "HD"
+
+	// VideoResolutionFhd is a VideoResolution enum value
+	VideoResolutionFhd = "FHD"
+)
+
+// VideoResolution_Values returns all elements of the VideoResolution enum
+func VideoResolution_Values() []string {
+	return []string{
+		VideoResolutionNone,
+		VideoResolutionHd,
+		VideoResolutionFhd,
 	}
 }

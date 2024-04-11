@@ -29,14 +29,13 @@ const opDeleteResourcePermission = "DeleteResourcePermission"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResourcePermissionRequest method.
+//	req, resp := client.DeleteResourcePermissionRequest(params)
 //
-//    // Example sending a request using the DeleteResourcePermissionRequest method.
-//    req, resp := client.DeleteResourcePermissionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/DeleteResourcePermission
 func (c *SsmSap) DeleteResourcePermissionRequest(input *DeleteResourcePermissionInput) (req *request.Request, output *DeleteResourcePermissionOutput) {
@@ -67,14 +66,15 @@ func (c *SsmSap) DeleteResourcePermissionRequest(input *DeleteResourcePermission
 // API operation DeleteResourcePermission for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource is not available.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/DeleteResourcePermission
 func (c *SsmSap) DeleteResourcePermission(input *DeleteResourcePermissionInput) (*DeleteResourcePermissionOutput, error) {
@@ -114,14 +114,13 @@ const opDeregisterApplication = "DeregisterApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeregisterApplicationRequest method.
+//	req, resp := client.DeregisterApplicationRequest(params)
 //
-//    // Example sending a request using the DeregisterApplicationRequest method.
-//    req, resp := client.DeregisterApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/DeregisterApplication
 func (c *SsmSap) DeregisterApplicationRequest(input *DeregisterApplicationInput) (req *request.Request, output *DeregisterApplicationOutput) {
@@ -154,11 +153,15 @@ func (c *SsmSap) DeregisterApplicationRequest(input *DeregisterApplicationInput)
 // API operation DeregisterApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - UnauthorizedException
+//     The request is not authorized.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/DeregisterApplication
 func (c *SsmSap) DeregisterApplication(input *DeregisterApplicationInput) (*DeregisterApplicationOutput, error) {
@@ -198,14 +201,13 @@ const opGetApplication = "GetApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetApplicationRequest method.
+//	req, resp := client.GetApplicationRequest(params)
 //
-//    // Example sending a request using the GetApplicationRequest method.
-//    req, resp := client.GetApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/GetApplication
 func (c *SsmSap) GetApplicationRequest(input *GetApplicationInput) (req *request.Request, output *GetApplicationOutput) {
@@ -237,11 +239,12 @@ func (c *SsmSap) GetApplicationRequest(input *GetApplicationInput) (req *request
 // API operation GetApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/GetApplication
 func (c *SsmSap) GetApplication(input *GetApplicationInput) (*GetApplicationOutput, error) {
@@ -281,14 +284,13 @@ const opGetComponent = "GetComponent"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetComponentRequest method.
+//	req, resp := client.GetComponentRequest(params)
 //
-//    // Example sending a request using the GetComponentRequest method.
-//    req, resp := client.GetComponentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/GetComponent
 func (c *SsmSap) GetComponentRequest(input *GetComponentInput) (req *request.Request, output *GetComponentOutput) {
@@ -320,11 +322,15 @@ func (c *SsmSap) GetComponentRequest(input *GetComponentInput) (req *request.Req
 // API operation GetComponent for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - UnauthorizedException
+//     The request is not authorized.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/GetComponent
 func (c *SsmSap) GetComponent(input *GetComponentInput) (*GetComponentOutput, error) {
@@ -364,14 +370,13 @@ const opGetDatabase = "GetDatabase"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDatabaseRequest method.
+//	req, resp := client.GetDatabaseRequest(params)
 //
-//    // Example sending a request using the GetDatabaseRequest method.
-//    req, resp := client.GetDatabaseRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/GetDatabase
 func (c *SsmSap) GetDatabaseRequest(input *GetDatabaseInput) (req *request.Request, output *GetDatabaseOutput) {
@@ -403,11 +408,12 @@ func (c *SsmSap) GetDatabaseRequest(input *GetDatabaseInput) (req *request.Reque
 // API operation GetDatabase for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/GetDatabase
 func (c *SsmSap) GetDatabase(input *GetDatabaseInput) (*GetDatabaseOutput, error) {
@@ -447,14 +453,13 @@ const opGetOperation = "GetOperation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetOperationRequest method.
+//	req, resp := client.GetOperationRequest(params)
 //
-//    // Example sending a request using the GetOperationRequest method.
-//    req, resp := client.GetOperationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/GetOperation
 func (c *SsmSap) GetOperationRequest(input *GetOperationInput) (req *request.Request, output *GetOperationOutput) {
@@ -485,11 +490,12 @@ func (c *SsmSap) GetOperationRequest(input *GetOperationInput) (req *request.Req
 // API operation GetOperation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/GetOperation
 func (c *SsmSap) GetOperation(input *GetOperationInput) (*GetOperationOutput, error) {
@@ -529,14 +535,13 @@ const opGetResourcePermission = "GetResourcePermission"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResourcePermissionRequest method.
+//	req, resp := client.GetResourcePermissionRequest(params)
 //
-//    // Example sending a request using the GetResourcePermissionRequest method.
-//    req, resp := client.GetResourcePermissionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/GetResourcePermission
 func (c *SsmSap) GetResourcePermissionRequest(input *GetResourcePermissionInput) (req *request.Request, output *GetResourcePermissionOutput) {
@@ -567,14 +572,15 @@ func (c *SsmSap) GetResourcePermissionRequest(input *GetResourcePermissionInput)
 // API operation GetResourcePermission for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource is not available.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/GetResourcePermission
 func (c *SsmSap) GetResourcePermission(input *GetResourcePermissionInput) (*GetResourcePermissionOutput, error) {
@@ -614,14 +620,13 @@ const opListApplications = "ListApplications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListApplicationsRequest method.
+//	req, resp := client.ListApplicationsRequest(params)
 //
-//    // Example sending a request using the ListApplicationsRequest method.
-//    req, resp := client.ListApplicationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/ListApplications
 func (c *SsmSap) ListApplicationsRequest(input *ListApplicationsInput) (req *request.Request, output *ListApplicationsOutput) {
@@ -658,14 +663,15 @@ func (c *SsmSap) ListApplicationsRequest(input *ListApplicationsInput) (req *req
 // API operation ListApplications for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource is not available.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/ListApplications
 func (c *SsmSap) ListApplications(input *ListApplicationsInput) (*ListApplicationsOutput, error) {
@@ -697,15 +703,14 @@ func (c *SsmSap) ListApplicationsWithContext(ctx aws.Context, input *ListApplica
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListApplications operation.
-//    pageNum := 0
-//    err := client.ListApplicationsPages(params,
-//        func(page *ssmsap.ListApplicationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListApplications operation.
+//	pageNum := 0
+//	err := client.ListApplicationsPages(params,
+//	    func(page *ssmsap.ListApplicationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SsmSap) ListApplicationsPages(input *ListApplicationsInput, fn func(*ListApplicationsOutput, bool) bool) error {
 	return c.ListApplicationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -757,14 +762,13 @@ const opListComponents = "ListComponents"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListComponentsRequest method.
+//	req, resp := client.ListComponentsRequest(params)
 //
-//    // Example sending a request using the ListComponentsRequest method.
-//    req, resp := client.ListComponentsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/ListComponents
 func (c *SsmSap) ListComponentsRequest(input *ListComponentsInput) (req *request.Request, output *ListComponentsOutput) {
@@ -801,14 +805,18 @@ func (c *SsmSap) ListComponentsRequest(input *ListComponentsInput) (req *request
 // API operation ListComponents for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource is not available.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - UnauthorizedException
+//     The request is not authorized.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ResourceNotFoundException
+//     The resource is not available.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/ListComponents
 func (c *SsmSap) ListComponents(input *ListComponentsInput) (*ListComponentsOutput, error) {
@@ -840,15 +848,14 @@ func (c *SsmSap) ListComponentsWithContext(ctx aws.Context, input *ListComponent
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListComponents operation.
-//    pageNum := 0
-//    err := client.ListComponentsPages(params,
-//        func(page *ssmsap.ListComponentsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListComponents operation.
+//	pageNum := 0
+//	err := client.ListComponentsPages(params,
+//	    func(page *ssmsap.ListComponentsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SsmSap) ListComponentsPages(input *ListComponentsInput, fn func(*ListComponentsOutput, bool) bool) error {
 	return c.ListComponentsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -900,14 +907,13 @@ const opListDatabases = "ListDatabases"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDatabasesRequest method.
+//	req, resp := client.ListDatabasesRequest(params)
 //
-//    // Example sending a request using the ListDatabasesRequest method.
-//    req, resp := client.ListDatabasesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/ListDatabases
 func (c *SsmSap) ListDatabasesRequest(input *ListDatabasesInput) (req *request.Request, output *ListDatabasesOutput) {
@@ -945,14 +951,15 @@ func (c *SsmSap) ListDatabasesRequest(input *ListDatabasesInput) (req *request.R
 // API operation ListDatabases for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource is not available.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/ListDatabases
 func (c *SsmSap) ListDatabases(input *ListDatabasesInput) (*ListDatabasesOutput, error) {
@@ -984,15 +991,14 @@ func (c *SsmSap) ListDatabasesWithContext(ctx aws.Context, input *ListDatabasesI
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDatabases operation.
-//    pageNum := 0
-//    err := client.ListDatabasesPages(params,
-//        func(page *ssmsap.ListDatabasesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDatabases operation.
+//	pageNum := 0
+//	err := client.ListDatabasesPages(params,
+//	    func(page *ssmsap.ListDatabasesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SsmSap) ListDatabasesPages(input *ListDatabasesInput, fn func(*ListDatabasesOutput, bool) bool) error {
 	return c.ListDatabasesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1044,14 +1050,13 @@ const opListOperations = "ListOperations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListOperationsRequest method.
+//	req, resp := client.ListOperationsRequest(params)
 //
-//    // Example sending a request using the ListOperationsRequest method.
-//    req, resp := client.ListOperationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/ListOperations
 func (c *SsmSap) ListOperationsRequest(input *ListOperationsInput) (req *request.Request, output *ListOperationsOutput) {
@@ -1088,11 +1093,12 @@ func (c *SsmSap) ListOperationsRequest(input *ListOperationsInput) (req *request
 // API operation ListOperations for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/ListOperations
 func (c *SsmSap) ListOperations(input *ListOperationsInput) (*ListOperationsOutput, error) {
@@ -1124,15 +1130,14 @@ func (c *SsmSap) ListOperationsWithContext(ctx aws.Context, input *ListOperation
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListOperations operation.
-//    pageNum := 0
-//    err := client.ListOperationsPages(params,
-//        func(page *ssmsap.ListOperationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListOperations operation.
+//	pageNum := 0
+//	err := client.ListOperationsPages(params,
+//	    func(page *ssmsap.ListOperationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SsmSap) ListOperationsPages(input *ListOperationsInput, fn func(*ListOperationsOutput, bool) bool) error {
 	return c.ListOperationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1184,14 +1189,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/ListTagsForResource
 func (c *SsmSap) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1223,14 +1227,15 @@ func (c *SsmSap) ListTagsForResourceRequest(input *ListTagsForResourceInput) (re
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource is not available.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
-//   * ConflictException
-//   A conflict has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     A conflict has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/ListTagsForResource
 func (c *SsmSap) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1270,14 +1275,13 @@ const opPutResourcePermission = "PutResourcePermission"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutResourcePermissionRequest method.
+//	req, resp := client.PutResourcePermissionRequest(params)
 //
-//    // Example sending a request using the PutResourcePermissionRequest method.
-//    req, resp := client.PutResourcePermissionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/PutResourcePermission
 func (c *SsmSap) PutResourcePermissionRequest(input *PutResourcePermissionInput) (req *request.Request, output *PutResourcePermissionOutput) {
@@ -1308,14 +1312,15 @@ func (c *SsmSap) PutResourcePermissionRequest(input *PutResourcePermissionInput)
 // API operation PutResourcePermission for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource is not available.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/PutResourcePermission
 func (c *SsmSap) PutResourcePermission(input *PutResourcePermissionInput) (*PutResourcePermissionOutput, error) {
@@ -1355,14 +1360,13 @@ const opRegisterApplication = "RegisterApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterApplicationRequest method.
+//	req, resp := client.RegisterApplicationRequest(params)
 //
-//    // Example sending a request using the RegisterApplicationRequest method.
-//    req, resp := client.RegisterApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/RegisterApplication
 func (c *SsmSap) RegisterApplicationRequest(input *RegisterApplicationInput) (req *request.Request, output *RegisterApplicationOutput) {
@@ -1403,14 +1407,18 @@ func (c *SsmSap) RegisterApplicationRequest(input *RegisterApplicationInput) (re
 // API operation RegisterApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ConflictException
-//   A conflict has occurred.
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     A conflict has occurred.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/RegisterApplication
 func (c *SsmSap) RegisterApplication(input *RegisterApplicationInput) (*RegisterApplicationOutput, error) {
@@ -1434,6 +1442,97 @@ func (c *SsmSap) RegisterApplicationWithContext(ctx aws.Context, input *Register
 	return out, req.Send()
 }
 
+const opStartApplicationRefresh = "StartApplicationRefresh"
+
+// StartApplicationRefreshRequest generates a "aws/request.Request" representing the
+// client's request for the StartApplicationRefresh operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartApplicationRefresh for more information on using the StartApplicationRefresh
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StartApplicationRefreshRequest method.
+//	req, resp := client.StartApplicationRefreshRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/StartApplicationRefresh
+func (c *SsmSap) StartApplicationRefreshRequest(input *StartApplicationRefreshInput) (req *request.Request, output *StartApplicationRefreshOutput) {
+	op := &request.Operation{
+		Name:       opStartApplicationRefresh,
+		HTTPMethod: "POST",
+		HTTPPath:   "/start-application-refresh",
+	}
+
+	if input == nil {
+		input = &StartApplicationRefreshInput{}
+	}
+
+	output = &StartApplicationRefreshOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartApplicationRefresh API operation for AWS Systems Manager for SAP.
+//
+// Refreshes a registered application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Systems Manager for SAP's
+// API operation StartApplicationRefresh for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UnauthorizedException
+//     The request is not authorized.
+//
+//   - ResourceNotFoundException
+//     The resource is not available.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     A conflict has occurred.
+//
+//   - InternalServerException
+//     An internal error has occurred.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/StartApplicationRefresh
+func (c *SsmSap) StartApplicationRefresh(input *StartApplicationRefreshInput) (*StartApplicationRefreshOutput, error) {
+	req, out := c.StartApplicationRefreshRequest(input)
+	return out, req.Send()
+}
+
+// StartApplicationRefreshWithContext is the same as StartApplicationRefresh with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartApplicationRefresh for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SsmSap) StartApplicationRefreshWithContext(ctx aws.Context, input *StartApplicationRefreshInput, opts ...request.Option) (*StartApplicationRefreshOutput, error) {
+	req, out := c.StartApplicationRefreshRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opTagResource = "TagResource"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
@@ -1450,14 +1549,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/TagResource
 func (c *SsmSap) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1489,14 +1587,15 @@ func (c *SsmSap) TagResourceRequest(input *TagResourceInput) (req *request.Reque
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource is not available.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
-//   * ConflictException
-//   A conflict has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     A conflict has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/TagResource
 func (c *SsmSap) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1536,14 +1635,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/UntagResource
 func (c *SsmSap) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -1575,14 +1673,15 @@ func (c *SsmSap) UntagResourceRequest(input *UntagResourceInput) (req *request.R
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource is not available.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ResourceNotFoundException
+//     The resource is not available.
 //
-//   * ConflictException
-//   A conflict has occurred.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     A conflict has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/UntagResource
 func (c *SsmSap) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -1622,14 +1721,13 @@ const opUpdateApplicationSettings = "UpdateApplicationSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateApplicationSettingsRequest method.
+//	req, resp := client.UpdateApplicationSettingsRequest(params)
 //
-//    // Example sending a request using the UpdateApplicationSettingsRequest method.
-//    req, resp := client.UpdateApplicationSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/UpdateApplicationSettings
 func (c *SsmSap) UpdateApplicationSettingsRequest(input *UpdateApplicationSettingsInput) (req *request.Request, output *UpdateApplicationSettingsOutput) {
@@ -1661,14 +1759,21 @@ func (c *SsmSap) UpdateApplicationSettingsRequest(input *UpdateApplicationSettin
 // API operation UpdateApplicationSettings for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource is not available.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - UnauthorizedException
+//     The request is not authorized.
 //
-//   * InternalServerException
-//   An internal error has occurred.
+//   - ResourceNotFoundException
+//     The resource is not available.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     A conflict has occurred.
+//
+//   - InternalServerException
+//     An internal error has occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-sap-2018-05-10/UpdateApplicationSettings
 func (c *SsmSap) UpdateApplicationSettings(input *UpdateApplicationSettingsInput) (*UpdateApplicationSettingsOutput, error) {
@@ -1704,6 +1809,9 @@ type Application struct {
 
 	// The components of the application.
 	Components []*string `type:"list"`
+
+	// The latest discovery result for the application.
+	DiscoveryStatus *string `type:"string" enum:"ApplicationDiscoveryStatus"`
 
 	// The ID of the application.
 	Id *string `type:"string"`
@@ -1754,6 +1862,12 @@ func (s *Application) SetArn(v string) *Application {
 // SetComponents sets the Components field's value.
 func (s *Application) SetComponents(v []*string) *Application {
 	s.Components = v
+	return s
+}
+
+// SetDiscoveryStatus sets the DiscoveryStatus field's value.
+func (s *Application) SetDiscoveryStatus(v string) *Application {
+	s.DiscoveryStatus = &v
 	return s
 }
 
@@ -1881,6 +1995,9 @@ type ApplicationSummary struct {
 	// The Amazon Resource Name (ARN) of the application.
 	Arn *string `type:"string"`
 
+	// The status of the latest discovery.
+	DiscoveryStatus *string `type:"string" enum:"ApplicationDiscoveryStatus"`
+
 	// The ID of the application.
 	Id *string `type:"string"`
 
@@ -1915,6 +2032,12 @@ func (s *ApplicationSummary) SetArn(v string) *ApplicationSummary {
 	return s
 }
 
+// SetDiscoveryStatus sets the DiscoveryStatus field's value.
+func (s *ApplicationSummary) SetDiscoveryStatus(v string) *ApplicationSummary {
+	s.DiscoveryStatus = &v
+	return s
+}
+
 // SetId sets the Id field's value.
 func (s *ApplicationSummary) SetId(v string) *ApplicationSummary {
 	s.Id = &v
@@ -1933,6 +2056,125 @@ func (s *ApplicationSummary) SetType(v string) *ApplicationSummary {
 	return s
 }
 
+// Describes the properties of the associated host.
+type AssociatedHost struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the Amazon EC2 instance.
+	Ec2InstanceId *string `type:"string"`
+
+	// The name of the host.
+	Hostname *string `type:"string"`
+
+	// The IP addresses of the associated host.
+	IpAddresses []*IpAddressMember `type:"list"`
+
+	// The version of the operating system.
+	OsVersion *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatedHost) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatedHost) GoString() string {
+	return s.String()
+}
+
+// SetEc2InstanceId sets the Ec2InstanceId field's value.
+func (s *AssociatedHost) SetEc2InstanceId(v string) *AssociatedHost {
+	s.Ec2InstanceId = &v
+	return s
+}
+
+// SetHostname sets the Hostname field's value.
+func (s *AssociatedHost) SetHostname(v string) *AssociatedHost {
+	s.Hostname = &v
+	return s
+}
+
+// SetIpAddresses sets the IpAddresses field's value.
+func (s *AssociatedHost) SetIpAddresses(v []*IpAddressMember) *AssociatedHost {
+	s.IpAddresses = v
+	return s
+}
+
+// SetOsVersion sets the OsVersion field's value.
+func (s *AssociatedHost) SetOsVersion(v string) *AssociatedHost {
+	s.OsVersion = &v
+	return s
+}
+
+// Configuration parameters for AWS Backint Agent for SAP HANA. You can backup
+// your SAP HANA database with AWS Backup or Amazon S3.
+type BackintConfig struct {
+	_ struct{} `type:"structure"`
+
+	// AWS service for your database backup.
+	//
+	// BackintMode is a required field
+	BackintMode *string `type:"string" required:"true" enum:"BackintMode"`
+
+	// EnsureNoBackupInProcess is a required field
+	EnsureNoBackupInProcess *bool `type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BackintConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BackintConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BackintConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BackintConfig"}
+	if s.BackintMode == nil {
+		invalidParams.Add(request.NewErrParamRequired("BackintMode"))
+	}
+	if s.EnsureNoBackupInProcess == nil {
+		invalidParams.Add(request.NewErrParamRequired("EnsureNoBackupInProcess"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBackintMode sets the BackintMode field's value.
+func (s *BackintConfig) SetBackintMode(v string) *BackintConfig {
+	s.BackintMode = &v
+	return s
+}
+
+// SetEnsureNoBackupInProcess sets the EnsureNoBackupInProcess field's value.
+func (s *BackintConfig) SetEnsureNoBackupInProcess(v bool) *BackintConfig {
+	s.EnsureNoBackupInProcess = &v
+	return s
+}
+
 // The SAP component of your application.
 type Component struct {
 	_ struct{} `type:"structure"`
@@ -1940,26 +2182,87 @@ type Component struct {
 	// The ID of the application.
 	ApplicationId *string `type:"string"`
 
+	// The Amazon Resource Name (ARN) of the component.
+	Arn *string `type:"string"`
+
+	// The associated host of the component.
+	AssociatedHost *AssociatedHost `type:"structure"`
+
+	// The child components of a highly available environment. For example, in a
+	// highly available SAP on AWS workload, the child component consists of the
+	// primary and secondar instances.
+	ChildComponents []*string `type:"list"`
+
 	// The ID of the component.
 	ComponentId *string `type:"string"`
 
 	// The type of the component.
 	ComponentType *string `type:"string" enum:"ComponentType"`
 
+	// The connection specifications for the database of the component.
+	DatabaseConnection *DatabaseConnection `type:"structure"`
+
 	// The SAP HANA databases of the component.
 	Databases []*string `type:"list"`
 
+	// The SAP HANA version of the component.
+	HdbVersion *string `type:"string"`
+
 	// The hosts of the component.
-	Hosts []*Host `type:"list"`
+	//
+	// Deprecated: This shape is no longer used. Please use AssociatedHost.
+	Hosts []*Host `deprecated:"true" type:"list"`
 
 	// The time at which the component was last updated.
 	LastUpdated *time.Time `type:"timestamp"`
 
+	// The parent component of a highly available environment. For example, in a
+	// highly available SAP on AWS workload, the parent component consists of the
+	// entire setup, including the child components.
+	ParentComponent *string `type:"string"`
+
 	// The primary host of the component.
-	PrimaryHost *string `type:"string"`
+	//
+	// Deprecated: This shape is no longer used. Please use AssociatedHost.
+	PrimaryHost *string `deprecated:"true" type:"string"`
+
+	// Details of the SAP HANA system replication for the component.
+	Resilience *Resilience `type:"structure"`
+
+	// The SAP feature of the component.
+	SapFeature *string `type:"string"`
+
+	// The hostname of the component.
+	SapHostname *string `type:"string"`
+
+	// The kernel version of the component.
+	SapKernelVersion *string `type:"string"`
+
+	// The SAP System Identifier of the application component.
+	Sid *string `type:"string"`
 
 	// The status of the component.
+	//
+	//    * ACTIVATED - this status has been deprecated.
+	//
+	//    * STARTING - the component is in the process of being started.
+	//
+	//    * STOPPED - the component is not running.
+	//
+	//    * STOPPING - the component is in the process of being stopped.
+	//
+	//    * RUNNING - the component is running.
+	//
+	//    * RUNNING_WITH_ERROR - one or more child component(s) of the parent component
+	//    is not running. Call GetComponent (https://docs.aws.amazon.com/ssmsap/latest/APIReference/API_GetComponent.html)
+	//    to review the status of each child component.
+	//
+	//    * UNDEFINED - AWS Systems Manager for SAP cannot provide the component
+	//    status based on the discovered information. Verify your SAP application.
 	Status *string `type:"string" enum:"ComponentStatus"`
+
+	// The SAP system number of the application component.
+	SystemNumber *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -1986,6 +2289,24 @@ func (s *Component) SetApplicationId(v string) *Component {
 	return s
 }
 
+// SetArn sets the Arn field's value.
+func (s *Component) SetArn(v string) *Component {
+	s.Arn = &v
+	return s
+}
+
+// SetAssociatedHost sets the AssociatedHost field's value.
+func (s *Component) SetAssociatedHost(v *AssociatedHost) *Component {
+	s.AssociatedHost = v
+	return s
+}
+
+// SetChildComponents sets the ChildComponents field's value.
+func (s *Component) SetChildComponents(v []*string) *Component {
+	s.ChildComponents = v
+	return s
+}
+
 // SetComponentId sets the ComponentId field's value.
 func (s *Component) SetComponentId(v string) *Component {
 	s.ComponentId = &v
@@ -1998,9 +2319,21 @@ func (s *Component) SetComponentType(v string) *Component {
 	return s
 }
 
+// SetDatabaseConnection sets the DatabaseConnection field's value.
+func (s *Component) SetDatabaseConnection(v *DatabaseConnection) *Component {
+	s.DatabaseConnection = v
+	return s
+}
+
 // SetDatabases sets the Databases field's value.
 func (s *Component) SetDatabases(v []*string) *Component {
 	s.Databases = v
+	return s
+}
+
+// SetHdbVersion sets the HdbVersion field's value.
+func (s *Component) SetHdbVersion(v string) *Component {
+	s.HdbVersion = &v
 	return s
 }
 
@@ -2016,9 +2349,45 @@ func (s *Component) SetLastUpdated(v time.Time) *Component {
 	return s
 }
 
+// SetParentComponent sets the ParentComponent field's value.
+func (s *Component) SetParentComponent(v string) *Component {
+	s.ParentComponent = &v
+	return s
+}
+
 // SetPrimaryHost sets the PrimaryHost field's value.
 func (s *Component) SetPrimaryHost(v string) *Component {
 	s.PrimaryHost = &v
+	return s
+}
+
+// SetResilience sets the Resilience field's value.
+func (s *Component) SetResilience(v *Resilience) *Component {
+	s.Resilience = v
+	return s
+}
+
+// SetSapFeature sets the SapFeature field's value.
+func (s *Component) SetSapFeature(v string) *Component {
+	s.SapFeature = &v
+	return s
+}
+
+// SetSapHostname sets the SapHostname field's value.
+func (s *Component) SetSapHostname(v string) *Component {
+	s.SapHostname = &v
+	return s
+}
+
+// SetSapKernelVersion sets the SapKernelVersion field's value.
+func (s *Component) SetSapKernelVersion(v string) *Component {
+	s.SapKernelVersion = &v
+	return s
+}
+
+// SetSid sets the Sid field's value.
+func (s *Component) SetSid(v string) *Component {
+	s.Sid = &v
 	return s
 }
 
@@ -2028,12 +2397,21 @@ func (s *Component) SetStatus(v string) *Component {
 	return s
 }
 
+// SetSystemNumber sets the SystemNumber field's value.
+func (s *Component) SetSystemNumber(v string) *Component {
+	s.SystemNumber = &v
+	return s
+}
+
 // The summary of the component.
 type ComponentSummary struct {
 	_ struct{} `type:"structure"`
 
 	// The ID of the application.
 	ApplicationId *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the component summary.
+	Arn *string `type:"string"`
 
 	// The ID of the component.
 	ComponentId *string `type:"string"`
@@ -2066,6 +2444,12 @@ func (s ComponentSummary) GoString() string {
 // SetApplicationId sets the ApplicationId field's value.
 func (s *ComponentSummary) SetApplicationId(v string) *ComponentSummary {
 	s.ApplicationId = &v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *ComponentSummary) SetArn(v string) *ComponentSummary {
+	s.Arn = &v
 	return s
 }
 
@@ -2166,7 +2550,7 @@ type Database struct {
 	ComponentId *string `type:"string"`
 
 	// The credentials of the database.
-	Credentials []*ApplicationCredential `min:"1" type:"list"`
+	Credentials []*ApplicationCredential `type:"list"`
 
 	// The ID of the SAP HANA database.
 	DatabaseId *string `type:"string"`
@@ -2271,6 +2655,56 @@ func (s *Database) SetSQLPort(v int64) *Database {
 // SetStatus sets the Status field's value.
 func (s *Database) SetStatus(v string) *Database {
 	s.Status = &v
+	return s
+}
+
+// The connection specifications for the database.
+type DatabaseConnection struct {
+	_ struct{} `type:"structure"`
+
+	// The IP address for connection.
+	ConnectionIp *string `type:"string"`
+
+	// The Amazon Resource Name of the connected SAP HANA database.
+	DatabaseArn *string `type:"string"`
+
+	// The method of connection.
+	DatabaseConnectionMethod *string `type:"string" enum:"DatabaseConnectionMethod"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DatabaseConnection) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DatabaseConnection) GoString() string {
+	return s.String()
+}
+
+// SetConnectionIp sets the ConnectionIp field's value.
+func (s *DatabaseConnection) SetConnectionIp(v string) *DatabaseConnection {
+	s.ConnectionIp = &v
+	return s
+}
+
+// SetDatabaseArn sets the DatabaseArn field's value.
+func (s *DatabaseConnection) SetDatabaseArn(v string) *DatabaseConnection {
+	s.DatabaseArn = &v
+	return s
+}
+
+// SetDatabaseConnectionMethod sets the DatabaseConnectionMethod field's value.
+func (s *DatabaseConnection) SetDatabaseConnectionMethod(v string) *DatabaseConnection {
+	s.DatabaseConnectionMethod = &v
 	return s
 }
 
@@ -2752,6 +3186,9 @@ type GetComponentOutput struct {
 
 	// The component of an application registered with AWS Systems Manager for SAP.
 	Component *Component `type:"structure"`
+
+	// The tags of a component.
+	Tags map[string]*string `type:"map"`
 }
 
 // String returns the string representation.
@@ -2775,6 +3212,12 @@ func (s GetComponentOutput) GoString() string {
 // SetComponent sets the Component field's value.
 func (s *GetComponentOutput) SetComponent(v *Component) *GetComponentOutput {
 	s.Component = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetComponentOutput) SetTags(v map[string]*string) *GetComponentOutput {
+	s.Tags = v
 	return s
 }
 
@@ -3042,6 +3485,9 @@ func (s *GetResourcePermissionOutput) SetPolicy(v string) *GetResourcePermission
 type Host struct {
 	_ struct{} `type:"structure"`
 
+	// The ID of Amazon EC2 instance.
+	EC2InstanceId *string `type:"string"`
+
 	// The IP address of the Dedicated Host.
 	HostIp *string `type:"string"`
 
@@ -3053,6 +3499,9 @@ type Host struct {
 
 	// The instance ID of the instance on the Dedicated Host.
 	InstanceId *string `type:"string"`
+
+	// The version of the operating system.
+	OsVersion *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -3071,6 +3520,12 @@ func (s Host) String() string {
 // value will be replaced with "sensitive".
 func (s Host) GoString() string {
 	return s.String()
+}
+
+// SetEC2InstanceId sets the EC2InstanceId field's value.
+func (s *Host) SetEC2InstanceId(v string) *Host {
+	s.EC2InstanceId = &v
+	return s
 }
 
 // SetHostIp sets the HostIp field's value.
@@ -3094,6 +3549,12 @@ func (s *Host) SetHostRole(v string) *Host {
 // SetInstanceId sets the InstanceId field's value.
 func (s *Host) SetInstanceId(v string) *Host {
 	s.InstanceId = &v
+	return s
+}
+
+// SetOsVersion sets the OsVersion field's value.
+func (s *Host) SetOsVersion(v string) *Host {
+	s.OsVersion = &v
 	return s
 }
 
@@ -3161,8 +3622,61 @@ func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Provides information of the IP address.
+type IpAddressMember struct {
+	_ struct{} `type:"structure"`
+
+	// The type of allocation for the IP address.
+	AllocationType *string `type:"string" enum:"AllocationType"`
+
+	// The IP address.
+	IpAddress *string `type:"string"`
+
+	// The primary IP address.
+	Primary *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IpAddressMember) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IpAddressMember) GoString() string {
+	return s.String()
+}
+
+// SetAllocationType sets the AllocationType field's value.
+func (s *IpAddressMember) SetAllocationType(v string) *IpAddressMember {
+	s.AllocationType = &v
+	return s
+}
+
+// SetIpAddress sets the IpAddress field's value.
+func (s *IpAddressMember) SetIpAddress(v string) *IpAddressMember {
+	s.IpAddress = &v
+	return s
+}
+
+// SetPrimary sets the Primary field's value.
+func (s *IpAddressMember) SetPrimary(v bool) *IpAddressMember {
+	s.Primary = &v
+	return s
+}
+
 type ListApplicationsInput struct {
 	_ struct{} `type:"structure"`
+
+	// The filter of name, value, and operator.
+	Filters []*Filter `min:"1" type:"list"`
 
 	// The maximum number of results to return with a single call. To retrieve the
 	// remaining results, make another call with the returned nextToken value.
@@ -3193,14 +3707,33 @@ func (s ListApplicationsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListApplicationsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListApplicationsInput"}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListApplicationsInput) SetFilters(v []*Filter) *ListApplicationsInput {
+	s.Filters = v
+	return s
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -3924,9 +4457,10 @@ type RegisterApplicationInput struct {
 	ApplicationType *string `type:"string" required:"true" enum:"ApplicationType"`
 
 	// The credentials of the SAP application.
-	//
-	// Credentials is a required field
-	Credentials []*ApplicationCredential `min:"1" type:"list" required:"true"`
+	Credentials []*ApplicationCredential `type:"list"`
+
+	// The Amazon Resource Name of the SAP HANA database.
+	DatabaseArn *string `type:"string"`
 
 	// The Amazon EC2 instances on which your SAP application is running.
 	//
@@ -3970,12 +4504,6 @@ func (s *RegisterApplicationInput) Validate() error {
 	if s.ApplicationType == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApplicationType"))
 	}
-	if s.Credentials == nil {
-		invalidParams.Add(request.NewErrParamRequired("Credentials"))
-	}
-	if s.Credentials != nil && len(s.Credentials) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Credentials", 1))
-	}
 	if s.Instances == nil {
 		invalidParams.Add(request.NewErrParamRequired("Instances"))
 	}
@@ -4014,6 +4542,12 @@ func (s *RegisterApplicationInput) SetApplicationType(v string) *RegisterApplica
 // SetCredentials sets the Credentials field's value.
 func (s *RegisterApplicationInput) SetCredentials(v []*ApplicationCredential) *RegisterApplicationInput {
 	s.Credentials = v
+	return s
+}
+
+// SetDatabaseArn sets the DatabaseArn field's value.
+func (s *RegisterApplicationInput) SetDatabaseArn(v string) *RegisterApplicationInput {
+	s.DatabaseArn = &v
 	return s
 }
 
@@ -4081,6 +4615,74 @@ func (s *RegisterApplicationOutput) SetOperationId(v string) *RegisterApplicatio
 	return s
 }
 
+// Details of the SAP HANA system replication for the instance.
+type Resilience struct {
+	_ struct{} `type:"structure"`
+
+	// The cluster status of the component.
+	ClusterStatus *string `type:"string" enum:"ClusterStatus"`
+
+	// Indicates if or not enqueue replication is enabled for the ASCS component.
+	EnqueueReplication *bool `type:"boolean"`
+
+	// The operation mode of the component.
+	HsrOperationMode *string `type:"string" enum:"OperationMode"`
+
+	// The replication mode of the component.
+	HsrReplicationMode *string `type:"string" enum:"ReplicationMode"`
+
+	// The tier of the component.
+	HsrTier *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Resilience) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Resilience) GoString() string {
+	return s.String()
+}
+
+// SetClusterStatus sets the ClusterStatus field's value.
+func (s *Resilience) SetClusterStatus(v string) *Resilience {
+	s.ClusterStatus = &v
+	return s
+}
+
+// SetEnqueueReplication sets the EnqueueReplication field's value.
+func (s *Resilience) SetEnqueueReplication(v bool) *Resilience {
+	s.EnqueueReplication = &v
+	return s
+}
+
+// SetHsrOperationMode sets the HsrOperationMode field's value.
+func (s *Resilience) SetHsrOperationMode(v string) *Resilience {
+	s.HsrOperationMode = &v
+	return s
+}
+
+// SetHsrReplicationMode sets the HsrReplicationMode field's value.
+func (s *Resilience) SetHsrReplicationMode(v string) *Resilience {
+	s.HsrReplicationMode = &v
+	return s
+}
+
+// SetHsrTier sets the HsrTier field's value.
+func (s *Resilience) SetHsrTier(v string) *Resilience {
+	s.HsrTier = &v
+	return s
+}
+
 // The resource is not available.
 type ResourceNotFoundException struct {
 	_            struct{}                  `type:"structure"`
@@ -4143,6 +4745,83 @@ func (s *ResourceNotFoundException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+type StartApplicationRefreshInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the application.
+	//
+	// ApplicationId is a required field
+	ApplicationId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartApplicationRefreshInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartApplicationRefreshInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartApplicationRefreshInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartApplicationRefreshInput"}
+	if s.ApplicationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApplicationId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApplicationId sets the ApplicationId field's value.
+func (s *StartApplicationRefreshInput) SetApplicationId(v string) *StartApplicationRefreshInput {
+	s.ApplicationId = &v
+	return s
+}
+
+type StartApplicationRefreshOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the operation.
+	OperationId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartApplicationRefreshOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartApplicationRefreshOutput) GoString() string {
+	return s.String()
+}
+
+// SetOperationId sets the OperationId field's value.
+func (s *StartApplicationRefreshOutput) SetOperationId(v string) *StartApplicationRefreshOutput {
+	s.OperationId = &v
+	return s
 }
 
 type TagResourceInput struct {
@@ -4228,6 +4907,70 @@ func (s TagResourceOutput) String() string {
 // value will be replaced with "sensitive".
 func (s TagResourceOutput) GoString() string {
 	return s.String()
+}
+
+// The request is not authorized.
+type UnauthorizedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnauthorizedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UnauthorizedException) GoString() string {
+	return s.String()
+}
+
+func newErrorUnauthorizedException(v protocol.ResponseMetadata) error {
+	return &UnauthorizedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnauthorizedException) Code() string {
+	return "UnauthorizedException"
+}
+
+// Message returns the exception's message.
+func (s *UnauthorizedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnauthorizedException) OrigErr() error {
+	return nil
+}
+
+func (s *UnauthorizedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnauthorizedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnauthorizedException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type UntagResourceInput struct {
@@ -4324,11 +5067,18 @@ type UpdateApplicationSettingsInput struct {
 	// ApplicationId is a required field
 	ApplicationId *string `type:"string" required:"true"`
 
+	// Installation of AWS Backint Agent for SAP HANA.
+	Backint *BackintConfig `type:"structure"`
+
 	// The credentials to be added or updated.
-	CredentialsToAddOrUpdate []*ApplicationCredential `min:"1" type:"list"`
+	CredentialsToAddOrUpdate []*ApplicationCredential `type:"list"`
 
 	// The credentials to be removed.
-	CredentialsToRemove []*ApplicationCredential `min:"1" type:"list"`
+	CredentialsToRemove []*ApplicationCredential `type:"list"`
+
+	// The Amazon Resource Name of the SAP HANA database that replaces the current
+	// SAP HANA connection with the SAP_ABAP application.
+	DatabaseArn *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -4355,11 +5105,10 @@ func (s *UpdateApplicationSettingsInput) Validate() error {
 	if s.ApplicationId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApplicationId"))
 	}
-	if s.CredentialsToAddOrUpdate != nil && len(s.CredentialsToAddOrUpdate) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("CredentialsToAddOrUpdate", 1))
-	}
-	if s.CredentialsToRemove != nil && len(s.CredentialsToRemove) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("CredentialsToRemove", 1))
+	if s.Backint != nil {
+		if err := s.Backint.Validate(); err != nil {
+			invalidParams.AddNested("Backint", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.CredentialsToAddOrUpdate != nil {
 		for i, v := range s.CredentialsToAddOrUpdate {
@@ -4394,6 +5143,12 @@ func (s *UpdateApplicationSettingsInput) SetApplicationId(v string) *UpdateAppli
 	return s
 }
 
+// SetBackint sets the Backint field's value.
+func (s *UpdateApplicationSettingsInput) SetBackint(v *BackintConfig) *UpdateApplicationSettingsInput {
+	s.Backint = v
+	return s
+}
+
 // SetCredentialsToAddOrUpdate sets the CredentialsToAddOrUpdate field's value.
 func (s *UpdateApplicationSettingsInput) SetCredentialsToAddOrUpdate(v []*ApplicationCredential) *UpdateApplicationSettingsInput {
 	s.CredentialsToAddOrUpdate = v
@@ -4403,6 +5158,12 @@ func (s *UpdateApplicationSettingsInput) SetCredentialsToAddOrUpdate(v []*Applic
 // SetCredentialsToRemove sets the CredentialsToRemove field's value.
 func (s *UpdateApplicationSettingsInput) SetCredentialsToRemove(v []*ApplicationCredential) *UpdateApplicationSettingsInput {
 	s.CredentialsToRemove = v
+	return s
+}
+
+// SetDatabaseArn sets the DatabaseArn field's value.
+func (s *UpdateApplicationSettingsInput) SetDatabaseArn(v string) *UpdateApplicationSettingsInput {
+	s.DatabaseArn = &v
 	return s
 }
 
@@ -4511,6 +5272,58 @@ func (s *ValidationException) RequestID() string {
 }
 
 const (
+	// AllocationTypeVpcSubnet is a AllocationType enum value
+	AllocationTypeVpcSubnet = "VPC_SUBNET"
+
+	// AllocationTypeElasticIp is a AllocationType enum value
+	AllocationTypeElasticIp = "ELASTIC_IP"
+
+	// AllocationTypeOverlay is a AllocationType enum value
+	AllocationTypeOverlay = "OVERLAY"
+
+	// AllocationTypeUnknown is a AllocationType enum value
+	AllocationTypeUnknown = "UNKNOWN"
+)
+
+// AllocationType_Values returns all elements of the AllocationType enum
+func AllocationType_Values() []string {
+	return []string{
+		AllocationTypeVpcSubnet,
+		AllocationTypeElasticIp,
+		AllocationTypeOverlay,
+		AllocationTypeUnknown,
+	}
+}
+
+const (
+	// ApplicationDiscoveryStatusSuccess is a ApplicationDiscoveryStatus enum value
+	ApplicationDiscoveryStatusSuccess = "SUCCESS"
+
+	// ApplicationDiscoveryStatusRegistrationFailed is a ApplicationDiscoveryStatus enum value
+	ApplicationDiscoveryStatusRegistrationFailed = "REGISTRATION_FAILED"
+
+	// ApplicationDiscoveryStatusRefreshFailed is a ApplicationDiscoveryStatus enum value
+	ApplicationDiscoveryStatusRefreshFailed = "REFRESH_FAILED"
+
+	// ApplicationDiscoveryStatusRegistering is a ApplicationDiscoveryStatus enum value
+	ApplicationDiscoveryStatusRegistering = "REGISTERING"
+
+	// ApplicationDiscoveryStatusDeleting is a ApplicationDiscoveryStatus enum value
+	ApplicationDiscoveryStatusDeleting = "DELETING"
+)
+
+// ApplicationDiscoveryStatus_Values returns all elements of the ApplicationDiscoveryStatus enum
+func ApplicationDiscoveryStatus_Values() []string {
+	return []string{
+		ApplicationDiscoveryStatusSuccess,
+		ApplicationDiscoveryStatusRegistrationFailed,
+		ApplicationDiscoveryStatusRefreshFailed,
+		ApplicationDiscoveryStatusRegistering,
+		ApplicationDiscoveryStatusDeleting,
+	}
+}
+
+const (
 	// ApplicationStatusActivated is a ApplicationStatus enum value
 	ApplicationStatusActivated = "ACTIVATED"
 
@@ -4553,36 +5366,132 @@ func ApplicationStatus_Values() []string {
 const (
 	// ApplicationTypeHana is a ApplicationType enum value
 	ApplicationTypeHana = "HANA"
+
+	// ApplicationTypeSapAbap is a ApplicationType enum value
+	ApplicationTypeSapAbap = "SAP_ABAP"
 )
 
 // ApplicationType_Values returns all elements of the ApplicationType enum
 func ApplicationType_Values() []string {
 	return []string{
 		ApplicationTypeHana,
+		ApplicationTypeSapAbap,
+	}
+}
+
+const (
+	// BackintModeAwsbackup is a BackintMode enum value
+	BackintModeAwsbackup = "AWSBackup"
+)
+
+// BackintMode_Values returns all elements of the BackintMode enum
+func BackintMode_Values() []string {
+	return []string{
+		BackintModeAwsbackup,
+	}
+}
+
+const (
+	// ClusterStatusOnline is a ClusterStatus enum value
+	ClusterStatusOnline = "ONLINE"
+
+	// ClusterStatusStandby is a ClusterStatus enum value
+	ClusterStatusStandby = "STANDBY"
+
+	// ClusterStatusMaintenance is a ClusterStatus enum value
+	ClusterStatusMaintenance = "MAINTENANCE"
+
+	// ClusterStatusOffline is a ClusterStatus enum value
+	ClusterStatusOffline = "OFFLINE"
+
+	// ClusterStatusNone is a ClusterStatus enum value
+	ClusterStatusNone = "NONE"
+)
+
+// ClusterStatus_Values returns all elements of the ClusterStatus enum
+func ClusterStatus_Values() []string {
+	return []string{
+		ClusterStatusOnline,
+		ClusterStatusStandby,
+		ClusterStatusMaintenance,
+		ClusterStatusOffline,
+		ClusterStatusNone,
 	}
 }
 
 const (
 	// ComponentStatusActivated is a ComponentStatus enum value
 	ComponentStatusActivated = "ACTIVATED"
+
+	// ComponentStatusStarting is a ComponentStatus enum value
+	ComponentStatusStarting = "STARTING"
+
+	// ComponentStatusStopped is a ComponentStatus enum value
+	ComponentStatusStopped = "STOPPED"
+
+	// ComponentStatusStopping is a ComponentStatus enum value
+	ComponentStatusStopping = "STOPPING"
+
+	// ComponentStatusRunning is a ComponentStatus enum value
+	ComponentStatusRunning = "RUNNING"
+
+	// ComponentStatusRunningWithError is a ComponentStatus enum value
+	ComponentStatusRunningWithError = "RUNNING_WITH_ERROR"
+
+	// ComponentStatusUndefined is a ComponentStatus enum value
+	ComponentStatusUndefined = "UNDEFINED"
 )
 
 // ComponentStatus_Values returns all elements of the ComponentStatus enum
 func ComponentStatus_Values() []string {
 	return []string{
 		ComponentStatusActivated,
+		ComponentStatusStarting,
+		ComponentStatusStopped,
+		ComponentStatusStopping,
+		ComponentStatusRunning,
+		ComponentStatusRunningWithError,
+		ComponentStatusUndefined,
 	}
 }
 
 const (
 	// ComponentTypeHana is a ComponentType enum value
 	ComponentTypeHana = "HANA"
+
+	// ComponentTypeHanaNode is a ComponentType enum value
+	ComponentTypeHanaNode = "HANA_NODE"
+
+	// ComponentTypeAbap is a ComponentType enum value
+	ComponentTypeAbap = "ABAP"
+
+	// ComponentTypeAscs is a ComponentType enum value
+	ComponentTypeAscs = "ASCS"
+
+	// ComponentTypeDialog is a ComponentType enum value
+	ComponentTypeDialog = "DIALOG"
+
+	// ComponentTypeWebdisp is a ComponentType enum value
+	ComponentTypeWebdisp = "WEBDISP"
+
+	// ComponentTypeWd is a ComponentType enum value
+	ComponentTypeWd = "WD"
+
+	// ComponentTypeErs is a ComponentType enum value
+	ComponentTypeErs = "ERS"
 )
 
 // ComponentType_Values returns all elements of the ComponentType enum
 func ComponentType_Values() []string {
 	return []string{
 		ComponentTypeHana,
+		ComponentTypeHanaNode,
+		ComponentTypeAbap,
+		ComponentTypeAscs,
+		ComponentTypeDialog,
+		ComponentTypeWebdisp,
+		ComponentTypeWd,
+		ComponentTypeErs,
 	}
 }
 
@@ -4595,6 +5504,22 @@ const (
 func CredentialType_Values() []string {
 	return []string{
 		CredentialTypeAdmin,
+	}
+}
+
+const (
+	// DatabaseConnectionMethodDirect is a DatabaseConnectionMethod enum value
+	DatabaseConnectionMethodDirect = "DIRECT"
+
+	// DatabaseConnectionMethodOverlay is a DatabaseConnectionMethod enum value
+	DatabaseConnectionMethodOverlay = "OVERLAY"
+)
+
+// DatabaseConnectionMethod_Values returns all elements of the DatabaseConnectionMethod enum
+func DatabaseConnectionMethod_Values() []string {
+	return []string{
+		DatabaseConnectionMethodDirect,
+		DatabaseConnectionMethodOverlay,
 	}
 }
 
@@ -4613,6 +5538,9 @@ const (
 
 	// DatabaseStatusUnknown is a DatabaseStatus enum value
 	DatabaseStatusUnknown = "UNKNOWN"
+
+	// DatabaseStatusError is a DatabaseStatus enum value
+	DatabaseStatusError = "ERROR"
 )
 
 // DatabaseStatus_Values returns all elements of the DatabaseStatus enum
@@ -4623,6 +5551,7 @@ func DatabaseStatus_Values() []string {
 		DatabaseStatusStopped,
 		DatabaseStatusWarning,
 		DatabaseStatusUnknown,
+		DatabaseStatusError,
 	}
 }
 
@@ -4687,6 +5616,34 @@ func HostRole_Values() []string {
 }
 
 const (
+	// OperationModePrimary is a OperationMode enum value
+	OperationModePrimary = "PRIMARY"
+
+	// OperationModeLogreplay is a OperationMode enum value
+	OperationModeLogreplay = "LOGREPLAY"
+
+	// OperationModeDeltaDatashipping is a OperationMode enum value
+	OperationModeDeltaDatashipping = "DELTA_DATASHIPPING"
+
+	// OperationModeLogreplayReadaccess is a OperationMode enum value
+	OperationModeLogreplayReadaccess = "LOGREPLAY_READACCESS"
+
+	// OperationModeNone is a OperationMode enum value
+	OperationModeNone = "NONE"
+)
+
+// OperationMode_Values returns all elements of the OperationMode enum
+func OperationMode_Values() []string {
+	return []string{
+		OperationModePrimary,
+		OperationModeLogreplay,
+		OperationModeDeltaDatashipping,
+		OperationModeLogreplayReadaccess,
+		OperationModeNone,
+	}
+}
+
+const (
 	// OperationStatusInprogress is a OperationStatus enum value
 	OperationStatusInprogress = "INPROGRESS"
 
@@ -4715,5 +5672,33 @@ const (
 func PermissionActionType_Values() []string {
 	return []string{
 		PermissionActionTypeRestore,
+	}
+}
+
+const (
+	// ReplicationModePrimary is a ReplicationMode enum value
+	ReplicationModePrimary = "PRIMARY"
+
+	// ReplicationModeNone is a ReplicationMode enum value
+	ReplicationModeNone = "NONE"
+
+	// ReplicationModeSync is a ReplicationMode enum value
+	ReplicationModeSync = "SYNC"
+
+	// ReplicationModeSyncmem is a ReplicationMode enum value
+	ReplicationModeSyncmem = "SYNCMEM"
+
+	// ReplicationModeAsync is a ReplicationMode enum value
+	ReplicationModeAsync = "ASYNC"
+)
+
+// ReplicationMode_Values returns all elements of the ReplicationMode enum
+func ReplicationMode_Values() []string {
+	return []string{
+		ReplicationModePrimary,
+		ReplicationModeNone,
+		ReplicationModeSync,
+		ReplicationModeSyncmem,
+		ReplicationModeAsync,
 	}
 }

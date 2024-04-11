@@ -27,14 +27,13 @@ const opBatchPutMetrics = "BatchPutMetrics"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchPutMetricsRequest method.
+//	req, resp := client.BatchPutMetricsRequest(params)
 //
-//    // Example sending a request using the BatchPutMetricsRequest method.
-//    req, resp := client.BatchPutMetricsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-metrics-2022-09-30/BatchPutMetrics
 func (c *SageMakerMetrics) BatchPutMetricsRequest(input *BatchPutMetricsInput) (req *request.Request, output *BatchPutMetricsOutput) {

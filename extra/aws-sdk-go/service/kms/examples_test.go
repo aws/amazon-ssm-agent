@@ -26,7 +26,6 @@ func parseTime(layout, value string) *time.Time {
 }
 
 // To cancel deletion of a KMS key
-//
 // The following example cancels deletion of the specified KMS key.
 func ExampleKMS_CancelKeyDeletion_shared00() {
 	svc := kms.New(session.New())
@@ -63,7 +62,6 @@ func ExampleKMS_CancelKeyDeletion_shared00() {
 }
 
 // To connect a custom key store
-//
 // This example connects an AWS KMS custom key store to its backing key store. For an
 // AWS CloudHSM key store, it connects the key store to its AWS CloudHSM cluster. For
 // an external key store, it connects the key store to the external key store proxy
@@ -105,7 +103,6 @@ func ExampleKMS_ConnectCustomKeyStore_shared00() {
 }
 
 // To create an alias
-//
 // The following example creates an alias for the specified KMS key.
 func ExampleKMS_CreateAlias_shared00() {
 	svc := kms.New(session.New())
@@ -147,7 +144,6 @@ func ExampleKMS_CreateAlias_shared00() {
 }
 
 // To create an AWS CloudHSM key store
-//
 // This example creates a custom key store that is associated with an AWS CloudHSM cluster.
 func ExampleKMS_CreateCustomKeyStore_shared00() {
 	svc := kms.New(session.New())
@@ -211,7 +207,6 @@ func ExampleKMS_CreateCustomKeyStore_shared00() {
 }
 
 // To create an external key store with VPC endpoint service connectivity
-//
 // This example creates an external key store that uses an Amazon VPC endpoint service
 // to communicate with AWS KMS.
 func ExampleKMS_CreateCustomKeyStore_shared01() {
@@ -282,7 +277,6 @@ func ExampleKMS_CreateCustomKeyStore_shared01() {
 }
 
 // To create an external key store with public endpoint connectivity
-//
 // This example creates an external key store with public endpoint connectivity.
 func ExampleKMS_CreateCustomKeyStore_shared02() {
 	svc := kms.New(session.New())
@@ -351,7 +345,6 @@ func ExampleKMS_CreateCustomKeyStore_shared02() {
 }
 
 // To create a grant
-//
 // The following example creates a grant that allows the specified IAM role to encrypt
 // data with the specified KMS key.
 func ExampleKMS_CreateGrant_shared00() {
@@ -385,6 +378,8 @@ func ExampleKMS_CreateGrant_shared00() {
 				fmt.Println(kms.ErrCodeLimitExceededException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -400,7 +395,6 @@ func ExampleKMS_CreateGrant_shared00() {
 }
 
 // To create a KMS key
-//
 // The following example creates a symmetric KMS key for encryption and decryption.
 // No parameters are required for this operation.
 func ExampleKMS_CreateKey_shared00() {
@@ -452,7 +446,6 @@ func ExampleKMS_CreateKey_shared00() {
 }
 
 // To create an asymmetric RSA KMS key for encryption and decryption
-//
 // This example creates a KMS key that contains an asymmetric RSA key pair for encryption
 // and decryption. The key spec and key usage can't be changed after the key is created.
 func ExampleKMS_CreateKey_shared01() {
@@ -507,7 +500,6 @@ func ExampleKMS_CreateKey_shared01() {
 }
 
 // To create an asymmetric elliptic curve KMS key for signing and verification
-//
 // This example creates a KMS key that contains an asymmetric elliptic curve (ECC) key
 // pair for signing and verification. The key usage is required even though "SIGN_VERIFY"
 // is the only valid value for ECC KMS keys. The key spec and key usage can't be changed
@@ -564,7 +556,6 @@ func ExampleKMS_CreateKey_shared02() {
 }
 
 // To create an HMAC KMS key
-//
 // This example creates a 384-bit symmetric HMAC KMS key. The GENERATE_VERIFY_MAC key
 // usage value is required even though it's the only valid value for HMAC KMS keys.
 // The key spec and key usage can't be changed after the key is created.
@@ -620,7 +611,6 @@ func ExampleKMS_CreateKey_shared03() {
 }
 
 // To create a multi-Region primary KMS key
-//
 // This example creates a multi-Region primary symmetric encryption key. Because the
 // default values for all parameters create a symmetric encryption key, only the MultiRegion
 // parameter is required for this KMS key.
@@ -675,10 +665,9 @@ func ExampleKMS_CreateKey_shared04() {
 }
 
 // To create a KMS key for imported key material
-//
-// This example creates a KMS key with no key material. When the operation is complete,
-// you can import your own key material into the KMS key. To create this KMS key, set
-// the Origin parameter to EXTERNAL.
+// This example creates a symmetric KMS key with no key material. When the operation
+// is complete, you can import your own key material into the KMS key. To create this
+// KMS key, set the Origin parameter to EXTERNAL.
 func ExampleKMS_CreateKey_shared05() {
 	svc := kms.New(session.New())
 	input := &kms.CreateKeyInput{
@@ -730,7 +719,6 @@ func ExampleKMS_CreateKey_shared05() {
 }
 
 // To create a KMS key in an AWS CloudHSM key store
-//
 // This example creates a KMS key in the specified AWS CloudHSM key store. The operation
 // creates the KMS key and its metadata in AWS KMS and creates the key material in the
 // AWS CloudHSM cluster associated with the custom key store. This example requires
@@ -787,7 +775,6 @@ func ExampleKMS_CreateKey_shared06() {
 }
 
 // To create a KMS key in an external key store
-//
 // This example creates a KMS key in the specified external key store. It uses the XksKeyId
 // parameter to associate the KMS key with an existing symmetric encryption key in your
 // external key manager. This CustomKeyStoreId, Origin, and XksKeyId parameters are
@@ -845,7 +832,6 @@ func ExampleKMS_CreateKey_shared07() {
 }
 
 // To decrypt data with a symmetric encryption KMS key
-//
 // The following example decrypts data that was encrypted with a symmetric encryption
 // KMS key. The KeyId is not required when decrypting with a symmetric encryption key,
 // but it is a best practice.
@@ -880,6 +866,8 @@ func ExampleKMS_Decrypt_shared00() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -895,7 +883,6 @@ func ExampleKMS_Decrypt_shared00() {
 }
 
 // To decrypt data with an asymmetric encryption KMS key
-//
 // The following example decrypts data that was encrypted with an asymmetric encryption
 // KMS key. When the KMS encryption key is asymmetric, you must specify the KMS key
 // ID and the encryption algorithm that was used to encrypt the data.
@@ -931,6 +918,8 @@ func ExampleKMS_Decrypt_shared01() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -946,7 +935,6 @@ func ExampleKMS_Decrypt_shared01() {
 }
 
 // To decrypt data for a Nitro enclave
-//
 // The following Decrypt example includes the Recipient parameter with a signed attestation
 // document from an AWS Nitro enclave. Instead of returning the decrypted data in plaintext
 // (Plaintext), the operation returns the decrypted data encrypted by the public key
@@ -986,6 +974,8 @@ func ExampleKMS_Decrypt_shared02() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1001,7 +991,6 @@ func ExampleKMS_Decrypt_shared02() {
 }
 
 // To delete an alias
-//
 // The following example deletes the specified alias.
 func ExampleKMS_DeleteAlias_shared00() {
 	svc := kms.New(session.New())
@@ -1036,7 +1025,6 @@ func ExampleKMS_DeleteAlias_shared00() {
 }
 
 // To delete a custom key store from AWS KMS
-//
 // This example deletes a custom key store from AWS KMS. This operation does not affect
 // the backing key store, such as a CloudHSM cluster, external key store proxy, or your
 // external key manager. This operation doesn't return any data. To verify that the
@@ -1074,7 +1062,6 @@ func ExampleKMS_DeleteCustomKeyStore_shared00() {
 }
 
 // To delete imported key material
-//
 // The following example deletes the imported key material from the specified KMS key.
 func ExampleKMS_DeleteImportedKeyMaterial_shared00() {
 	svc := kms.New(session.New())
@@ -1113,7 +1100,6 @@ func ExampleKMS_DeleteImportedKeyMaterial_shared00() {
 }
 
 // To get detailed information about custom key stores in the account and Region
-//
 // This example gets detailed information about all AWS KMS custom key stores in an
 // AWS account and Region. To get all key stores, do not enter a custom key store name
 // or ID.
@@ -1182,7 +1168,6 @@ func ExampleKMS_DescribeCustomKeyStores_shared01() {
 }
 
 // To get detailed information about an external key store by specifying its ID
-//
 // This example gets detailed information about an external key store by specifying
 // its ID. The example external key store proxy uses public endpoint connectivity.
 func ExampleKMS_DescribeCustomKeyStores_shared02() {
@@ -1255,7 +1240,6 @@ func ExampleKMS_DescribeCustomKeyStores_shared03() {
 }
 
 // To get details about a KMS key
-//
 // The following example gets metadata for a symmetric encryption KMS key.
 func ExampleKMS_DescribeKey_shared00() {
 	svc := kms.New(session.New())
@@ -1290,7 +1274,6 @@ func ExampleKMS_DescribeKey_shared00() {
 }
 
 // To get details about an RSA asymmetric KMS key
-//
 // The following example gets metadata for an asymmetric RSA KMS key used for signing
 // and verification.
 func ExampleKMS_DescribeKey_shared01() {
@@ -1326,7 +1309,6 @@ func ExampleKMS_DescribeKey_shared01() {
 }
 
 // To get details about a multi-Region key
-//
 // The following example gets metadata for a multi-Region replica key. This multi-Region
 // key is a symmetric encryption key. DescribeKey returns information about the primary
 // key and all of its replicas.
@@ -1363,7 +1345,6 @@ func ExampleKMS_DescribeKey_shared02() {
 }
 
 // To get details about an HMAC KMS key
-//
 // The following example gets the metadata of an HMAC KMS key.
 func ExampleKMS_DescribeKey_shared03() {
 	svc := kms.New(session.New())
@@ -1398,7 +1379,6 @@ func ExampleKMS_DescribeKey_shared03() {
 }
 
 // To get details about a KMS key in an AWS CloudHSM key store
-//
 // The following example gets the metadata of a KMS key in an AWS CloudHSM key store.
 func ExampleKMS_DescribeKey_shared04() {
 	svc := kms.New(session.New())
@@ -1433,7 +1413,6 @@ func ExampleKMS_DescribeKey_shared04() {
 }
 
 // To get details about a KMS key in an external key store
-//
 // The following example gets the metadata of a KMS key in an external key store.
 func ExampleKMS_DescribeKey_shared05() {
 	svc := kms.New(session.New())
@@ -1468,7 +1447,6 @@ func ExampleKMS_DescribeKey_shared05() {
 }
 
 // To disable a KMS key
-//
 // The following example disables the specified KMS key.
 func ExampleKMS_DisableKey_shared00() {
 	svc := kms.New(session.New())
@@ -1505,7 +1483,6 @@ func ExampleKMS_DisableKey_shared00() {
 }
 
 // To disable automatic rotation of key material
-//
 // The following example disables automatic annual rotation of the key material for
 // the specified KMS key.
 func ExampleKMS_DisableKeyRotation_shared00() {
@@ -1547,7 +1524,6 @@ func ExampleKMS_DisableKeyRotation_shared00() {
 }
 
 // To disconnect a custom key store from its CloudHSM cluster
-//
 // This example disconnects an AWS KMS custom key store from its backing key store.
 // For an AWS CloudHSM key store, it disconnects the key store from its AWS CloudHSM
 // cluster. For an external key store, it disconnects the key store from the external
@@ -1585,7 +1561,6 @@ func ExampleKMS_DisconnectCustomKeyStore_shared00() {
 }
 
 // To enable a KMS key
-//
 // The following example enables the specified KMS key.
 func ExampleKMS_EnableKey_shared00() {
 	svc := kms.New(session.New())
@@ -1624,7 +1599,6 @@ func ExampleKMS_EnableKey_shared00() {
 }
 
 // To enable automatic rotation of key material
-//
 // The following example enables automatic annual rotation of the key material for the
 // specified KMS key.
 func ExampleKMS_EnableKeyRotation_shared00() {
@@ -1666,7 +1640,6 @@ func ExampleKMS_EnableKeyRotation_shared00() {
 }
 
 // To encrypt data with a symmetric encryption KMS key
-//
 // The following example encrypts data with the specified symmetric encryption KMS key.
 func ExampleKMS_Encrypt_shared00() {
 	svc := kms.New(session.New())
@@ -1695,6 +1668,8 @@ func ExampleKMS_Encrypt_shared00() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1710,7 +1685,6 @@ func ExampleKMS_Encrypt_shared00() {
 }
 
 // To encrypt data with an asymmetric encryption KMS key
-//
 // The following example encrypts data with the specified RSA asymmetric KMS key. When
 // you encrypt with an asymmetric key, you must specify the encryption algorithm.
 func ExampleKMS_Encrypt_shared01() {
@@ -1741,6 +1715,8 @@ func ExampleKMS_Encrypt_shared01() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1756,7 +1732,6 @@ func ExampleKMS_Encrypt_shared01() {
 }
 
 // To generate a data key
-//
 // The following example generates a 256-bit symmetric data encryption key (data key)
 // in two formats. One is the unencrypted (plainext) data key, and the other is the
 // data key encrypted with the specified KMS key.
@@ -1787,6 +1762,8 @@ func ExampleKMS_GenerateDataKey_shared00() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1802,7 +1779,6 @@ func ExampleKMS_GenerateDataKey_shared00() {
 }
 
 // To generate a data key pair for a Nitro enclave
-//
 // The following example includes the Recipient parameter with a signed attestation
 // document from an AWS Nitro enclave. Instead of returning a copy of the data key encrypted
 // by the KMS key and a plaintext copy of the data key, GenerateDataKey returns one
@@ -1840,6 +1816,8 @@ func ExampleKMS_GenerateDataKey_shared01() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1855,7 +1833,6 @@ func ExampleKMS_GenerateDataKey_shared01() {
 }
 
 // To generate an RSA key pair for encryption and decryption
-//
 // This example generates an RSA data key pair for encryption and decryption. The operation
 // returns a plaintext public key and private key, and a copy of the private key that
 // is encrypted under a symmetric encryption KMS key that you specify.
@@ -1888,6 +1865,8 @@ func ExampleKMS_GenerateDataKeyPair_shared00() {
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
 			case kms.ErrCodeUnsupportedOperationException:
 				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1903,7 +1882,6 @@ func ExampleKMS_GenerateDataKeyPair_shared00() {
 }
 
 // To generate a data key pair for a Nitro enclave
-//
 // The following example includes the Recipient parameter with a signed attestation
 // document from an AWS Nitro enclave. Instead of returning a plaintext copy of the
 // private data key, GenerateDataKeyPair returns a copy of the private data key encrypted
@@ -1944,6 +1922,8 @@ func ExampleKMS_GenerateDataKeyPair_shared01() {
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
 			case kms.ErrCodeUnsupportedOperationException:
 				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1959,7 +1939,6 @@ func ExampleKMS_GenerateDataKeyPair_shared01() {
 }
 
 // To generate an asymmetric data key pair without a plaintext key
-//
 // This example returns an asymmetric elliptic curve (ECC) data key pair. The private
 // key is encrypted under the symmetric encryption KMS key that you specify. This operation
 // doesn't return a plaintext (unencrypted) private key.
@@ -1992,6 +1971,8 @@ func ExampleKMS_GenerateDataKeyPairWithoutPlaintext_shared00() {
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
 			case kms.ErrCodeUnsupportedOperationException:
 				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -2007,7 +1988,6 @@ func ExampleKMS_GenerateDataKeyPairWithoutPlaintext_shared00() {
 }
 
 // To generate an encrypted data key
-//
 // The following example generates an encrypted copy of a 256-bit symmetric data encryption
 // key (data key). The data key is encrypted with the specified KMS key.
 func ExampleKMS_GenerateDataKeyWithoutPlaintext_shared00() {
@@ -2037,6 +2017,8 @@ func ExampleKMS_GenerateDataKeyWithoutPlaintext_shared00() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -2052,7 +2034,6 @@ func ExampleKMS_GenerateDataKeyWithoutPlaintext_shared00() {
 }
 
 // To generate an HMAC for a message
-//
 // This example generates an HMAC for a message, an HMAC KMS key, and a MAC algorithm.
 // The algorithm must be supported by the specified HMAC KMS key.
 func ExampleKMS_GenerateMac_shared00() {
@@ -2081,6 +2062,8 @@ func ExampleKMS_GenerateMac_shared00() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -2096,7 +2079,6 @@ func ExampleKMS_GenerateMac_shared00() {
 }
 
 // To generate random data
-//
 // The following example generates 32 bytes of random data.
 func ExampleKMS_GenerateRandom_shared00() {
 	svc := kms.New(session.New())
@@ -2133,7 +2115,6 @@ func ExampleKMS_GenerateRandom_shared00() {
 }
 
 // To generate random data
-//
 // The following example includes the Recipient parameter with a signed attestation
 // document from an AWS Nitro enclave. Instead of returning a plaintext (unencrypted)
 // byte string, GenerateRandom returns the byte string encrypted by the public key from
@@ -2177,7 +2158,6 @@ func ExampleKMS_GenerateRandom_shared01() {
 }
 
 // To retrieve a key policy
-//
 // The following example retrieves the key policy for the specified KMS key.
 func ExampleKMS_GetKeyPolicy_shared00() {
 	svc := kms.New(session.New())
@@ -2215,7 +2195,6 @@ func ExampleKMS_GetKeyPolicy_shared00() {
 }
 
 // To retrieve the rotation status for a KMS key
-//
 // The following example retrieves the status of automatic annual rotation of the key
 // material for the specified KMS key.
 func ExampleKMS_GetKeyRotationStatus_shared00() {
@@ -2254,10 +2233,10 @@ func ExampleKMS_GetKeyRotationStatus_shared00() {
 	fmt.Println(result)
 }
 
-// To retrieve the public key and import token for a KMS key
-//
-// The following example retrieves the public key and import token for the specified
-// KMS key.
+// To download the public key and import token for a symmetric encryption KMS key
+// The following example downloads a public key and import token to import symmetric
+// encryption key material. It uses the default wrapping key spec and the RSAES_OAEP_SHA_256
+// wrapping algorithm.
 func ExampleKMS_GetParametersForImport_shared00() {
 	svc := kms.New(session.New())
 	input := &kms.GetParametersForImportInput{
@@ -2296,8 +2275,136 @@ func ExampleKMS_GetParametersForImport_shared00() {
 	fmt.Println(result)
 }
 
-// To download the public key of an asymmetric KMS key
+// To download the public key and import token for an RSA asymmetric KMS key
+// The following example downloads a public key and import token to import an RSA private
+// key. It uses a required RSA_AES wrapping algorithm and the largest supported private
+// key.
+func ExampleKMS_GetParametersForImport_shared01() {
+	svc := kms.New(session.New())
+	input := &kms.GetParametersForImportInput{
+		KeyId:             aws.String("arn:aws:kms:us-east-2:111122223333:key/8888abcd-12ab-34cd-56ef-1234567890ab"),
+		WrappingAlgorithm: aws.String("RSA_AES_KEY_WRAP_SHA_256"),
+		WrappingKeySpec:   aws.String("RSA_4096"),
+	}
+
+	result, err := svc.GetParametersForImport(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeNotFoundException:
+				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeInvalidStateException:
+				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To download the public key and import token for an elliptic curve (ECC) asymmetric
+// KMS key
 //
+// The following example downloads a public key and import token to import an ECC_NIST_P521
+// (secp521r1) private key. You cannot directly wrap this ECC key under an RSA_2048
+// public key, although you can use an RSA_2048 public key with an RSA_AES wrapping
+// algorithm to wrap any supported key material. This example requests an RSA_3072 public
+// key for use with the RSAES_OAEP_SHA_256.
+func ExampleKMS_GetParametersForImport_shared02() {
+	svc := kms.New(session.New())
+	input := &kms.GetParametersForImportInput{
+		KeyId:             aws.String("arn:aws:kms:us-east-2:111122223333:key/9876abcd-12ab-34cd-56ef-1234567890ab"),
+		WrappingAlgorithm: aws.String("RSAES_OAEP_SHA_256"),
+		WrappingKeySpec:   aws.String("RSA_3072"),
+	}
+
+	result, err := svc.GetParametersForImport(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeNotFoundException:
+				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeInvalidStateException:
+				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To download the public key and import token for an HMAC KMS key
+// The following example downloads a public key and import token to import an HMAC key.
+// It uses the RSAES_OAEP_SHA_256 wrapping algorithm and an RSA_4096 private key.
+func ExampleKMS_GetParametersForImport_shared03() {
+	svc := kms.New(session.New())
+	input := &kms.GetParametersForImportInput{
+		KeyId:             aws.String("2468abcd-12ab-34cd-56ef-1234567890ab"),
+		WrappingAlgorithm: aws.String("RSAES_OAEP_SHA_256"),
+		WrappingKeySpec:   aws.String("RSA_4096"),
+	}
+
+	result, err := svc.GetParametersForImport(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeNotFoundException:
+				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeInvalidStateException:
+				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To download the public key of an asymmetric KMS key
 // This example gets the public key of an asymmetric RSA KMS key used for encryption
 // and decryption. The operation returns the key spec, key usage, and encryption or
 // signing algorithms to help you use the public key correctly outside of AWS KMS.
@@ -2346,7 +2453,6 @@ func ExampleKMS_GetPublicKey_shared00() {
 }
 
 // To import key material into a KMS key
-//
 // The following example imports key material into the specified KMS key.
 func ExampleKMS_ImportKeyMaterial_shared00() {
 	svc := kms.New(session.New())
@@ -2395,8 +2501,59 @@ func ExampleKMS_ImportKeyMaterial_shared00() {
 	fmt.Println(result)
 }
 
+// To import key material into a KMS key
+// The following example imports key material that expires in 3 days. It might be part
+// of an application that frequently reimports the same key material to comply with
+// business rules or regulations.
+func ExampleKMS_ImportKeyMaterial_shared01() {
+	svc := kms.New(session.New())
+	input := &kms.ImportKeyMaterialInput{
+		EncryptedKeyMaterial: []byte("<binary data>"),
+		ExpirationModel:      aws.String("KEY_MATERIAL_EXPIRES"),
+		ImportToken:          []byte("<binary data>"),
+		KeyId:                aws.String("arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"),
+		ValidTo:              parseTime("2006-01-02T15:04:05.999999999Z", "2023-09-30T00:00:00-00:00"),
+	}
+
+	result, err := svc.ImportKeyMaterial(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeUnsupportedOperationException:
+				fmt.Println(kms.ErrCodeUnsupportedOperationException, aerr.Error())
+			case kms.ErrCodeDependencyTimeoutException:
+				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
+			case kms.ErrCodeNotFoundException:
+				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
+			case kms.ErrCodeInternalException:
+				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeInvalidStateException:
+				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeInvalidCiphertextException:
+				fmt.Println(kms.ErrCodeInvalidCiphertextException, aerr.Error())
+			case kms.ErrCodeIncorrectKeyMaterialException:
+				fmt.Println(kms.ErrCodeIncorrectKeyMaterialException, aerr.Error())
+			case kms.ErrCodeExpiredImportTokenException:
+				fmt.Println(kms.ErrCodeExpiredImportTokenException, aerr.Error())
+			case kms.ErrCodeInvalidImportTokenException:
+				fmt.Println(kms.ErrCodeInvalidImportTokenException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To list aliases
-//
 // The following example lists aliases.
 func ExampleKMS_ListAliases_shared00() {
 	svc := kms.New(session.New())
@@ -2431,7 +2588,6 @@ func ExampleKMS_ListAliases_shared00() {
 }
 
 // To list grants for a KMS key
-//
 // The following example lists grants for the specified KMS key.
 func ExampleKMS_ListGrants_shared00() {
 	svc := kms.New(session.New())
@@ -2472,7 +2628,6 @@ func ExampleKMS_ListGrants_shared00() {
 }
 
 // To list key policies for a KMS key
-//
 // The following example lists key policies for the specified KMS key.
 func ExampleKMS_ListKeyPolicies_shared00() {
 	svc := kms.New(session.New())
@@ -2509,7 +2664,6 @@ func ExampleKMS_ListKeyPolicies_shared00() {
 }
 
 // To list KMS keys
-//
 // The following example lists KMS keys.
 func ExampleKMS_ListKeys_shared00() {
 	svc := kms.New(session.New())
@@ -2540,7 +2694,6 @@ func ExampleKMS_ListKeys_shared00() {
 }
 
 // To list tags for a KMS key
-//
 // The following example lists tags for a KMS key.
 func ExampleKMS_ListResourceTags_shared00() {
 	svc := kms.New(session.New())
@@ -2575,7 +2728,6 @@ func ExampleKMS_ListResourceTags_shared00() {
 }
 
 // To list grants that the specified principal can retire
-//
 // The following example lists the grants that the specified principal (identity) can
 // retire.
 func ExampleKMS_ListRetirableGrants_shared00() {
@@ -2613,7 +2765,6 @@ func ExampleKMS_ListRetirableGrants_shared00() {
 }
 
 // To attach a key policy to a KMS key
-//
 // The following example attaches a key policy to the specified KMS key.
 func ExampleKMS_PutKeyPolicy_shared00() {
 	svc := kms.New(session.New())
@@ -2658,7 +2809,6 @@ func ExampleKMS_PutKeyPolicy_shared00() {
 }
 
 // To reencrypt data
-//
 // The following example reencrypts data with the specified KMS key.
 func ExampleKMS_ReEncrypt_shared00() {
 	svc := kms.New(session.New())
@@ -2691,6 +2841,8 @@ func ExampleKMS_ReEncrypt_shared00() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -2706,7 +2858,6 @@ func ExampleKMS_ReEncrypt_shared00() {
 }
 
 // To replicate a multi-Region key in a different AWS Region
-//
 // This example creates a multi-Region replica key in us-west-2 of a multi-Region primary
 // key in us-east-1.
 func ExampleKMS_ReplicateKey_shared00() {
@@ -2755,7 +2906,6 @@ func ExampleKMS_ReplicateKey_shared00() {
 }
 
 // To retire a grant
-//
 // The following example retires a grant.
 func ExampleKMS_RetireGrant_shared00() {
 	svc := kms.New(session.New())
@@ -2782,6 +2932,8 @@ func ExampleKMS_RetireGrant_shared00() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -2797,7 +2949,6 @@ func ExampleKMS_RetireGrant_shared00() {
 }
 
 // To revoke a grant
-//
 // The following example revokes a grant.
 func ExampleKMS_RevokeGrant_shared00() {
 	svc := kms.New(session.New())
@@ -2822,6 +2973,8 @@ func ExampleKMS_RevokeGrant_shared00() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -2837,7 +2990,6 @@ func ExampleKMS_RevokeGrant_shared00() {
 }
 
 // To schedule a KMS key for deletion
-//
 // The following example schedules the specified KMS key for deletion.
 func ExampleKMS_ScheduleKeyDeletion_shared00() {
 	svc := kms.New(session.New())
@@ -2875,7 +3027,6 @@ func ExampleKMS_ScheduleKeyDeletion_shared00() {
 }
 
 // To digitally sign a message with an asymmetric KMS key.
-//
 // This operation uses the private key in an asymmetric elliptic curve (ECC) KMS key
 // to generate a digital signature for a given message.
 func ExampleKMS_Sign_shared00() {
@@ -2907,6 +3058,8 @@ func ExampleKMS_Sign_shared00() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -2922,7 +3075,6 @@ func ExampleKMS_Sign_shared00() {
 }
 
 // To digitally sign a message digest with an asymmetric KMS key.
-//
 // This operation uses the private key in an asymmetric RSA signing KMS key to generate
 // a digital signature for a message digest. In this example, a large message was hashed
 // and the resulting digest is provided in the Message parameter. To tell KMS not to
@@ -2956,6 +3108,8 @@ func ExampleKMS_Sign_shared01() {
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -2971,7 +3125,6 @@ func ExampleKMS_Sign_shared01() {
 }
 
 // To tag a KMS key
-//
 // The following example tags a KMS key.
 func ExampleKMS_TagResource_shared00() {
 	svc := kms.New(session.New())
@@ -3016,7 +3169,6 @@ func ExampleKMS_TagResource_shared00() {
 }
 
 // To remove tags from a KMS key
-//
 // The following example removes tags from a KMS key.
 func ExampleKMS_UntagResource_shared00() {
 	svc := kms.New(session.New())
@@ -3057,7 +3209,6 @@ func ExampleKMS_UntagResource_shared00() {
 }
 
 // To update an alias
-//
 // The following example updates the specified alias to refer to the specified KMS key.
 func ExampleKMS_UpdateAlias_shared00() {
 	svc := kms.New(session.New())
@@ -3095,7 +3246,6 @@ func ExampleKMS_UpdateAlias_shared00() {
 }
 
 // To edit the friendly name of a custom key store
-//
 // This example changes the friendly name of the AWS KMS custom key store to the name
 // that you specify. This operation does not return any data. To verify that the operation
 // worked, use the DescribeCustomKeyStores operation.
@@ -3159,7 +3309,6 @@ func ExampleKMS_UpdateCustomKeyStore_shared00() {
 }
 
 // To edit the password of an AWS CloudHSM key store
-//
 // This example tells AWS KMS the password for the kmsuser crypto user in the AWS CloudHSM
 // cluster that is associated with the AWS KMS custom key store. (It does not change
 // the password in the CloudHSM cluster.) This operation does not return any data.
@@ -3223,7 +3372,6 @@ func ExampleKMS_UpdateCustomKeyStore_shared01() {
 }
 
 // To associate the custom key store with a different, but related, AWS CloudHSM cluster.
-//
 // This example changes the AWS CloudHSM cluster that is associated with an AWS CloudHSM
 // key store to a related cluster, such as a different backup of the same cluster. This
 // operation does not return any data. To verify that the operation worked, use the
@@ -3288,7 +3436,6 @@ func ExampleKMS_UpdateCustomKeyStore_shared02() {
 }
 
 // To update the proxy authentication credential of an external key store
-//
 // To update the proxy authentication credential for your external key store, specify
 // both the <code>RawSecretAccessKey</code> and the <code>AccessKeyId</code>, even if
 // you are changing only one of the values. You can use this feature to fix an invalid
@@ -3357,7 +3504,6 @@ func ExampleKMS_UpdateCustomKeyStore_shared03() {
 }
 
 // To edit the proxy URI path of an external key store.
-//
 // This example updates the proxy URI path for an external key store
 func ExampleKMS_UpdateCustomKeyStore_shared04() {
 	svc := kms.New(session.New())
@@ -3419,7 +3565,6 @@ func ExampleKMS_UpdateCustomKeyStore_shared04() {
 }
 
 // To update the proxy connectivity of an external key store to VPC_ENDPOINT_SERVICE
-//
 // To change the external key store proxy connectivity option from public endpoint connectivity
 // to VPC endpoint service connectivity, in addition to changing the <code>XksProxyConnectivity</code>
 // value, you must change the <code>XksProxyUriEndpoint</code> value to reflect the
@@ -3487,7 +3632,6 @@ func ExampleKMS_UpdateCustomKeyStore_shared05() {
 }
 
 // To update the description of a KMS key
-//
 // The following example updates the description of the specified KMS key.
 func ExampleKMS_UpdateKeyDescription_shared00() {
 	svc := kms.New(session.New())
@@ -3525,7 +3669,6 @@ func ExampleKMS_UpdateKeyDescription_shared00() {
 }
 
 // To update the primary Region of a multi-Region KMS key
-//
 // The following UpdatePrimaryRegion example changes the multi-Region replica key in
 // the eu-central-1 Region to the primary key. The current primary key in the us-west-1
 // Region becomes a replica key.
@@ -3574,7 +3717,6 @@ func ExampleKMS_UpdatePrimaryRegion_shared00() {
 }
 
 // To use an asymmetric KMS key to verify a digital signature
-//
 // This operation uses the public key in an elliptic curve (ECC) asymmetric key to verify
 // a digital signature within AWS KMS.
 func ExampleKMS_Verify_shared00() {
@@ -3609,6 +3751,8 @@ func ExampleKMS_Verify_shared00() {
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
 			case kms.ErrCodeKMSInvalidSignatureException:
 				fmt.Println(kms.ErrCodeKMSInvalidSignatureException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -3624,7 +3768,6 @@ func ExampleKMS_Verify_shared00() {
 }
 
 // To use an asymmetric KMS key to verify a digital signature on a message digest
-//
 // This operation uses the public key in an RSA asymmetric signing key pair to verify
 // the digital signature of a message digest. Hashing a message into a digest before
 // sending it to KMS lets you verify messages that exceed the 4096-byte message size
@@ -3661,6 +3804,8 @@ func ExampleKMS_Verify_shared01() {
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
 			case kms.ErrCodeKMSInvalidSignatureException:
 				fmt.Println(kms.ErrCodeKMSInvalidSignatureException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -3676,7 +3821,6 @@ func ExampleKMS_Verify_shared01() {
 }
 
 // To verify an HMAC
-//
 // This example verifies an HMAC for a particular message, HMAC KMS keys, and MAC algorithm.
 // A value of 'true' in the MacValid value in the response indicates that the HMAC is
 // valid.
@@ -3709,6 +3853,8 @@ func ExampleKMS_VerifyMac_shared00() {
 				fmt.Println(kms.ErrCodeKMSInvalidMacException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
+			case kms.ErrCodeDryRunOperationException:
+				fmt.Println(kms.ErrCodeDryRunOperationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

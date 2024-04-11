@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a SsmSap client from just a session.
-//     svc := ssmsap.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a SsmSap client with additional configuration
-//     svc := ssmsap.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a SsmSap client from just a session.
+//	svc := ssmsap.New(mySession)
+//
+//	// Create a SsmSap client with additional configuration
+//	svc := ssmsap.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *SsmSap {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

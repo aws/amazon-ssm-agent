@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWS IoT FleetWise.
-//    func myFunc(svc iotfleetwiseiface.IoTFleetWiseAPI) bool {
-//        // Make svc.AssociateVehicleFleet request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWS IoT FleetWise.
+//	func myFunc(svc iotfleetwiseiface.IoTFleetWiseAPI) bool {
+//	    // Make svc.AssociateVehicleFleet request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := iotfleetwise.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := iotfleetwise.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockIoTFleetWiseClient struct {
-//        iotfleetwiseiface.IoTFleetWiseAPI
-//    }
-//    func (m *mockIoTFleetWiseClient) AssociateVehicleFleet(input *iotfleetwise.AssociateVehicleFleetInput) (*iotfleetwise.AssociateVehicleFleetOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockIoTFleetWiseClient struct {
+//	    iotfleetwiseiface.IoTFleetWiseAPI
+//	}
+//	func (m *mockIoTFleetWiseClient) AssociateVehicleFleet(input *iotfleetwise.AssociateVehicleFleetInput) (*iotfleetwise.AssociateVehicleFleetOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockIoTFleetWiseClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockIoTFleetWiseClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -131,6 +131,10 @@ type IoTFleetWiseAPI interface {
 	GetDecoderManifest(*iotfleetwise.GetDecoderManifestInput) (*iotfleetwise.GetDecoderManifestOutput, error)
 	GetDecoderManifestWithContext(aws.Context, *iotfleetwise.GetDecoderManifestInput, ...request.Option) (*iotfleetwise.GetDecoderManifestOutput, error)
 	GetDecoderManifestRequest(*iotfleetwise.GetDecoderManifestInput) (*request.Request, *iotfleetwise.GetDecoderManifestOutput)
+
+	GetEncryptionConfiguration(*iotfleetwise.GetEncryptionConfigurationInput) (*iotfleetwise.GetEncryptionConfigurationOutput, error)
+	GetEncryptionConfigurationWithContext(aws.Context, *iotfleetwise.GetEncryptionConfigurationInput, ...request.Option) (*iotfleetwise.GetEncryptionConfigurationOutput, error)
+	GetEncryptionConfigurationRequest(*iotfleetwise.GetEncryptionConfigurationInput) (*request.Request, *iotfleetwise.GetEncryptionConfigurationOutput)
 
 	GetFleet(*iotfleetwise.GetFleetInput) (*iotfleetwise.GetFleetOutput, error)
 	GetFleetWithContext(aws.Context, *iotfleetwise.GetFleetInput, ...request.Option) (*iotfleetwise.GetFleetOutput, error)
@@ -258,6 +262,10 @@ type IoTFleetWiseAPI interface {
 
 	ListVehiclesInFleetPages(*iotfleetwise.ListVehiclesInFleetInput, func(*iotfleetwise.ListVehiclesInFleetOutput, bool) bool) error
 	ListVehiclesInFleetPagesWithContext(aws.Context, *iotfleetwise.ListVehiclesInFleetInput, func(*iotfleetwise.ListVehiclesInFleetOutput, bool) bool, ...request.Option) error
+
+	PutEncryptionConfiguration(*iotfleetwise.PutEncryptionConfigurationInput) (*iotfleetwise.PutEncryptionConfigurationOutput, error)
+	PutEncryptionConfigurationWithContext(aws.Context, *iotfleetwise.PutEncryptionConfigurationInput, ...request.Option) (*iotfleetwise.PutEncryptionConfigurationOutput, error)
+	PutEncryptionConfigurationRequest(*iotfleetwise.PutEncryptionConfigurationInput) (*request.Request, *iotfleetwise.PutEncryptionConfigurationOutput)
 
 	PutLoggingOptions(*iotfleetwise.PutLoggingOptionsInput) (*iotfleetwise.PutLoggingOptionsOutput, error)
 	PutLoggingOptionsWithContext(aws.Context, *iotfleetwise.PutLoggingOptionsInput, ...request.Option) (*iotfleetwise.PutLoggingOptionsOutput, error)

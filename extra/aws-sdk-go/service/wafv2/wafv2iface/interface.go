@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWS WAFV2.
-//    func myFunc(svc wafv2iface.WAFV2API) bool {
-//        // Make svc.AssociateWebACL request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWS WAFV2.
+//	func myFunc(svc wafv2iface.WAFV2API) bool {
+//	    // Make svc.AssociateWebACL request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := wafv2.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := wafv2.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockWAFV2Client struct {
-//        wafv2iface.WAFV2API
-//    }
-//    func (m *mockWAFV2Client) AssociateWebACL(input *wafv2.AssociateWebACLInput) (*wafv2.AssociateWebACLOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockWAFV2Client struct {
+//	    wafv2iface.WAFV2API
+//	}
+//	func (m *mockWAFV2Client) AssociateWebACL(input *wafv2.AssociateWebACLInput) (*wafv2.AssociateWebACLOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockWAFV2Client{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockWAFV2Client{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -88,6 +88,10 @@ type WAFV2API interface {
 	CreateWebACLWithContext(aws.Context, *wafv2.CreateWebACLInput, ...request.Option) (*wafv2.CreateWebACLOutput, error)
 	CreateWebACLRequest(*wafv2.CreateWebACLInput) (*request.Request, *wafv2.CreateWebACLOutput)
 
+	DeleteAPIKey(*wafv2.DeleteAPIKeyInput) (*wafv2.DeleteAPIKeyOutput, error)
+	DeleteAPIKeyWithContext(aws.Context, *wafv2.DeleteAPIKeyInput, ...request.Option) (*wafv2.DeleteAPIKeyOutput, error)
+	DeleteAPIKeyRequest(*wafv2.DeleteAPIKeyInput) (*request.Request, *wafv2.DeleteAPIKeyOutput)
+
 	DeleteFirewallManagerRuleGroups(*wafv2.DeleteFirewallManagerRuleGroupsInput) (*wafv2.DeleteFirewallManagerRuleGroupsOutput, error)
 	DeleteFirewallManagerRuleGroupsWithContext(aws.Context, *wafv2.DeleteFirewallManagerRuleGroupsInput, ...request.Option) (*wafv2.DeleteFirewallManagerRuleGroupsOutput, error)
 	DeleteFirewallManagerRuleGroupsRequest(*wafv2.DeleteFirewallManagerRuleGroupsInput) (*request.Request, *wafv2.DeleteFirewallManagerRuleGroupsOutput)
@@ -115,6 +119,14 @@ type WAFV2API interface {
 	DeleteWebACL(*wafv2.DeleteWebACLInput) (*wafv2.DeleteWebACLOutput, error)
 	DeleteWebACLWithContext(aws.Context, *wafv2.DeleteWebACLInput, ...request.Option) (*wafv2.DeleteWebACLOutput, error)
 	DeleteWebACLRequest(*wafv2.DeleteWebACLInput) (*request.Request, *wafv2.DeleteWebACLOutput)
+
+	DescribeAllManagedProducts(*wafv2.DescribeAllManagedProductsInput) (*wafv2.DescribeAllManagedProductsOutput, error)
+	DescribeAllManagedProductsWithContext(aws.Context, *wafv2.DescribeAllManagedProductsInput, ...request.Option) (*wafv2.DescribeAllManagedProductsOutput, error)
+	DescribeAllManagedProductsRequest(*wafv2.DescribeAllManagedProductsInput) (*request.Request, *wafv2.DescribeAllManagedProductsOutput)
+
+	DescribeManagedProductsByVendor(*wafv2.DescribeManagedProductsByVendorInput) (*wafv2.DescribeManagedProductsByVendorOutput, error)
+	DescribeManagedProductsByVendorWithContext(aws.Context, *wafv2.DescribeManagedProductsByVendorInput, ...request.Option) (*wafv2.DescribeManagedProductsByVendorOutput, error)
+	DescribeManagedProductsByVendorRequest(*wafv2.DescribeManagedProductsByVendorInput) (*request.Request, *wafv2.DescribeManagedProductsByVendorOutput)
 
 	DescribeManagedRuleGroup(*wafv2.DescribeManagedRuleGroupInput) (*wafv2.DescribeManagedRuleGroupOutput, error)
 	DescribeManagedRuleGroupWithContext(aws.Context, *wafv2.DescribeManagedRuleGroupInput, ...request.Option) (*wafv2.DescribeManagedRuleGroupOutput, error)

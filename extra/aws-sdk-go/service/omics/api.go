@@ -10,9 +10,212 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/aws/signer/v4"
 	"github.com/aws/aws-sdk-go/private/protocol"
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
+
+const opAbortMultipartReadSetUpload = "AbortMultipartReadSetUpload"
+
+// AbortMultipartReadSetUploadRequest generates a "aws/request.Request" representing the
+// client's request for the AbortMultipartReadSetUpload operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AbortMultipartReadSetUpload for more information on using the AbortMultipartReadSetUpload
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the AbortMultipartReadSetUploadRequest method.
+//	req, resp := client.AbortMultipartReadSetUploadRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/AbortMultipartReadSetUpload
+func (c *Omics) AbortMultipartReadSetUploadRequest(input *AbortMultipartReadSetUploadInput) (req *request.Request, output *AbortMultipartReadSetUploadOutput) {
+	op := &request.Operation{
+		Name:       opAbortMultipartReadSetUpload,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/sequencestore/{sequenceStoreId}/upload/{uploadId}/abort",
+	}
+
+	if input == nil {
+		input = &AbortMultipartReadSetUploadInput{}
+	}
+
+	output = &AbortMultipartReadSetUploadOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("control-storage-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// AbortMultipartReadSetUpload API operation for Amazon Omics.
+//
+// Stops a multipart upload.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation AbortMultipartReadSetUpload for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - NotSupportedOperationException
+//     The operation is not supported by Amazon Omics, or the API does not exist.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/AbortMultipartReadSetUpload
+func (c *Omics) AbortMultipartReadSetUpload(input *AbortMultipartReadSetUploadInput) (*AbortMultipartReadSetUploadOutput, error) {
+	req, out := c.AbortMultipartReadSetUploadRequest(input)
+	return out, req.Send()
+}
+
+// AbortMultipartReadSetUploadWithContext is the same as AbortMultipartReadSetUpload with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AbortMultipartReadSetUpload for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) AbortMultipartReadSetUploadWithContext(ctx aws.Context, input *AbortMultipartReadSetUploadInput, opts ...request.Option) (*AbortMultipartReadSetUploadOutput, error) {
+	req, out := c.AbortMultipartReadSetUploadRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opAcceptShare = "AcceptShare"
+
+// AcceptShareRequest generates a "aws/request.Request" representing the
+// client's request for the AcceptShare operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AcceptShare for more information on using the AcceptShare
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the AcceptShareRequest method.
+//	req, resp := client.AcceptShareRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/AcceptShare
+func (c *Omics) AcceptShareRequest(input *AcceptShareInput) (req *request.Request, output *AcceptShareOutput) {
+	op := &request.Operation{
+		Name:       opAcceptShare,
+		HTTPMethod: "POST",
+		HTTPPath:   "/share/{shareId}",
+	}
+
+	if input == nil {
+		input = &AcceptShareInput{}
+	}
+
+	output = &AcceptShareOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("analytics-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// AcceptShare API operation for Amazon Omics.
+//
+// Accepts a share for an analytics store.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation AcceptShare for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/AcceptShare
+func (c *Omics) AcceptShare(input *AcceptShareInput) (*AcceptShareOutput, error) {
+	req, out := c.AcceptShareRequest(input)
+	return out, req.Send()
+}
+
+// AcceptShareWithContext is the same as AcceptShare with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AcceptShare for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) AcceptShareWithContext(ctx aws.Context, input *AcceptShareInput, opts ...request.Option) (*AcceptShareOutput, error) {
+	req, out := c.AcceptShareRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
 
 const opBatchDeleteReadSet = "BatchDeleteReadSet"
 
@@ -30,14 +233,13 @@ const opBatchDeleteReadSet = "BatchDeleteReadSet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchDeleteReadSetRequest method.
+//	req, resp := client.BatchDeleteReadSetRequest(params)
 //
-//    // Example sending a request using the BatchDeleteReadSetRequest method.
-//    req, resp := client.BatchDeleteReadSetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/BatchDeleteReadSet
 func (c *Omics) BatchDeleteReadSetRequest(input *BatchDeleteReadSetInput) (req *request.Request, output *BatchDeleteReadSetOutput) {
@@ -70,23 +272,24 @@ func (c *Omics) BatchDeleteReadSetRequest(input *BatchDeleteReadSetInput) (req *
 // API operation BatchDeleteReadSet for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/BatchDeleteReadSet
 func (c *Omics) BatchDeleteReadSet(input *BatchDeleteReadSetInput) (*BatchDeleteReadSetOutput, error) {
@@ -126,14 +329,13 @@ const opCancelAnnotationImportJob = "CancelAnnotationImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelAnnotationImportJobRequest method.
+//	req, resp := client.CancelAnnotationImportJobRequest(params)
 //
-//    // Example sending a request using the CancelAnnotationImportJobRequest method.
-//    req, resp := client.CancelAnnotationImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CancelAnnotationImportJob
 func (c *Omics) CancelAnnotationImportJobRequest(input *CancelAnnotationImportJobInput) (req *request.Request, output *CancelAnnotationImportJobOutput) {
@@ -167,20 +369,21 @@ func (c *Omics) CancelAnnotationImportJobRequest(input *CancelAnnotationImportJo
 // API operation CancelAnnotationImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CancelAnnotationImportJob
 func (c *Omics) CancelAnnotationImportJob(input *CancelAnnotationImportJobInput) (*CancelAnnotationImportJobOutput, error) {
@@ -220,14 +423,13 @@ const opCancelRun = "CancelRun"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelRunRequest method.
+//	req, resp := client.CancelRunRequest(params)
 //
-//    // Example sending a request using the CancelRunRequest method.
-//    req, resp := client.CancelRunRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CancelRun
 func (c *Omics) CancelRunRequest(input *CancelRunInput) (req *request.Request, output *CancelRunOutput) {
@@ -261,29 +463,30 @@ func (c *Omics) CancelRunRequest(input *CancelRunInput) (req *request.Request, o
 // API operation CancelRun for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CancelRun
 func (c *Omics) CancelRun(input *CancelRunInput) (*CancelRunOutput, error) {
@@ -323,14 +526,13 @@ const opCancelVariantImportJob = "CancelVariantImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelVariantImportJobRequest method.
+//	req, resp := client.CancelVariantImportJobRequest(params)
 //
-//    // Example sending a request using the CancelVariantImportJobRequest method.
-//    req, resp := client.CancelVariantImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CancelVariantImportJob
 func (c *Omics) CancelVariantImportJobRequest(input *CancelVariantImportJobInput) (req *request.Request, output *CancelVariantImportJobOutput) {
@@ -364,20 +566,21 @@ func (c *Omics) CancelVariantImportJobRequest(input *CancelVariantImportJobInput
 // API operation CancelVariantImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CancelVariantImportJob
 func (c *Omics) CancelVariantImportJob(input *CancelVariantImportJobInput) (*CancelVariantImportJobOutput, error) {
@@ -401,6 +604,108 @@ func (c *Omics) CancelVariantImportJobWithContext(ctx aws.Context, input *Cancel
 	return out, req.Send()
 }
 
+const opCompleteMultipartReadSetUpload = "CompleteMultipartReadSetUpload"
+
+// CompleteMultipartReadSetUploadRequest generates a "aws/request.Request" representing the
+// client's request for the CompleteMultipartReadSetUpload operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CompleteMultipartReadSetUpload for more information on using the CompleteMultipartReadSetUpload
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CompleteMultipartReadSetUploadRequest method.
+//	req, resp := client.CompleteMultipartReadSetUploadRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CompleteMultipartReadSetUpload
+func (c *Omics) CompleteMultipartReadSetUploadRequest(input *CompleteMultipartReadSetUploadInput) (req *request.Request, output *CompleteMultipartReadSetUploadOutput) {
+	op := &request.Operation{
+		Name:       opCompleteMultipartReadSetUpload,
+		HTTPMethod: "POST",
+		HTTPPath:   "/sequencestore/{sequenceStoreId}/upload/{uploadId}/complete",
+	}
+
+	if input == nil {
+		input = &CompleteMultipartReadSetUploadInput{}
+	}
+
+	output = &CompleteMultipartReadSetUploadOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("storage-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// CompleteMultipartReadSetUpload API operation for Amazon Omics.
+//
+// Concludes a multipart upload once you have uploaded all the components.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation CompleteMultipartReadSetUpload for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - NotSupportedOperationException
+//     The operation is not supported by Amazon Omics, or the API does not exist.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CompleteMultipartReadSetUpload
+func (c *Omics) CompleteMultipartReadSetUpload(input *CompleteMultipartReadSetUploadInput) (*CompleteMultipartReadSetUploadOutput, error) {
+	req, out := c.CompleteMultipartReadSetUploadRequest(input)
+	return out, req.Send()
+}
+
+// CompleteMultipartReadSetUploadWithContext is the same as CompleteMultipartReadSetUpload with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CompleteMultipartReadSetUpload for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) CompleteMultipartReadSetUploadWithContext(ctx aws.Context, input *CompleteMultipartReadSetUploadInput, opts ...request.Option) (*CompleteMultipartReadSetUploadOutput, error) {
+	req, out := c.CompleteMultipartReadSetUploadRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateAnnotationStore = "CreateAnnotationStore"
 
 // CreateAnnotationStoreRequest generates a "aws/request.Request" representing the
@@ -417,14 +722,13 @@ const opCreateAnnotationStore = "CreateAnnotationStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAnnotationStoreRequest method.
+//	req, resp := client.CreateAnnotationStoreRequest(params)
 //
-//    // Example sending a request using the CreateAnnotationStoreRequest method.
-//    req, resp := client.CreateAnnotationStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateAnnotationStore
 func (c *Omics) CreateAnnotationStoreRequest(input *CreateAnnotationStoreInput) (req *request.Request, output *CreateAnnotationStoreOutput) {
@@ -457,26 +761,27 @@ func (c *Omics) CreateAnnotationStoreRequest(input *CreateAnnotationStoreInput) 
 // API operation CreateAnnotationStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateAnnotationStore
 func (c *Omics) CreateAnnotationStore(input *CreateAnnotationStoreInput) (*CreateAnnotationStoreOutput, error) {
@@ -500,6 +805,207 @@ func (c *Omics) CreateAnnotationStoreWithContext(ctx aws.Context, input *CreateA
 	return out, req.Send()
 }
 
+const opCreateAnnotationStoreVersion = "CreateAnnotationStoreVersion"
+
+// CreateAnnotationStoreVersionRequest generates a "aws/request.Request" representing the
+// client's request for the CreateAnnotationStoreVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateAnnotationStoreVersion for more information on using the CreateAnnotationStoreVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateAnnotationStoreVersionRequest method.
+//	req, resp := client.CreateAnnotationStoreVersionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateAnnotationStoreVersion
+func (c *Omics) CreateAnnotationStoreVersionRequest(input *CreateAnnotationStoreVersionInput) (req *request.Request, output *CreateAnnotationStoreVersionOutput) {
+	op := &request.Operation{
+		Name:       opCreateAnnotationStoreVersion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/annotationStore/{name}/version",
+	}
+
+	if input == nil {
+		input = &CreateAnnotationStoreVersionInput{}
+	}
+
+	output = &CreateAnnotationStoreVersionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("analytics-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// CreateAnnotationStoreVersion API operation for Amazon Omics.
+//
+// Creates a new version of an annotation store.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation CreateAnnotationStoreVersion for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateAnnotationStoreVersion
+func (c *Omics) CreateAnnotationStoreVersion(input *CreateAnnotationStoreVersionInput) (*CreateAnnotationStoreVersionOutput, error) {
+	req, out := c.CreateAnnotationStoreVersionRequest(input)
+	return out, req.Send()
+}
+
+// CreateAnnotationStoreVersionWithContext is the same as CreateAnnotationStoreVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateAnnotationStoreVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) CreateAnnotationStoreVersionWithContext(ctx aws.Context, input *CreateAnnotationStoreVersionInput, opts ...request.Option) (*CreateAnnotationStoreVersionOutput, error) {
+	req, out := c.CreateAnnotationStoreVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateMultipartReadSetUpload = "CreateMultipartReadSetUpload"
+
+// CreateMultipartReadSetUploadRequest generates a "aws/request.Request" representing the
+// client's request for the CreateMultipartReadSetUpload operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateMultipartReadSetUpload for more information on using the CreateMultipartReadSetUpload
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateMultipartReadSetUploadRequest method.
+//	req, resp := client.CreateMultipartReadSetUploadRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateMultipartReadSetUpload
+func (c *Omics) CreateMultipartReadSetUploadRequest(input *CreateMultipartReadSetUploadInput) (req *request.Request, output *CreateMultipartReadSetUploadOutput) {
+	op := &request.Operation{
+		Name:       opCreateMultipartReadSetUpload,
+		HTTPMethod: "POST",
+		HTTPPath:   "/sequencestore/{sequenceStoreId}/upload",
+	}
+
+	if input == nil {
+		input = &CreateMultipartReadSetUploadInput{}
+	}
+
+	output = &CreateMultipartReadSetUploadOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("control-storage-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// CreateMultipartReadSetUpload API operation for Amazon Omics.
+//
+// Begins a multipart read set upload.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation CreateMultipartReadSetUpload for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - NotSupportedOperationException
+//     The operation is not supported by Amazon Omics, or the API does not exist.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateMultipartReadSetUpload
+func (c *Omics) CreateMultipartReadSetUpload(input *CreateMultipartReadSetUploadInput) (*CreateMultipartReadSetUploadOutput, error) {
+	req, out := c.CreateMultipartReadSetUploadRequest(input)
+	return out, req.Send()
+}
+
+// CreateMultipartReadSetUploadWithContext is the same as CreateMultipartReadSetUpload with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateMultipartReadSetUpload for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) CreateMultipartReadSetUploadWithContext(ctx aws.Context, input *CreateMultipartReadSetUploadInput, opts ...request.Option) (*CreateMultipartReadSetUploadOutput, error) {
+	req, out := c.CreateMultipartReadSetUploadRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateReferenceStore = "CreateReferenceStore"
 
 // CreateReferenceStoreRequest generates a "aws/request.Request" representing the
@@ -516,14 +1022,13 @@ const opCreateReferenceStore = "CreateReferenceStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateReferenceStoreRequest method.
+//	req, resp := client.CreateReferenceStoreRequest(params)
 //
-//    // Example sending a request using the CreateReferenceStoreRequest method.
-//    req, resp := client.CreateReferenceStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateReferenceStore
 func (c *Omics) CreateReferenceStoreRequest(input *CreateReferenceStoreInput) (req *request.Request, output *CreateReferenceStoreOutput) {
@@ -556,23 +1061,24 @@ func (c *Omics) CreateReferenceStoreRequest(input *CreateReferenceStoreInput) (r
 // API operation CreateReferenceStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateReferenceStore
 func (c *Omics) CreateReferenceStore(input *CreateReferenceStoreInput) (*CreateReferenceStoreOutput, error) {
@@ -612,14 +1118,13 @@ const opCreateRunGroup = "CreateRunGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRunGroupRequest method.
+//	req, resp := client.CreateRunGroupRequest(params)
 //
-//    // Example sending a request using the CreateRunGroupRequest method.
-//    req, resp := client.CreateRunGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateRunGroup
 func (c *Omics) CreateRunGroupRequest(input *CreateRunGroupInput) (req *request.Request, output *CreateRunGroupOutput) {
@@ -652,29 +1157,30 @@ func (c *Omics) CreateRunGroupRequest(input *CreateRunGroupInput) (req *request.
 // API operation CreateRunGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateRunGroup
 func (c *Omics) CreateRunGroup(input *CreateRunGroupInput) (*CreateRunGroupOutput, error) {
@@ -714,14 +1220,13 @@ const opCreateSequenceStore = "CreateSequenceStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSequenceStoreRequest method.
+//	req, resp := client.CreateSequenceStoreRequest(params)
 //
-//    // Example sending a request using the CreateSequenceStoreRequest method.
-//    req, resp := client.CreateSequenceStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateSequenceStore
 func (c *Omics) CreateSequenceStoreRequest(input *CreateSequenceStoreInput) (req *request.Request, output *CreateSequenceStoreOutput) {
@@ -754,23 +1259,24 @@ func (c *Omics) CreateSequenceStoreRequest(input *CreateSequenceStoreInput) (req
 // API operation CreateSequenceStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateSequenceStore
 func (c *Omics) CreateSequenceStore(input *CreateSequenceStoreInput) (*CreateSequenceStoreOutput, error) {
@@ -794,6 +1300,106 @@ func (c *Omics) CreateSequenceStoreWithContext(ctx aws.Context, input *CreateSeq
 	return out, req.Send()
 }
 
+const opCreateShare = "CreateShare"
+
+// CreateShareRequest generates a "aws/request.Request" representing the
+// client's request for the CreateShare operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateShare for more information on using the CreateShare
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateShareRequest method.
+//	req, resp := client.CreateShareRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateShare
+func (c *Omics) CreateShareRequest(input *CreateShareInput) (req *request.Request, output *CreateShareOutput) {
+	op := &request.Operation{
+		Name:       opCreateShare,
+		HTTPMethod: "POST",
+		HTTPPath:   "/share",
+	}
+
+	if input == nil {
+		input = &CreateShareInput{}
+	}
+
+	output = &CreateShareOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("analytics-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// CreateShare API operation for Amazon Omics.
+//
+// Creates a share offer that can be accepted outside the account by a subscriber.
+// The share is created by the owner and accepted by the principal subscriber.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation CreateShare for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateShare
+func (c *Omics) CreateShare(input *CreateShareInput) (*CreateShareOutput, error) {
+	req, out := c.CreateShareRequest(input)
+	return out, req.Send()
+}
+
+// CreateShareWithContext is the same as CreateShare with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateShare for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) CreateShareWithContext(ctx aws.Context, input *CreateShareInput, opts ...request.Option) (*CreateShareOutput, error) {
+	req, out := c.CreateShareRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateVariantStore = "CreateVariantStore"
 
 // CreateVariantStoreRequest generates a "aws/request.Request" representing the
@@ -810,14 +1416,13 @@ const opCreateVariantStore = "CreateVariantStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateVariantStoreRequest method.
+//	req, resp := client.CreateVariantStoreRequest(params)
 //
-//    // Example sending a request using the CreateVariantStoreRequest method.
-//    req, resp := client.CreateVariantStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateVariantStore
 func (c *Omics) CreateVariantStoreRequest(input *CreateVariantStoreInput) (req *request.Request, output *CreateVariantStoreOutput) {
@@ -850,26 +1455,27 @@ func (c *Omics) CreateVariantStoreRequest(input *CreateVariantStoreInput) (req *
 // API operation CreateVariantStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateVariantStore
 func (c *Omics) CreateVariantStore(input *CreateVariantStoreInput) (*CreateVariantStoreOutput, error) {
@@ -909,14 +1515,13 @@ const opCreateWorkflow = "CreateWorkflow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWorkflowRequest method.
+//	req, resp := client.CreateWorkflowRequest(params)
 //
-//    // Example sending a request using the CreateWorkflowRequest method.
-//    req, resp := client.CreateWorkflowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateWorkflow
 func (c *Omics) CreateWorkflowRequest(input *CreateWorkflowInput) (req *request.Request, output *CreateWorkflowOutput) {
@@ -949,29 +1554,30 @@ func (c *Omics) CreateWorkflowRequest(input *CreateWorkflowInput) (req *request.
 // API operation CreateWorkflow for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/CreateWorkflow
 func (c *Omics) CreateWorkflow(input *CreateWorkflowInput) (*CreateWorkflowOutput, error) {
@@ -1011,14 +1617,13 @@ const opDeleteAnnotationStore = "DeleteAnnotationStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAnnotationStoreRequest method.
+//	req, resp := client.DeleteAnnotationStoreRequest(params)
 //
-//    // Example sending a request using the DeleteAnnotationStoreRequest method.
-//    req, resp := client.DeleteAnnotationStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteAnnotationStore
 func (c *Omics) DeleteAnnotationStoreRequest(input *DeleteAnnotationStoreInput) (req *request.Request, output *DeleteAnnotationStoreOutput) {
@@ -1051,23 +1656,24 @@ func (c *Omics) DeleteAnnotationStoreRequest(input *DeleteAnnotationStoreInput) 
 // API operation DeleteAnnotationStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteAnnotationStore
 func (c *Omics) DeleteAnnotationStore(input *DeleteAnnotationStoreInput) (*DeleteAnnotationStoreOutput, error) {
@@ -1091,6 +1697,102 @@ func (c *Omics) DeleteAnnotationStoreWithContext(ctx aws.Context, input *DeleteA
 	return out, req.Send()
 }
 
+const opDeleteAnnotationStoreVersions = "DeleteAnnotationStoreVersions"
+
+// DeleteAnnotationStoreVersionsRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteAnnotationStoreVersions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteAnnotationStoreVersions for more information on using the DeleteAnnotationStoreVersions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteAnnotationStoreVersionsRequest method.
+//	req, resp := client.DeleteAnnotationStoreVersionsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteAnnotationStoreVersions
+func (c *Omics) DeleteAnnotationStoreVersionsRequest(input *DeleteAnnotationStoreVersionsInput) (req *request.Request, output *DeleteAnnotationStoreVersionsOutput) {
+	op := &request.Operation{
+		Name:       opDeleteAnnotationStoreVersions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/annotationStore/{name}/versions/delete",
+	}
+
+	if input == nil {
+		input = &DeleteAnnotationStoreVersionsInput{}
+	}
+
+	output = &DeleteAnnotationStoreVersionsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("analytics-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// DeleteAnnotationStoreVersions API operation for Amazon Omics.
+//
+// Deletes one or multiple versions of an annotation store.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation DeleteAnnotationStoreVersions for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteAnnotationStoreVersions
+func (c *Omics) DeleteAnnotationStoreVersions(input *DeleteAnnotationStoreVersionsInput) (*DeleteAnnotationStoreVersionsOutput, error) {
+	req, out := c.DeleteAnnotationStoreVersionsRequest(input)
+	return out, req.Send()
+}
+
+// DeleteAnnotationStoreVersionsWithContext is the same as DeleteAnnotationStoreVersions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteAnnotationStoreVersions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) DeleteAnnotationStoreVersionsWithContext(ctx aws.Context, input *DeleteAnnotationStoreVersionsInput, opts ...request.Option) (*DeleteAnnotationStoreVersionsOutput, error) {
+	req, out := c.DeleteAnnotationStoreVersionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteReference = "DeleteReference"
 
 // DeleteReferenceRequest generates a "aws/request.Request" representing the
@@ -1107,14 +1809,13 @@ const opDeleteReference = "DeleteReference"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteReferenceRequest method.
+//	req, resp := client.DeleteReferenceRequest(params)
 //
-//    // Example sending a request using the DeleteReferenceRequest method.
-//    req, resp := client.DeleteReferenceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteReference
 func (c *Omics) DeleteReferenceRequest(input *DeleteReferenceInput) (req *request.Request, output *DeleteReferenceOutput) {
@@ -1148,26 +1849,27 @@ func (c *Omics) DeleteReferenceRequest(input *DeleteReferenceInput) (req *reques
 // API operation DeleteReference for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteReference
 func (c *Omics) DeleteReference(input *DeleteReferenceInput) (*DeleteReferenceOutput, error) {
@@ -1207,14 +1909,13 @@ const opDeleteReferenceStore = "DeleteReferenceStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteReferenceStoreRequest method.
+//	req, resp := client.DeleteReferenceStoreRequest(params)
 //
-//    // Example sending a request using the DeleteReferenceStoreRequest method.
-//    req, resp := client.DeleteReferenceStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteReferenceStore
 func (c *Omics) DeleteReferenceStoreRequest(input *DeleteReferenceStoreInput) (req *request.Request, output *DeleteReferenceStoreOutput) {
@@ -1248,26 +1949,27 @@ func (c *Omics) DeleteReferenceStoreRequest(input *DeleteReferenceStoreInput) (r
 // API operation DeleteReferenceStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteReferenceStore
 func (c *Omics) DeleteReferenceStore(input *DeleteReferenceStoreInput) (*DeleteReferenceStoreOutput, error) {
@@ -1307,14 +2009,13 @@ const opDeleteRun = "DeleteRun"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRunRequest method.
+//	req, resp := client.DeleteRunRequest(params)
 //
-//    // Example sending a request using the DeleteRunRequest method.
-//    req, resp := client.DeleteRunRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteRun
 func (c *Omics) DeleteRunRequest(input *DeleteRunInput) (req *request.Request, output *DeleteRunOutput) {
@@ -1348,29 +2049,30 @@ func (c *Omics) DeleteRunRequest(input *DeleteRunInput) (req *request.Request, o
 // API operation DeleteRun for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteRun
 func (c *Omics) DeleteRun(input *DeleteRunInput) (*DeleteRunOutput, error) {
@@ -1410,14 +2112,13 @@ const opDeleteRunGroup = "DeleteRunGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRunGroupRequest method.
+//	req, resp := client.DeleteRunGroupRequest(params)
 //
-//    // Example sending a request using the DeleteRunGroupRequest method.
-//    req, resp := client.DeleteRunGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteRunGroup
 func (c *Omics) DeleteRunGroupRequest(input *DeleteRunGroupInput) (req *request.Request, output *DeleteRunGroupOutput) {
@@ -1451,29 +2152,30 @@ func (c *Omics) DeleteRunGroupRequest(input *DeleteRunGroupInput) (req *request.
 // API operation DeleteRunGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteRunGroup
 func (c *Omics) DeleteRunGroup(input *DeleteRunGroupInput) (*DeleteRunGroupOutput, error) {
@@ -1513,14 +2215,13 @@ const opDeleteSequenceStore = "DeleteSequenceStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSequenceStoreRequest method.
+//	req, resp := client.DeleteSequenceStoreRequest(params)
 //
-//    // Example sending a request using the DeleteSequenceStoreRequest method.
-//    req, resp := client.DeleteSequenceStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteSequenceStore
 func (c *Omics) DeleteSequenceStoreRequest(input *DeleteSequenceStoreInput) (req *request.Request, output *DeleteSequenceStoreOutput) {
@@ -1554,26 +2255,27 @@ func (c *Omics) DeleteSequenceStoreRequest(input *DeleteSequenceStoreInput) (req
 // API operation DeleteSequenceStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteSequenceStore
 func (c *Omics) DeleteSequenceStore(input *DeleteSequenceStoreInput) (*DeleteSequenceStoreOutput, error) {
@@ -1597,6 +2299,105 @@ func (c *Omics) DeleteSequenceStoreWithContext(ctx aws.Context, input *DeleteSeq
 	return out, req.Send()
 }
 
+const opDeleteShare = "DeleteShare"
+
+// DeleteShareRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteShare operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteShare for more information on using the DeleteShare
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteShareRequest method.
+//	req, resp := client.DeleteShareRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteShare
+func (c *Omics) DeleteShareRequest(input *DeleteShareInput) (req *request.Request, output *DeleteShareOutput) {
+	op := &request.Operation{
+		Name:       opDeleteShare,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/share/{shareId}",
+	}
+
+	if input == nil {
+		input = &DeleteShareInput{}
+	}
+
+	output = &DeleteShareOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("analytics-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// DeleteShare API operation for Amazon Omics.
+//
+// Deletes a share of an analytics store.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation DeleteShare for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteShare
+func (c *Omics) DeleteShare(input *DeleteShareInput) (*DeleteShareOutput, error) {
+	req, out := c.DeleteShareRequest(input)
+	return out, req.Send()
+}
+
+// DeleteShareWithContext is the same as DeleteShare with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteShare for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) DeleteShareWithContext(ctx aws.Context, input *DeleteShareInput, opts ...request.Option) (*DeleteShareOutput, error) {
+	req, out := c.DeleteShareRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteVariantStore = "DeleteVariantStore"
 
 // DeleteVariantStoreRequest generates a "aws/request.Request" representing the
@@ -1613,14 +2414,13 @@ const opDeleteVariantStore = "DeleteVariantStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteVariantStoreRequest method.
+//	req, resp := client.DeleteVariantStoreRequest(params)
 //
-//    // Example sending a request using the DeleteVariantStoreRequest method.
-//    req, resp := client.DeleteVariantStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteVariantStore
 func (c *Omics) DeleteVariantStoreRequest(input *DeleteVariantStoreInput) (req *request.Request, output *DeleteVariantStoreOutput) {
@@ -1653,23 +2453,24 @@ func (c *Omics) DeleteVariantStoreRequest(input *DeleteVariantStoreInput) (req *
 // API operation DeleteVariantStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteVariantStore
 func (c *Omics) DeleteVariantStore(input *DeleteVariantStoreInput) (*DeleteVariantStoreOutput, error) {
@@ -1709,14 +2510,13 @@ const opDeleteWorkflow = "DeleteWorkflow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWorkflowRequest method.
+//	req, resp := client.DeleteWorkflowRequest(params)
 //
-//    // Example sending a request using the DeleteWorkflowRequest method.
-//    req, resp := client.DeleteWorkflowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteWorkflow
 func (c *Omics) DeleteWorkflowRequest(input *DeleteWorkflowInput) (req *request.Request, output *DeleteWorkflowOutput) {
@@ -1750,29 +2550,30 @@ func (c *Omics) DeleteWorkflowRequest(input *DeleteWorkflowInput) (req *request.
 // API operation DeleteWorkflow for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/DeleteWorkflow
 func (c *Omics) DeleteWorkflow(input *DeleteWorkflowInput) (*DeleteWorkflowOutput, error) {
@@ -1812,14 +2613,13 @@ const opGetAnnotationImportJob = "GetAnnotationImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAnnotationImportJobRequest method.
+//	req, resp := client.GetAnnotationImportJobRequest(params)
 //
-//    // Example sending a request using the GetAnnotationImportJobRequest method.
-//    req, resp := client.GetAnnotationImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetAnnotationImportJob
 func (c *Omics) GetAnnotationImportJobRequest(input *GetAnnotationImportJobInput) (req *request.Request, output *GetAnnotationImportJobOutput) {
@@ -1852,20 +2652,21 @@ func (c *Omics) GetAnnotationImportJobRequest(input *GetAnnotationImportJobInput
 // API operation GetAnnotationImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetAnnotationImportJob
 func (c *Omics) GetAnnotationImportJob(input *GetAnnotationImportJobInput) (*GetAnnotationImportJobOutput, error) {
@@ -1905,14 +2706,13 @@ const opGetAnnotationStore = "GetAnnotationStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAnnotationStoreRequest method.
+//	req, resp := client.GetAnnotationStoreRequest(params)
 //
-//    // Example sending a request using the GetAnnotationStoreRequest method.
-//    req, resp := client.GetAnnotationStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetAnnotationStore
 func (c *Omics) GetAnnotationStoreRequest(input *GetAnnotationStoreInput) (req *request.Request, output *GetAnnotationStoreOutput) {
@@ -1945,20 +2745,21 @@ func (c *Omics) GetAnnotationStoreRequest(input *GetAnnotationStoreInput) (req *
 // API operation GetAnnotationStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetAnnotationStore
 func (c *Omics) GetAnnotationStore(input *GetAnnotationStoreInput) (*GetAnnotationStoreOutput, error) {
@@ -1982,6 +2783,99 @@ func (c *Omics) GetAnnotationStoreWithContext(ctx aws.Context, input *GetAnnotat
 	return out, req.Send()
 }
 
+const opGetAnnotationStoreVersion = "GetAnnotationStoreVersion"
+
+// GetAnnotationStoreVersionRequest generates a "aws/request.Request" representing the
+// client's request for the GetAnnotationStoreVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetAnnotationStoreVersion for more information on using the GetAnnotationStoreVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetAnnotationStoreVersionRequest method.
+//	req, resp := client.GetAnnotationStoreVersionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetAnnotationStoreVersion
+func (c *Omics) GetAnnotationStoreVersionRequest(input *GetAnnotationStoreVersionInput) (req *request.Request, output *GetAnnotationStoreVersionOutput) {
+	op := &request.Operation{
+		Name:       opGetAnnotationStoreVersion,
+		HTTPMethod: "GET",
+		HTTPPath:   "/annotationStore/{name}/version/{versionName}",
+	}
+
+	if input == nil {
+		input = &GetAnnotationStoreVersionInput{}
+	}
+
+	output = &GetAnnotationStoreVersionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("analytics-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// GetAnnotationStoreVersion API operation for Amazon Omics.
+//
+// Retrieves the metadata for an annotation store version.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation GetAnnotationStoreVersion for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetAnnotationStoreVersion
+func (c *Omics) GetAnnotationStoreVersion(input *GetAnnotationStoreVersionInput) (*GetAnnotationStoreVersionOutput, error) {
+	req, out := c.GetAnnotationStoreVersionRequest(input)
+	return out, req.Send()
+}
+
+// GetAnnotationStoreVersionWithContext is the same as GetAnnotationStoreVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetAnnotationStoreVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) GetAnnotationStoreVersionWithContext(ctx aws.Context, input *GetAnnotationStoreVersionInput, opts ...request.Option) (*GetAnnotationStoreVersionOutput, error) {
+	req, out := c.GetAnnotationStoreVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetReadSet = "GetReadSet"
 
 // GetReadSetRequest generates a "aws/request.Request" representing the
@@ -1998,14 +2892,13 @@ const opGetReadSet = "GetReadSet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetReadSetRequest method.
+//	req, resp := client.GetReadSetRequest(params)
 //
-//    // Example sending a request using the GetReadSetRequest method.
-//    req, resp := client.GetReadSetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReadSet
 func (c *Omics) GetReadSetRequest(input *GetReadSetInput) (req *request.Request, output *GetReadSetOutput) {
@@ -2038,29 +2931,30 @@ func (c *Omics) GetReadSetRequest(input *GetReadSetInput) (req *request.Request,
 // API operation GetReadSet for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * RangeNotSatisfiableException
-//   The ranges specified in the request are not valid.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - RangeNotSatisfiableException
+//     The ranges specified in the request are not valid.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReadSet
 func (c *Omics) GetReadSet(input *GetReadSetInput) (*GetReadSetOutput, error) {
@@ -2100,14 +2994,13 @@ const opGetReadSetActivationJob = "GetReadSetActivationJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetReadSetActivationJobRequest method.
+//	req, resp := client.GetReadSetActivationJobRequest(params)
 //
-//    // Example sending a request using the GetReadSetActivationJobRequest method.
-//    req, resp := client.GetReadSetActivationJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReadSetActivationJob
 func (c *Omics) GetReadSetActivationJobRequest(input *GetReadSetActivationJobInput) (req *request.Request, output *GetReadSetActivationJobOutput) {
@@ -2140,23 +3033,24 @@ func (c *Omics) GetReadSetActivationJobRequest(input *GetReadSetActivationJobInp
 // API operation GetReadSetActivationJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReadSetActivationJob
 func (c *Omics) GetReadSetActivationJob(input *GetReadSetActivationJobInput) (*GetReadSetActivationJobOutput, error) {
@@ -2196,14 +3090,13 @@ const opGetReadSetExportJob = "GetReadSetExportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetReadSetExportJobRequest method.
+//	req, resp := client.GetReadSetExportJobRequest(params)
 //
-//    // Example sending a request using the GetReadSetExportJobRequest method.
-//    req, resp := client.GetReadSetExportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReadSetExportJob
 func (c *Omics) GetReadSetExportJobRequest(input *GetReadSetExportJobInput) (req *request.Request, output *GetReadSetExportJobOutput) {
@@ -2236,23 +3129,24 @@ func (c *Omics) GetReadSetExportJobRequest(input *GetReadSetExportJobInput) (req
 // API operation GetReadSetExportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReadSetExportJob
 func (c *Omics) GetReadSetExportJob(input *GetReadSetExportJobInput) (*GetReadSetExportJobOutput, error) {
@@ -2292,14 +3186,13 @@ const opGetReadSetImportJob = "GetReadSetImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetReadSetImportJobRequest method.
+//	req, resp := client.GetReadSetImportJobRequest(params)
 //
-//    // Example sending a request using the GetReadSetImportJobRequest method.
-//    req, resp := client.GetReadSetImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReadSetImportJob
 func (c *Omics) GetReadSetImportJobRequest(input *GetReadSetImportJobInput) (req *request.Request, output *GetReadSetImportJobOutput) {
@@ -2332,23 +3225,24 @@ func (c *Omics) GetReadSetImportJobRequest(input *GetReadSetImportJobInput) (req
 // API operation GetReadSetImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReadSetImportJob
 func (c *Omics) GetReadSetImportJob(input *GetReadSetImportJobInput) (*GetReadSetImportJobOutput, error) {
@@ -2388,14 +3282,13 @@ const opGetReadSetMetadata = "GetReadSetMetadata"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetReadSetMetadataRequest method.
+//	req, resp := client.GetReadSetMetadataRequest(params)
 //
-//    // Example sending a request using the GetReadSetMetadataRequest method.
-//    req, resp := client.GetReadSetMetadataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReadSetMetadata
 func (c *Omics) GetReadSetMetadataRequest(input *GetReadSetMetadataInput) (req *request.Request, output *GetReadSetMetadataOutput) {
@@ -2428,23 +3321,24 @@ func (c *Omics) GetReadSetMetadataRequest(input *GetReadSetMetadataInput) (req *
 // API operation GetReadSetMetadata for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReadSetMetadata
 func (c *Omics) GetReadSetMetadata(input *GetReadSetMetadataInput) (*GetReadSetMetadataOutput, error) {
@@ -2484,14 +3378,13 @@ const opGetReference = "GetReference"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetReferenceRequest method.
+//	req, resp := client.GetReferenceRequest(params)
 //
-//    // Example sending a request using the GetReferenceRequest method.
-//    req, resp := client.GetReferenceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReference
 func (c *Omics) GetReferenceRequest(input *GetReferenceInput) (req *request.Request, output *GetReferenceOutput) {
@@ -2524,26 +3417,27 @@ func (c *Omics) GetReferenceRequest(input *GetReferenceInput) (req *request.Requ
 // API operation GetReference for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * RangeNotSatisfiableException
-//   The ranges specified in the request are not valid.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - RangeNotSatisfiableException
+//     The ranges specified in the request are not valid.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReference
 func (c *Omics) GetReference(input *GetReferenceInput) (*GetReferenceOutput, error) {
@@ -2583,14 +3477,13 @@ const opGetReferenceImportJob = "GetReferenceImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetReferenceImportJobRequest method.
+//	req, resp := client.GetReferenceImportJobRequest(params)
 //
-//    // Example sending a request using the GetReferenceImportJobRequest method.
-//    req, resp := client.GetReferenceImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReferenceImportJob
 func (c *Omics) GetReferenceImportJobRequest(input *GetReferenceImportJobInput) (req *request.Request, output *GetReferenceImportJobOutput) {
@@ -2623,23 +3516,24 @@ func (c *Omics) GetReferenceImportJobRequest(input *GetReferenceImportJobInput) 
 // API operation GetReferenceImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReferenceImportJob
 func (c *Omics) GetReferenceImportJob(input *GetReferenceImportJobInput) (*GetReferenceImportJobOutput, error) {
@@ -2679,14 +3573,13 @@ const opGetReferenceMetadata = "GetReferenceMetadata"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetReferenceMetadataRequest method.
+//	req, resp := client.GetReferenceMetadataRequest(params)
 //
-//    // Example sending a request using the GetReferenceMetadataRequest method.
-//    req, resp := client.GetReferenceMetadataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReferenceMetadata
 func (c *Omics) GetReferenceMetadataRequest(input *GetReferenceMetadataInput) (req *request.Request, output *GetReferenceMetadataOutput) {
@@ -2719,23 +3612,24 @@ func (c *Omics) GetReferenceMetadataRequest(input *GetReferenceMetadataInput) (r
 // API operation GetReferenceMetadata for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReferenceMetadata
 func (c *Omics) GetReferenceMetadata(input *GetReferenceMetadataInput) (*GetReferenceMetadataOutput, error) {
@@ -2775,14 +3669,13 @@ const opGetReferenceStore = "GetReferenceStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetReferenceStoreRequest method.
+//	req, resp := client.GetReferenceStoreRequest(params)
 //
-//    // Example sending a request using the GetReferenceStoreRequest method.
-//    req, resp := client.GetReferenceStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReferenceStore
 func (c *Omics) GetReferenceStoreRequest(input *GetReferenceStoreInput) (req *request.Request, output *GetReferenceStoreOutput) {
@@ -2815,23 +3708,24 @@ func (c *Omics) GetReferenceStoreRequest(input *GetReferenceStoreInput) (req *re
 // API operation GetReferenceStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetReferenceStore
 func (c *Omics) GetReferenceStore(input *GetReferenceStoreInput) (*GetReferenceStoreOutput, error) {
@@ -2871,14 +3765,13 @@ const opGetRun = "GetRun"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRunRequest method.
+//	req, resp := client.GetRunRequest(params)
 //
-//    // Example sending a request using the GetRunRequest method.
-//    req, resp := client.GetRunRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetRun
 func (c *Omics) GetRunRequest(input *GetRunInput) (req *request.Request, output *GetRunOutput) {
@@ -2911,29 +3804,30 @@ func (c *Omics) GetRunRequest(input *GetRunInput) (req *request.Request, output 
 // API operation GetRun for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetRun
 func (c *Omics) GetRun(input *GetRunInput) (*GetRunOutput, error) {
@@ -2973,14 +3867,13 @@ const opGetRunGroup = "GetRunGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRunGroupRequest method.
+//	req, resp := client.GetRunGroupRequest(params)
 //
-//    // Example sending a request using the GetRunGroupRequest method.
-//    req, resp := client.GetRunGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetRunGroup
 func (c *Omics) GetRunGroupRequest(input *GetRunGroupInput) (req *request.Request, output *GetRunGroupOutput) {
@@ -3013,29 +3906,30 @@ func (c *Omics) GetRunGroupRequest(input *GetRunGroupInput) (req *request.Reques
 // API operation GetRunGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetRunGroup
 func (c *Omics) GetRunGroup(input *GetRunGroupInput) (*GetRunGroupOutput, error) {
@@ -3075,14 +3969,13 @@ const opGetRunTask = "GetRunTask"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRunTaskRequest method.
+//	req, resp := client.GetRunTaskRequest(params)
 //
-//    // Example sending a request using the GetRunTaskRequest method.
-//    req, resp := client.GetRunTaskRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetRunTask
 func (c *Omics) GetRunTaskRequest(input *GetRunTaskInput) (req *request.Request, output *GetRunTaskOutput) {
@@ -3115,29 +4008,30 @@ func (c *Omics) GetRunTaskRequest(input *GetRunTaskInput) (req *request.Request,
 // API operation GetRunTask for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetRunTask
 func (c *Omics) GetRunTask(input *GetRunTaskInput) (*GetRunTaskOutput, error) {
@@ -3177,14 +4071,13 @@ const opGetSequenceStore = "GetSequenceStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSequenceStoreRequest method.
+//	req, resp := client.GetSequenceStoreRequest(params)
 //
-//    // Example sending a request using the GetSequenceStoreRequest method.
-//    req, resp := client.GetSequenceStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetSequenceStore
 func (c *Omics) GetSequenceStoreRequest(input *GetSequenceStoreInput) (req *request.Request, output *GetSequenceStoreOutput) {
@@ -3217,23 +4110,24 @@ func (c *Omics) GetSequenceStoreRequest(input *GetSequenceStoreInput) (req *requ
 // API operation GetSequenceStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetSequenceStore
 func (c *Omics) GetSequenceStore(input *GetSequenceStoreInput) (*GetSequenceStoreOutput, error) {
@@ -3257,6 +4151,105 @@ func (c *Omics) GetSequenceStoreWithContext(ctx aws.Context, input *GetSequenceS
 	return out, req.Send()
 }
 
+const opGetShare = "GetShare"
+
+// GetShareRequest generates a "aws/request.Request" representing the
+// client's request for the GetShare operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetShare for more information on using the GetShare
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetShareRequest method.
+//	req, resp := client.GetShareRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetShare
+func (c *Omics) GetShareRequest(input *GetShareInput) (req *request.Request, output *GetShareOutput) {
+	op := &request.Operation{
+		Name:       opGetShare,
+		HTTPMethod: "GET",
+		HTTPPath:   "/share/{shareId}",
+	}
+
+	if input == nil {
+		input = &GetShareInput{}
+	}
+
+	output = &GetShareOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("analytics-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// GetShare API operation for Amazon Omics.
+//
+// Retrieves the metadata for a share.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation GetShare for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetShare
+func (c *Omics) GetShare(input *GetShareInput) (*GetShareOutput, error) {
+	req, out := c.GetShareRequest(input)
+	return out, req.Send()
+}
+
+// GetShareWithContext is the same as GetShare with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetShare for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) GetShareWithContext(ctx aws.Context, input *GetShareInput, opts ...request.Option) (*GetShareOutput, error) {
+	req, out := c.GetShareRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetVariantImportJob = "GetVariantImportJob"
 
 // GetVariantImportJobRequest generates a "aws/request.Request" representing the
@@ -3273,14 +4266,13 @@ const opGetVariantImportJob = "GetVariantImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetVariantImportJobRequest method.
+//	req, resp := client.GetVariantImportJobRequest(params)
 //
-//    // Example sending a request using the GetVariantImportJobRequest method.
-//    req, resp := client.GetVariantImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetVariantImportJob
 func (c *Omics) GetVariantImportJobRequest(input *GetVariantImportJobInput) (req *request.Request, output *GetVariantImportJobOutput) {
@@ -3313,20 +4305,21 @@ func (c *Omics) GetVariantImportJobRequest(input *GetVariantImportJobInput) (req
 // API operation GetVariantImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetVariantImportJob
 func (c *Omics) GetVariantImportJob(input *GetVariantImportJobInput) (*GetVariantImportJobOutput, error) {
@@ -3366,14 +4359,13 @@ const opGetVariantStore = "GetVariantStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetVariantStoreRequest method.
+//	req, resp := client.GetVariantStoreRequest(params)
 //
-//    // Example sending a request using the GetVariantStoreRequest method.
-//    req, resp := client.GetVariantStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetVariantStore
 func (c *Omics) GetVariantStoreRequest(input *GetVariantStoreInput) (req *request.Request, output *GetVariantStoreOutput) {
@@ -3406,20 +4398,21 @@ func (c *Omics) GetVariantStoreRequest(input *GetVariantStoreInput) (req *reques
 // API operation GetVariantStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetVariantStore
 func (c *Omics) GetVariantStore(input *GetVariantStoreInput) (*GetVariantStoreOutput, error) {
@@ -3459,14 +4452,13 @@ const opGetWorkflow = "GetWorkflow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetWorkflowRequest method.
+//	req, resp := client.GetWorkflowRequest(params)
 //
-//    // Example sending a request using the GetWorkflowRequest method.
-//    req, resp := client.GetWorkflowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetWorkflow
 func (c *Omics) GetWorkflowRequest(input *GetWorkflowInput) (req *request.Request, output *GetWorkflowOutput) {
@@ -3499,29 +4491,30 @@ func (c *Omics) GetWorkflowRequest(input *GetWorkflowInput) (req *request.Reques
 // API operation GetWorkflow for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/GetWorkflow
 func (c *Omics) GetWorkflow(input *GetWorkflowInput) (*GetWorkflowOutput, error) {
@@ -3561,14 +4554,13 @@ const opListAnnotationImportJobs = "ListAnnotationImportJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAnnotationImportJobsRequest method.
+//	req, resp := client.ListAnnotationImportJobsRequest(params)
 //
-//    // Example sending a request using the ListAnnotationImportJobsRequest method.
-//    req, resp := client.ListAnnotationImportJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListAnnotationImportJobs
 func (c *Omics) ListAnnotationImportJobsRequest(input *ListAnnotationImportJobsInput) (req *request.Request, output *ListAnnotationImportJobsOutput) {
@@ -3607,20 +4599,21 @@ func (c *Omics) ListAnnotationImportJobsRequest(input *ListAnnotationImportJobsI
 // API operation ListAnnotationImportJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListAnnotationImportJobs
 func (c *Omics) ListAnnotationImportJobs(input *ListAnnotationImportJobsInput) (*ListAnnotationImportJobsOutput, error) {
@@ -3652,15 +4645,14 @@ func (c *Omics) ListAnnotationImportJobsWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAnnotationImportJobs operation.
-//    pageNum := 0
-//    err := client.ListAnnotationImportJobsPages(params,
-//        func(page *omics.ListAnnotationImportJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAnnotationImportJobs operation.
+//	pageNum := 0
+//	err := client.ListAnnotationImportJobsPages(params,
+//	    func(page *omics.ListAnnotationImportJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListAnnotationImportJobsPages(input *ListAnnotationImportJobsInput, fn func(*ListAnnotationImportJobsOutput, bool) bool) error {
 	return c.ListAnnotationImportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3696,6 +4688,156 @@ func (c *Omics) ListAnnotationImportJobsPagesWithContext(ctx aws.Context, input 
 	return p.Err()
 }
 
+const opListAnnotationStoreVersions = "ListAnnotationStoreVersions"
+
+// ListAnnotationStoreVersionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListAnnotationStoreVersions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAnnotationStoreVersions for more information on using the ListAnnotationStoreVersions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListAnnotationStoreVersionsRequest method.
+//	req, resp := client.ListAnnotationStoreVersionsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListAnnotationStoreVersions
+func (c *Omics) ListAnnotationStoreVersionsRequest(input *ListAnnotationStoreVersionsInput) (req *request.Request, output *ListAnnotationStoreVersionsOutput) {
+	op := &request.Operation{
+		Name:       opListAnnotationStoreVersions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/annotationStore/{name}/versions",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAnnotationStoreVersionsInput{}
+	}
+
+	output = &ListAnnotationStoreVersionsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("analytics-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// ListAnnotationStoreVersions API operation for Amazon Omics.
+//
+// Lists the versions of an annotation store.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation ListAnnotationStoreVersions for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListAnnotationStoreVersions
+func (c *Omics) ListAnnotationStoreVersions(input *ListAnnotationStoreVersionsInput) (*ListAnnotationStoreVersionsOutput, error) {
+	req, out := c.ListAnnotationStoreVersionsRequest(input)
+	return out, req.Send()
+}
+
+// ListAnnotationStoreVersionsWithContext is the same as ListAnnotationStoreVersions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAnnotationStoreVersions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) ListAnnotationStoreVersionsWithContext(ctx aws.Context, input *ListAnnotationStoreVersionsInput, opts ...request.Option) (*ListAnnotationStoreVersionsOutput, error) {
+	req, out := c.ListAnnotationStoreVersionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAnnotationStoreVersionsPages iterates over the pages of a ListAnnotationStoreVersions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAnnotationStoreVersions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListAnnotationStoreVersions operation.
+//	pageNum := 0
+//	err := client.ListAnnotationStoreVersionsPages(params,
+//	    func(page *omics.ListAnnotationStoreVersionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Omics) ListAnnotationStoreVersionsPages(input *ListAnnotationStoreVersionsInput, fn func(*ListAnnotationStoreVersionsOutput, bool) bool) error {
+	return c.ListAnnotationStoreVersionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAnnotationStoreVersionsPagesWithContext same as ListAnnotationStoreVersionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) ListAnnotationStoreVersionsPagesWithContext(ctx aws.Context, input *ListAnnotationStoreVersionsInput, fn func(*ListAnnotationStoreVersionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAnnotationStoreVersionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAnnotationStoreVersionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAnnotationStoreVersionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListAnnotationStores = "ListAnnotationStores"
 
 // ListAnnotationStoresRequest generates a "aws/request.Request" representing the
@@ -3712,14 +4854,13 @@ const opListAnnotationStores = "ListAnnotationStores"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAnnotationStoresRequest method.
+//	req, resp := client.ListAnnotationStoresRequest(params)
 //
-//    // Example sending a request using the ListAnnotationStoresRequest method.
-//    req, resp := client.ListAnnotationStoresRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListAnnotationStores
 func (c *Omics) ListAnnotationStoresRequest(input *ListAnnotationStoresInput) (req *request.Request, output *ListAnnotationStoresOutput) {
@@ -3758,20 +4899,21 @@ func (c *Omics) ListAnnotationStoresRequest(input *ListAnnotationStoresInput) (r
 // API operation ListAnnotationStores for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListAnnotationStores
 func (c *Omics) ListAnnotationStores(input *ListAnnotationStoresInput) (*ListAnnotationStoresOutput, error) {
@@ -3803,15 +4945,14 @@ func (c *Omics) ListAnnotationStoresWithContext(ctx aws.Context, input *ListAnno
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAnnotationStores operation.
-//    pageNum := 0
-//    err := client.ListAnnotationStoresPages(params,
-//        func(page *omics.ListAnnotationStoresOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAnnotationStores operation.
+//	pageNum := 0
+//	err := client.ListAnnotationStoresPages(params,
+//	    func(page *omics.ListAnnotationStoresOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListAnnotationStoresPages(input *ListAnnotationStoresInput, fn func(*ListAnnotationStoresOutput, bool) bool) error {
 	return c.ListAnnotationStoresPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3847,6 +4988,167 @@ func (c *Omics) ListAnnotationStoresPagesWithContext(ctx aws.Context, input *Lis
 	return p.Err()
 }
 
+const opListMultipartReadSetUploads = "ListMultipartReadSetUploads"
+
+// ListMultipartReadSetUploadsRequest generates a "aws/request.Request" representing the
+// client's request for the ListMultipartReadSetUploads operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListMultipartReadSetUploads for more information on using the ListMultipartReadSetUploads
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListMultipartReadSetUploadsRequest method.
+//	req, resp := client.ListMultipartReadSetUploadsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListMultipartReadSetUploads
+func (c *Omics) ListMultipartReadSetUploadsRequest(input *ListMultipartReadSetUploadsInput) (req *request.Request, output *ListMultipartReadSetUploadsOutput) {
+	op := &request.Operation{
+		Name:       opListMultipartReadSetUploads,
+		HTTPMethod: "POST",
+		HTTPPath:   "/sequencestore/{sequenceStoreId}/uploads",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListMultipartReadSetUploadsInput{}
+	}
+
+	output = &ListMultipartReadSetUploadsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("control-storage-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// ListMultipartReadSetUploads API operation for Amazon Omics.
+//
+// Lists multipart read set uploads and for in progress uploads. Once the upload
+// is completed, a read set is created and the upload will no longer be returned
+// in the response.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation ListMultipartReadSetUploads for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - NotSupportedOperationException
+//     The operation is not supported by Amazon Omics, or the API does not exist.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListMultipartReadSetUploads
+func (c *Omics) ListMultipartReadSetUploads(input *ListMultipartReadSetUploadsInput) (*ListMultipartReadSetUploadsOutput, error) {
+	req, out := c.ListMultipartReadSetUploadsRequest(input)
+	return out, req.Send()
+}
+
+// ListMultipartReadSetUploadsWithContext is the same as ListMultipartReadSetUploads with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListMultipartReadSetUploads for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) ListMultipartReadSetUploadsWithContext(ctx aws.Context, input *ListMultipartReadSetUploadsInput, opts ...request.Option) (*ListMultipartReadSetUploadsOutput, error) {
+	req, out := c.ListMultipartReadSetUploadsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListMultipartReadSetUploadsPages iterates over the pages of a ListMultipartReadSetUploads operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListMultipartReadSetUploads method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListMultipartReadSetUploads operation.
+//	pageNum := 0
+//	err := client.ListMultipartReadSetUploadsPages(params,
+//	    func(page *omics.ListMultipartReadSetUploadsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Omics) ListMultipartReadSetUploadsPages(input *ListMultipartReadSetUploadsInput, fn func(*ListMultipartReadSetUploadsOutput, bool) bool) error {
+	return c.ListMultipartReadSetUploadsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListMultipartReadSetUploadsPagesWithContext same as ListMultipartReadSetUploadsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) ListMultipartReadSetUploadsPagesWithContext(ctx aws.Context, input *ListMultipartReadSetUploadsInput, fn func(*ListMultipartReadSetUploadsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListMultipartReadSetUploadsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListMultipartReadSetUploadsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListMultipartReadSetUploadsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListReadSetActivationJobs = "ListReadSetActivationJobs"
 
 // ListReadSetActivationJobsRequest generates a "aws/request.Request" representing the
@@ -3863,14 +5165,13 @@ const opListReadSetActivationJobs = "ListReadSetActivationJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReadSetActivationJobsRequest method.
+//	req, resp := client.ListReadSetActivationJobsRequest(params)
 //
-//    // Example sending a request using the ListReadSetActivationJobsRequest method.
-//    req, resp := client.ListReadSetActivationJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReadSetActivationJobs
 func (c *Omics) ListReadSetActivationJobsRequest(input *ListReadSetActivationJobsInput) (req *request.Request, output *ListReadSetActivationJobsOutput) {
@@ -3909,23 +5210,24 @@ func (c *Omics) ListReadSetActivationJobsRequest(input *ListReadSetActivationJob
 // API operation ListReadSetActivationJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReadSetActivationJobs
 func (c *Omics) ListReadSetActivationJobs(input *ListReadSetActivationJobsInput) (*ListReadSetActivationJobsOutput, error) {
@@ -3957,15 +5259,14 @@ func (c *Omics) ListReadSetActivationJobsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReadSetActivationJobs operation.
-//    pageNum := 0
-//    err := client.ListReadSetActivationJobsPages(params,
-//        func(page *omics.ListReadSetActivationJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReadSetActivationJobs operation.
+//	pageNum := 0
+//	err := client.ListReadSetActivationJobsPages(params,
+//	    func(page *omics.ListReadSetActivationJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListReadSetActivationJobsPages(input *ListReadSetActivationJobsInput, fn func(*ListReadSetActivationJobsOutput, bool) bool) error {
 	return c.ListReadSetActivationJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4017,14 +5318,13 @@ const opListReadSetExportJobs = "ListReadSetExportJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReadSetExportJobsRequest method.
+//	req, resp := client.ListReadSetExportJobsRequest(params)
 //
-//    // Example sending a request using the ListReadSetExportJobsRequest method.
-//    req, resp := client.ListReadSetExportJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReadSetExportJobs
 func (c *Omics) ListReadSetExportJobsRequest(input *ListReadSetExportJobsInput) (req *request.Request, output *ListReadSetExportJobsOutput) {
@@ -4063,23 +5363,24 @@ func (c *Omics) ListReadSetExportJobsRequest(input *ListReadSetExportJobsInput) 
 // API operation ListReadSetExportJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReadSetExportJobs
 func (c *Omics) ListReadSetExportJobs(input *ListReadSetExportJobsInput) (*ListReadSetExportJobsOutput, error) {
@@ -4111,15 +5412,14 @@ func (c *Omics) ListReadSetExportJobsWithContext(ctx aws.Context, input *ListRea
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReadSetExportJobs operation.
-//    pageNum := 0
-//    err := client.ListReadSetExportJobsPages(params,
-//        func(page *omics.ListReadSetExportJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReadSetExportJobs operation.
+//	pageNum := 0
+//	err := client.ListReadSetExportJobsPages(params,
+//	    func(page *omics.ListReadSetExportJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListReadSetExportJobsPages(input *ListReadSetExportJobsInput, fn func(*ListReadSetExportJobsOutput, bool) bool) error {
 	return c.ListReadSetExportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4171,14 +5471,13 @@ const opListReadSetImportJobs = "ListReadSetImportJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReadSetImportJobsRequest method.
+//	req, resp := client.ListReadSetImportJobsRequest(params)
 //
-//    // Example sending a request using the ListReadSetImportJobsRequest method.
-//    req, resp := client.ListReadSetImportJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReadSetImportJobs
 func (c *Omics) ListReadSetImportJobsRequest(input *ListReadSetImportJobsInput) (req *request.Request, output *ListReadSetImportJobsOutput) {
@@ -4217,23 +5516,24 @@ func (c *Omics) ListReadSetImportJobsRequest(input *ListReadSetImportJobsInput) 
 // API operation ListReadSetImportJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReadSetImportJobs
 func (c *Omics) ListReadSetImportJobs(input *ListReadSetImportJobsInput) (*ListReadSetImportJobsOutput, error) {
@@ -4265,15 +5565,14 @@ func (c *Omics) ListReadSetImportJobsWithContext(ctx aws.Context, input *ListRea
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReadSetImportJobs operation.
-//    pageNum := 0
-//    err := client.ListReadSetImportJobsPages(params,
-//        func(page *omics.ListReadSetImportJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReadSetImportJobs operation.
+//	pageNum := 0
+//	err := client.ListReadSetImportJobsPages(params,
+//	    func(page *omics.ListReadSetImportJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListReadSetImportJobsPages(input *ListReadSetImportJobsInput, fn func(*ListReadSetImportJobsOutput, bool) bool) error {
 	return c.ListReadSetImportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4309,6 +5608,166 @@ func (c *Omics) ListReadSetImportJobsPagesWithContext(ctx aws.Context, input *Li
 	return p.Err()
 }
 
+const opListReadSetUploadParts = "ListReadSetUploadParts"
+
+// ListReadSetUploadPartsRequest generates a "aws/request.Request" representing the
+// client's request for the ListReadSetUploadParts operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListReadSetUploadParts for more information on using the ListReadSetUploadParts
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListReadSetUploadPartsRequest method.
+//	req, resp := client.ListReadSetUploadPartsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReadSetUploadParts
+func (c *Omics) ListReadSetUploadPartsRequest(input *ListReadSetUploadPartsInput) (req *request.Request, output *ListReadSetUploadPartsOutput) {
+	op := &request.Operation{
+		Name:       opListReadSetUploadParts,
+		HTTPMethod: "POST",
+		HTTPPath:   "/sequencestore/{sequenceStoreId}/upload/{uploadId}/parts",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListReadSetUploadPartsInput{}
+	}
+
+	output = &ListReadSetUploadPartsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("control-storage-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// ListReadSetUploadParts API operation for Amazon Omics.
+//
+// This operation will list all parts in a requested multipart upload for a
+// sequence store.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation ListReadSetUploadParts for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - NotSupportedOperationException
+//     The operation is not supported by Amazon Omics, or the API does not exist.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReadSetUploadParts
+func (c *Omics) ListReadSetUploadParts(input *ListReadSetUploadPartsInput) (*ListReadSetUploadPartsOutput, error) {
+	req, out := c.ListReadSetUploadPartsRequest(input)
+	return out, req.Send()
+}
+
+// ListReadSetUploadPartsWithContext is the same as ListReadSetUploadParts with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListReadSetUploadParts for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) ListReadSetUploadPartsWithContext(ctx aws.Context, input *ListReadSetUploadPartsInput, opts ...request.Option) (*ListReadSetUploadPartsOutput, error) {
+	req, out := c.ListReadSetUploadPartsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListReadSetUploadPartsPages iterates over the pages of a ListReadSetUploadParts operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListReadSetUploadParts method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListReadSetUploadParts operation.
+//	pageNum := 0
+//	err := client.ListReadSetUploadPartsPages(params,
+//	    func(page *omics.ListReadSetUploadPartsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Omics) ListReadSetUploadPartsPages(input *ListReadSetUploadPartsInput, fn func(*ListReadSetUploadPartsOutput, bool) bool) error {
+	return c.ListReadSetUploadPartsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListReadSetUploadPartsPagesWithContext same as ListReadSetUploadPartsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) ListReadSetUploadPartsPagesWithContext(ctx aws.Context, input *ListReadSetUploadPartsInput, fn func(*ListReadSetUploadPartsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListReadSetUploadPartsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListReadSetUploadPartsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListReadSetUploadPartsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListReadSets = "ListReadSets"
 
 // ListReadSetsRequest generates a "aws/request.Request" representing the
@@ -4325,14 +5784,13 @@ const opListReadSets = "ListReadSets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReadSetsRequest method.
+//	req, resp := client.ListReadSetsRequest(params)
 //
-//    // Example sending a request using the ListReadSetsRequest method.
-//    req, resp := client.ListReadSetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReadSets
 func (c *Omics) ListReadSetsRequest(input *ListReadSetsInput) (req *request.Request, output *ListReadSetsOutput) {
@@ -4371,23 +5829,24 @@ func (c *Omics) ListReadSetsRequest(input *ListReadSetsInput) (req *request.Requ
 // API operation ListReadSets for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReadSets
 func (c *Omics) ListReadSets(input *ListReadSetsInput) (*ListReadSetsOutput, error) {
@@ -4419,15 +5878,14 @@ func (c *Omics) ListReadSetsWithContext(ctx aws.Context, input *ListReadSetsInpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReadSets operation.
-//    pageNum := 0
-//    err := client.ListReadSetsPages(params,
-//        func(page *omics.ListReadSetsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReadSets operation.
+//	pageNum := 0
+//	err := client.ListReadSetsPages(params,
+//	    func(page *omics.ListReadSetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListReadSetsPages(input *ListReadSetsInput, fn func(*ListReadSetsOutput, bool) bool) error {
 	return c.ListReadSetsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4479,14 +5937,13 @@ const opListReferenceImportJobs = "ListReferenceImportJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReferenceImportJobsRequest method.
+//	req, resp := client.ListReferenceImportJobsRequest(params)
 //
-//    // Example sending a request using the ListReferenceImportJobsRequest method.
-//    req, resp := client.ListReferenceImportJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReferenceImportJobs
 func (c *Omics) ListReferenceImportJobsRequest(input *ListReferenceImportJobsInput) (req *request.Request, output *ListReferenceImportJobsOutput) {
@@ -4525,23 +5982,24 @@ func (c *Omics) ListReferenceImportJobsRequest(input *ListReferenceImportJobsInp
 // API operation ListReferenceImportJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReferenceImportJobs
 func (c *Omics) ListReferenceImportJobs(input *ListReferenceImportJobsInput) (*ListReferenceImportJobsOutput, error) {
@@ -4573,15 +6031,14 @@ func (c *Omics) ListReferenceImportJobsWithContext(ctx aws.Context, input *ListR
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReferenceImportJobs operation.
-//    pageNum := 0
-//    err := client.ListReferenceImportJobsPages(params,
-//        func(page *omics.ListReferenceImportJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReferenceImportJobs operation.
+//	pageNum := 0
+//	err := client.ListReferenceImportJobsPages(params,
+//	    func(page *omics.ListReferenceImportJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListReferenceImportJobsPages(input *ListReferenceImportJobsInput, fn func(*ListReferenceImportJobsOutput, bool) bool) error {
 	return c.ListReferenceImportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4633,14 +6090,13 @@ const opListReferenceStores = "ListReferenceStores"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReferenceStoresRequest method.
+//	req, resp := client.ListReferenceStoresRequest(params)
 //
-//    // Example sending a request using the ListReferenceStoresRequest method.
-//    req, resp := client.ListReferenceStoresRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReferenceStores
 func (c *Omics) ListReferenceStoresRequest(input *ListReferenceStoresInput) (req *request.Request, output *ListReferenceStoresOutput) {
@@ -4679,20 +6135,21 @@ func (c *Omics) ListReferenceStoresRequest(input *ListReferenceStoresInput) (req
 // API operation ListReferenceStores for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReferenceStores
 func (c *Omics) ListReferenceStores(input *ListReferenceStoresInput) (*ListReferenceStoresOutput, error) {
@@ -4724,15 +6181,14 @@ func (c *Omics) ListReferenceStoresWithContext(ctx aws.Context, input *ListRefer
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReferenceStores operation.
-//    pageNum := 0
-//    err := client.ListReferenceStoresPages(params,
-//        func(page *omics.ListReferenceStoresOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReferenceStores operation.
+//	pageNum := 0
+//	err := client.ListReferenceStoresPages(params,
+//	    func(page *omics.ListReferenceStoresOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListReferenceStoresPages(input *ListReferenceStoresInput, fn func(*ListReferenceStoresOutput, bool) bool) error {
 	return c.ListReferenceStoresPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4784,14 +6240,13 @@ const opListReferences = "ListReferences"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReferencesRequest method.
+//	req, resp := client.ListReferencesRequest(params)
 //
-//    // Example sending a request using the ListReferencesRequest method.
-//    req, resp := client.ListReferencesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReferences
 func (c *Omics) ListReferencesRequest(input *ListReferencesInput) (req *request.Request, output *ListReferencesOutput) {
@@ -4830,23 +6285,24 @@ func (c *Omics) ListReferencesRequest(input *ListReferencesInput) (req *request.
 // API operation ListReferences for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListReferences
 func (c *Omics) ListReferences(input *ListReferencesInput) (*ListReferencesOutput, error) {
@@ -4878,15 +6334,14 @@ func (c *Omics) ListReferencesWithContext(ctx aws.Context, input *ListReferences
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReferences operation.
-//    pageNum := 0
-//    err := client.ListReferencesPages(params,
-//        func(page *omics.ListReferencesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReferences operation.
+//	pageNum := 0
+//	err := client.ListReferencesPages(params,
+//	    func(page *omics.ListReferencesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListReferencesPages(input *ListReferencesInput, fn func(*ListReferencesOutput, bool) bool) error {
 	return c.ListReferencesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4938,14 +6393,13 @@ const opListRunGroups = "ListRunGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRunGroupsRequest method.
+//	req, resp := client.ListRunGroupsRequest(params)
 //
-//    // Example sending a request using the ListRunGroupsRequest method.
-//    req, resp := client.ListRunGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListRunGroups
 func (c *Omics) ListRunGroupsRequest(input *ListRunGroupsInput) (req *request.Request, output *ListRunGroupsOutput) {
@@ -4984,29 +6438,30 @@ func (c *Omics) ListRunGroupsRequest(input *ListRunGroupsInput) (req *request.Re
 // API operation ListRunGroups for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListRunGroups
 func (c *Omics) ListRunGroups(input *ListRunGroupsInput) (*ListRunGroupsOutput, error) {
@@ -5038,15 +6493,14 @@ func (c *Omics) ListRunGroupsWithContext(ctx aws.Context, input *ListRunGroupsIn
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRunGroups operation.
-//    pageNum := 0
-//    err := client.ListRunGroupsPages(params,
-//        func(page *omics.ListRunGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRunGroups operation.
+//	pageNum := 0
+//	err := client.ListRunGroupsPages(params,
+//	    func(page *omics.ListRunGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListRunGroupsPages(input *ListRunGroupsInput, fn func(*ListRunGroupsOutput, bool) bool) error {
 	return c.ListRunGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5098,14 +6552,13 @@ const opListRunTasks = "ListRunTasks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRunTasksRequest method.
+//	req, resp := client.ListRunTasksRequest(params)
 //
-//    // Example sending a request using the ListRunTasksRequest method.
-//    req, resp := client.ListRunTasksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListRunTasks
 func (c *Omics) ListRunTasksRequest(input *ListRunTasksInput) (req *request.Request, output *ListRunTasksOutput) {
@@ -5144,29 +6597,30 @@ func (c *Omics) ListRunTasksRequest(input *ListRunTasksInput) (req *request.Requ
 // API operation ListRunTasks for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListRunTasks
 func (c *Omics) ListRunTasks(input *ListRunTasksInput) (*ListRunTasksOutput, error) {
@@ -5198,15 +6652,14 @@ func (c *Omics) ListRunTasksWithContext(ctx aws.Context, input *ListRunTasksInpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRunTasks operation.
-//    pageNum := 0
-//    err := client.ListRunTasksPages(params,
-//        func(page *omics.ListRunTasksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRunTasks operation.
+//	pageNum := 0
+//	err := client.ListRunTasksPages(params,
+//	    func(page *omics.ListRunTasksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListRunTasksPages(input *ListRunTasksInput, fn func(*ListRunTasksOutput, bool) bool) error {
 	return c.ListRunTasksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5258,14 +6711,13 @@ const opListRuns = "ListRuns"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRunsRequest method.
+//	req, resp := client.ListRunsRequest(params)
 //
-//    // Example sending a request using the ListRunsRequest method.
-//    req, resp := client.ListRunsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListRuns
 func (c *Omics) ListRunsRequest(input *ListRunsInput) (req *request.Request, output *ListRunsOutput) {
@@ -5304,29 +6756,30 @@ func (c *Omics) ListRunsRequest(input *ListRunsInput) (req *request.Request, out
 // API operation ListRuns for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListRuns
 func (c *Omics) ListRuns(input *ListRunsInput) (*ListRunsOutput, error) {
@@ -5358,15 +6811,14 @@ func (c *Omics) ListRunsWithContext(ctx aws.Context, input *ListRunsInput, opts 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRuns operation.
-//    pageNum := 0
-//    err := client.ListRunsPages(params,
-//        func(page *omics.ListRunsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRuns operation.
+//	pageNum := 0
+//	err := client.ListRunsPages(params,
+//	    func(page *omics.ListRunsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListRunsPages(input *ListRunsInput, fn func(*ListRunsOutput, bool) bool) error {
 	return c.ListRunsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5418,14 +6870,13 @@ const opListSequenceStores = "ListSequenceStores"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSequenceStoresRequest method.
+//	req, resp := client.ListSequenceStoresRequest(params)
 //
-//    // Example sending a request using the ListSequenceStoresRequest method.
-//    req, resp := client.ListSequenceStoresRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListSequenceStores
 func (c *Omics) ListSequenceStoresRequest(input *ListSequenceStoresInput) (req *request.Request, output *ListSequenceStoresOutput) {
@@ -5464,20 +6915,21 @@ func (c *Omics) ListSequenceStoresRequest(input *ListSequenceStoresInput) (req *
 // API operation ListSequenceStores for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListSequenceStores
 func (c *Omics) ListSequenceStores(input *ListSequenceStoresInput) (*ListSequenceStoresOutput, error) {
@@ -5509,15 +6961,14 @@ func (c *Omics) ListSequenceStoresWithContext(ctx aws.Context, input *ListSequen
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSequenceStores operation.
-//    pageNum := 0
-//    err := client.ListSequenceStoresPages(params,
-//        func(page *omics.ListSequenceStoresOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSequenceStores operation.
+//	pageNum := 0
+//	err := client.ListSequenceStoresPages(params,
+//	    func(page *omics.ListSequenceStoresOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListSequenceStoresPages(input *ListSequenceStoresInput, fn func(*ListSequenceStoresOutput, bool) bool) error {
 	return c.ListSequenceStoresPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5553,6 +7004,162 @@ func (c *Omics) ListSequenceStoresPagesWithContext(ctx aws.Context, input *ListS
 	return p.Err()
 }
 
+const opListShares = "ListShares"
+
+// ListSharesRequest generates a "aws/request.Request" representing the
+// client's request for the ListShares operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListShares for more information on using the ListShares
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListSharesRequest method.
+//	req, resp := client.ListSharesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListShares
+func (c *Omics) ListSharesRequest(input *ListSharesInput) (req *request.Request, output *ListSharesOutput) {
+	op := &request.Operation{
+		Name:       opListShares,
+		HTTPMethod: "POST",
+		HTTPPath:   "/shares",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSharesInput{}
+	}
+
+	output = &ListSharesOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("analytics-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// ListShares API operation for Amazon Omics.
+//
+// Lists all shares associated with an account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation ListShares for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListShares
+func (c *Omics) ListShares(input *ListSharesInput) (*ListSharesOutput, error) {
+	req, out := c.ListSharesRequest(input)
+	return out, req.Send()
+}
+
+// ListSharesWithContext is the same as ListShares with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListShares for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) ListSharesWithContext(ctx aws.Context, input *ListSharesInput, opts ...request.Option) (*ListSharesOutput, error) {
+	req, out := c.ListSharesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSharesPages iterates over the pages of a ListShares operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListShares method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListShares operation.
+//	pageNum := 0
+//	err := client.ListSharesPages(params,
+//	    func(page *omics.ListSharesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Omics) ListSharesPages(input *ListSharesInput, fn func(*ListSharesOutput, bool) bool) error {
+	return c.ListSharesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSharesPagesWithContext same as ListSharesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) ListSharesPagesWithContext(ctx aws.Context, input *ListSharesInput, fn func(*ListSharesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSharesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSharesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSharesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
@@ -5569,14 +7176,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListTagsForResource
 func (c *Omics) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -5609,29 +7215,30 @@ func (c *Omics) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListTagsForResource
 func (c *Omics) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -5671,14 +7278,13 @@ const opListVariantImportJobs = "ListVariantImportJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListVariantImportJobsRequest method.
+//	req, resp := client.ListVariantImportJobsRequest(params)
 //
-//    // Example sending a request using the ListVariantImportJobsRequest method.
-//    req, resp := client.ListVariantImportJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListVariantImportJobs
 func (c *Omics) ListVariantImportJobsRequest(input *ListVariantImportJobsInput) (req *request.Request, output *ListVariantImportJobsOutput) {
@@ -5717,20 +7323,21 @@ func (c *Omics) ListVariantImportJobsRequest(input *ListVariantImportJobsInput) 
 // API operation ListVariantImportJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListVariantImportJobs
 func (c *Omics) ListVariantImportJobs(input *ListVariantImportJobsInput) (*ListVariantImportJobsOutput, error) {
@@ -5762,15 +7369,14 @@ func (c *Omics) ListVariantImportJobsWithContext(ctx aws.Context, input *ListVar
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListVariantImportJobs operation.
-//    pageNum := 0
-//    err := client.ListVariantImportJobsPages(params,
-//        func(page *omics.ListVariantImportJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListVariantImportJobs operation.
+//	pageNum := 0
+//	err := client.ListVariantImportJobsPages(params,
+//	    func(page *omics.ListVariantImportJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListVariantImportJobsPages(input *ListVariantImportJobsInput, fn func(*ListVariantImportJobsOutput, bool) bool) error {
 	return c.ListVariantImportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5822,14 +7428,13 @@ const opListVariantStores = "ListVariantStores"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListVariantStoresRequest method.
+//	req, resp := client.ListVariantStoresRequest(params)
 //
-//    // Example sending a request using the ListVariantStoresRequest method.
-//    req, resp := client.ListVariantStoresRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListVariantStores
 func (c *Omics) ListVariantStoresRequest(input *ListVariantStoresInput) (req *request.Request, output *ListVariantStoresOutput) {
@@ -5868,20 +7473,21 @@ func (c *Omics) ListVariantStoresRequest(input *ListVariantStoresInput) (req *re
 // API operation ListVariantStores for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListVariantStores
 func (c *Omics) ListVariantStores(input *ListVariantStoresInput) (*ListVariantStoresOutput, error) {
@@ -5913,15 +7519,14 @@ func (c *Omics) ListVariantStoresWithContext(ctx aws.Context, input *ListVariant
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListVariantStores operation.
-//    pageNum := 0
-//    err := client.ListVariantStoresPages(params,
-//        func(page *omics.ListVariantStoresOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListVariantStores operation.
+//	pageNum := 0
+//	err := client.ListVariantStoresPages(params,
+//	    func(page *omics.ListVariantStoresOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListVariantStoresPages(input *ListVariantStoresInput, fn func(*ListVariantStoresOutput, bool) bool) error {
 	return c.ListVariantStoresPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5973,14 +7578,13 @@ const opListWorkflows = "ListWorkflows"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWorkflowsRequest method.
+//	req, resp := client.ListWorkflowsRequest(params)
 //
-//    // Example sending a request using the ListWorkflowsRequest method.
-//    req, resp := client.ListWorkflowsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListWorkflows
 func (c *Omics) ListWorkflowsRequest(input *ListWorkflowsInput) (req *request.Request, output *ListWorkflowsOutput) {
@@ -6019,29 +7623,30 @@ func (c *Omics) ListWorkflowsRequest(input *ListWorkflowsInput) (req *request.Re
 // API operation ListWorkflows for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/ListWorkflows
 func (c *Omics) ListWorkflows(input *ListWorkflowsInput) (*ListWorkflowsOutput, error) {
@@ -6073,15 +7678,14 @@ func (c *Omics) ListWorkflowsWithContext(ctx aws.Context, input *ListWorkflowsIn
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWorkflows operation.
-//    pageNum := 0
-//    err := client.ListWorkflowsPages(params,
-//        func(page *omics.ListWorkflowsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWorkflows operation.
+//	pageNum := 0
+//	err := client.ListWorkflowsPages(params,
+//	    func(page *omics.ListWorkflowsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Omics) ListWorkflowsPages(input *ListWorkflowsInput, fn func(*ListWorkflowsOutput, bool) bool) error {
 	return c.ListWorkflowsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6133,14 +7737,13 @@ const opStartAnnotationImportJob = "StartAnnotationImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartAnnotationImportJobRequest method.
+//	req, resp := client.StartAnnotationImportJobRequest(params)
 //
-//    // Example sending a request using the StartAnnotationImportJobRequest method.
-//    req, resp := client.StartAnnotationImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartAnnotationImportJob
 func (c *Omics) StartAnnotationImportJobRequest(input *StartAnnotationImportJobInput) (req *request.Request, output *StartAnnotationImportJobOutput) {
@@ -6173,23 +7776,24 @@ func (c *Omics) StartAnnotationImportJobRequest(input *StartAnnotationImportJobI
 // API operation StartAnnotationImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartAnnotationImportJob
 func (c *Omics) StartAnnotationImportJob(input *StartAnnotationImportJobInput) (*StartAnnotationImportJobOutput, error) {
@@ -6229,14 +7833,13 @@ const opStartReadSetActivationJob = "StartReadSetActivationJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartReadSetActivationJobRequest method.
+//	req, resp := client.StartReadSetActivationJobRequest(params)
 //
-//    // Example sending a request using the StartReadSetActivationJobRequest method.
-//    req, resp := client.StartReadSetActivationJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartReadSetActivationJob
 func (c *Omics) StartReadSetActivationJobRequest(input *StartReadSetActivationJobInput) (req *request.Request, output *StartReadSetActivationJobOutput) {
@@ -6270,26 +7873,27 @@ func (c *Omics) StartReadSetActivationJobRequest(input *StartReadSetActivationJo
 // API operation StartReadSetActivationJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartReadSetActivationJob
 func (c *Omics) StartReadSetActivationJob(input *StartReadSetActivationJobInput) (*StartReadSetActivationJobOutput, error) {
@@ -6329,14 +7933,13 @@ const opStartReadSetExportJob = "StartReadSetExportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartReadSetExportJobRequest method.
+//	req, resp := client.StartReadSetExportJobRequest(params)
 //
-//    // Example sending a request using the StartReadSetExportJobRequest method.
-//    req, resp := client.StartReadSetExportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartReadSetExportJob
 func (c *Omics) StartReadSetExportJobRequest(input *StartReadSetExportJobInput) (req *request.Request, output *StartReadSetExportJobOutput) {
@@ -6369,26 +7972,27 @@ func (c *Omics) StartReadSetExportJobRequest(input *StartReadSetExportJobInput) 
 // API operation StartReadSetExportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartReadSetExportJob
 func (c *Omics) StartReadSetExportJob(input *StartReadSetExportJobInput) (*StartReadSetExportJobOutput, error) {
@@ -6428,14 +8032,13 @@ const opStartReadSetImportJob = "StartReadSetImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartReadSetImportJobRequest method.
+//	req, resp := client.StartReadSetImportJobRequest(params)
 //
-//    // Example sending a request using the StartReadSetImportJobRequest method.
-//    req, resp := client.StartReadSetImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartReadSetImportJob
 func (c *Omics) StartReadSetImportJobRequest(input *StartReadSetImportJobInput) (req *request.Request, output *StartReadSetImportJobOutput) {
@@ -6468,26 +8071,27 @@ func (c *Omics) StartReadSetImportJobRequest(input *StartReadSetImportJobInput) 
 // API operation StartReadSetImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartReadSetImportJob
 func (c *Omics) StartReadSetImportJob(input *StartReadSetImportJobInput) (*StartReadSetImportJobOutput, error) {
@@ -6527,14 +8131,13 @@ const opStartReferenceImportJob = "StartReferenceImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartReferenceImportJobRequest method.
+//	req, resp := client.StartReferenceImportJobRequest(params)
 //
-//    // Example sending a request using the StartReferenceImportJobRequest method.
-//    req, resp := client.StartReferenceImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartReferenceImportJob
 func (c *Omics) StartReferenceImportJobRequest(input *StartReferenceImportJobInput) (req *request.Request, output *StartReferenceImportJobOutput) {
@@ -6567,26 +8170,27 @@ func (c *Omics) StartReferenceImportJobRequest(input *StartReferenceImportJobInp
 // API operation StartReferenceImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartReferenceImportJob
 func (c *Omics) StartReferenceImportJob(input *StartReferenceImportJobInput) (*StartReferenceImportJobOutput, error) {
@@ -6626,14 +8230,13 @@ const opStartRun = "StartRun"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartRunRequest method.
+//	req, resp := client.StartRunRequest(params)
 //
-//    // Example sending a request using the StartRunRequest method.
-//    req, resp := client.StartRunRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartRun
 func (c *Omics) StartRunRequest(input *StartRunInput) (req *request.Request, output *StartRunOutput) {
@@ -6656,7 +8259,13 @@ func (c *Omics) StartRunRequest(input *StartRunInput) (req *request.Request, out
 
 // StartRun API operation for Amazon Omics.
 //
-// Starts a run.
+// Starts a workflow run. To duplicate a run, specify the run's ID and a role
+// ARN. The remaining parameters are copied from the previous run.
+//
+// The total number of runs in your account is subject to a quota per Region.
+// To avoid needing to delete runs manually, you can set the retention mode
+// to REMOVE. Runs with this setting are deleted automatically when the run
+// quoata is exceeded.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6666,29 +8275,30 @@ func (c *Omics) StartRunRequest(input *StartRunInput) (req *request.Request, out
 // API operation StartRun for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartRun
 func (c *Omics) StartRun(input *StartRunInput) (*StartRunOutput, error) {
@@ -6728,14 +8338,13 @@ const opStartVariantImportJob = "StartVariantImportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartVariantImportJobRequest method.
+//	req, resp := client.StartVariantImportJobRequest(params)
 //
-//    // Example sending a request using the StartVariantImportJobRequest method.
-//    req, resp := client.StartVariantImportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartVariantImportJob
 func (c *Omics) StartVariantImportJobRequest(input *StartVariantImportJobInput) (req *request.Request, output *StartVariantImportJobOutput) {
@@ -6768,23 +8377,24 @@ func (c *Omics) StartVariantImportJobRequest(input *StartVariantImportJobInput) 
 // API operation StartVariantImportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/StartVariantImportJob
 func (c *Omics) StartVariantImportJob(input *StartVariantImportJobInput) (*StartVariantImportJobOutput, error) {
@@ -6824,14 +8434,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/TagResource
 func (c *Omics) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -6865,29 +8474,30 @@ func (c *Omics) TagResourceRequest(input *TagResourceInput) (req *request.Reques
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/TagResource
 func (c *Omics) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -6927,14 +8537,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UntagResource
 func (c *Omics) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -6968,29 +8577,30 @@ func (c *Omics) UntagResourceRequest(input *UntagResourceInput) (req *request.Re
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UntagResource
 func (c *Omics) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -7030,14 +8640,13 @@ const opUpdateAnnotationStore = "UpdateAnnotationStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAnnotationStoreRequest method.
+//	req, resp := client.UpdateAnnotationStoreRequest(params)
 //
-//    // Example sending a request using the UpdateAnnotationStoreRequest method.
-//    req, resp := client.UpdateAnnotationStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UpdateAnnotationStore
 func (c *Omics) UpdateAnnotationStoreRequest(input *UpdateAnnotationStoreInput) (req *request.Request, output *UpdateAnnotationStoreOutput) {
@@ -7070,20 +8679,21 @@ func (c *Omics) UpdateAnnotationStoreRequest(input *UpdateAnnotationStoreInput) 
 // API operation UpdateAnnotationStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UpdateAnnotationStore
 func (c *Omics) UpdateAnnotationStore(input *UpdateAnnotationStoreInput) (*UpdateAnnotationStoreOutput, error) {
@@ -7107,6 +8717,99 @@ func (c *Omics) UpdateAnnotationStoreWithContext(ctx aws.Context, input *UpdateA
 	return out, req.Send()
 }
 
+const opUpdateAnnotationStoreVersion = "UpdateAnnotationStoreVersion"
+
+// UpdateAnnotationStoreVersionRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateAnnotationStoreVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateAnnotationStoreVersion for more information on using the UpdateAnnotationStoreVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateAnnotationStoreVersionRequest method.
+//	req, resp := client.UpdateAnnotationStoreVersionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UpdateAnnotationStoreVersion
+func (c *Omics) UpdateAnnotationStoreVersionRequest(input *UpdateAnnotationStoreVersionInput) (req *request.Request, output *UpdateAnnotationStoreVersionOutput) {
+	op := &request.Operation{
+		Name:       opUpdateAnnotationStoreVersion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/annotationStore/{name}/version/{versionName}",
+	}
+
+	if input == nil {
+		input = &UpdateAnnotationStoreVersionInput{}
+	}
+
+	output = &UpdateAnnotationStoreVersionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("analytics-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// UpdateAnnotationStoreVersion API operation for Amazon Omics.
+//
+// Updates the description of an annotation store version.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation UpdateAnnotationStoreVersion for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UpdateAnnotationStoreVersion
+func (c *Omics) UpdateAnnotationStoreVersion(input *UpdateAnnotationStoreVersionInput) (*UpdateAnnotationStoreVersionOutput, error) {
+	req, out := c.UpdateAnnotationStoreVersionRequest(input)
+	return out, req.Send()
+}
+
+// UpdateAnnotationStoreVersionWithContext is the same as UpdateAnnotationStoreVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateAnnotationStoreVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) UpdateAnnotationStoreVersionWithContext(ctx aws.Context, input *UpdateAnnotationStoreVersionInput, opts ...request.Option) (*UpdateAnnotationStoreVersionOutput, error) {
+	req, out := c.UpdateAnnotationStoreVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateRunGroup = "UpdateRunGroup"
 
 // UpdateRunGroupRequest generates a "aws/request.Request" representing the
@@ -7123,14 +8826,13 @@ const opUpdateRunGroup = "UpdateRunGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRunGroupRequest method.
+//	req, resp := client.UpdateRunGroupRequest(params)
 //
-//    // Example sending a request using the UpdateRunGroupRequest method.
-//    req, resp := client.UpdateRunGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UpdateRunGroup
 func (c *Omics) UpdateRunGroupRequest(input *UpdateRunGroupInput) (req *request.Request, output *UpdateRunGroupOutput) {
@@ -7164,29 +8866,30 @@ func (c *Omics) UpdateRunGroupRequest(input *UpdateRunGroupInput) (req *request.
 // API operation UpdateRunGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UpdateRunGroup
 func (c *Omics) UpdateRunGroup(input *UpdateRunGroupInput) (*UpdateRunGroupOutput, error) {
@@ -7226,14 +8929,13 @@ const opUpdateVariantStore = "UpdateVariantStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateVariantStoreRequest method.
+//	req, resp := client.UpdateVariantStoreRequest(params)
 //
-//    // Example sending a request using the UpdateVariantStoreRequest method.
-//    req, resp := client.UpdateVariantStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UpdateVariantStore
 func (c *Omics) UpdateVariantStoreRequest(input *UpdateVariantStoreInput) (req *request.Request, output *UpdateVariantStoreOutput) {
@@ -7266,20 +8968,21 @@ func (c *Omics) UpdateVariantStoreRequest(input *UpdateVariantStoreInput) (req *
 // API operation UpdateVariantStore for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UpdateVariantStore
 func (c *Omics) UpdateVariantStore(input *UpdateVariantStoreInput) (*UpdateVariantStoreOutput, error) {
@@ -7319,14 +9022,13 @@ const opUpdateWorkflow = "UpdateWorkflow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateWorkflowRequest method.
+//	req, resp := client.UpdateWorkflowRequest(params)
 //
-//    // Example sending a request using the UpdateWorkflowRequest method.
-//    req, resp := client.UpdateWorkflowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UpdateWorkflow
 func (c *Omics) UpdateWorkflowRequest(input *UpdateWorkflowInput) (req *request.Request, output *UpdateWorkflowOutput) {
@@ -7360,29 +9062,30 @@ func (c *Omics) UpdateWorkflowRequest(input *UpdateWorkflowInput) (req *request.
 // API operation UpdateWorkflow for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   An unexpected error occurred. Try the request again.
 //
-//   * ServiceQuotaExceededException
-//   The request exceeds a service quota.
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an AWS service.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ConflictException
-//   The request cannot be applied to the target resource in its current state.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
 //
-//   * ResourceNotFoundException
-//   The target resource was not found in the current Region.
+//   - ConflictException
+//     The request cannot be applied to the target resource in its current state.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
 //
-//   * RequestTimeoutException
-//   The request timed out.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UpdateWorkflow
 func (c *Omics) UpdateWorkflow(input *UpdateWorkflowInput) (*UpdateWorkflowOutput, error) {
@@ -7404,6 +9107,281 @@ func (c *Omics) UpdateWorkflowWithContext(ctx aws.Context, input *UpdateWorkflow
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opUploadReadSetPart = "UploadReadSetPart"
+
+// UploadReadSetPartRequest generates a "aws/request.Request" representing the
+// client's request for the UploadReadSetPart operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UploadReadSetPart for more information on using the UploadReadSetPart
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UploadReadSetPartRequest method.
+//	req, resp := client.UploadReadSetPartRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UploadReadSetPart
+func (c *Omics) UploadReadSetPartRequest(input *UploadReadSetPartInput) (req *request.Request, output *UploadReadSetPartOutput) {
+	op := &request.Operation{
+		Name:       opUploadReadSetPart,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/sequencestore/{sequenceStoreId}/upload/{uploadId}/part",
+	}
+
+	if input == nil {
+		input = &UploadReadSetPartInput{}
+	}
+
+	output = &UploadReadSetPartOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Sign.Remove(v4.SignRequestHandler)
+	handler := v4.BuildNamedHandler("v4.CustomSignerHandler", v4.WithUnsignedPayload)
+	req.Handlers.Sign.PushFrontNamed(handler)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("storage-", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// UploadReadSetPart API operation for Amazon Omics.
+//
+// This operation uploads a specific part of a read set. If you upload a new
+// part using a previously used part number, the previously uploaded part will
+// be overwritten.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Omics's
+// API operation UploadReadSetPart for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     An unexpected error occurred. Try the request again.
+//
+//   - NotSupportedOperationException
+//     The operation is not supported by Amazon Omics, or the API does not exist.
+//
+//   - ServiceQuotaExceededException
+//     The request exceeds a service quota.
+//
+//   - ThrottlingException
+//     The request was denied due to request throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an AWS service.
+//
+//   - ResourceNotFoundException
+//     The target resource was not found in the current Region.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - RequestTimeoutException
+//     The request timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/omics-2022-11-28/UploadReadSetPart
+func (c *Omics) UploadReadSetPart(input *UploadReadSetPartInput) (*UploadReadSetPartOutput, error) {
+	req, out := c.UploadReadSetPartRequest(input)
+	return out, req.Send()
+}
+
+// UploadReadSetPartWithContext is the same as UploadReadSetPart with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UploadReadSetPart for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Omics) UploadReadSetPartWithContext(ctx aws.Context, input *UploadReadSetPartInput, opts ...request.Option) (*UploadReadSetPartOutput, error) {
+	req, out := c.UploadReadSetPartRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+type AbortMultipartReadSetUploadInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The sequence store ID for the store involved in the multipart upload.
+	//
+	// SequenceStoreId is a required field
+	SequenceStoreId *string `location:"uri" locationName:"sequenceStoreId" min:"10" type:"string" required:"true"`
+
+	// The ID for the multipart upload.
+	//
+	// UploadId is a required field
+	UploadId *string `location:"uri" locationName:"uploadId" min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AbortMultipartReadSetUploadInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AbortMultipartReadSetUploadInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AbortMultipartReadSetUploadInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AbortMultipartReadSetUploadInput"}
+	if s.SequenceStoreId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SequenceStoreId"))
+	}
+	if s.SequenceStoreId != nil && len(*s.SequenceStoreId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("SequenceStoreId", 10))
+	}
+	if s.UploadId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UploadId"))
+	}
+	if s.UploadId != nil && len(*s.UploadId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("UploadId", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSequenceStoreId sets the SequenceStoreId field's value.
+func (s *AbortMultipartReadSetUploadInput) SetSequenceStoreId(v string) *AbortMultipartReadSetUploadInput {
+	s.SequenceStoreId = &v
+	return s
+}
+
+// SetUploadId sets the UploadId field's value.
+func (s *AbortMultipartReadSetUploadInput) SetUploadId(v string) *AbortMultipartReadSetUploadInput {
+	s.UploadId = &v
+	return s
+}
+
+type AbortMultipartReadSetUploadOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AbortMultipartReadSetUploadOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AbortMultipartReadSetUploadOutput) GoString() string {
+	return s.String()
+}
+
+type AcceptShareInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID for a share offer for analytics store data.
+	//
+	// ShareId is a required field
+	ShareId *string `location:"uri" locationName:"shareId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AcceptShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AcceptShareInput"}
+	if s.ShareId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ShareId"))
+	}
+	if s.ShareId != nil && len(*s.ShareId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ShareId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetShareId sets the ShareId field's value.
+func (s *AcceptShareInput) SetShareId(v string) *AcceptShareInput {
+	s.ShareId = &v
+	return s
+}
+
+type AcceptShareOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The status of an analytics store share.
+	Status *string `locationName:"status" type:"string" enum:"ShareStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceptShareOutput) GoString() string {
+	return s.String()
+}
+
+// SetStatus sets the Status field's value.
+func (s *AcceptShareOutput) SetStatus(v string) *AcceptShareOutput {
+	s.Status = &v
+	return s
 }
 
 // You do not have sufficient access to perform this action.
@@ -7746,6 +9724,9 @@ func (s *AnnotationImportItemSource) SetSource(v string) *AnnotationImportItemSo
 type AnnotationImportJobItem struct {
 	_ struct{} `type:"structure"`
 
+	// The annotation schema generated by the parsed annotation data.
+	AnnotationFields map[string]*string `locationName:"annotationFields" type:"map"`
+
 	// When the job completed.
 	CompletionTime *time.Time `locationName:"completionTime" type:"timestamp" timestampFormat:"iso8601"`
 
@@ -7781,6 +9762,11 @@ type AnnotationImportJobItem struct {
 	//
 	// UpdateTime is a required field
 	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The name of the annotation store version.
+	//
+	// VersionName is a required field
+	VersionName *string `locationName:"versionName" min:"3" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -7799,6 +9785,12 @@ func (s AnnotationImportJobItem) String() string {
 // value will be replaced with "sensitive".
 func (s AnnotationImportJobItem) GoString() string {
 	return s.String()
+}
+
+// SetAnnotationFields sets the AnnotationFields field's value.
+func (s *AnnotationImportJobItem) SetAnnotationFields(v map[string]*string) *AnnotationImportJobItem {
+	s.AnnotationFields = v
+	return s
 }
 
 // SetCompletionTime sets the CompletionTime field's value.
@@ -7846,6 +9838,12 @@ func (s *AnnotationImportJobItem) SetStatus(v string) *AnnotationImportJobItem {
 // SetUpdateTime sets the UpdateTime field's value.
 func (s *AnnotationImportJobItem) SetUpdateTime(v time.Time) *AnnotationImportJobItem {
 	s.UpdateTime = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *AnnotationImportJobItem) SetVersionName(v string) *AnnotationImportJobItem {
+	s.VersionName = &v
 	return s
 }
 
@@ -8001,6 +9999,150 @@ func (s *AnnotationStoreItem) SetStoreSizeBytes(v int64) *AnnotationStoreItem {
 // SetUpdateTime sets the UpdateTime field's value.
 func (s *AnnotationStoreItem) SetUpdateTime(v time.Time) *AnnotationStoreItem {
 	s.UpdateTime = &v
+	return s
+}
+
+// Annotation store versions.
+type AnnotationStoreVersionItem struct {
+	_ struct{} `type:"structure"`
+
+	// The time stamp for when an annotation store version was created.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The description of an annotation store version.
+	//
+	// Description is a required field
+	Description *string `locationName:"description" type:"string" required:"true"`
+
+	// The annotation store version ID.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" type:"string" required:"true"`
+
+	// A name given to an annotation store version to distinguish it from others.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"3" type:"string" required:"true"`
+
+	// The status of an annotation store version.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"VersionStatus"`
+
+	// The status of an annotation store version.
+	//
+	// StatusMessage is a required field
+	StatusMessage *string `locationName:"statusMessage" type:"string" required:"true"`
+
+	// The store ID for an annotation store version.
+	//
+	// StoreId is a required field
+	StoreId *string `locationName:"storeId" type:"string" required:"true"`
+
+	// The time stamp for when an annotation store version was updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The Arn for an annotation store version.
+	//
+	// VersionArn is a required field
+	VersionArn *string `locationName:"versionArn" min:"20" type:"string" required:"true"`
+
+	// The name of an annotation store version.
+	//
+	// VersionName is a required field
+	VersionName *string `locationName:"versionName" min:"3" type:"string" required:"true"`
+
+	// The size of an annotation store version in Bytes.
+	//
+	// VersionSizeBytes is a required field
+	VersionSizeBytes *int64 `locationName:"versionSizeBytes" type:"long" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnnotationStoreVersionItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AnnotationStoreVersionItem) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *AnnotationStoreVersionItem) SetCreationTime(v time.Time) *AnnotationStoreVersionItem {
+	s.CreationTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *AnnotationStoreVersionItem) SetDescription(v string) *AnnotationStoreVersionItem {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *AnnotationStoreVersionItem) SetId(v string) *AnnotationStoreVersionItem {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AnnotationStoreVersionItem) SetName(v string) *AnnotationStoreVersionItem {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AnnotationStoreVersionItem) SetStatus(v string) *AnnotationStoreVersionItem {
+	s.Status = &v
+	return s
+}
+
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *AnnotationStoreVersionItem) SetStatusMessage(v string) *AnnotationStoreVersionItem {
+	s.StatusMessage = &v
+	return s
+}
+
+// SetStoreId sets the StoreId field's value.
+func (s *AnnotationStoreVersionItem) SetStoreId(v string) *AnnotationStoreVersionItem {
+	s.StoreId = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *AnnotationStoreVersionItem) SetUpdateTime(v time.Time) *AnnotationStoreVersionItem {
+	s.UpdateTime = &v
+	return s
+}
+
+// SetVersionArn sets the VersionArn field's value.
+func (s *AnnotationStoreVersionItem) SetVersionArn(v string) *AnnotationStoreVersionItem {
+	s.VersionArn = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *AnnotationStoreVersionItem) SetVersionName(v string) *AnnotationStoreVersionItem {
+	s.VersionName = &v
+	return s
+}
+
+// SetVersionSizeBytes sets the VersionSizeBytes field's value.
+func (s *AnnotationStoreVersionItem) SetVersionSizeBytes(v int64) *AnnotationStoreVersionItem {
+	s.VersionSizeBytes = &v
 	return s
 }
 
@@ -8314,6 +10456,211 @@ func (s CancelVariantImportJobOutput) GoString() string {
 	return s.String()
 }
 
+type CompleteMultipartReadSetUploadInput struct {
+	_ struct{} `type:"structure"`
+
+	// The individual uploads or parts of a multipart upload.
+	//
+	// Parts is a required field
+	Parts []*CompleteReadSetUploadPartListItem `locationName:"parts" type:"list" required:"true"`
+
+	// The sequence store ID for the store involved in the multipart upload.
+	//
+	// SequenceStoreId is a required field
+	SequenceStoreId *string `location:"uri" locationName:"sequenceStoreId" min:"10" type:"string" required:"true"`
+
+	// The ID for the multipart upload.
+	//
+	// UploadId is a required field
+	UploadId *string `location:"uri" locationName:"uploadId" min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompleteMultipartReadSetUploadInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompleteMultipartReadSetUploadInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CompleteMultipartReadSetUploadInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CompleteMultipartReadSetUploadInput"}
+	if s.Parts == nil {
+		invalidParams.Add(request.NewErrParamRequired("Parts"))
+	}
+	if s.SequenceStoreId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SequenceStoreId"))
+	}
+	if s.SequenceStoreId != nil && len(*s.SequenceStoreId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("SequenceStoreId", 10))
+	}
+	if s.UploadId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UploadId"))
+	}
+	if s.UploadId != nil && len(*s.UploadId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("UploadId", 10))
+	}
+	if s.Parts != nil {
+		for i, v := range s.Parts {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Parts", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetParts sets the Parts field's value.
+func (s *CompleteMultipartReadSetUploadInput) SetParts(v []*CompleteReadSetUploadPartListItem) *CompleteMultipartReadSetUploadInput {
+	s.Parts = v
+	return s
+}
+
+// SetSequenceStoreId sets the SequenceStoreId field's value.
+func (s *CompleteMultipartReadSetUploadInput) SetSequenceStoreId(v string) *CompleteMultipartReadSetUploadInput {
+	s.SequenceStoreId = &v
+	return s
+}
+
+// SetUploadId sets the UploadId field's value.
+func (s *CompleteMultipartReadSetUploadInput) SetUploadId(v string) *CompleteMultipartReadSetUploadInput {
+	s.UploadId = &v
+	return s
+}
+
+type CompleteMultipartReadSetUploadOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The read set ID created for an uploaded read set.
+	//
+	// ReadSetId is a required field
+	ReadSetId *string `locationName:"readSetId" min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompleteMultipartReadSetUploadOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompleteMultipartReadSetUploadOutput) GoString() string {
+	return s.String()
+}
+
+// SetReadSetId sets the ReadSetId field's value.
+func (s *CompleteMultipartReadSetUploadOutput) SetReadSetId(v string) *CompleteMultipartReadSetUploadOutput {
+	s.ReadSetId = &v
+	return s
+}
+
+// Part of the response to the CompleteReadSetUpload API, including metadata.
+type CompleteReadSetUploadPartListItem struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier used to confirm that parts are being added to the correct
+	// upload.
+	//
+	// Checksum is a required field
+	Checksum *string `locationName:"checksum" min:"1" type:"string" required:"true"`
+
+	// A number identifying the part in a read set upload.
+	//
+	// PartNumber is a required field
+	PartNumber *int64 `locationName:"partNumber" min:"1" type:"integer" required:"true"`
+
+	// The source file of the part being uploaded.
+	//
+	// PartSource is a required field
+	PartSource *string `locationName:"partSource" type:"string" required:"true" enum:"ReadSetPartSource"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompleteReadSetUploadPartListItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CompleteReadSetUploadPartListItem) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CompleteReadSetUploadPartListItem) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CompleteReadSetUploadPartListItem"}
+	if s.Checksum == nil {
+		invalidParams.Add(request.NewErrParamRequired("Checksum"))
+	}
+	if s.Checksum != nil && len(*s.Checksum) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Checksum", 1))
+	}
+	if s.PartNumber == nil {
+		invalidParams.Add(request.NewErrParamRequired("PartNumber"))
+	}
+	if s.PartNumber != nil && *s.PartNumber < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("PartNumber", 1))
+	}
+	if s.PartSource == nil {
+		invalidParams.Add(request.NewErrParamRequired("PartSource"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChecksum sets the Checksum field's value.
+func (s *CompleteReadSetUploadPartListItem) SetChecksum(v string) *CompleteReadSetUploadPartListItem {
+	s.Checksum = &v
+	return s
+}
+
+// SetPartNumber sets the PartNumber field's value.
+func (s *CompleteReadSetUploadPartListItem) SetPartNumber(v int64) *CompleteReadSetUploadPartListItem {
+	s.PartNumber = &v
+	return s
+}
+
+// SetPartSource sets the PartSource field's value.
+func (s *CompleteReadSetUploadPartListItem) SetPartSource(v string) *CompleteReadSetUploadPartListItem {
+	s.PartSource = &v
+	return s
+}
+
 // The request cannot be applied to the target resource in its current state.
 type ConflictException struct {
 	_            struct{}                  `type:"structure"`
@@ -8385,7 +10732,7 @@ type CreateAnnotationStoreInput struct {
 	Description *string `locationName:"description" type:"string"`
 
 	// A name for the store.
-	Name *string `locationName:"name" type:"string"`
+	Name *string `locationName:"name" min:"3" type:"string"`
 
 	// The genome reference for the store's annotations.
 	Reference *ReferenceItem `locationName:"reference" type:"structure"`
@@ -8403,6 +10750,10 @@ type CreateAnnotationStoreInput struct {
 
 	// Tags for the store.
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The name given to an annotation store version to distinguish it from other
+	// versions.
+	VersionName *string `locationName:"versionName" min:"3" type:"string"`
 }
 
 // String returns the string representation.
@@ -8426,8 +10777,14 @@ func (s CreateAnnotationStoreInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateAnnotationStoreInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateAnnotationStoreInput"}
+	if s.Name != nil && len(*s.Name) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 3))
+	}
 	if s.StoreFormat == nil {
 		invalidParams.Add(request.NewErrParamRequired("StoreFormat"))
+	}
+	if s.VersionName != nil && len(*s.VersionName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionName", 3))
 	}
 	if s.Reference != nil {
 		if err := s.Reference.Validate(); err != nil {
@@ -8493,6 +10850,12 @@ func (s *CreateAnnotationStoreInput) SetTags(v map[string]*string) *CreateAnnota
 	return s
 }
 
+// SetVersionName sets the VersionName field's value.
+func (s *CreateAnnotationStoreInput) SetVersionName(v string) *CreateAnnotationStoreInput {
+	s.VersionName = &v
+	return s
+}
+
 type CreateAnnotationStoreOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -8525,6 +10888,12 @@ type CreateAnnotationStoreOutput struct {
 
 	// The store's file parsing options.
 	StoreOptions *StoreOptions `locationName:"storeOptions" type:"structure"`
+
+	// The name given to an annotation store version to distinguish it from other
+	// versions.
+	//
+	// VersionName is a required field
+	VersionName *string `locationName:"versionName" min:"3" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -8584,6 +10953,518 @@ func (s *CreateAnnotationStoreOutput) SetStoreFormat(v string) *CreateAnnotation
 // SetStoreOptions sets the StoreOptions field's value.
 func (s *CreateAnnotationStoreOutput) SetStoreOptions(v *StoreOptions) *CreateAnnotationStoreOutput {
 	s.StoreOptions = v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *CreateAnnotationStoreOutput) SetVersionName(v string) *CreateAnnotationStoreOutput {
+	s.VersionName = &v
+	return s
+}
+
+type CreateAnnotationStoreVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The description of an annotation store version.
+	Description *string `locationName:"description" type:"string"`
+
+	// The name of an annotation store version from which versions are being created.
+	//
+	// Name is a required field
+	Name *string `location:"uri" locationName:"name" min:"3" type:"string" required:"true"`
+
+	// Any tags added to annotation store version.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The name given to an annotation store version to distinguish it from other
+	// versions.
+	//
+	// VersionName is a required field
+	VersionName *string `locationName:"versionName" min:"3" type:"string" required:"true"`
+
+	// The options for an annotation store version.
+	VersionOptions *VersionOptions `locationName:"versionOptions" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAnnotationStoreVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAnnotationStoreVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateAnnotationStoreVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateAnnotationStoreVersionInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 3))
+	}
+	if s.VersionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VersionName"))
+	}
+	if s.VersionName != nil && len(*s.VersionName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionName", 3))
+	}
+	if s.VersionOptions != nil {
+		if err := s.VersionOptions.Validate(); err != nil {
+			invalidParams.AddNested("VersionOptions", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateAnnotationStoreVersionInput) SetDescription(v string) *CreateAnnotationStoreVersionInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateAnnotationStoreVersionInput) SetName(v string) *CreateAnnotationStoreVersionInput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateAnnotationStoreVersionInput) SetTags(v map[string]*string) *CreateAnnotationStoreVersionInput {
+	s.Tags = v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *CreateAnnotationStoreVersionInput) SetVersionName(v string) *CreateAnnotationStoreVersionInput {
+	s.VersionName = &v
+	return s
+}
+
+// SetVersionOptions sets the VersionOptions field's value.
+func (s *CreateAnnotationStoreVersionInput) SetVersionOptions(v *VersionOptions) *CreateAnnotationStoreVersionInput {
+	s.VersionOptions = v
+	return s
+}
+
+type CreateAnnotationStoreVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The time stamp for the creation of an annotation store version.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// A generated ID for the annotation store
+	//
+	// Id is a required field
+	Id *string `locationName:"id" type:"string" required:"true"`
+
+	// The name given to an annotation store version to distinguish it from other
+	// versions.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"3" type:"string" required:"true"`
+
+	// The status of a annotation store version.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"VersionStatus"`
+
+	// The ID for the annotation store from which new versions are being created.
+	//
+	// StoreId is a required field
+	StoreId *string `locationName:"storeId" type:"string" required:"true"`
+
+	// The name given to an annotation store version to distinguish it from other
+	// versions.
+	//
+	// VersionName is a required field
+	VersionName *string `locationName:"versionName" min:"3" type:"string" required:"true"`
+
+	// The options for an annotation store version.
+	VersionOptions *VersionOptions `locationName:"versionOptions" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAnnotationStoreVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateAnnotationStoreVersionOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *CreateAnnotationStoreVersionOutput) SetCreationTime(v time.Time) *CreateAnnotationStoreVersionOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CreateAnnotationStoreVersionOutput) SetId(v string) *CreateAnnotationStoreVersionOutput {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateAnnotationStoreVersionOutput) SetName(v string) *CreateAnnotationStoreVersionOutput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateAnnotationStoreVersionOutput) SetStatus(v string) *CreateAnnotationStoreVersionOutput {
+	s.Status = &v
+	return s
+}
+
+// SetStoreId sets the StoreId field's value.
+func (s *CreateAnnotationStoreVersionOutput) SetStoreId(v string) *CreateAnnotationStoreVersionOutput {
+	s.StoreId = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *CreateAnnotationStoreVersionOutput) SetVersionName(v string) *CreateAnnotationStoreVersionOutput {
+	s.VersionName = &v
+	return s
+}
+
+// SetVersionOptions sets the VersionOptions field's value.
+func (s *CreateAnnotationStoreVersionOutput) SetVersionOptions(v *VersionOptions) *CreateAnnotationStoreVersionOutput {
+	s.VersionOptions = v
+	return s
+}
+
+type CreateMultipartReadSetUploadInput struct {
+	_ struct{} `type:"structure"`
+
+	// An idempotency token that can be used to avoid triggering multiple multipart
+	// uploads.
+	ClientToken *string `locationName:"clientToken" min:"1" type:"string"`
+
+	// The description of the read set.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// Where the source originated.
+	GeneratedFrom *string `locationName:"generatedFrom" min:"1" type:"string"`
+
+	// The name of the read set.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The ARN of the reference.
+	ReferenceArn *string `locationName:"referenceArn" min:"1" type:"string"`
+
+	// The source's sample ID.
+	//
+	// SampleId is a required field
+	SampleId *string `locationName:"sampleId" min:"1" type:"string" required:"true"`
+
+	// The sequence store ID for the store that is the destination of the multipart
+	// uploads.
+	//
+	// SequenceStoreId is a required field
+	SequenceStoreId *string `location:"uri" locationName:"sequenceStoreId" min:"10" type:"string" required:"true"`
+
+	// The type of file being uploaded.
+	//
+	// SourceFileType is a required field
+	SourceFileType *string `locationName:"sourceFileType" type:"string" required:"true" enum:"FileType"`
+
+	// The source's subject ID.
+	//
+	// SubjectId is a required field
+	SubjectId *string `locationName:"subjectId" min:"1" type:"string" required:"true"`
+
+	// Any tags to add to the read set.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateMultipartReadSetUploadInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateMultipartReadSetUploadInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateMultipartReadSetUploadInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateMultipartReadSetUploadInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.GeneratedFrom != nil && len(*s.GeneratedFrom) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GeneratedFrom", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.ReferenceArn != nil && len(*s.ReferenceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ReferenceArn", 1))
+	}
+	if s.SampleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SampleId"))
+	}
+	if s.SampleId != nil && len(*s.SampleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SampleId", 1))
+	}
+	if s.SequenceStoreId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SequenceStoreId"))
+	}
+	if s.SequenceStoreId != nil && len(*s.SequenceStoreId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("SequenceStoreId", 10))
+	}
+	if s.SourceFileType == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceFileType"))
+	}
+	if s.SubjectId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SubjectId"))
+	}
+	if s.SubjectId != nil && len(*s.SubjectId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubjectId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateMultipartReadSetUploadInput) SetClientToken(v string) *CreateMultipartReadSetUploadInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateMultipartReadSetUploadInput) SetDescription(v string) *CreateMultipartReadSetUploadInput {
+	s.Description = &v
+	return s
+}
+
+// SetGeneratedFrom sets the GeneratedFrom field's value.
+func (s *CreateMultipartReadSetUploadInput) SetGeneratedFrom(v string) *CreateMultipartReadSetUploadInput {
+	s.GeneratedFrom = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateMultipartReadSetUploadInput) SetName(v string) *CreateMultipartReadSetUploadInput {
+	s.Name = &v
+	return s
+}
+
+// SetReferenceArn sets the ReferenceArn field's value.
+func (s *CreateMultipartReadSetUploadInput) SetReferenceArn(v string) *CreateMultipartReadSetUploadInput {
+	s.ReferenceArn = &v
+	return s
+}
+
+// SetSampleId sets the SampleId field's value.
+func (s *CreateMultipartReadSetUploadInput) SetSampleId(v string) *CreateMultipartReadSetUploadInput {
+	s.SampleId = &v
+	return s
+}
+
+// SetSequenceStoreId sets the SequenceStoreId field's value.
+func (s *CreateMultipartReadSetUploadInput) SetSequenceStoreId(v string) *CreateMultipartReadSetUploadInput {
+	s.SequenceStoreId = &v
+	return s
+}
+
+// SetSourceFileType sets the SourceFileType field's value.
+func (s *CreateMultipartReadSetUploadInput) SetSourceFileType(v string) *CreateMultipartReadSetUploadInput {
+	s.SourceFileType = &v
+	return s
+}
+
+// SetSubjectId sets the SubjectId field's value.
+func (s *CreateMultipartReadSetUploadInput) SetSubjectId(v string) *CreateMultipartReadSetUploadInput {
+	s.SubjectId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateMultipartReadSetUploadInput) SetTags(v map[string]*string) *CreateMultipartReadSetUploadInput {
+	s.Tags = v
+	return s
+}
+
+type CreateMultipartReadSetUploadOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The creation time of the multipart upload.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The description of the read set.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The source of the read set.
+	GeneratedFrom *string `locationName:"generatedFrom" min:"1" type:"string"`
+
+	// The name of the read set.
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// The read set source's reference ARN.
+	//
+	// ReferenceArn is a required field
+	ReferenceArn *string `locationName:"referenceArn" min:"1" type:"string" required:"true"`
+
+	// The source's sample ID.
+	//
+	// SampleId is a required field
+	SampleId *string `locationName:"sampleId" min:"1" type:"string" required:"true"`
+
+	// The sequence store ID for the store that the read set will be created in.
+	//
+	// SequenceStoreId is a required field
+	SequenceStoreId *string `locationName:"sequenceStoreId" min:"10" type:"string" required:"true"`
+
+	// The file type of the read set source.
+	//
+	// SourceFileType is a required field
+	SourceFileType *string `locationName:"sourceFileType" type:"string" required:"true" enum:"FileType"`
+
+	// The source's subject ID.
+	//
+	// SubjectId is a required field
+	SubjectId *string `locationName:"subjectId" min:"1" type:"string" required:"true"`
+
+	// The tags to add to the read set.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The ID for the initiated multipart upload.
+	//
+	// UploadId is a required field
+	UploadId *string `locationName:"uploadId" min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateMultipartReadSetUploadOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateMultipartReadSetUploadOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *CreateMultipartReadSetUploadOutput) SetCreationTime(v time.Time) *CreateMultipartReadSetUploadOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateMultipartReadSetUploadOutput) SetDescription(v string) *CreateMultipartReadSetUploadOutput {
+	s.Description = &v
+	return s
+}
+
+// SetGeneratedFrom sets the GeneratedFrom field's value.
+func (s *CreateMultipartReadSetUploadOutput) SetGeneratedFrom(v string) *CreateMultipartReadSetUploadOutput {
+	s.GeneratedFrom = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateMultipartReadSetUploadOutput) SetName(v string) *CreateMultipartReadSetUploadOutput {
+	s.Name = &v
+	return s
+}
+
+// SetReferenceArn sets the ReferenceArn field's value.
+func (s *CreateMultipartReadSetUploadOutput) SetReferenceArn(v string) *CreateMultipartReadSetUploadOutput {
+	s.ReferenceArn = &v
+	return s
+}
+
+// SetSampleId sets the SampleId field's value.
+func (s *CreateMultipartReadSetUploadOutput) SetSampleId(v string) *CreateMultipartReadSetUploadOutput {
+	s.SampleId = &v
+	return s
+}
+
+// SetSequenceStoreId sets the SequenceStoreId field's value.
+func (s *CreateMultipartReadSetUploadOutput) SetSequenceStoreId(v string) *CreateMultipartReadSetUploadOutput {
+	s.SequenceStoreId = &v
+	return s
+}
+
+// SetSourceFileType sets the SourceFileType field's value.
+func (s *CreateMultipartReadSetUploadOutput) SetSourceFileType(v string) *CreateMultipartReadSetUploadOutput {
+	s.SourceFileType = &v
+	return s
+}
+
+// SetSubjectId sets the SubjectId field's value.
+func (s *CreateMultipartReadSetUploadOutput) SetSubjectId(v string) *CreateMultipartReadSetUploadOutput {
+	s.SubjectId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateMultipartReadSetUploadOutput) SetTags(v map[string]*string) *CreateMultipartReadSetUploadOutput {
+	s.Tags = v
+	return s
+}
+
+// SetUploadId sets the UploadId field's value.
+func (s *CreateMultipartReadSetUploadOutput) SetUploadId(v string) *CreateMultipartReadSetUploadOutput {
+	s.UploadId = &v
 	return s
 }
 
@@ -8775,6 +11656,9 @@ type CreateRunGroupInput struct {
 	// A maximum run time for the group in minutes.
 	MaxDuration *int64 `locationName:"maxDuration" min:"1" type:"integer"`
 
+	// The maximum GPUs that can be used by a run group.
+	MaxGpus *int64 `locationName:"maxGpus" min:"1" type:"integer"`
+
 	// The maximum number of concurrent runs for the group.
 	MaxRuns *int64 `locationName:"maxRuns" min:"1" type:"integer"`
 
@@ -8816,6 +11700,9 @@ func (s *CreateRunGroupInput) Validate() error {
 	if s.MaxDuration != nil && *s.MaxDuration < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxDuration", 1))
 	}
+	if s.MaxGpus != nil && *s.MaxGpus < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxGpus", 1))
+	}
 	if s.MaxRuns != nil && *s.MaxRuns < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxRuns", 1))
 	}
@@ -8841,6 +11728,12 @@ func (s *CreateRunGroupInput) SetMaxCpus(v int64) *CreateRunGroupInput {
 // SetMaxDuration sets the MaxDuration field's value.
 func (s *CreateRunGroupInput) SetMaxDuration(v int64) *CreateRunGroupInput {
 	s.MaxDuration = &v
+	return s
+}
+
+// SetMaxGpus sets the MaxGpus field's value.
+func (s *CreateRunGroupInput) SetMaxGpus(v int64) *CreateRunGroupInput {
+	s.MaxGpus = &v
 	return s
 }
 
@@ -8927,6 +11820,12 @@ type CreateSequenceStoreInput struct {
 	// A description for the store.
 	Description *string `locationName:"description" min:"1" type:"string"`
 
+	// The ETag algorithm family to use for ingested read sets.
+	ETagAlgorithmFamily *string `locationName:"eTagAlgorithmFamily" type:"string" enum:"ETagAlgorithmFamily"`
+
+	// An S3 location that is used to store files that have failed a direct upload.
+	FallbackLocation *string `locationName:"fallbackLocation" type:"string"`
+
 	// A name for the store.
 	//
 	// Name is a required field
@@ -8996,6 +11895,18 @@ func (s *CreateSequenceStoreInput) SetDescription(v string) *CreateSequenceStore
 	return s
 }
 
+// SetETagAlgorithmFamily sets the ETagAlgorithmFamily field's value.
+func (s *CreateSequenceStoreInput) SetETagAlgorithmFamily(v string) *CreateSequenceStoreInput {
+	s.ETagAlgorithmFamily = &v
+	return s
+}
+
+// SetFallbackLocation sets the FallbackLocation field's value.
+func (s *CreateSequenceStoreInput) SetFallbackLocation(v string) *CreateSequenceStoreInput {
+	s.FallbackLocation = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *CreateSequenceStoreInput) SetName(v string) *CreateSequenceStoreInput {
 	s.Name = &v
@@ -9029,6 +11940,12 @@ type CreateSequenceStoreOutput struct {
 
 	// The store's description.
 	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The algorithm family of the ETag.
+	ETagAlgorithmFamily *string `locationName:"eTagAlgorithmFamily" type:"string" enum:"ETagAlgorithmFamily"`
+
+	// An S3 location that is used to store files that have failed a direct upload.
+	FallbackLocation *string `locationName:"fallbackLocation" type:"string"`
 
 	// The store's ID.
 	//
@@ -9078,6 +11995,18 @@ func (s *CreateSequenceStoreOutput) SetDescription(v string) *CreateSequenceStor
 	return s
 }
 
+// SetETagAlgorithmFamily sets the ETagAlgorithmFamily field's value.
+func (s *CreateSequenceStoreOutput) SetETagAlgorithmFamily(v string) *CreateSequenceStoreOutput {
+	s.ETagAlgorithmFamily = &v
+	return s
+}
+
+// SetFallbackLocation sets the FallbackLocation field's value.
+func (s *CreateSequenceStoreOutput) SetFallbackLocation(v string) *CreateSequenceStoreOutput {
+	s.FallbackLocation = &v
+	return s
+}
+
 // SetId sets the Id field's value.
 func (s *CreateSequenceStoreOutput) SetId(v string) *CreateSequenceStoreOutput {
 	s.Id = &v
@@ -9096,6 +12025,128 @@ func (s *CreateSequenceStoreOutput) SetSseConfig(v *SseConfig) *CreateSequenceSt
 	return s
 }
 
+type CreateShareInput struct {
+	_ struct{} `type:"structure"`
+
+	// The principal subscriber is the account being given access to the analytics
+	// store data through the share offer.
+	//
+	// PrincipalSubscriber is a required field
+	PrincipalSubscriber *string `locationName:"principalSubscriber" type:"string" required:"true"`
+
+	// The resource ARN for the analytics store to be shared.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `locationName:"resourceArn" type:"string" required:"true"`
+
+	// A name given to the share.
+	ShareName *string `locationName:"shareName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateShareInput"}
+	if s.PrincipalSubscriber == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrincipalSubscriber"))
+	}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ShareName != nil && len(*s.ShareName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ShareName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPrincipalSubscriber sets the PrincipalSubscriber field's value.
+func (s *CreateShareInput) SetPrincipalSubscriber(v string) *CreateShareInput {
+	s.PrincipalSubscriber = &v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *CreateShareInput) SetResourceArn(v string) *CreateShareInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetShareName sets the ShareName field's value.
+func (s *CreateShareInput) SetShareName(v string) *CreateShareInput {
+	s.ShareName = &v
+	return s
+}
+
+type CreateShareOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An ID generated for the share.
+	ShareId *string `locationName:"shareId" type:"string"`
+
+	// A name given to the share.
+	ShareName *string `locationName:"shareName" min:"1" type:"string"`
+
+	// The status of a share.
+	Status *string `locationName:"status" type:"string" enum:"ShareStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateShareOutput) GoString() string {
+	return s.String()
+}
+
+// SetShareId sets the ShareId field's value.
+func (s *CreateShareOutput) SetShareId(v string) *CreateShareOutput {
+	s.ShareId = &v
+	return s
+}
+
+// SetShareName sets the ShareName field's value.
+func (s *CreateShareOutput) SetShareName(v string) *CreateShareOutput {
+	s.ShareName = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateShareOutput) SetStatus(v string) *CreateShareOutput {
+	s.Status = &v
+	return s
+}
+
 type CreateVariantStoreInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9103,7 +12154,7 @@ type CreateVariantStoreInput struct {
 	Description *string `locationName:"description" type:"string"`
 
 	// A name for the store.
-	Name *string `locationName:"name" type:"string"`
+	Name *string `locationName:"name" min:"3" type:"string"`
 
 	// The genome reference for the store's variants.
 	//
@@ -9138,6 +12189,9 @@ func (s CreateVariantStoreInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateVariantStoreInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateVariantStoreInput"}
+	if s.Name != nil && len(*s.Name) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 3))
+	}
 	if s.Reference == nil {
 		invalidParams.Add(request.NewErrParamRequired("Reference"))
 	}
@@ -9266,6 +12320,9 @@ func (s *CreateVariantStoreOutput) SetStatus(v string) *CreateVariantStoreOutput
 type CreateWorkflowInput struct {
 	_ struct{} `type:"structure"`
 
+	// The computational accelerator specified to run the workflow.
+	Accelerators *string `locationName:"accelerators" min:"1" type:"string" enum:"Accelerators"`
+
 	// The URI of a definition for the workflow.
 	DefinitionUri *string `locationName:"definitionUri" min:"1" type:"string"`
 
@@ -9292,7 +12349,7 @@ type CreateWorkflowInput struct {
 	// each request.
 	RequestId *string `locationName:"requestId" min:"1" type:"string" idempotencyToken:"true"`
 
-	// A storage capacity for the workflow in gigabytes.
+	// A storage capacity for the workflow in gibibytes.
 	StorageCapacity *int64 `locationName:"storageCapacity" type:"integer"`
 
 	// Tags for the workflow.
@@ -9320,6 +12377,9 @@ func (s CreateWorkflowInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateWorkflowInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateWorkflowInput"}
+	if s.Accelerators != nil && len(*s.Accelerators) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Accelerators", 1))
+	}
 	if s.DefinitionUri != nil && len(*s.DefinitionUri) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DefinitionUri", 1))
 	}
@@ -9346,6 +12406,12 @@ func (s *CreateWorkflowInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccelerators sets the Accelerators field's value.
+func (s *CreateWorkflowInput) SetAccelerators(v string) *CreateWorkflowInput {
+	s.Accelerators = &v
+	return s
 }
 
 // SetDefinitionUri sets the DefinitionUri field's value.
@@ -9554,6 +12620,112 @@ func (s DeleteAnnotationStoreOutput) GoString() string {
 // SetStatus sets the Status field's value.
 func (s *DeleteAnnotationStoreOutput) SetStatus(v string) *DeleteAnnotationStoreOutput {
 	s.Status = &v
+	return s
+}
+
+type DeleteAnnotationStoreVersionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Forces the deletion of an annotation store version when imports are in-progress..
+	Force *bool `location:"querystring" locationName:"force" type:"boolean"`
+
+	// The name of the annotation store from which versions are being deleted.
+	//
+	// Name is a required field
+	Name *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// The versions of an annotation store to be deleted.
+	//
+	// Versions is a required field
+	Versions []*string `locationName:"versions" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAnnotationStoreVersionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAnnotationStoreVersionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteAnnotationStoreVersionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteAnnotationStoreVersionsInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Versions == nil {
+		invalidParams.Add(request.NewErrParamRequired("Versions"))
+	}
+	if s.Versions != nil && len(s.Versions) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Versions", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetForce sets the Force field's value.
+func (s *DeleteAnnotationStoreVersionsInput) SetForce(v bool) *DeleteAnnotationStoreVersionsInput {
+	s.Force = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DeleteAnnotationStoreVersionsInput) SetName(v string) *DeleteAnnotationStoreVersionsInput {
+	s.Name = &v
+	return s
+}
+
+// SetVersions sets the Versions field's value.
+func (s *DeleteAnnotationStoreVersionsInput) SetVersions(v []*string) *DeleteAnnotationStoreVersionsInput {
+	s.Versions = v
+	return s
+}
+
+type DeleteAnnotationStoreVersionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Any errors that occur when attempting to delete an annotation store version.
+	Errors []*VersionDeleteError `locationName:"errors" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAnnotationStoreVersionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteAnnotationStoreVersionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetErrors sets the Errors field's value.
+func (s *DeleteAnnotationStoreVersionsOutput) SetErrors(v []*VersionDeleteError) *DeleteAnnotationStoreVersionsOutput {
+	s.Errors = v
 	return s
 }
 
@@ -9929,6 +13101,86 @@ func (s DeleteSequenceStoreOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteShareInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The ID for the share request to be deleted.
+	//
+	// ShareId is a required field
+	ShareId *string `location:"uri" locationName:"shareId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteShareInput"}
+	if s.ShareId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ShareId"))
+	}
+	if s.ShareId != nil && len(*s.ShareId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ShareId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetShareId sets the ShareId field's value.
+func (s *DeleteShareInput) SetShareId(v string) *DeleteShareInput {
+	s.ShareId = &v
+	return s
+}
+
+type DeleteShareOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The status of the share being deleted.
+	Status *string `locationName:"status" type:"string" enum:"ShareStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteShareOutput) GoString() string {
+	return s.String()
+}
+
+// SetStatus sets the Status field's value.
+func (s *DeleteShareOutput) SetStatus(v string) *DeleteShareOutput {
+	s.Status = &v
+	return s
+}
+
 type DeleteVariantStoreInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -10089,6 +13341,56 @@ func (s DeleteWorkflowOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DeleteWorkflowOutput) GoString() string {
 	return s.String()
+}
+
+// The entity tag (ETag) is a hash of the object representing its semantic content.
+type ETag struct {
+	_ struct{} `type:"structure"`
+
+	// The algorithm used to calculate the read set’s ETag(s).
+	Algorithm *string `locationName:"algorithm" type:"string" enum:"ETagAlgorithm"`
+
+	// The ETag hash calculated on Source1 of the read set.
+	Source1 *string `locationName:"source1" type:"string"`
+
+	// The ETag hash calculated on Source2 of the read set.
+	Source2 *string `locationName:"source2" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ETag) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ETag) GoString() string {
+	return s.String()
+}
+
+// SetAlgorithm sets the Algorithm field's value.
+func (s *ETag) SetAlgorithm(v string) *ETag {
+	s.Algorithm = &v
+	return s
+}
+
+// SetSource1 sets the Source1 field's value.
+func (s *ETag) SetSource1(v string) *ETag {
+	s.Source1 = &v
+	return s
+}
+
+// SetSource2 sets the Source2 field's value.
+func (s *ETag) SetSource2(v string) *ETag {
+	s.Source2 = &v
+	return s
 }
 
 // A read set.
@@ -10342,6 +13644,9 @@ type FileInformation struct {
 	// The file's part size.
 	PartSize *int64 `locationName:"partSize" min:"1" type:"long"`
 
+	// The S3 URI metadata of a sequence store.
+	S3Access *ReadSetS3Access `locationName:"s3Access" type:"structure"`
+
 	// The file's total parts.
 	TotalParts *int64 `locationName:"totalParts" min:"1" type:"integer"`
 }
@@ -10376,9 +13681,70 @@ func (s *FileInformation) SetPartSize(v int64) *FileInformation {
 	return s
 }
 
+// SetS3Access sets the S3Access field's value.
+func (s *FileInformation) SetS3Access(v *ReadSetS3Access) *FileInformation {
+	s.S3Access = v
+	return s
+}
+
 // SetTotalParts sets the TotalParts field's value.
 func (s *FileInformation) SetTotalParts(v int64) *FileInformation {
 	s.TotalParts = &v
+	return s
+}
+
+// Use filters to focus the returned annotation store versions on a specific
+// parameter, such as the status of the annotation store.
+type Filter struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Number (Arn) for an analytics store.
+	ResourceArns []*string `locationName:"resourceArns" min:"1" type:"list"`
+
+	// The status of an annotation store version.
+	Status []*string `locationName:"status" type:"list" enum:"ShareStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Filter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Filter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Filter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Filter"}
+	if s.ResourceArns != nil && len(s.ResourceArns) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArns", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArns sets the ResourceArns field's value.
+func (s *Filter) SetResourceArns(v []*string) *Filter {
+	s.ResourceArns = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *Filter) SetStatus(v []*string) *Filter {
+	s.Status = v
 	return s
 }
 
@@ -10490,6 +13856,9 @@ func (s *GetAnnotationImportJobInput) SetJobId(v string) *GetAnnotationImportJob
 type GetAnnotationImportJobOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The annotation schema generated by the parsed annotation data.
+	AnnotationFields map[string]*string `locationName:"annotationFields" type:"map"`
+
 	// When the job completed.
 	//
 	// CompletionTime is a required field
@@ -10544,6 +13913,11 @@ type GetAnnotationImportJobOutput struct {
 	//
 	// UpdateTime is a required field
 	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The name of the annotation store version.
+	//
+	// VersionName is a required field
+	VersionName *string `locationName:"versionName" min:"3" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -10562,6 +13936,12 @@ func (s GetAnnotationImportJobOutput) String() string {
 // value will be replaced with "sensitive".
 func (s GetAnnotationImportJobOutput) GoString() string {
 	return s.String()
+}
+
+// SetAnnotationFields sets the AnnotationFields field's value.
+func (s *GetAnnotationImportJobOutput) SetAnnotationFields(v map[string]*string) *GetAnnotationImportJobOutput {
+	s.AnnotationFields = v
+	return s
 }
 
 // SetCompletionTime sets the CompletionTime field's value.
@@ -10627,6 +14007,12 @@ func (s *GetAnnotationImportJobOutput) SetStatusMessage(v string) *GetAnnotation
 // SetUpdateTime sets the UpdateTime field's value.
 func (s *GetAnnotationImportJobOutput) SetUpdateTime(v time.Time) *GetAnnotationImportJobOutput {
 	s.UpdateTime = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *GetAnnotationImportJobOutput) SetVersionName(v string) *GetAnnotationImportJobOutput {
+	s.VersionName = &v
 	return s
 }
 
@@ -10701,6 +14087,11 @@ type GetAnnotationStoreOutput struct {
 	//
 	// Name is a required field
 	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// An integer indicating how many versions of an annotation store exist.
+	//
+	// NumVersions is a required field
+	NumVersions *int64 `locationName:"numVersions" type:"integer" required:"true"`
 
 	// The store's genome reference.
 	//
@@ -10791,6 +14182,12 @@ func (s *GetAnnotationStoreOutput) SetName(v string) *GetAnnotationStoreOutput {
 	return s
 }
 
+// SetNumVersions sets the NumVersions field's value.
+func (s *GetAnnotationStoreOutput) SetNumVersions(v int64) *GetAnnotationStoreOutput {
+	s.NumVersions = &v
+	return s
+}
+
 // SetReference sets the Reference field's value.
 func (s *GetAnnotationStoreOutput) SetReference(v *ReferenceItem) *GetAnnotationStoreOutput {
 	s.Reference = v
@@ -10848,6 +14245,235 @@ func (s *GetAnnotationStoreOutput) SetTags(v map[string]*string) *GetAnnotationS
 // SetUpdateTime sets the UpdateTime field's value.
 func (s *GetAnnotationStoreOutput) SetUpdateTime(v time.Time) *GetAnnotationStoreOutput {
 	s.UpdateTime = &v
+	return s
+}
+
+type GetAnnotationStoreVersionInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name given to an annotation store version to distinguish it from others.
+	//
+	// Name is a required field
+	Name *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// The name given to an annotation store version to distinguish it from others.
+	//
+	// VersionName is a required field
+	VersionName *string `location:"uri" locationName:"versionName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAnnotationStoreVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAnnotationStoreVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetAnnotationStoreVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetAnnotationStoreVersionInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.VersionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VersionName"))
+	}
+	if s.VersionName != nil && len(*s.VersionName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *GetAnnotationStoreVersionInput) SetName(v string) *GetAnnotationStoreVersionInput {
+	s.Name = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *GetAnnotationStoreVersionInput) SetVersionName(v string) *GetAnnotationStoreVersionInput {
+	s.VersionName = &v
+	return s
+}
+
+type GetAnnotationStoreVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The time stamp for when an annotation store version was created.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The description for an annotation store version.
+	//
+	// Description is a required field
+	Description *string `locationName:"description" type:"string" required:"true"`
+
+	// The annotation store version ID.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" type:"string" required:"true"`
+
+	// The name of the annotation store.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"3" type:"string" required:"true"`
+
+	// The status of an annotation store version.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"VersionStatus"`
+
+	// The status of an annotation store version.
+	//
+	// StatusMessage is a required field
+	StatusMessage *string `locationName:"statusMessage" type:"string" required:"true"`
+
+	// The store ID for annotation store version.
+	//
+	// StoreId is a required field
+	StoreId *string `locationName:"storeId" type:"string" required:"true"`
+
+	// Any tags associated with an annotation store version.
+	//
+	// Tags is a required field
+	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
+
+	// The time stamp for when an annotation store version was updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The Arn for the annotation store.
+	//
+	// VersionArn is a required field
+	VersionArn *string `locationName:"versionArn" min:"20" type:"string" required:"true"`
+
+	// The name given to an annotation store version to distinguish it from others.
+	//
+	// VersionName is a required field
+	VersionName *string `locationName:"versionName" min:"3" type:"string" required:"true"`
+
+	// The options for an annotation store version.
+	VersionOptions *VersionOptions `locationName:"versionOptions" type:"structure"`
+
+	// The size of the annotation store version in Bytes.
+	//
+	// VersionSizeBytes is a required field
+	VersionSizeBytes *int64 `locationName:"versionSizeBytes" type:"long" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAnnotationStoreVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAnnotationStoreVersionOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *GetAnnotationStoreVersionOutput) SetCreationTime(v time.Time) *GetAnnotationStoreVersionOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *GetAnnotationStoreVersionOutput) SetDescription(v string) *GetAnnotationStoreVersionOutput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *GetAnnotationStoreVersionOutput) SetId(v string) *GetAnnotationStoreVersionOutput {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetAnnotationStoreVersionOutput) SetName(v string) *GetAnnotationStoreVersionOutput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetAnnotationStoreVersionOutput) SetStatus(v string) *GetAnnotationStoreVersionOutput {
+	s.Status = &v
+	return s
+}
+
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *GetAnnotationStoreVersionOutput) SetStatusMessage(v string) *GetAnnotationStoreVersionOutput {
+	s.StatusMessage = &v
+	return s
+}
+
+// SetStoreId sets the StoreId field's value.
+func (s *GetAnnotationStoreVersionOutput) SetStoreId(v string) *GetAnnotationStoreVersionOutput {
+	s.StoreId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetAnnotationStoreVersionOutput) SetTags(v map[string]*string) *GetAnnotationStoreVersionOutput {
+	s.Tags = v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *GetAnnotationStoreVersionOutput) SetUpdateTime(v time.Time) *GetAnnotationStoreVersionOutput {
+	s.UpdateTime = &v
+	return s
+}
+
+// SetVersionArn sets the VersionArn field's value.
+func (s *GetAnnotationStoreVersionOutput) SetVersionArn(v string) *GetAnnotationStoreVersionOutput {
+	s.VersionArn = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *GetAnnotationStoreVersionOutput) SetVersionName(v string) *GetAnnotationStoreVersionOutput {
+	s.VersionName = &v
+	return s
+}
+
+// SetVersionOptions sets the VersionOptions field's value.
+func (s *GetAnnotationStoreVersionOutput) SetVersionOptions(v *VersionOptions) *GetAnnotationStoreVersionOutput {
+	s.VersionOptions = v
+	return s
+}
+
+// SetVersionSizeBytes sets the VersionSizeBytes field's value.
+func (s *GetAnnotationStoreVersionOutput) SetVersionSizeBytes(v int64) *GetAnnotationStoreVersionOutput {
+	s.VersionSizeBytes = &v
 	return s
 }
 
@@ -11523,8 +15149,15 @@ type GetReadSetMetadataOutput struct {
 	// CreationTime is a required field
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
 
+	// The creation type of the read set.
+	CreationType *string `locationName:"creationType" type:"string" enum:"CreationType"`
+
 	// The read set's description.
 	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The entity tag (ETag) is a hash of the object meant to represent its semantic
+	// content.
+	Etag *ETag `locationName:"etag" type:"structure"`
 
 	// The read set's file type.
 	//
@@ -11561,6 +15194,10 @@ type GetReadSetMetadataOutput struct {
 	// Status is a required field
 	Status *string `locationName:"status" type:"string" required:"true" enum:"ReadSetStatus"`
 
+	// The status message for a read set. It provides more detail as to why the
+	// read set has a status.
+	StatusMessage *string `locationName:"statusMessage" min:"1" type:"string"`
+
 	// The read set's subject ID.
 	SubjectId *string `locationName:"subjectId" min:"1" type:"string"`
 }
@@ -11595,9 +15232,21 @@ func (s *GetReadSetMetadataOutput) SetCreationTime(v time.Time) *GetReadSetMetad
 	return s
 }
 
+// SetCreationType sets the CreationType field's value.
+func (s *GetReadSetMetadataOutput) SetCreationType(v string) *GetReadSetMetadataOutput {
+	s.CreationType = &v
+	return s
+}
+
 // SetDescription sets the Description field's value.
 func (s *GetReadSetMetadataOutput) SetDescription(v string) *GetReadSetMetadataOutput {
 	s.Description = &v
+	return s
+}
+
+// SetEtag sets the Etag field's value.
+func (s *GetReadSetMetadataOutput) SetEtag(v *ETag) *GetReadSetMetadataOutput {
+	s.Etag = v
 	return s
 }
 
@@ -11652,6 +15301,12 @@ func (s *GetReadSetMetadataOutput) SetSequenceStoreId(v string) *GetReadSetMetad
 // SetStatus sets the Status field's value.
 func (s *GetReadSetMetadataOutput) SetStatus(v string) *GetReadSetMetadataOutput {
 	s.Status = &v
+	return s
+}
+
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *GetReadSetMetadataOutput) SetStatusMessage(v string) *GetReadSetMetadataOutput {
+	s.StatusMessage = &v
 	return s
 }
 
@@ -12387,6 +16042,9 @@ type GetRunGroupOutput struct {
 	// The group's maximum run time in minutes.
 	MaxDuration *int64 `locationName:"maxDuration" min:"1" type:"integer"`
 
+	// The maximum GPUs that can be used by a run group.
+	MaxGpus *int64 `locationName:"maxGpus" min:"1" type:"integer"`
+
 	// The maximum number of concurrent runs for the group.
 	MaxRuns *int64 `locationName:"maxRuns" min:"1" type:"integer"`
 
@@ -12442,6 +16100,12 @@ func (s *GetRunGroupOutput) SetMaxCpus(v int64) *GetRunGroupOutput {
 // SetMaxDuration sets the MaxDuration field's value.
 func (s *GetRunGroupOutput) SetMaxDuration(v int64) *GetRunGroupOutput {
 	s.MaxDuration = &v
+	return s
+}
+
+// SetMaxGpus sets the MaxGpus field's value.
+func (s *GetRunGroupOutput) SetMaxGpus(v int64) *GetRunGroupOutput {
+	s.MaxGpus = &v
 	return s
 }
 
@@ -12524,6 +16188,9 @@ func (s *GetRunInput) SetId(v string) *GetRunInput {
 type GetRunOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The computational accelerator used to run the workflow.
+	Accelerators *string `locationName:"accelerators" min:"1" type:"string" enum:"Accelerators"`
+
 	// The run's ARN.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
@@ -12536,11 +16203,17 @@ type GetRunOutput struct {
 	// The run's digest.
 	Digest *string `locationName:"digest" min:"1" type:"string"`
 
+	// The reason a run has failed.
+	FailureReason *string `locationName:"failureReason" min:"1" type:"string"`
+
 	// The run's ID.
 	Id *string `locationName:"id" min:"1" type:"string"`
 
 	// The run's log level.
 	LogLevel *string `locationName:"logLevel" min:"1" type:"string" enum:"RunLogLevel"`
+
+	// The location of the run log.
+	LogLocation *RunLogLocation `locationName:"logLocation" type:"structure"`
 
 	// The run's name.
 	Name *string `locationName:"name" min:"1" type:"string"`
@@ -12554,6 +16227,9 @@ type GetRunOutput struct {
 	// The run's resource digests.
 	ResourceDigests map[string]*string `locationName:"resourceDigests" type:"map"`
 
+	// The run's retention mode.
+	RetentionMode *string `locationName:"retentionMode" min:"1" type:"string" enum:"RunRetentionMode"`
+
 	// The run's service role ARN.
 	RoleArn *string `locationName:"roleArn" min:"1" type:"string"`
 
@@ -12562,6 +16238,9 @@ type GetRunOutput struct {
 
 	// The run's ID.
 	RunId *string `locationName:"runId" min:"1" type:"string"`
+
+	// The destination for workflow outputs.
+	RunOutputUri *string `locationName:"runOutputUri" min:"1" type:"string"`
 
 	// When the run started.
 	StartTime *time.Time `locationName:"startTime" type:"timestamp" timestampFormat:"iso8601"`
@@ -12583,6 +16262,9 @@ type GetRunOutput struct {
 
 	// The run's tags.
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The universally unique identifier for a run.
+	Uuid *string `locationName:"uuid" min:"1" type:"string"`
 
 	// The run's workflow ID.
 	WorkflowId *string `locationName:"workflowId" min:"1" type:"string"`
@@ -12609,6 +16291,12 @@ func (s GetRunOutput) GoString() string {
 	return s.String()
 }
 
+// SetAccelerators sets the Accelerators field's value.
+func (s *GetRunOutput) SetAccelerators(v string) *GetRunOutput {
+	s.Accelerators = &v
+	return s
+}
+
 // SetArn sets the Arn field's value.
 func (s *GetRunOutput) SetArn(v string) *GetRunOutput {
 	s.Arn = &v
@@ -12633,6 +16321,12 @@ func (s *GetRunOutput) SetDigest(v string) *GetRunOutput {
 	return s
 }
 
+// SetFailureReason sets the FailureReason field's value.
+func (s *GetRunOutput) SetFailureReason(v string) *GetRunOutput {
+	s.FailureReason = &v
+	return s
+}
+
 // SetId sets the Id field's value.
 func (s *GetRunOutput) SetId(v string) *GetRunOutput {
 	s.Id = &v
@@ -12642,6 +16336,12 @@ func (s *GetRunOutput) SetId(v string) *GetRunOutput {
 // SetLogLevel sets the LogLevel field's value.
 func (s *GetRunOutput) SetLogLevel(v string) *GetRunOutput {
 	s.LogLevel = &v
+	return s
+}
+
+// SetLogLocation sets the LogLocation field's value.
+func (s *GetRunOutput) SetLogLocation(v *RunLogLocation) *GetRunOutput {
+	s.LogLocation = v
 	return s
 }
 
@@ -12669,6 +16369,12 @@ func (s *GetRunOutput) SetResourceDigests(v map[string]*string) *GetRunOutput {
 	return s
 }
 
+// SetRetentionMode sets the RetentionMode field's value.
+func (s *GetRunOutput) SetRetentionMode(v string) *GetRunOutput {
+	s.RetentionMode = &v
+	return s
+}
+
 // SetRoleArn sets the RoleArn field's value.
 func (s *GetRunOutput) SetRoleArn(v string) *GetRunOutput {
 	s.RoleArn = &v
@@ -12684,6 +16390,12 @@ func (s *GetRunOutput) SetRunGroupId(v string) *GetRunOutput {
 // SetRunId sets the RunId field's value.
 func (s *GetRunOutput) SetRunId(v string) *GetRunOutput {
 	s.RunId = &v
+	return s
+}
+
+// SetRunOutputUri sets the RunOutputUri field's value.
+func (s *GetRunOutput) SetRunOutputUri(v string) *GetRunOutput {
+	s.RunOutputUri = &v
 	return s
 }
 
@@ -12729,6 +16441,12 @@ func (s *GetRunOutput) SetTags(v map[string]*string) *GetRunOutput {
 	return s
 }
 
+// SetUuid sets the Uuid field's value.
+func (s *GetRunOutput) SetUuid(v string) *GetRunOutput {
+	s.Uuid = &v
+	return s
+}
+
 // SetWorkflowId sets the WorkflowId field's value.
 func (s *GetRunOutput) SetWorkflowId(v string) *GetRunOutput {
 	s.WorkflowId = &v
@@ -12744,7 +16462,7 @@ func (s *GetRunOutput) SetWorkflowType(v string) *GetRunOutput {
 type GetRunTaskInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The task's ID.
+	// The workflow run ID.
 	//
 	// Id is a required field
 	Id *string `location:"uri" locationName:"id" min:"1" type:"string" required:"true"`
@@ -12816,6 +16534,15 @@ type GetRunTaskOutput struct {
 	// When the task was created.
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601"`
 
+	// The reason a task has failed.
+	FailureReason *string `locationName:"failureReason" min:"1" type:"string"`
+
+	// The number of Graphics Processing Units (GPU) specified in the task.
+	Gpus *int64 `locationName:"gpus" type:"integer"`
+
+	// The instance type for a task.
+	InstanceType *string `locationName:"instanceType" type:"string"`
+
 	// The task's log stream.
 	LogStream *string `locationName:"logStream" type:"string"`
 
@@ -12868,6 +16595,24 @@ func (s *GetRunTaskOutput) SetCpus(v int64) *GetRunTaskOutput {
 // SetCreationTime sets the CreationTime field's value.
 func (s *GetRunTaskOutput) SetCreationTime(v time.Time) *GetRunTaskOutput {
 	s.CreationTime = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *GetRunTaskOutput) SetFailureReason(v string) *GetRunTaskOutput {
+	s.FailureReason = &v
+	return s
+}
+
+// SetGpus sets the Gpus field's value.
+func (s *GetRunTaskOutput) SetGpus(v int64) *GetRunTaskOutput {
+	s.Gpus = &v
+	return s
+}
+
+// SetInstanceType sets the InstanceType field's value.
+func (s *GetRunTaskOutput) SetInstanceType(v string) *GetRunTaskOutput {
+	s.InstanceType = &v
 	return s
 }
 
@@ -12984,6 +16729,12 @@ type GetSequenceStoreOutput struct {
 	// The store's description.
 	Description *string `locationName:"description" min:"1" type:"string"`
 
+	// The algorithm family of the ETag.
+	ETagAlgorithmFamily *string `locationName:"eTagAlgorithmFamily" type:"string" enum:"ETagAlgorithmFamily"`
+
+	// An S3 location that is used to store files that have failed a direct upload.
+	FallbackLocation *string `locationName:"fallbackLocation" type:"string"`
+
 	// The store's ID.
 	//
 	// Id is a required field
@@ -12991,6 +16742,10 @@ type GetSequenceStoreOutput struct {
 
 	// The store's name.
 	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// The S3 metadata of a sequence store, including the ARN and S3 URI of the
+	// S3 bucket.
+	S3Access *SequenceStoreS3Access `locationName:"s3Access" type:"structure"`
 
 	// The store's server-side encryption (SSE) settings.
 	SseConfig *SseConfig `locationName:"sseConfig" type:"structure"`
@@ -13032,6 +16787,18 @@ func (s *GetSequenceStoreOutput) SetDescription(v string) *GetSequenceStoreOutpu
 	return s
 }
 
+// SetETagAlgorithmFamily sets the ETagAlgorithmFamily field's value.
+func (s *GetSequenceStoreOutput) SetETagAlgorithmFamily(v string) *GetSequenceStoreOutput {
+	s.ETagAlgorithmFamily = &v
+	return s
+}
+
+// SetFallbackLocation sets the FallbackLocation field's value.
+func (s *GetSequenceStoreOutput) SetFallbackLocation(v string) *GetSequenceStoreOutput {
+	s.FallbackLocation = &v
+	return s
+}
+
 // SetId sets the Id field's value.
 func (s *GetSequenceStoreOutput) SetId(v string) *GetSequenceStoreOutput {
 	s.Id = &v
@@ -13044,9 +16811,96 @@ func (s *GetSequenceStoreOutput) SetName(v string) *GetSequenceStoreOutput {
 	return s
 }
 
+// SetS3Access sets the S3Access field's value.
+func (s *GetSequenceStoreOutput) SetS3Access(v *SequenceStoreS3Access) *GetSequenceStoreOutput {
+	s.S3Access = v
+	return s
+}
+
 // SetSseConfig sets the SseConfig field's value.
 func (s *GetSequenceStoreOutput) SetSseConfig(v *SseConfig) *GetSequenceStoreOutput {
 	s.SseConfig = v
+	return s
+}
+
+type GetShareInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The generated ID for a share.
+	//
+	// ShareId is a required field
+	ShareId *string `location:"uri" locationName:"shareId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetShareInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetShareInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetShareInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetShareInput"}
+	if s.ShareId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ShareId"))
+	}
+	if s.ShareId != nil && len(*s.ShareId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ShareId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetShareId sets the ShareId field's value.
+func (s *GetShareInput) SetShareId(v string) *GetShareInput {
+	s.ShareId = &v
+	return s
+}
+
+type GetShareOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An analytic store share details object. contains status, resourceArn, ownerId,
+	// etc.
+	Share *ShareDetails `locationName:"share" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetShareOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetShareOutput) GoString() string {
+	return s.String()
+}
+
+// SetShare sets the Share field's value.
+func (s *GetShareOutput) SetShare(v *ShareDetails) *GetShareOutput {
+	s.Share = v
 	return s
 }
 
@@ -13101,6 +16955,9 @@ func (s *GetVariantImportJobInput) SetJobId(v string) *GetVariantImportJobInput 
 
 type GetVariantImportJobOutput struct {
 	_ struct{} `type:"structure"`
+
+	// The annotation schema generated by the parsed annotation data.
+	AnnotationFields map[string]*string `locationName:"annotationFields" type:"map"`
 
 	// When the job completed.
 	CompletionTime *time.Time `locationName:"completionTime" type:"timestamp" timestampFormat:"iso8601"`
@@ -13167,6 +17024,12 @@ func (s GetVariantImportJobOutput) String() string {
 // value will be replaced with "sensitive".
 func (s GetVariantImportJobOutput) GoString() string {
 	return s.String()
+}
+
+// SetAnnotationFields sets the AnnotationFields field's value.
+func (s *GetVariantImportJobOutput) SetAnnotationFields(v map[string]*string) *GetVariantImportJobOutput {
+	s.AnnotationFields = v
+	return s
 }
 
 // SetCompletionTime sets the CompletionTime field's value.
@@ -13505,6 +17368,9 @@ func (s *GetWorkflowInput) SetType(v string) *GetWorkflowInput {
 type GetWorkflowOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The computational accelerator specified to run the workflow.
+	Accelerators *string `locationName:"accelerators" min:"1" type:"string" enum:"Accelerators"`
+
 	// The workflow's ARN.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
@@ -13528,6 +17394,9 @@ type GetWorkflowOutput struct {
 
 	// The path of the main definition file for the workflow.
 	Main *string `locationName:"main" min:"1" type:"string"`
+
+	// Gets metadata for workflow.
+	Metadata map[string]*string `locationName:"metadata" type:"map"`
 
 	// The workflow's name.
 	Name *string `locationName:"name" min:"1" type:"string"`
@@ -13567,6 +17436,12 @@ func (s GetWorkflowOutput) String() string {
 // value will be replaced with "sensitive".
 func (s GetWorkflowOutput) GoString() string {
 	return s.String()
+}
+
+// SetAccelerators sets the Accelerators field's value.
+func (s *GetWorkflowOutput) SetAccelerators(v string) *GetWorkflowOutput {
+	s.Accelerators = &v
+	return s
 }
 
 // SetArn sets the Arn field's value.
@@ -13614,6 +17489,12 @@ func (s *GetWorkflowOutput) SetId(v string) *GetWorkflowOutput {
 // SetMain sets the Main field's value.
 func (s *GetWorkflowOutput) SetMain(v string) *GetWorkflowOutput {
 	s.Main = &v
+	return s
+}
+
+// SetMetadata sets the Metadata field's value.
+func (s *GetWorkflowOutput) SetMetadata(v map[string]*string) *GetWorkflowOutput {
+	s.Metadata = v
 	return s
 }
 
@@ -14261,7 +18142,7 @@ type ListAnnotationImportJobsInput struct {
 	// The maximum number of jobs to return in one page of results.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
-	// Specify the pagination token from a previous request to retrieve the next
+	// Specifies the pagination token from a previous request to retrieve the next
 	// page of results.
 	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
 }
@@ -14333,7 +18214,8 @@ type ListAnnotationImportJobsOutput struct {
 	// A list of jobs.
 	AnnotationImportJobs []*AnnotationImportJobItem `locationName:"annotationImportJobs" type:"list"`
 
-	// A pagination token that's included if more results are available.
+	// Specifies the pagination token from a previous request to retrieve the next
+	// page of results.
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
@@ -14363,6 +18245,164 @@ func (s *ListAnnotationImportJobsOutput) SetAnnotationImportJobs(v []*Annotation
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListAnnotationImportJobsOutput) SetNextToken(v string) *ListAnnotationImportJobsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// Use filters to focus the returned annotation store versions on a specific
+// parameter, such as the status of the annotation store.
+type ListAnnotationStoreVersionsFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The status of an annotation store version.
+	Status *string `locationName:"status" type:"string" enum:"VersionStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnnotationStoreVersionsFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnnotationStoreVersionsFilter) GoString() string {
+	return s.String()
+}
+
+// SetStatus sets the Status field's value.
+func (s *ListAnnotationStoreVersionsFilter) SetStatus(v string) *ListAnnotationStoreVersionsFilter {
+	s.Status = &v
+	return s
+}
+
+type ListAnnotationStoreVersionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// A filter to apply to the list of annotation store versions.
+	Filter *ListAnnotationStoreVersionsFilter `locationName:"filter" type:"structure"`
+
+	// The maximum number of annotation store versions to return in one page of
+	// results.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The name of an annotation store.
+	//
+	// Name is a required field
+	Name *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// Specifies the pagination token from a previous request to retrieve the next
+	// page of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnnotationStoreVersionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnnotationStoreVersionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAnnotationStoreVersionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAnnotationStoreVersionsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilter sets the Filter field's value.
+func (s *ListAnnotationStoreVersionsInput) SetFilter(v *ListAnnotationStoreVersionsFilter) *ListAnnotationStoreVersionsInput {
+	s.Filter = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAnnotationStoreVersionsInput) SetMaxResults(v int64) *ListAnnotationStoreVersionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ListAnnotationStoreVersionsInput) SetName(v string) *ListAnnotationStoreVersionsInput {
+	s.Name = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAnnotationStoreVersionsInput) SetNextToken(v string) *ListAnnotationStoreVersionsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAnnotationStoreVersionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Lists all versions of an annotation store.
+	AnnotationStoreVersions []*AnnotationStoreVersionItem `locationName:"annotationStoreVersions" type:"list"`
+
+	// Specifies the pagination token from a previous request to retrieve the next
+	// page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnnotationStoreVersionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAnnotationStoreVersionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAnnotationStoreVersions sets the AnnotationStoreVersions field's value.
+func (s *ListAnnotationStoreVersionsOutput) SetAnnotationStoreVersions(v []*AnnotationStoreVersionItem) *ListAnnotationStoreVersionsOutput {
+	s.AnnotationStoreVersions = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAnnotationStoreVersionsOutput) SetNextToken(v string) *ListAnnotationStoreVersionsOutput {
 	s.NextToken = &v
 	return s
 }
@@ -14514,6 +18554,121 @@ func (s *ListAnnotationStoresOutput) SetAnnotationStores(v []*AnnotationStoreIte
 // SetNextToken sets the NextToken field's value.
 func (s *ListAnnotationStoresOutput) SetNextToken(v string) *ListAnnotationStoresOutput {
 	s.NextToken = &v
+	return s
+}
+
+type ListMultipartReadSetUploadsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of multipart uploads returned in a page.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// Next token returned in the response of a previous ListMultipartReadSetUploads
+	// call. Used to get the next page of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
+
+	// The Sequence Store ID used for the multipart uploads.
+	//
+	// SequenceStoreId is a required field
+	SequenceStoreId *string `location:"uri" locationName:"sequenceStoreId" min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMultipartReadSetUploadsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMultipartReadSetUploadsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListMultipartReadSetUploadsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListMultipartReadSetUploadsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.SequenceStoreId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SequenceStoreId"))
+	}
+	if s.SequenceStoreId != nil && len(*s.SequenceStoreId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("SequenceStoreId", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListMultipartReadSetUploadsInput) SetMaxResults(v int64) *ListMultipartReadSetUploadsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListMultipartReadSetUploadsInput) SetNextToken(v string) *ListMultipartReadSetUploadsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSequenceStoreId sets the SequenceStoreId field's value.
+func (s *ListMultipartReadSetUploadsInput) SetSequenceStoreId(v string) *ListMultipartReadSetUploadsInput {
+	s.SequenceStoreId = &v
+	return s
+}
+
+type ListMultipartReadSetUploadsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Next token returned in the response of a previous ListMultipartReadSetUploads
+	// call. Used to get the next page of results.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// An array of multipart uploads.
+	Uploads []*MultipartReadSetUploadListItem `locationName:"uploads" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMultipartReadSetUploadsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListMultipartReadSetUploadsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListMultipartReadSetUploadsOutput) SetNextToken(v string) *ListMultipartReadSetUploadsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetUploads sets the Uploads field's value.
+func (s *ListMultipartReadSetUploadsOutput) SetUploads(v []*MultipartReadSetUploadListItem) *ListMultipartReadSetUploadsOutput {
+	s.Uploads = v
 	return s
 }
 
@@ -14883,6 +19038,161 @@ func (s *ListReadSetImportJobsOutput) SetImportJobs(v []*ImportReadSetJobItem) *
 // SetNextToken sets the NextToken field's value.
 func (s *ListReadSetImportJobsOutput) SetNextToken(v string) *ListReadSetImportJobsOutput {
 	s.NextToken = &v
+	return s
+}
+
+type ListReadSetUploadPartsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Attributes used to filter for a specific subset of read set part uploads.
+	Filter *ReadSetUploadPartListFilter `locationName:"filter" type:"structure"`
+
+	// The maximum number of read set upload parts returned in a page.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// Next token returned in the response of a previous ListReadSetUploadPartsRequest
+	// call. Used to get the next page of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
+
+	// The source file for the upload part.
+	//
+	// PartSource is a required field
+	PartSource *string `locationName:"partSource" type:"string" required:"true" enum:"ReadSetPartSource"`
+
+	// The Sequence Store ID used for the multipart uploads.
+	//
+	// SequenceStoreId is a required field
+	SequenceStoreId *string `location:"uri" locationName:"sequenceStoreId" min:"10" type:"string" required:"true"`
+
+	// The ID for the initiated multipart upload.
+	//
+	// UploadId is a required field
+	UploadId *string `location:"uri" locationName:"uploadId" min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReadSetUploadPartsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReadSetUploadPartsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListReadSetUploadPartsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListReadSetUploadPartsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.PartSource == nil {
+		invalidParams.Add(request.NewErrParamRequired("PartSource"))
+	}
+	if s.SequenceStoreId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SequenceStoreId"))
+	}
+	if s.SequenceStoreId != nil && len(*s.SequenceStoreId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("SequenceStoreId", 10))
+	}
+	if s.UploadId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UploadId"))
+	}
+	if s.UploadId != nil && len(*s.UploadId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("UploadId", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilter sets the Filter field's value.
+func (s *ListReadSetUploadPartsInput) SetFilter(v *ReadSetUploadPartListFilter) *ListReadSetUploadPartsInput {
+	s.Filter = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListReadSetUploadPartsInput) SetMaxResults(v int64) *ListReadSetUploadPartsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReadSetUploadPartsInput) SetNextToken(v string) *ListReadSetUploadPartsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPartSource sets the PartSource field's value.
+func (s *ListReadSetUploadPartsInput) SetPartSource(v string) *ListReadSetUploadPartsInput {
+	s.PartSource = &v
+	return s
+}
+
+// SetSequenceStoreId sets the SequenceStoreId field's value.
+func (s *ListReadSetUploadPartsInput) SetSequenceStoreId(v string) *ListReadSetUploadPartsInput {
+	s.SequenceStoreId = &v
+	return s
+}
+
+// SetUploadId sets the UploadId field's value.
+func (s *ListReadSetUploadPartsInput) SetUploadId(v string) *ListReadSetUploadPartsInput {
+	s.UploadId = &v
+	return s
+}
+
+type ListReadSetUploadPartsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Next token returned in the response of a previous ListReadSetUploadParts
+	// call. Used to get the next page of results.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// An array of upload parts.
+	Parts []*ReadSetUploadPartListItem `locationName:"parts" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReadSetUploadPartsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListReadSetUploadPartsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReadSetUploadPartsOutput) SetNextToken(v string) *ListReadSetUploadPartsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetParts sets the Parts field's value.
+func (s *ListReadSetUploadPartsOutput) SetParts(v []*ReadSetUploadPartListItem) *ListReadSetUploadPartsOutput {
+	s.Parts = v
 	return s
 }
 
@@ -15632,6 +19942,9 @@ type ListRunsInput struct {
 	// Specify the pagination token from a previous request to retrieve the next
 	// page of results.
 	StartingToken *string `location:"querystring" locationName:"startingToken" min:"1" type:"string"`
+
+	// The status of a run.
+	Status *string `location:"querystring" locationName:"status" min:"1" type:"string" enum:"RunStatus"`
 }
 
 // String returns the string representation.
@@ -15667,6 +19980,9 @@ func (s *ListRunsInput) Validate() error {
 	if s.StartingToken != nil && len(*s.StartingToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StartingToken", 1))
 	}
+	if s.Status != nil && len(*s.Status) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Status", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -15695,6 +20011,12 @@ func (s *ListRunsInput) SetRunGroupId(v string) *ListRunsInput {
 // SetStartingToken sets the StartingToken field's value.
 func (s *ListRunsInput) SetStartingToken(v string) *ListRunsInput {
 	s.StartingToken = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ListRunsInput) SetStatus(v string) *ListRunsInput {
+	s.Status = &v
 	return s
 }
 
@@ -15848,6 +20170,128 @@ func (s *ListSequenceStoresOutput) SetNextToken(v string) *ListSequenceStoresOut
 // SetSequenceStores sets the SequenceStores field's value.
 func (s *ListSequenceStoresOutput) SetSequenceStores(v []*SequenceStoreDetail) *ListSequenceStoresOutput {
 	s.SequenceStores = v
+	return s
+}
+
+type ListSharesInput struct {
+	_ struct{} `type:"structure"`
+
+	// Attributes used to filter for a specific subset of shares.
+	Filter *Filter `locationName:"filter" type:"structure"`
+
+	// The maximum number of shares to return in one page of results.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
+
+	// Next token returned in the response of a previous ListReadSetUploadPartsRequest
+	// call. Used to get the next page of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The account that owns the analytics store shared.
+	//
+	// ResourceOwner is a required field
+	ResourceOwner *string `locationName:"resourceOwner" type:"string" required:"true" enum:"ResourceOwner"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSharesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSharesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSharesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSharesInput"}
+	if s.ResourceOwner == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceOwner"))
+	}
+	if s.Filter != nil {
+		if err := s.Filter.Validate(); err != nil {
+			invalidParams.AddNested("Filter", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilter sets the Filter field's value.
+func (s *ListSharesInput) SetFilter(v *Filter) *ListSharesInput {
+	s.Filter = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSharesInput) SetMaxResults(v int64) *ListSharesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSharesInput) SetNextToken(v string) *ListSharesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResourceOwner sets the ResourceOwner field's value.
+func (s *ListSharesInput) SetResourceOwner(v string) *ListSharesInput {
+	s.ResourceOwner = &v
+	return s
+}
+
+type ListSharesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Next token returned in the response of a previous ListSharesResponse call.
+	// Used to get the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The shares available and their meta details.
+	//
+	// Shares is a required field
+	Shares []*ShareDetails `locationName:"shares" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSharesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSharesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSharesOutput) SetNextToken(v string) *ListSharesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetShares sets the Shares field's value.
+func (s *ListSharesOutput) SetShares(v []*ShareDetails) *ListSharesOutput {
+	s.Shares = v
 	return s
 }
 
@@ -16363,6 +20807,209 @@ func (s *ListWorkflowsOutput) SetNextToken(v string) *ListWorkflowsOutput {
 	return s
 }
 
+// Part of the response to ListMultipartReadSetUploads, excluding completed
+// and aborted multipart uploads.
+type MultipartReadSetUploadListItem struct {
+	_ struct{} `type:"structure"`
+
+	// The time stamp for when a direct upload was created.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The description of a read set.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The source of an uploaded part.
+	//
+	// GeneratedFrom is a required field
+	GeneratedFrom *string `locationName:"generatedFrom" min:"1" type:"string" required:"true"`
+
+	// The name of a read set.
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// The source's reference ARN.
+	//
+	// ReferenceArn is a required field
+	ReferenceArn *string `locationName:"referenceArn" min:"1" type:"string" required:"true"`
+
+	// The read set source's sample ID.
+	//
+	// SampleId is a required field
+	SampleId *string `locationName:"sampleId" min:"1" type:"string" required:"true"`
+
+	// The sequence store ID used for the multipart upload.
+	//
+	// SequenceStoreId is a required field
+	SequenceStoreId *string `locationName:"sequenceStoreId" min:"10" type:"string" required:"true"`
+
+	// The type of file the read set originated from.
+	//
+	// SourceFileType is a required field
+	SourceFileType *string `locationName:"sourceFileType" type:"string" required:"true" enum:"FileType"`
+
+	// The read set source's subject ID.
+	//
+	// SubjectId is a required field
+	SubjectId *string `locationName:"subjectId" min:"1" type:"string" required:"true"`
+
+	// Any tags you wish to add to a read set.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The ID for the initiated multipart upload.
+	//
+	// UploadId is a required field
+	UploadId *string `locationName:"uploadId" min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MultipartReadSetUploadListItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MultipartReadSetUploadListItem) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *MultipartReadSetUploadListItem) SetCreationTime(v time.Time) *MultipartReadSetUploadListItem {
+	s.CreationTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *MultipartReadSetUploadListItem) SetDescription(v string) *MultipartReadSetUploadListItem {
+	s.Description = &v
+	return s
+}
+
+// SetGeneratedFrom sets the GeneratedFrom field's value.
+func (s *MultipartReadSetUploadListItem) SetGeneratedFrom(v string) *MultipartReadSetUploadListItem {
+	s.GeneratedFrom = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *MultipartReadSetUploadListItem) SetName(v string) *MultipartReadSetUploadListItem {
+	s.Name = &v
+	return s
+}
+
+// SetReferenceArn sets the ReferenceArn field's value.
+func (s *MultipartReadSetUploadListItem) SetReferenceArn(v string) *MultipartReadSetUploadListItem {
+	s.ReferenceArn = &v
+	return s
+}
+
+// SetSampleId sets the SampleId field's value.
+func (s *MultipartReadSetUploadListItem) SetSampleId(v string) *MultipartReadSetUploadListItem {
+	s.SampleId = &v
+	return s
+}
+
+// SetSequenceStoreId sets the SequenceStoreId field's value.
+func (s *MultipartReadSetUploadListItem) SetSequenceStoreId(v string) *MultipartReadSetUploadListItem {
+	s.SequenceStoreId = &v
+	return s
+}
+
+// SetSourceFileType sets the SourceFileType field's value.
+func (s *MultipartReadSetUploadListItem) SetSourceFileType(v string) *MultipartReadSetUploadListItem {
+	s.SourceFileType = &v
+	return s
+}
+
+// SetSubjectId sets the SubjectId field's value.
+func (s *MultipartReadSetUploadListItem) SetSubjectId(v string) *MultipartReadSetUploadListItem {
+	s.SubjectId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *MultipartReadSetUploadListItem) SetTags(v map[string]*string) *MultipartReadSetUploadListItem {
+	s.Tags = v
+	return s
+}
+
+// SetUploadId sets the UploadId field's value.
+func (s *MultipartReadSetUploadListItem) SetUploadId(v string) *MultipartReadSetUploadListItem {
+	s.UploadId = &v
+	return s
+}
+
+// The operation is not supported by Amazon Omics, or the API does not exist.
+type NotSupportedOperationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotSupportedOperationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotSupportedOperationException) GoString() string {
+	return s.String()
+}
+
+func newErrorNotSupportedOperationException(v protocol.ResponseMetadata) error {
+	return &NotSupportedOperationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *NotSupportedOperationException) Code() string {
+	return "NotSupportedOperationException"
+}
+
+// Message returns the exception's message.
+func (s *NotSupportedOperationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *NotSupportedOperationException) OrigErr() error {
+	return nil
+}
+
+func (s *NotSupportedOperationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *NotSupportedOperationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *NotSupportedOperationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The ranges specified in the request are not valid.
 type RangeNotSatisfiableException struct {
 	_            struct{}                  `type:"structure"`
@@ -16675,14 +21322,26 @@ type ReadSetFilter struct {
 	// The filter's end date.
 	CreatedBefore *time.Time `locationName:"createdBefore" type:"timestamp" timestampFormat:"iso8601"`
 
+	// The creation type of the read set.
+	CreationType *string `locationName:"creationType" type:"string" enum:"CreationType"`
+
+	// Where the source originated.
+	GeneratedFrom *string `locationName:"generatedFrom" min:"1" type:"string"`
+
 	// A name to filter on.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
 	// A genome reference ARN to filter on.
-	ReferenceArn *string `locationName:"referenceArn" min:"1" type:"string"`
+	ReferenceArn *string `locationName:"referenceArn" type:"string"`
+
+	// The read set source's sample ID.
+	SampleId *string `locationName:"sampleId" min:"1" type:"string"`
 
 	// A status to filter on.
 	Status *string `locationName:"status" type:"string" enum:"ReadSetStatus"`
+
+	// The read set source's subject ID.
+	SubjectId *string `locationName:"subjectId" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -16706,11 +21365,17 @@ func (s ReadSetFilter) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ReadSetFilter) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ReadSetFilter"}
+	if s.GeneratedFrom != nil && len(*s.GeneratedFrom) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GeneratedFrom", 1))
+	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
-	if s.ReferenceArn != nil && len(*s.ReferenceArn) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("ReferenceArn", 1))
+	if s.SampleId != nil && len(*s.SampleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SampleId", 1))
+	}
+	if s.SubjectId != nil && len(*s.SubjectId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SubjectId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -16731,6 +21396,18 @@ func (s *ReadSetFilter) SetCreatedBefore(v time.Time) *ReadSetFilter {
 	return s
 }
 
+// SetCreationType sets the CreationType field's value.
+func (s *ReadSetFilter) SetCreationType(v string) *ReadSetFilter {
+	s.CreationType = &v
+	return s
+}
+
+// SetGeneratedFrom sets the GeneratedFrom field's value.
+func (s *ReadSetFilter) SetGeneratedFrom(v string) *ReadSetFilter {
+	s.GeneratedFrom = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *ReadSetFilter) SetName(v string) *ReadSetFilter {
 	s.Name = &v
@@ -16743,9 +21420,21 @@ func (s *ReadSetFilter) SetReferenceArn(v string) *ReadSetFilter {
 	return s
 }
 
+// SetSampleId sets the SampleId field's value.
+func (s *ReadSetFilter) SetSampleId(v string) *ReadSetFilter {
+	s.SampleId = &v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *ReadSetFilter) SetStatus(v string) *ReadSetFilter {
 	s.Status = &v
+	return s
+}
+
+// SetSubjectId sets the SubjectId field's value.
+func (s *ReadSetFilter) SetSubjectId(v string) *ReadSetFilter {
+	s.SubjectId = &v
 	return s
 }
 
@@ -16763,8 +21452,14 @@ type ReadSetListItem struct {
 	// CreationTime is a required field
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
 
+	// The creation type of the read set.
+	CreationType *string `locationName:"creationType" type:"string" enum:"CreationType"`
+
 	// The read set's description.
 	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The entity tag (ETag) is a hash of the object representing its semantic content.
+	Etag *ETag `locationName:"etag" type:"structure"`
 
 	// The read set's file type.
 	//
@@ -16797,6 +21492,10 @@ type ReadSetListItem struct {
 	//
 	// Status is a required field
 	Status *string `locationName:"status" type:"string" required:"true" enum:"ReadSetStatus"`
+
+	// The status for a read set. It provides more detail as to why the read set
+	// has a status.
+	StatusMessage *string `locationName:"statusMessage" min:"1" type:"string"`
 
 	// The read set's subject ID.
 	SubjectId *string `locationName:"subjectId" min:"1" type:"string"`
@@ -16832,9 +21531,21 @@ func (s *ReadSetListItem) SetCreationTime(v time.Time) *ReadSetListItem {
 	return s
 }
 
+// SetCreationType sets the CreationType field's value.
+func (s *ReadSetListItem) SetCreationType(v string) *ReadSetListItem {
+	s.CreationType = &v
+	return s
+}
+
 // SetDescription sets the Description field's value.
 func (s *ReadSetListItem) SetDescription(v string) *ReadSetListItem {
 	s.Description = &v
+	return s
+}
+
+// SetEtag sets the Etag field's value.
+func (s *ReadSetListItem) SetEtag(v *ETag) *ReadSetListItem {
+	s.Etag = v
 	return s
 }
 
@@ -16886,9 +21597,176 @@ func (s *ReadSetListItem) SetStatus(v string) *ReadSetListItem {
 	return s
 }
 
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *ReadSetListItem) SetStatusMessage(v string) *ReadSetListItem {
+	s.StatusMessage = &v
+	return s
+}
+
 // SetSubjectId sets the SubjectId field's value.
 func (s *ReadSetListItem) SetSubjectId(v string) *ReadSetListItem {
 	s.SubjectId = &v
+	return s
+}
+
+// The S3 URI for each read set file.
+type ReadSetS3Access struct {
+	_ struct{} `type:"structure"`
+
+	// The S3 URI for each read set file.
+	S3Uri *string `locationName:"s3Uri" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReadSetS3Access) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReadSetS3Access) GoString() string {
+	return s.String()
+}
+
+// SetS3Uri sets the S3Uri field's value.
+func (s *ReadSetS3Access) SetS3Uri(v string) *ReadSetS3Access {
+	s.S3Uri = &v
+	return s
+}
+
+// Filter settings that select for read set upload parts of interest.
+type ReadSetUploadPartListFilter struct {
+	_ struct{} `type:"structure"`
+
+	// Filters for read set uploads after a specified time.
+	CreatedAfter *time.Time `locationName:"createdAfter" type:"timestamp" timestampFormat:"iso8601"`
+
+	// Filters for read set part uploads before a specified time.
+	CreatedBefore *time.Time `locationName:"createdBefore" type:"timestamp" timestampFormat:"iso8601"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReadSetUploadPartListFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReadSetUploadPartListFilter) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAfter sets the CreatedAfter field's value.
+func (s *ReadSetUploadPartListFilter) SetCreatedAfter(v time.Time) *ReadSetUploadPartListFilter {
+	s.CreatedAfter = &v
+	return s
+}
+
+// SetCreatedBefore sets the CreatedBefore field's value.
+func (s *ReadSetUploadPartListFilter) SetCreatedBefore(v time.Time) *ReadSetUploadPartListFilter {
+	s.CreatedBefore = &v
+	return s
+}
+
+// The metadata of a single part of a file that was added to a multipart upload.
+// A list of these parts is returned in the response to the ListReadSetUploadParts
+// API.
+type ReadSetUploadPartListItem struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier used to confirm that parts are being added to the correct
+	// upload.
+	//
+	// Checksum is a required field
+	Checksum *string `locationName:"checksum" type:"string" required:"true"`
+
+	// The time stamp for when a direct upload was created.
+	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601"`
+
+	// The time stamp for the most recent update to an uploaded part.
+	LastUpdatedTime *time.Time `locationName:"lastUpdatedTime" type:"timestamp" timestampFormat:"iso8601"`
+
+	// The number identifying the part in an upload.
+	//
+	// PartNumber is a required field
+	PartNumber *int64 `locationName:"partNumber" min:"1" type:"integer" required:"true"`
+
+	// The size of the the part in an upload.
+	//
+	// PartSize is a required field
+	PartSize *int64 `locationName:"partSize" min:"1" type:"long" required:"true"`
+
+	// The origin of the part being direct uploaded.
+	//
+	// PartSource is a required field
+	PartSource *string `locationName:"partSource" type:"string" required:"true" enum:"ReadSetPartSource"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReadSetUploadPartListItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReadSetUploadPartListItem) GoString() string {
+	return s.String()
+}
+
+// SetChecksum sets the Checksum field's value.
+func (s *ReadSetUploadPartListItem) SetChecksum(v string) *ReadSetUploadPartListItem {
+	s.Checksum = &v
+	return s
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *ReadSetUploadPartListItem) SetCreationTime(v time.Time) *ReadSetUploadPartListItem {
+	s.CreationTime = &v
+	return s
+}
+
+// SetLastUpdatedTime sets the LastUpdatedTime field's value.
+func (s *ReadSetUploadPartListItem) SetLastUpdatedTime(v time.Time) *ReadSetUploadPartListItem {
+	s.LastUpdatedTime = &v
+	return s
+}
+
+// SetPartNumber sets the PartNumber field's value.
+func (s *ReadSetUploadPartListItem) SetPartNumber(v int64) *ReadSetUploadPartListItem {
+	s.PartNumber = &v
+	return s
+}
+
+// SetPartSize sets the PartSize field's value.
+func (s *ReadSetUploadPartListItem) SetPartSize(v int64) *ReadSetUploadPartListItem {
+	s.PartSize = &v
+	return s
+}
+
+// SetPartSource sets the PartSource field's value.
+func (s *ReadSetUploadPartListItem) SetPartSource(v string) *ReadSetUploadPartListItem {
+	s.PartSource = &v
 	return s
 }
 
@@ -17462,6 +22340,9 @@ type RunGroupListItem struct {
 	// The group's maximum duration setting in minutes.
 	MaxDuration *int64 `locationName:"maxDuration" min:"1" type:"integer"`
 
+	// The maximum GPUs that can be used by a run group.
+	MaxGpus *int64 `locationName:"maxGpus" min:"1" type:"integer"`
+
 	// The group's maximum concurrent run setting.
 	MaxRuns *int64 `locationName:"maxRuns" min:"1" type:"integer"`
 
@@ -17514,6 +22395,12 @@ func (s *RunGroupListItem) SetMaxCpus(v int64) *RunGroupListItem {
 // SetMaxDuration sets the MaxDuration field's value.
 func (s *RunGroupListItem) SetMaxDuration(v int64) *RunGroupListItem {
 	s.MaxDuration = &v
+	return s
+}
+
+// SetMaxGpus sets the MaxGpus field's value.
+func (s *RunGroupListItem) SetMaxGpus(v int64) *RunGroupListItem {
+	s.MaxGpus = &v
 	return s
 }
 
@@ -17642,6 +22529,47 @@ func (s *RunListItem) SetWorkflowId(v string) *RunListItem {
 	return s
 }
 
+// The URI for the run log.
+type RunLogLocation struct {
+	_ struct{} `type:"structure"`
+
+	// The log stream ARN for the engine log.
+	EngineLogStream *string `locationName:"engineLogStream" type:"string"`
+
+	// The log stream ARN for the run log.
+	RunLogStream *string `locationName:"runLogStream" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RunLogLocation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RunLogLocation) GoString() string {
+	return s.String()
+}
+
+// SetEngineLogStream sets the EngineLogStream field's value.
+func (s *RunLogLocation) SetEngineLogStream(v string) *RunLogLocation {
+	s.EngineLogStream = &v
+	return s
+}
+
+// SetRunLogStream sets the RunLogStream field's value.
+func (s *RunLogLocation) SetRunLogStream(v string) *RunLogLocation {
+	s.RunLogStream = &v
+	return s
+}
+
 // Details about a sequence.
 type SequenceInformation struct {
 	_ struct{} `type:"structure"`
@@ -17718,6 +22646,12 @@ type SequenceStoreDetail struct {
 	// The store's description.
 	Description *string `locationName:"description" min:"1" type:"string"`
 
+	// The algorithm family of the ETag.
+	ETagAlgorithmFamily *string `locationName:"eTagAlgorithmFamily" type:"string" enum:"ETagAlgorithmFamily"`
+
+	// An S3 location that is used to store files that have failed a direct upload.
+	FallbackLocation *string `locationName:"fallbackLocation" type:"string"`
+
 	// The store's ID.
 	//
 	// Id is a required field
@@ -17763,6 +22697,18 @@ func (s *SequenceStoreDetail) SetCreationTime(v time.Time) *SequenceStoreDetail 
 // SetDescription sets the Description field's value.
 func (s *SequenceStoreDetail) SetDescription(v string) *SequenceStoreDetail {
 	s.Description = &v
+	return s
+}
+
+// SetETagAlgorithmFamily sets the ETagAlgorithmFamily field's value.
+func (s *SequenceStoreDetail) SetETagAlgorithmFamily(v string) *SequenceStoreDetail {
+	s.ETagAlgorithmFamily = &v
+	return s
+}
+
+// SetFallbackLocation sets the FallbackLocation field's value.
+func (s *SequenceStoreDetail) SetFallbackLocation(v string) *SequenceStoreDetail {
+	s.FallbackLocation = &v
 	return s
 }
 
@@ -17847,6 +22793,48 @@ func (s *SequenceStoreFilter) SetName(v string) *SequenceStoreFilter {
 	return s
 }
 
+// The S3 access metadata of the sequence store.
+type SequenceStoreS3Access struct {
+	_ struct{} `type:"structure"`
+
+	// This is ARN of the access point associated with the S3 bucket storing read
+	// sets.
+	S3AccessPointArn *string `locationName:"s3AccessPointArn" min:"1" type:"string"`
+
+	// The S3 URI of the sequence store.
+	S3Uri *string `locationName:"s3Uri" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SequenceStoreS3Access) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SequenceStoreS3Access) GoString() string {
+	return s.String()
+}
+
+// SetS3AccessPointArn sets the S3AccessPointArn field's value.
+func (s *SequenceStoreS3Access) SetS3AccessPointArn(v string) *SequenceStoreS3Access {
+	s.S3AccessPointArn = &v
+	return s
+}
+
+// SetS3Uri sets the S3Uri field's value.
+func (s *SequenceStoreS3Access) SetS3Uri(v string) *SequenceStoreS3Access {
+	s.S3Uri = &v
+	return s
+}
+
 // The request exceeds a service quota.
 type ServiceQuotaExceededException struct {
 	_            struct{}                  `type:"structure"`
@@ -17909,6 +22897,112 @@ func (s *ServiceQuotaExceededException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *ServiceQuotaExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// The details of a share.
+type ShareDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The timestamp for when the share was created.
+	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601"`
+
+	// The account ID for the data owner. The owner creates the share offer.
+	OwnerId *string `locationName:"ownerId" type:"string"`
+
+	// The principal subscriber is the account the analytics store data is being
+	// shared with.
+	PrincipalSubscriber *string `locationName:"principalSubscriber" type:"string"`
+
+	// The resource Arn of the analytics store being shared.
+	ResourceArn *string `locationName:"resourceArn" type:"string"`
+
+	// The ID for a share offer for an analytics store .
+	ShareId *string `locationName:"shareId" type:"string"`
+
+	// The name of the share.
+	ShareName *string `locationName:"shareName" min:"1" type:"string"`
+
+	// The status of a share.
+	Status *string `locationName:"status" type:"string" enum:"ShareStatus"`
+
+	// The status message for a share. It provides more details on the status of
+	// the share.
+	StatusMessage *string `locationName:"statusMessage" type:"string"`
+
+	// The timestamp of the share update.
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" timestampFormat:"iso8601"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ShareDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ShareDetails) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *ShareDetails) SetCreationTime(v time.Time) *ShareDetails {
+	s.CreationTime = &v
+	return s
+}
+
+// SetOwnerId sets the OwnerId field's value.
+func (s *ShareDetails) SetOwnerId(v string) *ShareDetails {
+	s.OwnerId = &v
+	return s
+}
+
+// SetPrincipalSubscriber sets the PrincipalSubscriber field's value.
+func (s *ShareDetails) SetPrincipalSubscriber(v string) *ShareDetails {
+	s.PrincipalSubscriber = &v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *ShareDetails) SetResourceArn(v string) *ShareDetails {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetShareId sets the ShareId field's value.
+func (s *ShareDetails) SetShareId(v string) *ShareDetails {
+	s.ShareId = &v
+	return s
+}
+
+// SetShareName sets the ShareName field's value.
+func (s *ShareDetails) SetShareName(v string) *ShareDetails {
+	s.ShareName = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ShareDetails) SetStatus(v string) *ShareDetails {
+	s.Status = &v
+	return s
+}
+
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *ShareDetails) SetStatusMessage(v string) *ShareDetails {
+	s.StatusMessage = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *ShareDetails) SetUpdateTime(v time.Time) *ShareDetails {
+	s.UpdateTime = &v
+	return s
 }
 
 // Source files for a sequence.
@@ -18029,6 +23123,9 @@ func (s *SseConfig) SetType(v string) *SseConfig {
 type StartAnnotationImportJobInput struct {
 	_ struct{} `type:"structure"`
 
+	// The annotation schema generated by the parsed annotation data.
+	AnnotationFields map[string]*string `locationName:"annotationFields" type:"map"`
+
 	// A destination annotation store for the job.
 	//
 	// DestinationName is a required field
@@ -18049,6 +23146,9 @@ type StartAnnotationImportJobInput struct {
 
 	// The job's left normalization setting.
 	RunLeftNormalization *bool `locationName:"runLeftNormalization" type:"boolean"`
+
+	// The name of the annotation store version.
+	VersionName *string `locationName:"versionName" min:"3" type:"string"`
 }
 
 // String returns the string representation.
@@ -18090,6 +23190,9 @@ func (s *StartAnnotationImportJobInput) Validate() error {
 	if s.RoleArn != nil && len(*s.RoleArn) < 20 {
 		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 20))
 	}
+	if s.VersionName != nil && len(*s.VersionName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionName", 3))
+	}
 	if s.FormatOptions != nil {
 		if err := s.FormatOptions.Validate(); err != nil {
 			invalidParams.AddNested("FormatOptions", err.(request.ErrInvalidParams))
@@ -18110,6 +23213,12 @@ func (s *StartAnnotationImportJobInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAnnotationFields sets the AnnotationFields field's value.
+func (s *StartAnnotationImportJobInput) SetAnnotationFields(v map[string]*string) *StartAnnotationImportJobInput {
+	s.AnnotationFields = v
+	return s
 }
 
 // SetDestinationName sets the DestinationName field's value.
@@ -18139,6 +23248,12 @@ func (s *StartAnnotationImportJobInput) SetRoleArn(v string) *StartAnnotationImp
 // SetRunLeftNormalization sets the RunLeftNormalization field's value.
 func (s *StartAnnotationImportJobInput) SetRunLeftNormalization(v bool) *StartAnnotationImportJobInput {
 	s.RunLeftNormalization = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *StartAnnotationImportJobInput) SetVersionName(v string) *StartAnnotationImportJobInput {
+	s.VersionName = &v
 	return s
 }
 
@@ -18774,9 +23889,7 @@ type StartReadSetImportJobSourceItem struct {
 	Name *string `locationName:"name" min:"1" type:"string"`
 
 	// The source's reference ARN.
-	//
-	// ReferenceArn is a required field
-	ReferenceArn *string `locationName:"referenceArn" min:"1" type:"string" required:"true"`
+	ReferenceArn *string `locationName:"referenceArn" min:"1" type:"string"`
 
 	// The source's sample ID.
 	//
@@ -18831,9 +23944,6 @@ func (s *StartReadSetImportJobSourceItem) Validate() error {
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
-	}
-	if s.ReferenceArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("ReferenceArn"))
 	}
 	if s.ReferenceArn != nil && len(*s.ReferenceArn) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ReferenceArn", 1))
@@ -19209,6 +24319,9 @@ type StartRunInput struct {
 	// each request.
 	RequestId *string `locationName:"requestId" min:"1" type:"string" idempotencyToken:"true"`
 
+	// The retention mode for the run.
+	RetentionMode *string `locationName:"retentionMode" min:"1" type:"string" enum:"RunRetentionMode"`
+
 	// A service role for the run.
 	//
 	// RoleArn is a required field
@@ -19217,10 +24330,10 @@ type StartRunInput struct {
 	// The run's group ID.
 	RunGroupId *string `locationName:"runGroupId" min:"1" type:"string"`
 
-	// The run's ID.
+	// The ID of a run to duplicate.
 	RunId *string `locationName:"runId" min:"1" type:"string"`
 
-	// A storage capacity for the run in gigabytes.
+	// A storage capacity for the run in gibibytes.
 	StorageCapacity *int64 `locationName:"storageCapacity" type:"integer"`
 
 	// Tags for the run.
@@ -19229,7 +24342,7 @@ type StartRunInput struct {
 	// The run's workflow ID.
 	WorkflowId *string `locationName:"workflowId" min:"1" type:"string"`
 
-	// The run's workflows type.
+	// The run's workflow type.
 	WorkflowType *string `locationName:"workflowType" min:"1" type:"string" enum:"WorkflowType"`
 }
 
@@ -19265,6 +24378,9 @@ func (s *StartRunInput) Validate() error {
 	}
 	if s.RequestId != nil && len(*s.RequestId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("RequestId", 1))
+	}
+	if s.RetentionMode != nil && len(*s.RetentionMode) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RetentionMode", 1))
 	}
 	if s.RoleArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
@@ -19321,6 +24437,12 @@ func (s *StartRunInput) SetRequestId(v string) *StartRunInput {
 	return s
 }
 
+// SetRetentionMode sets the RetentionMode field's value.
+func (s *StartRunInput) SetRetentionMode(v string) *StartRunInput {
+	s.RetentionMode = &v
+	return s
+}
+
 // SetRoleArn sets the RoleArn field's value.
 func (s *StartRunInput) SetRoleArn(v string) *StartRunInput {
 	s.RoleArn = &v
@@ -19372,11 +24494,17 @@ type StartRunOutput struct {
 	// The run's ID.
 	Id *string `locationName:"id" min:"1" type:"string"`
 
+	// The destination for workflow outputs.
+	RunOutputUri *string `locationName:"runOutputUri" min:"1" type:"string"`
+
 	// The run's status.
 	Status *string `locationName:"status" min:"1" type:"string" enum:"RunStatus"`
 
 	// The run's tags.
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The universally unique identifier for a run.
+	Uuid *string `locationName:"uuid" min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -19409,6 +24537,12 @@ func (s *StartRunOutput) SetId(v string) *StartRunOutput {
 	return s
 }
 
+// SetRunOutputUri sets the RunOutputUri field's value.
+func (s *StartRunOutput) SetRunOutputUri(v string) *StartRunOutput {
+	s.RunOutputUri = &v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *StartRunOutput) SetStatus(v string) *StartRunOutput {
 	s.Status = &v
@@ -19421,8 +24555,17 @@ func (s *StartRunOutput) SetTags(v map[string]*string) *StartRunOutput {
 	return s
 }
 
+// SetUuid sets the Uuid field's value.
+func (s *StartRunOutput) SetUuid(v string) *StartRunOutput {
+	s.Uuid = &v
+	return s
+}
+
 type StartVariantImportJobInput struct {
 	_ struct{} `type:"structure"`
+
+	// The annotation schema generated by the parsed annotation data.
+	AnnotationFields map[string]*string `locationName:"annotationFields" type:"map"`
 
 	// The destination variant store for the job.
 	//
@@ -19497,6 +24640,12 @@ func (s *StartVariantImportJobInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAnnotationFields sets the AnnotationFields field's value.
+func (s *StartVariantImportJobInput) SetAnnotationFields(v map[string]*string) *StartVariantImportJobInput {
+	s.AnnotationFields = v
+	return s
 }
 
 // SetDestinationName sets the DestinationName field's value.
@@ -19698,6 +24847,12 @@ type TaskListItem struct {
 	// When the task was created.
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601"`
 
+	// The number of Graphics Processing Units (GPU) specified for the task.
+	Gpus *int64 `locationName:"gpus" type:"integer"`
+
+	// The instance type for a task.
+	InstanceType *string `locationName:"instanceType" type:"string"`
+
 	// The task's memory use in gigabyes.
 	Memory *int64 `locationName:"memory" min:"1" type:"integer"`
 
@@ -19744,6 +24899,18 @@ func (s *TaskListItem) SetCpus(v int64) *TaskListItem {
 // SetCreationTime sets the CreationTime field's value.
 func (s *TaskListItem) SetCreationTime(v time.Time) *TaskListItem {
 	s.CreationTime = &v
+	return s
+}
+
+// SetGpus sets the Gpus field's value.
+func (s *TaskListItem) SetGpus(v int64) *TaskListItem {
+	s.Gpus = &v
+	return s
+}
+
+// SetInstanceType sets the InstanceType field's value.
+func (s *TaskListItem) SetInstanceType(v string) *TaskListItem {
+	s.InstanceType = &v
 	return s
 }
 
@@ -19953,6 +25120,69 @@ func (s *TsvStoreOptions) SetFormatToHeader(v map[string]*string) *TsvStoreOptio
 
 // SetSchema sets the Schema field's value.
 func (s *TsvStoreOptions) SetSchema(v []map[string]*string) *TsvStoreOptions {
+	s.Schema = v
+	return s
+}
+
+// The options for a TSV file.
+type TsvVersionOptions struct {
+	_ struct{} `type:"structure"`
+
+	// The store version's annotation type.
+	AnnotationType *string `locationName:"annotationType" type:"string" enum:"AnnotationType"`
+
+	// The annotation store version's header key to column name mapping.
+	FormatToHeader map[string]*string `locationName:"formatToHeader" type:"map"`
+
+	// The TSV schema for an annotation store version.
+	Schema []map[string]*string `locationName:"schema" min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TsvVersionOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TsvVersionOptions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TsvVersionOptions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TsvVersionOptions"}
+	if s.Schema != nil && len(s.Schema) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Schema", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnnotationType sets the AnnotationType field's value.
+func (s *TsvVersionOptions) SetAnnotationType(v string) *TsvVersionOptions {
+	s.AnnotationType = &v
+	return s
+}
+
+// SetFormatToHeader sets the FormatToHeader field's value.
+func (s *TsvVersionOptions) SetFormatToHeader(v map[string]*string) *TsvVersionOptions {
+	s.FormatToHeader = v
+	return s
+}
+
+// SetSchema sets the Schema field's value.
+func (s *TsvVersionOptions) SetSchema(v []map[string]*string) *TsvVersionOptions {
 	s.Schema = v
 	return s
 }
@@ -20217,6 +25447,191 @@ func (s *UpdateAnnotationStoreOutput) SetUpdateTime(v time.Time) *UpdateAnnotati
 	return s
 }
 
+type UpdateAnnotationStoreVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The description of an annotation store.
+	Description *string `locationName:"description" type:"string"`
+
+	// The name of an annotation store.
+	//
+	// Name is a required field
+	Name *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// The name of an annotation store version.
+	//
+	// VersionName is a required field
+	VersionName *string `location:"uri" locationName:"versionName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAnnotationStoreVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAnnotationStoreVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateAnnotationStoreVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateAnnotationStoreVersionInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.VersionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VersionName"))
+	}
+	if s.VersionName != nil && len(*s.VersionName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateAnnotationStoreVersionInput) SetDescription(v string) *UpdateAnnotationStoreVersionInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateAnnotationStoreVersionInput) SetName(v string) *UpdateAnnotationStoreVersionInput {
+	s.Name = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *UpdateAnnotationStoreVersionInput) SetVersionName(v string) *UpdateAnnotationStoreVersionInput {
+	s.VersionName = &v
+	return s
+}
+
+type UpdateAnnotationStoreVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The time stamp for when an annotation store version was created.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `locationName:"creationTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The description of an annotation store version.
+	//
+	// Description is a required field
+	Description *string `locationName:"description" type:"string" required:"true"`
+
+	// The annotation store version ID.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" type:"string" required:"true"`
+
+	// The name of an annotation store.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"3" type:"string" required:"true"`
+
+	// The status of an annotation store version.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"VersionStatus"`
+
+	// The annotation store ID.
+	//
+	// StoreId is a required field
+	StoreId *string `locationName:"storeId" type:"string" required:"true"`
+
+	// The time stamp for when an annotation store version was updated.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `locationName:"updateTime" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The name of an annotation store version.
+	//
+	// VersionName is a required field
+	VersionName *string `locationName:"versionName" min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAnnotationStoreVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAnnotationStoreVersionOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *UpdateAnnotationStoreVersionOutput) SetCreationTime(v time.Time) *UpdateAnnotationStoreVersionOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateAnnotationStoreVersionOutput) SetDescription(v string) *UpdateAnnotationStoreVersionOutput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateAnnotationStoreVersionOutput) SetId(v string) *UpdateAnnotationStoreVersionOutput {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateAnnotationStoreVersionOutput) SetName(v string) *UpdateAnnotationStoreVersionOutput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *UpdateAnnotationStoreVersionOutput) SetStatus(v string) *UpdateAnnotationStoreVersionOutput {
+	s.Status = &v
+	return s
+}
+
+// SetStoreId sets the StoreId field's value.
+func (s *UpdateAnnotationStoreVersionOutput) SetStoreId(v string) *UpdateAnnotationStoreVersionOutput {
+	s.StoreId = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *UpdateAnnotationStoreVersionOutput) SetUpdateTime(v time.Time) *UpdateAnnotationStoreVersionOutput {
+	s.UpdateTime = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *UpdateAnnotationStoreVersionOutput) SetVersionName(v string) *UpdateAnnotationStoreVersionOutput {
+	s.VersionName = &v
+	return s
+}
+
 type UpdateRunGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -20230,6 +25645,9 @@ type UpdateRunGroupInput struct {
 
 	// A maximum run time for the group in minutes.
 	MaxDuration *int64 `locationName:"maxDuration" min:"1" type:"integer"`
+
+	// The maximum GPUs that can be used by a run group.
+	MaxGpus *int64 `locationName:"maxGpus" min:"1" type:"integer"`
 
 	// The maximum number of concurrent runs for the group.
 	MaxRuns *int64 `locationName:"maxRuns" min:"1" type:"integer"`
@@ -20271,6 +25689,9 @@ func (s *UpdateRunGroupInput) Validate() error {
 	if s.MaxDuration != nil && *s.MaxDuration < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxDuration", 1))
 	}
+	if s.MaxGpus != nil && *s.MaxGpus < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxGpus", 1))
+	}
 	if s.MaxRuns != nil && *s.MaxRuns < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxRuns", 1))
 	}
@@ -20299,6 +25720,12 @@ func (s *UpdateRunGroupInput) SetMaxCpus(v int64) *UpdateRunGroupInput {
 // SetMaxDuration sets the MaxDuration field's value.
 func (s *UpdateRunGroupInput) SetMaxDuration(v int64) *UpdateRunGroupInput {
 	s.MaxDuration = &v
+	return s
+}
+
+// SetMaxGpus sets the MaxGpus field's value.
+func (s *UpdateRunGroupInput) SetMaxGpus(v int64) *UpdateRunGroupInput {
+	s.MaxGpus = &v
 	return s
 }
 
@@ -20588,6 +26015,156 @@ func (s UpdateWorkflowOutput) GoString() string {
 	return s.String()
 }
 
+type UploadReadSetPartInput struct {
+	_ struct{} `type:"structure" payload:"Payload"`
+
+	// The number of the part being uploaded.
+	//
+	// PartNumber is a required field
+	PartNumber *int64 `location:"querystring" locationName:"partNumber" min:"1" type:"integer" required:"true"`
+
+	// The source file for an upload part.
+	//
+	// PartSource is a required field
+	PartSource *string `location:"querystring" locationName:"partSource" type:"string" required:"true" enum:"ReadSetPartSource"`
+
+	// The read set data to upload for a part.
+	//
+	// To use an non-seekable io.Reader for this request wrap the io.Reader with
+	// "aws.ReadSeekCloser". The SDK will not retry request errors for non-seekable
+	// readers. This will allow the SDK to send the reader's payload as chunked
+	// transfer encoding.
+	//
+	// Payload is a required field
+	Payload io.ReadSeeker `locationName:"payload" type:"blob" required:"true"`
+
+	// The Sequence Store ID used for the multipart upload.
+	//
+	// SequenceStoreId is a required field
+	SequenceStoreId *string `location:"uri" locationName:"sequenceStoreId" min:"10" type:"string" required:"true"`
+
+	// The ID for the initiated multipart upload.
+	//
+	// UploadId is a required field
+	UploadId *string `location:"uri" locationName:"uploadId" min:"10" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UploadReadSetPartInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UploadReadSetPartInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UploadReadSetPartInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UploadReadSetPartInput"}
+	if s.PartNumber == nil {
+		invalidParams.Add(request.NewErrParamRequired("PartNumber"))
+	}
+	if s.PartNumber != nil && *s.PartNumber < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("PartNumber", 1))
+	}
+	if s.PartSource == nil {
+		invalidParams.Add(request.NewErrParamRequired("PartSource"))
+	}
+	if s.Payload == nil {
+		invalidParams.Add(request.NewErrParamRequired("Payload"))
+	}
+	if s.SequenceStoreId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SequenceStoreId"))
+	}
+	if s.SequenceStoreId != nil && len(*s.SequenceStoreId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("SequenceStoreId", 10))
+	}
+	if s.UploadId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UploadId"))
+	}
+	if s.UploadId != nil && len(*s.UploadId) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("UploadId", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPartNumber sets the PartNumber field's value.
+func (s *UploadReadSetPartInput) SetPartNumber(v int64) *UploadReadSetPartInput {
+	s.PartNumber = &v
+	return s
+}
+
+// SetPartSource sets the PartSource field's value.
+func (s *UploadReadSetPartInput) SetPartSource(v string) *UploadReadSetPartInput {
+	s.PartSource = &v
+	return s
+}
+
+// SetPayload sets the Payload field's value.
+func (s *UploadReadSetPartInput) SetPayload(v io.ReadSeeker) *UploadReadSetPartInput {
+	s.Payload = v
+	return s
+}
+
+// SetSequenceStoreId sets the SequenceStoreId field's value.
+func (s *UploadReadSetPartInput) SetSequenceStoreId(v string) *UploadReadSetPartInput {
+	s.SequenceStoreId = &v
+	return s
+}
+
+// SetUploadId sets the UploadId field's value.
+func (s *UploadReadSetPartInput) SetUploadId(v string) *UploadReadSetPartInput {
+	s.UploadId = &v
+	return s
+}
+
+type UploadReadSetPartOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An identifier used to confirm that parts are being added to the intended
+	// upload.
+	//
+	// Checksum is a required field
+	Checksum *string `locationName:"checksum" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UploadReadSetPartOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UploadReadSetPartOutput) GoString() string {
+	return s.String()
+}
+
+// SetChecksum sets the Checksum field's value.
+func (s *UploadReadSetPartOutput) SetChecksum(v string) *UploadReadSetPartOutput {
+	s.Checksum = &v
+	return s
+}
+
 // The input fails to satisfy the constraints specified by an AWS service.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
@@ -20757,6 +26334,9 @@ func (s *VariantImportItemSource) SetSource(v string) *VariantImportItemSource {
 type VariantImportJobItem struct {
 	_ struct{} `type:"structure"`
 
+	// The annotation schema generated by the parsed annotation data.
+	AnnotationFields map[string]*string `locationName:"annotationFields" type:"map"`
+
 	// When the job completed.
 	CompletionTime *time.Time `locationName:"completionTime" type:"timestamp" timestampFormat:"iso8601"`
 
@@ -20810,6 +26390,12 @@ func (s VariantImportJobItem) String() string {
 // value will be replaced with "sensitive".
 func (s VariantImportJobItem) GoString() string {
 	return s.String()
+}
+
+// SetAnnotationFields sets the AnnotationFields field's value.
+func (s *VariantImportJobItem) SetAnnotationFields(v map[string]*string) *VariantImportJobItem {
+	s.AnnotationFields = v
+	return s
 }
 
 // SetCompletionTime sets the CompletionTime field's value.
@@ -21045,6 +26631,98 @@ func (s *VcfOptions) SetIgnoreQualField(v bool) *VcfOptions {
 	return s
 }
 
+// The error preventing deletion of the annotation store version.
+type VersionDeleteError struct {
+	_ struct{} `type:"structure"`
+
+	// The message explaining the error in annotation store deletion.
+	//
+	// Message is a required field
+	Message *string `locationName:"message" type:"string" required:"true"`
+
+	// The name given to an annotation store version.
+	//
+	// VersionName is a required field
+	VersionName *string `locationName:"versionName" min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VersionDeleteError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VersionDeleteError) GoString() string {
+	return s.String()
+}
+
+// SetMessage sets the Message field's value.
+func (s *VersionDeleteError) SetMessage(v string) *VersionDeleteError {
+	s.Message = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *VersionDeleteError) SetVersionName(v string) *VersionDeleteError {
+	s.VersionName = &v
+	return s
+}
+
+// The options for an annotation store version.
+type VersionOptions struct {
+	_ struct{} `type:"structure"`
+
+	// File settings for a version of a TSV store.
+	TsvVersionOptions *TsvVersionOptions `locationName:"tsvVersionOptions" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VersionOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VersionOptions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VersionOptions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VersionOptions"}
+	if s.TsvVersionOptions != nil {
+		if err := s.TsvVersionOptions.Validate(); err != nil {
+			invalidParams.AddNested("TsvVersionOptions", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTsvVersionOptions sets the TsvVersionOptions field's value.
+func (s *VersionOptions) SetTsvVersionOptions(v *TsvVersionOptions) *VersionOptions {
+	s.TsvVersionOptions = v
+	return s
+}
+
 // A workflow.
 type WorkflowListItem struct {
 	_ struct{} `type:"structure"`
@@ -21060,6 +26738,10 @@ type WorkflowListItem struct {
 
 	// The workflow's ID.
 	Id *string `locationName:"id" min:"1" type:"string"`
+
+	// Any metadata available for workflow. The information listed may vary depending
+	// on the workflow, and there may also be no metadata to return.
+	Metadata map[string]*string `locationName:"metadata" type:"map"`
 
 	// The workflow's name.
 	Name *string `locationName:"name" min:"1" type:"string"`
@@ -21110,6 +26792,12 @@ func (s *WorkflowListItem) SetDigest(v string) *WorkflowListItem {
 // SetId sets the Id field's value.
 func (s *WorkflowListItem) SetId(v string) *WorkflowListItem {
 	s.Id = &v
+	return s
+}
+
+// SetMetadata sets the Metadata field's value.
+func (s *WorkflowListItem) SetMetadata(v map[string]*string) *WorkflowListItem {
+	s.Metadata = v
 	return s
 }
 
@@ -21173,6 +26861,18 @@ func (s *WorkflowParameter) SetOptional(v bool) *WorkflowParameter {
 }
 
 const (
+	// AcceleratorsGpu is a Accelerators enum value
+	AcceleratorsGpu = "GPU"
+)
+
+// Accelerators_Values returns all elements of the Accelerators enum
+func Accelerators_Values() []string {
+	return []string{
+		AcceleratorsGpu,
+	}
+}
+
+const (
 	// AnnotationTypeGeneric is a AnnotationType enum value
 	AnnotationTypeGeneric = "GENERIC"
 
@@ -21209,6 +26909,86 @@ func AnnotationType_Values() []string {
 }
 
 const (
+	// CreationTypeImport is a CreationType enum value
+	CreationTypeImport = "IMPORT"
+
+	// CreationTypeUpload is a CreationType enum value
+	CreationTypeUpload = "UPLOAD"
+)
+
+// CreationType_Values returns all elements of the CreationType enum
+func CreationType_Values() []string {
+	return []string{
+		CreationTypeImport,
+		CreationTypeUpload,
+	}
+}
+
+const (
+	// ETagAlgorithmFastqMd5up is a ETagAlgorithm enum value
+	ETagAlgorithmFastqMd5up = "FASTQ_MD5up"
+
+	// ETagAlgorithmBamMd5up is a ETagAlgorithm enum value
+	ETagAlgorithmBamMd5up = "BAM_MD5up"
+
+	// ETagAlgorithmCramMd5up is a ETagAlgorithm enum value
+	ETagAlgorithmCramMd5up = "CRAM_MD5up"
+
+	// ETagAlgorithmFastqSha256up is a ETagAlgorithm enum value
+	ETagAlgorithmFastqSha256up = "FASTQ_SHA256up"
+
+	// ETagAlgorithmBamSha256up is a ETagAlgorithm enum value
+	ETagAlgorithmBamSha256up = "BAM_SHA256up"
+
+	// ETagAlgorithmCramSha256up is a ETagAlgorithm enum value
+	ETagAlgorithmCramSha256up = "CRAM_SHA256up"
+
+	// ETagAlgorithmFastqSha512up is a ETagAlgorithm enum value
+	ETagAlgorithmFastqSha512up = "FASTQ_SHA512up"
+
+	// ETagAlgorithmBamSha512up is a ETagAlgorithm enum value
+	ETagAlgorithmBamSha512up = "BAM_SHA512up"
+
+	// ETagAlgorithmCramSha512up is a ETagAlgorithm enum value
+	ETagAlgorithmCramSha512up = "CRAM_SHA512up"
+)
+
+// ETagAlgorithm_Values returns all elements of the ETagAlgorithm enum
+func ETagAlgorithm_Values() []string {
+	return []string{
+		ETagAlgorithmFastqMd5up,
+		ETagAlgorithmBamMd5up,
+		ETagAlgorithmCramMd5up,
+		ETagAlgorithmFastqSha256up,
+		ETagAlgorithmBamSha256up,
+		ETagAlgorithmCramSha256up,
+		ETagAlgorithmFastqSha512up,
+		ETagAlgorithmBamSha512up,
+		ETagAlgorithmCramSha512up,
+	}
+}
+
+const (
+	// ETagAlgorithmFamilyMd5up is a ETagAlgorithmFamily enum value
+	ETagAlgorithmFamilyMd5up = "MD5up"
+
+	// ETagAlgorithmFamilySha256up is a ETagAlgorithmFamily enum value
+	ETagAlgorithmFamilySha256up = "SHA256up"
+
+	// ETagAlgorithmFamilySha512up is a ETagAlgorithmFamily enum value
+	ETagAlgorithmFamilySha512up = "SHA512up"
+)
+
+// ETagAlgorithmFamily_Values returns all elements of the ETagAlgorithmFamily enum
+func ETagAlgorithmFamily_Values() []string {
+	return []string{
+		ETagAlgorithmFamilyMd5up,
+		ETagAlgorithmFamilySha256up,
+		ETagAlgorithmFamilySha512up,
+	}
+}
+
+const (
 	// EncryptionTypeKms is a EncryptionType enum value
 	EncryptionTypeKms = "KMS"
 )
@@ -21229,6 +27009,9 @@ const (
 
 	// FileTypeCram is a FileType enum value
 	FileTypeCram = "CRAM"
+
+	// FileTypeUbam is a FileType enum value
+	FileTypeUbam = "UBAM"
 )
 
 // FileType_Values returns all elements of the FileType enum
@@ -21237,6 +27020,7 @@ func FileType_Values() []string {
 		FileTypeFastq,
 		FileTypeBam,
 		FileTypeCram,
+		FileTypeUbam,
 	}
 }
 
@@ -21505,6 +27289,22 @@ func ReadSetImportJobStatus_Values() []string {
 }
 
 const (
+	// ReadSetPartSourceSource1 is a ReadSetPartSource enum value
+	ReadSetPartSourceSource1 = "SOURCE1"
+
+	// ReadSetPartSourceSource2 is a ReadSetPartSource enum value
+	ReadSetPartSourceSource2 = "SOURCE2"
+)
+
+// ReadSetPartSource_Values returns all elements of the ReadSetPartSource enum
+func ReadSetPartSource_Values() []string {
+	return []string{
+		ReadSetPartSourceSource1,
+		ReadSetPartSourceSource2,
+	}
+}
+
+const (
 	// ReadSetStatusArchived is a ReadSetStatus enum value
 	ReadSetStatusArchived = "ARCHIVED"
 
@@ -21519,6 +27319,12 @@ const (
 
 	// ReadSetStatusDeleted is a ReadSetStatus enum value
 	ReadSetStatusDeleted = "DELETED"
+
+	// ReadSetStatusProcessingUpload is a ReadSetStatus enum value
+	ReadSetStatusProcessingUpload = "PROCESSING_UPLOAD"
+
+	// ReadSetStatusUploadFailed is a ReadSetStatus enum value
+	ReadSetStatusUploadFailed = "UPLOAD_FAILED"
 )
 
 // ReadSetStatus_Values returns all elements of the ReadSetStatus enum
@@ -21529,6 +27335,8 @@ func ReadSetStatus_Values() []string {
 		ReadSetStatusActive,
 		ReadSetStatusDeleting,
 		ReadSetStatusDeleted,
+		ReadSetStatusProcessingUpload,
+		ReadSetStatusUploadFailed,
 	}
 }
 
@@ -21629,6 +27437,22 @@ func ReferenceStatus_Values() []string {
 }
 
 const (
+	// ResourceOwnerSelf is a ResourceOwner enum value
+	ResourceOwnerSelf = "SELF"
+
+	// ResourceOwnerOther is a ResourceOwner enum value
+	ResourceOwnerOther = "OTHER"
+)
+
+// ResourceOwner_Values returns all elements of the ResourceOwner enum
+func ResourceOwner_Values() []string {
+	return []string{
+		ResourceOwnerSelf,
+		ResourceOwnerOther,
+	}
+}
+
+const (
 	// RunExportDefinition is a RunExport enum value
 	RunExportDefinition = "DEFINITION"
 )
@@ -21661,6 +27485,22 @@ func RunLogLevel_Values() []string {
 		RunLogLevelFatal,
 		RunLogLevelError,
 		RunLogLevelAll,
+	}
+}
+
+const (
+	// RunRetentionModeRetain is a RunRetentionMode enum value
+	RunRetentionModeRetain = "RETAIN"
+
+	// RunRetentionModeRemove is a RunRetentionMode enum value
+	RunRetentionModeRemove = "REMOVE"
+)
+
+// RunRetentionMode_Values returns all elements of the RunRetentionMode enum
+func RunRetentionMode_Values() []string {
+	return []string{
+		RunRetentionModeRetain,
+		RunRetentionModeRemove,
 	}
 }
 
@@ -21733,6 +27573,38 @@ func SchemaValueType_Values() []string {
 		SchemaValueTypeFloat,
 		SchemaValueTypeDouble,
 		SchemaValueTypeBoolean,
+	}
+}
+
+const (
+	// ShareStatusPending is a ShareStatus enum value
+	ShareStatusPending = "PENDING"
+
+	// ShareStatusActivating is a ShareStatus enum value
+	ShareStatusActivating = "ACTIVATING"
+
+	// ShareStatusActive is a ShareStatus enum value
+	ShareStatusActive = "ACTIVE"
+
+	// ShareStatusDeleting is a ShareStatus enum value
+	ShareStatusDeleting = "DELETING"
+
+	// ShareStatusDeleted is a ShareStatus enum value
+	ShareStatusDeleted = "DELETED"
+
+	// ShareStatusFailed is a ShareStatus enum value
+	ShareStatusFailed = "FAILED"
+)
+
+// ShareStatus_Values returns all elements of the ShareStatus enum
+func ShareStatus_Values() []string {
+	return []string{
+		ShareStatusPending,
+		ShareStatusActivating,
+		ShareStatusActive,
+		ShareStatusDeleting,
+		ShareStatusDeleted,
+		ShareStatusFailed,
 	}
 }
 
@@ -21821,11 +27693,42 @@ func TaskStatus_Values() []string {
 }
 
 const (
+	// VersionStatusCreating is a VersionStatus enum value
+	VersionStatusCreating = "CREATING"
+
+	// VersionStatusUpdating is a VersionStatus enum value
+	VersionStatusUpdating = "UPDATING"
+
+	// VersionStatusDeleting is a VersionStatus enum value
+	VersionStatusDeleting = "DELETING"
+
+	// VersionStatusActive is a VersionStatus enum value
+	VersionStatusActive = "ACTIVE"
+
+	// VersionStatusFailed is a VersionStatus enum value
+	VersionStatusFailed = "FAILED"
+)
+
+// VersionStatus_Values returns all elements of the VersionStatus enum
+func VersionStatus_Values() []string {
+	return []string{
+		VersionStatusCreating,
+		VersionStatusUpdating,
+		VersionStatusDeleting,
+		VersionStatusActive,
+		VersionStatusFailed,
+	}
+}
+
+const (
 	// WorkflowEngineWdl is a WorkflowEngine enum value
 	WorkflowEngineWdl = "WDL"
 
 	// WorkflowEngineNextflow is a WorkflowEngine enum value
 	WorkflowEngineNextflow = "NEXTFLOW"
+
+	// WorkflowEngineCwl is a WorkflowEngine enum value
+	WorkflowEngineCwl = "CWL"
 )
 
 // WorkflowEngine_Values returns all elements of the WorkflowEngine enum
@@ -21833,6 +27736,7 @@ func WorkflowEngine_Values() []string {
 	return []string{
 		WorkflowEngineWdl,
 		WorkflowEngineNextflow,
+		WorkflowEngineCwl,
 	}
 }
 
@@ -21863,6 +27767,9 @@ const (
 
 	// WorkflowStatusFailed is a WorkflowStatus enum value
 	WorkflowStatusFailed = "FAILED"
+
+	// WorkflowStatusInactive is a WorkflowStatus enum value
+	WorkflowStatusInactive = "INACTIVE"
 )
 
 // WorkflowStatus_Values returns all elements of the WorkflowStatus enum
@@ -21873,17 +27780,22 @@ func WorkflowStatus_Values() []string {
 		WorkflowStatusUpdating,
 		WorkflowStatusDeleted,
 		WorkflowStatusFailed,
+		WorkflowStatusInactive,
 	}
 }
 
 const (
 	// WorkflowTypePrivate is a WorkflowType enum value
 	WorkflowTypePrivate = "PRIVATE"
+
+	// WorkflowTypeReady2run is a WorkflowType enum value
+	WorkflowTypeReady2run = "READY2RUN"
 )
 
 // WorkflowType_Values returns all elements of the WorkflowType enum
 func WorkflowType_Values() []string {
 	return []string{
 		WorkflowTypePrivate,
+		WorkflowTypeReady2run,
 	}
 }

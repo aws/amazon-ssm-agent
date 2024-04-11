@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon Keyspaces.
-//    func myFunc(svc keyspacesiface.KeyspacesAPI) bool {
-//        // Make svc.CreateKeyspace request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon Keyspaces.
+//	func myFunc(svc keyspacesiface.KeyspacesAPI) bool {
+//	    // Make svc.CreateKeyspace request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := keyspaces.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := keyspaces.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockKeyspacesClient struct {
-//        keyspacesiface.KeyspacesAPI
-//    }
-//    func (m *mockKeyspacesClient) CreateKeyspace(input *keyspaces.CreateKeyspaceInput) (*keyspaces.CreateKeyspaceOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockKeyspacesClient struct {
+//	    keyspacesiface.KeyspacesAPI
+//	}
+//	func (m *mockKeyspacesClient) CreateKeyspace(input *keyspaces.CreateKeyspaceInput) (*keyspaces.CreateKeyspaceOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockKeyspacesClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockKeyspacesClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -83,6 +83,10 @@ type KeyspacesAPI interface {
 	GetTable(*keyspaces.GetTableInput) (*keyspaces.GetTableOutput, error)
 	GetTableWithContext(aws.Context, *keyspaces.GetTableInput, ...request.Option) (*keyspaces.GetTableOutput, error)
 	GetTableRequest(*keyspaces.GetTableInput) (*request.Request, *keyspaces.GetTableOutput)
+
+	GetTableAutoScalingSettings(*keyspaces.GetTableAutoScalingSettingsInput) (*keyspaces.GetTableAutoScalingSettingsOutput, error)
+	GetTableAutoScalingSettingsWithContext(aws.Context, *keyspaces.GetTableAutoScalingSettingsInput, ...request.Option) (*keyspaces.GetTableAutoScalingSettingsOutput, error)
+	GetTableAutoScalingSettingsRequest(*keyspaces.GetTableAutoScalingSettingsInput) (*request.Request, *keyspaces.GetTableAutoScalingSettingsOutput)
 
 	ListKeyspaces(*keyspaces.ListKeyspacesInput) (*keyspaces.ListKeyspacesOutput, error)
 	ListKeyspacesWithContext(aws.Context, *keyspaces.ListKeyspacesInput, ...request.Option) (*keyspaces.ListKeyspacesOutput, error)

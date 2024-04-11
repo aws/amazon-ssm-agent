@@ -7,14 +7,14 @@
 // Metrics. Use these APIs to put and retrieve (get) features related to your
 // training run.
 //
-//    * BatchPutMetrics (https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_metrics_BatchPutMetrics.html)
+//   - BatchPutMetrics (https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_metrics_BatchPutMetrics.html)
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/sagemaker-metrics-2022-09-30 for more information on this service.
 //
 // See sagemakermetrics package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/sagemakermetrics/
 //
-// Using the Client
+// # Using the Client
 //
 // To contact Amazon SageMaker Metrics Service with the SDK use the New function to create
 // a new service client. With that client you can make API requests to the service.

@@ -29,14 +29,13 @@ const opAddTags = "AddTags"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddTagsRequest method.
+//	req, resp := client.AddTagsRequest(params)
 //
-//    // Example sending a request using the AddTagsRequest method.
-//    req, resp := client.AddTagsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/AddTags
 func (c *CloudTrail) AddTagsRequest(input *AddTagsInput) (req *request.Request, output *AddTagsOutput) {
@@ -65,7 +64,7 @@ func (c *CloudTrail) AddTagsRequest(input *AddTagsInput) (req *request.Request, 
 // the tag will be created with the specified key and a value of null. You can
 // tag a trail or event data store that applies to all Amazon Web Services Regions
 // only from the Region in which the trail or event data store was created (also
-// known as its home region).
+// known as its home Region).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -75,82 +74,87 @@ func (c *CloudTrail) AddTagsRequest(input *AddTagsInput) (req *request.Request, 
 // API operation AddTags for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   This exception is thrown when the specified resource is not found.
 //
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
+//   - ResourceNotFoundException
+//     This exception is thrown when the specified resource is not found.
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * ResourceTypeNotSupportedException
-//   This exception is thrown when the specified resource type is not supported
-//   by CloudTrail.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * TagsLimitExceededException
-//   The number of tags per trail, event data store, or channel has exceeded the
-//   permitted amount. Currently, the limit is 50.
+//   - ChannelARNInvalidException
+//     This exception is thrown when the specified value of ChannelARN is not valid.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - ResourceTypeNotSupportedException
+//     This exception is thrown when the specified resource type is not supported
+//     by CloudTrail.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - TagsLimitExceededException
+//     The number of tags per trail, event data store, or channel has exceeded the
+//     permitted amount. Currently, the limit is 50.
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Be between 3 and 128 characters
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Be between 3 and 128 characters
 //
-//   * InvalidTagParameterException
-//   This exception is thrown when the specified tag key or values are not valid.
-//   It can also occur if there are duplicate tags or too many tags on the resource.
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - InvalidTagParameterException
+//     This exception is thrown when the specified tag key or values are not valid.
+//     It can also occur if there are duplicate tags or too many tags on the resource.
 //
-//   * ChannelNotFoundException
-//   This exception is thrown when CloudTrail cannot find the specified channel.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - ChannelNotFoundException
+//     This exception is thrown when CloudTrail cannot find the specified channel.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * ConflictException
-//   This exception is thrown when the specified resource is not ready for an
-//   operation. This can occur when you try to run an operation on a resource
-//   before CloudTrail has time to fully load the resource, or because another
-//   operation is modifying the resource. If this exception occurs, wait a few
-//   minutes, and then try the operation again.
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/AddTags
 func (c *CloudTrail) AddTags(input *AddTagsInput) (*AddTagsOutput, error) {
@@ -190,14 +194,13 @@ const opCancelQuery = "CancelQuery"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelQueryRequest method.
+//	req, resp := client.CancelQueryRequest(params)
 //
-//    // Example sending a request using the CancelQueryRequest method.
-//    req, resp := client.CancelQueryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/CancelQuery
 func (c *CloudTrail) CancelQueryRequest(input *CancelQueryInput) (req *request.Request, output *CancelQueryOutput) {
@@ -232,42 +235,43 @@ func (c *CloudTrail) CancelQueryRequest(input *CancelQueryInput) (req *request.R
 // API operation CancelQuery for usage and error information.
 //
 // Returned Error Types:
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * InactiveQueryException
-//   The specified query cannot be canceled because it is in the FINISHED, FAILED,
-//   TIMED_OUT, or CANCELLED state.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InactiveQueryException
+//     The specified query cannot be canceled because it is in the FINISHED, FAILED,
+//     TIMED_OUT, or CANCELLED state.
 //
-//   * QueryIdNotFoundException
-//   The query ID does not exist or does not map to a query.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - QueryIdNotFoundException
+//     The query ID does not exist or does not map to a query.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * ConflictException
-//   This exception is thrown when the specified resource is not ready for an
-//   operation. This can occur when you try to run an operation on a resource
-//   before CloudTrail has time to fully load the resource, or because another
-//   operation is modifying the resource. If this exception occurs, wait a few
-//   minutes, and then try the operation again.
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/CancelQuery
 func (c *CloudTrail) CancelQuery(input *CancelQueryInput) (*CancelQueryOutput, error) {
@@ -307,14 +311,13 @@ const opCreateChannel = "CreateChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateChannelRequest method.
+//	req, resp := client.CreateChannelRequest(params)
 //
-//    // Example sending a request using the CreateChannelRequest method.
-//    req, resp := client.CreateChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/CreateChannel
 func (c *CloudTrail) CreateChannelRequest(input *CreateChannelInput) (req *request.Request, output *CreateChannelOutput) {
@@ -347,45 +350,46 @@ func (c *CloudTrail) CreateChannelRequest(input *CreateChannelInput) (req *reque
 // API operation CreateChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ChannelMaxLimitExceededException
-//   This exception is thrown when the maximum number of channels limit is exceeded.
 //
-//   * InvalidSourceException
-//   This exception is thrown when the specified value of Source is not valid.
+//   - ChannelMaxLimitExceededException
+//     This exception is thrown when the maximum number of channels limit is exceeded.
 //
-//   * ChannelAlreadyExistsException
-//   This exception is thrown when the provided channel already exists.
+//   - InvalidSourceException
+//     This exception is thrown when the specified value of Source is not valid.
 //
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
+//   - ChannelAlreadyExistsException
+//     This exception is thrown when the provided channel already exists.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InvalidEventDataStoreCategoryException
-//   This exception is thrown when event categories of specified event data stores
-//   are not valid.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - InvalidEventDataStoreCategoryException
+//     This exception is thrown when event categories of specified event data stores
+//     are not valid.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * InvalidTagParameterException
-//   This exception is thrown when the specified tag key or values are not valid.
-//   It can also occur if there are duplicate tags or too many tags on the resource.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * TagsLimitExceededException
-//   The number of tags per trail, event data store, or channel has exceeded the
-//   permitted amount. Currently, the limit is 50.
+//   - InvalidTagParameterException
+//     This exception is thrown when the specified tag key or values are not valid.
+//     It can also occur if there are duplicate tags or too many tags on the resource.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - TagsLimitExceededException
+//     The number of tags per trail, event data store, or channel has exceeded the
+//     permitted amount. Currently, the limit is 50.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/CreateChannel
 func (c *CloudTrail) CreateChannel(input *CreateChannelInput) (*CreateChannelOutput, error) {
@@ -425,14 +429,13 @@ const opCreateEventDataStore = "CreateEventDataStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateEventDataStoreRequest method.
+//	req, resp := client.CreateEventDataStoreRequest(params)
 //
-//    // Example sending a request using the CreateEventDataStoreRequest method.
-//    req, resp := client.CreateEventDataStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/CreateEventDataStore
 func (c *CloudTrail) CreateEventDataStoreRequest(input *CreateEventDataStoreInput) (req *request.Request, output *CreateEventDataStoreOutput) {
@@ -463,105 +466,106 @@ func (c *CloudTrail) CreateEventDataStoreRequest(input *CreateEventDataStoreInpu
 // API operation CreateEventDataStore for usage and error information.
 //
 // Returned Error Types:
-//   * EventDataStoreAlreadyExistsException
-//   An event data store with that name already exists.
 //
-//   * EventDataStoreMaxLimitExceededException
-//   Your account has used the maximum number of event data stores.
+//   - EventDataStoreAlreadyExistsException
+//     An event data store with that name already exists.
 //
-//   * InvalidEventSelectorsException
-//   This exception is thrown when the PutEventSelectors operation is called with
-//   a number of event selectors, advanced event selectors, or data resources
-//   that is not valid. The combination of event selectors or advanced event selectors
-//   and data resources is not valid. A trail can have up to 5 event selectors.
-//   If a trail uses advanced event selectors, a maximum of 500 total values for
-//   all conditions in all advanced event selectors is allowed. A trail is limited
-//   to 250 data resources. These data resources can be distributed across event
-//   selectors, but the overall total cannot exceed 250.
+//   - EventDataStoreMaxLimitExceededException
+//     Your account has used the maximum number of event data stores.
 //
-//   You can:
+//   - InvalidEventSelectorsException
+//     This exception is thrown when the PutEventSelectors operation is called with
+//     a number of event selectors, advanced event selectors, or data resources
+//     that is not valid. The combination of event selectors or advanced event selectors
+//     and data resources is not valid. A trail can have up to 5 event selectors.
+//     If a trail uses advanced event selectors, a maximum of 500 total values for
+//     all conditions in all advanced event selectors is allowed. A trail is limited
+//     to 250 data resources. These data resources can be distributed across event
+//     selectors, but the overall total cannot exceed 250.
 //
-//      * Specify a valid number of event selectors (1 to 5) for a trail.
+//     You can:
 //
-//      * Specify a valid number of data resources (1 to 250) for an event selector.
-//      The limit of number of resources on an individual event selector is configurable
-//      up to 250. However, this upper limit is allowed only if the total number
-//      of data resources does not exceed 250 across all event selectors for a
-//      trail.
+//   - Specify a valid number of event selectors (1 to 5) for a trail.
 //
-//      * Specify up to 500 values for all conditions in all advanced event selectors
-//      for a trail.
+//   - Specify a valid number of data resources (1 to 250) for an event selector.
+//     The limit of number of resources on an individual event selector is configurable
+//     up to 250. However, this upper limit is allowed only if the total number
+//     of data resources does not exceed 250 across all event selectors for a
+//     trail.
 //
-//      * Specify a valid value for a parameter. For example, specifying the ReadWriteType
-//      parameter with a value of read-only is not valid.
+//   - Specify up to 500 values for all conditions in all advanced event selectors
+//     for a trail.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - Specify a valid value for a parameter. For example, specifying the ReadWriteType
+//     parameter with a value of read-only is not valid.
 //
-//   * InvalidTagParameterException
-//   This exception is thrown when the specified tag key or values are not valid.
-//   It can also occur if there are duplicate tags or too many tags on the resource.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidTagParameterException
+//     This exception is thrown when the specified tag key or values are not valid.
+//     It can also occur if there are duplicate tags or too many tags on the resource.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * ConflictException
-//   This exception is thrown when the specified resource is not ready for an
-//   operation. This can occur when you try to run an operation on a resource
-//   before CloudTrail has time to fully load the resource, or because another
-//   operation is modifying the resource. If this exception occurs, wait a few
-//   minutes, and then try the operation again.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * InsufficientEncryptionPolicyException
-//   This exception is thrown when the policy on the S3 bucket or KMS key does
-//   not have sufficient permissions for the operation.
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
 //
-//   * InvalidKmsKeyIdException
-//   This exception is thrown when the KMS key ARN is not valid.
+//   - InsufficientEncryptionPolicyException
+//     This exception is thrown when the policy on the S3 bucket or KMS key does
+//     not have sufficient permissions for the operation.
 //
-//   * KmsKeyNotFoundException
-//   This exception is thrown when the KMS key does not exist, when the S3 bucket
-//   and the KMS key are not in the same region, or when the KMS key associated
-//   with the Amazon SNS topic either does not exist or is not in the same region.
+//   - InvalidKmsKeyIdException
+//     This exception is thrown when the KMS key ARN is not valid.
 //
-//   * KmsException
-//   This exception is thrown when there is an issue with the specified KMS key
-//   and the trail or event data store can't be updated.
+//   - KmsKeyNotFoundException
+//     This exception is thrown when the KMS key does not exist, when the S3 bucket
+//     and the KMS key are not in the same Region, or when the KMS key associated
+//     with the Amazon SNS topic either does not exist or is not in the same Region.
 //
-//   * AccessNotEnabledException
-//   This exception is thrown when trusted access has not been enabled between
-//   CloudTrail and Organizations. For more information, see Enabling Trusted
-//   Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
-//   and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   - KmsException
+//     This exception is thrown when there is an issue with the specified KMS key
+//     and the trail or event data store can't be updated.
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - AccessNotEnabledException
+//     This exception is thrown when trusted access has not been enabled between
+//     CloudTrail and Organizations. For more information, see Enabling Trusted
+//     Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+//     and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
 //
-//   * OrganizationsNotInUseException
-//   This exception is thrown when the request is made from an Amazon Web Services
-//   account that is not a member of an organization. To make this request, sign
-//   in using the credentials of an account that belongs to an organization.
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
 //
-//   * OrganizationNotInAllFeaturesModeException
-//   This exception is thrown when Organizations is not configured to support
-//   all features. All features must be enabled in Organizations to support creating
-//   an organization trail or event data store.
+//   - OrganizationsNotInUseException
+//     This exception is thrown when the request is made from an Amazon Web Services
+//     account that is not a member of an organization. To make this request, sign
+//     in using the credentials of an account that belongs to an organization.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - OrganizationNotInAllFeaturesModeException
+//     This exception is thrown when Organizations is not configured to support
+//     all features. All features must be enabled in Organizations to support creating
+//     an organization trail or event data store.
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/CreateEventDataStore
 func (c *CloudTrail) CreateEventDataStore(input *CreateEventDataStoreInput) (*CreateEventDataStoreOutput, error) {
@@ -601,14 +605,13 @@ const opCreateTrail = "CreateTrail"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateTrailRequest method.
+//	req, resp := client.CreateTrailRequest(params)
 //
-//    // Example sending a request using the CreateTrailRequest method.
-//    req, resp := client.CreateTrailRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/CreateTrail
 func (c *CloudTrail) CreateTrailRequest(input *CreateTrailInput) (req *request.Request, output *CreateTrailOutput) {
@@ -640,140 +643,147 @@ func (c *CloudTrail) CreateTrailRequest(input *CreateTrailInput) (req *request.R
 // API operation CreateTrail for usage and error information.
 //
 // Returned Error Types:
-//   * MaximumNumberOfTrailsExceededException
-//   This exception is thrown when the maximum number of trails is reached.
 //
-//   * TrailAlreadyExistsException
-//   This exception is thrown when the specified trail already exists.
+//   - MaximumNumberOfTrailsExceededException
+//     This exception is thrown when the maximum number of trails is reached.
 //
-//   * S3BucketDoesNotExistException
-//   This exception is thrown when the specified S3 bucket does not exist.
+//   - TrailAlreadyExistsException
+//     This exception is thrown when the specified trail already exists.
 //
-//   * InsufficientS3BucketPolicyException
-//   This exception is thrown when the policy on the S3 bucket is not sufficient.
+//   - S3BucketDoesNotExistException
+//     This exception is thrown when the specified S3 bucket does not exist.
 //
-//   * InsufficientSnsTopicPolicyException
-//   This exception is thrown when the policy on the Amazon SNS topic is not sufficient.
+//   - InsufficientS3BucketPolicyException
+//     This exception is thrown when the policy on the S3 bucket is not sufficient.
 //
-//   * InsufficientEncryptionPolicyException
-//   This exception is thrown when the policy on the S3 bucket or KMS key does
-//   not have sufficient permissions for the operation.
+//   - InsufficientSnsTopicPolicyException
+//     This exception is thrown when the policy on the Amazon SNS topic is not sufficient.
 //
-//   * InvalidS3BucketNameException
-//   This exception is thrown when the provided S3 bucket name is not valid.
+//   - InsufficientEncryptionPolicyException
+//     This exception is thrown when the policy on the S3 bucket or KMS key does
+//     not have sufficient permissions for the operation.
 //
-//   * InvalidS3PrefixException
-//   This exception is thrown when the provided S3 prefix is not valid.
+//   - InvalidS3BucketNameException
+//     This exception is thrown when the provided S3 bucket name is not valid.
 //
-//   * InvalidSnsTopicNameException
-//   This exception is thrown when the provided SNS topic name is not valid.
+//   - InvalidS3PrefixException
+//     This exception is thrown when the provided S3 prefix is not valid.
 //
-//   * InvalidKmsKeyIdException
-//   This exception is thrown when the KMS key ARN is not valid.
+//   - InvalidSnsTopicNameException
+//     This exception is thrown when the provided SNS topic name is not valid.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - InvalidKmsKeyIdException
+//     This exception is thrown when the KMS key ARN is not valid.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Be between 3 and 128 characters
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Be between 3 and 128 characters
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   * TrailNotProvidedException
-//   This exception is no longer in use.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   * TagsLimitExceededException
-//   The number of tags per trail, event data store, or channel has exceeded the
-//   permitted amount. Currently, the limit is 50.
+//   - TrailNotProvidedException
+//     This exception is no longer in use.
 //
-//   * InvalidParameterCombinationException
-//   This exception is thrown when the combination of parameters provided is not
-//   valid.
+//   - TagsLimitExceededException
+//     The number of tags per trail, event data store, or channel has exceeded the
+//     permitted amount. Currently, the limit is 50.
 //
-//   * KmsKeyNotFoundException
-//   This exception is thrown when the KMS key does not exist, when the S3 bucket
-//   and the KMS key are not in the same region, or when the KMS key associated
-//   with the Amazon SNS topic either does not exist or is not in the same region.
+//   - InvalidParameterCombinationException
+//     This exception is thrown when the combination of parameters provided is not
+//     valid.
 //
-//   * KmsKeyDisabledException
-//   This exception is no longer in use.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * KmsException
-//   This exception is thrown when there is an issue with the specified KMS key
-//   and the trail or event data store can't be updated.
+//   - KmsKeyNotFoundException
+//     This exception is thrown when the KMS key does not exist, when the S3 bucket
+//     and the KMS key are not in the same Region, or when the KMS key associated
+//     with the Amazon SNS topic either does not exist or is not in the same Region.
 //
-//   * InvalidCloudWatchLogsLogGroupArnException
-//   This exception is thrown when the provided CloudWatch Logs log group is not
-//   valid.
+//   - KmsKeyDisabledException
+//     This exception is no longer in use.
 //
-//   * InvalidCloudWatchLogsRoleArnException
-//   This exception is thrown when the provided role is not valid.
+//   - KmsException
+//     This exception is thrown when there is an issue with the specified KMS key
+//     and the trail or event data store can't be updated.
 //
-//   * CloudWatchLogsDeliveryUnavailableException
-//   Cannot set a CloudWatch Logs delivery for this region.
+//   - InvalidCloudWatchLogsLogGroupArnException
+//     This exception is thrown when the provided CloudWatch Logs log group is not
+//     valid.
 //
-//   * InvalidTagParameterException
-//   This exception is thrown when the specified tag key or values are not valid.
-//   It can also occur if there are duplicate tags or too many tags on the resource.
+//   - InvalidCloudWatchLogsRoleArnException
+//     This exception is thrown when the provided role is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - CloudWatchLogsDeliveryUnavailableException
+//     Cannot set a CloudWatch Logs delivery for this Region.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidTagParameterException
+//     This exception is thrown when the specified tag key or values are not valid.
+//     It can also occur if there are duplicate tags or too many tags on the resource.
 //
-//   * AccessNotEnabledException
-//   This exception is thrown when trusted access has not been enabled between
-//   CloudTrail and Organizations. For more information, see Enabling Trusted
-//   Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
-//   and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - AccessNotEnabledException
+//     This exception is thrown when trusted access has not been enabled between
+//     CloudTrail and Organizations. For more information, see Enabling Trusted
+//     Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+//     and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
-//   * OrganizationsNotInUseException
-//   This exception is thrown when the request is made from an Amazon Web Services
-//   account that is not a member of an organization. To make this request, sign
-//   in using the credentials of an account that belongs to an organization.
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
 //
-//   * OrganizationNotInAllFeaturesModeException
-//   This exception is thrown when Organizations is not configured to support
-//   all features. All features must be enabled in Organizations to support creating
-//   an organization trail or event data store.
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - OrganizationsNotInUseException
+//     This exception is thrown when the request is made from an Amazon Web Services
+//     account that is not a member of an organization. To make this request, sign
+//     in using the credentials of an account that belongs to an organization.
 //
-//   * CloudTrailInvalidClientTokenIdException
-//   This exception is thrown when a call results in the InvalidClientTokenId
-//   error code. This can occur when you are creating or updating a trail to send
-//   notifications to an Amazon SNS topic that is in a suspended Amazon Web Services
-//   account.
+//   - OrganizationNotInAllFeaturesModeException
+//     This exception is thrown when Organizations is not configured to support
+//     all features. All features must be enabled in Organizations to support creating
+//     an organization trail or event data store.
 //
-//   * ConflictException
-//   This exception is thrown when the specified resource is not ready for an
-//   operation. This can occur when you try to run an operation on a resource
-//   before CloudTrail has time to fully load the resource, or because another
-//   operation is modifying the resource. If this exception occurs, wait a few
-//   minutes, and then try the operation again.
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - CloudTrailInvalidClientTokenIdException
+//     This exception is thrown when a call results in the InvalidClientTokenId
+//     error code. This can occur when you are creating or updating a trail to send
+//     notifications to an Amazon SNS topic that is in a suspended Amazon Web Services
+//     account.
+//
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
+//
+//   - ThrottlingException
+//     This exception is thrown when the request rate exceeds the limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/CreateTrail
 func (c *CloudTrail) CreateTrail(input *CreateTrailInput) (*CreateTrailOutput, error) {
@@ -813,14 +823,13 @@ const opDeleteChannel = "DeleteChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteChannelRequest method.
+//	req, resp := client.DeleteChannelRequest(params)
 //
-//    // Example sending a request using the DeleteChannelRequest method.
-//    req, resp := client.DeleteChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DeleteChannel
 func (c *CloudTrail) DeleteChannelRequest(input *DeleteChannelInput) (req *request.Request, output *DeleteChannelOutput) {
@@ -852,17 +861,18 @@ func (c *CloudTrail) DeleteChannelRequest(input *DeleteChannelInput) (req *reque
 // API operation DeleteChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ChannelARNInvalidException
-//   This exception is thrown when the specified value of ChannelARN is not valid.
 //
-//   * ChannelNotFoundException
-//   This exception is thrown when CloudTrail cannot find the specified channel.
+//   - ChannelARNInvalidException
+//     This exception is thrown when the specified value of ChannelARN is not valid.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - ChannelNotFoundException
+//     This exception is thrown when CloudTrail cannot find the specified channel.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DeleteChannel
 func (c *CloudTrail) DeleteChannel(input *DeleteChannelInput) (*DeleteChannelOutput, error) {
@@ -902,14 +912,13 @@ const opDeleteEventDataStore = "DeleteEventDataStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteEventDataStoreRequest method.
+//	req, resp := client.DeleteEventDataStoreRequest(params)
 //
-//    // Example sending a request using the DeleteEventDataStoreRequest method.
-//    req, resp := client.DeleteEventDataStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DeleteEventDataStore
 func (c *CloudTrail) DeleteEventDataStoreRequest(input *DeleteEventDataStoreInput) (req *request.Request, output *DeleteEventDataStoreOutput) {
@@ -935,8 +944,9 @@ func (c *CloudTrail) DeleteEventDataStoreRequest(input *DeleteEventDataStoreInpu
 // an event data store ARN. After you run DeleteEventDataStore, the event data
 // store enters a PENDING_DELETION state, and is automatically deleted after
 // a wait period of seven days. TerminationProtectionEnabled must be set to
-// False on the event data store; this operation cannot work if TerminationProtectionEnabled
-// is True.
+// False on the event data store and the FederationStatus must be DISABLED.
+// You cannot delete an event data store if TerminationProtectionEnabled is
+// True or the FederationStatus is ENABLED.
 //
 // After you run DeleteEventDataStore on an event data store, you cannot run
 // ListQueries, DescribeQuery, or GetQueryResults on queries that are using
@@ -951,52 +961,65 @@ func (c *CloudTrail) DeleteEventDataStoreRequest(input *DeleteEventDataStoreInpu
 // API operation DeleteEventDataStore for usage and error information.
 //
 // Returned Error Types:
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * EventDataStoreTerminationProtectedException
-//   The event data store cannot be deleted because termination protection is
-//   enabled for it.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * EventDataStoreHasOngoingImportException
-//   This exception is thrown when you try to update or delete an event data store
-//   that currently has an import in progress.
+//   - EventDataStoreTerminationProtectedException
+//     The event data store cannot be deleted because termination protection is
+//     enabled for it.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - EventDataStoreHasOngoingImportException
+//     This exception is thrown when you try to update or delete an event data store
+//     that currently has an import in progress.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
 //
-//   * ChannelExistsForEDSException
-//   This exception is thrown when the specified event data store cannot yet be
-//   deleted because it is in use by a channel.
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - ChannelExistsForEDSException
+//     This exception is thrown when the specified event data store cannot yet be
+//     deleted because it is in use by a channel.
+//
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
+//
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
+//
+//   - EventDataStoreFederationEnabledException
+//     You cannot delete the event data store because Lake query federation is enabled.
+//     To delete the event data store, run the DisableFederation operation to disable
+//     Lake query federation on the event data store.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DeleteEventDataStore
 func (c *CloudTrail) DeleteEventDataStore(input *DeleteEventDataStoreInput) (*DeleteEventDataStoreOutput, error) {
@@ -1036,14 +1059,13 @@ const opDeleteResourcePolicy = "DeleteResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResourcePolicyRequest method.
+//	req, resp := client.DeleteResourcePolicyRequest(params)
 //
-//    // Example sending a request using the DeleteResourcePolicyRequest method.
-//    req, resp := client.DeleteResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DeleteResourcePolicy
 func (c *CloudTrail) DeleteResourcePolicyRequest(input *DeleteResourcePolicyInput) (req *request.Request, output *DeleteResourcePolicyOutput) {
@@ -1075,26 +1097,27 @@ func (c *CloudTrail) DeleteResourcePolicyRequest(input *DeleteResourcePolicyInpu
 // API operation DeleteResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceARNNotValidException
-//   This exception is thrown when the provided resource does not exist, or the
-//   ARN format of the resource is not valid. The following is the valid format
-//   for a resource ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/MyChannel.
 //
-//   * ResourceNotFoundException
-//   This exception is thrown when the specified resource is not found.
+//   - ResourceARNNotValidException
+//     This exception is thrown when the provided resource does not exist, or the
+//     ARN format of the resource is not valid. The following is the valid format
+//     for a resource ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/MyChannel.
 //
-//   * ResourcePolicyNotFoundException
-//   This exception is thrown when the specified resource policy is not found.
+//   - ResourceNotFoundException
+//     This exception is thrown when the specified resource is not found.
 //
-//   * ResourceTypeNotSupportedException
-//   This exception is thrown when the specified resource type is not supported
-//   by CloudTrail.
+//   - ResourcePolicyNotFoundException
+//     This exception is thrown when the specified resource policy is not found.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - ResourceTypeNotSupportedException
+//     This exception is thrown when the specified resource type is not supported
+//     by CloudTrail.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DeleteResourcePolicy
 func (c *CloudTrail) DeleteResourcePolicy(input *DeleteResourcePolicyInput) (*DeleteResourcePolicyOutput, error) {
@@ -1134,14 +1157,13 @@ const opDeleteTrail = "DeleteTrail"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteTrailRequest method.
+//	req, resp := client.DeleteTrailRequest(params)
 //
-//    // Example sending a request using the DeleteTrailRequest method.
-//    req, resp := client.DeleteTrailRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DeleteTrail
 func (c *CloudTrail) DeleteTrailRequest(input *DeleteTrailInput) (req *request.Request, output *DeleteTrailOutput) {
@@ -1163,9 +1185,9 @@ func (c *CloudTrail) DeleteTrailRequest(input *DeleteTrailInput) (req *request.R
 
 // DeleteTrail API operation for AWS CloudTrail.
 //
-// Deletes a trail. This operation must be called from the region in which the
+// Deletes a trail. This operation must be called from the Region in which the
 // trail was created. DeleteTrail cannot be called on the shadow trails (replicated
-// trails in other regions) of a trail that is enabled in all regions.
+// trails in other Regions) of a trail that is enabled in all Regions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1175,70 +1197,71 @@ func (c *CloudTrail) DeleteTrailRequest(input *DeleteTrailInput) (req *request.R
 // API operation DeleteTrail for usage and error information.
 //
 // Returned Error Types:
-//   * TrailNotFoundException
-//   This exception is thrown when the trail with the given name is not found.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - TrailNotFoundException
+//     This exception is thrown when the trail with the given name is not found.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Be between 3 and 128 characters
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Be between 3 and 128 characters
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * ConflictException
-//   This exception is thrown when the specified resource is not ready for an
-//   operation. This can occur when you try to run an operation on a resource
-//   before CloudTrail has time to fully load the resource, or because another
-//   operation is modifying the resource. If this exception occurs, wait a few
-//   minutes, and then try the operation again.
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
 //
-//   * InvalidHomeRegionException
-//   This exception is thrown when an operation is called on a trail from a region
-//   other than the region in which the trail was created.
+//   - ThrottlingException
+//     This exception is thrown when the request rate exceeds the limit.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - InvalidHomeRegionException
+//     This exception is thrown when an operation is called on a trail from a Region
+//     other than the Region in which the trail was created.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DeleteTrail
 func (c *CloudTrail) DeleteTrail(input *DeleteTrailInput) (*DeleteTrailOutput, error) {
@@ -1278,14 +1301,13 @@ const opDeregisterOrganizationDelegatedAdmin = "DeregisterOrganizationDelegatedA
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeregisterOrganizationDelegatedAdminRequest method.
+//	req, resp := client.DeregisterOrganizationDelegatedAdminRequest(params)
 //
-//    // Example sending a request using the DeregisterOrganizationDelegatedAdminRequest method.
-//    req, resp := client.DeregisterOrganizationDelegatedAdminRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DeregisterOrganizationDelegatedAdmin
 func (c *CloudTrail) DeregisterOrganizationDelegatedAdminRequest(input *DeregisterOrganizationDelegatedAdminInput) (req *request.Request, output *DeregisterOrganizationDelegatedAdminOutput) {
@@ -1318,54 +1340,55 @@ func (c *CloudTrail) DeregisterOrganizationDelegatedAdminRequest(input *Deregist
 // API operation DeregisterOrganizationDelegatedAdmin for usage and error information.
 //
 // Returned Error Types:
-//   * AccountNotFoundException
-//   This exception is thrown when the specified account is not found or not part
-//   of an organization.
 //
-//   * AccountNotRegisteredException
-//   This exception is thrown when the specified account is not registered as
-//   the CloudTrail delegated administrator.
+//   - AccountNotFoundException
+//     This exception is thrown when the specified account is not found or not part
+//     of an organization.
 //
-//   * AccessNotEnabledException
-//   This exception is thrown when trusted access has not been enabled between
-//   CloudTrail and Organizations. For more information, see Enabling Trusted
-//   Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
-//   and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   - AccountNotRegisteredException
+//     This exception is thrown when the specified account is not registered as
+//     the CloudTrail delegated administrator.
 //
-//   * ConflictException
-//   This exception is thrown when the specified resource is not ready for an
-//   operation. This can occur when you try to run an operation on a resource
-//   before CloudTrail has time to fully load the resource, or because another
-//   operation is modifying the resource. If this exception occurs, wait a few
-//   minutes, and then try the operation again.
+//   - AccessNotEnabledException
+//     This exception is thrown when trusted access has not been enabled between
+//     CloudTrail and Organizations. For more information, see Enabling Trusted
+//     Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+//     and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
 //
-//   * NotOrganizationManagementAccountException
-//   This exception is thrown when the account making the request is not the organization's
-//   management account.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * OrganizationNotInAllFeaturesModeException
-//   This exception is thrown when Organizations is not configured to support
-//   all features. All features must be enabled in Organizations to support creating
-//   an organization trail or event data store.
+//   - NotOrganizationManagementAccountException
+//     This exception is thrown when the account making the request is not the organization's
+//     management account.
 //
-//   * OrganizationsNotInUseException
-//   This exception is thrown when the request is made from an Amazon Web Services
-//   account that is not a member of an organization. To make this request, sign
-//   in using the credentials of an account that belongs to an organization.
+//   - OrganizationNotInAllFeaturesModeException
+//     This exception is thrown when Organizations is not configured to support
+//     all features. All features must be enabled in Organizations to support creating
+//     an organization trail or event data store.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OrganizationsNotInUseException
+//     This exception is thrown when the request is made from an Amazon Web Services
+//     account that is not a member of an organization. To make this request, sign
+//     in using the credentials of an account that belongs to an organization.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DeregisterOrganizationDelegatedAdmin
 func (c *CloudTrail) DeregisterOrganizationDelegatedAdmin(input *DeregisterOrganizationDelegatedAdminInput) (*DeregisterOrganizationDelegatedAdminOutput, error) {
@@ -1405,14 +1428,13 @@ const opDescribeQuery = "DescribeQuery"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeQueryRequest method.
+//	req, resp := client.DescribeQueryRequest(params)
 //
-//    // Example sending a request using the DescribeQueryRequest method.
-//    req, resp := client.DescribeQueryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DescribeQuery
 func (c *CloudTrail) DescribeQueryRequest(input *DescribeQueryInput) (req *request.Request, output *DescribeQueryOutput) {
@@ -1434,8 +1456,12 @@ func (c *CloudTrail) DescribeQueryRequest(input *DescribeQueryInput) (req *reque
 // DescribeQuery API operation for AWS CloudTrail.
 //
 // Returns metadata about a query, including query run time in milliseconds,
-// number of events scanned and matched, and query status. You must specify
-// an ARN for EventDataStore, and a value for QueryID.
+// number of events scanned and matched, and query status. If the query results
+// were delivered to an S3 bucket, the response also provides the S3 URI and
+// the delivery status.
+//
+// You must specify either a QueryID or a QueryAlias. Specifying the QueryAlias
+// parameter returns information about the last query run for the alias.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1445,31 +1471,32 @@ func (c *CloudTrail) DescribeQueryRequest(input *DescribeQueryInput) (req *reque
 // API operation DescribeQuery for usage and error information.
 //
 // Returned Error Types:
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * QueryIdNotFoundException
-//   The query ID does not exist or does not map to a query.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - QueryIdNotFoundException
+//     The query ID does not exist or does not map to a query.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DescribeQuery
 func (c *CloudTrail) DescribeQuery(input *DescribeQueryInput) (*DescribeQueryOutput, error) {
@@ -1509,14 +1536,13 @@ const opDescribeTrails = "DescribeTrails"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeTrailsRequest method.
+//	req, resp := client.DescribeTrailsRequest(params)
 //
-//    // Example sending a request using the DescribeTrailsRequest method.
-//    req, resp := client.DescribeTrailsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DescribeTrails
 func (c *CloudTrail) DescribeTrailsRequest(input *DescribeTrailsInput) (req *request.Request, output *DescribeTrailsOutput) {
@@ -1537,7 +1563,7 @@ func (c *CloudTrail) DescribeTrailsRequest(input *DescribeTrailsInput) (req *req
 
 // DescribeTrails API operation for AWS CloudTrail.
 //
-// Retrieves settings for one or more trails associated with the current region
+// Retrieves settings for one or more trails associated with the current Region
 // for your account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1548,31 +1574,42 @@ func (c *CloudTrail) DescribeTrailsRequest(input *DescribeTrailsInput) (req *req
 // API operation DescribeTrails for usage and error information.
 //
 // Returned Error Types:
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Be between 3 and 128 characters
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Be between 3 and 128 characters
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - Not be in IP address format (for example, 192.168.5.4)
+//
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
+//
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DescribeTrails
 func (c *CloudTrail) DescribeTrails(input *DescribeTrailsInput) (*DescribeTrailsOutput, error) {
@@ -1596,6 +1633,303 @@ func (c *CloudTrail) DescribeTrailsWithContext(ctx aws.Context, input *DescribeT
 	return out, req.Send()
 }
 
+const opDisableFederation = "DisableFederation"
+
+// DisableFederationRequest generates a "aws/request.Request" representing the
+// client's request for the DisableFederation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisableFederation for more information on using the DisableFederation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DisableFederationRequest method.
+//	req, resp := client.DisableFederationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DisableFederation
+func (c *CloudTrail) DisableFederationRequest(input *DisableFederationInput) (req *request.Request, output *DisableFederationOutput) {
+	op := &request.Operation{
+		Name:       opDisableFederation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisableFederationInput{}
+	}
+
+	output = &DisableFederationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DisableFederation API operation for AWS CloudTrail.
+//
+// Disables Lake query federation on the specified event data store. When you
+// disable federation, CloudTrail disables the integration with Glue, Lake Formation,
+// and Amazon Athena. After disabling Lake query federation, you can no longer
+// query your event data in Amazon Athena.
+//
+// No CloudTrail Lake data is deleted when you disable federation and you can
+// continue to run queries in CloudTrail Lake.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CloudTrail's
+// API operation DisableFederation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
+//
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
+//
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
+//
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
+//
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - AccessNotEnabledException
+//     This exception is thrown when trusted access has not been enabled between
+//     CloudTrail and Organizations. For more information, see Enabling Trusted
+//     Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+//     and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
+//
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - OrganizationsNotInUseException
+//     This exception is thrown when the request is made from an Amazon Web Services
+//     account that is not a member of an organization. To make this request, sign
+//     in using the credentials of an account that belongs to an organization.
+//
+//   - OrganizationNotInAllFeaturesModeException
+//     This exception is thrown when Organizations is not configured to support
+//     all features. All features must be enabled in Organizations to support creating
+//     an organization trail or event data store.
+//
+//   - ConcurrentModificationException
+//     You are trying to update a resource when another request is in progress.
+//     Allow sufficient wait time for the previous request to complete, then retry
+//     your request.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/DisableFederation
+func (c *CloudTrail) DisableFederation(input *DisableFederationInput) (*DisableFederationOutput, error) {
+	req, out := c.DisableFederationRequest(input)
+	return out, req.Send()
+}
+
+// DisableFederationWithContext is the same as DisableFederation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisableFederation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudTrail) DisableFederationWithContext(ctx aws.Context, input *DisableFederationInput, opts ...request.Option) (*DisableFederationOutput, error) {
+	req, out := c.DisableFederationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opEnableFederation = "EnableFederation"
+
+// EnableFederationRequest generates a "aws/request.Request" representing the
+// client's request for the EnableFederation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See EnableFederation for more information on using the EnableFederation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the EnableFederationRequest method.
+//	req, resp := client.EnableFederationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/EnableFederation
+func (c *CloudTrail) EnableFederationRequest(input *EnableFederationInput) (req *request.Request, output *EnableFederationOutput) {
+	op := &request.Operation{
+		Name:       opEnableFederation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &EnableFederationInput{}
+	}
+
+	output = &EnableFederationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// EnableFederation API operation for AWS CloudTrail.
+//
+// Enables Lake query federation on the specified event data store. Federating
+// an event data store lets you view the metadata associated with the event
+// data store in the Glue Data Catalog (https://docs.aws.amazon.com/glue/latest/dg/components-overview.html#data-catalog-intro)
+// and run SQL queries against your event data using Amazon Athena. The table
+// metadata stored in the Glue Data Catalog lets the Athena query engine know
+// how to find, read, and process the data that you want to query.
+//
+// When you enable Lake query federation, CloudTrail creates a managed database
+// named aws:cloudtrail (if the database doesn't already exist) and a managed
+// federated table in the Glue Data Catalog. The event data store ID is used
+// for the table name. CloudTrail registers the role ARN and event data store
+// in Lake Formation (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-federation-lake-formation.html),
+// the service responsible for allowing fine-grained access control of the federated
+// resources in the Glue Data Catalog.
+//
+// For more information about Lake query federation, see Federate an event data
+// store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-federation.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CloudTrail's
+// API operation EnableFederation for usage and error information.
+//
+// Returned Error Types:
+//
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
+//
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
+//
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
+//
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
+//
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - AccessNotEnabledException
+//     This exception is thrown when trusted access has not been enabled between
+//     CloudTrail and Organizations. For more information, see Enabling Trusted
+//     Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+//     and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
+//
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - OrganizationsNotInUseException
+//     This exception is thrown when the request is made from an Amazon Web Services
+//     account that is not a member of an organization. To make this request, sign
+//     in using the credentials of an account that belongs to an organization.
+//
+//   - OrganizationNotInAllFeaturesModeException
+//     This exception is thrown when Organizations is not configured to support
+//     all features. All features must be enabled in Organizations to support creating
+//     an organization trail or event data store.
+//
+//   - ConcurrentModificationException
+//     You are trying to update a resource when another request is in progress.
+//     Allow sufficient wait time for the previous request to complete, then retry
+//     your request.
+//
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
+//
+//   - EventDataStoreFederationEnabledException
+//     You cannot delete the event data store because Lake query federation is enabled.
+//     To delete the event data store, run the DisableFederation operation to disable
+//     Lake query federation on the event data store.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/EnableFederation
+func (c *CloudTrail) EnableFederation(input *EnableFederationInput) (*EnableFederationOutput, error) {
+	req, out := c.EnableFederationRequest(input)
+	return out, req.Send()
+}
+
+// EnableFederationWithContext is the same as EnableFederation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See EnableFederation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudTrail) EnableFederationWithContext(ctx aws.Context, input *EnableFederationInput, opts ...request.Option) (*EnableFederationOutput, error) {
+	req, out := c.EnableFederationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetChannel = "GetChannel"
 
 // GetChannelRequest generates a "aws/request.Request" representing the
@@ -1612,14 +1946,13 @@ const opGetChannel = "GetChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetChannelRequest method.
+//	req, resp := client.GetChannelRequest(params)
 //
-//    // Example sending a request using the GetChannelRequest method.
-//    req, resp := client.GetChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetChannel
 func (c *CloudTrail) GetChannelRequest(input *GetChannelInput) (req *request.Request, output *GetChannelOutput) {
@@ -1650,17 +1983,18 @@ func (c *CloudTrail) GetChannelRequest(input *GetChannelInput) (req *request.Req
 // API operation GetChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ChannelARNInvalidException
-//   This exception is thrown when the specified value of ChannelARN is not valid.
 //
-//   * ChannelNotFoundException
-//   This exception is thrown when CloudTrail cannot find the specified channel.
+//   - ChannelARNInvalidException
+//     This exception is thrown when the specified value of ChannelARN is not valid.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - ChannelNotFoundException
+//     This exception is thrown when CloudTrail cannot find the specified channel.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetChannel
 func (c *CloudTrail) GetChannel(input *GetChannelInput) (*GetChannelOutput, error) {
@@ -1700,14 +2034,13 @@ const opGetEventDataStore = "GetEventDataStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetEventDataStoreRequest method.
+//	req, resp := client.GetEventDataStoreRequest(params)
 //
-//    // Example sending a request using the GetEventDataStoreRequest method.
-//    req, resp := client.GetEventDataStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetEventDataStore
 func (c *CloudTrail) GetEventDataStoreRequest(input *GetEventDataStoreInput) (req *request.Request, output *GetEventDataStoreOutput) {
@@ -1739,25 +2072,26 @@ func (c *CloudTrail) GetEventDataStoreRequest(input *GetEventDataStoreInput) (re
 // API operation GetEventDataStore for usage and error information.
 //
 // Returned Error Types:
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetEventDataStore
 func (c *CloudTrail) GetEventDataStore(input *GetEventDataStoreInput) (*GetEventDataStoreOutput, error) {
@@ -1797,14 +2131,13 @@ const opGetEventSelectors = "GetEventSelectors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetEventSelectorsRequest method.
+//	req, resp := client.GetEventSelectorsRequest(params)
 //
-//    // Example sending a request using the GetEventSelectorsRequest method.
-//    req, resp := client.GetEventSelectorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetEventSelectors
 func (c *CloudTrail) GetEventSelectorsRequest(input *GetEventSelectorsInput) (req *request.Request, output *GetEventSelectorsOutput) {
@@ -1828,20 +2161,20 @@ func (c *CloudTrail) GetEventSelectorsRequest(input *GetEventSelectorsInput) (re
 // Describes the settings for the event selectors that you configured for your
 // trail. The information returned for your event selectors includes the following:
 //
-//    * If your event selector includes read-only events, write-only events,
-//    or all events. This applies to both management events and data events.
+//   - If your event selector includes read-only events, write-only events,
+//     or all events. This applies to both management events and data events.
 //
-//    * If your event selector includes management events.
+//   - If your event selector includes management events.
 //
-//    * If your event selector includes data events, the resources on which
-//    you are logging data events.
+//   - If your event selector includes data events, the resources on which
+//     you are logging data events.
 //
 // For more information about logging management and data events, see the following
 // topics in the CloudTrail User Guide:
 //
-//    * Logging management events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-events-with-cloudtrail.html)
+//   - Logging management events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-events-with-cloudtrail.html)
 //
-//    * Logging data events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
+//   - Logging data events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1851,47 +2184,45 @@ func (c *CloudTrail) GetEventSelectorsRequest(input *GetEventSelectorsInput) (re
 // API operation GetEventSelectors for usage and error information.
 //
 // Returned Error Types:
-//   * TrailNotFoundException
-//   This exception is thrown when the trail with the given name is not found.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - TrailNotFoundException
+//     This exception is thrown when the trail with the given name is not found.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Be between 3 and 128 characters
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Be between 3 and 128 characters
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetEventSelectors
 func (c *CloudTrail) GetEventSelectors(input *GetEventSelectorsInput) (*GetEventSelectorsOutput, error) {
@@ -1931,14 +2262,13 @@ const opGetImport = "GetImport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetImportRequest method.
+//	req, resp := client.GetImportRequest(params)
 //
-//    // Example sending a request using the GetImportRequest method.
-//    req, resp := client.GetImportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetImport
 func (c *CloudTrail) GetImportRequest(input *GetImportInput) (req *request.Request, output *GetImportOutput) {
@@ -1969,17 +2299,18 @@ func (c *CloudTrail) GetImportRequest(input *GetImportInput) (req *request.Reque
 // API operation GetImport for usage and error information.
 //
 // Returned Error Types:
-//   * ImportNotFoundException
-//   The specified import was not found.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - ImportNotFoundException
+//     The specified import was not found.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetImport
 func (c *CloudTrail) GetImport(input *GetImportInput) (*GetImportOutput, error) {
@@ -2019,14 +2350,13 @@ const opGetInsightSelectors = "GetInsightSelectors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetInsightSelectorsRequest method.
+//	req, resp := client.GetInsightSelectorsRequest(params)
 //
-//    // Example sending a request using the GetInsightSelectorsRequest method.
-//    req, resp := client.GetInsightSelectorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetInsightSelectors
 func (c *CloudTrail) GetInsightSelectorsRequest(input *GetInsightSelectorsInput) (req *request.Request, output *GetInsightSelectorsOutput) {
@@ -2048,12 +2378,17 @@ func (c *CloudTrail) GetInsightSelectorsRequest(input *GetInsightSelectorsInput)
 // GetInsightSelectors API operation for AWS CloudTrail.
 //
 // Describes the settings for the Insights event selectors that you configured
-// for your trail. GetInsightSelectors shows if CloudTrail Insights event logging
-// is enabled on the trail, and if it is, which insight types are enabled. If
-// you run GetInsightSelectors on a trail that does not have Insights events
-// enabled, the operation throws the exception InsightNotEnabledException
+// for your trail or event data store. GetInsightSelectors shows if CloudTrail
+// Insights event logging is enabled on the trail or event data store, and if
+// it is, which Insights types are enabled. If you run GetInsightSelectors on
+// a trail or event data store that does not have Insights events enabled, the
+// operation throws the exception InsightNotEnabledException
 //
-// For more information, see Logging CloudTrail Insights Events for Trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html)
+// Specify either the EventDataStore parameter to get Insights event selectors
+// for an event data store, or the TrailName parameter to the get Insights event
+// selectors for a trail. You cannot specify these parameters together.
+//
+// For more information, see Logging CloudTrail Insights events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html)
 // in the CloudTrail User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2064,51 +2399,59 @@ func (c *CloudTrail) GetInsightSelectorsRequest(input *GetInsightSelectorsInput)
 // API operation GetInsightSelectors for usage and error information.
 //
 // Returned Error Types:
-//   * TrailNotFoundException
-//   This exception is thrown when the trail with the given name is not found.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - InvalidParameterCombinationException
+//     This exception is thrown when the combination of parameters provided is not
+//     valid.
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - TrailNotFoundException
+//     This exception is thrown when the trail with the given name is not found.
 //
-//      * Be between 3 and 128 characters
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Start with a letter or number, and end with a letter or number
 //
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
+//   - Be between 3 and 128 characters
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * InsightNotEnabledException
-//   If you run GetInsightSelectors on a trail that does not have Insights events
-//   enabled, the operation throws the exception InsightNotEnabledException.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - InsightNotEnabledException
+//     If you run GetInsightSelectors on a trail or event data store that does not
+//     have Insights events enabled, the operation throws the exception InsightNotEnabledException.
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - ThrottlingException
+//     This exception is thrown when the request rate exceeds the limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetInsightSelectors
 func (c *CloudTrail) GetInsightSelectors(input *GetInsightSelectorsInput) (*GetInsightSelectorsOutput, error) {
@@ -2148,14 +2491,13 @@ const opGetQueryResults = "GetQueryResults"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetQueryResultsRequest method.
+//	req, resp := client.GetQueryResultsRequest(params)
 //
-//    // Example sending a request using the GetQueryResultsRequest method.
-//    req, resp := client.GetQueryResultsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetQueryResults
 func (c *CloudTrail) GetQueryResultsRequest(input *GetQueryResultsInput) (req *request.Request, output *GetQueryResultsOutput) {
@@ -2183,7 +2525,7 @@ func (c *CloudTrail) GetQueryResultsRequest(input *GetQueryResultsInput) (req *r
 // GetQueryResults API operation for AWS CloudTrail.
 //
 // Gets event data results of a query. You must specify the QueryID value returned
-// by the StartQuery operation, and an ARN for EventDataStore.
+// by the StartQuery operation.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2193,42 +2535,43 @@ func (c *CloudTrail) GetQueryResultsRequest(input *GetQueryResultsInput) (req *r
 // API operation GetQueryResults for usage and error information.
 //
 // Returned Error Types:
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * InvalidMaxResultsException
-//   This exception is thrown if the limit specified is not valid.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * InvalidNextTokenException
-//   A token that is not valid, or a token that was previously used in a request
-//   with different parameters. This exception is thrown if the token is not valid.
+//   - InvalidMaxResultsException
+//     This exception is thrown if the limit specified is not valid.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InvalidNextTokenException
+//     A token that is not valid, or a token that was previously used in a request
+//     with different parameters. This exception is thrown if the token is not valid.
 //
-//   * QueryIdNotFoundException
-//   The query ID does not exist or does not map to a query.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * InsufficientEncryptionPolicyException
-//   This exception is thrown when the policy on the S3 bucket or KMS key does
-//   not have sufficient permissions for the operation.
+//   - QueryIdNotFoundException
+//     The query ID does not exist or does not map to a query.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InsufficientEncryptionPolicyException
+//     This exception is thrown when the policy on the S3 bucket or KMS key does
+//     not have sufficient permissions for the operation.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetQueryResults
 func (c *CloudTrail) GetQueryResults(input *GetQueryResultsInput) (*GetQueryResultsOutput, error) {
@@ -2260,15 +2603,14 @@ func (c *CloudTrail) GetQueryResultsWithContext(ctx aws.Context, input *GetQuery
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetQueryResults operation.
-//    pageNum := 0
-//    err := client.GetQueryResultsPages(params,
-//        func(page *cloudtrail.GetQueryResultsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetQueryResults operation.
+//	pageNum := 0
+//	err := client.GetQueryResultsPages(params,
+//	    func(page *cloudtrail.GetQueryResultsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudTrail) GetQueryResultsPages(input *GetQueryResultsInput, fn func(*GetQueryResultsOutput, bool) bool) error {
 	return c.GetQueryResultsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2320,14 +2662,13 @@ const opGetResourcePolicy = "GetResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResourcePolicyRequest method.
+//	req, resp := client.GetResourcePolicyRequest(params)
 //
-//    // Example sending a request using the GetResourcePolicyRequest method.
-//    req, resp := client.GetResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetResourcePolicy
 func (c *CloudTrail) GetResourcePolicyRequest(input *GetResourcePolicyInput) (req *request.Request, output *GetResourcePolicyOutput) {
@@ -2359,26 +2700,27 @@ func (c *CloudTrail) GetResourcePolicyRequest(input *GetResourcePolicyInput) (re
 // API operation GetResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceARNNotValidException
-//   This exception is thrown when the provided resource does not exist, or the
-//   ARN format of the resource is not valid. The following is the valid format
-//   for a resource ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/MyChannel.
 //
-//   * ResourceNotFoundException
-//   This exception is thrown when the specified resource is not found.
+//   - ResourceARNNotValidException
+//     This exception is thrown when the provided resource does not exist, or the
+//     ARN format of the resource is not valid. The following is the valid format
+//     for a resource ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/MyChannel.
 //
-//   * ResourcePolicyNotFoundException
-//   This exception is thrown when the specified resource policy is not found.
+//   - ResourceNotFoundException
+//     This exception is thrown when the specified resource is not found.
 //
-//   * ResourceTypeNotSupportedException
-//   This exception is thrown when the specified resource type is not supported
-//   by CloudTrail.
+//   - ResourcePolicyNotFoundException
+//     This exception is thrown when the specified resource policy is not found.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - ResourceTypeNotSupportedException
+//     This exception is thrown when the specified resource type is not supported
+//     by CloudTrail.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetResourcePolicy
 func (c *CloudTrail) GetResourcePolicy(input *GetResourcePolicyInput) (*GetResourcePolicyOutput, error) {
@@ -2418,14 +2760,13 @@ const opGetTrail = "GetTrail"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTrailRequest method.
+//	req, resp := client.GetTrailRequest(params)
 //
-//    // Example sending a request using the GetTrailRequest method.
-//    req, resp := client.GetTrailRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetTrail
 func (c *CloudTrail) GetTrailRequest(input *GetTrailInput) (req *request.Request, output *GetTrailOutput) {
@@ -2456,43 +2797,41 @@ func (c *CloudTrail) GetTrailRequest(input *GetTrailInput) (req *request.Request
 // API operation GetTrail for usage and error information.
 //
 // Returned Error Types:
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * TrailNotFoundException
-//   This exception is thrown when the trail with the given name is not found.
+//   - TrailNotFoundException
+//     This exception is thrown when the trail with the given name is not found.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Be between 3 and 128 characters
+//   - Be between 3 and 128 characters
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetTrail
 func (c *CloudTrail) GetTrail(input *GetTrailInput) (*GetTrailOutput, error) {
@@ -2532,14 +2871,13 @@ const opGetTrailStatus = "GetTrailStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTrailStatusRequest method.
+//	req, resp := client.GetTrailStatusRequest(params)
 //
-//    // Example sending a request using the GetTrailStatusRequest method.
-//    req, resp := client.GetTrailStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetTrailStatus
 func (c *CloudTrail) GetTrailStatusRequest(input *GetTrailStatusInput) (req *request.Request, output *GetTrailStatusOutput) {
@@ -2563,8 +2901,8 @@ func (c *CloudTrail) GetTrailStatusRequest(input *GetTrailStatusInput) (req *req
 // Returns a JSON-formatted list of information about the specified trail. Fields
 // include information on delivery errors, Amazon SNS and Amazon S3 errors,
 // and start and stop logging times for each trail. This operation returns trail
-// status from a single region. To return trail status from all regions, you
-// must call the operation on each region.
+// status from a single Region. To return trail status from all Regions, you
+// must call the operation on each Region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2574,43 +2912,41 @@ func (c *CloudTrail) GetTrailStatusRequest(input *GetTrailStatusInput) (req *req
 // API operation GetTrailStatus for usage and error information.
 //
 // Returned Error Types:
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * TrailNotFoundException
-//   This exception is thrown when the trail with the given name is not found.
+//   - TrailNotFoundException
+//     This exception is thrown when the trail with the given name is not found.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Be between 3 and 128 characters
+//   - Be between 3 and 128 characters
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/GetTrailStatus
 func (c *CloudTrail) GetTrailStatus(input *GetTrailStatusInput) (*GetTrailStatusOutput, error) {
@@ -2650,14 +2986,13 @@ const opListChannels = "ListChannels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListChannelsRequest method.
+//	req, resp := client.ListChannelsRequest(params)
 //
-//    // Example sending a request using the ListChannelsRequest method.
-//    req, resp := client.ListChannelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListChannels
 func (c *CloudTrail) ListChannelsRequest(input *ListChannelsInput) (req *request.Request, output *ListChannelsOutput) {
@@ -2694,15 +3029,16 @@ func (c *CloudTrail) ListChannelsRequest(input *ListChannelsInput) (req *request
 // API operation ListChannels for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   A token that is not valid, or a token that was previously used in a request
-//   with different parameters. This exception is thrown if the token is not valid.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidNextTokenException
+//     A token that is not valid, or a token that was previously used in a request
+//     with different parameters. This exception is thrown if the token is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListChannels
 func (c *CloudTrail) ListChannels(input *ListChannelsInput) (*ListChannelsOutput, error) {
@@ -2734,15 +3070,14 @@ func (c *CloudTrail) ListChannelsWithContext(ctx aws.Context, input *ListChannel
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListChannels operation.
-//    pageNum := 0
-//    err := client.ListChannelsPages(params,
-//        func(page *cloudtrail.ListChannelsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListChannels operation.
+//	pageNum := 0
+//	err := client.ListChannelsPages(params,
+//	    func(page *cloudtrail.ListChannelsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudTrail) ListChannelsPages(input *ListChannelsInput, fn func(*ListChannelsOutput, bool) bool) error {
 	return c.ListChannelsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2794,14 +3129,13 @@ const opListEventDataStores = "ListEventDataStores"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListEventDataStoresRequest method.
+//	req, resp := client.ListEventDataStoresRequest(params)
 //
-//    // Example sending a request using the ListEventDataStoresRequest method.
-//    req, resp := client.ListEventDataStoresRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListEventDataStores
 func (c *CloudTrail) ListEventDataStoresRequest(input *ListEventDataStoresInput) (req *request.Request, output *ListEventDataStoresOutput) {
@@ -2829,7 +3163,7 @@ func (c *CloudTrail) ListEventDataStoresRequest(input *ListEventDataStoresInput)
 // ListEventDataStores API operation for AWS CloudTrail.
 //
 // Returns information about all event data stores in the account, in the current
-// region.
+// Region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2839,22 +3173,23 @@ func (c *CloudTrail) ListEventDataStoresRequest(input *ListEventDataStoresInput)
 // API operation ListEventDataStores for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidMaxResultsException
-//   This exception is thrown if the limit specified is not valid.
 //
-//   * InvalidNextTokenException
-//   A token that is not valid, or a token that was previously used in a request
-//   with different parameters. This exception is thrown if the token is not valid.
+//   - InvalidMaxResultsException
+//     This exception is thrown if the limit specified is not valid.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidNextTokenException
+//     A token that is not valid, or a token that was previously used in a request
+//     with different parameters. This exception is thrown if the token is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListEventDataStores
 func (c *CloudTrail) ListEventDataStores(input *ListEventDataStoresInput) (*ListEventDataStoresOutput, error) {
@@ -2886,15 +3221,14 @@ func (c *CloudTrail) ListEventDataStoresWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListEventDataStores operation.
-//    pageNum := 0
-//    err := client.ListEventDataStoresPages(params,
-//        func(page *cloudtrail.ListEventDataStoresOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListEventDataStores operation.
+//	pageNum := 0
+//	err := client.ListEventDataStoresPages(params,
+//	    func(page *cloudtrail.ListEventDataStoresOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudTrail) ListEventDataStoresPages(input *ListEventDataStoresInput, fn func(*ListEventDataStoresOutput, bool) bool) error {
 	return c.ListEventDataStoresPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2946,14 +3280,13 @@ const opListImportFailures = "ListImportFailures"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListImportFailuresRequest method.
+//	req, resp := client.ListImportFailuresRequest(params)
 //
-//    // Example sending a request using the ListImportFailuresRequest method.
-//    req, resp := client.ListImportFailuresRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListImportFailures
 func (c *CloudTrail) ListImportFailuresRequest(input *ListImportFailuresInput) (req *request.Request, output *ListImportFailuresOutput) {
@@ -2990,15 +3323,19 @@ func (c *CloudTrail) ListImportFailuresRequest(input *ListImportFailuresInput) (
 // API operation ListImportFailures for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   A token that is not valid, or a token that was previously used in a request
-//   with different parameters. This exception is thrown if the token is not valid.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidNextTokenException
+//     A token that is not valid, or a token that was previously used in a request
+//     with different parameters. This exception is thrown if the token is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListImportFailures
 func (c *CloudTrail) ListImportFailures(input *ListImportFailuresInput) (*ListImportFailuresOutput, error) {
@@ -3030,15 +3367,14 @@ func (c *CloudTrail) ListImportFailuresWithContext(ctx aws.Context, input *ListI
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListImportFailures operation.
-//    pageNum := 0
-//    err := client.ListImportFailuresPages(params,
-//        func(page *cloudtrail.ListImportFailuresOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListImportFailures operation.
+//	pageNum := 0
+//	err := client.ListImportFailuresPages(params,
+//	    func(page *cloudtrail.ListImportFailuresOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudTrail) ListImportFailuresPages(input *ListImportFailuresInput, fn func(*ListImportFailuresOutput, bool) bool) error {
 	return c.ListImportFailuresPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3090,14 +3426,13 @@ const opListImports = "ListImports"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListImportsRequest method.
+//	req, resp := client.ListImportsRequest(params)
 //
-//    // Example sending a request using the ListImportsRequest method.
-//    req, resp := client.ListImportsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListImports
 func (c *CloudTrail) ListImportsRequest(input *ListImportsInput) (req *request.Request, output *ListImportsOutput) {
@@ -3135,22 +3470,23 @@ func (c *CloudTrail) ListImportsRequest(input *ListImportsInput) (req *request.R
 // API operation ListImports for usage and error information.
 //
 // Returned Error Types:
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
 //
-//   * InvalidNextTokenException
-//   A token that is not valid, or a token that was previously used in a request
-//   with different parameters. This exception is thrown if the token is not valid.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InvalidNextTokenException
+//     A token that is not valid, or a token that was previously used in a request
+//     with different parameters. This exception is thrown if the token is not valid.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListImports
 func (c *CloudTrail) ListImports(input *ListImportsInput) (*ListImportsOutput, error) {
@@ -3182,15 +3518,14 @@ func (c *CloudTrail) ListImportsWithContext(ctx aws.Context, input *ListImportsI
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListImports operation.
-//    pageNum := 0
-//    err := client.ListImportsPages(params,
-//        func(page *cloudtrail.ListImportsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListImports operation.
+//	pageNum := 0
+//	err := client.ListImportsPages(params,
+//	    func(page *cloudtrail.ListImportsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudTrail) ListImportsPages(input *ListImportsInput, fn func(*ListImportsOutput, bool) bool) error {
 	return c.ListImportsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3226,6 +3561,168 @@ func (c *CloudTrail) ListImportsPagesWithContext(ctx aws.Context, input *ListImp
 	return p.Err()
 }
 
+const opListInsightsMetricData = "ListInsightsMetricData"
+
+// ListInsightsMetricDataRequest generates a "aws/request.Request" representing the
+// client's request for the ListInsightsMetricData operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListInsightsMetricData for more information on using the ListInsightsMetricData
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListInsightsMetricDataRequest method.
+//	req, resp := client.ListInsightsMetricDataRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListInsightsMetricData
+func (c *CloudTrail) ListInsightsMetricDataRequest(input *ListInsightsMetricDataInput) (req *request.Request, output *ListInsightsMetricDataOutput) {
+	op := &request.Operation{
+		Name:       opListInsightsMetricData,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListInsightsMetricDataInput{}
+	}
+
+	output = &ListInsightsMetricDataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListInsightsMetricData API operation for AWS CloudTrail.
+//
+// Returns Insights metrics data for trails that have enabled Insights. The
+// request must include the EventSource, EventName, and InsightType parameters.
+//
+// If the InsightType is set to ApiErrorRateInsight, the request must also include
+// the ErrorCode parameter.
+//
+// The following are the available time periods for ListInsightsMetricData.
+// Each cutoff is inclusive.
+//
+//   - Data points with a period of 60 seconds (1-minute) are available for
+//     15 days.
+//
+//   - Data points with a period of 300 seconds (5-minute) are available for
+//     63 days.
+//
+//   - Data points with a period of 3600 seconds (1 hour) are available for
+//     90 days.
+//
+// Access to the ListInsightsMetricData API operation is linked to the cloudtrail:LookupEvents
+// action. To use this operation, you must have permissions to perform the cloudtrail:LookupEvents
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CloudTrail's
+// API operation ListInsightsMetricData for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
+//
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListInsightsMetricData
+func (c *CloudTrail) ListInsightsMetricData(input *ListInsightsMetricDataInput) (*ListInsightsMetricDataOutput, error) {
+	req, out := c.ListInsightsMetricDataRequest(input)
+	return out, req.Send()
+}
+
+// ListInsightsMetricDataWithContext is the same as ListInsightsMetricData with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListInsightsMetricData for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudTrail) ListInsightsMetricDataWithContext(ctx aws.Context, input *ListInsightsMetricDataInput, opts ...request.Option) (*ListInsightsMetricDataOutput, error) {
+	req, out := c.ListInsightsMetricDataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListInsightsMetricDataPages iterates over the pages of a ListInsightsMetricData operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListInsightsMetricData method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListInsightsMetricData operation.
+//	pageNum := 0
+//	err := client.ListInsightsMetricDataPages(params,
+//	    func(page *cloudtrail.ListInsightsMetricDataOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CloudTrail) ListInsightsMetricDataPages(input *ListInsightsMetricDataInput, fn func(*ListInsightsMetricDataOutput, bool) bool) error {
+	return c.ListInsightsMetricDataPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListInsightsMetricDataPagesWithContext same as ListInsightsMetricDataPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudTrail) ListInsightsMetricDataPagesWithContext(ctx aws.Context, input *ListInsightsMetricDataInput, fn func(*ListInsightsMetricDataOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListInsightsMetricDataInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListInsightsMetricDataRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListInsightsMetricDataOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListPublicKeys = "ListPublicKeys"
 
 // ListPublicKeysRequest generates a "aws/request.Request" representing the
@@ -3242,14 +3739,13 @@ const opListPublicKeys = "ListPublicKeys"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPublicKeysRequest method.
+//	req, resp := client.ListPublicKeysRequest(params)
 //
-//    // Example sending a request using the ListPublicKeysRequest method.
-//    req, resp := client.ListPublicKeysRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListPublicKeys
 func (c *CloudTrail) ListPublicKeysRequest(input *ListPublicKeysInput) (req *request.Request, output *ListPublicKeysOutput) {
@@ -3280,9 +3776,9 @@ func (c *CloudTrail) ListPublicKeysRequest(input *ListPublicKeysInput) (req *req
 // within the specified time range. The public key is needed to validate digest
 // files that were signed with its corresponding private key.
 //
-// CloudTrail uses different private and public key pairs per region. Each digest
-// file is signed with a private key unique to its region. When you validate
-// a digest file from a specific region, you must look in the same region for
+// CloudTrail uses different private and public key pairs per Region. Each digest
+// file is signed with a private key unique to its Region. When you validate
+// a digest file from a specific Region, you must look in the same Region for
 // its corresponding public key.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -3293,18 +3789,19 @@ func (c *CloudTrail) ListPublicKeysRequest(input *ListPublicKeysInput) (req *req
 // API operation ListPublicKeys for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidTimeRangeException
-//   Occurs if the timestamp values are not valid. Either the start time occurs
-//   after the end time, or the time range is outside the range of possible values.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - InvalidTimeRangeException
+//     Occurs if the timestamp values are not valid. Either the start time occurs
+//     after the end time, or the time range is outside the range of possible values.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * InvalidTokenException
-//   Reserved for future use.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - InvalidTokenException
+//     Reserved for future use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListPublicKeys
 func (c *CloudTrail) ListPublicKeys(input *ListPublicKeysInput) (*ListPublicKeysOutput, error) {
@@ -3336,15 +3833,14 @@ func (c *CloudTrail) ListPublicKeysWithContext(ctx aws.Context, input *ListPubli
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPublicKeys operation.
-//    pageNum := 0
-//    err := client.ListPublicKeysPages(params,
-//        func(page *cloudtrail.ListPublicKeysOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPublicKeys operation.
+//	pageNum := 0
+//	err := client.ListPublicKeysPages(params,
+//	    func(page *cloudtrail.ListPublicKeysOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudTrail) ListPublicKeysPages(input *ListPublicKeysInput, fn func(*ListPublicKeysOutput, bool) bool) error {
 	return c.ListPublicKeysPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3396,14 +3892,13 @@ const opListQueries = "ListQueries"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListQueriesRequest method.
+//	req, resp := client.ListQueriesRequest(params)
 //
-//    // Example sending a request using the ListQueriesRequest method.
-//    req, resp := client.ListQueriesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListQueries
 func (c *CloudTrail) ListQueriesRequest(input *ListQueriesInput) (req *request.Request, output *ListQueriesOutput) {
@@ -3445,44 +3940,45 @@ func (c *CloudTrail) ListQueriesRequest(input *ListQueriesInput) (req *request.R
 // API operation ListQueries for usage and error information.
 //
 // Returned Error Types:
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * InvalidDateRangeException
-//   A date range for the query was specified that is not valid. Be sure that
-//   the start time is chronologically before the end time. For more information
-//   about writing a query, see Create or edit a query (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-create-edit-query.html)
-//   in the CloudTrail User Guide.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * InvalidMaxResultsException
-//   This exception is thrown if the limit specified is not valid.
+//   - InvalidDateRangeException
+//     A date range for the query was specified that is not valid. Be sure that
+//     the start time is chronologically before the end time. For more information
+//     about writing a query, see Create or edit a query (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-create-edit-query.html)
+//     in the CloudTrail User Guide.
 //
-//   * InvalidNextTokenException
-//   A token that is not valid, or a token that was previously used in a request
-//   with different parameters. This exception is thrown if the token is not valid.
+//   - InvalidMaxResultsException
+//     This exception is thrown if the limit specified is not valid.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InvalidNextTokenException
+//     A token that is not valid, or a token that was previously used in a request
+//     with different parameters. This exception is thrown if the token is not valid.
 //
-//   * InvalidQueryStatusException
-//   The query status is not valid for the operation.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidQueryStatusException
+//     The query status is not valid for the operation.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListQueries
 func (c *CloudTrail) ListQueries(input *ListQueriesInput) (*ListQueriesOutput, error) {
@@ -3514,15 +4010,14 @@ func (c *CloudTrail) ListQueriesWithContext(ctx aws.Context, input *ListQueriesI
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListQueries operation.
-//    pageNum := 0
-//    err := client.ListQueriesPages(params,
-//        func(page *cloudtrail.ListQueriesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListQueries operation.
+//	pageNum := 0
+//	err := client.ListQueriesPages(params,
+//	    func(page *cloudtrail.ListQueriesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudTrail) ListQueriesPages(input *ListQueriesInput, fn func(*ListQueriesOutput, bool) bool) error {
 	return c.ListQueriesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3574,14 +4069,13 @@ const opListTags = "ListTags"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsRequest method.
+//	req, resp := client.ListTagsRequest(params)
 //
-//    // Example sending a request using the ListTagsRequest method.
-//    req, resp := client.ListTagsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListTags
 func (c *CloudTrail) ListTagsRequest(input *ListTagsInput) (req *request.Request, output *ListTagsOutput) {
@@ -3608,8 +4102,8 @@ func (c *CloudTrail) ListTagsRequest(input *ListTagsInput) (req *request.Request
 
 // ListTags API operation for AWS CloudTrail.
 //
-// Lists the tags for the trail, event data store, or channel in the current
-// region.
+// Lists the tags for the specified trails, event data stores, or channels in
+// the current Region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3619,60 +4113,65 @@ func (c *CloudTrail) ListTagsRequest(input *ListTagsInput) (req *request.Request
 // API operation ListTags for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   This exception is thrown when the specified resource is not found.
 //
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
+//   - ResourceNotFoundException
+//     This exception is thrown when the specified resource is not found.
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * ResourceTypeNotSupportedException
-//   This exception is thrown when the specified resource type is not supported
-//   by CloudTrail.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - ChannelARNInvalidException
+//     This exception is thrown when the specified value of ChannelARN is not valid.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - ResourceTypeNotSupportedException
+//     This exception is thrown when the specified resource type is not supported
+//     by CloudTrail.
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Be between 3 and 128 characters
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Be between 3 and 128 characters
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * InvalidTokenException
-//   Reserved for future use.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - InvalidTokenException
+//     Reserved for future use.
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListTags
 func (c *CloudTrail) ListTags(input *ListTagsInput) (*ListTagsOutput, error) {
@@ -3704,15 +4203,14 @@ func (c *CloudTrail) ListTagsWithContext(ctx aws.Context, input *ListTagsInput, 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTags operation.
-//    pageNum := 0
-//    err := client.ListTagsPages(params,
-//        func(page *cloudtrail.ListTagsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTags operation.
+//	pageNum := 0
+//	err := client.ListTagsPages(params,
+//	    func(page *cloudtrail.ListTagsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudTrail) ListTagsPages(input *ListTagsInput, fn func(*ListTagsOutput, bool) bool) error {
 	return c.ListTagsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3764,14 +4262,13 @@ const opListTrails = "ListTrails"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTrailsRequest method.
+//	req, resp := client.ListTrailsRequest(params)
 //
-//    // Example sending a request using the ListTrailsRequest method.
-//    req, resp := client.ListTrailsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListTrails
 func (c *CloudTrail) ListTrailsRequest(input *ListTrailsInput) (req *request.Request, output *ListTrailsOutput) {
@@ -3808,11 +4305,12 @@ func (c *CloudTrail) ListTrailsRequest(input *ListTrailsInput) (req *request.Req
 // API operation ListTrails for usage and error information.
 //
 // Returned Error Types:
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/ListTrails
 func (c *CloudTrail) ListTrails(input *ListTrailsInput) (*ListTrailsOutput, error) {
@@ -3844,15 +4342,14 @@ func (c *CloudTrail) ListTrailsWithContext(ctx aws.Context, input *ListTrailsInp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTrails operation.
-//    pageNum := 0
-//    err := client.ListTrailsPages(params,
-//        func(page *cloudtrail.ListTrailsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTrails operation.
+//	pageNum := 0
+//	err := client.ListTrailsPages(params,
+//	    func(page *cloudtrail.ListTrailsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudTrail) ListTrailsPages(input *ListTrailsInput, fn func(*ListTrailsOutput, bool) bool) error {
 	return c.ListTrailsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3904,14 +4401,13 @@ const opLookupEvents = "LookupEvents"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the LookupEventsRequest method.
+//	req, resp := client.LookupEventsRequest(params)
 //
-//    // Example sending a request using the LookupEventsRequest method.
-//    req, resp := client.LookupEventsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/LookupEvents
 func (c *CloudTrail) LookupEventsRequest(input *LookupEventsInput) (req *request.Request, output *LookupEventsOutput) {
@@ -3941,39 +4437,44 @@ func (c *CloudTrail) LookupEventsRequest(input *LookupEventsInput) (req *request
 // Looks up management events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events)
 // or CloudTrail Insights events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-insights-events)
 // that are captured by CloudTrail. You can look up events that occurred in
-// a region within the last 90 days. Lookup supports the following attributes
-// for management events:
+// a Region within the last 90 days.
 //
-//    * Amazon Web Services access key
+// LookupEvents returns recent Insights events for trails that enable Insights.
+// To view Insights events for an event data store, you can run queries on your
+// Insights event data store, and you can also view the Lake dashboard for Insights.
 //
-//    * Event ID
+// Lookup supports the following attributes for management events:
 //
-//    * Event name
+//   - Amazon Web Services access key
 //
-//    * Event source
+//   - Event ID
 //
-//    * Read only
+//   - Event name
 //
-//    * Resource name
+//   - Event source
 //
-//    * Resource type
+//   - Read only
 //
-//    * User name
+//   - Resource name
+//
+//   - Resource type
+//
+//   - User name
 //
 // Lookup supports the following attributes for Insights events:
 //
-//    * Event ID
+//   - Event ID
 //
-//    * Event name
+//   - Event name
 //
-//    * Event source
+//   - Event source
 //
 // All attributes are optional. The default number of results returned is 50,
 // with a maximum of 50 possible. The response includes a token that you can
 // use to get the next page of results.
 //
 // The rate of lookup requests is limited to two per second, per account, per
-// region. If this limit is exceeded, a throttling error occurs.
+// Region. If this limit is exceeded, a throttling error occurs.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3983,29 +4484,30 @@ func (c *CloudTrail) LookupEventsRequest(input *LookupEventsInput) (req *request
 // API operation LookupEvents for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidLookupAttributesException
-//   Occurs when a lookup attribute is specified that is not valid.
 //
-//   * InvalidTimeRangeException
-//   Occurs if the timestamp values are not valid. Either the start time occurs
-//   after the end time, or the time range is outside the range of possible values.
+//   - InvalidLookupAttributesException
+//     Occurs when a lookup attribute is specified that is not valid.
 //
-//   * InvalidMaxResultsException
-//   This exception is thrown if the limit specified is not valid.
+//   - InvalidTimeRangeException
+//     Occurs if the timestamp values are not valid. Either the start time occurs
+//     after the end time, or the time range is outside the range of possible values.
 //
-//   * InvalidNextTokenException
-//   A token that is not valid, or a token that was previously used in a request
-//   with different parameters. This exception is thrown if the token is not valid.
+//   - InvalidMaxResultsException
+//     This exception is thrown if the limit specified is not valid.
 //
-//   * InvalidEventCategoryException
-//   Occurs if an event category that is not valid is specified as a value of
-//   EventCategory.
+//   - InvalidNextTokenException
+//     A token that is not valid, or a token that was previously used in a request
+//     with different parameters. This exception is thrown if the token is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - InvalidEventCategoryException
+//     Occurs if an event category that is not valid is specified as a value of
+//     EventCategory.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/LookupEvents
 func (c *CloudTrail) LookupEvents(input *LookupEventsInput) (*LookupEventsOutput, error) {
@@ -4037,15 +4539,14 @@ func (c *CloudTrail) LookupEventsWithContext(ctx aws.Context, input *LookupEvent
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a LookupEvents operation.
-//    pageNum := 0
-//    err := client.LookupEventsPages(params,
-//        func(page *cloudtrail.LookupEventsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a LookupEvents operation.
+//	pageNum := 0
+//	err := client.LookupEventsPages(params,
+//	    func(page *cloudtrail.LookupEventsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CloudTrail) LookupEventsPages(input *LookupEventsInput, fn func(*LookupEventsOutput, bool) bool) error {
 	return c.LookupEventsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4097,14 +4598,13 @@ const opPutEventSelectors = "PutEventSelectors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutEventSelectorsRequest method.
+//	req, resp := client.PutEventSelectorsRequest(params)
 //
-//    // Example sending a request using the PutEventSelectorsRequest method.
-//    req, resp := client.PutEventSelectorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/PutEventSelectors
 func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (req *request.Request, output *PutEventSelectorsOutput) {
@@ -4127,7 +4627,11 @@ func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (re
 //
 // Configures an event selector or advanced event selectors for your trail.
 // Use event selectors or advanced event selectors to specify management and
-// data event settings for your trail. By default, trails created without specific
+// data event settings for your trail. If you want your trail to log Insights
+// events, be sure the event selector enables logging of the Insights event
+// types you want configured for your trail. For more information about logging
+// Insights events, see Logging Insights events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html)
+// in the CloudTrail User Guide. By default, trails created without specific
 // event selectors are configured to log all read and write management events,
 // and no data events.
 //
@@ -4136,7 +4640,7 @@ func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (re
 // any event selector, the trail processes and logs the event. If the event
 // doesn't match any event selector, the trail doesn't log the event.
 //
-// Example
+// # Example
 //
 // You create an event selector for a trail and specify that you want write-only
 // events.
@@ -4151,13 +4655,13 @@ func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (re
 // The GetConsoleOutput is a read-only event that doesn't match your event selector.
 // The trail doesn't log the event.
 //
-// The PutEventSelectors operation must be called from the region in which the
+// The PutEventSelectors operation must be called from the Region in which the
 // trail was created; otherwise, an InvalidHomeRegionException exception is
 // thrown.
 //
 // You can configure up to five event selectors for each trail. For more information,
-// see Logging management events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-events-with-cloudtrail.html),
-// Logging data events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html),
+// see Logging management events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-events-with-cloudtrail.html),
+// Logging data events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html),
 // and Quotas in CloudTrail (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html)
 // in the CloudTrail User Guide.
 //
@@ -4166,7 +4670,7 @@ func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (re
 // on a trail. You can use either AdvancedEventSelectors or EventSelectors,
 // but not both. If you apply AdvancedEventSelectors to a trail, any existing
 // EventSelectors are overwritten. For more information about advanced event
-// selectors, see Logging data events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
+// selectors, see Logging data events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
 // in the CloudTrail User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -4177,89 +4681,97 @@ func (c *CloudTrail) PutEventSelectorsRequest(input *PutEventSelectorsInput) (re
 // API operation PutEventSelectors for usage and error information.
 //
 // Returned Error Types:
-//   * TrailNotFoundException
-//   This exception is thrown when the trail with the given name is not found.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - TrailNotFoundException
+//     This exception is thrown when the trail with the given name is not found.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Be between 3 and 128 characters
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Be between 3 and 128 characters
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * InvalidHomeRegionException
-//   This exception is thrown when an operation is called on a trail from a region
-//   other than the region in which the trail was created.
+//   - InvalidHomeRegionException
+//     This exception is thrown when an operation is called on a trail from a Region
+//     other than the Region in which the trail was created.
 //
-//   * InvalidEventSelectorsException
-//   This exception is thrown when the PutEventSelectors operation is called with
-//   a number of event selectors, advanced event selectors, or data resources
-//   that is not valid. The combination of event selectors or advanced event selectors
-//   and data resources is not valid. A trail can have up to 5 event selectors.
-//   If a trail uses advanced event selectors, a maximum of 500 total values for
-//   all conditions in all advanced event selectors is allowed. A trail is limited
-//   to 250 data resources. These data resources can be distributed across event
-//   selectors, but the overall total cannot exceed 250.
+//   - InvalidEventSelectorsException
+//     This exception is thrown when the PutEventSelectors operation is called with
+//     a number of event selectors, advanced event selectors, or data resources
+//     that is not valid. The combination of event selectors or advanced event selectors
+//     and data resources is not valid. A trail can have up to 5 event selectors.
+//     If a trail uses advanced event selectors, a maximum of 500 total values for
+//     all conditions in all advanced event selectors is allowed. A trail is limited
+//     to 250 data resources. These data resources can be distributed across event
+//     selectors, but the overall total cannot exceed 250.
 //
-//   You can:
+//     You can:
 //
-//      * Specify a valid number of event selectors (1 to 5) for a trail.
+//   - Specify a valid number of event selectors (1 to 5) for a trail.
 //
-//      * Specify a valid number of data resources (1 to 250) for an event selector.
-//      The limit of number of resources on an individual event selector is configurable
-//      up to 250. However, this upper limit is allowed only if the total number
-//      of data resources does not exceed 250 across all event selectors for a
-//      trail.
+//   - Specify a valid number of data resources (1 to 250) for an event selector.
+//     The limit of number of resources on an individual event selector is configurable
+//     up to 250. However, this upper limit is allowed only if the total number
+//     of data resources does not exceed 250 across all event selectors for a
+//     trail.
 //
-//      * Specify up to 500 values for all conditions in all advanced event selectors
-//      for a trail.
+//   - Specify up to 500 values for all conditions in all advanced event selectors
+//     for a trail.
 //
-//      * Specify a valid value for a parameter. For example, specifying the ReadWriteType
-//      parameter with a value of read-only is not valid.
+//   - Specify a valid value for a parameter. For example, specifying the ReadWriteType
+//     parameter with a value of read-only is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - ThrottlingException
+//     This exception is thrown when the request rate exceeds the limit.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/PutEventSelectors
 func (c *CloudTrail) PutEventSelectors(input *PutEventSelectorsInput) (*PutEventSelectorsOutput, error) {
@@ -4299,14 +4811,13 @@ const opPutInsightSelectors = "PutInsightSelectors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutInsightSelectorsRequest method.
+//	req, resp := client.PutInsightSelectorsRequest(params)
 //
-//    // Example sending a request using the PutInsightSelectorsRequest method.
-//    req, resp := client.PutInsightSelectorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/PutInsightSelectors
 func (c *CloudTrail) PutInsightSelectorsRequest(input *PutInsightSelectorsInput) (req *request.Request, output *PutInsightSelectorsOutput) {
@@ -4328,10 +4839,31 @@ func (c *CloudTrail) PutInsightSelectorsRequest(input *PutInsightSelectorsInput)
 // PutInsightSelectors API operation for AWS CloudTrail.
 //
 // Lets you enable Insights event logging by specifying the Insights selectors
-// that you want to enable on an existing trail. You also use PutInsightSelectors
-// to turn off Insights event logging, by passing an empty list of insight types.
-// The valid Insights event types in this release are ApiErrorRateInsight and
-// ApiCallRateInsight.
+// that you want to enable on an existing trail or event data store. You also
+// use PutInsightSelectors to turn off Insights event logging, by passing an
+// empty list of Insights types. The valid Insights event types are ApiErrorRateInsight
+// and ApiCallRateInsight.
+//
+// To enable Insights on an event data store, you must specify the ARNs (or
+// ID suffix of the ARNs) for the source event data store (EventDataStore) and
+// the destination event data store (InsightsDestination). The source event
+// data store logs management events and enables Insights. The destination event
+// data store logs Insights events based upon the management event activity
+// of the source event data store. The source and destination event data stores
+// must belong to the same Amazon Web Services account.
+//
+// To log Insights events for a trail, you must specify the name (TrailName)
+// of the CloudTrail trail for which you want to change or add Insights selectors.
+//
+// To log CloudTrail Insights events on API call volume, the trail or event
+// data store must log write management events. To log CloudTrail Insights events
+// on API error rate, the trail or event data store must log read or write management
+// events. You can call GetEventSelectors on a trail to check whether the trail
+// logs management events. You can call GetEventDataStore on an event data store
+// to check whether the event data store logs management events.
+//
+// For more information, see Logging CloudTrail Insights events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html)
+// in the CloudTrail User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4341,77 +4873,97 @@ func (c *CloudTrail) PutInsightSelectorsRequest(input *PutInsightSelectorsInput)
 // API operation PutInsightSelectors for usage and error information.
 //
 // Returned Error Types:
-//   * TrailNotFoundException
-//   This exception is thrown when the trail with the given name is not found.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - InvalidParameterCombinationException
+//     This exception is thrown when the combination of parameters provided is not
+//     valid.
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - TrailNotFoundException
+//     This exception is thrown when the trail with the given name is not found.
 //
-//      * Be between 3 and 128 characters
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Start with a letter or number, and end with a letter or number
 //
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
+//   - Be between 3 and 128 characters
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   * InvalidHomeRegionException
-//   This exception is thrown when an operation is called on a trail from a region
-//   other than the region in which the trail was created.
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   * InvalidInsightSelectorsException
-//   The formatting or syntax of the InsightSelectors JSON statement in your PutInsightSelectors
-//   or GetInsightSelectors request is not valid, or the specified insight type
-//   in the InsightSelectors statement is not a valid insight type.
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * InsufficientS3BucketPolicyException
-//   This exception is thrown when the policy on the S3 bucket is not sufficient.
+//   - InvalidHomeRegionException
+//     This exception is thrown when an operation is called on a trail from a Region
+//     other than the Region in which the trail was created.
 //
-//   * InsufficientEncryptionPolicyException
-//   This exception is thrown when the policy on the S3 bucket or KMS key does
-//   not have sufficient permissions for the operation.
+//   - InvalidInsightSelectorsException
+//     For PutInsightSelectors, this exception is thrown when the formatting or
+//     syntax of the InsightSelectors JSON statement is not valid, or the specified
+//     InsightType in the InsightSelectors statement is not valid. Valid values
+//     for InsightType are ApiCallRateInsight and ApiErrorRateInsight. To enable
+//     Insights on an event data store, the destination event data store specified
+//     by the InsightsDestination parameter must log Insights events and the source
+//     event data store specified by the EventDataStore parameter must log management
+//     events.
 //
-//   * S3BucketDoesNotExistException
-//   This exception is thrown when the specified S3 bucket does not exist.
+//     For UpdateEventDataStore, this exception is thrown if Insights are enabled
+//     on the event data store and the updated advanced event selectors are not
+//     compatible with the configured InsightSelectors. If the InsightSelectors
+//     includes an InsightType of ApiCallRateInsight, the source event data store
+//     must log write management events. If the InsightSelectors includes an InsightType
+//     of ApiErrorRateInsight, the source event data store must log management events.
 //
-//   * KmsException
-//   This exception is thrown when there is an issue with the specified KMS key
-//   and the trail or event data store can't be updated.
+//   - InsufficientS3BucketPolicyException
+//     This exception is thrown when the policy on the S3 bucket is not sufficient.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - InsufficientEncryptionPolicyException
+//     This exception is thrown when the policy on the S3 bucket or KMS key does
+//     not have sufficient permissions for the operation.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - S3BucketDoesNotExistException
+//     This exception is thrown when the specified S3 bucket does not exist.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - KmsException
+//     This exception is thrown when there is an issue with the specified KMS key
+//     and the trail or event data store can't be updated.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - ThrottlingException
+//     This exception is thrown when the request rate exceeds the limit.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/PutInsightSelectors
 func (c *CloudTrail) PutInsightSelectors(input *PutInsightSelectorsInput) (*PutInsightSelectorsOutput, error) {
@@ -4451,14 +5003,13 @@ const opPutResourcePolicy = "PutResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutResourcePolicyRequest method.
+//	req, resp := client.PutResourcePolicyRequest(params)
 //
-//    // Example sending a request using the PutResourcePolicyRequest method.
-//    req, resp := client.PutResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/PutResourcePolicy
 func (c *CloudTrail) PutResourcePolicyRequest(input *PutResourcePolicyInput) (req *request.Request, output *PutResourcePolicyOutput) {
@@ -4493,37 +5044,38 @@ func (c *CloudTrail) PutResourcePolicyRequest(input *PutResourcePolicyInput) (re
 // API operation PutResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceARNNotValidException
-//   This exception is thrown when the provided resource does not exist, or the
-//   ARN format of the resource is not valid. The following is the valid format
-//   for a resource ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/MyChannel.
 //
-//   * ResourcePolicyNotValidException
-//   This exception is thrown when the resouce-based policy has syntax errors,
-//   or contains a principal that is not valid.
+//   - ResourceARNNotValidException
+//     This exception is thrown when the provided resource does not exist, or the
+//     ARN format of the resource is not valid. The following is the valid format
+//     for a resource ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/MyChannel.
 //
-//   The following are requirements for the resource policy:
+//   - ResourcePolicyNotValidException
+//     This exception is thrown when the resouce-based policy has syntax errors,
+//     or contains a principal that is not valid.
 //
-//      * Contains only one action: cloudtrail-data:PutAuditEvents
+//     The following are requirements for the resource policy:
 //
-//      * Contains at least one statement. The policy can have a maximum of 20
-//      statements.
+//   - Contains only one action: cloudtrail-data:PutAuditEvents
 //
-//      * Each statement contains at least one principal. A statement can have
-//      a maximum of 50 principals.
+//   - Contains at least one statement. The policy can have a maximum of 20
+//     statements.
 //
-//   * ResourceNotFoundException
-//   This exception is thrown when the specified resource is not found.
+//   - Each statement contains at least one principal. A statement can have
+//     a maximum of 50 principals.
 //
-//   * ResourceTypeNotSupportedException
-//   This exception is thrown when the specified resource type is not supported
-//   by CloudTrail.
+//   - ResourceNotFoundException
+//     This exception is thrown when the specified resource is not found.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - ResourceTypeNotSupportedException
+//     This exception is thrown when the specified resource type is not supported
+//     by CloudTrail.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/PutResourcePolicy
 func (c *CloudTrail) PutResourcePolicy(input *PutResourcePolicyInput) (*PutResourcePolicyOutput, error) {
@@ -4563,14 +5115,13 @@ const opRegisterOrganizationDelegatedAdmin = "RegisterOrganizationDelegatedAdmin
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterOrganizationDelegatedAdminRequest method.
+//	req, resp := client.RegisterOrganizationDelegatedAdminRequest(params)
 //
-//    // Example sending a request using the RegisterOrganizationDelegatedAdminRequest method.
-//    req, resp := client.RegisterOrganizationDelegatedAdminRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/RegisterOrganizationDelegatedAdmin
 func (c *CloudTrail) RegisterOrganizationDelegatedAdminRequest(input *RegisterOrganizationDelegatedAdminInput) (req *request.Request, output *RegisterOrganizationDelegatedAdminOutput) {
@@ -4593,7 +5144,7 @@ func (c *CloudTrail) RegisterOrganizationDelegatedAdminRequest(input *RegisterOr
 // RegisterOrganizationDelegatedAdmin API operation for AWS CloudTrail.
 //
 // Registers an organization’s member account as the CloudTrail delegated
-// administrator.
+// administrator (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-delegated-administrator.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4603,62 +5154,63 @@ func (c *CloudTrail) RegisterOrganizationDelegatedAdminRequest(input *RegisterOr
 // API operation RegisterOrganizationDelegatedAdmin for usage and error information.
 //
 // Returned Error Types:
-//   * AccountRegisteredException
-//   This exception is thrown when the account is already registered as the CloudTrail
-//   delegated administrator.
 //
-//   * AccountNotFoundException
-//   This exception is thrown when the specified account is not found or not part
-//   of an organization.
+//   - AccountRegisteredException
+//     This exception is thrown when the account is already registered as the CloudTrail
+//     delegated administrator.
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - AccountNotFoundException
+//     This exception is thrown when the specified account is not found or not part
+//     of an organization.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
 //
-//   * CannotDelegateManagementAccountException
-//   This exception is thrown when the management account of an organization is
-//   registered as the CloudTrail delegated administrator.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * AccessNotEnabledException
-//   This exception is thrown when trusted access has not been enabled between
-//   CloudTrail and Organizations. For more information, see Enabling Trusted
-//   Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
-//   and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   - CannotDelegateManagementAccountException
+//     This exception is thrown when the management account of an organization is
+//     registered as the CloudTrail delegated administrator.
 //
-//   * ConflictException
-//   This exception is thrown when the specified resource is not ready for an
-//   operation. This can occur when you try to run an operation on a resource
-//   before CloudTrail has time to fully load the resource, or because another
-//   operation is modifying the resource. If this exception occurs, wait a few
-//   minutes, and then try the operation again.
+//   - AccessNotEnabledException
+//     This exception is thrown when trusted access has not been enabled between
+//     CloudTrail and Organizations. For more information, see Enabling Trusted
+//     Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+//     and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
-//   * DelegatedAdminAccountLimitExceededException
-//   This exception is thrown when the maximum number of CloudTrail delegated
-//   administrators is reached.
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
 //
-//   * NotOrganizationManagementAccountException
-//   This exception is thrown when the account making the request is not the organization's
-//   management account.
+//   - DelegatedAdminAccountLimitExceededException
+//     This exception is thrown when the maximum number of CloudTrail delegated
+//     administrators is reached.
 //
-//   * OrganizationNotInAllFeaturesModeException
-//   This exception is thrown when Organizations is not configured to support
-//   all features. All features must be enabled in Organizations to support creating
-//   an organization trail or event data store.
+//   - NotOrganizationManagementAccountException
+//     This exception is thrown when the account making the request is not the organization's
+//     management account.
 //
-//   * OrganizationsNotInUseException
-//   This exception is thrown when the request is made from an Amazon Web Services
-//   account that is not a member of an organization. To make this request, sign
-//   in using the credentials of an account that belongs to an organization.
+//   - OrganizationNotInAllFeaturesModeException
+//     This exception is thrown when Organizations is not configured to support
+//     all features. All features must be enabled in Organizations to support creating
+//     an organization trail or event data store.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OrganizationsNotInUseException
+//     This exception is thrown when the request is made from an Amazon Web Services
+//     account that is not a member of an organization. To make this request, sign
+//     in using the credentials of an account that belongs to an organization.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/RegisterOrganizationDelegatedAdmin
 func (c *CloudTrail) RegisterOrganizationDelegatedAdmin(input *RegisterOrganizationDelegatedAdminInput) (*RegisterOrganizationDelegatedAdminOutput, error) {
@@ -4698,14 +5250,13 @@ const opRemoveTags = "RemoveTags"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveTagsRequest method.
+//	req, resp := client.RemoveTagsRequest(params)
 //
-//    // Example sending a request using the RemoveTagsRequest method.
-//    req, resp := client.RemoveTagsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/RemoveTags
 func (c *CloudTrail) RemoveTagsRequest(input *RemoveTagsInput) (req *request.Request, output *RemoveTagsOutput) {
@@ -4737,71 +5288,76 @@ func (c *CloudTrail) RemoveTagsRequest(input *RemoveTagsInput) (req *request.Req
 // API operation RemoveTags for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   This exception is thrown when the specified resource is not found.
 //
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
+//   - ResourceNotFoundException
+//     This exception is thrown when the specified resource is not found.
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * ResourceTypeNotSupportedException
-//   This exception is thrown when the specified resource type is not supported
-//   by CloudTrail.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - ChannelARNInvalidException
+//     This exception is thrown when the specified value of ChannelARN is not valid.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - ResourceTypeNotSupportedException
+//     This exception is thrown when the specified resource type is not supported
+//     by CloudTrail.
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Be between 3 and 128 characters
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Be between 3 and 128 characters
 //
-//   * InvalidTagParameterException
-//   This exception is thrown when the specified tag key or values are not valid.
-//   It can also occur if there are duplicate tags or too many tags on the resource.
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - InvalidTagParameterException
+//     This exception is thrown when the specified tag key or values are not valid.
+//     It can also occur if there are duplicate tags or too many tags on the resource.
 //
-//   * ChannelNotFoundException
-//   This exception is thrown when CloudTrail cannot find the specified channel.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - ChannelNotFoundException
+//     This exception is thrown when CloudTrail cannot find the specified channel.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/RemoveTags
 func (c *CloudTrail) RemoveTags(input *RemoveTagsInput) (*RemoveTagsOutput, error) {
@@ -4841,14 +5397,13 @@ const opRestoreEventDataStore = "RestoreEventDataStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RestoreEventDataStoreRequest method.
+//	req, resp := client.RestoreEventDataStoreRequest(params)
 //
-//    // Example sending a request using the RestoreEventDataStoreRequest method.
-//    req, resp := client.RestoreEventDataStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/RestoreEventDataStore
 func (c *CloudTrail) RestoreEventDataStoreRequest(input *RestoreEventDataStoreInput) (req *request.Request, output *RestoreEventDataStoreOutput) {
@@ -4882,59 +5437,60 @@ func (c *CloudTrail) RestoreEventDataStoreRequest(input *RestoreEventDataStoreIn
 // API operation RestoreEventDataStore for usage and error information.
 //
 // Returned Error Types:
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * EventDataStoreMaxLimitExceededException
-//   Your account has used the maximum number of event data stores.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * InvalidEventDataStoreStatusException
-//   The event data store is not in a status that supports the operation.
+//   - EventDataStoreMaxLimitExceededException
+//     Your account has used the maximum number of event data stores.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InvalidEventDataStoreStatusException
+//     The event data store is not in a status that supports the operation.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * AccessNotEnabledException
-//   This exception is thrown when trusted access has not been enabled between
-//   CloudTrail and Organizations. For more information, see Enabling Trusted
-//   Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
-//   and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - AccessNotEnabledException
+//     This exception is thrown when trusted access has not been enabled between
+//     CloudTrail and Organizations. For more information, see Enabling Trusted
+//     Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+//     and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
-//   * OrganizationsNotInUseException
-//   This exception is thrown when the request is made from an Amazon Web Services
-//   account that is not a member of an organization. To make this request, sign
-//   in using the credentials of an account that belongs to an organization.
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - OrganizationsNotInUseException
+//     This exception is thrown when the request is made from an Amazon Web Services
+//     account that is not a member of an organization. To make this request, sign
+//     in using the credentials of an account that belongs to an organization.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
 //
-//   * OrganizationNotInAllFeaturesModeException
-//   This exception is thrown when Organizations is not configured to support
-//   all features. All features must be enabled in Organizations to support creating
-//   an organization trail or event data store.
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - OrganizationNotInAllFeaturesModeException
+//     This exception is thrown when Organizations is not configured to support
+//     all features. All features must be enabled in Organizations to support creating
+//     an organization trail or event data store.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/RestoreEventDataStore
 func (c *CloudTrail) RestoreEventDataStore(input *RestoreEventDataStoreInput) (*RestoreEventDataStoreOutput, error) {
@@ -4958,6 +5514,125 @@ func (c *CloudTrail) RestoreEventDataStoreWithContext(ctx aws.Context, input *Re
 	return out, req.Send()
 }
 
+const opStartEventDataStoreIngestion = "StartEventDataStoreIngestion"
+
+// StartEventDataStoreIngestionRequest generates a "aws/request.Request" representing the
+// client's request for the StartEventDataStoreIngestion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartEventDataStoreIngestion for more information on using the StartEventDataStoreIngestion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StartEventDataStoreIngestionRequest method.
+//	req, resp := client.StartEventDataStoreIngestionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StartEventDataStoreIngestion
+func (c *CloudTrail) StartEventDataStoreIngestionRequest(input *StartEventDataStoreIngestionInput) (req *request.Request, output *StartEventDataStoreIngestionOutput) {
+	op := &request.Operation{
+		Name:       opStartEventDataStoreIngestion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartEventDataStoreIngestionInput{}
+	}
+
+	output = &StartEventDataStoreIngestionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StartEventDataStoreIngestion API operation for AWS CloudTrail.
+//
+// Starts the ingestion of live events on an event data store specified as either
+// an ARN or the ID portion of the ARN. To start ingestion, the event data store
+// Status must be STOPPED_INGESTION and the eventCategory must be Management,
+// Data, or ConfigurationItem.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CloudTrail's
+// API operation StartEventDataStoreIngestion for usage and error information.
+//
+// Returned Error Types:
+//
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
+//
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
+//
+//   - InvalidEventDataStoreStatusException
+//     The event data store is not in a status that supports the operation.
+//
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
+//
+//   - InvalidEventDataStoreCategoryException
+//     This exception is thrown when event categories of specified event data stores
+//     are not valid.
+//
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StartEventDataStoreIngestion
+func (c *CloudTrail) StartEventDataStoreIngestion(input *StartEventDataStoreIngestionInput) (*StartEventDataStoreIngestionOutput, error) {
+	req, out := c.StartEventDataStoreIngestionRequest(input)
+	return out, req.Send()
+}
+
+// StartEventDataStoreIngestionWithContext is the same as StartEventDataStoreIngestion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartEventDataStoreIngestion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudTrail) StartEventDataStoreIngestionWithContext(ctx aws.Context, input *StartEventDataStoreIngestionInput, opts ...request.Option) (*StartEventDataStoreIngestionOutput, error) {
+	req, out := c.StartEventDataStoreIngestionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartImport = "StartImport"
 
 // StartImportRequest generates a "aws/request.Request" representing the
@@ -4974,14 +5649,13 @@ const opStartImport = "StartImport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartImportRequest method.
+//	req, resp := client.StartImportRequest(params)
 //
-//    // Example sending a request using the StartImportRequest method.
-//    req, resp := client.StartImportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StartImport
 func (c *CloudTrail) StartImportRequest(input *StartImportInput) (req *request.Request, output *StartImportOutput) {
@@ -5030,52 +5704,53 @@ func (c *CloudTrail) StartImportRequest(input *StartImportInput) (req *request.R
 // API operation StartImport for usage and error information.
 //
 // Returned Error Types:
-//   * AccountHasOngoingImportException
-//   This exception is thrown when you start a new import and a previous import
-//   is still in progress.
 //
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
+//   - AccountHasOngoingImportException
+//     This exception is thrown when you start a new import and a previous import
+//     is still in progress.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InvalidEventDataStoreStatusException
-//   The event data store is not in a status that supports the operation.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * InvalidEventDataStoreCategoryException
-//   This exception is thrown when event categories of specified event data stores
-//   are not valid.
+//   - InvalidEventDataStoreStatusException
+//     The event data store is not in a status that supports the operation.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - InvalidEventDataStoreCategoryException
+//     This exception is thrown when event categories of specified event data stores
+//     are not valid.
 //
-//   * InvalidImportSourceException
-//   This exception is thrown when the provided source S3 bucket is not valid
-//   for import.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * ImportNotFoundException
-//   The specified import was not found.
+//   - InvalidImportSourceException
+//     This exception is thrown when the provided source S3 bucket is not valid
+//     for import.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - ImportNotFoundException
+//     The specified import was not found.
 //
-//   * InsufficientEncryptionPolicyException
-//   This exception is thrown when the policy on the S3 bucket or KMS key does
-//   not have sufficient permissions for the operation.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InsufficientEncryptionPolicyException
+//     This exception is thrown when the policy on the S3 bucket or KMS key does
+//     not have sufficient permissions for the operation.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StartImport
 func (c *CloudTrail) StartImport(input *StartImportInput) (*StartImportOutput, error) {
@@ -5115,14 +5790,13 @@ const opStartLogging = "StartLogging"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartLoggingRequest method.
+//	req, resp := client.StartLoggingRequest(params)
 //
-//    // Example sending a request using the StartLoggingRequest method.
-//    req, resp := client.StartLoggingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StartLogging
 func (c *CloudTrail) StartLoggingRequest(input *StartLoggingInput) (req *request.Request, output *StartLoggingOutput) {
@@ -5145,10 +5819,10 @@ func (c *CloudTrail) StartLoggingRequest(input *StartLoggingInput) (req *request
 // StartLogging API operation for AWS CloudTrail.
 //
 // Starts the recording of Amazon Web Services API calls and log file delivery
-// for a trail. For a trail that is enabled in all regions, this operation must
-// be called from the region in which the trail was created. This operation
-// cannot be called on the shadow trails (replicated trails in other regions)
-// of a trail that is enabled in all regions.
+// for a trail. For a trail that is enabled in all Regions, this operation must
+// be called from the Region in which the trail was created. This operation
+// cannot be called on the shadow trails (replicated trails in other Regions)
+// of a trail that is enabled in all Regions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5158,70 +5832,71 @@ func (c *CloudTrail) StartLoggingRequest(input *StartLoggingInput) (req *request
 // API operation StartLogging for usage and error information.
 //
 // Returned Error Types:
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * ConflictException
-//   This exception is thrown when the specified resource is not ready for an
-//   operation. This can occur when you try to run an operation on a resource
-//   before CloudTrail has time to fully load the resource, or because another
-//   operation is modifying the resource. If this exception occurs, wait a few
-//   minutes, and then try the operation again.
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
 //
-//   * TrailNotFoundException
-//   This exception is thrown when the trail with the given name is not found.
+//   - ThrottlingException
+//     This exception is thrown when the request rate exceeds the limit.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - TrailNotFoundException
+//     This exception is thrown when the trail with the given name is not found.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Be between 3 and 128 characters
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Be between 3 and 128 characters
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   * InvalidHomeRegionException
-//   This exception is thrown when an operation is called on a trail from a region
-//   other than the region in which the trail was created.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - InvalidHomeRegionException
+//     This exception is thrown when an operation is called on a trail from a Region
+//     other than the Region in which the trail was created.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StartLogging
 func (c *CloudTrail) StartLogging(input *StartLoggingInput) (*StartLoggingOutput, error) {
@@ -5261,14 +5936,13 @@ const opStartQuery = "StartQuery"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartQueryRequest method.
+//	req, resp := client.StartQueryRequest(params)
 //
-//    // Example sending a request using the StartQueryRequest method.
-//    req, resp := client.StartQueryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StartQuery
 func (c *CloudTrail) StartQueryRequest(input *StartQueryInput) (req *request.Request, output *StartQueryOutput) {
@@ -5289,9 +5963,14 @@ func (c *CloudTrail) StartQueryRequest(input *StartQueryInput) (req *request.Req
 
 // StartQuery API operation for AWS CloudTrail.
 //
-// Starts a CloudTrail Lake query. The required QueryStatement parameter provides
+// Starts a CloudTrail Lake query. Use the QueryStatement parameter to provide
 // your SQL query, enclosed in single quotation marks. Use the optional DeliveryS3Uri
 // parameter to deliver the query results to an S3 bucket.
+//
+// StartQuery requires you specify either the QueryStatement parameter, or a
+// QueryAlias and any QueryParameters. In the current release, the QueryAlias
+// and QueryParameters parameters are used only for the queries that populate
+// the CloudTrail Lake dashboards.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5301,54 +5980,56 @@ func (c *CloudTrail) StartQueryRequest(input *StartQueryInput) (req *request.Req
 // API operation StartQuery for usage and error information.
 //
 // Returned Error Types:
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * InvalidQueryStatementException
-//   The query that was submitted has validation errors, or uses incorrect syntax
-//   or unsupported keywords. For more information about writing a query, see
-//   Create or edit a query (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-create-edit-query.html)
-//   in the CloudTrail User Guide.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * MaxConcurrentQueriesException
-//   You are already running the maximum number of concurrent queries. Wait a
-//   minute for some queries to finish, and then run the query again.
+//   - InvalidQueryStatementException
+//     The query that was submitted has validation errors, or uses incorrect syntax
+//     or unsupported keywords. For more information about writing a query, see
+//     Create or edit a query (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-create-edit-query.html)
+//     in the CloudTrail User Guide.
 //
-//   * InsufficientEncryptionPolicyException
-//   This exception is thrown when the policy on the S3 bucket or KMS key does
-//   not have sufficient permissions for the operation.
+//   - MaxConcurrentQueriesException
+//     You are already running the maximum number of concurrent queries. The maximum
+//     number of concurrent queries is 10. Wait a minute for some queries to finish,
+//     and then run the query again.
 //
-//   * InvalidS3PrefixException
-//   This exception is thrown when the provided S3 prefix is not valid.
+//   - InsufficientEncryptionPolicyException
+//     This exception is thrown when the policy on the S3 bucket or KMS key does
+//     not have sufficient permissions for the operation.
 //
-//   * InvalidS3BucketNameException
-//   This exception is thrown when the provided S3 bucket name is not valid.
+//   - InvalidS3PrefixException
+//     This exception is thrown when the provided S3 prefix is not valid.
 //
-//   * InsufficientS3BucketPolicyException
-//   This exception is thrown when the policy on the S3 bucket is not sufficient.
+//   - InvalidS3BucketNameException
+//     This exception is thrown when the provided S3 bucket name is not valid.
 //
-//   * S3BucketDoesNotExistException
-//   This exception is thrown when the specified S3 bucket does not exist.
+//   - InsufficientS3BucketPolicyException
+//     This exception is thrown when the policy on the S3 bucket is not sufficient.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - S3BucketDoesNotExistException
+//     This exception is thrown when the specified S3 bucket does not exist.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StartQuery
 func (c *CloudTrail) StartQuery(input *StartQueryInput) (*StartQueryOutput, error) {
@@ -5372,6 +6053,125 @@ func (c *CloudTrail) StartQueryWithContext(ctx aws.Context, input *StartQueryInp
 	return out, req.Send()
 }
 
+const opStopEventDataStoreIngestion = "StopEventDataStoreIngestion"
+
+// StopEventDataStoreIngestionRequest generates a "aws/request.Request" representing the
+// client's request for the StopEventDataStoreIngestion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopEventDataStoreIngestion for more information on using the StopEventDataStoreIngestion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StopEventDataStoreIngestionRequest method.
+//	req, resp := client.StopEventDataStoreIngestionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StopEventDataStoreIngestion
+func (c *CloudTrail) StopEventDataStoreIngestionRequest(input *StopEventDataStoreIngestionInput) (req *request.Request, output *StopEventDataStoreIngestionOutput) {
+	op := &request.Operation{
+		Name:       opStopEventDataStoreIngestion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopEventDataStoreIngestionInput{}
+	}
+
+	output = &StopEventDataStoreIngestionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StopEventDataStoreIngestion API operation for AWS CloudTrail.
+//
+// Stops the ingestion of live events on an event data store specified as either
+// an ARN or the ID portion of the ARN. To stop ingestion, the event data store
+// Status must be ENABLED and the eventCategory must be Management, Data, or
+// ConfigurationItem.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CloudTrail's
+// API operation StopEventDataStoreIngestion for usage and error information.
+//
+// Returned Error Types:
+//
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
+//
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
+//
+//   - InvalidEventDataStoreStatusException
+//     The event data store is not in a status that supports the operation.
+//
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
+//
+//   - InvalidEventDataStoreCategoryException
+//     This exception is thrown when event categories of specified event data stores
+//     are not valid.
+//
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
+//
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StopEventDataStoreIngestion
+func (c *CloudTrail) StopEventDataStoreIngestion(input *StopEventDataStoreIngestionInput) (*StopEventDataStoreIngestionOutput, error) {
+	req, out := c.StopEventDataStoreIngestionRequest(input)
+	return out, req.Send()
+}
+
+// StopEventDataStoreIngestionWithContext is the same as StopEventDataStoreIngestion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopEventDataStoreIngestion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudTrail) StopEventDataStoreIngestionWithContext(ctx aws.Context, input *StopEventDataStoreIngestionInput, opts ...request.Option) (*StopEventDataStoreIngestionOutput, error) {
+	req, out := c.StopEventDataStoreIngestionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStopImport = "StopImport"
 
 // StopImportRequest generates a "aws/request.Request" representing the
@@ -5388,14 +6188,13 @@ const opStopImport = "StopImport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopImportRequest method.
+//	req, resp := client.StopImportRequest(params)
 //
-//    // Example sending a request using the StopImportRequest method.
-//    req, resp := client.StopImportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StopImport
 func (c *CloudTrail) StopImportRequest(input *StopImportInput) (req *request.Request, output *StopImportOutput) {
@@ -5426,17 +6225,18 @@ func (c *CloudTrail) StopImportRequest(input *StopImportInput) (req *request.Req
 // API operation StopImport for usage and error information.
 //
 // Returned Error Types:
-//   * ImportNotFoundException
-//   The specified import was not found.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - ImportNotFoundException
+//     The specified import was not found.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StopImport
 func (c *CloudTrail) StopImport(input *StopImportInput) (*StopImportOutput, error) {
@@ -5476,14 +6276,13 @@ const opStopLogging = "StopLogging"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopLoggingRequest method.
+//	req, resp := client.StopLoggingRequest(params)
 //
-//    // Example sending a request using the StopLoggingRequest method.
-//    req, resp := client.StopLoggingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StopLogging
 func (c *CloudTrail) StopLoggingRequest(input *StopLoggingInput) (req *request.Request, output *StopLoggingOutput) {
@@ -5508,11 +6307,11 @@ func (c *CloudTrail) StopLoggingRequest(input *StopLoggingInput) (req *request.R
 // Suspends the recording of Amazon Web Services API calls and log file delivery
 // for the specified trail. Under most circumstances, there is no need to use
 // this action. You can update a trail without stopping it first. This action
-// is the only way to stop recording. For a trail enabled in all regions, this
-// operation must be called from the region in which the trail was created,
+// is the only way to stop recording. For a trail enabled in all Regions, this
+// operation must be called from the Region in which the trail was created,
 // or an InvalidHomeRegionException will occur. This operation cannot be called
-// on the shadow trails (replicated trails in other regions) of a trail enabled
-// in all regions.
+// on the shadow trails (replicated trails in other Regions) of a trail enabled
+// in all Regions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5522,70 +6321,71 @@ func (c *CloudTrail) StopLoggingRequest(input *StopLoggingInput) (req *request.R
 // API operation StopLogging for usage and error information.
 //
 // Returned Error Types:
-//   * TrailNotFoundException
-//   This exception is thrown when the trail with the given name is not found.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - TrailNotFoundException
+//     This exception is thrown when the trail with the given name is not found.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Be between 3 and 128 characters
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Be between 3 and 128 characters
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * ConflictException
-//   This exception is thrown when the specified resource is not ready for an
-//   operation. This can occur when you try to run an operation on a resource
-//   before CloudTrail has time to fully load the resource, or because another
-//   operation is modifying the resource. If this exception occurs, wait a few
-//   minutes, and then try the operation again.
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
 //
-//   * InvalidHomeRegionException
-//   This exception is thrown when an operation is called on a trail from a region
-//   other than the region in which the trail was created.
+//   - ThrottlingException
+//     This exception is thrown when the request rate exceeds the limit.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - InvalidHomeRegionException
+//     This exception is thrown when an operation is called on a trail from a Region
+//     other than the Region in which the trail was created.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/StopLogging
 func (c *CloudTrail) StopLogging(input *StopLoggingInput) (*StopLoggingOutput, error) {
@@ -5625,14 +6425,13 @@ const opUpdateChannel = "UpdateChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateChannelRequest method.
+//	req, resp := client.UpdateChannelRequest(params)
 //
-//    // Example sending a request using the UpdateChannelRequest method.
-//    req, resp := client.UpdateChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/UpdateChannel
 func (c *CloudTrail) UpdateChannelRequest(input *UpdateChannelInput) (req *request.Request, output *UpdateChannelOutput) {
@@ -5663,37 +6462,38 @@ func (c *CloudTrail) UpdateChannelRequest(input *UpdateChannelInput) (req *reque
 // API operation UpdateChannel for usage and error information.
 //
 // Returned Error Types:
-//   * ChannelARNInvalidException
-//   This exception is thrown when the specified value of ChannelARN is not valid.
 //
-//   * ChannelNotFoundException
-//   This exception is thrown when CloudTrail cannot find the specified channel.
+//   - ChannelARNInvalidException
+//     This exception is thrown when the specified value of ChannelARN is not valid.
 //
-//   * ChannelAlreadyExistsException
-//   This exception is thrown when the provided channel already exists.
+//   - ChannelNotFoundException
+//     This exception is thrown when CloudTrail cannot find the specified channel.
 //
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
+//   - ChannelAlreadyExistsException
+//     This exception is thrown when the provided channel already exists.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   * InvalidEventDataStoreCategoryException
-//   This exception is thrown when event categories of specified event data stores
-//   are not valid.
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - InvalidEventDataStoreCategoryException
+//     This exception is thrown when event categories of specified event data stores
+//     are not valid.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
+//
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/UpdateChannel
 func (c *CloudTrail) UpdateChannel(input *UpdateChannelInput) (*UpdateChannelOutput, error) {
@@ -5733,14 +6533,13 @@ const opUpdateEventDataStore = "UpdateEventDataStore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateEventDataStoreRequest method.
+//	req, resp := client.UpdateEventDataStoreRequest(params)
 //
-//    // Example sending a request using the UpdateEventDataStoreRequest method.
-//    req, resp := client.UpdateEventDataStoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/UpdateEventDataStore
 func (c *CloudTrail) UpdateEventDataStoreRequest(input *UpdateEventDataStoreInput) (req *request.Request, output *UpdateEventDataStoreOutput) {
@@ -5764,16 +6563,18 @@ func (c *CloudTrail) UpdateEventDataStoreRequest(input *UpdateEventDataStoreInpu
 // Updates an event data store. The required EventDataStore value is an ARN
 // or the ID portion of the ARN. Other parameters are optional, but at least
 // one optional parameter must be specified, or CloudTrail throws an error.
-// RetentionPeriod is in days, and valid values are integers between 90 and
-// 2557. By default, TerminationProtection is enabled.
+// RetentionPeriod is in days, and valid values are integers between 7 and 3653
+// if the BillingMode is set to EXTENDABLE_RETENTION_PRICING, or between 7 and
+// 2557 if BillingMode is set to FIXED_RETENTION_PRICING. By default, TerminationProtection
+// is enabled.
 //
 // For event data stores for CloudTrail events, AdvancedEventSelectors includes
-// or excludes management and data events in your event data store. For more
-// information about AdvancedEventSelectors, see PutEventSelectorsRequest$AdvancedEventSelectors.
+// or excludes management or data events in your event data store. For more
+// information about AdvancedEventSelectors, see AdvancedEventSelectors (https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_AdvancedEventSelector.html).
 //
-// For event data stores for Config configuration items, Audit Manager evidence,
-// or non-Amazon Web Services events, AdvancedEventSelectors includes events
-// of that type in your event data store.
+// For event data stores for CloudTrail Insights events, Config configuration
+// items, Audit Manager evidence, or non-Amazon Web Services events, AdvancedEventSelectors
+// includes events of that type in your event data store.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5783,102 +6584,123 @@ func (c *CloudTrail) UpdateEventDataStoreRequest(input *UpdateEventDataStoreInpu
 // API operation UpdateEventDataStore for usage and error information.
 //
 // Returned Error Types:
-//   * EventDataStoreARNInvalidException
-//   The specified event data store ARN is not valid or does not map to an event
-//   data store in your account.
 //
-//   * EventDataStoreNotFoundException
-//   The specified event data store was not found.
+//   - EventDataStoreAlreadyExistsException
+//     An event data store with that name already exists.
 //
-//   * InvalidEventSelectorsException
-//   This exception is thrown when the PutEventSelectors operation is called with
-//   a number of event selectors, advanced event selectors, or data resources
-//   that is not valid. The combination of event selectors or advanced event selectors
-//   and data resources is not valid. A trail can have up to 5 event selectors.
-//   If a trail uses advanced event selectors, a maximum of 500 total values for
-//   all conditions in all advanced event selectors is allowed. A trail is limited
-//   to 250 data resources. These data resources can be distributed across event
-//   selectors, but the overall total cannot exceed 250.
+//   - EventDataStoreARNInvalidException
+//     The specified event data store ARN is not valid or does not map to an event
+//     data store in your account.
 //
-//   You can:
+//   - EventDataStoreNotFoundException
+//     The specified event data store was not found.
 //
-//      * Specify a valid number of event selectors (1 to 5) for a trail.
+//   - InvalidEventSelectorsException
+//     This exception is thrown when the PutEventSelectors operation is called with
+//     a number of event selectors, advanced event selectors, or data resources
+//     that is not valid. The combination of event selectors or advanced event selectors
+//     and data resources is not valid. A trail can have up to 5 event selectors.
+//     If a trail uses advanced event selectors, a maximum of 500 total values for
+//     all conditions in all advanced event selectors is allowed. A trail is limited
+//     to 250 data resources. These data resources can be distributed across event
+//     selectors, but the overall total cannot exceed 250.
 //
-//      * Specify a valid number of data resources (1 to 250) for an event selector.
-//      The limit of number of resources on an individual event selector is configurable
-//      up to 250. However, this upper limit is allowed only if the total number
-//      of data resources does not exceed 250 across all event selectors for a
-//      trail.
+//     You can:
 //
-//      * Specify up to 500 values for all conditions in all advanced event selectors
-//      for a trail.
+//   - Specify a valid number of event selectors (1 to 5) for a trail.
 //
-//      * Specify a valid value for a parameter. For example, specifying the ReadWriteType
-//      parameter with a value of read-only is not valid.
+//   - Specify a valid number of data resources (1 to 250) for an event selector.
+//     The limit of number of resources on an individual event selector is configurable
+//     up to 250. However, this upper limit is allowed only if the total number
+//     of data resources does not exceed 250 across all event selectors for a
+//     trail.
 //
-//   * EventDataStoreHasOngoingImportException
-//   This exception is thrown when you try to update or delete an event data store
-//   that currently has an import in progress.
+//   - Specify up to 500 values for all conditions in all advanced event selectors
+//     for a trail.
 //
-//   * InactiveEventDataStoreException
-//   The event data store is inactive.
+//   - Specify a valid value for a parameter. For example, specifying the ReadWriteType
+//     parameter with a value of read-only is not valid.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - InvalidInsightSelectorsException
+//     For PutInsightSelectors, this exception is thrown when the formatting or
+//     syntax of the InsightSelectors JSON statement is not valid, or the specified
+//     InsightType in the InsightSelectors statement is not valid. Valid values
+//     for InsightType are ApiCallRateInsight and ApiErrorRateInsight. To enable
+//     Insights on an event data store, the destination event data store specified
+//     by the InsightsDestination parameter must log Insights events and the source
+//     event data store specified by the EventDataStore parameter must log management
+//     events.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//     For UpdateEventDataStore, this exception is thrown if Insights are enabled
+//     on the event data store and the updated advanced event selectors are not
+//     compatible with the configured InsightSelectors. If the InsightSelectors
+//     includes an InsightType of ApiCallRateInsight, the source event data store
+//     must log write management events. If the InsightSelectors includes an InsightType
+//     of ApiErrorRateInsight, the source event data store must log management events.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - EventDataStoreHasOngoingImportException
+//     This exception is thrown when you try to update or delete an event data store
+//     that currently has an import in progress.
 //
-//   * InsufficientEncryptionPolicyException
-//   This exception is thrown when the policy on the S3 bucket or KMS key does
-//   not have sufficient permissions for the operation.
+//   - InactiveEventDataStoreException
+//     The event data store is inactive.
 //
-//   * InvalidKmsKeyIdException
-//   This exception is thrown when the KMS key ARN is not valid.
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
-//   * KmsKeyNotFoundException
-//   This exception is thrown when the KMS key does not exist, when the S3 bucket
-//   and the KMS key are not in the same region, or when the KMS key associated
-//   with the Amazon SNS topic either does not exist or is not in the same region.
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * KmsException
-//   This exception is thrown when there is an issue with the specified KMS key
-//   and the trail or event data store can't be updated.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * AccessNotEnabledException
-//   This exception is thrown when trusted access has not been enabled between
-//   CloudTrail and Organizations. For more information, see Enabling Trusted
-//   Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
-//   and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   - InsufficientEncryptionPolicyException
+//     This exception is thrown when the policy on the S3 bucket or KMS key does
+//     not have sufficient permissions for the operation.
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - InvalidKmsKeyIdException
+//     This exception is thrown when the KMS key ARN is not valid.
 //
-//   * OrganizationsNotInUseException
-//   This exception is thrown when the request is made from an Amazon Web Services
-//   account that is not a member of an organization. To make this request, sign
-//   in using the credentials of an account that belongs to an organization.
+//   - KmsKeyNotFoundException
+//     This exception is thrown when the KMS key does not exist, when the S3 bucket
+//     and the KMS key are not in the same Region, or when the KMS key associated
+//     with the Amazon SNS topic either does not exist or is not in the same Region.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - KmsException
+//     This exception is thrown when there is an issue with the specified KMS key
+//     and the trail or event data store can't be updated.
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - AccessNotEnabledException
+//     This exception is thrown when trusted access has not been enabled between
+//     CloudTrail and Organizations. For more information, see Enabling Trusted
+//     Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+//     and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
-//   * OrganizationNotInAllFeaturesModeException
-//   This exception is thrown when Organizations is not configured to support
-//   all features. All features must be enabled in Organizations to support creating
-//   an organization trail or event data store.
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
+//
+//   - OrganizationsNotInUseException
+//     This exception is thrown when the request is made from an Amazon Web Services
+//     account that is not a member of an organization. To make this request, sign
+//     in using the credentials of an account that belongs to an organization.
+//
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
+//
+//   - OrganizationNotInAllFeaturesModeException
+//     This exception is thrown when Organizations is not configured to support
+//     all features. All features must be enabled in Organizations to support creating
+//     an organization trail or event data store.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/UpdateEventDataStore
 func (c *CloudTrail) UpdateEventDataStore(input *UpdateEventDataStoreInput) (*UpdateEventDataStoreOutput, error) {
@@ -5918,14 +6740,13 @@ const opUpdateTrail = "UpdateTrail"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateTrailRequest method.
+//	req, resp := client.UpdateTrailRequest(params)
 //
-//    // Example sending a request using the UpdateTrailRequest method.
-//    req, resp := client.UpdateTrailRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/UpdateTrail
 func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.Request, output *UpdateTrailOutput) {
@@ -5951,7 +6772,7 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 // service. Use this action to designate an existing bucket for log delivery.
 // If the existing bucket has previously been a target for CloudTrail log files,
 // an IAM policy exists for the bucket. UpdateTrail must be called from the
-// region in which the trail was created; otherwise, an InvalidHomeRegionException
+// Region in which the trail was created; otherwise, an InvalidHomeRegionException
 // is thrown.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -5962,175 +6783,176 @@ func (c *CloudTrail) UpdateTrailRequest(input *UpdateTrailInput) (req *request.R
 // API operation UpdateTrail for usage and error information.
 //
 // Returned Error Types:
-//   * S3BucketDoesNotExistException
-//   This exception is thrown when the specified S3 bucket does not exist.
 //
-//   * InsufficientS3BucketPolicyException
-//   This exception is thrown when the policy on the S3 bucket is not sufficient.
+//   - S3BucketDoesNotExistException
+//     This exception is thrown when the specified S3 bucket does not exist.
 //
-//   * InsufficientSnsTopicPolicyException
-//   This exception is thrown when the policy on the Amazon SNS topic is not sufficient.
+//   - InsufficientS3BucketPolicyException
+//     This exception is thrown when the policy on the S3 bucket is not sufficient.
 //
-//   * InsufficientEncryptionPolicyException
-//   This exception is thrown when the policy on the S3 bucket or KMS key does
-//   not have sufficient permissions for the operation.
+//   - InsufficientSnsTopicPolicyException
+//     This exception is thrown when the policy on the Amazon SNS topic is not sufficient.
 //
-//   * TrailNotFoundException
-//   This exception is thrown when the trail with the given name is not found.
+//   - InsufficientEncryptionPolicyException
+//     This exception is thrown when the policy on the S3 bucket or KMS key does
+//     not have sufficient permissions for the operation.
 //
-//   * InvalidS3BucketNameException
-//   This exception is thrown when the provided S3 bucket name is not valid.
+//   - TrailNotFoundException
+//     This exception is thrown when the trail with the given name is not found.
 //
-//   * InvalidS3PrefixException
-//   This exception is thrown when the provided S3 prefix is not valid.
+//   - InvalidS3BucketNameException
+//     This exception is thrown when the provided S3 bucket name is not valid.
 //
-//   * InvalidSnsTopicNameException
-//   This exception is thrown when the provided SNS topic name is not valid.
+//   - InvalidS3PrefixException
+//     This exception is thrown when the provided S3 prefix is not valid.
 //
-//   * InvalidKmsKeyIdException
-//   This exception is thrown when the KMS key ARN is not valid.
+//   - InvalidSnsTopicNameException
+//     This exception is thrown when the provided SNS topic name is not valid.
 //
-//   * InvalidTrailNameException
-//   This exception is thrown when the provided trail name is not valid. Trail
-//   names must meet the following requirements:
+//   - InvalidKmsKeyIdException
+//     This exception is thrown when the KMS key ARN is not valid.
 //
-//      * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//      (_), or dashes (-)
+//   - InvalidTrailNameException
+//     This exception is thrown when the provided trail name is not valid. Trail
+//     names must meet the following requirements:
 //
-//      * Start with a letter or number, and end with a letter or number
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//      * Be between 3 and 128 characters
+//   - Start with a letter or number, and end with a letter or number
 //
-//      * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//      and my--namespace are not valid.
+//   - Be between 3 and 128 characters
 //
-//      * Not be in IP address format (for example, 192.168.5.4)
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//   * TrailNotProvidedException
-//   This exception is no longer in use.
+//   - Not be in IP address format (for example, 192.168.5.4)
 //
-//   * InvalidEventSelectorsException
-//   This exception is thrown when the PutEventSelectors operation is called with
-//   a number of event selectors, advanced event selectors, or data resources
-//   that is not valid. The combination of event selectors or advanced event selectors
-//   and data resources is not valid. A trail can have up to 5 event selectors.
-//   If a trail uses advanced event selectors, a maximum of 500 total values for
-//   all conditions in all advanced event selectors is allowed. A trail is limited
-//   to 250 data resources. These data resources can be distributed across event
-//   selectors, but the overall total cannot exceed 250.
+//   - TrailNotProvidedException
+//     This exception is no longer in use.
 //
-//   You can:
+//   - InvalidEventSelectorsException
+//     This exception is thrown when the PutEventSelectors operation is called with
+//     a number of event selectors, advanced event selectors, or data resources
+//     that is not valid. The combination of event selectors or advanced event selectors
+//     and data resources is not valid. A trail can have up to 5 event selectors.
+//     If a trail uses advanced event selectors, a maximum of 500 total values for
+//     all conditions in all advanced event selectors is allowed. A trail is limited
+//     to 250 data resources. These data resources can be distributed across event
+//     selectors, but the overall total cannot exceed 250.
 //
-//      * Specify a valid number of event selectors (1 to 5) for a trail.
+//     You can:
 //
-//      * Specify a valid number of data resources (1 to 250) for an event selector.
-//      The limit of number of resources on an individual event selector is configurable
-//      up to 250. However, this upper limit is allowed only if the total number
-//      of data resources does not exceed 250 across all event selectors for a
-//      trail.
+//   - Specify a valid number of event selectors (1 to 5) for a trail.
 //
-//      * Specify up to 500 values for all conditions in all advanced event selectors
-//      for a trail.
+//   - Specify a valid number of data resources (1 to 250) for an event selector.
+//     The limit of number of resources on an individual event selector is configurable
+//     up to 250. However, this upper limit is allowed only if the total number
+//     of data resources does not exceed 250 across all event selectors for a
+//     trail.
 //
-//      * Specify a valid value for a parameter. For example, specifying the ReadWriteType
-//      parameter with a value of read-only is not valid.
+//   - Specify up to 500 values for all conditions in all advanced event selectors
+//     for a trail.
 //
-//   * ARNInvalidException
-//   This exception is thrown when an operation is called with a trail ARN that
-//   is not valid. The following is the format of a trail ARN.
+//   - Specify a valid value for a parameter. For example, specifying the ReadWriteType
+//     parameter with a value of read-only is not valid.
 //
-//   arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+//   - ARNInvalidException
+//     This exception is thrown when an operation is called with an ARN that is
+//     not valid.
 //
-//   This exception is also thrown when you call AddTags or RemoveTags on a trail,
-//   event data store, or channel with a resource ARN that is not valid.
+//     The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-//   The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+//     The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
-//   The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+//     The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 //
-//   * ConflictException
-//   This exception is thrown when the specified resource is not ready for an
-//   operation. This can occur when you try to run an operation on a resource
-//   before CloudTrail has time to fully load the resource, or because another
-//   operation is modifying the resource. If this exception occurs, wait a few
-//   minutes, and then try the operation again.
+//   - ConflictException
+//     This exception is thrown when the specified resource is not ready for an
+//     operation. This can occur when you try to run an operation on a resource
+//     before CloudTrail has time to fully load the resource, or because another
+//     operation is modifying the resource. If this exception occurs, wait a few
+//     minutes, and then try the operation again.
 //
-//   * InvalidParameterCombinationException
-//   This exception is thrown when the combination of parameters provided is not
-//   valid.
+//   - ThrottlingException
+//     This exception is thrown when the request rate exceeds the limit.
 //
-//   * InvalidHomeRegionException
-//   This exception is thrown when an operation is called on a trail from a region
-//   other than the region in which the trail was created.
+//   - InvalidParameterCombinationException
+//     This exception is thrown when the combination of parameters provided is not
+//     valid.
 //
-//   * KmsKeyNotFoundException
-//   This exception is thrown when the KMS key does not exist, when the S3 bucket
-//   and the KMS key are not in the same region, or when the KMS key associated
-//   with the Amazon SNS topic either does not exist or is not in the same region.
+//   - InvalidHomeRegionException
+//     This exception is thrown when an operation is called on a trail from a Region
+//     other than the Region in which the trail was created.
 //
-//   * KmsKeyDisabledException
-//   This exception is no longer in use.
+//   - KmsKeyNotFoundException
+//     This exception is thrown when the KMS key does not exist, when the S3 bucket
+//     and the KMS key are not in the same Region, or when the KMS key associated
+//     with the Amazon SNS topic either does not exist or is not in the same Region.
 //
-//   * KmsException
-//   This exception is thrown when there is an issue with the specified KMS key
-//   and the trail or event data store can't be updated.
+//   - KmsKeyDisabledException
+//     This exception is no longer in use.
 //
-//   * InvalidCloudWatchLogsLogGroupArnException
-//   This exception is thrown when the provided CloudWatch Logs log group is not
-//   valid.
+//   - KmsException
+//     This exception is thrown when there is an issue with the specified KMS key
+//     and the trail or event data store can't be updated.
 //
-//   * InvalidCloudWatchLogsRoleArnException
-//   This exception is thrown when the provided role is not valid.
+//   - InvalidCloudWatchLogsLogGroupArnException
+//     This exception is thrown when the provided CloudWatch Logs log group is not
+//     valid.
 //
-//   * CloudWatchLogsDeliveryUnavailableException
-//   Cannot set a CloudWatch Logs delivery for this region.
+//   - InvalidCloudWatchLogsRoleArnException
+//     This exception is thrown when the provided role is not valid.
 //
-//   * UnsupportedOperationException
-//   This exception is thrown when the requested operation is not supported.
+//   - CloudWatchLogsDeliveryUnavailableException
+//     Cannot set a CloudWatch Logs delivery for this Region.
 //
-//   * OperationNotPermittedException
-//   This exception is thrown when the requested operation is not permitted.
+//   - UnsupportedOperationException
+//     This exception is thrown when the requested operation is not supported.
 //
-//   * AccessNotEnabledException
-//   This exception is thrown when trusted access has not been enabled between
-//   CloudTrail and Organizations. For more information, see Enabling Trusted
-//   Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
-//   and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
+//   - OperationNotPermittedException
+//     This exception is thrown when the requested operation is not permitted.
 //
-//   * InsufficientDependencyServiceAccessPermissionException
-//   This exception is thrown when the IAM user or role that is used to create
-//   the organization resource lacks one or more required permissions for creating
-//   an organization resource in a required service.
+//   - AccessNotEnabledException
+//     This exception is thrown when trusted access has not been enabled between
+//     CloudTrail and Organizations. For more information, see Enabling Trusted
+//     Access with Other Amazon Web Services Services (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html)
+//     and Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html).
 //
-//   * OrganizationsNotInUseException
-//   This exception is thrown when the request is made from an Amazon Web Services
-//   account that is not a member of an organization. To make this request, sign
-//   in using the credentials of an account that belongs to an organization.
+//   - InsufficientDependencyServiceAccessPermissionException
+//     This exception is thrown when the IAM identity that is used to create the
+//     organization resource lacks one or more required permissions for creating
+//     an organization resource in a required service.
 //
-//   * NotOrganizationMasterAccountException
-//   This exception is thrown when the Amazon Web Services account making the
-//   request to create or update an organization trail or event data store is
-//   not the management account for an organization in Organizations. For more
-//   information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
-//   or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
+//   - OrganizationsNotInUseException
+//     This exception is thrown when the request is made from an Amazon Web Services
+//     account that is not a member of an organization. To make this request, sign
+//     in using the credentials of an account that belongs to an organization.
 //
-//   * OrganizationNotInAllFeaturesModeException
-//   This exception is thrown when Organizations is not configured to support
-//   all features. All features must be enabled in Organizations to support creating
-//   an organization trail or event data store.
+//   - NotOrganizationMasterAccountException
+//     This exception is thrown when the Amazon Web Services account making the
+//     request to create or update an organization trail or event data store is
+//     not the management account for an organization in Organizations. For more
+//     information, see Prepare For Creating a Trail For Your Organization (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html)
+//     or Create an event data store (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store.html).
 //
-//   * NoManagementAccountSLRExistsException
-//   This exception is thrown when the management account does not have a service-linked
-//   role.
+//   - OrganizationNotInAllFeaturesModeException
+//     This exception is thrown when Organizations is not configured to support
+//     all features. All features must be enabled in Organizations to support creating
+//     an organization trail or event data store.
 //
-//   * CloudTrailInvalidClientTokenIdException
-//   This exception is thrown when a call results in the InvalidClientTokenId
-//   error code. This can occur when you are creating or updating a trail to send
-//   notifications to an Amazon SNS topic that is in a suspended Amazon Web Services
-//   account.
+//   - NoManagementAccountSLRExistsException
+//     This exception is thrown when the management account does not have a service-linked
+//     role.
 //
-//   * InvalidParameterException
-//   The request includes a parameter that is not valid.
+//   - CloudTrailInvalidClientTokenIdException
+//     This exception is thrown when a call results in the InvalidClientTokenId
+//     error code. This can occur when you are creating or updating a trail to send
+//     notifications to an Amazon SNS topic that is in a suspended Amazon Web Services
+//     account.
+//
+//   - InvalidParameterException
+//     The request includes a parameter that is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-2013-11-01/UpdateTrail
 func (c *CloudTrail) UpdateTrail(input *UpdateTrailInput) (*UpdateTrailOutput, error) {
@@ -6154,15 +6976,12 @@ func (c *CloudTrail) UpdateTrailWithContext(ctx aws.Context, input *UpdateTrailI
 	return out, req.Send()
 }
 
-// This exception is thrown when an operation is called with a trail ARN that
-// is not valid. The following is the format of a trail ARN.
+// This exception is thrown when an operation is called with an ARN that is
+// not valid.
 //
-// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+// The following is the format of a trail ARN: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 //
-// This exception is also thrown when you call AddTags or RemoveTags on a trail,
-// event data store, or channel with a resource ARN that is not valid.
-//
-// The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+// The following is the format of an event data store ARN: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 //
 // The following is the format of a channel ARN: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 type ARNInvalidException struct {
@@ -6225,6 +7044,70 @@ func (s *ARNInvalidException) StatusCode() int {
 
 // RequestID returns the service's response RequestID for request.
 func (s *ARNInvalidException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// You do not have sufficient access to perform this action.
+type AccessDeniedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
+	return &AccessDeniedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccessDeniedException) Code() string {
+	return "AccessDeniedException"
+}
+
+// Message returns the exception's message.
+func (s *AccessDeniedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccessDeniedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccessDeniedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccessDeniedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccessDeniedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
@@ -6564,7 +7447,7 @@ type AddTagsInput struct {
 	//
 	// The format of a trail ARN is: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
-	// The format of an event data store ARN is: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+	// The format of an event data store ARN is: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 	//
 	// The format of a channel ARN is: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 	//
@@ -6656,25 +7539,38 @@ func (s AddTagsOutput) GoString() string {
 	return s.String()
 }
 
-// Advanced event selectors let you create fine-grained selectors for the following
-// CloudTrail event record ﬁelds. They help you control costs by logging only
-// those events that are important to you. For more information about advanced
-// event selectors, see Logging data events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
+// Advanced event selectors let you create fine-grained selectors for CloudTrail
+// management and data events. They help you control costs by logging only those
+// events that are important to you. For more information about advanced event
+// selectors, see Logging management events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-events-with-cloudtrail.html)
+// and Logging data events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
 // in the CloudTrail User Guide.
 //
-//    * readOnly
-//
-//    * eventSource
-//
-//    * eventName
-//
-//    * eventCategory
-//
-//    * resources.type
-//
-//    * resources.ARN
-//
 // You cannot apply both event selectors and advanced event selectors to a trail.
+//
+// Supported CloudTrail event record fields for management events
+//
+//   - eventCategory (required)
+//
+//   - eventSource
+//
+//   - readOnly
+//
+// Supported CloudTrail event record fields for data events
+//
+//   - eventCategory (required)
+//
+//   - resources.type (required)
+//
+//   - readOnly
+//
+//   - eventName
+//
+//   - resources.ARN
+//
+// For event data stores for CloudTrail Insights events, Config configuration
+// items, Audit Manager evidence, or events outside of Amazon Web Services,
+// the only supported field is eventCategory.
 type AdvancedEventSelector struct {
 	_ struct{} `type:"structure"`
 
@@ -6758,15 +7654,19 @@ type AdvancedFieldSelector struct {
 	Equals []*string `min:"1" type:"list"`
 
 	// A field in a CloudTrail event record on which to filter events to be logged.
-	// For event data stores for Config configuration items, Audit Manager evidence,
-	// or non-Amazon Web Services events, the field is used only for selecting events
-	// as filtering is not supported.
+	// For event data stores for CloudTrail Insights events, Config configuration
+	// items, Audit Manager evidence, or events outside of Amazon Web Services,
+	// the field is used only for selecting events as filtering is not supported.
 	//
-	// For CloudTrail event records, supported fields include readOnly, eventCategory,
-	// eventSource (for management events), eventName, resources.type, and resources.ARN.
+	// For CloudTrail management events, supported fields include readOnly, eventCategory,
+	// and eventSource.
 	//
-	// For event data stores for Config configuration items, Audit Manager evidence,
-	// or non-Amazon Web Services events, the only supported field is eventCategory.
+	// For CloudTrail data events, supported fields include readOnly, eventCategory,
+	// eventName, resources.type, and resources.ARN.
+	//
+	// For event data stores for CloudTrail Insights events, Config configuration
+	// items, Audit Manager evidence, or events outside of Amazon Web Services,
+	// the only supported field is eventCategory.
 	//
 	//    * readOnly - Optional. Can be set to Equals a value of true or false.
 	//    If you do not add this field, CloudTrail logs both read and write events.
@@ -6774,27 +7674,43 @@ type AdvancedFieldSelector struct {
 	//    events.
 	//
 	//    * eventSource - For filtering management events only. This can be set
-	//    only to NotEquals kms.amazonaws.com.
+	//    to NotEquals kms.amazonaws.com or NotEquals rdsdata.amazonaws.com.
 	//
 	//    * eventName - Can use any operator. You can use it to ﬁlter in or ﬁlter
 	//    out any data event logged to CloudTrail, such as PutBucket or GetSnapshotBlock.
 	//    You can have multiple values for this ﬁeld, separated by commas.
 	//
 	//    * eventCategory - This is required and must be set to Equals. For CloudTrail
-	//    event records, the value must be Management or Data. For Config configuration
-	//    items, the value must be ConfigurationItem. For Audit Manager evidence,
-	//    the value must be Evidence. For non-Amazon Web Services events, the value
-	//    must be ActivityAuditLog.
+	//    management events, the value must be Management. For CloudTrail data events,
+	//    the value must be Data. The following are used only for event data stores:
+	//    For CloudTrail Insights events, the value must be Insight. For Config
+	//    configuration items, the value must be ConfigurationItem. For Audit Manager
+	//    evidence, the value must be Evidence. For non-Amazon Web Services events,
+	//    the value must be ActivityAuditLog.
 	//
 	//    * resources.type - This ﬁeld is required for CloudTrail data events.
 	//    resources.type can only use the Equals operator, and the value can be
-	//    one of the following: AWS::CloudTrail::Channel AWS::S3::Object AWS::Lambda::Function
-	//    AWS::DynamoDB::Table AWS::S3Outposts::Object AWS::ManagedBlockchain::Node
-	//    AWS::S3ObjectLambda::AccessPoint AWS::EC2::Snapshot AWS::S3::AccessPoint
-	//    AWS::DynamoDB::Stream AWS::Glue::Table AWS::FinSpace::Environment AWS::SageMaker::ExperimentTrialComponent
-	//    AWS::SageMaker::FeatureGroup You can have only one resources.type ﬁeld
-	//    per selector. To log data events on more than one resource type, add another
-	//    selector.
+	//    one of the following: AWS::DynamoDB::Table AWS::Lambda::Function AWS::S3::Object
+	//    AWS::AppConfig::Configuration AWS::B2BI::Transformer AWS::Bedrock::AgentAlias
+	//    AWS::Bedrock::KnowledgeBase AWS::Cassandra::Table AWS::CloudFront::KeyValueStore
+	//    AWS::CloudTrail::Channel AWS::CodeWhisperer::Customization AWS::CodeWhisperer::Profile
+	//    AWS::Cognito::IdentityPool AWS::DynamoDB::Stream AWS::EC2::Snapshot AWS::EMRWAL::Workspace
+	//    AWS::FinSpace::Environment AWS::Glue::Table AWS::GreengrassV2::ComponentVersion
+	//    AWS::GreengrassV2::Deployment AWS::GuardDuty::Detector AWS::IoT::Certificate
+	//    AWS::IoT::Thing AWS::IoTSiteWise::Asset AWS::IoTSiteWise::TimeSeries AWS::IoTTwinMaker::Entity
+	//    AWS::IoTTwinMaker::Workspace AWS::KendraRanking::ExecutionPlan AWS::KinesisVideo::Stream
+	//    AWS::ManagedBlockchain::Network AWS::ManagedBlockchain::Node AWS::MedicalImaging::Datastore
+	//    AWS::NeptuneGraph::Graph AWS::PCAConnectorAD::Connector AWS::QBusiness::Application
+	//    AWS::QBusiness::DataSource AWS::QBusiness::Index AWS::QBusiness::WebExperience
+	//    AWS::RDS::DBCluster AWS::S3::AccessPoint AWS::S3ObjectLambda::AccessPoint
+	//    AWS::S3Outposts::Object AWS::SageMaker::Endpoint AWS::SageMaker::ExperimentTrialComponent
+	//    AWS::SageMaker::FeatureGroup AWS::ServiceDiscovery::Namespace AWS::ServiceDiscovery::Service
+	//    AWS::SCN::Instance AWS::SNS::PlatformEndpoint AWS::SNS::Topic AWS::SWF::Domain
+	//    AWS::SQS::Queue AWS::SSMMessages::ControlChannel AWS::ThinClient::Device
+	//    AWS::ThinClient::Environment AWS::Timestream::Database AWS::Timestream::Table
+	//    AWS::VerifiedPermissions::PolicyStore You can have only one resources.type
+	//    ﬁeld per selector. To log data events on more than one resource type,
+	//    add another selector.
 	//
 	//    * resources.ARN - You can use any operator with resources.ARN, but if
 	//    you use Equals or NotEquals, the value must exactly match the ARN of a
@@ -6806,42 +7722,159 @@ type AdvancedFieldSelector struct {
 	//    is intentional; do not exclude it. Replace the text between less than
 	//    and greater than symbols (<>) with resource-specific information. arn:<partition>:s3:::<bucket_name>/
 	//    arn:<partition>:s3:::<bucket_name>/<object_path>/ When resources.type
-	//    equals AWS::S3::AccessPoint, and the operator is set to Equals or NotEquals,
-	//    the ARN must be in one of the following formats. To log events on all
-	//    objects in an S3 access point, we recommend that you use only the access
-	//    point ARN, don’t include the object path, and use the StartsWith or
-	//    NotStartsWith operators. arn:<partition>:s3:<region>:<account_ID>:accesspoint/<access_point_name>
-	//    arn:<partition>:s3:<region>:<account_ID>:accesspoint/<access_point_name>/object/<object_path>
+	//    equals AWS::DynamoDB::Table, and the operator is set to Equals or NotEquals,
+	//    the ARN must be in the following format: arn:<partition>:dynamodb:<region>:<account_ID>:table/<table_name>
 	//    When resources.type equals AWS::Lambda::Function, and the operator is
 	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:lambda:<region>:<account_ID>:function:<function_name>
-	//    When resources.type equals AWS::DynamoDB::Table, and the operator is set
-	//    to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:dynamodb:<region>:<account_ID>:table/<table_name>
+	//    When resources.type equals AWS::AppConfig::Configuration, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:appconfig:<region>:<account_ID>:application/<application_ID>/environment/<environment_ID>/configuration/<configuration_profile_ID>
+	//    When resources.type equals AWS::B2BI::Transformer, and the operator is
+	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:b2bi:<region>:<account_ID>:transformer/<transformer_ID>
+	//    When resources.type equals AWS::Bedrock::AgentAlias, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:bedrock:<region>:<account_ID>:agent-alias/<agent_ID>/<alias_ID>
+	//    When resources.type equals AWS::Bedrock::KnowledgeBase, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:bedrock:<region>:<account_ID>:knowledge-base/<knowledge_base_ID>
+	//    When resources.type equals AWS::Cassandra::Table, and the operator is
+	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:cassandra:<region>:<account_ID>:/keyspace/<keyspace_name>/table/<table_name>
+	//    When resources.type equals AWS::CloudFront::KeyValueStore, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:cloudfront:<region>:<account_ID>:key-value-store/<KVS_name>
 	//    When resources.type equals AWS::CloudTrail::Channel, and the operator
 	//    is set to Equals or NotEquals, the ARN must be in the following format:
 	//    arn:<partition>:cloudtrail:<region>:<account_ID>:channel/<channel_UUID>
-	//    When resources.type equals AWS::S3Outposts::Object, and the operator is
-	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:s3-outposts:<region>:<account_ID>:<object_path>
-	//    When resources.type equals AWS::ManagedBlockchain::Node, and the operator
+	//    When resources.type equals AWS::CodeWhisperer::Customization, and the
+	//    operator is set to Equals or NotEquals, the ARN must be in the following
+	//    format: arn:<partition>:codewhisperer:<region>:<account_ID>:customization/<customization_ID>
+	//    When resources.type equals AWS::CodeWhisperer::Profile, and the operator
 	//    is set to Equals or NotEquals, the ARN must be in the following format:
-	//    arn:<partition>:managedblockchain:<region>:<account_ID>:nodes/<node_ID>
-	//    When resources.type equals AWS::S3ObjectLambda::AccessPoint, and the operator
+	//    arn:<partition>:codewhisperer:<region>:<account_ID>:profile/<profile_ID>
+	//    When resources.type equals AWS::Cognito::IdentityPool, and the operator
 	//    is set to Equals or NotEquals, the ARN must be in the following format:
-	//    arn:<partition>:s3-object-lambda:<region>:<account_ID>:accesspoint/<access_point_name>
-	//    When resources.type equals AWS::EC2::Snapshot, and the operator is set
-	//    to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:ec2:<region>::snapshot/<snapshot_ID>
+	//    arn:<partition>:cognito-identity:<region>:<account_ID>:identitypool/<identity_pool_ID>
 	//    When resources.type equals AWS::DynamoDB::Stream, and the operator is
 	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:dynamodb:<region>:<account_ID>:table/<table_name>/stream/<date_time>
-	//    When resources.type equals AWS::Glue::Table, and the operator is set to
-	//    Equals or NotEquals, the ARN must be in the following format: arn:<partition>:glue:<region>:<account_ID>:table/<database_name>/<table_name>
+	//    When resources.type equals AWS::EC2::Snapshot, and the operator is set
+	//    to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:ec2:<region>::snapshot/<snapshot_ID>
+	//    When resources.type equals AWS::EMRWAL::Workspace, and the operator is
+	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:emrwal:<region>:<account_ID>:workspace/<workspace_name>
 	//    When resources.type equals AWS::FinSpace::Environment, and the operator
 	//    is set to Equals or NotEquals, the ARN must be in the following format:
 	//    arn:<partition>:finspace:<region>:<account_ID>:environment/<environment_ID>
+	//    When resources.type equals AWS::Glue::Table, and the operator is set to
+	//    Equals or NotEquals, the ARN must be in the following format: arn:<partition>:glue:<region>:<account_ID>:table/<database_name>/<table_name>
+	//    When resources.type equals AWS::GreengrassV2::ComponentVersion, and the
+	//    operator is set to Equals or NotEquals, the ARN must be in the following
+	//    format: arn:<partition>:greengrass:<region>:<account_ID>:components/<component_name>
+	//    When resources.type equals AWS::GreengrassV2::Deployment, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:greengrass:<region>:<account_ID>:deployments/<deployment_ID
+	//    When resources.type equals AWS::GuardDuty::Detector, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:guardduty:<region>:<account_ID>:detector/<detector_ID>
+	//    When resources.type equals AWS::IoT::Certificate, and the operator is
+	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:iot:<region>:<account_ID>:cert/<certificate_ID>
+	//    When resources.type equals AWS::IoT::Thing, and the operator is set to
+	//    Equals or NotEquals, the ARN must be in the following format: arn:<partition>:iot:<region>:<account_ID>:thing/<thing_ID>
+	//    When resources.type equals AWS::IoTSiteWise::Asset, and the operator is
+	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:iotsitewise:<region>:<account_ID>:asset/<asset_ID>
+	//    When resources.type equals AWS::IoTSiteWise::TimeSeries, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:iotsitewise:<region>:<account_ID>:timeseries/<timeseries_ID>
+	//    When resources.type equals AWS::IoTTwinMaker::Entity, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:iottwinmaker:<region>:<account_ID>:workspace/<workspace_ID>/entity/<entity_ID>
+	//    When resources.type equals AWS::IoTTwinMaker::Workspace, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:iottwinmaker:<region>:<account_ID>:workspace/<workspace_ID>
+	//    When resources.type equals AWS::KendraRanking::ExecutionPlan, and the
+	//    operator is set to Equals or NotEquals, the ARN must be in the following
+	//    format: arn:<partition>:kendra-ranking:<region>:<account_ID>:rescore-execution-plan/<rescore_execution_plan_ID>
+	//    When resources.type equals AWS::KinesisVideo::Stream, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:kinesisvideo:<region>:<account_ID>:stream/<stream_name>/<creation_time>
+	//    When resources.type equals AWS::ManagedBlockchain::Network, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:managedblockchain:::networks/<network_name> When resources.type
+	//    equals AWS::ManagedBlockchain::Node, and the operator is set to Equals
+	//    or NotEquals, the ARN must be in the following format: arn:<partition>:managedblockchain:<region>:<account_ID>:nodes/<node_ID>
+	//    When resources.type equals AWS::MedicalImaging::Datastore, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:medical-imaging:<region>:<account_ID>:datastore/<data_store_ID>
+	//    When resources.type equals AWS::NeptuneGraph::Graph, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:neptune-graph:<region>:<account_ID>:graph/<graph_ID> When
+	//    resources.type equals AWS::PCAConnectorAD::Connector, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:pca-connector-ad:<region>:<account_ID>:connector/<connector_ID>
+	//    When resources.type equals AWS::QBusiness::Application, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:qbusiness:<region>:<account_ID>:application/<application_ID>
+	//    When resources.type equals AWS::QBusiness::DataSource, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:qbusiness:<region>:<account_ID>:application/<application_ID>/index/<index_ID>/data-source/<datasource_ID>
+	//    When resources.type equals AWS::QBusiness::Index, and the operator is
+	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:qbusiness:<region>:<account_ID>:application/<application_ID>/index/<index_ID>
+	//    When resources.type equals AWS::QBusiness::WebExperience, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:qbusiness:<region>:<account_ID>:application/<application_ID>/web-experience/<web_experience_ID>
+	//    When resources.type equals AWS::RDS::DBCluster, and the operator is set
+	//    to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:rds:<region>:<account_ID>:cluster/<cluster_name>
+	//    When resources.type equals AWS::S3::AccessPoint, and the operator is set
+	//    to Equals or NotEquals, the ARN must be in one of the following formats.
+	//    To log events on all objects in an S3 access point, we recommend that
+	//    you use only the access point ARN, don’t include the object path, and
+	//    use the StartsWith or NotStartsWith operators. arn:<partition>:s3:<region>:<account_ID>:accesspoint/<access_point_name>
+	//    arn:<partition>:s3:<region>:<account_ID>:accesspoint/<access_point_name>/object/<object_path>
+	//    When resources.type equals AWS::S3ObjectLambda::AccessPoint, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:s3-object-lambda:<region>:<account_ID>:accesspoint/<access_point_name>
+	//    When resources.type equals AWS::S3Outposts::Object, and the operator is
+	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:s3-outposts:<region>:<account_ID>:<object_path>
+	//    When resources.type equals AWS::SageMaker::Endpoint, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:sagemaker:<region>:<account_ID>:endpoint/<endpoint_name>
 	//    When resources.type equals AWS::SageMaker::ExperimentTrialComponent, and
 	//    the operator is set to Equals or NotEquals, the ARN must be in the following
 	//    format: arn:<partition>:sagemaker:<region>:<account_ID>:experiment-trial-component/<experiment_trial_component_name>
 	//    When resources.type equals AWS::SageMaker::FeatureGroup, and the operator
 	//    is set to Equals or NotEquals, the ARN must be in the following format:
 	//    arn:<partition>:sagemaker:<region>:<account_ID>:feature-group/<feature_group_name>
+	//    When resources.type equals AWS::SCN::Instance, and the operator is set
+	//    to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:scn:<region>:<account_ID>:instance/<instance_ID>
+	//    When resources.type equals AWS::ServiceDiscovery::Namespace, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:servicediscovery:<region>:<account_ID>:namespace/<namespace_ID>
+	//    When resources.type equals AWS::ServiceDiscovery::Service, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:servicediscovery:<region>:<account_ID>:service/<service_ID>
+	//    When resources.type equals AWS::SNS::PlatformEndpoint, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:sns:<region>:<account_ID>:endpoint/<endpoint_type>/<endpoint_name>/<endpoint_ID>
+	//    When resources.type equals AWS::SNS::Topic, and the operator is set to
+	//    Equals or NotEquals, the ARN must be in the following format: arn:<partition>:sns:<region>:<account_ID>:<topic_name>
+	//    When resources.type equals AWS::SWF::Domain, and the operator is set to
+	//    Equals or NotEquals, the ARN must be in the following format: arn:<partition>:swf:<region>:<account_ID>:domain/<domain_name>
+	//    When resources.type equals AWS::SQS::Queue, and the operator is set to
+	//    Equals or NotEquals, the ARN must be in the following format: arn:<partition>:sqs:<region>:<account_ID>:<queue_name>
+	//    When resources.type equals AWS::SSMMessages::ControlChannel, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:ssmmessages:<region>:<account_ID>:control-channel/<channel_ID>
+	//    When resources.type equals AWS::ThinClient::Device, and the operator is
+	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:thinclient:<region>:<account_ID>:device/<device_ID>
+	//    When resources.type equals AWS::ThinClient::Environment, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:thinclient:<region>:<account_ID>:environment/<environment_ID>
+	//    When resources.type equals AWS::Timestream::Database, and the operator
+	//    is set to Equals or NotEquals, the ARN must be in the following format:
+	//    arn:<partition>:timestream:<region>:<account_ID>:database/<database_name>
+	//    When resources.type equals AWS::Timestream::Table, and the operator is
+	//    set to Equals or NotEquals, the ARN must be in the following format: arn:<partition>:timestream:<region>:<account_ID>:database/<database_name>/table/<table_name>
+	//    When resources.type equals AWS::VerifiedPermissions::PolicyStore, and
+	//    the operator is set to Equals or NotEquals, the ARN must be in the following
+	//    format: arn:<partition>:verifiedpermissions:<region>:<account_ID>:policy-store/<policy_store_UUID>
 	//
 	// Field is a required field
 	Field *string `min:"1" type:"string" required:"true"`
@@ -7564,7 +8597,7 @@ func (s *CloudTrailInvalidClientTokenIdException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Cannot set a CloudWatch Logs delivery for this region.
+// Cannot set a CloudWatch Logs delivery for this Region.
 type CloudWatchLogsDeliveryUnavailableException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -7625,6 +8658,72 @@ func (s *CloudWatchLogsDeliveryUnavailableException) StatusCode() int {
 
 // RequestID returns the service's response RequestID for request.
 func (s *CloudWatchLogsDeliveryUnavailableException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// You are trying to update a resource when another request is in progress.
+// Allow sufficient wait time for the previous request to complete, then retry
+// your request.
+type ConcurrentModificationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConcurrentModificationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConcurrentModificationException) GoString() string {
+	return s.String()
+}
+
+func newErrorConcurrentModificationException(v protocol.ResponseMetadata) error {
+	return &ConcurrentModificationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ConcurrentModificationException) Code() string {
+	return "ConcurrentModificationException"
+}
+
+// Message returns the exception's message.
+func (s *ConcurrentModificationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ConcurrentModificationException) OrigErr() error {
+	return nil
+}
+
+func (s *ConcurrentModificationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ConcurrentModificationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ConcurrentModificationException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
@@ -7906,6 +9005,26 @@ type CreateEventDataStoreInput struct {
 	// in the CloudTrail User Guide.
 	AdvancedEventSelectors []*AdvancedEventSelector `type:"list"`
 
+	// The billing mode for the event data store determines the cost for ingesting
+	// events and the default and maximum retention period for the event data store.
+	//
+	// The following are the possible values:
+	//
+	//    * EXTENDABLE_RETENTION_PRICING - This billing mode is generally recommended
+	//    if you want a flexible retention period of up to 3653 days (about 10 years).
+	//    The default retention period for this billing mode is 366 days.
+	//
+	//    * FIXED_RETENTION_PRICING - This billing mode is recommended if you expect
+	//    to ingest more than 25 TB of event data per month and need a retention
+	//    period of up to 2557 days (about 7 years). The default retention period
+	//    for this billing mode is 2557 days.
+	//
+	// The default value is EXTENDABLE_RETENTION_PRICING.
+	//
+	// For more information about CloudTrail pricing, see CloudTrail Pricing (http://aws.amazon.com/cloudtrail/pricing/)
+	// and Managing CloudTrail Lake costs (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-manage-costs.html).
+	BillingMode *string `type:"string" enum:"BillingMode"`
+
 	// Specifies the KMS key ID to use to encrypt the events delivered by CloudTrail.
 	// The value can be an alias name prefixed by alias/, a fully specified ARN
 	// to an alias, a fully specified ARN to a key, or a globally unique identifier.
@@ -7933,8 +9052,8 @@ type CreateEventDataStoreInput struct {
 	//    * 12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `min:"1" type:"string"`
 
-	// Specifies whether the event data store includes events from all regions,
-	// or only from the region in which the event data store is created.
+	// Specifies whether the event data store includes events from all Regions,
+	// or only from the Region in which the event data store is created.
 	MultiRegionEnabled *bool `type:"boolean"`
 
 	// The name of the event data store.
@@ -7946,9 +9065,28 @@ type CreateEventDataStoreInput struct {
 	// in Organizations.
 	OrganizationEnabled *bool `type:"boolean"`
 
-	// The retention period of the event data store, in days. You can set a retention
-	// period of up to 2557 days, the equivalent of seven years.
+	// The retention period of the event data store, in days. If BillingMode is
+	// set to EXTENDABLE_RETENTION_PRICING, you can set a retention period of up
+	// to 3653 days, the equivalent of 10 years. If BillingMode is set to FIXED_RETENTION_PRICING,
+	// you can set a retention period of up to 2557 days, the equivalent of seven
+	// years.
+	//
+	// CloudTrail Lake determines whether to retain an event by checking if the
+	// eventTime of the event is within the specified retention period. For example,
+	// if you set a retention period of 90 days, CloudTrail will remove events when
+	// the eventTime is older than 90 days.
+	//
+	// If you plan to copy trail events to this event data store, we recommend that
+	// you consider both the age of the events that you want to copy as well as
+	// how long you want to keep the copied events in your event data store. For
+	// example, if you copy trail events that are 5 years old and specify a retention
+	// period of 7 years, the event data store will retain those events for two
+	// years.
 	RetentionPeriod *int64 `min:"7" type:"integer"`
+
+	// Specifies whether the event data store should start ingesting live events.
+	// The default is true.
+	StartIngestion *bool `type:"boolean"`
 
 	// A list of tags.
 	TagsList []*Tag `type:"list"`
@@ -8025,6 +9163,12 @@ func (s *CreateEventDataStoreInput) SetAdvancedEventSelectors(v []*AdvancedEvent
 	return s
 }
 
+// SetBillingMode sets the BillingMode field's value.
+func (s *CreateEventDataStoreInput) SetBillingMode(v string) *CreateEventDataStoreInput {
+	s.BillingMode = &v
+	return s
+}
+
 // SetKmsKeyId sets the KmsKeyId field's value.
 func (s *CreateEventDataStoreInput) SetKmsKeyId(v string) *CreateEventDataStoreInput {
 	s.KmsKeyId = &v
@@ -8055,6 +9199,12 @@ func (s *CreateEventDataStoreInput) SetRetentionPeriod(v int64) *CreateEventData
 	return s
 }
 
+// SetStartIngestion sets the StartIngestion field's value.
+func (s *CreateEventDataStoreInput) SetStartIngestion(v bool) *CreateEventDataStoreInput {
+	s.StartIngestion = &v
+	return s
+}
+
 // SetTagsList sets the TagsList field's value.
 func (s *CreateEventDataStoreInput) SetTagsList(v []*Tag) *CreateEventDataStoreInput {
 	s.TagsList = v
@@ -8074,6 +9224,9 @@ type CreateEventDataStoreOutput struct {
 	// data store.
 	AdvancedEventSelectors []*AdvancedEventSelector `type:"list"`
 
+	// The billing mode for the event data store.
+	BillingMode *string `type:"string" enum:"BillingMode"`
+
 	// The timestamp that shows when the event data store was created.
 	CreatedTimestamp *time.Time `type:"timestamp"`
 
@@ -8086,8 +9239,8 @@ type CreateEventDataStoreOutput struct {
 	// arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `min:"1" type:"string"`
 
-	// Indicates whether the event data store collects events from all regions,
-	// or only from the region in which it was created.
+	// Indicates whether the event data store collects events from all Regions,
+	// or only from the Region in which it was created.
 	MultiRegionEnabled *bool `type:"boolean"`
 
 	// The name of the event data store.
@@ -8136,6 +9289,12 @@ func (s CreateEventDataStoreOutput) GoString() string {
 // SetAdvancedEventSelectors sets the AdvancedEventSelectors field's value.
 func (s *CreateEventDataStoreOutput) SetAdvancedEventSelectors(v []*AdvancedEventSelector) *CreateEventDataStoreOutput {
 	s.AdvancedEventSelectors = v
+	return s
+}
+
+// SetBillingMode sets the BillingMode field's value.
+func (s *CreateEventDataStoreOutput) SetBillingMode(v string) *CreateEventDataStoreOutput {
+	s.BillingMode = &v
 	return s
 }
 
@@ -8237,10 +9396,10 @@ type CreateTrailInput struct {
 	// as IAM to the log files.
 	IncludeGlobalServiceEvents *bool `type:"boolean"`
 
-	// Specifies whether the trail is created in the current region or in all regions.
-	// The default is false, which creates a trail only in the region where you
+	// Specifies whether the trail is created in the current Region or in all Regions.
+	// The default is false, which creates a trail only in the Region where you
 	// are signed in. As a best practice, consider creating trails that log events
-	// in all regions.
+	// in all Regions.
 	IsMultiRegionTrail *bool `type:"boolean"`
 
 	// Specifies whether the trail is created for all accounts in an organization
@@ -8439,7 +9598,7 @@ type CreateTrailOutput struct {
 	// as IAM to the log files.
 	IncludeGlobalServiceEvents *bool `type:"boolean"`
 
-	// Specifies whether the trail exists in one region or in all regions.
+	// Specifies whether the trail exists in one Region or in all Regions.
 	IsMultiRegionTrail *bool `type:"boolean"`
 
 	// Specifies whether the trail is an organization trail.
@@ -8634,38 +9793,15 @@ type DataResource struct {
 	// The resource type in which you want to log data events. You can specify the
 	// following basic event selector resource types:
 	//
-	//    * AWS::S3::Object
+	//    * AWS::DynamoDB::Table
 	//
 	//    * AWS::Lambda::Function
 	//
-	//    * AWS::DynamoDB::Table
+	//    * AWS::S3::Object
 	//
-	// The following resource types are also available through advanced event selectors.
-	// Basic event selector resource types are valid in advanced event selectors,
-	// but advanced event selector resource types are not valid in basic event selectors.
-	// For more information, see AdvancedFieldSelector$Field.
-	//
-	//    * AWS::CloudTrail::Channel
-	//
-	//    * AWS::S3Outposts::Object
-	//
-	//    * AWS::ManagedBlockchain::Node
-	//
-	//    * AWS::S3ObjectLambda::AccessPoint
-	//
-	//    * AWS::EC2::Snapshot
-	//
-	//    * AWS::S3::AccessPoint
-	//
-	//    * AWS::DynamoDB::Stream
-	//
-	//    * AWS::Glue::Table
-	//
-	//    * AWS::FinSpace::Environment
-	//
-	//    * AWS::SageMaker::ExperimentTrialComponent
-	//
-	//    * AWS::SageMaker::FeatureGroup
+	// Additional resource types are available through advanced event selectors.
+	// For more information about these additional resource types, see AdvancedFieldSelector
+	// (https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_AdvancedFieldSelector.html).
 	Type *string `type:"string"`
 
 	// An array of Amazon Resource Name (ARN) strings or partial ARN strings for
@@ -9168,10 +10304,11 @@ type DescribeQueryInput struct {
 	// Deprecated: EventDataStore is no longer required by DescribeQueryRequest
 	EventDataStore *string `min:"3" deprecated:"true" type:"string"`
 
+	// The alias that identifies a query template.
+	QueryAlias *string `min:"1" type:"string"`
+
 	// The query ID.
-	//
-	// QueryId is a required field
-	QueryId *string `min:"36" type:"string" required:"true"`
+	QueryId *string `min:"36" type:"string"`
 }
 
 // String returns the string representation.
@@ -9198,8 +10335,8 @@ func (s *DescribeQueryInput) Validate() error {
 	if s.EventDataStore != nil && len(*s.EventDataStore) < 3 {
 		invalidParams.Add(request.NewErrParamMinLen("EventDataStore", 3))
 	}
-	if s.QueryId == nil {
-		invalidParams.Add(request.NewErrParamRequired("QueryId"))
+	if s.QueryAlias != nil && len(*s.QueryAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryAlias", 1))
 	}
 	if s.QueryId != nil && len(*s.QueryId) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("QueryId", 36))
@@ -9214,6 +10351,12 @@ func (s *DescribeQueryInput) Validate() error {
 // SetEventDataStore sets the EventDataStore field's value.
 func (s *DescribeQueryInput) SetEventDataStore(v string) *DescribeQueryInput {
 	s.EventDataStore = &v
+	return s
+}
+
+// SetQueryAlias sets the QueryAlias field's value.
+func (s *DescribeQueryInput) SetQueryAlias(v string) *DescribeQueryInput {
+	s.QueryAlias = &v
 	return s
 }
 
@@ -9316,10 +10459,10 @@ type DescribeTrailsInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies whether to include shadow trails in the response. A shadow trail
-	// is the replication in a region of a trail that was created in a different
-	// region, or in the case of an organization trail, the replication of an organization
+	// is the replication in a Region of a trail that was created in a different
+	// Region, or in the case of an organization trail, the replication of an organization
 	// trail in member accounts. If you do not include shadow trails, organization
-	// trails in a member account and region replication trails will not be returned.
+	// trails in a member account and Region replication trails will not be returned.
 	// The default is true.
 	IncludeShadowTrails *bool `locationName:"includeShadowTrails" type:"boolean"`
 
@@ -9328,19 +10471,19 @@ type DescribeTrailsInput struct {
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
-	// If an empty list is specified, information for the trail in the current region
+	// If an empty list is specified, information for the trail in the current Region
 	// is returned.
 	//
 	//    * If an empty list is specified and IncludeShadowTrails is false, then
-	//    information for all trails in the current region is returned.
+	//    information for all trails in the current Region is returned.
 	//
 	//    * If an empty list is specified and IncludeShadowTrails is null or true,
-	//    then information for all trails in the current region and any associated
-	//    shadow trails in other regions is returned.
+	//    then information for all trails in the current Region and any associated
+	//    shadow trails in other Regions is returned.
 	//
 	// If one or more trail names are specified, information is returned only if
-	// the names match the names of trails belonging only to the current region
-	// and current account. To return information about a trail in another region,
+	// the names match the names of trails belonging only to the current Region
+	// and current account. To return information about a trail in another Region,
 	// you must specify its trail ARN.
 	TrailNameList []*string `locationName:"trailNameList" type:"list"`
 }
@@ -9424,7 +10567,7 @@ type Destination struct {
 	Location *string `min:"3" type:"string" required:"true"`
 
 	// The type of destination for events arriving from a channel. For channels
-	// used for a CloudTrail Lake integration, the value is EventDataStore. For
+	// used for a CloudTrail Lake integration, the value is EVENT_DATA_STORE. For
 	// service-linked channels, the value is AWS_SERVICE.
 	//
 	// Type is a required field
@@ -9477,6 +10620,215 @@ func (s *Destination) SetLocation(v string) *Destination {
 // SetType sets the Type field's value.
 func (s *Destination) SetType(v string) *Destination {
 	s.Type = &v
+	return s
+}
+
+type DisableFederationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN (or ID suffix of the ARN) of the event data store for which you want
+	// to disable Lake query federation.
+	//
+	// EventDataStore is a required field
+	EventDataStore *string `min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableFederationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableFederationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisableFederationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisableFederationInput"}
+	if s.EventDataStore == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventDataStore"))
+	}
+	if s.EventDataStore != nil && len(*s.EventDataStore) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("EventDataStore", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEventDataStore sets the EventDataStore field's value.
+func (s *DisableFederationInput) SetEventDataStore(v string) *DisableFederationInput {
+	s.EventDataStore = &v
+	return s
+}
+
+type DisableFederationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the event data store for which you disabled Lake query federation.
+	EventDataStoreArn *string `min:"3" type:"string"`
+
+	// The federation status.
+	FederationStatus *string `type:"string" enum:"FederationStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableFederationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableFederationOutput) GoString() string {
+	return s.String()
+}
+
+// SetEventDataStoreArn sets the EventDataStoreArn field's value.
+func (s *DisableFederationOutput) SetEventDataStoreArn(v string) *DisableFederationOutput {
+	s.EventDataStoreArn = &v
+	return s
+}
+
+// SetFederationStatus sets the FederationStatus field's value.
+func (s *DisableFederationOutput) SetFederationStatus(v string) *DisableFederationOutput {
+	s.FederationStatus = &v
+	return s
+}
+
+type EnableFederationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN (or ID suffix of the ARN) of the event data store for which you want
+	// to enable Lake query federation.
+	//
+	// EventDataStore is a required field
+	EventDataStore *string `min:"3" type:"string" required:"true"`
+
+	// The ARN of the federation role to use for the event data store. Amazon Web
+	// Services services like Lake Formation use this federation role to access
+	// data for the federated event data store. The federation role must exist in
+	// your account and provide the required minimum permissions (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-federation.html#query-federation-permissions-role).
+	//
+	// FederationRoleArn is a required field
+	FederationRoleArn *string `min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableFederationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableFederationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EnableFederationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EnableFederationInput"}
+	if s.EventDataStore == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventDataStore"))
+	}
+	if s.EventDataStore != nil && len(*s.EventDataStore) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("EventDataStore", 3))
+	}
+	if s.FederationRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("FederationRoleArn"))
+	}
+	if s.FederationRoleArn != nil && len(*s.FederationRoleArn) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("FederationRoleArn", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEventDataStore sets the EventDataStore field's value.
+func (s *EnableFederationInput) SetEventDataStore(v string) *EnableFederationInput {
+	s.EventDataStore = &v
+	return s
+}
+
+// SetFederationRoleArn sets the FederationRoleArn field's value.
+func (s *EnableFederationInput) SetFederationRoleArn(v string) *EnableFederationInput {
+	s.FederationRoleArn = &v
+	return s
+}
+
+type EnableFederationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the event data store for which you enabled Lake query federation.
+	EventDataStoreArn *string `min:"3" type:"string"`
+
+	// The ARN of the federation role.
+	FederationRoleArn *string `min:"3" type:"string"`
+
+	// The federation status.
+	FederationStatus *string `type:"string" enum:"FederationStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableFederationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableFederationOutput) GoString() string {
+	return s.String()
+}
+
+// SetEventDataStoreArn sets the EventDataStoreArn field's value.
+func (s *EnableFederationOutput) SetEventDataStoreArn(v string) *EnableFederationOutput {
+	s.EventDataStoreArn = &v
+	return s
+}
+
+// SetFederationRoleArn sets the FederationRoleArn field's value.
+func (s *EnableFederationOutput) SetFederationRoleArn(v string) *EnableFederationOutput {
+	s.FederationRoleArn = &v
+	return s
+}
+
+// SetFederationStatus sets the FederationStatus field's value.
+func (s *EnableFederationOutput) SetFederationStatus(v string) *EnableFederationOutput {
+	s.FederationStatus = &v
 	return s
 }
 
@@ -9590,8 +10942,7 @@ func (s *Event) SetUsername(v string) *Event {
 
 // A storage lake of event data against which you can run complex SQL-based
 // queries. An event data store can include events that you have logged on your
-// account from the last 90 to 2557 days (about three months to up to seven
-// years). To select events for an event data store, use advanced event selectors
+// account. To select events for an event data store, use advanced event selectors
 // (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html#creating-data-event-selectors-advanced).
 type EventDataStore struct {
 	_ struct{} `type:"structure"`
@@ -9610,8 +10961,8 @@ type EventDataStore struct {
 	// The ARN of the event data store.
 	EventDataStoreArn *string `min:"3" type:"string"`
 
-	// Indicates whether the event data store includes events from all regions,
-	// or only from the region in which it was created.
+	// Indicates whether the event data store includes events from all Regions,
+	// or only from the Region in which it was created.
 	//
 	// Deprecated: MultiRegionEnabled is no longer returned by ListEventDataStores
 	MultiRegionEnabled *bool `deprecated:"true" type:"boolean"`
@@ -9629,7 +10980,7 @@ type EventDataStore struct {
 	// Deprecated: RetentionPeriod is no longer returned by ListEventDataStores
 	RetentionPeriod *int64 `min:"7" deprecated:"true" type:"integer"`
 
-	// The status of an event data store. Values are ENABLED and PENDING_DELETION.
+	// The status of an event data store.
 	//
 	// Deprecated: Status is no longer returned by ListEventDataStores
 	Status *string `deprecated:"true" type:"string" enum:"EventDataStoreStatus"`
@@ -9851,6 +11202,72 @@ func (s *EventDataStoreAlreadyExistsException) StatusCode() int {
 
 // RequestID returns the service's response RequestID for request.
 func (s *EventDataStoreAlreadyExistsException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// You cannot delete the event data store because Lake query federation is enabled.
+// To delete the event data store, run the DisableFederation operation to disable
+// Lake query federation on the event data store.
+type EventDataStoreFederationEnabledException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventDataStoreFederationEnabledException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventDataStoreFederationEnabledException) GoString() string {
+	return s.String()
+}
+
+func newErrorEventDataStoreFederationEnabledException(v protocol.ResponseMetadata) error {
+	return &EventDataStoreFederationEnabledException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *EventDataStoreFederationEnabledException) Code() string {
+	return "EventDataStoreFederationEnabledException"
+}
+
+// Message returns the exception's message.
+func (s *EventDataStoreFederationEnabledException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *EventDataStoreFederationEnabledException) OrigErr() error {
+	return nil
+}
+
+func (s *EventDataStoreFederationEnabledException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *EventDataStoreFederationEnabledException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *EventDataStoreFederationEnabledException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
@@ -10143,7 +11560,7 @@ type EventSelector struct {
 	// RDS Data API events by containing kms.amazonaws.com or rdsdata.amazonaws.com.
 	// By default, ExcludeManagementEventSources is empty, and KMS and Amazon RDS
 	// Data API events are logged to your trail. You can exclude management event
-	// sources only in regions that support the event source.
+	// sources only in Regions that support the event source.
 	ExcludeManagementEventSources []*string `type:"list"`
 
 	// Specify if you want your event selector to include management events for
@@ -10156,7 +11573,7 @@ type EventSelector struct {
 	//
 	// The first copy of management events is free. You are charged for additional
 	// copies of management events that you are logging on any subsequent trail
-	// in the same region. For more information about CloudTrail pricing, see CloudTrail
+	// in the same Region. For more information about CloudTrail pricing, see CloudTrail
 	// Pricing (http://aws.amazon.com/cloudtrail/pricing/).
 	IncludeManagementEvents *bool `type:"boolean"`
 
@@ -10286,7 +11703,7 @@ type GetChannelOutput struct {
 	Source *string `min:"1" type:"string"`
 
 	// Provides information about the advanced event selectors configured for the
-	// channel, and whether the channel applies to all regions or a single region.
+	// channel, and whether the channel applies to all Regions or a single Region.
 	SourceConfig *SourceConfig `type:"structure"`
 }
 
@@ -10400,11 +11817,24 @@ type GetEventDataStoreOutput struct {
 	// The advanced event selectors used to select events for the data store.
 	AdvancedEventSelectors []*AdvancedEventSelector `type:"list"`
 
+	// The billing mode for the event data store.
+	BillingMode *string `type:"string" enum:"BillingMode"`
+
 	// The timestamp of the event data store's creation.
 	CreatedTimestamp *time.Time `type:"timestamp"`
 
 	// The event data store Amazon Resource Number (ARN).
 	EventDataStoreArn *string `min:"3" type:"string"`
+
+	// If Lake query federation is enabled, provides the ARN of the federation role
+	// used to access the resources for the federated event data store.
+	FederationRoleArn *string `min:"3" type:"string"`
+
+	// Indicates the Lake query federation (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-federation.html)
+	// status. The status is ENABLED if Lake query federation is enabled, or DISABLED
+	// if Lake query federation is disabled. You cannot delete an event data store
+	// if the FederationStatus is ENABLED.
+	FederationStatus *string `type:"string" enum:"FederationStatus"`
 
 	// Specifies the KMS key ID that encrypts the events delivered by CloudTrail.
 	// The value is a fully specified ARN to a KMS key in the following format.
@@ -10412,8 +11842,8 @@ type GetEventDataStoreOutput struct {
 	// arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `min:"1" type:"string"`
 
-	// Indicates whether the event data store includes events from all regions,
-	// or only from the region in which it was created.
+	// Indicates whether the event data store includes events from all Regions,
+	// or only from the Region in which it was created.
 	MultiRegionEnabled *bool `type:"boolean"`
 
 	// The name of the event data store.
@@ -10426,7 +11856,7 @@ type GetEventDataStoreOutput struct {
 	// The retention period of the event data store, in days.
 	RetentionPeriod *int64 `min:"7" type:"integer"`
 
-	// The status of an event data store. Values can be ENABLED and PENDING_DELETION.
+	// The status of an event data store.
 	Status *string `type:"string" enum:"EventDataStoreStatus"`
 
 	// Indicates that termination protection is enabled.
@@ -10461,6 +11891,12 @@ func (s *GetEventDataStoreOutput) SetAdvancedEventSelectors(v []*AdvancedEventSe
 	return s
 }
 
+// SetBillingMode sets the BillingMode field's value.
+func (s *GetEventDataStoreOutput) SetBillingMode(v string) *GetEventDataStoreOutput {
+	s.BillingMode = &v
+	return s
+}
+
 // SetCreatedTimestamp sets the CreatedTimestamp field's value.
 func (s *GetEventDataStoreOutput) SetCreatedTimestamp(v time.Time) *GetEventDataStoreOutput {
 	s.CreatedTimestamp = &v
@@ -10470,6 +11906,18 @@ func (s *GetEventDataStoreOutput) SetCreatedTimestamp(v time.Time) *GetEventData
 // SetEventDataStoreArn sets the EventDataStoreArn field's value.
 func (s *GetEventDataStoreOutput) SetEventDataStoreArn(v string) *GetEventDataStoreOutput {
 	s.EventDataStoreArn = &v
+	return s
+}
+
+// SetFederationRoleArn sets the FederationRoleArn field's value.
+func (s *GetEventDataStoreOutput) SetFederationRoleArn(v string) *GetEventDataStoreOutput {
+	s.FederationRoleArn = &v
+	return s
+}
+
+// SetFederationStatus sets the FederationStatus field's value.
+func (s *GetEventDataStoreOutput) SetFederationStatus(v string) *GetEventDataStoreOutput {
+	s.FederationStatus = &v
 	return s
 }
 
@@ -10793,6 +12241,12 @@ func (s *GetImportOutput) SetUpdatedTimestamp(v time.Time) *GetImportOutput {
 type GetInsightSelectorsInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies the ARN (or ID suffix of the ARN) of the event data store for which
+	// you want to get Insights selectors.
+	//
+	// You cannot use this parameter with the TrailName parameter.
+	EventDataStore *string `min:"3" type:"string"`
+
 	// Specifies the name of the trail or trail ARN. If you specify a trail name,
 	// the string must meet the following requirements:
 	//
@@ -10812,8 +12266,8 @@ type GetInsightSelectorsInput struct {
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
-	// TrailName is a required field
-	TrailName *string `type:"string" required:"true"`
+	// You cannot use this parameter with the EventDataStore parameter.
+	TrailName *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -10837,14 +12291,20 @@ func (s GetInsightSelectorsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *GetInsightSelectorsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetInsightSelectorsInput"}
-	if s.TrailName == nil {
-		invalidParams.Add(request.NewErrParamRequired("TrailName"))
+	if s.EventDataStore != nil && len(*s.EventDataStore) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("EventDataStore", 3))
 	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetEventDataStore sets the EventDataStore field's value.
+func (s *GetInsightSelectorsInput) SetEventDataStore(v string) *GetInsightSelectorsInput {
+	s.EventDataStore = &v
+	return s
 }
 
 // SetTrailName sets the TrailName field's value.
@@ -10856,10 +12316,16 @@ func (s *GetInsightSelectorsInput) SetTrailName(v string) *GetInsightSelectorsIn
 type GetInsightSelectorsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A JSON string that contains the insight types you want to log on a trail.
-	// In this release, ApiErrorRateInsight and ApiCallRateInsight are supported
-	// as insight types.
+	// The ARN of the source event data store that enabled Insights events.
+	EventDataStoreArn *string `min:"3" type:"string"`
+
+	// A JSON string that contains the Insight types you want to log on a trail
+	// or event data store. ApiErrorRateInsight and ApiCallRateInsight are supported
+	// as Insights types.
 	InsightSelectors []*InsightSelector `type:"list"`
+
+	// The ARN of the destination event data store that logs Insights events.
+	InsightsDestination *string `min:"3" type:"string"`
 
 	// The Amazon Resource Name (ARN) of a trail for which you want to get Insights
 	// selectors.
@@ -10884,9 +12350,21 @@ func (s GetInsightSelectorsOutput) GoString() string {
 	return s.String()
 }
 
+// SetEventDataStoreArn sets the EventDataStoreArn field's value.
+func (s *GetInsightSelectorsOutput) SetEventDataStoreArn(v string) *GetInsightSelectorsOutput {
+	s.EventDataStoreArn = &v
+	return s
+}
+
 // SetInsightSelectors sets the InsightSelectors field's value.
 func (s *GetInsightSelectorsOutput) SetInsightSelectors(v []*InsightSelector) *GetInsightSelectorsOutput {
 	s.InsightSelectors = v
+	return s
+}
+
+// SetInsightsDestination sets the InsightsDestination field's value.
+func (s *GetInsightSelectorsOutput) SetInsightsDestination(v string) *GetInsightSelectorsOutput {
+	s.InsightsDestination = &v
 	return s
 }
 
@@ -11228,7 +12706,7 @@ type GetTrailStatusInput struct {
 
 	// Specifies the name or the CloudTrail ARN of the trail for which you are requesting
 	// status. To get the status of a shadow trail (a replication of the trail in
-	// another region), you must specify its ARN. The following is the format of
+	// another Region), you must specify its ARN. The following is the format of
 	// a trail ARN.
 	//
 	// arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
@@ -11999,8 +13477,8 @@ func (s *IngestionStatus) SetLatestIngestionSuccessTime(v time.Time) *IngestionS
 	return s
 }
 
-// If you run GetInsightSelectors on a trail that does not have Insights events
-// enabled, the operation throws the exception InsightNotEnabledException.
+// If you run GetInsightSelectors on a trail or event data store that does not
+// have Insights events enabled, the operation throws the exception InsightNotEnabledException.
 type InsightNotEnabledException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -12064,13 +13542,19 @@ func (s *InsightNotEnabledException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// A JSON string that contains a list of insight types that are logged on a
-// trail.
+// A JSON string that contains a list of Insights types that are logged on a
+// trail or event data store.
 type InsightSelector struct {
 	_ struct{} `type:"structure"`
 
-	// The type of insights to log on a trail. ApiCallRateInsight and ApiErrorRateInsight
-	// are valid insight types.
+	// The type of Insights events to log on a trail or event data store. ApiCallRateInsight
+	// and ApiErrorRateInsight are valid Insight types.
+	//
+	// The ApiCallRateInsight Insights type analyzes write-only management API calls
+	// that are aggregated per minute against a baseline API call volume.
+	//
+	// The ApiErrorRateInsight Insights type analyzes management API calls that
+	// result in error codes. The error is shown if the API call is unsuccessful.
 	InsightType *string `type:"string" enum:"InsightType"`
 }
 
@@ -12098,8 +13582,8 @@ func (s *InsightSelector) SetInsightType(v string) *InsightSelector {
 	return s
 }
 
-// This exception is thrown when the IAM user or role that is used to create
-// the organization resource lacks one or more required permissions for creating
+// This exception is thrown when the IAM identity that is used to create the
+// organization resource lacks one or more required permissions for creating
 // an organization resource in a required service.
 type InsufficientDependencyServiceAccessPermissionException struct {
 	_            struct{}                  `type:"structure"`
@@ -12758,19 +14242,19 @@ func (s *InvalidEventDataStoreStatusException) RequestID() string {
 //
 // You can:
 //
-//    * Specify a valid number of event selectors (1 to 5) for a trail.
+//   - Specify a valid number of event selectors (1 to 5) for a trail.
 //
-//    * Specify a valid number of data resources (1 to 250) for an event selector.
-//    The limit of number of resources on an individual event selector is configurable
-//    up to 250. However, this upper limit is allowed only if the total number
-//    of data resources does not exceed 250 across all event selectors for a
-//    trail.
+//   - Specify a valid number of data resources (1 to 250) for an event selector.
+//     The limit of number of resources on an individual event selector is configurable
+//     up to 250. However, this upper limit is allowed only if the total number
+//     of data resources does not exceed 250 across all event selectors for a
+//     trail.
 //
-//    * Specify up to 500 values for all conditions in all advanced event selectors
-//    for a trail.
+//   - Specify up to 500 values for all conditions in all advanced event selectors
+//     for a trail.
 //
-//    * Specify a valid value for a parameter. For example, specifying the ReadWriteType
-//    parameter with a value of read-only is not valid.
+//   - Specify a valid value for a parameter. For example, specifying the ReadWriteType
+//     parameter with a value of read-only is not valid.
 type InvalidEventSelectorsException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -12834,8 +14318,8 @@ func (s *InvalidEventSelectorsException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// This exception is thrown when an operation is called on a trail from a region
-// other than the region in which the trail was created.
+// This exception is thrown when an operation is called on a trail from a Region
+// other than the Region in which the trail was created.
 type InvalidHomeRegionException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -12964,9 +14448,21 @@ func (s *InvalidImportSourceException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The formatting or syntax of the InsightSelectors JSON statement in your PutInsightSelectors
-// or GetInsightSelectors request is not valid, or the specified insight type
-// in the InsightSelectors statement is not a valid insight type.
+// For PutInsightSelectors, this exception is thrown when the formatting or
+// syntax of the InsightSelectors JSON statement is not valid, or the specified
+// InsightType in the InsightSelectors statement is not valid. Valid values
+// for InsightType are ApiCallRateInsight and ApiErrorRateInsight. To enable
+// Insights on an event data store, the destination event data store specified
+// by the InsightsDestination parameter must log Insights events and the source
+// event data store specified by the EventDataStore parameter must log management
+// events.
+//
+// For UpdateEventDataStore, this exception is thrown if Insights are enabled
+// on the event data store and the updated advanced event selectors are not
+// compatible with the configured InsightSelectors. If the InsightSelectors
+// includes an InsightType of ApiCallRateInsight, the source event data store
+// must log write management events. If the InsightSelectors includes an InsightType
+// of ApiErrorRateInsight, the source event data store must log management events.
 type InvalidInsightSelectorsException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -14000,17 +15496,17 @@ func (s *InvalidTokenException) RequestID() string {
 // This exception is thrown when the provided trail name is not valid. Trail
 // names must meet the following requirements:
 //
-//    * Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
-//    (_), or dashes (-)
+//   - Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores
+//     (_), or dashes (-)
 //
-//    * Start with a letter or number, and end with a letter or number
+//   - Start with a letter or number, and end with a letter or number
 //
-//    * Be between 3 and 128 characters
+//   - Be between 3 and 128 characters
 //
-//    * Have no adjacent periods, underscores or dashes. Names like my-_namespace
-//    and my--namespace are not valid.
+//   - Have no adjacent periods, underscores or dashes. Names like my-_namespace
+//     and my--namespace are not valid.
 //
-//    * Not be in IP address format (for example, 192.168.5.4)
+//   - Not be in IP address format (for example, 192.168.5.4)
 type InvalidTrailNameException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -14206,8 +15702,8 @@ func (s *KmsKeyDisabledException) RequestID() string {
 }
 
 // This exception is thrown when the KMS key does not exist, when the S3 bucket
-// and the KMS key are not in the same region, or when the KMS key associated
-// with the Amazon SNS topic either does not exist or is not in the same region.
+// and the KMS key are not in the same Region, or when the KMS key associated
+// with the Amazon SNS topic either does not exist or is not in the same Region.
 type KmsKeyNotFoundException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -14431,7 +15927,7 @@ type ListEventDataStoresOutput struct {
 	_ struct{} `type:"structure"`
 
 	// Contains information about event data stores in the account, in the current
-	// region.
+	// Region.
 	EventDataStores []*EventDataStore `type:"list"`
 
 	// A token you can use to get the next page of results.
@@ -14698,6 +16194,272 @@ func (s *ListImportsOutput) SetNextToken(v string) *ListImportsOutput {
 	return s
 }
 
+type ListInsightsMetricDataInput struct {
+	_ struct{} `type:"structure"`
+
+	// Type of datapoints to return. Valid values are NonZeroData and FillWithZeros.
+	// The default is NonZeroData.
+	DataType *string `type:"string" enum:"InsightsMetricDataType"`
+
+	// Specifies, in UTC, the end time for time-series data. The value specified
+	// is exclusive; results include data points up to the specified time stamp.
+	//
+	// The default is the time of request.
+	EndTime *time.Time `type:"timestamp"`
+
+	// Conditionally required if the InsightType parameter is set to ApiErrorRateInsight.
+	//
+	// If returning metrics for the ApiErrorRateInsight Insights type, this is the
+	// error to retrieve data for. For example, AccessDenied.
+	ErrorCode *string `type:"string"`
+
+	// The name of the event, typically the Amazon Web Services API on which unusual
+	// levels of activity were recorded.
+	//
+	// EventName is a required field
+	EventName *string `type:"string" required:"true"`
+
+	// The Amazon Web Services service to which the request was made, such as iam.amazonaws.com
+	// or s3.amazonaws.com.
+	//
+	// EventSource is a required field
+	EventSource *string `type:"string" required:"true"`
+
+	// The type of CloudTrail Insights event, which is either ApiCallRateInsight
+	// or ApiErrorRateInsight. The ApiCallRateInsight Insights type analyzes write-only
+	// management API calls that are aggregated per minute against a baseline API
+	// call volume. The ApiErrorRateInsight Insights type analyzes management API
+	// calls that result in error codes.
+	//
+	// InsightType is a required field
+	InsightType *string `type:"string" required:"true" enum:"InsightType"`
+
+	// The maximum number of datapoints to return. Valid values are integers from
+	// 1 to 21600. The default value is 21600.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Returned if all datapoints can't be returned in a single call. For example,
+	// due to reaching MaxResults.
+	//
+	// Add this parameter to the request to continue retrieving results starting
+	// from the last evaluated point.
+	NextToken *string `min:"1" type:"string"`
+
+	// Granularity of data to retrieve, in seconds. Valid values are 60, 300, and
+	// 3600. If you specify any other value, you will get an error. The default
+	// is 3600 seconds.
+	Period *int64 `min:"60" type:"integer"`
+
+	// Specifies, in UTC, the start time for time-series data. The value specified
+	// is inclusive; results include data points with the specified time stamp.
+	//
+	// The default is 90 days before the time of request.
+	StartTime *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListInsightsMetricDataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListInsightsMetricDataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListInsightsMetricDataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListInsightsMetricDataInput"}
+	if s.EventName == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventName"))
+	}
+	if s.EventSource == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventSource"))
+	}
+	if s.InsightType == nil {
+		invalidParams.Add(request.NewErrParamRequired("InsightType"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.Period != nil && *s.Period < 60 {
+		invalidParams.Add(request.NewErrParamMinValue("Period", 60))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataType sets the DataType field's value.
+func (s *ListInsightsMetricDataInput) SetDataType(v string) *ListInsightsMetricDataInput {
+	s.DataType = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *ListInsightsMetricDataInput) SetEndTime(v time.Time) *ListInsightsMetricDataInput {
+	s.EndTime = &v
+	return s
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *ListInsightsMetricDataInput) SetErrorCode(v string) *ListInsightsMetricDataInput {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetEventName sets the EventName field's value.
+func (s *ListInsightsMetricDataInput) SetEventName(v string) *ListInsightsMetricDataInput {
+	s.EventName = &v
+	return s
+}
+
+// SetEventSource sets the EventSource field's value.
+func (s *ListInsightsMetricDataInput) SetEventSource(v string) *ListInsightsMetricDataInput {
+	s.EventSource = &v
+	return s
+}
+
+// SetInsightType sets the InsightType field's value.
+func (s *ListInsightsMetricDataInput) SetInsightType(v string) *ListInsightsMetricDataInput {
+	s.InsightType = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListInsightsMetricDataInput) SetMaxResults(v int64) *ListInsightsMetricDataInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListInsightsMetricDataInput) SetNextToken(v string) *ListInsightsMetricDataInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPeriod sets the Period field's value.
+func (s *ListInsightsMetricDataInput) SetPeriod(v int64) *ListInsightsMetricDataInput {
+	s.Period = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *ListInsightsMetricDataInput) SetStartTime(v time.Time) *ListInsightsMetricDataInput {
+	s.StartTime = &v
+	return s
+}
+
+type ListInsightsMetricDataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Only returned if InsightType parameter was set to ApiErrorRateInsight.
+	//
+	// If returning metrics for the ApiErrorRateInsight Insights type, this is the
+	// error to retrieve data for. For example, AccessDenied.
+	ErrorCode *string `type:"string"`
+
+	// The name of the event, typically the Amazon Web Services API on which unusual
+	// levels of activity were recorded.
+	EventName *string `type:"string"`
+
+	// The Amazon Web Services service to which the request was made, such as iam.amazonaws.com
+	// or s3.amazonaws.com.
+	EventSource *string `type:"string"`
+
+	// The type of CloudTrail Insights event, which is either ApiCallRateInsight
+	// or ApiErrorRateInsight. The ApiCallRateInsight Insights type analyzes write-only
+	// management API calls that are aggregated per minute against a baseline API
+	// call volume. The ApiErrorRateInsight Insights type analyzes management API
+	// calls that result in error codes.
+	InsightType *string `type:"string" enum:"InsightType"`
+
+	// Only returned if the full results could not be returned in a single query.
+	// You can set the NextToken parameter in the next request to this value to
+	// continue retrieval.
+	NextToken *string `min:"1" type:"string"`
+
+	// List of timestamps at intervals corresponding to the specified time period.
+	Timestamps []*time.Time `type:"list"`
+
+	// List of values representing the API call rate or error rate at each timestamp.
+	// The number of values is equal to the number of timestamps.
+	Values []*float64 `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListInsightsMetricDataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListInsightsMetricDataOutput) GoString() string {
+	return s.String()
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *ListInsightsMetricDataOutput) SetErrorCode(v string) *ListInsightsMetricDataOutput {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetEventName sets the EventName field's value.
+func (s *ListInsightsMetricDataOutput) SetEventName(v string) *ListInsightsMetricDataOutput {
+	s.EventName = &v
+	return s
+}
+
+// SetEventSource sets the EventSource field's value.
+func (s *ListInsightsMetricDataOutput) SetEventSource(v string) *ListInsightsMetricDataOutput {
+	s.EventSource = &v
+	return s
+}
+
+// SetInsightType sets the InsightType field's value.
+func (s *ListInsightsMetricDataOutput) SetInsightType(v string) *ListInsightsMetricDataOutput {
+	s.InsightType = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListInsightsMetricDataOutput) SetNextToken(v string) *ListInsightsMetricDataOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTimestamps sets the Timestamps field's value.
+func (s *ListInsightsMetricDataOutput) SetTimestamps(v []*time.Time) *ListInsightsMetricDataOutput {
+	s.Timestamps = v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *ListInsightsMetricDataOutput) SetValues(v []*float64) *ListInsightsMetricDataOutput {
+	s.Values = v
+	return s
+}
+
 // Requests the public keys for a specified time range.
 type ListPublicKeysInput struct {
 	_ struct{} `type:"structure"`
@@ -14950,6 +16712,12 @@ type ListTagsInput struct {
 	// Specifies a list of trail, event data store, or channel ARNs whose tags will
 	// be listed. The list has a limit of 20 ARNs.
 	//
+	// Example trail ARN format: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
+	//
+	// Example event data store ARN format: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+	//
+	// Example channel ARN format: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
+	//
 	// ResourceIdList is a required field
 	ResourceIdList []*string `type:"list" required:"true"`
 }
@@ -15084,7 +16852,7 @@ type ListTrailsOutput struct {
 	// of 'root', the call with NextToken should include those same parameters.
 	NextToken *string `type:"string"`
 
-	// Returns the name, ARN, and home region of trails in the current account.
+	// Returns the name, ARN, and home Region of trails in the current account.
 	Trails []*TrailInfo `type:"list"`
 }
 
@@ -15128,6 +16896,10 @@ type LookupAttribute struct {
 	AttributeKey *string `type:"string" required:"true" enum:"LookupAttributeKey"`
 
 	// Specifies a value for the specified AttributeKey.
+	//
+	// The maximum length for the AttributeValue is 2000 characters. The following
+	// characters ('_', '', ',', '\\n') count as two characters towards the 2000
+	// character limit.
 	//
 	// AttributeValue is a required field
 	AttributeValue *string `min:"1" type:"string" required:"true"`
@@ -15342,8 +17114,9 @@ func (s *LookupEventsOutput) SetNextToken(v string) *LookupEventsOutput {
 	return s
 }
 
-// You are already running the maximum number of concurrent queries. Wait a
-// minute for some queries to finish, and then run the query again.
+// You are already running the maximum number of concurrent queries. The maximum
+// number of concurrent queries is 10. Wait a minute for some queries to finish,
+// and then run the query again.
 type MaxConcurrentQueriesException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -15934,7 +17707,7 @@ type PutEventSelectorsInput struct {
 	// can use either AdvancedEventSelectors or EventSelectors, but not both. If
 	// you apply AdvancedEventSelectors to a trail, any existing EventSelectors
 	// are overwritten. For more information about advanced event selectors, see
-	// Logging data events for trails (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
+	// Logging data events (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html)
 	// in the CloudTrail User Guide.
 	AdvancedEventSelectors []*AdvancedEventSelector `type:"list"`
 
@@ -16081,17 +17854,40 @@ func (s *PutEventSelectorsOutput) SetTrailARN(v string) *PutEventSelectorsOutput
 type PutInsightSelectorsInput struct {
 	_ struct{} `type:"structure"`
 
-	// A JSON string that contains the insight types you want to log on a trail.
-	// ApiCallRateInsight and ApiErrorRateInsight are valid insight types.
+	// The ARN (or ID suffix of the ARN) of the source event data store for which
+	// you want to change or add Insights selectors. To enable Insights on an event
+	// data store, you must provide both the EventDataStore and InsightsDestination
+	// parameters.
+	//
+	// You cannot use this parameter with the TrailName parameter.
+	EventDataStore *string `min:"3" type:"string"`
+
+	// A JSON string that contains the Insights types you want to log on a trail
+	// or event data store. ApiCallRateInsight and ApiErrorRateInsight are valid
+	// Insight types.
+	//
+	// The ApiCallRateInsight Insights type analyzes write-only management API calls
+	// that are aggregated per minute against a baseline API call volume.
+	//
+	// The ApiErrorRateInsight Insights type analyzes management API calls that
+	// result in error codes. The error is shown if the API call is unsuccessful.
 	//
 	// InsightSelectors is a required field
 	InsightSelectors []*InsightSelector `type:"list" required:"true"`
 
+	// The ARN (or ID suffix of the ARN) of the destination event data store that
+	// logs Insights events. To enable Insights on an event data store, you must
+	// provide both the EventDataStore and InsightsDestination parameters.
+	//
+	// You cannot use this parameter with the TrailName parameter.
+	InsightsDestination *string `min:"3" type:"string"`
+
 	// The name of the CloudTrail trail for which you want to change or add Insights
 	// selectors.
 	//
-	// TrailName is a required field
-	TrailName *string `type:"string" required:"true"`
+	// You cannot use this parameter with the EventDataStore and InsightsDestination
+	// parameters.
+	TrailName *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -16115,11 +17911,14 @@ func (s PutInsightSelectorsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *PutInsightSelectorsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "PutInsightSelectorsInput"}
+	if s.EventDataStore != nil && len(*s.EventDataStore) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("EventDataStore", 3))
+	}
 	if s.InsightSelectors == nil {
 		invalidParams.Add(request.NewErrParamRequired("InsightSelectors"))
 	}
-	if s.TrailName == nil {
-		invalidParams.Add(request.NewErrParamRequired("TrailName"))
+	if s.InsightsDestination != nil && len(*s.InsightsDestination) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("InsightsDestination", 3))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -16128,9 +17927,21 @@ func (s *PutInsightSelectorsInput) Validate() error {
 	return nil
 }
 
+// SetEventDataStore sets the EventDataStore field's value.
+func (s *PutInsightSelectorsInput) SetEventDataStore(v string) *PutInsightSelectorsInput {
+	s.EventDataStore = &v
+	return s
+}
+
 // SetInsightSelectors sets the InsightSelectors field's value.
 func (s *PutInsightSelectorsInput) SetInsightSelectors(v []*InsightSelector) *PutInsightSelectorsInput {
 	s.InsightSelectors = v
+	return s
+}
+
+// SetInsightsDestination sets the InsightsDestination field's value.
+func (s *PutInsightSelectorsInput) SetInsightsDestination(v string) *PutInsightSelectorsInput {
+	s.InsightsDestination = &v
 	return s
 }
 
@@ -16143,10 +17954,17 @@ func (s *PutInsightSelectorsInput) SetTrailName(v string) *PutInsightSelectorsIn
 type PutInsightSelectorsOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the source event data store for which you
+	// want to change or add Insights selectors.
+	EventDataStoreArn *string `min:"3" type:"string"`
+
 	// A JSON string that contains the Insights event types that you want to log
-	// on a trail. The valid Insights types in this release are ApiErrorRateInsight
+	// on a trail or event data store. The valid Insights types are ApiErrorRateInsight
 	// and ApiCallRateInsight.
 	InsightSelectors []*InsightSelector `type:"list"`
+
+	// The ARN of the destination event data store that logs Insights events.
+	InsightsDestination *string `min:"3" type:"string"`
 
 	// The Amazon Resource Name (ARN) of a trail for which you want to change or
 	// add Insights selectors.
@@ -16171,9 +17989,21 @@ func (s PutInsightSelectorsOutput) GoString() string {
 	return s.String()
 }
 
+// SetEventDataStoreArn sets the EventDataStoreArn field's value.
+func (s *PutInsightSelectorsOutput) SetEventDataStoreArn(v string) *PutInsightSelectorsOutput {
+	s.EventDataStoreArn = &v
+	return s
+}
+
 // SetInsightSelectors sets the InsightSelectors field's value.
 func (s *PutInsightSelectorsOutput) SetInsightSelectors(v []*InsightSelector) *PutInsightSelectorsOutput {
 	s.InsightSelectors = v
+	return s
+}
+
+// SetInsightsDestination sets the InsightsDestination field's value.
+func (s *PutInsightSelectorsOutput) SetInsightsDestination(v string) *PutInsightSelectorsOutput {
+	s.InsightsDestination = &v
 	return s
 }
 
@@ -16625,7 +18455,7 @@ type RemoveTagsInput struct {
 	//
 	// Example trail ARN format: arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail
 	//
-	// Example event data store ARN format: arn:aws:cloudtrail:us-east-2:12345678910:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
+	// Example event data store ARN format: arn:aws:cloudtrail:us-east-2:123456789012:eventdatastore/EXAMPLE-f852-4e8f-8bd1-bcf6cEXAMPLE
 	//
 	// Example channel ARN format: arn:aws:cloudtrail:us-east-2:123456789012:channel/01234567890
 	//
@@ -16966,13 +18796,13 @@ func (s *ResourcePolicyNotFoundException) RequestID() string {
 //
 // The following are requirements for the resource policy:
 //
-//    * Contains only one action: cloudtrail-data:PutAuditEvents
+//   - Contains only one action: cloudtrail-data:PutAuditEvents
 //
-//    * Contains at least one statement. The policy can have a maximum of 20
-//    statements.
+//   - Contains at least one statement. The policy can have a maximum of 20
+//     statements.
 //
-//    * Each statement contains at least one principal. A statement can have
-//    a maximum of 50 principals.
+//   - Each statement contains at least one principal. A statement can have
+//     a maximum of 50 principals.
 type ResourcePolicyNotValidException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -17198,6 +19028,9 @@ type RestoreEventDataStoreOutput struct {
 	// The advanced event selectors that were used to select events.
 	AdvancedEventSelectors []*AdvancedEventSelector `type:"list"`
 
+	// The billing mode for the event data store.
+	BillingMode *string `type:"string" enum:"BillingMode"`
+
 	// The timestamp of an event data store's creation.
 	CreatedTimestamp *time.Time `type:"timestamp"`
 
@@ -17210,8 +19043,8 @@ type RestoreEventDataStoreOutput struct {
 	// arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `min:"1" type:"string"`
 
-	// Indicates whether the event data store is collecting events from all regions,
-	// or only from the region in which the event data store was created.
+	// Indicates whether the event data store is collecting events from all Regions,
+	// or only from the Region in which the event data store was created.
 	MultiRegionEnabled *bool `type:"boolean"`
 
 	// The name of the event data store.
@@ -17258,6 +19091,12 @@ func (s RestoreEventDataStoreOutput) GoString() string {
 // SetAdvancedEventSelectors sets the AdvancedEventSelectors field's value.
 func (s *RestoreEventDataStoreOutput) SetAdvancedEventSelectors(v []*AdvancedEventSelector) *RestoreEventDataStoreOutput {
 	s.AdvancedEventSelectors = v
+	return s
+}
+
+// SetBillingMode sets the BillingMode field's value.
+func (s *RestoreEventDataStoreOutput) SetBillingMode(v string) *RestoreEventDataStoreOutput {
+	s.BillingMode = &v
 	return s
 }
 
@@ -17394,7 +19233,7 @@ type S3ImportSource struct {
 	// S3BucketAccessRoleArn is a required field
 	S3BucketAccessRoleArn *string `type:"string" required:"true"`
 
-	// The region associated with the source S3 bucket.
+	// The Region associated with the source S3 bucket.
 	//
 	// S3BucketRegion is a required field
 	S3BucketRegion *string `type:"string" required:"true"`
@@ -17467,7 +19306,7 @@ type SourceConfig struct {
 	// The advanced event selectors that are configured for the channel.
 	AdvancedEventSelectors []*AdvancedEventSelector `type:"list"`
 
-	// Specifies whether the channel applies to a single region or to all regions.
+	// Specifies whether the channel applies to a single Region or to all Regions.
 	ApplyToAllRegions *bool `type:"boolean"`
 }
 
@@ -17499,6 +19338,78 @@ func (s *SourceConfig) SetAdvancedEventSelectors(v []*AdvancedEventSelector) *So
 func (s *SourceConfig) SetApplyToAllRegions(v bool) *SourceConfig {
 	s.ApplyToAllRegions = &v
 	return s
+}
+
+type StartEventDataStoreIngestionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN (or ID suffix of the ARN) of the event data store for which you want
+	// to start ingestion.
+	//
+	// EventDataStore is a required field
+	EventDataStore *string `min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartEventDataStoreIngestionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartEventDataStoreIngestionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartEventDataStoreIngestionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartEventDataStoreIngestionInput"}
+	if s.EventDataStore == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventDataStore"))
+	}
+	if s.EventDataStore != nil && len(*s.EventDataStore) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("EventDataStore", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEventDataStore sets the EventDataStore field's value.
+func (s *StartEventDataStoreIngestionInput) SetEventDataStore(v string) *StartEventDataStoreIngestionInput {
+	s.EventDataStore = &v
+	return s
+}
+
+type StartEventDataStoreIngestionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartEventDataStoreIngestionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartEventDataStoreIngestionOutput) GoString() string {
+	return s.String()
 }
 
 type StartImportInput struct {
@@ -17778,10 +19689,14 @@ type StartQueryInput struct {
 	// The URI for the S3 bucket where CloudTrail delivers the query results.
 	DeliveryS3Uri *string `type:"string"`
 
+	// The alias that identifies a query template.
+	QueryAlias *string `min:"1" type:"string"`
+
+	// The query parameters for the specified QueryAlias.
+	QueryParameters []*string `min:"1" type:"list"`
+
 	// The SQL code of your query.
-	//
-	// QueryStatement is a required field
-	QueryStatement *string `min:"1" type:"string" required:"true"`
+	QueryStatement *string `min:"1" type:"string"`
 }
 
 // String returns the string representation.
@@ -17805,8 +19720,11 @@ func (s StartQueryInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StartQueryInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartQueryInput"}
-	if s.QueryStatement == nil {
-		invalidParams.Add(request.NewErrParamRequired("QueryStatement"))
+	if s.QueryAlias != nil && len(*s.QueryAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryAlias", 1))
+	}
+	if s.QueryParameters != nil && len(s.QueryParameters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryParameters", 1))
 	}
 	if s.QueryStatement != nil && len(*s.QueryStatement) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("QueryStatement", 1))
@@ -17821,6 +19739,18 @@ func (s *StartQueryInput) Validate() error {
 // SetDeliveryS3Uri sets the DeliveryS3Uri field's value.
 func (s *StartQueryInput) SetDeliveryS3Uri(v string) *StartQueryInput {
 	s.DeliveryS3Uri = &v
+	return s
+}
+
+// SetQueryAlias sets the QueryAlias field's value.
+func (s *StartQueryInput) SetQueryAlias(v string) *StartQueryInput {
+	s.QueryAlias = &v
+	return s
+}
+
+// SetQueryParameters sets the QueryParameters field's value.
+func (s *StartQueryInput) SetQueryParameters(v []*string) *StartQueryInput {
+	s.QueryParameters = v
 	return s
 }
 
@@ -17859,6 +19789,78 @@ func (s StartQueryOutput) GoString() string {
 func (s *StartQueryOutput) SetQueryId(v string) *StartQueryOutput {
 	s.QueryId = &v
 	return s
+}
+
+type StopEventDataStoreIngestionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN (or ID suffix of the ARN) of the event data store for which you want
+	// to stop ingestion.
+	//
+	// EventDataStore is a required field
+	EventDataStore *string `min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopEventDataStoreIngestionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopEventDataStoreIngestionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopEventDataStoreIngestionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopEventDataStoreIngestionInput"}
+	if s.EventDataStore == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventDataStore"))
+	}
+	if s.EventDataStore != nil && len(*s.EventDataStore) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("EventDataStore", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEventDataStore sets the EventDataStore field's value.
+func (s *StopEventDataStoreIngestionInput) SetEventDataStore(v string) *StopEventDataStoreIngestionInput {
+	s.EventDataStore = &v
+	return s
+}
+
+type StopEventDataStoreIngestionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopEventDataStoreIngestionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopEventDataStoreIngestionOutput) GoString() string {
+	return s.String()
 }
 
 type StopImportInput struct {
@@ -18221,6 +20223,70 @@ func (s *TagsLimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// This exception is thrown when the request rate exceeds the limit.
+type ThrottlingException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThrottlingException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThrottlingException) GoString() string {
+	return s.String()
+}
+
+func newErrorThrottlingException(v protocol.ResponseMetadata) error {
+	return &ThrottlingException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ThrottlingException) Code() string {
+	return "ThrottlingException"
+}
+
+// Message returns the exception's message.
+func (s *ThrottlingException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ThrottlingException) OrigErr() error {
+	return nil
+}
+
+func (s *ThrottlingException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ThrottlingException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ThrottlingException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The settings for a trail.
 type Trail struct {
 	_ struct{} `type:"structure"`
@@ -18240,14 +20306,14 @@ type Trail struct {
 	// list.
 	HasInsightSelectors *bool `type:"boolean"`
 
-	// The region in which the trail was created.
+	// The Region in which the trail was created.
 	HomeRegion *string `type:"string"`
 
 	// Set to True to include Amazon Web Services API calls from Amazon Web Services
 	// global services such as IAM. Otherwise, False.
 	IncludeGlobalServiceEvents *bool `type:"boolean"`
 
-	// Specifies whether the trail exists only in one region or exists in all regions.
+	// Specifies whether the trail exists only in one Region or exists in all Regions.
 	IsMultiRegionTrail *bool `type:"boolean"`
 
 	// Specifies whether the trail is an organization trail.
@@ -18470,7 +20536,7 @@ func (s *TrailAlreadyExistsException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// Information about a CloudTrail trail, including the trail's name, home region,
+// Information about a CloudTrail trail, including the trail's name, home Region,
 // and Amazon Resource Name (ARN).
 type TrailInfo struct {
 	_ struct{} `type:"structure"`
@@ -18863,6 +20929,30 @@ type UpdateEventDataStoreInput struct {
 	// store.
 	AdvancedEventSelectors []*AdvancedEventSelector `type:"list"`
 
+	//
+	// You can't change the billing mode from EXTENDABLE_RETENTION_PRICING to FIXED_RETENTION_PRICING.
+	// If BillingMode is set to EXTENDABLE_RETENTION_PRICING and you want to use
+	// FIXED_RETENTION_PRICING instead, you'll need to stop ingestion on the event
+	// data store and create a new event data store that uses FIXED_RETENTION_PRICING.
+	//
+	// The billing mode for the event data store determines the cost for ingesting
+	// events and the default and maximum retention period for the event data store.
+	//
+	// The following are the possible values:
+	//
+	//    * EXTENDABLE_RETENTION_PRICING - This billing mode is generally recommended
+	//    if you want a flexible retention period of up to 3653 days (about 10 years).
+	//    The default retention period for this billing mode is 366 days.
+	//
+	//    * FIXED_RETENTION_PRICING - This billing mode is recommended if you expect
+	//    to ingest more than 25 TB of event data per month and need a retention
+	//    period of up to 2557 days (about 7 years). The default retention period
+	//    for this billing mode is 2557 days.
+	//
+	// For more information about CloudTrail pricing, see CloudTrail Pricing (http://aws.amazon.com/cloudtrail/pricing/)
+	// and Managing CloudTrail Lake costs (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-manage-costs.html).
+	BillingMode *string `type:"string" enum:"BillingMode"`
+
 	// The ARN (or the ID suffix of the ARN) of the event data store that you want
 	// to update.
 	//
@@ -18896,8 +20986,8 @@ type UpdateEventDataStoreInput struct {
 	//    * 12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `min:"1" type:"string"`
 
-	// Specifies whether an event data store collects events from all regions, or
-	// only from the region in which it was created.
+	// Specifies whether an event data store collects events from all Regions, or
+	// only from the Region in which it was created.
 	MultiRegionEnabled *bool `type:"boolean"`
 
 	// The event data store name.
@@ -18905,9 +20995,28 @@ type UpdateEventDataStoreInput struct {
 
 	// Specifies whether an event data store collects events logged for an organization
 	// in Organizations.
+	//
+	// Only the management account for the organization can convert an organization
+	// event data store to a non-organization event data store, or convert a non-organization
+	// event data store to an organization event data store.
 	OrganizationEnabled *bool `type:"boolean"`
 
-	// The retention period, in days.
+	// The retention period of the event data store, in days. If BillingMode is
+	// set to EXTENDABLE_RETENTION_PRICING, you can set a retention period of up
+	// to 3653 days, the equivalent of 10 years. If BillingMode is set to FIXED_RETENTION_PRICING,
+	// you can set a retention period of up to 2557 days, the equivalent of seven
+	// years.
+	//
+	// CloudTrail Lake determines whether to retain an event by checking if the
+	// eventTime of the event is within the specified retention period. For example,
+	// if you set a retention period of 90 days, CloudTrail will remove events when
+	// the eventTime is older than 90 days.
+	//
+	// If you decrease the retention period of an event data store, CloudTrail will
+	// remove any events with an eventTime older than the new retention period.
+	// For example, if the previous retention period was 365 days and you decrease
+	// it to 100 days, CloudTrail will remove events with an eventTime older than
+	// 100 days.
 	RetentionPeriod *int64 `min:"7" type:"integer"`
 
 	// Indicates that termination protection is enabled and the event data store
@@ -18974,6 +21083,12 @@ func (s *UpdateEventDataStoreInput) SetAdvancedEventSelectors(v []*AdvancedEvent
 	return s
 }
 
+// SetBillingMode sets the BillingMode field's value.
+func (s *UpdateEventDataStoreInput) SetBillingMode(v string) *UpdateEventDataStoreInput {
+	s.BillingMode = &v
+	return s
+}
+
 // SetEventDataStore sets the EventDataStore field's value.
 func (s *UpdateEventDataStoreInput) SetEventDataStore(v string) *UpdateEventDataStoreInput {
 	s.EventDataStore = &v
@@ -19022,11 +21137,24 @@ type UpdateEventDataStoreOutput struct {
 	// The advanced event selectors that are applied to the event data store.
 	AdvancedEventSelectors []*AdvancedEventSelector `type:"list"`
 
+	// The billing mode for the event data store.
+	BillingMode *string `type:"string" enum:"BillingMode"`
+
 	// The timestamp that shows when an event data store was first created.
 	CreatedTimestamp *time.Time `type:"timestamp"`
 
 	// The ARN of the event data store.
 	EventDataStoreArn *string `min:"3" type:"string"`
+
+	// If Lake query federation is enabled, provides the ARN of the federation role
+	// used to access the resources for the federated event data store.
+	FederationRoleArn *string `min:"3" type:"string"`
+
+	// Indicates the Lake query federation (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-federation.html)
+	// status. The status is ENABLED if Lake query federation is enabled, or DISABLED
+	// if Lake query federation is disabled. You cannot delete an event data store
+	// if the FederationStatus is ENABLED.
+	FederationStatus *string `type:"string" enum:"FederationStatus"`
 
 	// Specifies the KMS key ID that encrypts the events delivered by CloudTrail.
 	// The value is a fully specified ARN to a KMS key in the following format.
@@ -19034,8 +21162,8 @@ type UpdateEventDataStoreOutput struct {
 	// arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012
 	KmsKeyId *string `min:"1" type:"string"`
 
-	// Indicates whether the event data store includes events from all regions,
-	// or only from the region in which it was created.
+	// Indicates whether the event data store includes events from all Regions,
+	// or only from the Region in which it was created.
 	MultiRegionEnabled *bool `type:"boolean"`
 
 	// The name of the event data store.
@@ -19048,7 +21176,7 @@ type UpdateEventDataStoreOutput struct {
 	// The retention period, in days.
 	RetentionPeriod *int64 `min:"7" type:"integer"`
 
-	// The status of an event data store. Values can be ENABLED and PENDING_DELETION.
+	// The status of an event data store.
 	Status *string `type:"string" enum:"EventDataStoreStatus"`
 
 	// Indicates whether termination protection is enabled for the event data store.
@@ -19083,6 +21211,12 @@ func (s *UpdateEventDataStoreOutput) SetAdvancedEventSelectors(v []*AdvancedEven
 	return s
 }
 
+// SetBillingMode sets the BillingMode field's value.
+func (s *UpdateEventDataStoreOutput) SetBillingMode(v string) *UpdateEventDataStoreOutput {
+	s.BillingMode = &v
+	return s
+}
+
 // SetCreatedTimestamp sets the CreatedTimestamp field's value.
 func (s *UpdateEventDataStoreOutput) SetCreatedTimestamp(v time.Time) *UpdateEventDataStoreOutput {
 	s.CreatedTimestamp = &v
@@ -19092,6 +21226,18 @@ func (s *UpdateEventDataStoreOutput) SetCreatedTimestamp(v time.Time) *UpdateEve
 // SetEventDataStoreArn sets the EventDataStoreArn field's value.
 func (s *UpdateEventDataStoreOutput) SetEventDataStoreArn(v string) *UpdateEventDataStoreOutput {
 	s.EventDataStoreArn = &v
+	return s
+}
+
+// SetFederationRoleArn sets the FederationRoleArn field's value.
+func (s *UpdateEventDataStoreOutput) SetFederationRoleArn(v string) *UpdateEventDataStoreOutput {
+	s.FederationRoleArn = &v
+	return s
+}
+
+// SetFederationStatus sets the FederationStatus field's value.
+func (s *UpdateEventDataStoreOutput) SetFederationStatus(v string) *UpdateEventDataStoreOutput {
+	s.FederationStatus = &v
 	return s
 }
 
@@ -19174,25 +21320,28 @@ type UpdateTrailInput struct {
 	// as IAM to the log files.
 	IncludeGlobalServiceEvents *bool `type:"boolean"`
 
-	// Specifies whether the trail applies only to the current region or to all
-	// regions. The default is false. If the trail exists only in the current region
+	// Specifies whether the trail applies only to the current Region or to all
+	// Regions. The default is false. If the trail exists only in the current Region
 	// and this value is set to true, shadow trails (replications of the trail)
-	// will be created in the other regions. If the trail exists in all regions
-	// and this value is set to false, the trail will remain in the region where
-	// it was created, and its shadow trails in other regions will be deleted. As
-	// a best practice, consider using trails that log events in all regions.
+	// will be created in the other Regions. If the trail exists in all Regions
+	// and this value is set to false, the trail will remain in the Region where
+	// it was created, and its shadow trails in other Regions will be deleted. As
+	// a best practice, consider using trails that log events in all Regions.
 	IsMultiRegionTrail *bool `type:"boolean"`
 
 	// Specifies whether the trail is applied to all accounts in an organization
 	// in Organizations, or only for the current Amazon Web Services account. The
 	// default is false, and cannot be true unless the call is made on behalf of
-	// an Amazon Web Services account that is the management account or delegated
-	// administrator account for an organization in Organizations. If the trail
-	// is not an organization trail and this is set to true, the trail will be created
-	// in all Amazon Web Services accounts that belong to the organization. If the
-	// trail is an organization trail and this is set to false, the trail will remain
-	// in the current Amazon Web Services account but be deleted from all member
-	// accounts in the organization.
+	// an Amazon Web Services account that is the management account for an organization
+	// in Organizations. If the trail is not an organization trail and this is set
+	// to true, the trail will be created in all Amazon Web Services accounts that
+	// belong to the organization. If the trail is an organization trail and this
+	// is set to false, the trail will remain in the current Amazon Web Services
+	// account but be deleted from all member accounts in the organization.
+	//
+	// Only the management account for the organization can convert an organization
+	// trail to a non-organization trail, or convert a non-organization trail to
+	// an organization trail.
 	IsOrganizationTrail *bool `type:"boolean"`
 
 	// Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail.
@@ -19365,7 +21514,7 @@ type UpdateTrailOutput struct {
 	// as IAM to the log files.
 	IncludeGlobalServiceEvents *bool `type:"boolean"`
 
-	// Specifies whether the trail exists in one region or in all regions.
+	// Specifies whether the trail exists in one Region or in all Regions.
 	IsMultiRegionTrail *bool `type:"boolean"`
 
 	// Specifies whether the trail is an organization trail.
@@ -19398,7 +21547,7 @@ type UpdateTrailOutput struct {
 	// arn:aws:sns:us-east-2:123456789012:MyTopic
 	SnsTopicARN *string `type:"string"`
 
-	// This field is no longer in use. Use UpdateTrailResponse$SnsTopicARN.
+	// This field is no longer in use. Use SnsTopicARN.
 	//
 	// Deprecated: SnsTopicName has been deprecated
 	SnsTopicName *string `deprecated:"true" type:"string"`
@@ -19507,6 +21656,22 @@ func (s *UpdateTrailOutput) SetTrailARN(v string) *UpdateTrailOutput {
 }
 
 const (
+	// BillingModeExtendableRetentionPricing is a BillingMode enum value
+	BillingModeExtendableRetentionPricing = "EXTENDABLE_RETENTION_PRICING"
+
+	// BillingModeFixedRetentionPricing is a BillingMode enum value
+	BillingModeFixedRetentionPricing = "FIXED_RETENTION_PRICING"
+)
+
+// BillingMode_Values returns all elements of the BillingMode enum
+func BillingMode_Values() []string {
+	return []string{
+		BillingModeExtendableRetentionPricing,
+		BillingModeFixedRetentionPricing,
+	}
+}
+
+const (
 	// DeliveryStatusSuccess is a DeliveryStatus enum value
 	DeliveryStatusSuccess = "SUCCESS"
 
@@ -19587,6 +21752,15 @@ const (
 
 	// EventDataStoreStatusPendingDeletion is a EventDataStoreStatus enum value
 	EventDataStoreStatusPendingDeletion = "PENDING_DELETION"
+
+	// EventDataStoreStatusStartingIngestion is a EventDataStoreStatus enum value
+	EventDataStoreStatusStartingIngestion = "STARTING_INGESTION"
+
+	// EventDataStoreStatusStoppingIngestion is a EventDataStoreStatus enum value
+	EventDataStoreStatusStoppingIngestion = "STOPPING_INGESTION"
+
+	// EventDataStoreStatusStoppedIngestion is a EventDataStoreStatus enum value
+	EventDataStoreStatusStoppedIngestion = "STOPPED_INGESTION"
 )
 
 // EventDataStoreStatus_Values returns all elements of the EventDataStoreStatus enum
@@ -19595,6 +21769,33 @@ func EventDataStoreStatus_Values() []string {
 		EventDataStoreStatusCreated,
 		EventDataStoreStatusEnabled,
 		EventDataStoreStatusPendingDeletion,
+		EventDataStoreStatusStartingIngestion,
+		EventDataStoreStatusStoppingIngestion,
+		EventDataStoreStatusStoppedIngestion,
+	}
+}
+
+const (
+	// FederationStatusEnabling is a FederationStatus enum value
+	FederationStatusEnabling = "ENABLING"
+
+	// FederationStatusEnabled is a FederationStatus enum value
+	FederationStatusEnabled = "ENABLED"
+
+	// FederationStatusDisabling is a FederationStatus enum value
+	FederationStatusDisabling = "DISABLING"
+
+	// FederationStatusDisabled is a FederationStatus enum value
+	FederationStatusDisabled = "DISABLED"
+)
+
+// FederationStatus_Values returns all elements of the FederationStatus enum
+func FederationStatus_Values() []string {
+	return []string{
+		FederationStatusEnabling,
+		FederationStatusEnabled,
+		FederationStatusDisabling,
+		FederationStatusDisabled,
 	}
 }
 
@@ -19659,6 +21860,22 @@ func InsightType_Values() []string {
 	return []string{
 		InsightTypeApiCallRateInsight,
 		InsightTypeApiErrorRateInsight,
+	}
+}
+
+const (
+	// InsightsMetricDataTypeFillWithZeros is a InsightsMetricDataType enum value
+	InsightsMetricDataTypeFillWithZeros = "FillWithZeros"
+
+	// InsightsMetricDataTypeNonZeroData is a InsightsMetricDataType enum value
+	InsightsMetricDataTypeNonZeroData = "NonZeroData"
+)
+
+// InsightsMetricDataType_Values returns all elements of the InsightsMetricDataType enum
+func InsightsMetricDataType_Values() []string {
+	return []string{
+		InsightsMetricDataTypeFillWithZeros,
+		InsightsMetricDataTypeNonZeroData,
 	}
 }
 

@@ -30,14 +30,13 @@ const opAcceptInputDeviceTransfer = "AcceptInputDeviceTransfer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AcceptInputDeviceTransferRequest method.
+//	req, resp := client.AcceptInputDeviceTransferRequest(params)
 //
-//    // Example sending a request using the AcceptInputDeviceTransferRequest method.
-//    req, resp := client.AcceptInputDeviceTransferRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/AcceptInputDeviceTransfer
 func (c *MediaLive) AcceptInputDeviceTransferRequest(input *AcceptInputDeviceTransferInput) (req *request.Request, output *AcceptInputDeviceTransferOutput) {
@@ -70,23 +69,24 @@ func (c *MediaLive) AcceptInputDeviceTransferRequest(input *AcceptInputDeviceTra
 // API operation AcceptInputDeviceTransfer for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/AcceptInputDeviceTransfer
 func (c *MediaLive) AcceptInputDeviceTransfer(input *AcceptInputDeviceTransferInput) (*AcceptInputDeviceTransferOutput, error) {
@@ -126,14 +126,13 @@ const opBatchDelete = "BatchDelete"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchDeleteRequest method.
+//	req, resp := client.BatchDeleteRequest(params)
 //
-//    // Example sending a request using the BatchDeleteRequest method.
-//    req, resp := client.BatchDeleteRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchDelete
 func (c *MediaLive) BatchDeleteRequest(input *BatchDeleteInput) (req *request.Request, output *BatchDeleteOutput) {
@@ -164,21 +163,22 @@ func (c *MediaLive) BatchDeleteRequest(input *BatchDeleteInput) (req *request.Re
 // API operation BatchDelete for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchDelete
 func (c *MediaLive) BatchDelete(input *BatchDeleteInput) (*BatchDeleteOutput, error) {
@@ -218,14 +218,13 @@ const opBatchStart = "BatchStart"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchStartRequest method.
+//	req, resp := client.BatchStartRequest(params)
 //
-//    // Example sending a request using the BatchStartRequest method.
-//    req, resp := client.BatchStartRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchStart
 func (c *MediaLive) BatchStartRequest(input *BatchStartInput) (req *request.Request, output *BatchStartOutput) {
@@ -246,7 +245,7 @@ func (c *MediaLive) BatchStartRequest(input *BatchStartInput) (req *request.Requ
 
 // BatchStart API operation for AWS Elemental MediaLive.
 //
-// Starts existing resources
+// # Starts existing resources
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -256,21 +255,22 @@ func (c *MediaLive) BatchStartRequest(input *BatchStartInput) (req *request.Requ
 // API operation BatchStart for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchStart
 func (c *MediaLive) BatchStart(input *BatchStartInput) (*BatchStartOutput, error) {
@@ -310,14 +310,13 @@ const opBatchStop = "BatchStop"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchStopRequest method.
+//	req, resp := client.BatchStopRequest(params)
 //
-//    // Example sending a request using the BatchStopRequest method.
-//    req, resp := client.BatchStopRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchStop
 func (c *MediaLive) BatchStopRequest(input *BatchStopInput) (req *request.Request, output *BatchStopOutput) {
@@ -338,7 +337,7 @@ func (c *MediaLive) BatchStopRequest(input *BatchStopInput) (req *request.Reques
 
 // BatchStop API operation for AWS Elemental MediaLive.
 //
-// Stops running resources
+// # Stops running resources
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -348,21 +347,22 @@ func (c *MediaLive) BatchStopRequest(input *BatchStopInput) (req *request.Reques
 // API operation BatchStop for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchStop
 func (c *MediaLive) BatchStop(input *BatchStopInput) (*BatchStopOutput, error) {
@@ -402,14 +402,13 @@ const opBatchUpdateSchedule = "BatchUpdateSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchUpdateScheduleRequest method.
+//	req, resp := client.BatchUpdateScheduleRequest(params)
 //
-//    // Example sending a request using the BatchUpdateScheduleRequest method.
-//    req, resp := client.BatchUpdateScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchUpdateSchedule
 func (c *MediaLive) BatchUpdateScheduleRequest(input *BatchUpdateScheduleInput) (req *request.Request, output *BatchUpdateScheduleOutput) {
@@ -430,7 +429,7 @@ func (c *MediaLive) BatchUpdateScheduleRequest(input *BatchUpdateScheduleInput) 
 
 // BatchUpdateSchedule API operation for AWS Elemental MediaLive.
 //
-// Update a channel schedule
+// # Update a channel schedule
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -440,21 +439,22 @@ func (c *MediaLive) BatchUpdateScheduleRequest(input *BatchUpdateScheduleInput) 
 // API operation BatchUpdateSchedule for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/BatchUpdateSchedule
 func (c *MediaLive) BatchUpdateSchedule(input *BatchUpdateScheduleInput) (*BatchUpdateScheduleOutput, error) {
@@ -494,14 +494,13 @@ const opCancelInputDeviceTransfer = "CancelInputDeviceTransfer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelInputDeviceTransferRequest method.
+//	req, resp := client.CancelInputDeviceTransferRequest(params)
 //
-//    // Example sending a request using the CancelInputDeviceTransferRequest method.
-//    req, resp := client.CancelInputDeviceTransferRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CancelInputDeviceTransfer
 func (c *MediaLive) CancelInputDeviceTransferRequest(input *CancelInputDeviceTransferInput) (req *request.Request, output *CancelInputDeviceTransferOutput) {
@@ -533,23 +532,24 @@ func (c *MediaLive) CancelInputDeviceTransferRequest(input *CancelInputDeviceTra
 // API operation CancelInputDeviceTransfer for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CancelInputDeviceTransfer
 func (c *MediaLive) CancelInputDeviceTransfer(input *CancelInputDeviceTransferInput) (*CancelInputDeviceTransferOutput, error) {
@@ -589,14 +589,13 @@ const opClaimDevice = "ClaimDevice"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ClaimDeviceRequest method.
+//	req, resp := client.ClaimDeviceRequest(params)
 //
-//    // Example sending a request using the ClaimDeviceRequest method.
-//    req, resp := client.ClaimDeviceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ClaimDevice
 func (c *MediaLive) ClaimDeviceRequest(input *ClaimDeviceInput) (req *request.Request, output *ClaimDeviceOutput) {
@@ -629,21 +628,22 @@ func (c *MediaLive) ClaimDeviceRequest(input *ClaimDeviceInput) (req *request.Re
 // API operation ClaimDevice for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ClaimDevice
 func (c *MediaLive) ClaimDevice(input *ClaimDeviceInput) (*ClaimDeviceOutput, error) {
@@ -683,14 +683,13 @@ const opCreateChannel = "CreateChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateChannelRequest method.
+//	req, resp := client.CreateChannelRequest(params)
 //
-//    // Example sending a request using the CreateChannelRequest method.
-//    req, resp := client.CreateChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateChannel
 func (c *MediaLive) CreateChannelRequest(input *CreateChannelInput) (req *request.Request, output *CreateChannelOutput) {
@@ -711,7 +710,7 @@ func (c *MediaLive) CreateChannelRequest(input *CreateChannelInput) (req *reques
 
 // CreateChannel API operation for AWS Elemental MediaLive.
 //
-// Creates a new channel
+// # Creates a new channel
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -721,21 +720,22 @@ func (c *MediaLive) CreateChannelRequest(input *CreateChannelInput) (req *reques
 // API operation CreateChannel for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateChannel
 func (c *MediaLive) CreateChannel(input *CreateChannelInput) (*CreateChannelOutput, error) {
@@ -759,6 +759,363 @@ func (c *MediaLive) CreateChannelWithContext(ctx aws.Context, input *CreateChann
 	return out, req.Send()
 }
 
+const opCreateCloudWatchAlarmTemplate = "CreateCloudWatchAlarmTemplate"
+
+// CreateCloudWatchAlarmTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the CreateCloudWatchAlarmTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateCloudWatchAlarmTemplate for more information on using the CreateCloudWatchAlarmTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateCloudWatchAlarmTemplateRequest method.
+//	req, resp := client.CreateCloudWatchAlarmTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateCloudWatchAlarmTemplate
+func (c *MediaLive) CreateCloudWatchAlarmTemplateRequest(input *CreateCloudWatchAlarmTemplateInput) (req *request.Request, output *CreateCloudWatchAlarmTemplateOutput) {
+	op := &request.Operation{
+		Name:       opCreateCloudWatchAlarmTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/cloudwatch-alarm-templates",
+	}
+
+	if input == nil {
+		input = &CreateCloudWatchAlarmTemplateInput{}
+	}
+
+	output = &CreateCloudWatchAlarmTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateCloudWatchAlarmTemplate API operation for AWS Elemental MediaLive.
+//
+// Creates a cloudwatch alarm template to dynamically generate cloudwatch metric
+// alarms on targeted resource types.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation CreateCloudWatchAlarmTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateCloudWatchAlarmTemplate
+func (c *MediaLive) CreateCloudWatchAlarmTemplate(input *CreateCloudWatchAlarmTemplateInput) (*CreateCloudWatchAlarmTemplateOutput, error) {
+	req, out := c.CreateCloudWatchAlarmTemplateRequest(input)
+	return out, req.Send()
+}
+
+// CreateCloudWatchAlarmTemplateWithContext is the same as CreateCloudWatchAlarmTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateCloudWatchAlarmTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) CreateCloudWatchAlarmTemplateWithContext(ctx aws.Context, input *CreateCloudWatchAlarmTemplateInput, opts ...request.Option) (*CreateCloudWatchAlarmTemplateOutput, error) {
+	req, out := c.CreateCloudWatchAlarmTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateCloudWatchAlarmTemplateGroup = "CreateCloudWatchAlarmTemplateGroup"
+
+// CreateCloudWatchAlarmTemplateGroupRequest generates a "aws/request.Request" representing the
+// client's request for the CreateCloudWatchAlarmTemplateGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateCloudWatchAlarmTemplateGroup for more information on using the CreateCloudWatchAlarmTemplateGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateCloudWatchAlarmTemplateGroupRequest method.
+//	req, resp := client.CreateCloudWatchAlarmTemplateGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateCloudWatchAlarmTemplateGroup
+func (c *MediaLive) CreateCloudWatchAlarmTemplateGroupRequest(input *CreateCloudWatchAlarmTemplateGroupInput) (req *request.Request, output *CreateCloudWatchAlarmTemplateGroupOutput) {
+	op := &request.Operation{
+		Name:       opCreateCloudWatchAlarmTemplateGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/cloudwatch-alarm-template-groups",
+	}
+
+	if input == nil {
+		input = &CreateCloudWatchAlarmTemplateGroupInput{}
+	}
+
+	output = &CreateCloudWatchAlarmTemplateGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateCloudWatchAlarmTemplateGroup API operation for AWS Elemental MediaLive.
+//
+// Creates a cloudwatch alarm template group to group your cloudwatch alarm
+// templates and to attach to signal maps for dynamically creating alarms.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation CreateCloudWatchAlarmTemplateGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateCloudWatchAlarmTemplateGroup
+func (c *MediaLive) CreateCloudWatchAlarmTemplateGroup(input *CreateCloudWatchAlarmTemplateGroupInput) (*CreateCloudWatchAlarmTemplateGroupOutput, error) {
+	req, out := c.CreateCloudWatchAlarmTemplateGroupRequest(input)
+	return out, req.Send()
+}
+
+// CreateCloudWatchAlarmTemplateGroupWithContext is the same as CreateCloudWatchAlarmTemplateGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateCloudWatchAlarmTemplateGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) CreateCloudWatchAlarmTemplateGroupWithContext(ctx aws.Context, input *CreateCloudWatchAlarmTemplateGroupInput, opts ...request.Option) (*CreateCloudWatchAlarmTemplateGroupOutput, error) {
+	req, out := c.CreateCloudWatchAlarmTemplateGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateEventBridgeRuleTemplate = "CreateEventBridgeRuleTemplate"
+
+// CreateEventBridgeRuleTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the CreateEventBridgeRuleTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateEventBridgeRuleTemplate for more information on using the CreateEventBridgeRuleTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateEventBridgeRuleTemplateRequest method.
+//	req, resp := client.CreateEventBridgeRuleTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateEventBridgeRuleTemplate
+func (c *MediaLive) CreateEventBridgeRuleTemplateRequest(input *CreateEventBridgeRuleTemplateInput) (req *request.Request, output *CreateEventBridgeRuleTemplateOutput) {
+	op := &request.Operation{
+		Name:       opCreateEventBridgeRuleTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/eventbridge-rule-templates",
+	}
+
+	if input == nil {
+		input = &CreateEventBridgeRuleTemplateInput{}
+	}
+
+	output = &CreateEventBridgeRuleTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateEventBridgeRuleTemplate API operation for AWS Elemental MediaLive.
+//
+// Creates an eventbridge rule template to monitor events and send notifications
+// to your targeted resources.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation CreateEventBridgeRuleTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateEventBridgeRuleTemplate
+func (c *MediaLive) CreateEventBridgeRuleTemplate(input *CreateEventBridgeRuleTemplateInput) (*CreateEventBridgeRuleTemplateOutput, error) {
+	req, out := c.CreateEventBridgeRuleTemplateRequest(input)
+	return out, req.Send()
+}
+
+// CreateEventBridgeRuleTemplateWithContext is the same as CreateEventBridgeRuleTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateEventBridgeRuleTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) CreateEventBridgeRuleTemplateWithContext(ctx aws.Context, input *CreateEventBridgeRuleTemplateInput, opts ...request.Option) (*CreateEventBridgeRuleTemplateOutput, error) {
+	req, out := c.CreateEventBridgeRuleTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateEventBridgeRuleTemplateGroup = "CreateEventBridgeRuleTemplateGroup"
+
+// CreateEventBridgeRuleTemplateGroupRequest generates a "aws/request.Request" representing the
+// client's request for the CreateEventBridgeRuleTemplateGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateEventBridgeRuleTemplateGroup for more information on using the CreateEventBridgeRuleTemplateGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateEventBridgeRuleTemplateGroupRequest method.
+//	req, resp := client.CreateEventBridgeRuleTemplateGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateEventBridgeRuleTemplateGroup
+func (c *MediaLive) CreateEventBridgeRuleTemplateGroupRequest(input *CreateEventBridgeRuleTemplateGroupInput) (req *request.Request, output *CreateEventBridgeRuleTemplateGroupOutput) {
+	op := &request.Operation{
+		Name:       opCreateEventBridgeRuleTemplateGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/eventbridge-rule-template-groups",
+	}
+
+	if input == nil {
+		input = &CreateEventBridgeRuleTemplateGroupInput{}
+	}
+
+	output = &CreateEventBridgeRuleTemplateGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateEventBridgeRuleTemplateGroup API operation for AWS Elemental MediaLive.
+//
+// Creates an eventbridge rule template group to group your eventbridge rule
+// templates and to attach to signal maps for dynamically creating notification
+// rules.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation CreateEventBridgeRuleTemplateGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateEventBridgeRuleTemplateGroup
+func (c *MediaLive) CreateEventBridgeRuleTemplateGroup(input *CreateEventBridgeRuleTemplateGroupInput) (*CreateEventBridgeRuleTemplateGroupOutput, error) {
+	req, out := c.CreateEventBridgeRuleTemplateGroupRequest(input)
+	return out, req.Send()
+}
+
+// CreateEventBridgeRuleTemplateGroupWithContext is the same as CreateEventBridgeRuleTemplateGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateEventBridgeRuleTemplateGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) CreateEventBridgeRuleTemplateGroupWithContext(ctx aws.Context, input *CreateEventBridgeRuleTemplateGroupInput, opts ...request.Option) (*CreateEventBridgeRuleTemplateGroupOutput, error) {
+	req, out := c.CreateEventBridgeRuleTemplateGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateInput = "CreateInput"
 
 // CreateInputRequest generates a "aws/request.Request" representing the
@@ -775,14 +1132,13 @@ const opCreateInput = "CreateInput"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateInputRequest method.
+//	req, resp := client.CreateInputRequest(params)
 //
-//    // Example sending a request using the CreateInputRequest method.
-//    req, resp := client.CreateInputRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateInput
 func (c *MediaLive) CreateInputRequest(input *CreateInputInput) (req *request.Request, output *CreateInputOutput) {
@@ -803,7 +1159,7 @@ func (c *MediaLive) CreateInputRequest(input *CreateInputInput) (req *request.Re
 
 // CreateInput API operation for AWS Elemental MediaLive.
 //
-// Create an input
+// # Create an input
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -813,17 +1169,18 @@ func (c *MediaLive) CreateInputRequest(input *CreateInputInput) (req *request.Re
 // API operation CreateInput for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateInput
 func (c *MediaLive) CreateInput(input *CreateInputInput) (*CreateInputOutput, error) {
@@ -863,14 +1220,13 @@ const opCreateInputSecurityGroup = "CreateInputSecurityGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateInputSecurityGroupRequest method.
+//	req, resp := client.CreateInputSecurityGroupRequest(params)
 //
-//    // Example sending a request using the CreateInputSecurityGroupRequest method.
-//    req, resp := client.CreateInputSecurityGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateInputSecurityGroup
 func (c *MediaLive) CreateInputSecurityGroupRequest(input *CreateInputSecurityGroupInput) (req *request.Request, output *CreateInputSecurityGroupOutput) {
@@ -891,7 +1247,7 @@ func (c *MediaLive) CreateInputSecurityGroupRequest(input *CreateInputSecurityGr
 
 // CreateInputSecurityGroup API operation for AWS Elemental MediaLive.
 //
-// Creates a Input Security Group
+// # Creates a Input Security Group
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -901,17 +1257,18 @@ func (c *MediaLive) CreateInputSecurityGroupRequest(input *CreateInputSecurityGr
 // API operation CreateInputSecurityGroup for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateInputSecurityGroup
 func (c *MediaLive) CreateInputSecurityGroup(input *CreateInputSecurityGroupInput) (*CreateInputSecurityGroupOutput, error) {
@@ -951,14 +1308,13 @@ const opCreateMultiplex = "CreateMultiplex"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateMultiplexRequest method.
+//	req, resp := client.CreateMultiplexRequest(params)
 //
-//    // Example sending a request using the CreateMultiplexRequest method.
-//    req, resp := client.CreateMultiplexRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateMultiplex
 func (c *MediaLive) CreateMultiplexRequest(input *CreateMultiplexInput) (req *request.Request, output *CreateMultiplexOutput) {
@@ -989,21 +1345,22 @@ func (c *MediaLive) CreateMultiplexRequest(input *CreateMultiplexInput) (req *re
 // API operation CreateMultiplex for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateMultiplex
 func (c *MediaLive) CreateMultiplex(input *CreateMultiplexInput) (*CreateMultiplexOutput, error) {
@@ -1043,14 +1400,13 @@ const opCreateMultiplexProgram = "CreateMultiplexProgram"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateMultiplexProgramRequest method.
+//	req, resp := client.CreateMultiplexProgramRequest(params)
 //
-//    // Example sending a request using the CreateMultiplexProgramRequest method.
-//    req, resp := client.CreateMultiplexProgramRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateMultiplexProgram
 func (c *MediaLive) CreateMultiplexProgramRequest(input *CreateMultiplexProgramInput) (req *request.Request, output *CreateMultiplexProgramOutput) {
@@ -1081,21 +1437,22 @@ func (c *MediaLive) CreateMultiplexProgramRequest(input *CreateMultiplexProgramI
 // API operation CreateMultiplexProgram for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateMultiplexProgram
 func (c *MediaLive) CreateMultiplexProgram(input *CreateMultiplexProgramInput) (*CreateMultiplexProgramOutput, error) {
@@ -1135,14 +1492,13 @@ const opCreatePartnerInput = "CreatePartnerInput"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreatePartnerInputRequest method.
+//	req, resp := client.CreatePartnerInputRequest(params)
 //
-//    // Example sending a request using the CreatePartnerInputRequest method.
-//    req, resp := client.CreatePartnerInputRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreatePartnerInput
 func (c *MediaLive) CreatePartnerInputRequest(input *CreatePartnerInputInput) (req *request.Request, output *CreatePartnerInputOutput) {
@@ -1163,7 +1519,7 @@ func (c *MediaLive) CreatePartnerInputRequest(input *CreatePartnerInputInput) (r
 
 // CreatePartnerInput API operation for AWS Elemental MediaLive.
 //
-// Create a partner input
+// # Create a partner input
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1173,17 +1529,18 @@ func (c *MediaLive) CreatePartnerInputRequest(input *CreatePartnerInputInput) (r
 // API operation CreatePartnerInput for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreatePartnerInput
 func (c *MediaLive) CreatePartnerInput(input *CreatePartnerInputInput) (*CreatePartnerInputOutput, error) {
@@ -1207,6 +1564,95 @@ func (c *MediaLive) CreatePartnerInputWithContext(ctx aws.Context, input *Create
 	return out, req.Send()
 }
 
+const opCreateSignalMap = "CreateSignalMap"
+
+// CreateSignalMapRequest generates a "aws/request.Request" representing the
+// client's request for the CreateSignalMap operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateSignalMap for more information on using the CreateSignalMap
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateSignalMapRequest method.
+//	req, resp := client.CreateSignalMapRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateSignalMap
+func (c *MediaLive) CreateSignalMapRequest(input *CreateSignalMapInput) (req *request.Request, output *CreateSignalMapOutput) {
+	op := &request.Operation{
+		Name:       opCreateSignalMap,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/signal-maps",
+	}
+
+	if input == nil {
+		input = &CreateSignalMapInput{}
+	}
+
+	output = &CreateSignalMapOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateSignalMap API operation for AWS Elemental MediaLive.
+//
+// Initiates the creation of a new signal map. Will discover a new mediaResourceMap
+// based on the provided discoveryEntryPointArn.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation CreateSignalMap for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateSignalMap
+func (c *MediaLive) CreateSignalMap(input *CreateSignalMapInput) (*CreateSignalMapOutput, error) {
+	req, out := c.CreateSignalMapRequest(input)
+	return out, req.Send()
+}
+
+// CreateSignalMapWithContext is the same as CreateSignalMap with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateSignalMap for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) CreateSignalMapWithContext(ctx aws.Context, input *CreateSignalMapInput, opts ...request.Option) (*CreateSignalMapOutput, error) {
+	req, out := c.CreateSignalMapRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateTags = "CreateTags"
 
 // CreateTagsRequest generates a "aws/request.Request" representing the
@@ -1223,14 +1669,13 @@ const opCreateTags = "CreateTags"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateTagsRequest method.
+//	req, resp := client.CreateTagsRequest(params)
 //
-//    // Example sending a request using the CreateTagsRequest method.
-//    req, resp := client.CreateTagsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateTags
 func (c *MediaLive) CreateTagsRequest(input *CreateTagsInput) (req *request.Request, output *CreateTagsOutput) {
@@ -1252,7 +1697,7 @@ func (c *MediaLive) CreateTagsRequest(input *CreateTagsInput) (req *request.Requ
 
 // CreateTags API operation for AWS Elemental MediaLive.
 //
-// Create tags for a resource
+// # Create tags for a resource
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1262,13 +1707,14 @@ func (c *MediaLive) CreateTagsRequest(input *CreateTagsInput) (req *request.Requ
 // API operation CreateTags for usage and error information.
 //
 // Returned Error Types:
-//   * NotFoundException
 //
-//   * BadRequestException
+//   - NotFoundException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreateTags
 func (c *MediaLive) CreateTags(input *CreateTagsInput) (*CreateTagsOutput, error) {
@@ -1308,14 +1754,13 @@ const opDeleteChannel = "DeleteChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteChannelRequest method.
+//	req, resp := client.DeleteChannelRequest(params)
 //
-//    // Example sending a request using the DeleteChannelRequest method.
-//    req, resp := client.DeleteChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteChannel
 func (c *MediaLive) DeleteChannelRequest(input *DeleteChannelInput) (req *request.Request, output *DeleteChannelOutput) {
@@ -1346,21 +1791,22 @@ func (c *MediaLive) DeleteChannelRequest(input *DeleteChannelInput) (req *reques
 // API operation DeleteChannel for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteChannel
 func (c *MediaLive) DeleteChannel(input *DeleteChannelInput) (*DeleteChannelOutput, error) {
@@ -1384,6 +1830,366 @@ func (c *MediaLive) DeleteChannelWithContext(ctx aws.Context, input *DeleteChann
 	return out, req.Send()
 }
 
+const opDeleteCloudWatchAlarmTemplate = "DeleteCloudWatchAlarmTemplate"
+
+// DeleteCloudWatchAlarmTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteCloudWatchAlarmTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteCloudWatchAlarmTemplate for more information on using the DeleteCloudWatchAlarmTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteCloudWatchAlarmTemplateRequest method.
+//	req, resp := client.DeleteCloudWatchAlarmTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteCloudWatchAlarmTemplate
+func (c *MediaLive) DeleteCloudWatchAlarmTemplateRequest(input *DeleteCloudWatchAlarmTemplateInput) (req *request.Request, output *DeleteCloudWatchAlarmTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDeleteCloudWatchAlarmTemplate,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/prod/cloudwatch-alarm-templates/{identifier}",
+	}
+
+	if input == nil {
+		input = &DeleteCloudWatchAlarmTemplateInput{}
+	}
+
+	output = &DeleteCloudWatchAlarmTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteCloudWatchAlarmTemplate API operation for AWS Elemental MediaLive.
+//
+// Deletes a cloudwatch alarm template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation DeleteCloudWatchAlarmTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteCloudWatchAlarmTemplate
+func (c *MediaLive) DeleteCloudWatchAlarmTemplate(input *DeleteCloudWatchAlarmTemplateInput) (*DeleteCloudWatchAlarmTemplateOutput, error) {
+	req, out := c.DeleteCloudWatchAlarmTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DeleteCloudWatchAlarmTemplateWithContext is the same as DeleteCloudWatchAlarmTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteCloudWatchAlarmTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) DeleteCloudWatchAlarmTemplateWithContext(ctx aws.Context, input *DeleteCloudWatchAlarmTemplateInput, opts ...request.Option) (*DeleteCloudWatchAlarmTemplateOutput, error) {
+	req, out := c.DeleteCloudWatchAlarmTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteCloudWatchAlarmTemplateGroup = "DeleteCloudWatchAlarmTemplateGroup"
+
+// DeleteCloudWatchAlarmTemplateGroupRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteCloudWatchAlarmTemplateGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteCloudWatchAlarmTemplateGroup for more information on using the DeleteCloudWatchAlarmTemplateGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteCloudWatchAlarmTemplateGroupRequest method.
+//	req, resp := client.DeleteCloudWatchAlarmTemplateGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteCloudWatchAlarmTemplateGroup
+func (c *MediaLive) DeleteCloudWatchAlarmTemplateGroupRequest(input *DeleteCloudWatchAlarmTemplateGroupInput) (req *request.Request, output *DeleteCloudWatchAlarmTemplateGroupOutput) {
+	op := &request.Operation{
+		Name:       opDeleteCloudWatchAlarmTemplateGroup,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/prod/cloudwatch-alarm-template-groups/{identifier}",
+	}
+
+	if input == nil {
+		input = &DeleteCloudWatchAlarmTemplateGroupInput{}
+	}
+
+	output = &DeleteCloudWatchAlarmTemplateGroupOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteCloudWatchAlarmTemplateGroup API operation for AWS Elemental MediaLive.
+//
+// Deletes a cloudwatch alarm template group. You must detach this group from
+// all signal maps and ensure its existing templates are moved to another group
+// or deleted.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation DeleteCloudWatchAlarmTemplateGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteCloudWatchAlarmTemplateGroup
+func (c *MediaLive) DeleteCloudWatchAlarmTemplateGroup(input *DeleteCloudWatchAlarmTemplateGroupInput) (*DeleteCloudWatchAlarmTemplateGroupOutput, error) {
+	req, out := c.DeleteCloudWatchAlarmTemplateGroupRequest(input)
+	return out, req.Send()
+}
+
+// DeleteCloudWatchAlarmTemplateGroupWithContext is the same as DeleteCloudWatchAlarmTemplateGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteCloudWatchAlarmTemplateGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) DeleteCloudWatchAlarmTemplateGroupWithContext(ctx aws.Context, input *DeleteCloudWatchAlarmTemplateGroupInput, opts ...request.Option) (*DeleteCloudWatchAlarmTemplateGroupOutput, error) {
+	req, out := c.DeleteCloudWatchAlarmTemplateGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteEventBridgeRuleTemplate = "DeleteEventBridgeRuleTemplate"
+
+// DeleteEventBridgeRuleTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteEventBridgeRuleTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteEventBridgeRuleTemplate for more information on using the DeleteEventBridgeRuleTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteEventBridgeRuleTemplateRequest method.
+//	req, resp := client.DeleteEventBridgeRuleTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteEventBridgeRuleTemplate
+func (c *MediaLive) DeleteEventBridgeRuleTemplateRequest(input *DeleteEventBridgeRuleTemplateInput) (req *request.Request, output *DeleteEventBridgeRuleTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDeleteEventBridgeRuleTemplate,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/prod/eventbridge-rule-templates/{identifier}",
+	}
+
+	if input == nil {
+		input = &DeleteEventBridgeRuleTemplateInput{}
+	}
+
+	output = &DeleteEventBridgeRuleTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteEventBridgeRuleTemplate API operation for AWS Elemental MediaLive.
+//
+// Deletes an eventbridge rule template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation DeleteEventBridgeRuleTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteEventBridgeRuleTemplate
+func (c *MediaLive) DeleteEventBridgeRuleTemplate(input *DeleteEventBridgeRuleTemplateInput) (*DeleteEventBridgeRuleTemplateOutput, error) {
+	req, out := c.DeleteEventBridgeRuleTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DeleteEventBridgeRuleTemplateWithContext is the same as DeleteEventBridgeRuleTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteEventBridgeRuleTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) DeleteEventBridgeRuleTemplateWithContext(ctx aws.Context, input *DeleteEventBridgeRuleTemplateInput, opts ...request.Option) (*DeleteEventBridgeRuleTemplateOutput, error) {
+	req, out := c.DeleteEventBridgeRuleTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteEventBridgeRuleTemplateGroup = "DeleteEventBridgeRuleTemplateGroup"
+
+// DeleteEventBridgeRuleTemplateGroupRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteEventBridgeRuleTemplateGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteEventBridgeRuleTemplateGroup for more information on using the DeleteEventBridgeRuleTemplateGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteEventBridgeRuleTemplateGroupRequest method.
+//	req, resp := client.DeleteEventBridgeRuleTemplateGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteEventBridgeRuleTemplateGroup
+func (c *MediaLive) DeleteEventBridgeRuleTemplateGroupRequest(input *DeleteEventBridgeRuleTemplateGroupInput) (req *request.Request, output *DeleteEventBridgeRuleTemplateGroupOutput) {
+	op := &request.Operation{
+		Name:       opDeleteEventBridgeRuleTemplateGroup,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/prod/eventbridge-rule-template-groups/{identifier}",
+	}
+
+	if input == nil {
+		input = &DeleteEventBridgeRuleTemplateGroupInput{}
+	}
+
+	output = &DeleteEventBridgeRuleTemplateGroupOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteEventBridgeRuleTemplateGroup API operation for AWS Elemental MediaLive.
+//
+// Deletes an eventbridge rule template group. You must detach this group from
+// all signal maps and ensure its existing templates are moved to another group
+// or deleted.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation DeleteEventBridgeRuleTemplateGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteEventBridgeRuleTemplateGroup
+func (c *MediaLive) DeleteEventBridgeRuleTemplateGroup(input *DeleteEventBridgeRuleTemplateGroupInput) (*DeleteEventBridgeRuleTemplateGroupOutput, error) {
+	req, out := c.DeleteEventBridgeRuleTemplateGroupRequest(input)
+	return out, req.Send()
+}
+
+// DeleteEventBridgeRuleTemplateGroupWithContext is the same as DeleteEventBridgeRuleTemplateGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteEventBridgeRuleTemplateGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) DeleteEventBridgeRuleTemplateGroupWithContext(ctx aws.Context, input *DeleteEventBridgeRuleTemplateGroupInput, opts ...request.Option) (*DeleteEventBridgeRuleTemplateGroupOutput, error) {
+	req, out := c.DeleteEventBridgeRuleTemplateGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteInput = "DeleteInput"
 
 // DeleteInputRequest generates a "aws/request.Request" representing the
@@ -1400,14 +2206,13 @@ const opDeleteInput = "DeleteInput"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteInputRequest method.
+//	req, resp := client.DeleteInputRequest(params)
 //
-//    // Example sending a request using the DeleteInputRequest method.
-//    req, resp := client.DeleteInputRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteInput
 func (c *MediaLive) DeleteInputRequest(input *DeleteInputInput) (req *request.Request, output *DeleteInputOutput) {
@@ -1429,7 +2234,7 @@ func (c *MediaLive) DeleteInputRequest(input *DeleteInputInput) (req *request.Re
 
 // DeleteInput API operation for AWS Elemental MediaLive.
 //
-// Deletes the input end point
+// # Deletes the input end point
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1439,21 +2244,22 @@ func (c *MediaLive) DeleteInputRequest(input *DeleteInputInput) (req *request.Re
 // API operation DeleteInput for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteInput
 func (c *MediaLive) DeleteInput(input *DeleteInputInput) (*DeleteInputOutput, error) {
@@ -1493,14 +2299,13 @@ const opDeleteInputSecurityGroup = "DeleteInputSecurityGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteInputSecurityGroupRequest method.
+//	req, resp := client.DeleteInputSecurityGroupRequest(params)
 //
-//    // Example sending a request using the DeleteInputSecurityGroupRequest method.
-//    req, resp := client.DeleteInputSecurityGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteInputSecurityGroup
 func (c *MediaLive) DeleteInputSecurityGroupRequest(input *DeleteInputSecurityGroupInput) (req *request.Request, output *DeleteInputSecurityGroupOutput) {
@@ -1522,7 +2327,7 @@ func (c *MediaLive) DeleteInputSecurityGroupRequest(input *DeleteInputSecurityGr
 
 // DeleteInputSecurityGroup API operation for AWS Elemental MediaLive.
 //
-// Deletes an Input Security Group
+// # Deletes an Input Security Group
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1532,19 +2337,20 @@ func (c *MediaLive) DeleteInputSecurityGroupRequest(input *DeleteInputSecurityGr
 // API operation DeleteInputSecurityGroup for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteInputSecurityGroup
 func (c *MediaLive) DeleteInputSecurityGroup(input *DeleteInputSecurityGroupInput) (*DeleteInputSecurityGroupOutput, error) {
@@ -1584,14 +2390,13 @@ const opDeleteMultiplex = "DeleteMultiplex"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMultiplexRequest method.
+//	req, resp := client.DeleteMultiplexRequest(params)
 //
-//    // Example sending a request using the DeleteMultiplexRequest method.
-//    req, resp := client.DeleteMultiplexRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteMultiplex
 func (c *MediaLive) DeleteMultiplexRequest(input *DeleteMultiplexInput) (req *request.Request, output *DeleteMultiplexOutput) {
@@ -1622,21 +2427,22 @@ func (c *MediaLive) DeleteMultiplexRequest(input *DeleteMultiplexInput) (req *re
 // API operation DeleteMultiplex for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteMultiplex
 func (c *MediaLive) DeleteMultiplex(input *DeleteMultiplexInput) (*DeleteMultiplexOutput, error) {
@@ -1676,14 +2482,13 @@ const opDeleteMultiplexProgram = "DeleteMultiplexProgram"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteMultiplexProgramRequest method.
+//	req, resp := client.DeleteMultiplexProgramRequest(params)
 //
-//    // Example sending a request using the DeleteMultiplexProgramRequest method.
-//    req, resp := client.DeleteMultiplexProgramRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteMultiplexProgram
 func (c *MediaLive) DeleteMultiplexProgramRequest(input *DeleteMultiplexProgramInput) (req *request.Request, output *DeleteMultiplexProgramOutput) {
@@ -1714,21 +2519,22 @@ func (c *MediaLive) DeleteMultiplexProgramRequest(input *DeleteMultiplexProgramI
 // API operation DeleteMultiplexProgram for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteMultiplexProgram
 func (c *MediaLive) DeleteMultiplexProgram(input *DeleteMultiplexProgramInput) (*DeleteMultiplexProgramOutput, error) {
@@ -1768,14 +2574,13 @@ const opDeleteReservation = "DeleteReservation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteReservationRequest method.
+//	req, resp := client.DeleteReservationRequest(params)
 //
-//    // Example sending a request using the DeleteReservationRequest method.
-//    req, resp := client.DeleteReservationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteReservation
 func (c *MediaLive) DeleteReservationRequest(input *DeleteReservationInput) (req *request.Request, output *DeleteReservationOutput) {
@@ -1806,21 +2611,22 @@ func (c *MediaLive) DeleteReservationRequest(input *DeleteReservationInput) (req
 // API operation DeleteReservation for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteReservation
 func (c *MediaLive) DeleteReservation(input *DeleteReservationInput) (*DeleteReservationOutput, error) {
@@ -1860,14 +2666,13 @@ const opDeleteSchedule = "DeleteSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteScheduleRequest method.
+//	req, resp := client.DeleteScheduleRequest(params)
 //
-//    // Example sending a request using the DeleteScheduleRequest method.
-//    req, resp := client.DeleteScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteSchedule
 func (c *MediaLive) DeleteScheduleRequest(input *DeleteScheduleInput) (req *request.Request, output *DeleteScheduleOutput) {
@@ -1899,19 +2704,20 @@ func (c *MediaLive) DeleteScheduleRequest(input *DeleteScheduleInput) (req *requ
 // API operation DeleteSchedule for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteSchedule
 func (c *MediaLive) DeleteSchedule(input *DeleteScheduleInput) (*DeleteScheduleOutput, error) {
@@ -1935,6 +2741,95 @@ func (c *MediaLive) DeleteScheduleWithContext(ctx aws.Context, input *DeleteSche
 	return out, req.Send()
 }
 
+const opDeleteSignalMap = "DeleteSignalMap"
+
+// DeleteSignalMapRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteSignalMap operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteSignalMap for more information on using the DeleteSignalMap
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteSignalMapRequest method.
+//	req, resp := client.DeleteSignalMapRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteSignalMap
+func (c *MediaLive) DeleteSignalMapRequest(input *DeleteSignalMapInput) (req *request.Request, output *DeleteSignalMapOutput) {
+	op := &request.Operation{
+		Name:       opDeleteSignalMap,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/prod/signal-maps/{identifier}",
+	}
+
+	if input == nil {
+		input = &DeleteSignalMapInput{}
+	}
+
+	output = &DeleteSignalMapOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteSignalMap API operation for AWS Elemental MediaLive.
+//
+// Deletes the specified signal map.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation DeleteSignalMap for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteSignalMap
+func (c *MediaLive) DeleteSignalMap(input *DeleteSignalMapInput) (*DeleteSignalMapOutput, error) {
+	req, out := c.DeleteSignalMapRequest(input)
+	return out, req.Send()
+}
+
+// DeleteSignalMapWithContext is the same as DeleteSignalMap with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteSignalMap for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) DeleteSignalMapWithContext(ctx aws.Context, input *DeleteSignalMapInput, opts ...request.Option) (*DeleteSignalMapOutput, error) {
+	req, out := c.DeleteSignalMapRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteTags = "DeleteTags"
 
 // DeleteTagsRequest generates a "aws/request.Request" representing the
@@ -1951,14 +2846,13 @@ const opDeleteTags = "DeleteTags"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteTagsRequest method.
+//	req, resp := client.DeleteTagsRequest(params)
 //
-//    // Example sending a request using the DeleteTagsRequest method.
-//    req, resp := client.DeleteTagsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteTags
 func (c *MediaLive) DeleteTagsRequest(input *DeleteTagsInput) (req *request.Request, output *DeleteTagsOutput) {
@@ -1980,7 +2874,7 @@ func (c *MediaLive) DeleteTagsRequest(input *DeleteTagsInput) (req *request.Requ
 
 // DeleteTags API operation for AWS Elemental MediaLive.
 //
-// Removes tags for a resource
+// # Removes tags for a resource
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1990,13 +2884,14 @@ func (c *MediaLive) DeleteTagsRequest(input *DeleteTagsInput) (req *request.Requ
 // API operation DeleteTags for usage and error information.
 //
 // Returned Error Types:
-//   * NotFoundException
 //
-//   * BadRequestException
+//   - NotFoundException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DeleteTags
 func (c *MediaLive) DeleteTags(input *DeleteTagsInput) (*DeleteTagsOutput, error) {
@@ -2020,6 +2915,94 @@ func (c *MediaLive) DeleteTagsWithContext(ctx aws.Context, input *DeleteTagsInpu
 	return out, req.Send()
 }
 
+const opDescribeAccountConfiguration = "DescribeAccountConfiguration"
+
+// DescribeAccountConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeAccountConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeAccountConfiguration for more information on using the DescribeAccountConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DescribeAccountConfigurationRequest method.
+//	req, resp := client.DescribeAccountConfigurationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeAccountConfiguration
+func (c *MediaLive) DescribeAccountConfigurationRequest(input *DescribeAccountConfigurationInput) (req *request.Request, output *DescribeAccountConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAccountConfiguration,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/accountConfiguration",
+	}
+
+	if input == nil {
+		input = &DescribeAccountConfigurationInput{}
+	}
+
+	output = &DescribeAccountConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeAccountConfiguration API operation for AWS Elemental MediaLive.
+//
+// # Describe account configuration
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation DescribeAccountConfiguration for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - BadGatewayException
+//
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeAccountConfiguration
+func (c *MediaLive) DescribeAccountConfiguration(input *DescribeAccountConfigurationInput) (*DescribeAccountConfigurationOutput, error) {
+	req, out := c.DescribeAccountConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DescribeAccountConfigurationWithContext is the same as DescribeAccountConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeAccountConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) DescribeAccountConfigurationWithContext(ctx aws.Context, input *DescribeAccountConfigurationInput, opts ...request.Option) (*DescribeAccountConfigurationOutput, error) {
+	req, out := c.DescribeAccountConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeChannel = "DescribeChannel"
 
 // DescribeChannelRequest generates a "aws/request.Request" representing the
@@ -2036,14 +3019,13 @@ const opDescribeChannel = "DescribeChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeChannelRequest method.
+//	req, resp := client.DescribeChannelRequest(params)
 //
-//    // Example sending a request using the DescribeChannelRequest method.
-//    req, resp := client.DescribeChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeChannel
 func (c *MediaLive) DescribeChannelRequest(input *DescribeChannelInput) (req *request.Request, output *DescribeChannelOutput) {
@@ -2064,7 +3046,7 @@ func (c *MediaLive) DescribeChannelRequest(input *DescribeChannelInput) (req *re
 
 // DescribeChannel API operation for AWS Elemental MediaLive.
 //
-// Gets details about a channel
+// # Gets details about a channel
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2074,19 +3056,20 @@ func (c *MediaLive) DescribeChannelRequest(input *DescribeChannelInput) (req *re
 // API operation DescribeChannel for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeChannel
 func (c *MediaLive) DescribeChannel(input *DescribeChannelInput) (*DescribeChannelOutput, error) {
@@ -2126,14 +3109,13 @@ const opDescribeInput = "DescribeInput"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeInputRequest method.
+//	req, resp := client.DescribeInputRequest(params)
 //
-//    // Example sending a request using the DescribeInputRequest method.
-//    req, resp := client.DescribeInputRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeInput
 func (c *MediaLive) DescribeInputRequest(input *DescribeInputInput) (req *request.Request, output *DescribeInputOutput) {
@@ -2154,7 +3136,7 @@ func (c *MediaLive) DescribeInputRequest(input *DescribeInputInput) (req *reques
 
 // DescribeInput API operation for AWS Elemental MediaLive.
 //
-// Produces details about an input
+// # Produces details about an input
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2164,19 +3146,20 @@ func (c *MediaLive) DescribeInputRequest(input *DescribeInputInput) (req *reques
 // API operation DescribeInput for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeInput
 func (c *MediaLive) DescribeInput(input *DescribeInputInput) (*DescribeInputOutput, error) {
@@ -2216,14 +3199,13 @@ const opDescribeInputDevice = "DescribeInputDevice"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeInputDeviceRequest method.
+//	req, resp := client.DescribeInputDeviceRequest(params)
 //
-//    // Example sending a request using the DescribeInputDeviceRequest method.
-//    req, resp := client.DescribeInputDeviceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeInputDevice
 func (c *MediaLive) DescribeInputDeviceRequest(input *DescribeInputDeviceInput) (req *request.Request, output *DescribeInputDeviceOutput) {
@@ -2244,7 +3226,7 @@ func (c *MediaLive) DescribeInputDeviceRequest(input *DescribeInputDeviceInput) 
 
 // DescribeInputDevice API operation for AWS Elemental MediaLive.
 //
-// Gets the details for the input device
+// # Gets the details for the input device
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2254,19 +3236,20 @@ func (c *MediaLive) DescribeInputDeviceRequest(input *DescribeInputDeviceInput) 
 // API operation DescribeInputDevice for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeInputDevice
 func (c *MediaLive) DescribeInputDevice(input *DescribeInputDeviceInput) (*DescribeInputDeviceOutput, error) {
@@ -2306,14 +3289,13 @@ const opDescribeInputDeviceThumbnail = "DescribeInputDeviceThumbnail"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeInputDeviceThumbnailRequest method.
+//	req, resp := client.DescribeInputDeviceThumbnailRequest(params)
 //
-//    // Example sending a request using the DescribeInputDeviceThumbnailRequest method.
-//    req, resp := client.DescribeInputDeviceThumbnailRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeInputDeviceThumbnail
 func (c *MediaLive) DescribeInputDeviceThumbnailRequest(input *DescribeInputDeviceThumbnailInput) (req *request.Request, output *DescribeInputDeviceThumbnailOutput) {
@@ -2344,19 +3326,20 @@ func (c *MediaLive) DescribeInputDeviceThumbnailRequest(input *DescribeInputDevi
 // API operation DescribeInputDeviceThumbnail for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeInputDeviceThumbnail
 func (c *MediaLive) DescribeInputDeviceThumbnail(input *DescribeInputDeviceThumbnailInput) (*DescribeInputDeviceThumbnailOutput, error) {
@@ -2396,14 +3379,13 @@ const opDescribeInputSecurityGroup = "DescribeInputSecurityGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeInputSecurityGroupRequest method.
+//	req, resp := client.DescribeInputSecurityGroupRequest(params)
 //
-//    // Example sending a request using the DescribeInputSecurityGroupRequest method.
-//    req, resp := client.DescribeInputSecurityGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeInputSecurityGroup
 func (c *MediaLive) DescribeInputSecurityGroupRequest(input *DescribeInputSecurityGroupInput) (req *request.Request, output *DescribeInputSecurityGroupOutput) {
@@ -2424,7 +3406,7 @@ func (c *MediaLive) DescribeInputSecurityGroupRequest(input *DescribeInputSecuri
 
 // DescribeInputSecurityGroup API operation for AWS Elemental MediaLive.
 //
-// Produces a summary of an Input Security Group
+// # Produces a summary of an Input Security Group
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2434,19 +3416,20 @@ func (c *MediaLive) DescribeInputSecurityGroupRequest(input *DescribeInputSecuri
 // API operation DescribeInputSecurityGroup for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeInputSecurityGroup
 func (c *MediaLive) DescribeInputSecurityGroup(input *DescribeInputSecurityGroupInput) (*DescribeInputSecurityGroupOutput, error) {
@@ -2486,14 +3469,13 @@ const opDescribeMultiplex = "DescribeMultiplex"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeMultiplexRequest method.
+//	req, resp := client.DescribeMultiplexRequest(params)
 //
-//    // Example sending a request using the DescribeMultiplexRequest method.
-//    req, resp := client.DescribeMultiplexRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeMultiplex
 func (c *MediaLive) DescribeMultiplexRequest(input *DescribeMultiplexInput) (req *request.Request, output *DescribeMultiplexOutput) {
@@ -2524,19 +3506,20 @@ func (c *MediaLive) DescribeMultiplexRequest(input *DescribeMultiplexInput) (req
 // API operation DescribeMultiplex for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeMultiplex
 func (c *MediaLive) DescribeMultiplex(input *DescribeMultiplexInput) (*DescribeMultiplexOutput, error) {
@@ -2576,14 +3559,13 @@ const opDescribeMultiplexProgram = "DescribeMultiplexProgram"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeMultiplexProgramRequest method.
+//	req, resp := client.DescribeMultiplexProgramRequest(params)
 //
-//    // Example sending a request using the DescribeMultiplexProgramRequest method.
-//    req, resp := client.DescribeMultiplexProgramRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeMultiplexProgram
 func (c *MediaLive) DescribeMultiplexProgramRequest(input *DescribeMultiplexProgramInput) (req *request.Request, output *DescribeMultiplexProgramOutput) {
@@ -2614,19 +3596,20 @@ func (c *MediaLive) DescribeMultiplexProgramRequest(input *DescribeMultiplexProg
 // API operation DescribeMultiplexProgram for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeMultiplexProgram
 func (c *MediaLive) DescribeMultiplexProgram(input *DescribeMultiplexProgramInput) (*DescribeMultiplexProgramOutput, error) {
@@ -2666,14 +3649,13 @@ const opDescribeOffering = "DescribeOffering"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeOfferingRequest method.
+//	req, resp := client.DescribeOfferingRequest(params)
 //
-//    // Example sending a request using the DescribeOfferingRequest method.
-//    req, resp := client.DescribeOfferingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeOffering
 func (c *MediaLive) DescribeOfferingRequest(input *DescribeOfferingInput) (req *request.Request, output *DescribeOfferingOutput) {
@@ -2704,19 +3686,20 @@ func (c *MediaLive) DescribeOfferingRequest(input *DescribeOfferingInput) (req *
 // API operation DescribeOffering for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeOffering
 func (c *MediaLive) DescribeOffering(input *DescribeOfferingInput) (*DescribeOfferingOutput, error) {
@@ -2756,14 +3739,13 @@ const opDescribeReservation = "DescribeReservation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeReservationRequest method.
+//	req, resp := client.DescribeReservationRequest(params)
 //
-//    // Example sending a request using the DescribeReservationRequest method.
-//    req, resp := client.DescribeReservationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeReservation
 func (c *MediaLive) DescribeReservationRequest(input *DescribeReservationInput) (req *request.Request, output *DescribeReservationOutput) {
@@ -2794,19 +3776,20 @@ func (c *MediaLive) DescribeReservationRequest(input *DescribeReservationInput) 
 // API operation DescribeReservation for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeReservation
 func (c *MediaLive) DescribeReservation(input *DescribeReservationInput) (*DescribeReservationOutput, error) {
@@ -2846,14 +3829,13 @@ const opDescribeSchedule = "DescribeSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeScheduleRequest method.
+//	req, resp := client.DescribeScheduleRequest(params)
 //
-//    // Example sending a request using the DescribeScheduleRequest method.
-//    req, resp := client.DescribeScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeSchedule
 func (c *MediaLive) DescribeScheduleRequest(input *DescribeScheduleInput) (req *request.Request, output *DescribeScheduleOutput) {
@@ -2880,7 +3862,7 @@ func (c *MediaLive) DescribeScheduleRequest(input *DescribeScheduleInput) (req *
 
 // DescribeSchedule API operation for AWS Elemental MediaLive.
 //
-// Get a channel schedule
+// # Get a channel schedule
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2890,19 +3872,20 @@ func (c *MediaLive) DescribeScheduleRequest(input *DescribeScheduleInput) (req *
 // API operation DescribeSchedule for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeSchedule
 func (c *MediaLive) DescribeSchedule(input *DescribeScheduleInput) (*DescribeScheduleOutput, error) {
@@ -2934,15 +3917,14 @@ func (c *MediaLive) DescribeScheduleWithContext(ctx aws.Context, input *Describe
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeSchedule operation.
-//    pageNum := 0
-//    err := client.DescribeSchedulePages(params,
-//        func(page *medialive.DescribeScheduleOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeSchedule operation.
+//	pageNum := 0
+//	err := client.DescribeSchedulePages(params,
+//	    func(page *medialive.DescribeScheduleOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaLive) DescribeSchedulePages(input *DescribeScheduleInput, fn func(*DescribeScheduleOutput, bool) bool) error {
 	return c.DescribeSchedulePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2978,6 +3960,528 @@ func (c *MediaLive) DescribeSchedulePagesWithContext(ctx aws.Context, input *Des
 	return p.Err()
 }
 
+const opDescribeThumbnails = "DescribeThumbnails"
+
+// DescribeThumbnailsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeThumbnails operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeThumbnails for more information on using the DescribeThumbnails
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DescribeThumbnailsRequest method.
+//	req, resp := client.DescribeThumbnailsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeThumbnails
+func (c *MediaLive) DescribeThumbnailsRequest(input *DescribeThumbnailsInput) (req *request.Request, output *DescribeThumbnailsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeThumbnails,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/channels/{channelId}/thumbnails",
+	}
+
+	if input == nil {
+		input = &DescribeThumbnailsInput{}
+	}
+
+	output = &DescribeThumbnailsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeThumbnails API operation for AWS Elemental MediaLive.
+//
+// Describe the latest thumbnails data.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation DescribeThumbnails for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - BadGatewayException
+//
+//   - NotFoundException
+//
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/DescribeThumbnails
+func (c *MediaLive) DescribeThumbnails(input *DescribeThumbnailsInput) (*DescribeThumbnailsOutput, error) {
+	req, out := c.DescribeThumbnailsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeThumbnailsWithContext is the same as DescribeThumbnails with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeThumbnails for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) DescribeThumbnailsWithContext(ctx aws.Context, input *DescribeThumbnailsInput, opts ...request.Option) (*DescribeThumbnailsOutput, error) {
+	req, out := c.DescribeThumbnailsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetCloudWatchAlarmTemplate = "GetCloudWatchAlarmTemplate"
+
+// GetCloudWatchAlarmTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GetCloudWatchAlarmTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCloudWatchAlarmTemplate for more information on using the GetCloudWatchAlarmTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetCloudWatchAlarmTemplateRequest method.
+//	req, resp := client.GetCloudWatchAlarmTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/GetCloudWatchAlarmTemplate
+func (c *MediaLive) GetCloudWatchAlarmTemplateRequest(input *GetCloudWatchAlarmTemplateInput) (req *request.Request, output *GetCloudWatchAlarmTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGetCloudWatchAlarmTemplate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/cloudwatch-alarm-templates/{identifier}",
+	}
+
+	if input == nil {
+		input = &GetCloudWatchAlarmTemplateInput{}
+	}
+
+	output = &GetCloudWatchAlarmTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCloudWatchAlarmTemplate API operation for AWS Elemental MediaLive.
+//
+// Retrieves the specified cloudwatch alarm template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation GetCloudWatchAlarmTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/GetCloudWatchAlarmTemplate
+func (c *MediaLive) GetCloudWatchAlarmTemplate(input *GetCloudWatchAlarmTemplateInput) (*GetCloudWatchAlarmTemplateOutput, error) {
+	req, out := c.GetCloudWatchAlarmTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GetCloudWatchAlarmTemplateWithContext is the same as GetCloudWatchAlarmTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCloudWatchAlarmTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) GetCloudWatchAlarmTemplateWithContext(ctx aws.Context, input *GetCloudWatchAlarmTemplateInput, opts ...request.Option) (*GetCloudWatchAlarmTemplateOutput, error) {
+	req, out := c.GetCloudWatchAlarmTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetCloudWatchAlarmTemplateGroup = "GetCloudWatchAlarmTemplateGroup"
+
+// GetCloudWatchAlarmTemplateGroupRequest generates a "aws/request.Request" representing the
+// client's request for the GetCloudWatchAlarmTemplateGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCloudWatchAlarmTemplateGroup for more information on using the GetCloudWatchAlarmTemplateGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetCloudWatchAlarmTemplateGroupRequest method.
+//	req, resp := client.GetCloudWatchAlarmTemplateGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/GetCloudWatchAlarmTemplateGroup
+func (c *MediaLive) GetCloudWatchAlarmTemplateGroupRequest(input *GetCloudWatchAlarmTemplateGroupInput) (req *request.Request, output *GetCloudWatchAlarmTemplateGroupOutput) {
+	op := &request.Operation{
+		Name:       opGetCloudWatchAlarmTemplateGroup,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/cloudwatch-alarm-template-groups/{identifier}",
+	}
+
+	if input == nil {
+		input = &GetCloudWatchAlarmTemplateGroupInput{}
+	}
+
+	output = &GetCloudWatchAlarmTemplateGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCloudWatchAlarmTemplateGroup API operation for AWS Elemental MediaLive.
+//
+// Retrieves the specified cloudwatch alarm template group.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation GetCloudWatchAlarmTemplateGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/GetCloudWatchAlarmTemplateGroup
+func (c *MediaLive) GetCloudWatchAlarmTemplateGroup(input *GetCloudWatchAlarmTemplateGroupInput) (*GetCloudWatchAlarmTemplateGroupOutput, error) {
+	req, out := c.GetCloudWatchAlarmTemplateGroupRequest(input)
+	return out, req.Send()
+}
+
+// GetCloudWatchAlarmTemplateGroupWithContext is the same as GetCloudWatchAlarmTemplateGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCloudWatchAlarmTemplateGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) GetCloudWatchAlarmTemplateGroupWithContext(ctx aws.Context, input *GetCloudWatchAlarmTemplateGroupInput, opts ...request.Option) (*GetCloudWatchAlarmTemplateGroupOutput, error) {
+	req, out := c.GetCloudWatchAlarmTemplateGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetEventBridgeRuleTemplate = "GetEventBridgeRuleTemplate"
+
+// GetEventBridgeRuleTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GetEventBridgeRuleTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetEventBridgeRuleTemplate for more information on using the GetEventBridgeRuleTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetEventBridgeRuleTemplateRequest method.
+//	req, resp := client.GetEventBridgeRuleTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/GetEventBridgeRuleTemplate
+func (c *MediaLive) GetEventBridgeRuleTemplateRequest(input *GetEventBridgeRuleTemplateInput) (req *request.Request, output *GetEventBridgeRuleTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGetEventBridgeRuleTemplate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/eventbridge-rule-templates/{identifier}",
+	}
+
+	if input == nil {
+		input = &GetEventBridgeRuleTemplateInput{}
+	}
+
+	output = &GetEventBridgeRuleTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetEventBridgeRuleTemplate API operation for AWS Elemental MediaLive.
+//
+// Retrieves the specified eventbridge rule template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation GetEventBridgeRuleTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/GetEventBridgeRuleTemplate
+func (c *MediaLive) GetEventBridgeRuleTemplate(input *GetEventBridgeRuleTemplateInput) (*GetEventBridgeRuleTemplateOutput, error) {
+	req, out := c.GetEventBridgeRuleTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GetEventBridgeRuleTemplateWithContext is the same as GetEventBridgeRuleTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetEventBridgeRuleTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) GetEventBridgeRuleTemplateWithContext(ctx aws.Context, input *GetEventBridgeRuleTemplateInput, opts ...request.Option) (*GetEventBridgeRuleTemplateOutput, error) {
+	req, out := c.GetEventBridgeRuleTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetEventBridgeRuleTemplateGroup = "GetEventBridgeRuleTemplateGroup"
+
+// GetEventBridgeRuleTemplateGroupRequest generates a "aws/request.Request" representing the
+// client's request for the GetEventBridgeRuleTemplateGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetEventBridgeRuleTemplateGroup for more information on using the GetEventBridgeRuleTemplateGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetEventBridgeRuleTemplateGroupRequest method.
+//	req, resp := client.GetEventBridgeRuleTemplateGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/GetEventBridgeRuleTemplateGroup
+func (c *MediaLive) GetEventBridgeRuleTemplateGroupRequest(input *GetEventBridgeRuleTemplateGroupInput) (req *request.Request, output *GetEventBridgeRuleTemplateGroupOutput) {
+	op := &request.Operation{
+		Name:       opGetEventBridgeRuleTemplateGroup,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/eventbridge-rule-template-groups/{identifier}",
+	}
+
+	if input == nil {
+		input = &GetEventBridgeRuleTemplateGroupInput{}
+	}
+
+	output = &GetEventBridgeRuleTemplateGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetEventBridgeRuleTemplateGroup API operation for AWS Elemental MediaLive.
+//
+// Retrieves the specified eventbridge rule template group.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation GetEventBridgeRuleTemplateGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/GetEventBridgeRuleTemplateGroup
+func (c *MediaLive) GetEventBridgeRuleTemplateGroup(input *GetEventBridgeRuleTemplateGroupInput) (*GetEventBridgeRuleTemplateGroupOutput, error) {
+	req, out := c.GetEventBridgeRuleTemplateGroupRequest(input)
+	return out, req.Send()
+}
+
+// GetEventBridgeRuleTemplateGroupWithContext is the same as GetEventBridgeRuleTemplateGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetEventBridgeRuleTemplateGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) GetEventBridgeRuleTemplateGroupWithContext(ctx aws.Context, input *GetEventBridgeRuleTemplateGroupInput, opts ...request.Option) (*GetEventBridgeRuleTemplateGroupOutput, error) {
+	req, out := c.GetEventBridgeRuleTemplateGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetSignalMap = "GetSignalMap"
+
+// GetSignalMapRequest generates a "aws/request.Request" representing the
+// client's request for the GetSignalMap operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSignalMap for more information on using the GetSignalMap
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetSignalMapRequest method.
+//	req, resp := client.GetSignalMapRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/GetSignalMap
+func (c *MediaLive) GetSignalMapRequest(input *GetSignalMapInput) (req *request.Request, output *GetSignalMapOutput) {
+	op := &request.Operation{
+		Name:       opGetSignalMap,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/signal-maps/{identifier}",
+	}
+
+	if input == nil {
+		input = &GetSignalMapInput{}
+	}
+
+	output = &GetSignalMapOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSignalMap API operation for AWS Elemental MediaLive.
+//
+// Retrieves the specified signal map.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation GetSignalMap for usage and error information.
+//
+// Returned Error Types:
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/GetSignalMap
+func (c *MediaLive) GetSignalMap(input *GetSignalMapInput) (*GetSignalMapOutput, error) {
+	req, out := c.GetSignalMapRequest(input)
+	return out, req.Send()
+}
+
+// GetSignalMapWithContext is the same as GetSignalMap with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSignalMap for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) GetSignalMapWithContext(ctx aws.Context, input *GetSignalMapInput, opts ...request.Option) (*GetSignalMapOutput, error) {
+	req, out := c.GetSignalMapRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListChannels = "ListChannels"
 
 // ListChannelsRequest generates a "aws/request.Request" representing the
@@ -2994,14 +4498,13 @@ const opListChannels = "ListChannels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListChannelsRequest method.
+//	req, resp := client.ListChannelsRequest(params)
 //
-//    // Example sending a request using the ListChannelsRequest method.
-//    req, resp := client.ListChannelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListChannels
 func (c *MediaLive) ListChannelsRequest(input *ListChannelsInput) (req *request.Request, output *ListChannelsOutput) {
@@ -3028,7 +4531,7 @@ func (c *MediaLive) ListChannelsRequest(input *ListChannelsInput) (req *request.
 
 // ListChannels API operation for AWS Elemental MediaLive.
 //
-// Produces list of channels that have been created
+// # Produces list of channels that have been created
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3038,17 +4541,18 @@ func (c *MediaLive) ListChannelsRequest(input *ListChannelsInput) (req *request.
 // API operation ListChannels for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListChannels
 func (c *MediaLive) ListChannels(input *ListChannelsInput) (*ListChannelsOutput, error) {
@@ -3080,15 +4584,14 @@ func (c *MediaLive) ListChannelsWithContext(ctx aws.Context, input *ListChannels
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListChannels operation.
-//    pageNum := 0
-//    err := client.ListChannelsPages(params,
-//        func(page *medialive.ListChannelsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListChannels operation.
+//	pageNum := 0
+//	err := client.ListChannelsPages(params,
+//	    func(page *medialive.ListChannelsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaLive) ListChannelsPages(input *ListChannelsInput, fn func(*ListChannelsOutput, bool) bool) error {
 	return c.ListChannelsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3124,6 +4627,578 @@ func (c *MediaLive) ListChannelsPagesWithContext(ctx aws.Context, input *ListCha
 	return p.Err()
 }
 
+const opListCloudWatchAlarmTemplateGroups = "ListCloudWatchAlarmTemplateGroups"
+
+// ListCloudWatchAlarmTemplateGroupsRequest generates a "aws/request.Request" representing the
+// client's request for the ListCloudWatchAlarmTemplateGroups operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCloudWatchAlarmTemplateGroups for more information on using the ListCloudWatchAlarmTemplateGroups
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListCloudWatchAlarmTemplateGroupsRequest method.
+//	req, resp := client.ListCloudWatchAlarmTemplateGroupsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListCloudWatchAlarmTemplateGroups
+func (c *MediaLive) ListCloudWatchAlarmTemplateGroupsRequest(input *ListCloudWatchAlarmTemplateGroupsInput) (req *request.Request, output *ListCloudWatchAlarmTemplateGroupsOutput) {
+	op := &request.Operation{
+		Name:       opListCloudWatchAlarmTemplateGroups,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/cloudwatch-alarm-template-groups",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCloudWatchAlarmTemplateGroupsInput{}
+	}
+
+	output = &ListCloudWatchAlarmTemplateGroupsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCloudWatchAlarmTemplateGroups API operation for AWS Elemental MediaLive.
+//
+// Lists cloudwatch alarm template groups.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation ListCloudWatchAlarmTemplateGroups for usage and error information.
+//
+// Returned Error Types:
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListCloudWatchAlarmTemplateGroups
+func (c *MediaLive) ListCloudWatchAlarmTemplateGroups(input *ListCloudWatchAlarmTemplateGroupsInput) (*ListCloudWatchAlarmTemplateGroupsOutput, error) {
+	req, out := c.ListCloudWatchAlarmTemplateGroupsRequest(input)
+	return out, req.Send()
+}
+
+// ListCloudWatchAlarmTemplateGroupsWithContext is the same as ListCloudWatchAlarmTemplateGroups with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCloudWatchAlarmTemplateGroups for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListCloudWatchAlarmTemplateGroupsWithContext(ctx aws.Context, input *ListCloudWatchAlarmTemplateGroupsInput, opts ...request.Option) (*ListCloudWatchAlarmTemplateGroupsOutput, error) {
+	req, out := c.ListCloudWatchAlarmTemplateGroupsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCloudWatchAlarmTemplateGroupsPages iterates over the pages of a ListCloudWatchAlarmTemplateGroups operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCloudWatchAlarmTemplateGroups method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListCloudWatchAlarmTemplateGroups operation.
+//	pageNum := 0
+//	err := client.ListCloudWatchAlarmTemplateGroupsPages(params,
+//	    func(page *medialive.ListCloudWatchAlarmTemplateGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *MediaLive) ListCloudWatchAlarmTemplateGroupsPages(input *ListCloudWatchAlarmTemplateGroupsInput, fn func(*ListCloudWatchAlarmTemplateGroupsOutput, bool) bool) error {
+	return c.ListCloudWatchAlarmTemplateGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCloudWatchAlarmTemplateGroupsPagesWithContext same as ListCloudWatchAlarmTemplateGroupsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListCloudWatchAlarmTemplateGroupsPagesWithContext(ctx aws.Context, input *ListCloudWatchAlarmTemplateGroupsInput, fn func(*ListCloudWatchAlarmTemplateGroupsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCloudWatchAlarmTemplateGroupsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCloudWatchAlarmTemplateGroupsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCloudWatchAlarmTemplateGroupsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListCloudWatchAlarmTemplates = "ListCloudWatchAlarmTemplates"
+
+// ListCloudWatchAlarmTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListCloudWatchAlarmTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCloudWatchAlarmTemplates for more information on using the ListCloudWatchAlarmTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListCloudWatchAlarmTemplatesRequest method.
+//	req, resp := client.ListCloudWatchAlarmTemplatesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListCloudWatchAlarmTemplates
+func (c *MediaLive) ListCloudWatchAlarmTemplatesRequest(input *ListCloudWatchAlarmTemplatesInput) (req *request.Request, output *ListCloudWatchAlarmTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opListCloudWatchAlarmTemplates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/cloudwatch-alarm-templates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCloudWatchAlarmTemplatesInput{}
+	}
+
+	output = &ListCloudWatchAlarmTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCloudWatchAlarmTemplates API operation for AWS Elemental MediaLive.
+//
+// Lists cloudwatch alarm templates.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation ListCloudWatchAlarmTemplates for usage and error information.
+//
+// Returned Error Types:
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListCloudWatchAlarmTemplates
+func (c *MediaLive) ListCloudWatchAlarmTemplates(input *ListCloudWatchAlarmTemplatesInput) (*ListCloudWatchAlarmTemplatesOutput, error) {
+	req, out := c.ListCloudWatchAlarmTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// ListCloudWatchAlarmTemplatesWithContext is the same as ListCloudWatchAlarmTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCloudWatchAlarmTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListCloudWatchAlarmTemplatesWithContext(ctx aws.Context, input *ListCloudWatchAlarmTemplatesInput, opts ...request.Option) (*ListCloudWatchAlarmTemplatesOutput, error) {
+	req, out := c.ListCloudWatchAlarmTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCloudWatchAlarmTemplatesPages iterates over the pages of a ListCloudWatchAlarmTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCloudWatchAlarmTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListCloudWatchAlarmTemplates operation.
+//	pageNum := 0
+//	err := client.ListCloudWatchAlarmTemplatesPages(params,
+//	    func(page *medialive.ListCloudWatchAlarmTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *MediaLive) ListCloudWatchAlarmTemplatesPages(input *ListCloudWatchAlarmTemplatesInput, fn func(*ListCloudWatchAlarmTemplatesOutput, bool) bool) error {
+	return c.ListCloudWatchAlarmTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCloudWatchAlarmTemplatesPagesWithContext same as ListCloudWatchAlarmTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListCloudWatchAlarmTemplatesPagesWithContext(ctx aws.Context, input *ListCloudWatchAlarmTemplatesInput, fn func(*ListCloudWatchAlarmTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCloudWatchAlarmTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCloudWatchAlarmTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCloudWatchAlarmTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListEventBridgeRuleTemplateGroups = "ListEventBridgeRuleTemplateGroups"
+
+// ListEventBridgeRuleTemplateGroupsRequest generates a "aws/request.Request" representing the
+// client's request for the ListEventBridgeRuleTemplateGroups operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListEventBridgeRuleTemplateGroups for more information on using the ListEventBridgeRuleTemplateGroups
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListEventBridgeRuleTemplateGroupsRequest method.
+//	req, resp := client.ListEventBridgeRuleTemplateGroupsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListEventBridgeRuleTemplateGroups
+func (c *MediaLive) ListEventBridgeRuleTemplateGroupsRequest(input *ListEventBridgeRuleTemplateGroupsInput) (req *request.Request, output *ListEventBridgeRuleTemplateGroupsOutput) {
+	op := &request.Operation{
+		Name:       opListEventBridgeRuleTemplateGroups,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/eventbridge-rule-template-groups",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListEventBridgeRuleTemplateGroupsInput{}
+	}
+
+	output = &ListEventBridgeRuleTemplateGroupsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListEventBridgeRuleTemplateGroups API operation for AWS Elemental MediaLive.
+//
+// Lists eventbridge rule template groups.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation ListEventBridgeRuleTemplateGroups for usage and error information.
+//
+// Returned Error Types:
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListEventBridgeRuleTemplateGroups
+func (c *MediaLive) ListEventBridgeRuleTemplateGroups(input *ListEventBridgeRuleTemplateGroupsInput) (*ListEventBridgeRuleTemplateGroupsOutput, error) {
+	req, out := c.ListEventBridgeRuleTemplateGroupsRequest(input)
+	return out, req.Send()
+}
+
+// ListEventBridgeRuleTemplateGroupsWithContext is the same as ListEventBridgeRuleTemplateGroups with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListEventBridgeRuleTemplateGroups for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListEventBridgeRuleTemplateGroupsWithContext(ctx aws.Context, input *ListEventBridgeRuleTemplateGroupsInput, opts ...request.Option) (*ListEventBridgeRuleTemplateGroupsOutput, error) {
+	req, out := c.ListEventBridgeRuleTemplateGroupsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListEventBridgeRuleTemplateGroupsPages iterates over the pages of a ListEventBridgeRuleTemplateGroups operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListEventBridgeRuleTemplateGroups method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListEventBridgeRuleTemplateGroups operation.
+//	pageNum := 0
+//	err := client.ListEventBridgeRuleTemplateGroupsPages(params,
+//	    func(page *medialive.ListEventBridgeRuleTemplateGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *MediaLive) ListEventBridgeRuleTemplateGroupsPages(input *ListEventBridgeRuleTemplateGroupsInput, fn func(*ListEventBridgeRuleTemplateGroupsOutput, bool) bool) error {
+	return c.ListEventBridgeRuleTemplateGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListEventBridgeRuleTemplateGroupsPagesWithContext same as ListEventBridgeRuleTemplateGroupsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListEventBridgeRuleTemplateGroupsPagesWithContext(ctx aws.Context, input *ListEventBridgeRuleTemplateGroupsInput, fn func(*ListEventBridgeRuleTemplateGroupsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListEventBridgeRuleTemplateGroupsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListEventBridgeRuleTemplateGroupsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListEventBridgeRuleTemplateGroupsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListEventBridgeRuleTemplates = "ListEventBridgeRuleTemplates"
+
+// ListEventBridgeRuleTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListEventBridgeRuleTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListEventBridgeRuleTemplates for more information on using the ListEventBridgeRuleTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListEventBridgeRuleTemplatesRequest method.
+//	req, resp := client.ListEventBridgeRuleTemplatesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListEventBridgeRuleTemplates
+func (c *MediaLive) ListEventBridgeRuleTemplatesRequest(input *ListEventBridgeRuleTemplatesInput) (req *request.Request, output *ListEventBridgeRuleTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opListEventBridgeRuleTemplates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/eventbridge-rule-templates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListEventBridgeRuleTemplatesInput{}
+	}
+
+	output = &ListEventBridgeRuleTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListEventBridgeRuleTemplates API operation for AWS Elemental MediaLive.
+//
+// Lists eventbridge rule templates.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation ListEventBridgeRuleTemplates for usage and error information.
+//
+// Returned Error Types:
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListEventBridgeRuleTemplates
+func (c *MediaLive) ListEventBridgeRuleTemplates(input *ListEventBridgeRuleTemplatesInput) (*ListEventBridgeRuleTemplatesOutput, error) {
+	req, out := c.ListEventBridgeRuleTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// ListEventBridgeRuleTemplatesWithContext is the same as ListEventBridgeRuleTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListEventBridgeRuleTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListEventBridgeRuleTemplatesWithContext(ctx aws.Context, input *ListEventBridgeRuleTemplatesInput, opts ...request.Option) (*ListEventBridgeRuleTemplatesOutput, error) {
+	req, out := c.ListEventBridgeRuleTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListEventBridgeRuleTemplatesPages iterates over the pages of a ListEventBridgeRuleTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListEventBridgeRuleTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListEventBridgeRuleTemplates operation.
+//	pageNum := 0
+//	err := client.ListEventBridgeRuleTemplatesPages(params,
+//	    func(page *medialive.ListEventBridgeRuleTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *MediaLive) ListEventBridgeRuleTemplatesPages(input *ListEventBridgeRuleTemplatesInput, fn func(*ListEventBridgeRuleTemplatesOutput, bool) bool) error {
+	return c.ListEventBridgeRuleTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListEventBridgeRuleTemplatesPagesWithContext same as ListEventBridgeRuleTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListEventBridgeRuleTemplatesPagesWithContext(ctx aws.Context, input *ListEventBridgeRuleTemplatesInput, fn func(*ListEventBridgeRuleTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListEventBridgeRuleTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListEventBridgeRuleTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListEventBridgeRuleTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListInputDeviceTransfers = "ListInputDeviceTransfers"
 
 // ListInputDeviceTransfersRequest generates a "aws/request.Request" representing the
@@ -3140,14 +5215,13 @@ const opListInputDeviceTransfers = "ListInputDeviceTransfers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListInputDeviceTransfersRequest method.
+//	req, resp := client.ListInputDeviceTransfersRequest(params)
 //
-//    // Example sending a request using the ListInputDeviceTransfersRequest method.
-//    req, resp := client.ListInputDeviceTransfersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListInputDeviceTransfers
 func (c *MediaLive) ListInputDeviceTransfersRequest(input *ListInputDeviceTransfersInput) (req *request.Request, output *ListInputDeviceTransfersOutput) {
@@ -3186,19 +5260,20 @@ func (c *MediaLive) ListInputDeviceTransfersRequest(input *ListInputDeviceTransf
 // API operation ListInputDeviceTransfers for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListInputDeviceTransfers
 func (c *MediaLive) ListInputDeviceTransfers(input *ListInputDeviceTransfersInput) (*ListInputDeviceTransfersOutput, error) {
@@ -3230,15 +5305,14 @@ func (c *MediaLive) ListInputDeviceTransfersWithContext(ctx aws.Context, input *
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListInputDeviceTransfers operation.
-//    pageNum := 0
-//    err := client.ListInputDeviceTransfersPages(params,
-//        func(page *medialive.ListInputDeviceTransfersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListInputDeviceTransfers operation.
+//	pageNum := 0
+//	err := client.ListInputDeviceTransfersPages(params,
+//	    func(page *medialive.ListInputDeviceTransfersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaLive) ListInputDeviceTransfersPages(input *ListInputDeviceTransfersInput, fn func(*ListInputDeviceTransfersOutput, bool) bool) error {
 	return c.ListInputDeviceTransfersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3290,14 +5364,13 @@ const opListInputDevices = "ListInputDevices"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListInputDevicesRequest method.
+//	req, resp := client.ListInputDevicesRequest(params)
 //
-//    // Example sending a request using the ListInputDevicesRequest method.
-//    req, resp := client.ListInputDevicesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListInputDevices
 func (c *MediaLive) ListInputDevicesRequest(input *ListInputDevicesInput) (req *request.Request, output *ListInputDevicesOutput) {
@@ -3324,7 +5397,7 @@ func (c *MediaLive) ListInputDevicesRequest(input *ListInputDevicesInput) (req *
 
 // ListInputDevices API operation for AWS Elemental MediaLive.
 //
-// List input devices
+// # List input devices
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3334,17 +5407,18 @@ func (c *MediaLive) ListInputDevicesRequest(input *ListInputDevicesInput) (req *
 // API operation ListInputDevices for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListInputDevices
 func (c *MediaLive) ListInputDevices(input *ListInputDevicesInput) (*ListInputDevicesOutput, error) {
@@ -3376,15 +5450,14 @@ func (c *MediaLive) ListInputDevicesWithContext(ctx aws.Context, input *ListInpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListInputDevices operation.
-//    pageNum := 0
-//    err := client.ListInputDevicesPages(params,
-//        func(page *medialive.ListInputDevicesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListInputDevices operation.
+//	pageNum := 0
+//	err := client.ListInputDevicesPages(params,
+//	    func(page *medialive.ListInputDevicesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaLive) ListInputDevicesPages(input *ListInputDevicesInput, fn func(*ListInputDevicesOutput, bool) bool) error {
 	return c.ListInputDevicesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3436,14 +5509,13 @@ const opListInputSecurityGroups = "ListInputSecurityGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListInputSecurityGroupsRequest method.
+//	req, resp := client.ListInputSecurityGroupsRequest(params)
 //
-//    // Example sending a request using the ListInputSecurityGroupsRequest method.
-//    req, resp := client.ListInputSecurityGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListInputSecurityGroups
 func (c *MediaLive) ListInputSecurityGroupsRequest(input *ListInputSecurityGroupsInput) (req *request.Request, output *ListInputSecurityGroupsOutput) {
@@ -3470,7 +5542,7 @@ func (c *MediaLive) ListInputSecurityGroupsRequest(input *ListInputSecurityGroup
 
 // ListInputSecurityGroups API operation for AWS Elemental MediaLive.
 //
-// Produces a list of Input Security Groups for an account
+// # Produces a list of Input Security Groups for an account
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3480,17 +5552,18 @@ func (c *MediaLive) ListInputSecurityGroupsRequest(input *ListInputSecurityGroup
 // API operation ListInputSecurityGroups for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListInputSecurityGroups
 func (c *MediaLive) ListInputSecurityGroups(input *ListInputSecurityGroupsInput) (*ListInputSecurityGroupsOutput, error) {
@@ -3522,15 +5595,14 @@ func (c *MediaLive) ListInputSecurityGroupsWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListInputSecurityGroups operation.
-//    pageNum := 0
-//    err := client.ListInputSecurityGroupsPages(params,
-//        func(page *medialive.ListInputSecurityGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListInputSecurityGroups operation.
+//	pageNum := 0
+//	err := client.ListInputSecurityGroupsPages(params,
+//	    func(page *medialive.ListInputSecurityGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaLive) ListInputSecurityGroupsPages(input *ListInputSecurityGroupsInput, fn func(*ListInputSecurityGroupsOutput, bool) bool) error {
 	return c.ListInputSecurityGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3582,14 +5654,13 @@ const opListInputs = "ListInputs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListInputsRequest method.
+//	req, resp := client.ListInputsRequest(params)
 //
-//    // Example sending a request using the ListInputsRequest method.
-//    req, resp := client.ListInputsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListInputs
 func (c *MediaLive) ListInputsRequest(input *ListInputsInput) (req *request.Request, output *ListInputsOutput) {
@@ -3616,7 +5687,7 @@ func (c *MediaLive) ListInputsRequest(input *ListInputsInput) (req *request.Requ
 
 // ListInputs API operation for AWS Elemental MediaLive.
 //
-// Produces list of inputs that have been created
+// # Produces list of inputs that have been created
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3626,17 +5697,18 @@ func (c *MediaLive) ListInputsRequest(input *ListInputsInput) (req *request.Requ
 // API operation ListInputs for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListInputs
 func (c *MediaLive) ListInputs(input *ListInputsInput) (*ListInputsOutput, error) {
@@ -3668,15 +5740,14 @@ func (c *MediaLive) ListInputsWithContext(ctx aws.Context, input *ListInputsInpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListInputs operation.
-//    pageNum := 0
-//    err := client.ListInputsPages(params,
-//        func(page *medialive.ListInputsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListInputs operation.
+//	pageNum := 0
+//	err := client.ListInputsPages(params,
+//	    func(page *medialive.ListInputsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaLive) ListInputsPages(input *ListInputsInput, fn func(*ListInputsOutput, bool) bool) error {
 	return c.ListInputsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3728,14 +5799,13 @@ const opListMultiplexPrograms = "ListMultiplexPrograms"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMultiplexProgramsRequest method.
+//	req, resp := client.ListMultiplexProgramsRequest(params)
 //
-//    // Example sending a request using the ListMultiplexProgramsRequest method.
-//    req, resp := client.ListMultiplexProgramsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListMultiplexPrograms
 func (c *MediaLive) ListMultiplexProgramsRequest(input *ListMultiplexProgramsInput) (req *request.Request, output *ListMultiplexProgramsOutput) {
@@ -3772,19 +5842,20 @@ func (c *MediaLive) ListMultiplexProgramsRequest(input *ListMultiplexProgramsInp
 // API operation ListMultiplexPrograms for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListMultiplexPrograms
 func (c *MediaLive) ListMultiplexPrograms(input *ListMultiplexProgramsInput) (*ListMultiplexProgramsOutput, error) {
@@ -3816,15 +5887,14 @@ func (c *MediaLive) ListMultiplexProgramsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMultiplexPrograms operation.
-//    pageNum := 0
-//    err := client.ListMultiplexProgramsPages(params,
-//        func(page *medialive.ListMultiplexProgramsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMultiplexPrograms operation.
+//	pageNum := 0
+//	err := client.ListMultiplexProgramsPages(params,
+//	    func(page *medialive.ListMultiplexProgramsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaLive) ListMultiplexProgramsPages(input *ListMultiplexProgramsInput, fn func(*ListMultiplexProgramsOutput, bool) bool) error {
 	return c.ListMultiplexProgramsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3876,14 +5946,13 @@ const opListMultiplexes = "ListMultiplexes"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListMultiplexesRequest method.
+//	req, resp := client.ListMultiplexesRequest(params)
 //
-//    // Example sending a request using the ListMultiplexesRequest method.
-//    req, resp := client.ListMultiplexesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListMultiplexes
 func (c *MediaLive) ListMultiplexesRequest(input *ListMultiplexesInput) (req *request.Request, output *ListMultiplexesOutput) {
@@ -3920,17 +5989,18 @@ func (c *MediaLive) ListMultiplexesRequest(input *ListMultiplexesInput) (req *re
 // API operation ListMultiplexes for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListMultiplexes
 func (c *MediaLive) ListMultiplexes(input *ListMultiplexesInput) (*ListMultiplexesOutput, error) {
@@ -3962,15 +6032,14 @@ func (c *MediaLive) ListMultiplexesWithContext(ctx aws.Context, input *ListMulti
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListMultiplexes operation.
-//    pageNum := 0
-//    err := client.ListMultiplexesPages(params,
-//        func(page *medialive.ListMultiplexesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListMultiplexes operation.
+//	pageNum := 0
+//	err := client.ListMultiplexesPages(params,
+//	    func(page *medialive.ListMultiplexesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaLive) ListMultiplexesPages(input *ListMultiplexesInput, fn func(*ListMultiplexesOutput, bool) bool) error {
 	return c.ListMultiplexesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4022,14 +6091,13 @@ const opListOfferings = "ListOfferings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListOfferingsRequest method.
+//	req, resp := client.ListOfferingsRequest(params)
 //
-//    // Example sending a request using the ListOfferingsRequest method.
-//    req, resp := client.ListOfferingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListOfferings
 func (c *MediaLive) ListOfferingsRequest(input *ListOfferingsInput) (req *request.Request, output *ListOfferingsOutput) {
@@ -4066,17 +6134,18 @@ func (c *MediaLive) ListOfferingsRequest(input *ListOfferingsInput) (req *reques
 // API operation ListOfferings for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListOfferings
 func (c *MediaLive) ListOfferings(input *ListOfferingsInput) (*ListOfferingsOutput, error) {
@@ -4108,15 +6177,14 @@ func (c *MediaLive) ListOfferingsWithContext(ctx aws.Context, input *ListOfferin
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListOfferings operation.
-//    pageNum := 0
-//    err := client.ListOfferingsPages(params,
-//        func(page *medialive.ListOfferingsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListOfferings operation.
+//	pageNum := 0
+//	err := client.ListOfferingsPages(params,
+//	    func(page *medialive.ListOfferingsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaLive) ListOfferingsPages(input *ListOfferingsInput, fn func(*ListOfferingsOutput, bool) bool) error {
 	return c.ListOfferingsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4168,14 +6236,13 @@ const opListReservations = "ListReservations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReservationsRequest method.
+//	req, resp := client.ListReservationsRequest(params)
 //
-//    // Example sending a request using the ListReservationsRequest method.
-//    req, resp := client.ListReservationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListReservations
 func (c *MediaLive) ListReservationsRequest(input *ListReservationsInput) (req *request.Request, output *ListReservationsOutput) {
@@ -4212,17 +6279,18 @@ func (c *MediaLive) ListReservationsRequest(input *ListReservationsInput) (req *
 // API operation ListReservations for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListReservations
 func (c *MediaLive) ListReservations(input *ListReservationsInput) (*ListReservationsOutput, error) {
@@ -4254,15 +6322,14 @@ func (c *MediaLive) ListReservationsWithContext(ctx aws.Context, input *ListRese
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReservations operation.
-//    pageNum := 0
-//    err := client.ListReservationsPages(params,
-//        func(page *medialive.ListReservationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReservations operation.
+//	pageNum := 0
+//	err := client.ListReservationsPages(params,
+//	    func(page *medialive.ListReservationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaLive) ListReservationsPages(input *ListReservationsInput, fn func(*ListReservationsOutput, bool) bool) error {
 	return c.ListReservationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4298,6 +6365,149 @@ func (c *MediaLive) ListReservationsPagesWithContext(ctx aws.Context, input *Lis
 	return p.Err()
 }
 
+const opListSignalMaps = "ListSignalMaps"
+
+// ListSignalMapsRequest generates a "aws/request.Request" representing the
+// client's request for the ListSignalMaps operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSignalMaps for more information on using the ListSignalMaps
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListSignalMapsRequest method.
+//	req, resp := client.ListSignalMapsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListSignalMaps
+func (c *MediaLive) ListSignalMapsRequest(input *ListSignalMapsInput) (req *request.Request, output *ListSignalMapsOutput) {
+	op := &request.Operation{
+		Name:       opListSignalMaps,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/signal-maps",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSignalMapsInput{}
+	}
+
+	output = &ListSignalMapsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSignalMaps API operation for AWS Elemental MediaLive.
+//
+// Lists signal maps.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation ListSignalMaps for usage and error information.
+//
+// Returned Error Types:
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListSignalMaps
+func (c *MediaLive) ListSignalMaps(input *ListSignalMapsInput) (*ListSignalMapsOutput, error) {
+	req, out := c.ListSignalMapsRequest(input)
+	return out, req.Send()
+}
+
+// ListSignalMapsWithContext is the same as ListSignalMaps with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSignalMaps for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListSignalMapsWithContext(ctx aws.Context, input *ListSignalMapsInput, opts ...request.Option) (*ListSignalMapsOutput, error) {
+	req, out := c.ListSignalMapsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSignalMapsPages iterates over the pages of a ListSignalMaps operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSignalMaps method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListSignalMaps operation.
+//	pageNum := 0
+//	err := client.ListSignalMapsPages(params,
+//	    func(page *medialive.ListSignalMapsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *MediaLive) ListSignalMapsPages(input *ListSignalMapsInput, fn func(*ListSignalMapsOutput, bool) bool) error {
+	return c.ListSignalMapsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSignalMapsPagesWithContext same as ListSignalMapsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListSignalMapsPagesWithContext(ctx aws.Context, input *ListSignalMapsInput, fn func(*ListSignalMapsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSignalMapsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSignalMapsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSignalMapsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
@@ -4314,14 +6524,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListTagsForResource
 func (c *MediaLive) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -4342,7 +6551,7 @@ func (c *MediaLive) ListTagsForResourceRequest(input *ListTagsForResourceInput) 
 
 // ListTagsForResource API operation for AWS Elemental MediaLive.
 //
-// Produces list of tags that have been created for a resource
+// # Produces list of tags that have been created for a resource
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4352,13 +6561,14 @@ func (c *MediaLive) ListTagsForResourceRequest(input *ListTagsForResourceInput) 
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * NotFoundException
 //
-//   * BadRequestException
+//   - NotFoundException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListTagsForResource
 func (c *MediaLive) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -4398,14 +6608,13 @@ const opPurchaseOffering = "PurchaseOffering"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PurchaseOfferingRequest method.
+//	req, resp := client.PurchaseOfferingRequest(params)
 //
-//    // Example sending a request using the PurchaseOfferingRequest method.
-//    req, resp := client.PurchaseOfferingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/PurchaseOffering
 func (c *MediaLive) PurchaseOfferingRequest(input *PurchaseOfferingInput) (req *request.Request, output *PurchaseOfferingOutput) {
@@ -4436,21 +6645,22 @@ func (c *MediaLive) PurchaseOfferingRequest(input *PurchaseOfferingInput) (req *
 // API operation PurchaseOffering for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/PurchaseOffering
 func (c *MediaLive) PurchaseOffering(input *PurchaseOfferingInput) (*PurchaseOfferingOutput, error) {
@@ -4490,14 +6700,13 @@ const opRebootInputDevice = "RebootInputDevice"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RebootInputDeviceRequest method.
+//	req, resp := client.RebootInputDeviceRequest(params)
 //
-//    // Example sending a request using the RebootInputDeviceRequest method.
-//    req, resp := client.RebootInputDeviceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RebootInputDevice
 func (c *MediaLive) RebootInputDeviceRequest(input *RebootInputDeviceInput) (req *request.Request, output *RebootInputDeviceOutput) {
@@ -4531,21 +6740,22 @@ func (c *MediaLive) RebootInputDeviceRequest(input *RebootInputDeviceInput) (req
 // API operation RebootInputDevice for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RebootInputDevice
 func (c *MediaLive) RebootInputDevice(input *RebootInputDeviceInput) (*RebootInputDeviceOutput, error) {
@@ -4585,14 +6795,13 @@ const opRejectInputDeviceTransfer = "RejectInputDeviceTransfer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RejectInputDeviceTransferRequest method.
+//	req, resp := client.RejectInputDeviceTransferRequest(params)
 //
-//    // Example sending a request using the RejectInputDeviceTransferRequest method.
-//    req, resp := client.RejectInputDeviceTransferRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RejectInputDeviceTransfer
 func (c *MediaLive) RejectInputDeviceTransferRequest(input *RejectInputDeviceTransferInput) (req *request.Request, output *RejectInputDeviceTransferOutput) {
@@ -4624,23 +6833,24 @@ func (c *MediaLive) RejectInputDeviceTransferRequest(input *RejectInputDeviceTra
 // API operation RejectInputDeviceTransfer for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RejectInputDeviceTransfer
 func (c *MediaLive) RejectInputDeviceTransfer(input *RejectInputDeviceTransferInput) (*RejectInputDeviceTransferOutput, error) {
@@ -4664,6 +6874,98 @@ func (c *MediaLive) RejectInputDeviceTransferWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opRestartChannelPipelines = "RestartChannelPipelines"
+
+// RestartChannelPipelinesRequest generates a "aws/request.Request" representing the
+// client's request for the RestartChannelPipelines operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RestartChannelPipelines for more information on using the RestartChannelPipelines
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the RestartChannelPipelinesRequest method.
+//	req, resp := client.RestartChannelPipelinesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RestartChannelPipelines
+func (c *MediaLive) RestartChannelPipelinesRequest(input *RestartChannelPipelinesInput) (req *request.Request, output *RestartChannelPipelinesOutput) {
+	op := &request.Operation{
+		Name:       opRestartChannelPipelines,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/channels/{channelId}/restartChannelPipelines",
+	}
+
+	if input == nil {
+		input = &RestartChannelPipelinesInput{}
+	}
+
+	output = &RestartChannelPipelinesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RestartChannelPipelines API operation for AWS Elemental MediaLive.
+//
+// Restart pipelines in one channel that is currently running.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation RestartChannelPipelines for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - BadGatewayException
+//
+//   - NotFoundException
+//
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RestartChannelPipelines
+func (c *MediaLive) RestartChannelPipelines(input *RestartChannelPipelinesInput) (*RestartChannelPipelinesOutput, error) {
+	req, out := c.RestartChannelPipelinesRequest(input)
+	return out, req.Send()
+}
+
+// RestartChannelPipelinesWithContext is the same as RestartChannelPipelines with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RestartChannelPipelines for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) RestartChannelPipelinesWithContext(ctx aws.Context, input *RestartChannelPipelinesInput, opts ...request.Option) (*RestartChannelPipelinesOutput, error) {
+	req, out := c.RestartChannelPipelinesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartChannel = "StartChannel"
 
 // StartChannelRequest generates a "aws/request.Request" representing the
@@ -4680,14 +6982,13 @@ const opStartChannel = "StartChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartChannelRequest method.
+//	req, resp := client.StartChannelRequest(params)
 //
-//    // Example sending a request using the StartChannelRequest method.
-//    req, resp := client.StartChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartChannel
 func (c *MediaLive) StartChannelRequest(input *StartChannelInput) (req *request.Request, output *StartChannelOutput) {
@@ -4708,7 +7009,7 @@ func (c *MediaLive) StartChannelRequest(input *StartChannelInput) (req *request.
 
 // StartChannel API operation for AWS Elemental MediaLive.
 //
-// Starts an existing channel
+// # Starts an existing channel
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4718,21 +7019,22 @@ func (c *MediaLive) StartChannelRequest(input *StartChannelInput) (req *request.
 // API operation StartChannel for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartChannel
 func (c *MediaLive) StartChannel(input *StartChannelInput) (*StartChannelOutput, error) {
@@ -4756,6 +7058,189 @@ func (c *MediaLive) StartChannelWithContext(ctx aws.Context, input *StartChannel
 	return out, req.Send()
 }
 
+const opStartDeleteMonitorDeployment = "StartDeleteMonitorDeployment"
+
+// StartDeleteMonitorDeploymentRequest generates a "aws/request.Request" representing the
+// client's request for the StartDeleteMonitorDeployment operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartDeleteMonitorDeployment for more information on using the StartDeleteMonitorDeployment
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StartDeleteMonitorDeploymentRequest method.
+//	req, resp := client.StartDeleteMonitorDeploymentRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartDeleteMonitorDeployment
+func (c *MediaLive) StartDeleteMonitorDeploymentRequest(input *StartDeleteMonitorDeploymentInput) (req *request.Request, output *StartDeleteMonitorDeploymentOutput) {
+	op := &request.Operation{
+		Name:       opStartDeleteMonitorDeployment,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/prod/signal-maps/{identifier}/monitor-deployment",
+	}
+
+	if input == nil {
+		input = &StartDeleteMonitorDeploymentInput{}
+	}
+
+	output = &StartDeleteMonitorDeploymentOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartDeleteMonitorDeployment API operation for AWS Elemental MediaLive.
+//
+// Initiates a deployment to delete the monitor of the specified signal map.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation StartDeleteMonitorDeployment for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartDeleteMonitorDeployment
+func (c *MediaLive) StartDeleteMonitorDeployment(input *StartDeleteMonitorDeploymentInput) (*StartDeleteMonitorDeploymentOutput, error) {
+	req, out := c.StartDeleteMonitorDeploymentRequest(input)
+	return out, req.Send()
+}
+
+// StartDeleteMonitorDeploymentWithContext is the same as StartDeleteMonitorDeployment with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartDeleteMonitorDeployment for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) StartDeleteMonitorDeploymentWithContext(ctx aws.Context, input *StartDeleteMonitorDeploymentInput, opts ...request.Option) (*StartDeleteMonitorDeploymentOutput, error) {
+	req, out := c.StartDeleteMonitorDeploymentRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartInputDevice = "StartInputDevice"
+
+// StartInputDeviceRequest generates a "aws/request.Request" representing the
+// client's request for the StartInputDevice operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartInputDevice for more information on using the StartInputDevice
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StartInputDeviceRequest method.
+//	req, resp := client.StartInputDeviceRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartInputDevice
+func (c *MediaLive) StartInputDeviceRequest(input *StartInputDeviceInput) (req *request.Request, output *StartInputDeviceOutput) {
+	op := &request.Operation{
+		Name:       opStartInputDevice,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/inputDevices/{inputDeviceId}/start",
+	}
+
+	if input == nil {
+		input = &StartInputDeviceInput{}
+	}
+
+	output = &StartInputDeviceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StartInputDevice API operation for AWS Elemental MediaLive.
+//
+// Start an input device that is attached to a MediaConnect flow. (There is
+// no need to start a device that is attached to a MediaLive input; MediaLive
+// starts the device when the channel starts.)
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation StartInputDevice for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - UnprocessableEntityException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - BadGatewayException
+//
+//   - NotFoundException
+//
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartInputDevice
+func (c *MediaLive) StartInputDevice(input *StartInputDeviceInput) (*StartInputDeviceOutput, error) {
+	req, out := c.StartInputDeviceRequest(input)
+	return out, req.Send()
+}
+
+// StartInputDeviceWithContext is the same as StartInputDevice with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartInputDevice for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) StartInputDeviceWithContext(ctx aws.Context, input *StartInputDeviceInput, opts ...request.Option) (*StartInputDeviceOutput, error) {
+	req, out := c.StartInputDeviceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartInputDeviceMaintenanceWindow = "StartInputDeviceMaintenanceWindow"
 
 // StartInputDeviceMaintenanceWindowRequest generates a "aws/request.Request" representing the
@@ -4772,14 +7257,13 @@ const opStartInputDeviceMaintenanceWindow = "StartInputDeviceMaintenanceWindow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartInputDeviceMaintenanceWindowRequest method.
+//	req, resp := client.StartInputDeviceMaintenanceWindowRequest(params)
 //
-//    // Example sending a request using the StartInputDeviceMaintenanceWindowRequest method.
-//    req, resp := client.StartInputDeviceMaintenanceWindowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartInputDeviceMaintenanceWindow
 func (c *MediaLive) StartInputDeviceMaintenanceWindowRequest(input *StartInputDeviceMaintenanceWindowInput) (req *request.Request, output *StartInputDeviceMaintenanceWindowOutput) {
@@ -4818,21 +7302,22 @@ func (c *MediaLive) StartInputDeviceMaintenanceWindowRequest(input *StartInputDe
 // API operation StartInputDeviceMaintenanceWindow for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartInputDeviceMaintenanceWindow
 func (c *MediaLive) StartInputDeviceMaintenanceWindow(input *StartInputDeviceMaintenanceWindowInput) (*StartInputDeviceMaintenanceWindowOutput, error) {
@@ -4856,6 +7341,95 @@ func (c *MediaLive) StartInputDeviceMaintenanceWindowWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
+const opStartMonitorDeployment = "StartMonitorDeployment"
+
+// StartMonitorDeploymentRequest generates a "aws/request.Request" representing the
+// client's request for the StartMonitorDeployment operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartMonitorDeployment for more information on using the StartMonitorDeployment
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StartMonitorDeploymentRequest method.
+//	req, resp := client.StartMonitorDeploymentRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartMonitorDeployment
+func (c *MediaLive) StartMonitorDeploymentRequest(input *StartMonitorDeploymentInput) (req *request.Request, output *StartMonitorDeploymentOutput) {
+	op := &request.Operation{
+		Name:       opStartMonitorDeployment,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/signal-maps/{identifier}/monitor-deployment",
+	}
+
+	if input == nil {
+		input = &StartMonitorDeploymentInput{}
+	}
+
+	output = &StartMonitorDeploymentOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartMonitorDeployment API operation for AWS Elemental MediaLive.
+//
+// Initiates a deployment to deploy the latest monitor of the specified signal
+// map.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation StartMonitorDeployment for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartMonitorDeployment
+func (c *MediaLive) StartMonitorDeployment(input *StartMonitorDeploymentInput) (*StartMonitorDeploymentOutput, error) {
+	req, out := c.StartMonitorDeploymentRequest(input)
+	return out, req.Send()
+}
+
+// StartMonitorDeploymentWithContext is the same as StartMonitorDeployment with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartMonitorDeployment for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) StartMonitorDeploymentWithContext(ctx aws.Context, input *StartMonitorDeploymentInput, opts ...request.Option) (*StartMonitorDeploymentOutput, error) {
+	req, out := c.StartMonitorDeploymentRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartMultiplex = "StartMultiplex"
 
 // StartMultiplexRequest generates a "aws/request.Request" representing the
@@ -4872,14 +7446,13 @@ const opStartMultiplex = "StartMultiplex"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartMultiplexRequest method.
+//	req, resp := client.StartMultiplexRequest(params)
 //
-//    // Example sending a request using the StartMultiplexRequest method.
-//    req, resp := client.StartMultiplexRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartMultiplex
 func (c *MediaLive) StartMultiplexRequest(input *StartMultiplexInput) (req *request.Request, output *StartMultiplexOutput) {
@@ -4911,21 +7484,22 @@ func (c *MediaLive) StartMultiplexRequest(input *StartMultiplexInput) (req *requ
 // API operation StartMultiplex for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartMultiplex
 func (c *MediaLive) StartMultiplex(input *StartMultiplexInput) (*StartMultiplexOutput, error) {
@@ -4949,6 +7523,95 @@ func (c *MediaLive) StartMultiplexWithContext(ctx aws.Context, input *StartMulti
 	return out, req.Send()
 }
 
+const opStartUpdateSignalMap = "StartUpdateSignalMap"
+
+// StartUpdateSignalMapRequest generates a "aws/request.Request" representing the
+// client's request for the StartUpdateSignalMap operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartUpdateSignalMap for more information on using the StartUpdateSignalMap
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StartUpdateSignalMapRequest method.
+//	req, resp := client.StartUpdateSignalMapRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartUpdateSignalMap
+func (c *MediaLive) StartUpdateSignalMapRequest(input *StartUpdateSignalMapInput) (req *request.Request, output *StartUpdateSignalMapOutput) {
+	op := &request.Operation{
+		Name:       opStartUpdateSignalMap,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/prod/signal-maps/{identifier}",
+	}
+
+	if input == nil {
+		input = &StartUpdateSignalMapInput{}
+	}
+
+	output = &StartUpdateSignalMapOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartUpdateSignalMap API operation for AWS Elemental MediaLive.
+//
+// Initiates an update for the specified signal map. Will discover a new signal
+// map if a changed discoveryEntryPointArn is provided.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation StartUpdateSignalMap for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StartUpdateSignalMap
+func (c *MediaLive) StartUpdateSignalMap(input *StartUpdateSignalMapInput) (*StartUpdateSignalMapOutput, error) {
+	req, out := c.StartUpdateSignalMapRequest(input)
+	return out, req.Send()
+}
+
+// StartUpdateSignalMapWithContext is the same as StartUpdateSignalMap with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartUpdateSignalMap for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) StartUpdateSignalMapWithContext(ctx aws.Context, input *StartUpdateSignalMapInput, opts ...request.Option) (*StartUpdateSignalMapOutput, error) {
+	req, out := c.StartUpdateSignalMapRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStopChannel = "StopChannel"
 
 // StopChannelRequest generates a "aws/request.Request" representing the
@@ -4965,14 +7628,13 @@ const opStopChannel = "StopChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopChannelRequest method.
+//	req, resp := client.StopChannelRequest(params)
 //
-//    // Example sending a request using the StopChannelRequest method.
-//    req, resp := client.StopChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StopChannel
 func (c *MediaLive) StopChannelRequest(input *StopChannelInput) (req *request.Request, output *StopChannelOutput) {
@@ -4993,7 +7655,7 @@ func (c *MediaLive) StopChannelRequest(input *StopChannelInput) (req *request.Re
 
 // StopChannel API operation for AWS Elemental MediaLive.
 //
-// Stops a running channel
+// # Stops a running channel
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5003,21 +7665,22 @@ func (c *MediaLive) StopChannelRequest(input *StopChannelInput) (req *request.Re
 // API operation StopChannel for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StopChannel
 func (c *MediaLive) StopChannel(input *StopChannelInput) (*StopChannelOutput, error) {
@@ -5041,6 +7704,101 @@ func (c *MediaLive) StopChannelWithContext(ctx aws.Context, input *StopChannelIn
 	return out, req.Send()
 }
 
+const opStopInputDevice = "StopInputDevice"
+
+// StopInputDeviceRequest generates a "aws/request.Request" representing the
+// client's request for the StopInputDevice operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopInputDevice for more information on using the StopInputDevice
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StopInputDeviceRequest method.
+//	req, resp := client.StopInputDeviceRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StopInputDevice
+func (c *MediaLive) StopInputDeviceRequest(input *StopInputDeviceInput) (req *request.Request, output *StopInputDeviceOutput) {
+	op := &request.Operation{
+		Name:       opStopInputDevice,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/inputDevices/{inputDeviceId}/stop",
+	}
+
+	if input == nil {
+		input = &StopInputDeviceInput{}
+	}
+
+	output = &StopInputDeviceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StopInputDevice API operation for AWS Elemental MediaLive.
+//
+// Stop an input device that is attached to a MediaConnect flow. (There is no
+// need to stop a device that is attached to a MediaLive input; MediaLive automatically
+// stops the device when the channel stops.)
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation StopInputDevice for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - UnprocessableEntityException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - BadGatewayException
+//
+//   - NotFoundException
+//
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StopInputDevice
+func (c *MediaLive) StopInputDevice(input *StopInputDeviceInput) (*StopInputDeviceOutput, error) {
+	req, out := c.StopInputDeviceRequest(input)
+	return out, req.Send()
+}
+
+// StopInputDeviceWithContext is the same as StopInputDevice with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopInputDevice for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) StopInputDeviceWithContext(ctx aws.Context, input *StopInputDeviceInput, opts ...request.Option) (*StopInputDeviceOutput, error) {
+	req, out := c.StopInputDeviceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStopMultiplex = "StopMultiplex"
 
 // StopMultiplexRequest generates a "aws/request.Request" representing the
@@ -5057,14 +7815,13 @@ const opStopMultiplex = "StopMultiplex"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopMultiplexRequest method.
+//	req, resp := client.StopMultiplexRequest(params)
 //
-//    // Example sending a request using the StopMultiplexRequest method.
-//    req, resp := client.StopMultiplexRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StopMultiplex
 func (c *MediaLive) StopMultiplexRequest(input *StopMultiplexInput) (req *request.Request, output *StopMultiplexOutput) {
@@ -5096,21 +7853,22 @@ func (c *MediaLive) StopMultiplexRequest(input *StopMultiplexInput) (req *reques
 // API operation StopMultiplex for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/StopMultiplex
 func (c *MediaLive) StopMultiplex(input *StopMultiplexInput) (*StopMultiplexOutput, error) {
@@ -5150,14 +7908,13 @@ const opTransferInputDevice = "TransferInputDevice"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TransferInputDeviceRequest method.
+//	req, resp := client.TransferInputDeviceRequest(params)
 //
-//    // Example sending a request using the TransferInputDeviceRequest method.
-//    req, resp := client.TransferInputDeviceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/TransferInputDevice
 func (c *MediaLive) TransferInputDeviceRequest(input *TransferInputDeviceInput) (req *request.Request, output *TransferInputDeviceOutput) {
@@ -5190,23 +7947,24 @@ func (c *MediaLive) TransferInputDeviceRequest(input *TransferInputDeviceInput) 
 // API operation TransferInputDevice for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/TransferInputDevice
 func (c *MediaLive) TransferInputDevice(input *TransferInputDeviceInput) (*TransferInputDeviceOutput, error) {
@@ -5230,6 +7988,96 @@ func (c *MediaLive) TransferInputDeviceWithContext(ctx aws.Context, input *Trans
 	return out, req.Send()
 }
 
+const opUpdateAccountConfiguration = "UpdateAccountConfiguration"
+
+// UpdateAccountConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateAccountConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateAccountConfiguration for more information on using the UpdateAccountConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateAccountConfigurationRequest method.
+//	req, resp := client.UpdateAccountConfigurationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateAccountConfiguration
+func (c *MediaLive) UpdateAccountConfigurationRequest(input *UpdateAccountConfigurationInput) (req *request.Request, output *UpdateAccountConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opUpdateAccountConfiguration,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/prod/accountConfiguration",
+	}
+
+	if input == nil {
+		input = &UpdateAccountConfigurationInput{}
+	}
+
+	output = &UpdateAccountConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateAccountConfiguration API operation for AWS Elemental MediaLive.
+//
+// # Update account configuration
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation UpdateAccountConfiguration for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - UnprocessableEntityException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - BadGatewayException
+//
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateAccountConfiguration
+func (c *MediaLive) UpdateAccountConfiguration(input *UpdateAccountConfigurationInput) (*UpdateAccountConfigurationOutput, error) {
+	req, out := c.UpdateAccountConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// UpdateAccountConfigurationWithContext is the same as UpdateAccountConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateAccountConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) UpdateAccountConfigurationWithContext(ctx aws.Context, input *UpdateAccountConfigurationInput, opts ...request.Option) (*UpdateAccountConfigurationOutput, error) {
+	req, out := c.UpdateAccountConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateChannel = "UpdateChannel"
 
 // UpdateChannelRequest generates a "aws/request.Request" representing the
@@ -5246,14 +8094,13 @@ const opUpdateChannel = "UpdateChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateChannelRequest method.
+//	req, resp := client.UpdateChannelRequest(params)
 //
-//    // Example sending a request using the UpdateChannelRequest method.
-//    req, resp := client.UpdateChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateChannel
 func (c *MediaLive) UpdateChannelRequest(input *UpdateChannelInput) (req *request.Request, output *UpdateChannelOutput) {
@@ -5284,19 +8131,20 @@ func (c *MediaLive) UpdateChannelRequest(input *UpdateChannelInput) (req *reques
 // API operation UpdateChannel for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * GatewayTimeoutException
+//   - BadGatewayException
 //
-//   * ConflictException
+//   - GatewayTimeoutException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateChannel
 func (c *MediaLive) UpdateChannel(input *UpdateChannelInput) (*UpdateChannelOutput, error) {
@@ -5336,14 +8184,13 @@ const opUpdateChannelClass = "UpdateChannelClass"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateChannelClassRequest method.
+//	req, resp := client.UpdateChannelClassRequest(params)
 //
-//    // Example sending a request using the UpdateChannelClassRequest method.
-//    req, resp := client.UpdateChannelClassRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateChannelClass
 func (c *MediaLive) UpdateChannelClassRequest(input *UpdateChannelClassInput) (req *request.Request, output *UpdateChannelClassOutput) {
@@ -5374,23 +8221,24 @@ func (c *MediaLive) UpdateChannelClassRequest(input *UpdateChannelClassInput) (r
 // API operation UpdateChannelClass for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateChannelClass
 func (c *MediaLive) UpdateChannelClass(input *UpdateChannelClassInput) (*UpdateChannelClassOutput, error) {
@@ -5414,6 +8262,358 @@ func (c *MediaLive) UpdateChannelClassWithContext(ctx aws.Context, input *Update
 	return out, req.Send()
 }
 
+const opUpdateCloudWatchAlarmTemplate = "UpdateCloudWatchAlarmTemplate"
+
+// UpdateCloudWatchAlarmTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateCloudWatchAlarmTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateCloudWatchAlarmTemplate for more information on using the UpdateCloudWatchAlarmTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateCloudWatchAlarmTemplateRequest method.
+//	req, resp := client.UpdateCloudWatchAlarmTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateCloudWatchAlarmTemplate
+func (c *MediaLive) UpdateCloudWatchAlarmTemplateRequest(input *UpdateCloudWatchAlarmTemplateInput) (req *request.Request, output *UpdateCloudWatchAlarmTemplateOutput) {
+	op := &request.Operation{
+		Name:       opUpdateCloudWatchAlarmTemplate,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/prod/cloudwatch-alarm-templates/{identifier}",
+	}
+
+	if input == nil {
+		input = &UpdateCloudWatchAlarmTemplateInput{}
+	}
+
+	output = &UpdateCloudWatchAlarmTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateCloudWatchAlarmTemplate API operation for AWS Elemental MediaLive.
+//
+// Updates the specified cloudwatch alarm template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation UpdateCloudWatchAlarmTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateCloudWatchAlarmTemplate
+func (c *MediaLive) UpdateCloudWatchAlarmTemplate(input *UpdateCloudWatchAlarmTemplateInput) (*UpdateCloudWatchAlarmTemplateOutput, error) {
+	req, out := c.UpdateCloudWatchAlarmTemplateRequest(input)
+	return out, req.Send()
+}
+
+// UpdateCloudWatchAlarmTemplateWithContext is the same as UpdateCloudWatchAlarmTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateCloudWatchAlarmTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) UpdateCloudWatchAlarmTemplateWithContext(ctx aws.Context, input *UpdateCloudWatchAlarmTemplateInput, opts ...request.Option) (*UpdateCloudWatchAlarmTemplateOutput, error) {
+	req, out := c.UpdateCloudWatchAlarmTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateCloudWatchAlarmTemplateGroup = "UpdateCloudWatchAlarmTemplateGroup"
+
+// UpdateCloudWatchAlarmTemplateGroupRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateCloudWatchAlarmTemplateGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateCloudWatchAlarmTemplateGroup for more information on using the UpdateCloudWatchAlarmTemplateGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateCloudWatchAlarmTemplateGroupRequest method.
+//	req, resp := client.UpdateCloudWatchAlarmTemplateGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateCloudWatchAlarmTemplateGroup
+func (c *MediaLive) UpdateCloudWatchAlarmTemplateGroupRequest(input *UpdateCloudWatchAlarmTemplateGroupInput) (req *request.Request, output *UpdateCloudWatchAlarmTemplateGroupOutput) {
+	op := &request.Operation{
+		Name:       opUpdateCloudWatchAlarmTemplateGroup,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/prod/cloudwatch-alarm-template-groups/{identifier}",
+	}
+
+	if input == nil {
+		input = &UpdateCloudWatchAlarmTemplateGroupInput{}
+	}
+
+	output = &UpdateCloudWatchAlarmTemplateGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateCloudWatchAlarmTemplateGroup API operation for AWS Elemental MediaLive.
+//
+// Updates the specified cloudwatch alarm template group.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation UpdateCloudWatchAlarmTemplateGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateCloudWatchAlarmTemplateGroup
+func (c *MediaLive) UpdateCloudWatchAlarmTemplateGroup(input *UpdateCloudWatchAlarmTemplateGroupInput) (*UpdateCloudWatchAlarmTemplateGroupOutput, error) {
+	req, out := c.UpdateCloudWatchAlarmTemplateGroupRequest(input)
+	return out, req.Send()
+}
+
+// UpdateCloudWatchAlarmTemplateGroupWithContext is the same as UpdateCloudWatchAlarmTemplateGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateCloudWatchAlarmTemplateGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) UpdateCloudWatchAlarmTemplateGroupWithContext(ctx aws.Context, input *UpdateCloudWatchAlarmTemplateGroupInput, opts ...request.Option) (*UpdateCloudWatchAlarmTemplateGroupOutput, error) {
+	req, out := c.UpdateCloudWatchAlarmTemplateGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateEventBridgeRuleTemplate = "UpdateEventBridgeRuleTemplate"
+
+// UpdateEventBridgeRuleTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateEventBridgeRuleTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateEventBridgeRuleTemplate for more information on using the UpdateEventBridgeRuleTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateEventBridgeRuleTemplateRequest method.
+//	req, resp := client.UpdateEventBridgeRuleTemplateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateEventBridgeRuleTemplate
+func (c *MediaLive) UpdateEventBridgeRuleTemplateRequest(input *UpdateEventBridgeRuleTemplateInput) (req *request.Request, output *UpdateEventBridgeRuleTemplateOutput) {
+	op := &request.Operation{
+		Name:       opUpdateEventBridgeRuleTemplate,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/prod/eventbridge-rule-templates/{identifier}",
+	}
+
+	if input == nil {
+		input = &UpdateEventBridgeRuleTemplateInput{}
+	}
+
+	output = &UpdateEventBridgeRuleTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateEventBridgeRuleTemplate API operation for AWS Elemental MediaLive.
+//
+// Updates the specified eventbridge rule template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation UpdateEventBridgeRuleTemplate for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateEventBridgeRuleTemplate
+func (c *MediaLive) UpdateEventBridgeRuleTemplate(input *UpdateEventBridgeRuleTemplateInput) (*UpdateEventBridgeRuleTemplateOutput, error) {
+	req, out := c.UpdateEventBridgeRuleTemplateRequest(input)
+	return out, req.Send()
+}
+
+// UpdateEventBridgeRuleTemplateWithContext is the same as UpdateEventBridgeRuleTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateEventBridgeRuleTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) UpdateEventBridgeRuleTemplateWithContext(ctx aws.Context, input *UpdateEventBridgeRuleTemplateInput, opts ...request.Option) (*UpdateEventBridgeRuleTemplateOutput, error) {
+	req, out := c.UpdateEventBridgeRuleTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateEventBridgeRuleTemplateGroup = "UpdateEventBridgeRuleTemplateGroup"
+
+// UpdateEventBridgeRuleTemplateGroupRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateEventBridgeRuleTemplateGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateEventBridgeRuleTemplateGroup for more information on using the UpdateEventBridgeRuleTemplateGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateEventBridgeRuleTemplateGroupRequest method.
+//	req, resp := client.UpdateEventBridgeRuleTemplateGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateEventBridgeRuleTemplateGroup
+func (c *MediaLive) UpdateEventBridgeRuleTemplateGroupRequest(input *UpdateEventBridgeRuleTemplateGroupInput) (req *request.Request, output *UpdateEventBridgeRuleTemplateGroupOutput) {
+	op := &request.Operation{
+		Name:       opUpdateEventBridgeRuleTemplateGroup,
+		HTTPMethod: "PATCH",
+		HTTPPath:   "/prod/eventbridge-rule-template-groups/{identifier}",
+	}
+
+	if input == nil {
+		input = &UpdateEventBridgeRuleTemplateGroupInput{}
+	}
+
+	output = &UpdateEventBridgeRuleTemplateGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateEventBridgeRuleTemplateGroup API operation for AWS Elemental MediaLive.
+//
+// Updates the specified eventbridge rule template group.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation UpdateEventBridgeRuleTemplateGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - BadRequestException
+//
+//   - InternalServerErrorException
+//
+//   - ForbiddenException
+//
+//   - NotFoundException
+//
+//   - TooManyRequestsException
+//
+//   - ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateEventBridgeRuleTemplateGroup
+func (c *MediaLive) UpdateEventBridgeRuleTemplateGroup(input *UpdateEventBridgeRuleTemplateGroupInput) (*UpdateEventBridgeRuleTemplateGroupOutput, error) {
+	req, out := c.UpdateEventBridgeRuleTemplateGroupRequest(input)
+	return out, req.Send()
+}
+
+// UpdateEventBridgeRuleTemplateGroupWithContext is the same as UpdateEventBridgeRuleTemplateGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateEventBridgeRuleTemplateGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) UpdateEventBridgeRuleTemplateGroupWithContext(ctx aws.Context, input *UpdateEventBridgeRuleTemplateGroupInput, opts ...request.Option) (*UpdateEventBridgeRuleTemplateGroupOutput, error) {
+	req, out := c.UpdateEventBridgeRuleTemplateGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateInput = "UpdateInput"
 
 // UpdateInputRequest generates a "aws/request.Request" representing the
@@ -5430,14 +8630,13 @@ const opUpdateInput = "UpdateInput"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateInputRequest method.
+//	req, resp := client.UpdateInputRequest(params)
 //
-//    // Example sending a request using the UpdateInputRequest method.
-//    req, resp := client.UpdateInputRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateInput
 func (c *MediaLive) UpdateInputRequest(input *UpdateInputInput) (req *request.Request, output *UpdateInputOutput) {
@@ -5468,19 +8667,20 @@ func (c *MediaLive) UpdateInputRequest(input *UpdateInputInput) (req *request.Re
 // API operation UpdateInput for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * ConflictException
+//   - GatewayTimeoutException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateInput
 func (c *MediaLive) UpdateInput(input *UpdateInputInput) (*UpdateInputOutput, error) {
@@ -5520,14 +8720,13 @@ const opUpdateInputDevice = "UpdateInputDevice"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateInputDeviceRequest method.
+//	req, resp := client.UpdateInputDeviceRequest(params)
 //
-//    // Example sending a request using the UpdateInputDeviceRequest method.
-//    req, resp := client.UpdateInputDeviceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateInputDevice
 func (c *MediaLive) UpdateInputDeviceRequest(input *UpdateInputDeviceInput) (req *request.Request, output *UpdateInputDeviceOutput) {
@@ -5558,21 +8757,22 @@ func (c *MediaLive) UpdateInputDeviceRequest(input *UpdateInputDeviceInput) (req
 // API operation UpdateInputDevice for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
+//
+//   - TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateInputDevice
 func (c *MediaLive) UpdateInputDevice(input *UpdateInputDeviceInput) (*UpdateInputDeviceOutput, error) {
@@ -5612,14 +8812,13 @@ const opUpdateInputSecurityGroup = "UpdateInputSecurityGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateInputSecurityGroupRequest method.
+//	req, resp := client.UpdateInputSecurityGroupRequest(params)
 //
-//    // Example sending a request using the UpdateInputSecurityGroupRequest method.
-//    req, resp := client.UpdateInputSecurityGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateInputSecurityGroup
 func (c *MediaLive) UpdateInputSecurityGroupRequest(input *UpdateInputSecurityGroupInput) (req *request.Request, output *UpdateInputSecurityGroupOutput) {
@@ -5650,19 +8849,20 @@ func (c *MediaLive) UpdateInputSecurityGroupRequest(input *UpdateInputSecurityGr
 // API operation UpdateInputSecurityGroup for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * ConflictException
+//   - GatewayTimeoutException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateInputSecurityGroup
 func (c *MediaLive) UpdateInputSecurityGroup(input *UpdateInputSecurityGroupInput) (*UpdateInputSecurityGroupOutput, error) {
@@ -5702,14 +8902,13 @@ const opUpdateMultiplex = "UpdateMultiplex"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateMultiplexRequest method.
+//	req, resp := client.UpdateMultiplexRequest(params)
 //
-//    // Example sending a request using the UpdateMultiplexRequest method.
-//    req, resp := client.UpdateMultiplexRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateMultiplex
 func (c *MediaLive) UpdateMultiplexRequest(input *UpdateMultiplexInput) (req *request.Request, output *UpdateMultiplexOutput) {
@@ -5740,21 +8939,22 @@ func (c *MediaLive) UpdateMultiplexRequest(input *UpdateMultiplexInput) (req *re
 // API operation UpdateMultiplex for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * ConflictException
+//   - GatewayTimeoutException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateMultiplex
 func (c *MediaLive) UpdateMultiplex(input *UpdateMultiplexInput) (*UpdateMultiplexOutput, error) {
@@ -5794,14 +8994,13 @@ const opUpdateMultiplexProgram = "UpdateMultiplexProgram"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateMultiplexProgramRequest method.
+//	req, resp := client.UpdateMultiplexProgramRequest(params)
 //
-//    // Example sending a request using the UpdateMultiplexProgramRequest method.
-//    req, resp := client.UpdateMultiplexProgramRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateMultiplexProgram
 func (c *MediaLive) UpdateMultiplexProgramRequest(input *UpdateMultiplexProgramInput) (req *request.Request, output *UpdateMultiplexProgramOutput) {
@@ -5832,21 +9031,22 @@ func (c *MediaLive) UpdateMultiplexProgramRequest(input *UpdateMultiplexProgramI
 // API operation UpdateMultiplexProgram for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * UnprocessableEntityException
+//   - BadRequestException
 //
-//   * InternalServerErrorException
+//   - UnprocessableEntityException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * ConflictException
+//   - GatewayTimeoutException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateMultiplexProgram
 func (c *MediaLive) UpdateMultiplexProgram(input *UpdateMultiplexProgramInput) (*UpdateMultiplexProgramOutput, error) {
@@ -5886,14 +9086,13 @@ const opUpdateReservation = "UpdateReservation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateReservationRequest method.
+//	req, resp := client.UpdateReservationRequest(params)
 //
-//    // Example sending a request using the UpdateReservationRequest method.
-//    req, resp := client.UpdateReservationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateReservation
 func (c *MediaLive) UpdateReservationRequest(input *UpdateReservationInput) (req *request.Request, output *UpdateReservationOutput) {
@@ -5924,21 +9123,22 @@ func (c *MediaLive) UpdateReservationRequest(input *UpdateReservationInput) (req
 // API operation UpdateReservation for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
 //
-//   * InternalServerErrorException
+//   - BadRequestException
 //
-//   * ForbiddenException
+//   - InternalServerErrorException
 //
-//   * BadGatewayException
+//   - ForbiddenException
 //
-//   * NotFoundException
+//   - BadGatewayException
 //
-//   * GatewayTimeoutException
+//   - NotFoundException
 //
-//   * TooManyRequestsException
+//   - GatewayTimeoutException
 //
-//   * ConflictException
+//   - TooManyRequestsException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/UpdateReservation
 func (c *MediaLive) UpdateReservation(input *UpdateReservationInput) (*UpdateReservationOutput, error) {
@@ -6082,6 +9282,10 @@ func (s *AacSettings) SetVbrQuality(v string) *AacSettings {
 type Ac3Settings struct {
 	_ struct{} `type:"structure"`
 
+	// Applies a 3 dB attenuation to the surround channels. Applies only when the
+	// coding mode parameter is CODING_MODE_3_2_LFE.
+	AttenuationControl *string `locationName:"attenuationControl" type:"string" enum:"Ac3AttenuationControl"`
+
 	// Average bitrate in bits/second. Valid bitrates depend on the coding mode.
 	Bitrate *float64 `locationName:"bitrate" type:"double"`
 
@@ -6139,6 +9343,12 @@ func (s *Ac3Settings) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAttenuationControl sets the AttenuationControl field's value.
+func (s *Ac3Settings) SetAttenuationControl(v string) *Ac3Settings {
+	s.AttenuationControl = &v
+	return s
 }
 
 // SetBitrate sets the Bitrate field's value.
@@ -6250,6 +9460,39 @@ func (s AcceptInputDeviceTransferOutput) String() string {
 // value will be replaced with "sensitive".
 func (s AcceptInputDeviceTransferOutput) GoString() string {
 	return s.String()
+}
+
+type AccountConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the KMS key to use for all features that use key encryption. Specify
+	// the ARN of a KMS key that you have created. Or leave blank to use the key
+	// that MediaLive creates and manages for you.
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccountConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccountConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *AccountConfiguration) SetKmsKeyId(v string) *AccountConfiguration {
+	s.KmsKeyId = &v
+	return s
 }
 
 // Ancillary Source Settings
@@ -6796,6 +10039,10 @@ func (s *AudioCodecSettings) SetWavSettings(v *WavSettings) *AudioCodecSettings 
 type AudioDescription struct {
 	_ struct{} `type:"structure"`
 
+	// Identifies the DASH roles to assign to this audio output. Applies only when
+	// the audio output is configured for DVB DASH accessibility signaling.
+	AudioDashRoles []*string `locationName:"audioDashRoles" type:"list" enum:"DashRoleAudio"`
+
 	// Advanced audio normalization settings.
 	AudioNormalizationSettings *AudioNormalizationSettings `locationName:"audioNormalizationSettings" type:"structure"`
 
@@ -6822,6 +10069,11 @@ type AudioDescription struct {
 
 	// Audio codec settings.
 	CodecSettings *AudioCodecSettings `locationName:"codecSettings" type:"structure"`
+
+	// Identifies DVB DASH accessibility signaling in this audio output. Used in
+	// Microsoft Smooth Streaming outputs to signal accessibility information to
+	// packagers.
+	DvbDashAccessibility *string `locationName:"dvbDashAccessibility" type:"string" enum:"DvbDashAccessibility"`
 
 	// RFC 5646 language code representing the language of the audio output track.
 	// Only used if languageControlMode is useConfigured, or there is no ISO 639
@@ -6902,6 +10154,12 @@ func (s *AudioDescription) Validate() error {
 	return nil
 }
 
+// SetAudioDashRoles sets the AudioDashRoles field's value.
+func (s *AudioDescription) SetAudioDashRoles(v []*string) *AudioDescription {
+	s.AudioDashRoles = v
+	return s
+}
+
 // SetAudioNormalizationSettings sets the AudioNormalizationSettings field's value.
 func (s *AudioDescription) SetAudioNormalizationSettings(v *AudioNormalizationSettings) *AudioDescription {
 	s.AudioNormalizationSettings = v
@@ -6935,6 +10193,12 @@ func (s *AudioDescription) SetAudioWatermarkingSettings(v *AudioWatermarkSetting
 // SetCodecSettings sets the CodecSettings field's value.
 func (s *AudioDescription) SetCodecSettings(v *AudioCodecSettings) *AudioDescription {
 	s.CodecSettings = v
+	return s
+}
+
+// SetDvbDashAccessibility sets the DvbDashAccessibility field's value.
+func (s *AudioDescription) SetDvbDashAccessibility(v string) *AudioDescription {
+	s.DvbDashAccessibility = &v
 	return s
 }
 
@@ -9179,8 +12443,13 @@ type CaptionDescription struct {
 	_ struct{} `type:"structure"`
 
 	// Indicates whether the caption track implements accessibility features such
-	// as written descriptions of spoken dialog, music, and sounds.
+	// as written descriptions of spoken dialog, music, and sounds. This signaling
+	// is added to HLS output group and MediaPackage output group.
 	Accessibility *string `locationName:"accessibility" type:"string" enum:"AccessibilityType"`
+
+	// Identifies the DASH roles to assign to this captions output. Applies only
+	// when the captions output is configured for DVB DASH accessibility signaling.
+	CaptionDashRoles []*string `locationName:"captionDashRoles" type:"list" enum:"DashRoleCaption"`
 
 	// Specifies which input caption selector to use as a caption source when generating
 	// output captions. This field should match a captionSelector name.
@@ -9191,6 +12460,11 @@ type CaptionDescription struct {
 	// Additional settings for captions destination that depend on the destination
 	// type.
 	DestinationSettings *CaptionDestinationSettings `locationName:"destinationSettings" type:"structure"`
+
+	// Identifies DVB DASH accessibility signaling in this captions output. Used
+	// in Microsoft Smooth Streaming outputs to signal accessibility information
+	// to packagers.
+	DvbDashAccessibility *string `locationName:"dvbDashAccessibility" type:"string" enum:"DvbDashAccessibility"`
 
 	// ISO 639-2 three-digit code: http://www.loc.gov/standards/iso639-2/
 	LanguageCode *string `locationName:"languageCode" type:"string"`
@@ -9251,6 +12525,12 @@ func (s *CaptionDescription) SetAccessibility(v string) *CaptionDescription {
 	return s
 }
 
+// SetCaptionDashRoles sets the CaptionDashRoles field's value.
+func (s *CaptionDescription) SetCaptionDashRoles(v []*string) *CaptionDescription {
+	s.CaptionDashRoles = v
+	return s
+}
+
 // SetCaptionSelectorName sets the CaptionSelectorName field's value.
 func (s *CaptionDescription) SetCaptionSelectorName(v string) *CaptionDescription {
 	s.CaptionSelectorName = &v
@@ -9260,6 +12540,12 @@ func (s *CaptionDescription) SetCaptionSelectorName(v string) *CaptionDescriptio
 // SetDestinationSettings sets the DestinationSettings field's value.
 func (s *CaptionDescription) SetDestinationSettings(v *CaptionDestinationSettings) *CaptionDescription {
 	s.DestinationSettings = v
+	return s
+}
+
+// SetDvbDashAccessibility sets the DvbDashAccessibility field's value.
+func (s *CaptionDescription) SetDvbDashAccessibility(v string) *CaptionDescription {
+	s.DvbDashAccessibility = &v
 	return s
 }
 
@@ -10314,6 +13600,588 @@ func (s ClaimDeviceOutput) GoString() string {
 	return s.String()
 }
 
+type CloudWatchAlarmTemplateGroupSummary struct {
+	_ struct{} `type:"structure"`
+
+	// A cloudwatch alarm template group's ARN (Amazon Resource Name)
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// CreatedAt is a required field
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// A resource's optional description.
+	Description *string `locationName:"description" type:"string"`
+
+	// A cloudwatch alarm template group's id. AWS provided template groups have
+	// ids that start with `aws-`
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"7" type:"string" required:"true"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	// A resource's name. Names must be unique within the scope of a resource type
+	// in a specific region.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The number of templates in a group.
+	//
+	// TemplateCount is a required field
+	TemplateCount *int64 `locationName:"templateCount" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CloudWatchAlarmTemplateGroupSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CloudWatchAlarmTemplateGroupSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CloudWatchAlarmTemplateGroupSummary) SetArn(v string) *CloudWatchAlarmTemplateGroupSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CloudWatchAlarmTemplateGroupSummary) SetCreatedAt(v time.Time) *CloudWatchAlarmTemplateGroupSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CloudWatchAlarmTemplateGroupSummary) SetDescription(v string) *CloudWatchAlarmTemplateGroupSummary {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CloudWatchAlarmTemplateGroupSummary) SetId(v string) *CloudWatchAlarmTemplateGroupSummary {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *CloudWatchAlarmTemplateGroupSummary) SetModifiedAt(v time.Time) *CloudWatchAlarmTemplateGroupSummary {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CloudWatchAlarmTemplateGroupSummary) SetName(v string) *CloudWatchAlarmTemplateGroupSummary {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CloudWatchAlarmTemplateGroupSummary) SetTags(v map[string]*string) *CloudWatchAlarmTemplateGroupSummary {
+	s.Tags = v
+	return s
+}
+
+// SetTemplateCount sets the TemplateCount field's value.
+func (s *CloudWatchAlarmTemplateGroupSummary) SetTemplateCount(v int64) *CloudWatchAlarmTemplateGroupSummary {
+	s.TemplateCount = &v
+	return s
+}
+
+type CloudWatchAlarmTemplateSummary struct {
+	_ struct{} `type:"structure"`
+
+	// A cloudwatch alarm template's ARN (Amazon Resource Name)
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// The comparison operator used to compare the specified statistic and the threshold.
+	//
+	// ComparisonOperator is a required field
+	ComparisonOperator *string `locationName:"comparisonOperator" type:"string" required:"true" enum:"CloudWatchAlarmTemplateComparisonOperator"`
+
+	// CreatedAt is a required field
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// The number of datapoints within the evaluation period that must be breaching
+	// to trigger the alarm.
+	DatapointsToAlarm *int64 `locationName:"datapointsToAlarm" min:"1" type:"integer"`
+
+	// A resource's optional description.
+	Description *string `locationName:"description" type:"string"`
+
+	// The number of periods over which data is compared to the specified threshold.
+	//
+	// EvaluationPeriods is a required field
+	EvaluationPeriods *int64 `locationName:"evaluationPeriods" min:"1" type:"integer" required:"true"`
+
+	// A cloudwatch alarm template group's id. AWS provided template groups have
+	// ids that start with `aws-`
+	//
+	// GroupId is a required field
+	GroupId *string `locationName:"groupId" min:"7" type:"string" required:"true"`
+
+	// A cloudwatch alarm template's id. AWS provided templates have ids that start
+	// with `aws-`
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"7" type:"string" required:"true"`
+
+	// The name of the metric associated with the alarm. Must be compatible with
+	// targetResourceType.
+	//
+	// MetricName is a required field
+	MetricName *string `locationName:"metricName" type:"string" required:"true"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	// A resource's name. Names must be unique within the scope of a resource type
+	// in a specific region.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The period, in seconds, over which the specified statistic is applied.
+	//
+	// Period is a required field
+	Period *int64 `locationName:"period" min:"10" type:"integer" required:"true"`
+
+	// The statistic to apply to the alarm's metric data.
+	//
+	// Statistic is a required field
+	Statistic *string `locationName:"statistic" type:"string" required:"true" enum:"CloudWatchAlarmTemplateStatistic"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The resource type this template should dynamically generate cloudwatch metric
+	// alarms for.
+	//
+	// TargetResourceType is a required field
+	TargetResourceType *string `locationName:"targetResourceType" type:"string" required:"true" enum:"CloudWatchAlarmTemplateTargetResourceType"`
+
+	// The threshold value to compare with the specified statistic.
+	//
+	// Threshold is a required field
+	Threshold *float64 `locationName:"threshold" type:"double" required:"true"`
+
+	// Specifies how missing data points are treated when evaluating the alarm's
+	// condition.
+	//
+	// TreatMissingData is a required field
+	TreatMissingData *string `locationName:"treatMissingData" type:"string" required:"true" enum:"CloudWatchAlarmTemplateTreatMissingData"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CloudWatchAlarmTemplateSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CloudWatchAlarmTemplateSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetArn(v string) *CloudWatchAlarmTemplateSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetComparisonOperator sets the ComparisonOperator field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetComparisonOperator(v string) *CloudWatchAlarmTemplateSummary {
+	s.ComparisonOperator = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetCreatedAt(v time.Time) *CloudWatchAlarmTemplateSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDatapointsToAlarm sets the DatapointsToAlarm field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetDatapointsToAlarm(v int64) *CloudWatchAlarmTemplateSummary {
+	s.DatapointsToAlarm = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetDescription(v string) *CloudWatchAlarmTemplateSummary {
+	s.Description = &v
+	return s
+}
+
+// SetEvaluationPeriods sets the EvaluationPeriods field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetEvaluationPeriods(v int64) *CloudWatchAlarmTemplateSummary {
+	s.EvaluationPeriods = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetGroupId(v string) *CloudWatchAlarmTemplateSummary {
+	s.GroupId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetId(v string) *CloudWatchAlarmTemplateSummary {
+	s.Id = &v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetMetricName(v string) *CloudWatchAlarmTemplateSummary {
+	s.MetricName = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetModifiedAt(v time.Time) *CloudWatchAlarmTemplateSummary {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetName(v string) *CloudWatchAlarmTemplateSummary {
+	s.Name = &v
+	return s
+}
+
+// SetPeriod sets the Period field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetPeriod(v int64) *CloudWatchAlarmTemplateSummary {
+	s.Period = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetStatistic(v string) *CloudWatchAlarmTemplateSummary {
+	s.Statistic = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetTags(v map[string]*string) *CloudWatchAlarmTemplateSummary {
+	s.Tags = v
+	return s
+}
+
+// SetTargetResourceType sets the TargetResourceType field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetTargetResourceType(v string) *CloudWatchAlarmTemplateSummary {
+	s.TargetResourceType = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetThreshold(v float64) *CloudWatchAlarmTemplateSummary {
+	s.Threshold = &v
+	return s
+}
+
+// SetTreatMissingData sets the TreatMissingData field's value.
+func (s *CloudWatchAlarmTemplateSummary) SetTreatMissingData(v string) *CloudWatchAlarmTemplateSummary {
+	s.TreatMissingData = &v
+	return s
+}
+
+// Cmaf Ingest Group Settings
+type CmafIngestGroupSettings struct {
+	_ struct{} `type:"structure"`
+
+	// A HTTP destination for the tracks
+	//
+	// Destination is a required field
+	Destination *OutputLocationRef `locationName:"destination" type:"structure" required:"true"`
+
+	// If set to passthrough, Nielsen inaudible tones for media tracking will be
+	// detected in the input audio and an equivalent ID3 tag will be inserted in
+	// the output.
+	NielsenId3Behavior *string `locationName:"nielsenId3Behavior" type:"string" enum:"CmafNielsenId3Behavior"`
+
+	// Type of scte35 track to add. none or scte35WithoutSegmentation
+	Scte35Type *string `locationName:"scte35Type" type:"string" enum:"Scte35Type"`
+
+	// The nominal duration of segments. The units are specified in SegmentLengthUnits.
+	// The segments will end on the next keyframe after the specified duration,
+	// so the actual segment length might be longer, and it might be a fraction
+	// of the units.
+	SegmentLength *int64 `locationName:"segmentLength" min:"1" type:"integer"`
+
+	// Time unit for segment length parameter.
+	SegmentLengthUnits *string `locationName:"segmentLengthUnits" type:"string" enum:"CmafIngestSegmentLengthUnits"`
+
+	// Number of milliseconds to delay the output from the second pipeline.
+	SendDelayMs *int64 `locationName:"sendDelayMs" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CmafIngestGroupSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CmafIngestGroupSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CmafIngestGroupSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CmafIngestGroupSettings"}
+	if s.Destination == nil {
+		invalidParams.Add(request.NewErrParamRequired("Destination"))
+	}
+	if s.SegmentLength != nil && *s.SegmentLength < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("SegmentLength", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDestination sets the Destination field's value.
+func (s *CmafIngestGroupSettings) SetDestination(v *OutputLocationRef) *CmafIngestGroupSettings {
+	s.Destination = v
+	return s
+}
+
+// SetNielsenId3Behavior sets the NielsenId3Behavior field's value.
+func (s *CmafIngestGroupSettings) SetNielsenId3Behavior(v string) *CmafIngestGroupSettings {
+	s.NielsenId3Behavior = &v
+	return s
+}
+
+// SetScte35Type sets the Scte35Type field's value.
+func (s *CmafIngestGroupSettings) SetScte35Type(v string) *CmafIngestGroupSettings {
+	s.Scte35Type = &v
+	return s
+}
+
+// SetSegmentLength sets the SegmentLength field's value.
+func (s *CmafIngestGroupSettings) SetSegmentLength(v int64) *CmafIngestGroupSettings {
+	s.SegmentLength = &v
+	return s
+}
+
+// SetSegmentLengthUnits sets the SegmentLengthUnits field's value.
+func (s *CmafIngestGroupSettings) SetSegmentLengthUnits(v string) *CmafIngestGroupSettings {
+	s.SegmentLengthUnits = &v
+	return s
+}
+
+// SetSendDelayMs sets the SendDelayMs field's value.
+func (s *CmafIngestGroupSettings) SetSendDelayMs(v int64) *CmafIngestGroupSettings {
+	s.SendDelayMs = &v
+	return s
+}
+
+// Cmaf Ingest Output Settings
+type CmafIngestOutputSettings struct {
+	_ struct{} `type:"structure"`
+
+	// String concatenated to the end of the destination filename. Required for
+	// multiple outputs of the same type.
+	NameModifier *string `locationName:"nameModifier" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CmafIngestOutputSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CmafIngestOutputSettings) GoString() string {
+	return s.String()
+}
+
+// SetNameModifier sets the NameModifier field's value.
+func (s *CmafIngestOutputSettings) SetNameModifier(v string) *CmafIngestOutputSettings {
+	s.NameModifier = &v
+	return s
+}
+
+// Property of ColorCorrectionSettings. Used for custom color space conversion.
+// The object identifies one 3D LUT file and specifies the input/output color
+// space combination that the file will be used for.
+type ColorCorrection struct {
+	_ struct{} `type:"structure"`
+
+	// The color space of the input.
+	//
+	// InputColorSpace is a required field
+	InputColorSpace *string `locationName:"inputColorSpace" type:"string" required:"true" enum:"ColorSpace"`
+
+	// The color space of the output.
+	//
+	// OutputColorSpace is a required field
+	OutputColorSpace *string `locationName:"outputColorSpace" type:"string" required:"true" enum:"ColorSpace"`
+
+	// The URI of the 3D LUT file. The protocol must be 's3:' or 's3ssl:':.
+	//
+	// Uri is a required field
+	Uri *string `locationName:"uri" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ColorCorrection) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ColorCorrection) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ColorCorrection) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ColorCorrection"}
+	if s.InputColorSpace == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputColorSpace"))
+	}
+	if s.OutputColorSpace == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutputColorSpace"))
+	}
+	if s.Uri == nil {
+		invalidParams.Add(request.NewErrParamRequired("Uri"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputColorSpace sets the InputColorSpace field's value.
+func (s *ColorCorrection) SetInputColorSpace(v string) *ColorCorrection {
+	s.InputColorSpace = &v
+	return s
+}
+
+// SetOutputColorSpace sets the OutputColorSpace field's value.
+func (s *ColorCorrection) SetOutputColorSpace(v string) *ColorCorrection {
+	s.OutputColorSpace = &v
+	return s
+}
+
+// SetUri sets the Uri field's value.
+func (s *ColorCorrection) SetUri(v string) *ColorCorrection {
+	s.Uri = &v
+	return s
+}
+
+// Property of encoderSettings. Controls color conversion when you are using
+// 3D LUT files to perform color conversion on video.
+type ColorCorrectionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// An array of colorCorrections that applies when you are using 3D LUT files
+	// to perform color conversion on video. Each colorCorrection contains one 3D
+	// LUT file (that defines the color mapping for converting an input color space
+	// to an output color space), and the input/output combination that this 3D
+	// LUT file applies to. MediaLive reads the color space in the input metadata,
+	// determines the color space that you have specified for the output, and finds
+	// and uses the LUT file that applies to this combination.
+	//
+	// GlobalColorCorrections is a required field
+	GlobalColorCorrections []*ColorCorrection `locationName:"globalColorCorrections" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ColorCorrectionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ColorCorrectionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ColorCorrectionSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ColorCorrectionSettings"}
+	if s.GlobalColorCorrections == nil {
+		invalidParams.Add(request.NewErrParamRequired("GlobalColorCorrections"))
+	}
+	if s.GlobalColorCorrections != nil {
+		for i, v := range s.GlobalColorCorrections {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "GlobalColorCorrections", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGlobalColorCorrections sets the GlobalColorCorrections field's value.
+func (s *ColorCorrectionSettings) SetGlobalColorCorrections(v []*ColorCorrection) *ColorCorrectionSettings {
+	s.GlobalColorCorrections = v
+	return s
+}
+
 // Passthrough applies no color space conversion to the output
 type ColorSpacePassthroughSettings struct {
 	_ struct{} `type:"structure"`
@@ -10607,6 +14475,868 @@ func (s CreateChannelOutput) GoString() string {
 // SetChannel sets the Channel field's value.
 func (s *CreateChannelOutput) SetChannel(v *Channel) *CreateChannelOutput {
 	s.Channel = v
+	return s
+}
+
+type CreateCloudWatchAlarmTemplateGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCloudWatchAlarmTemplateGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCloudWatchAlarmTemplateGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateCloudWatchAlarmTemplateGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateCloudWatchAlarmTemplateGroupInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateCloudWatchAlarmTemplateGroupInput) SetDescription(v string) *CreateCloudWatchAlarmTemplateGroupInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateCloudWatchAlarmTemplateGroupInput) SetName(v string) *CreateCloudWatchAlarmTemplateGroupInput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateCloudWatchAlarmTemplateGroupInput) SetTags(v map[string]*string) *CreateCloudWatchAlarmTemplateGroupInput {
+	s.Tags = v
+	return s
+}
+
+type CreateCloudWatchAlarmTemplateGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCloudWatchAlarmTemplateGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCloudWatchAlarmTemplateGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateCloudWatchAlarmTemplateGroupOutput) SetArn(v string) *CreateCloudWatchAlarmTemplateGroupOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CreateCloudWatchAlarmTemplateGroupOutput) SetCreatedAt(v time.Time) *CreateCloudWatchAlarmTemplateGroupOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateCloudWatchAlarmTemplateGroupOutput) SetDescription(v string) *CreateCloudWatchAlarmTemplateGroupOutput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CreateCloudWatchAlarmTemplateGroupOutput) SetId(v string) *CreateCloudWatchAlarmTemplateGroupOutput {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *CreateCloudWatchAlarmTemplateGroupOutput) SetModifiedAt(v time.Time) *CreateCloudWatchAlarmTemplateGroupOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateCloudWatchAlarmTemplateGroupOutput) SetName(v string) *CreateCloudWatchAlarmTemplateGroupOutput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateCloudWatchAlarmTemplateGroupOutput) SetTags(v map[string]*string) *CreateCloudWatchAlarmTemplateGroupOutput {
+	s.Tags = v
+	return s
+}
+
+type CreateCloudWatchAlarmTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The comparison operator used to compare the specified statistic and the threshold.
+	//
+	// ComparisonOperator is a required field
+	ComparisonOperator *string `locationName:"comparisonOperator" type:"string" required:"true" enum:"CloudWatchAlarmTemplateComparisonOperator"`
+
+	DatapointsToAlarm *int64 `locationName:"datapointsToAlarm" min:"1" type:"integer"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	// EvaluationPeriods is a required field
+	EvaluationPeriods *int64 `locationName:"evaluationPeriods" min:"1" type:"integer" required:"true"`
+
+	// GroupIdentifier is a required field
+	GroupIdentifier *string `locationName:"groupIdentifier" type:"string" required:"true"`
+
+	// MetricName is a required field
+	MetricName *string `locationName:"metricName" type:"string" required:"true"`
+
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Period is a required field
+	Period *int64 `locationName:"period" min:"10" type:"integer" required:"true"`
+
+	// The statistic to apply to the alarm's metric data.
+	//
+	// Statistic is a required field
+	Statistic *string `locationName:"statistic" type:"string" required:"true" enum:"CloudWatchAlarmTemplateStatistic"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The resource type this template should dynamically generate cloudwatch metric
+	// alarms for.
+	//
+	// TargetResourceType is a required field
+	TargetResourceType *string `locationName:"targetResourceType" type:"string" required:"true" enum:"CloudWatchAlarmTemplateTargetResourceType"`
+
+	// Threshold is a required field
+	Threshold *float64 `locationName:"threshold" type:"double" required:"true"`
+
+	// Specifies how missing data points are treated when evaluating the alarm's
+	// condition.
+	//
+	// TreatMissingData is a required field
+	TreatMissingData *string `locationName:"treatMissingData" type:"string" required:"true" enum:"CloudWatchAlarmTemplateTreatMissingData"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCloudWatchAlarmTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCloudWatchAlarmTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateCloudWatchAlarmTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateCloudWatchAlarmTemplateInput"}
+	if s.ComparisonOperator == nil {
+		invalidParams.Add(request.NewErrParamRequired("ComparisonOperator"))
+	}
+	if s.DatapointsToAlarm != nil && *s.DatapointsToAlarm < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("DatapointsToAlarm", 1))
+	}
+	if s.EvaluationPeriods == nil {
+		invalidParams.Add(request.NewErrParamRequired("EvaluationPeriods"))
+	}
+	if s.EvaluationPeriods != nil && *s.EvaluationPeriods < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("EvaluationPeriods", 1))
+	}
+	if s.GroupIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupIdentifier"))
+	}
+	if s.MetricName == nil {
+		invalidParams.Add(request.NewErrParamRequired("MetricName"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Period == nil {
+		invalidParams.Add(request.NewErrParamRequired("Period"))
+	}
+	if s.Period != nil && *s.Period < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("Period", 10))
+	}
+	if s.Statistic == nil {
+		invalidParams.Add(request.NewErrParamRequired("Statistic"))
+	}
+	if s.TargetResourceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetResourceType"))
+	}
+	if s.Threshold == nil {
+		invalidParams.Add(request.NewErrParamRequired("Threshold"))
+	}
+	if s.TreatMissingData == nil {
+		invalidParams.Add(request.NewErrParamRequired("TreatMissingData"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetComparisonOperator sets the ComparisonOperator field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetComparisonOperator(v string) *CreateCloudWatchAlarmTemplateInput {
+	s.ComparisonOperator = &v
+	return s
+}
+
+// SetDatapointsToAlarm sets the DatapointsToAlarm field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetDatapointsToAlarm(v int64) *CreateCloudWatchAlarmTemplateInput {
+	s.DatapointsToAlarm = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetDescription(v string) *CreateCloudWatchAlarmTemplateInput {
+	s.Description = &v
+	return s
+}
+
+// SetEvaluationPeriods sets the EvaluationPeriods field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetEvaluationPeriods(v int64) *CreateCloudWatchAlarmTemplateInput {
+	s.EvaluationPeriods = &v
+	return s
+}
+
+// SetGroupIdentifier sets the GroupIdentifier field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetGroupIdentifier(v string) *CreateCloudWatchAlarmTemplateInput {
+	s.GroupIdentifier = &v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetMetricName(v string) *CreateCloudWatchAlarmTemplateInput {
+	s.MetricName = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetName(v string) *CreateCloudWatchAlarmTemplateInput {
+	s.Name = &v
+	return s
+}
+
+// SetPeriod sets the Period field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetPeriod(v int64) *CreateCloudWatchAlarmTemplateInput {
+	s.Period = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetStatistic(v string) *CreateCloudWatchAlarmTemplateInput {
+	s.Statistic = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetTags(v map[string]*string) *CreateCloudWatchAlarmTemplateInput {
+	s.Tags = v
+	return s
+}
+
+// SetTargetResourceType sets the TargetResourceType field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetTargetResourceType(v string) *CreateCloudWatchAlarmTemplateInput {
+	s.TargetResourceType = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetThreshold(v float64) *CreateCloudWatchAlarmTemplateInput {
+	s.Threshold = &v
+	return s
+}
+
+// SetTreatMissingData sets the TreatMissingData field's value.
+func (s *CreateCloudWatchAlarmTemplateInput) SetTreatMissingData(v string) *CreateCloudWatchAlarmTemplateInput {
+	s.TreatMissingData = &v
+	return s
+}
+
+type CreateCloudWatchAlarmTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	// The comparison operator used to compare the specified statistic and the threshold.
+	ComparisonOperator *string `locationName:"comparisonOperator" type:"string" enum:"CloudWatchAlarmTemplateComparisonOperator"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	DatapointsToAlarm *int64 `locationName:"datapointsToAlarm" min:"1" type:"integer"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	EvaluationPeriods *int64 `locationName:"evaluationPeriods" min:"1" type:"integer"`
+
+	GroupId *string `locationName:"groupId" min:"7" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	MetricName *string `locationName:"metricName" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	Period *int64 `locationName:"period" min:"10" type:"integer"`
+
+	// The statistic to apply to the alarm's metric data.
+	Statistic *string `locationName:"statistic" type:"string" enum:"CloudWatchAlarmTemplateStatistic"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The resource type this template should dynamically generate cloudwatch metric
+	// alarms for.
+	TargetResourceType *string `locationName:"targetResourceType" type:"string" enum:"CloudWatchAlarmTemplateTargetResourceType"`
+
+	Threshold *float64 `locationName:"threshold" type:"double"`
+
+	// Specifies how missing data points are treated when evaluating the alarm's
+	// condition.
+	TreatMissingData *string `locationName:"treatMissingData" type:"string" enum:"CloudWatchAlarmTemplateTreatMissingData"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCloudWatchAlarmTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCloudWatchAlarmTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetArn(v string) *CreateCloudWatchAlarmTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetComparisonOperator sets the ComparisonOperator field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetComparisonOperator(v string) *CreateCloudWatchAlarmTemplateOutput {
+	s.ComparisonOperator = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetCreatedAt(v time.Time) *CreateCloudWatchAlarmTemplateOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDatapointsToAlarm sets the DatapointsToAlarm field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetDatapointsToAlarm(v int64) *CreateCloudWatchAlarmTemplateOutput {
+	s.DatapointsToAlarm = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetDescription(v string) *CreateCloudWatchAlarmTemplateOutput {
+	s.Description = &v
+	return s
+}
+
+// SetEvaluationPeriods sets the EvaluationPeriods field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetEvaluationPeriods(v int64) *CreateCloudWatchAlarmTemplateOutput {
+	s.EvaluationPeriods = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetGroupId(v string) *CreateCloudWatchAlarmTemplateOutput {
+	s.GroupId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetId(v string) *CreateCloudWatchAlarmTemplateOutput {
+	s.Id = &v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetMetricName(v string) *CreateCloudWatchAlarmTemplateOutput {
+	s.MetricName = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetModifiedAt(v time.Time) *CreateCloudWatchAlarmTemplateOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetName(v string) *CreateCloudWatchAlarmTemplateOutput {
+	s.Name = &v
+	return s
+}
+
+// SetPeriod sets the Period field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetPeriod(v int64) *CreateCloudWatchAlarmTemplateOutput {
+	s.Period = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetStatistic(v string) *CreateCloudWatchAlarmTemplateOutput {
+	s.Statistic = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetTags(v map[string]*string) *CreateCloudWatchAlarmTemplateOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTargetResourceType sets the TargetResourceType field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetTargetResourceType(v string) *CreateCloudWatchAlarmTemplateOutput {
+	s.TargetResourceType = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetThreshold(v float64) *CreateCloudWatchAlarmTemplateOutput {
+	s.Threshold = &v
+	return s
+}
+
+// SetTreatMissingData sets the TreatMissingData field's value.
+func (s *CreateCloudWatchAlarmTemplateOutput) SetTreatMissingData(v string) *CreateCloudWatchAlarmTemplateOutput {
+	s.TreatMissingData = &v
+	return s
+}
+
+type CreateEventBridgeRuleTemplateGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateEventBridgeRuleTemplateGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateEventBridgeRuleTemplateGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateEventBridgeRuleTemplateGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateEventBridgeRuleTemplateGroupInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateEventBridgeRuleTemplateGroupInput) SetDescription(v string) *CreateEventBridgeRuleTemplateGroupInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateEventBridgeRuleTemplateGroupInput) SetName(v string) *CreateEventBridgeRuleTemplateGroupInput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateEventBridgeRuleTemplateGroupInput) SetTags(v map[string]*string) *CreateEventBridgeRuleTemplateGroupInput {
+	s.Tags = v
+	return s
+}
+
+type CreateEventBridgeRuleTemplateGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateEventBridgeRuleTemplateGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateEventBridgeRuleTemplateGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateEventBridgeRuleTemplateGroupOutput) SetArn(v string) *CreateEventBridgeRuleTemplateGroupOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CreateEventBridgeRuleTemplateGroupOutput) SetCreatedAt(v time.Time) *CreateEventBridgeRuleTemplateGroupOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateEventBridgeRuleTemplateGroupOutput) SetDescription(v string) *CreateEventBridgeRuleTemplateGroupOutput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CreateEventBridgeRuleTemplateGroupOutput) SetId(v string) *CreateEventBridgeRuleTemplateGroupOutput {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *CreateEventBridgeRuleTemplateGroupOutput) SetModifiedAt(v time.Time) *CreateEventBridgeRuleTemplateGroupOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateEventBridgeRuleTemplateGroupOutput) SetName(v string) *CreateEventBridgeRuleTemplateGroupOutput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateEventBridgeRuleTemplateGroupOutput) SetTags(v map[string]*string) *CreateEventBridgeRuleTemplateGroupOutput {
+	s.Tags = v
+	return s
+}
+
+type CreateEventBridgeRuleTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	EventTargets []*EventBridgeRuleTemplateTarget `locationName:"eventTargets" type:"list"`
+
+	// The type of event to match with the rule.
+	//
+	// EventType is a required field
+	EventType *string `locationName:"eventType" type:"string" required:"true" enum:"EventBridgeRuleTemplateEventType"`
+
+	// GroupIdentifier is a required field
+	GroupIdentifier *string `locationName:"groupIdentifier" type:"string" required:"true"`
+
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateEventBridgeRuleTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateEventBridgeRuleTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateEventBridgeRuleTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateEventBridgeRuleTemplateInput"}
+	if s.EventType == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventType"))
+	}
+	if s.GroupIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupIdentifier"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.EventTargets != nil {
+		for i, v := range s.EventTargets {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "EventTargets", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateEventBridgeRuleTemplateInput) SetDescription(v string) *CreateEventBridgeRuleTemplateInput {
+	s.Description = &v
+	return s
+}
+
+// SetEventTargets sets the EventTargets field's value.
+func (s *CreateEventBridgeRuleTemplateInput) SetEventTargets(v []*EventBridgeRuleTemplateTarget) *CreateEventBridgeRuleTemplateInput {
+	s.EventTargets = v
+	return s
+}
+
+// SetEventType sets the EventType field's value.
+func (s *CreateEventBridgeRuleTemplateInput) SetEventType(v string) *CreateEventBridgeRuleTemplateInput {
+	s.EventType = &v
+	return s
+}
+
+// SetGroupIdentifier sets the GroupIdentifier field's value.
+func (s *CreateEventBridgeRuleTemplateInput) SetGroupIdentifier(v string) *CreateEventBridgeRuleTemplateInput {
+	s.GroupIdentifier = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateEventBridgeRuleTemplateInput) SetName(v string) *CreateEventBridgeRuleTemplateInput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateEventBridgeRuleTemplateInput) SetTags(v map[string]*string) *CreateEventBridgeRuleTemplateInput {
+	s.Tags = v
+	return s
+}
+
+type CreateEventBridgeRuleTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	EventTargets []*EventBridgeRuleTemplateTarget `locationName:"eventTargets" type:"list"`
+
+	// The type of event to match with the rule.
+	EventType *string `locationName:"eventType" type:"string" enum:"EventBridgeRuleTemplateEventType"`
+
+	GroupId *string `locationName:"groupId" min:"7" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateEventBridgeRuleTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateEventBridgeRuleTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateEventBridgeRuleTemplateOutput) SetArn(v string) *CreateEventBridgeRuleTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CreateEventBridgeRuleTemplateOutput) SetCreatedAt(v time.Time) *CreateEventBridgeRuleTemplateOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateEventBridgeRuleTemplateOutput) SetDescription(v string) *CreateEventBridgeRuleTemplateOutput {
+	s.Description = &v
+	return s
+}
+
+// SetEventTargets sets the EventTargets field's value.
+func (s *CreateEventBridgeRuleTemplateOutput) SetEventTargets(v []*EventBridgeRuleTemplateTarget) *CreateEventBridgeRuleTemplateOutput {
+	s.EventTargets = v
+	return s
+}
+
+// SetEventType sets the EventType field's value.
+func (s *CreateEventBridgeRuleTemplateOutput) SetEventType(v string) *CreateEventBridgeRuleTemplateOutput {
+	s.EventType = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *CreateEventBridgeRuleTemplateOutput) SetGroupId(v string) *CreateEventBridgeRuleTemplateOutput {
+	s.GroupId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CreateEventBridgeRuleTemplateOutput) SetId(v string) *CreateEventBridgeRuleTemplateOutput {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *CreateEventBridgeRuleTemplateOutput) SetModifiedAt(v time.Time) *CreateEventBridgeRuleTemplateOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateEventBridgeRuleTemplateOutput) SetName(v string) *CreateEventBridgeRuleTemplateOutput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateEventBridgeRuleTemplateOutput) SetTags(v map[string]*string) *CreateEventBridgeRuleTemplateOutput {
+	s.Tags = v
 	return s
 }
 
@@ -11171,6 +15901,274 @@ func (s *CreatePartnerInputOutput) SetInput(v *Input) *CreatePartnerInputOutput 
 	return s
 }
 
+type CreateSignalMapInput struct {
+	_ struct{} `type:"structure"`
+
+	CloudWatchAlarmTemplateGroupIdentifiers []*string `locationName:"cloudWatchAlarmTemplateGroupIdentifiers" type:"list"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	// DiscoveryEntryPointArn is a required field
+	DiscoveryEntryPointArn *string `locationName:"discoveryEntryPointArn" min:"1" type:"string" required:"true"`
+
+	EventBridgeRuleTemplateGroupIdentifiers []*string `locationName:"eventBridgeRuleTemplateGroupIdentifiers" type:"list"`
+
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSignalMapInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSignalMapInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateSignalMapInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateSignalMapInput"}
+	if s.DiscoveryEntryPointArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("DiscoveryEntryPointArn"))
+	}
+	if s.DiscoveryEntryPointArn != nil && len(*s.DiscoveryEntryPointArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DiscoveryEntryPointArn", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCloudWatchAlarmTemplateGroupIdentifiers sets the CloudWatchAlarmTemplateGroupIdentifiers field's value.
+func (s *CreateSignalMapInput) SetCloudWatchAlarmTemplateGroupIdentifiers(v []*string) *CreateSignalMapInput {
+	s.CloudWatchAlarmTemplateGroupIdentifiers = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateSignalMapInput) SetDescription(v string) *CreateSignalMapInput {
+	s.Description = &v
+	return s
+}
+
+// SetDiscoveryEntryPointArn sets the DiscoveryEntryPointArn field's value.
+func (s *CreateSignalMapInput) SetDiscoveryEntryPointArn(v string) *CreateSignalMapInput {
+	s.DiscoveryEntryPointArn = &v
+	return s
+}
+
+// SetEventBridgeRuleTemplateGroupIdentifiers sets the EventBridgeRuleTemplateGroupIdentifiers field's value.
+func (s *CreateSignalMapInput) SetEventBridgeRuleTemplateGroupIdentifiers(v []*string) *CreateSignalMapInput {
+	s.EventBridgeRuleTemplateGroupIdentifiers = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateSignalMapInput) SetName(v string) *CreateSignalMapInput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateSignalMapInput) SetTags(v map[string]*string) *CreateSignalMapInput {
+	s.Tags = v
+	return s
+}
+
+type CreateSignalMapOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CloudWatchAlarmTemplateGroupIds []*string `locationName:"cloudWatchAlarmTemplateGroupIds" type:"list"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	DiscoveryEntryPointArn *string `locationName:"discoveryEntryPointArn" min:"1" type:"string"`
+
+	ErrorMessage *string `locationName:"errorMessage" min:"1" type:"string"`
+
+	EventBridgeRuleTemplateGroupIds []*string `locationName:"eventBridgeRuleTemplateGroupIds" type:"list"`
+
+	// A map representing an incomplete AWS media workflow as a graph.
+	FailedMediaResourceMap map[string]*MediaResource `locationName:"failedMediaResourceMap" type:"map"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	LastDiscoveredAt *time.Time `locationName:"lastDiscoveredAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	// Represents the latest successful monitor deployment of a signal map.
+	LastSuccessfulMonitorDeployment *SuccessfulMonitorDeployment `locationName:"lastSuccessfulMonitorDeployment" type:"structure"`
+
+	// A map representing an AWS media workflow as a graph.
+	MediaResourceMap map[string]*MediaResource `locationName:"mediaResourceMap" type:"map"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	MonitorChangesPendingDeployment *bool `locationName:"monitorChangesPendingDeployment" type:"boolean"`
+
+	// Represents the latest monitor deployment of a signal map.
+	MonitorDeployment *MonitorDeployment `locationName:"monitorDeployment" type:"structure"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// A signal map's current status which is dependent on its lifecycle actions
+	// or associated jobs.
+	Status *string `locationName:"status" type:"string" enum:"SignalMapStatus"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSignalMapOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateSignalMapOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateSignalMapOutput) SetArn(v string) *CreateSignalMapOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCloudWatchAlarmTemplateGroupIds sets the CloudWatchAlarmTemplateGroupIds field's value.
+func (s *CreateSignalMapOutput) SetCloudWatchAlarmTemplateGroupIds(v []*string) *CreateSignalMapOutput {
+	s.CloudWatchAlarmTemplateGroupIds = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CreateSignalMapOutput) SetCreatedAt(v time.Time) *CreateSignalMapOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateSignalMapOutput) SetDescription(v string) *CreateSignalMapOutput {
+	s.Description = &v
+	return s
+}
+
+// SetDiscoveryEntryPointArn sets the DiscoveryEntryPointArn field's value.
+func (s *CreateSignalMapOutput) SetDiscoveryEntryPointArn(v string) *CreateSignalMapOutput {
+	s.DiscoveryEntryPointArn = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *CreateSignalMapOutput) SetErrorMessage(v string) *CreateSignalMapOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetEventBridgeRuleTemplateGroupIds sets the EventBridgeRuleTemplateGroupIds field's value.
+func (s *CreateSignalMapOutput) SetEventBridgeRuleTemplateGroupIds(v []*string) *CreateSignalMapOutput {
+	s.EventBridgeRuleTemplateGroupIds = v
+	return s
+}
+
+// SetFailedMediaResourceMap sets the FailedMediaResourceMap field's value.
+func (s *CreateSignalMapOutput) SetFailedMediaResourceMap(v map[string]*MediaResource) *CreateSignalMapOutput {
+	s.FailedMediaResourceMap = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *CreateSignalMapOutput) SetId(v string) *CreateSignalMapOutput {
+	s.Id = &v
+	return s
+}
+
+// SetLastDiscoveredAt sets the LastDiscoveredAt field's value.
+func (s *CreateSignalMapOutput) SetLastDiscoveredAt(v time.Time) *CreateSignalMapOutput {
+	s.LastDiscoveredAt = &v
+	return s
+}
+
+// SetLastSuccessfulMonitorDeployment sets the LastSuccessfulMonitorDeployment field's value.
+func (s *CreateSignalMapOutput) SetLastSuccessfulMonitorDeployment(v *SuccessfulMonitorDeployment) *CreateSignalMapOutput {
+	s.LastSuccessfulMonitorDeployment = v
+	return s
+}
+
+// SetMediaResourceMap sets the MediaResourceMap field's value.
+func (s *CreateSignalMapOutput) SetMediaResourceMap(v map[string]*MediaResource) *CreateSignalMapOutput {
+	s.MediaResourceMap = v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *CreateSignalMapOutput) SetModifiedAt(v time.Time) *CreateSignalMapOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetMonitorChangesPendingDeployment sets the MonitorChangesPendingDeployment field's value.
+func (s *CreateSignalMapOutput) SetMonitorChangesPendingDeployment(v bool) *CreateSignalMapOutput {
+	s.MonitorChangesPendingDeployment = &v
+	return s
+}
+
+// SetMonitorDeployment sets the MonitorDeployment field's value.
+func (s *CreateSignalMapOutput) SetMonitorDeployment(v *MonitorDeployment) *CreateSignalMapOutput {
+	s.MonitorDeployment = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateSignalMapOutput) SetName(v string) *CreateSignalMapOutput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateSignalMapOutput) SetStatus(v string) *CreateSignalMapOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateSignalMapOutput) SetTags(v map[string]*string) *CreateSignalMapOutput {
+	s.Tags = v
+	return s
+}
+
 type CreateTagsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -11464,6 +16462,282 @@ func (s *DeleteChannelOutput) SetTags(v map[string]*string) *DeleteChannelOutput
 func (s *DeleteChannelOutput) SetVpc(v *VpcOutputSettingsDescription) *DeleteChannelOutput {
 	s.Vpc = v
 	return s
+}
+
+type DeleteCloudWatchAlarmTemplateGroupInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCloudWatchAlarmTemplateGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCloudWatchAlarmTemplateGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteCloudWatchAlarmTemplateGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteCloudWatchAlarmTemplateGroupInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *DeleteCloudWatchAlarmTemplateGroupInput) SetIdentifier(v string) *DeleteCloudWatchAlarmTemplateGroupInput {
+	s.Identifier = &v
+	return s
+}
+
+type DeleteCloudWatchAlarmTemplateGroupOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCloudWatchAlarmTemplateGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCloudWatchAlarmTemplateGroupOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteCloudWatchAlarmTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCloudWatchAlarmTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCloudWatchAlarmTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteCloudWatchAlarmTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteCloudWatchAlarmTemplateInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *DeleteCloudWatchAlarmTemplateInput) SetIdentifier(v string) *DeleteCloudWatchAlarmTemplateInput {
+	s.Identifier = &v
+	return s
+}
+
+type DeleteCloudWatchAlarmTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCloudWatchAlarmTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteCloudWatchAlarmTemplateOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteEventBridgeRuleTemplateGroupInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventBridgeRuleTemplateGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventBridgeRuleTemplateGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteEventBridgeRuleTemplateGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteEventBridgeRuleTemplateGroupInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *DeleteEventBridgeRuleTemplateGroupInput) SetIdentifier(v string) *DeleteEventBridgeRuleTemplateGroupInput {
+	s.Identifier = &v
+	return s
+}
+
+type DeleteEventBridgeRuleTemplateGroupOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventBridgeRuleTemplateGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventBridgeRuleTemplateGroupOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteEventBridgeRuleTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventBridgeRuleTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventBridgeRuleTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteEventBridgeRuleTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteEventBridgeRuleTemplateInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *DeleteEventBridgeRuleTemplateInput) SetIdentifier(v string) *DeleteEventBridgeRuleTemplateInput {
+	s.Identifier = &v
+	return s
+}
+
+type DeleteEventBridgeRuleTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventBridgeRuleTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteEventBridgeRuleTemplateOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteInputInput struct {
@@ -12176,6 +17450,75 @@ func (s DeleteScheduleOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteSignalMapInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSignalMapInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSignalMapInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteSignalMapInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteSignalMapInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *DeleteSignalMapInput) SetIdentifier(v string) *DeleteSignalMapInput {
+	s.Identifier = &v
+	return s
+}
+
+type DeleteSignalMapOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSignalMapOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteSignalMapOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteTagsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -12255,6 +17598,58 @@ func (s DeleteTagsOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DeleteTagsOutput) GoString() string {
 	return s.String()
+}
+
+type DescribeAccountConfigurationInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccountConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccountConfigurationInput) GoString() string {
+	return s.String()
+}
+
+type DescribeAccountConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	AccountConfiguration *AccountConfiguration `locationName:"accountConfiguration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccountConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeAccountConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccountConfiguration sets the AccountConfiguration field's value.
+func (s *DescribeAccountConfigurationOutput) SetAccountConfiguration(v *AccountConfiguration) *DescribeAccountConfigurationOutput {
+	s.AccountConfiguration = v
+	return s
 }
 
 type DescribeChannelInput struct {
@@ -12527,6 +17922,8 @@ type DescribeInputDeviceOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
+
 	// The state of the connection between the input device and AWS.
 	ConnectionState *string `locationName:"connectionState" type:"string" enum:"InputDeviceConnectionState"`
 
@@ -12548,10 +17945,15 @@ type DescribeInputDeviceOutput struct {
 
 	MacAddress *string `locationName:"macAddress" type:"string"`
 
+	MedialiveInputArns []*string `locationName:"medialiveInputArns" type:"list"`
+
 	Name *string `locationName:"name" type:"string"`
 
 	// The network settings for the input device.
 	NetworkSettings *InputDeviceNetworkSettings `locationName:"networkSettings" type:"structure"`
+
+	// The output attachment type of the input device.
+	OutputType *string `locationName:"outputType" type:"string" enum:"InputDeviceOutputType"`
 
 	SerialNumber *string `locationName:"serialNumber" type:"string"`
 
@@ -12587,6 +17989,12 @@ func (s DescribeInputDeviceOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *DescribeInputDeviceOutput) SetArn(v string) *DescribeInputDeviceOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *DescribeInputDeviceOutput) SetAvailabilityZone(v string) *DescribeInputDeviceOutput {
+	s.AvailabilityZone = &v
 	return s
 }
 
@@ -12626,6 +18034,12 @@ func (s *DescribeInputDeviceOutput) SetMacAddress(v string) *DescribeInputDevice
 	return s
 }
 
+// SetMedialiveInputArns sets the MedialiveInputArns field's value.
+func (s *DescribeInputDeviceOutput) SetMedialiveInputArns(v []*string) *DescribeInputDeviceOutput {
+	s.MedialiveInputArns = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *DescribeInputDeviceOutput) SetName(v string) *DescribeInputDeviceOutput {
 	s.Name = &v
@@ -12635,6 +18049,12 @@ func (s *DescribeInputDeviceOutput) SetName(v string) *DescribeInputDeviceOutput
 // SetNetworkSettings sets the NetworkSettings field's value.
 func (s *DescribeInputDeviceOutput) SetNetworkSettings(v *InputDeviceNetworkSettings) *DescribeInputDeviceOutput {
 	s.NetworkSettings = v
+	return s
+}
+
+// SetOutputType sets the OutputType field's value.
+func (s *DescribeInputDeviceOutput) SetOutputType(v string) *DescribeInputDeviceOutput {
+	s.OutputType = &v
 	return s
 }
 
@@ -13870,6 +19290,107 @@ func (s *DescribeScheduleOutput) SetScheduleActions(v []*ScheduleAction) *Descri
 	return s
 }
 
+type DescribeThumbnailsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// ChannelId is a required field
+	ChannelId *string `location:"uri" locationName:"channelId" type:"string" required:"true"`
+
+	// PipelineId is a required field
+	PipelineId *string `location:"querystring" locationName:"pipelineId" type:"string" required:"true"`
+
+	// ThumbnailType is a required field
+	ThumbnailType *string `location:"querystring" locationName:"thumbnailType" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeThumbnailsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeThumbnailsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeThumbnailsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeThumbnailsInput"}
+	if s.ChannelId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelId"))
+	}
+	if s.ChannelId != nil && len(*s.ChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelId", 1))
+	}
+	if s.PipelineId == nil {
+		invalidParams.Add(request.NewErrParamRequired("PipelineId"))
+	}
+	if s.ThumbnailType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ThumbnailType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelId sets the ChannelId field's value.
+func (s *DescribeThumbnailsInput) SetChannelId(v string) *DescribeThumbnailsInput {
+	s.ChannelId = &v
+	return s
+}
+
+// SetPipelineId sets the PipelineId field's value.
+func (s *DescribeThumbnailsInput) SetPipelineId(v string) *DescribeThumbnailsInput {
+	s.PipelineId = &v
+	return s
+}
+
+// SetThumbnailType sets the ThumbnailType field's value.
+func (s *DescribeThumbnailsInput) SetThumbnailType(v string) *DescribeThumbnailsInput {
+	s.ThumbnailType = &v
+	return s
+}
+
+type DescribeThumbnailsOutput struct {
+	_ struct{} `type:"structure"`
+
+	ThumbnailDetails []*ThumbnailDetail `locationName:"thumbnailDetails" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeThumbnailsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeThumbnailsOutput) GoString() string {
+	return s.String()
+}
+
+// SetThumbnailDetails sets the ThumbnailDetails field's value.
+func (s *DescribeThumbnailsOutput) SetThumbnailDetails(v []*ThumbnailDetail) *DescribeThumbnailsOutput {
+	s.ThumbnailDetails = v
+	return s
+}
+
 // Dolby Vision81 Settings
 type DolbyVision81Settings struct {
 	_ struct{} `type:"structure"`
@@ -14959,6 +20480,9 @@ type EncoderSettings struct {
 	// Settings for caption decriptions
 	CaptionDescriptions []*CaptionDescription `locationName:"captionDescriptions" type:"list"`
 
+	// Color Correction Settings
+	ColorCorrectionSettings *ColorCorrectionSettings `locationName:"colorCorrectionSettings" type:"structure"`
+
 	// Feature Activations
 	FeatureActivations *FeatureActivations `locationName:"featureActivations" type:"structure"`
 
@@ -14973,6 +20497,9 @@ type EncoderSettings struct {
 
 	// OutputGroups is a required field
 	OutputGroups []*OutputGroup `locationName:"outputGroups" type:"list" required:"true"`
+
+	// Thumbnail configuration settings.
+	ThumbnailConfiguration *ThumbnailConfiguration `locationName:"thumbnailConfiguration" type:"structure"`
 
 	// Contains settings used to acquire and adjust timecode information from inputs.
 	//
@@ -15051,6 +20578,11 @@ func (s *EncoderSettings) Validate() error {
 			}
 		}
 	}
+	if s.ColorCorrectionSettings != nil {
+		if err := s.ColorCorrectionSettings.Validate(); err != nil {
+			invalidParams.AddNested("ColorCorrectionSettings", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.GlobalConfiguration != nil {
 		if err := s.GlobalConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("GlobalConfiguration", err.(request.ErrInvalidParams))
@@ -15069,6 +20601,11 @@ func (s *EncoderSettings) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OutputGroups", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.ThumbnailConfiguration != nil {
+		if err := s.ThumbnailConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ThumbnailConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.TimecodeConfig != nil {
@@ -15123,6 +20660,12 @@ func (s *EncoderSettings) SetCaptionDescriptions(v []*CaptionDescription) *Encod
 	return s
 }
 
+// SetColorCorrectionSettings sets the ColorCorrectionSettings field's value.
+func (s *EncoderSettings) SetColorCorrectionSettings(v *ColorCorrectionSettings) *EncoderSettings {
+	s.ColorCorrectionSettings = v
+	return s
+}
+
 // SetFeatureActivations sets the FeatureActivations field's value.
 func (s *EncoderSettings) SetFeatureActivations(v *FeatureActivations) *EncoderSettings {
 	s.FeatureActivations = v
@@ -15153,6 +20696,12 @@ func (s *EncoderSettings) SetOutputGroups(v []*OutputGroup) *EncoderSettings {
 	return s
 }
 
+// SetThumbnailConfiguration sets the ThumbnailConfiguration field's value.
+func (s *EncoderSettings) SetThumbnailConfiguration(v *ThumbnailConfiguration) *EncoderSettings {
+	s.ThumbnailConfiguration = v
+	return s
+}
+
 // SetTimecodeConfig sets the TimecodeConfig field's value.
 func (s *EncoderSettings) SetTimecodeConfig(v *TimecodeConfig) *EncoderSettings {
 	s.TimecodeConfig = v
@@ -15162,6 +20711,54 @@ func (s *EncoderSettings) SetTimecodeConfig(v *TimecodeConfig) *EncoderSettings 
 // SetVideoDescriptions sets the VideoDescriptions field's value.
 func (s *EncoderSettings) SetVideoDescriptions(v []*VideoDescription) *EncoderSettings {
 	s.VideoDescriptions = v
+	return s
+}
+
+// Epoch Locking Settings
+type EpochLockingSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Optional. Enter a value here to use a custom epoch, instead of the standard
+	// epoch (which started at 1970-01-01T00:00:00 UTC). Specify the start time
+	// of the custom epoch, in YYYY-MM-DDTHH:MM:SS in UTC. The time must be 2000-01-01T00:00:00
+	// or later. Always set the MM:SS portion to 00:00.
+	CustomEpoch *string `locationName:"customEpoch" type:"string"`
+
+	// Optional. Enter a time for the jam sync. The default is midnight UTC. When
+	// epoch locking is enabled, MediaLive performs a daily jam sync on every output
+	// encode to ensure timecodes don’t diverge from the wall clock. The jam sync
+	// applies only to encodes with frame rate of 29.97 or 59.94 FPS. To override,
+	// enter a time in HH:MM:SS in UTC. Always set the MM:SS portion to 00:00.
+	JamSyncTime *string `locationName:"jamSyncTime" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EpochLockingSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EpochLockingSettings) GoString() string {
+	return s.String()
+}
+
+// SetCustomEpoch sets the CustomEpoch field's value.
+func (s *EpochLockingSettings) SetCustomEpoch(v string) *EpochLockingSettings {
+	s.CustomEpoch = &v
+	return s
+}
+
+// SetJamSyncTime sets the JamSyncTime field's value.
+func (s *EpochLockingSettings) SetJamSyncTime(v string) *EpochLockingSettings {
+	s.JamSyncTime = &v
 	return s
 }
 
@@ -15273,6 +20870,285 @@ func (s *Esam) SetUsername(v string) *Esam {
 // SetZoneIdentity sets the ZoneIdentity field's value.
 func (s *Esam) SetZoneIdentity(v string) *Esam {
 	s.ZoneIdentity = &v
+	return s
+}
+
+type EventBridgeRuleTemplateGroupSummary struct {
+	_ struct{} `type:"structure"`
+
+	// An eventbridge rule template group's ARN (Amazon Resource Name)
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// CreatedAt is a required field
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// A resource's optional description.
+	Description *string `locationName:"description" type:"string"`
+
+	// An eventbridge rule template group's id. AWS provided template groups have
+	// ids that start with `aws-`
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"7" type:"string" required:"true"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	// A resource's name. Names must be unique within the scope of a resource type
+	// in a specific region.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The number of templates in a group.
+	//
+	// TemplateCount is a required field
+	TemplateCount *int64 `locationName:"templateCount" type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventBridgeRuleTemplateGroupSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventBridgeRuleTemplateGroupSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *EventBridgeRuleTemplateGroupSummary) SetArn(v string) *EventBridgeRuleTemplateGroupSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *EventBridgeRuleTemplateGroupSummary) SetCreatedAt(v time.Time) *EventBridgeRuleTemplateGroupSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *EventBridgeRuleTemplateGroupSummary) SetDescription(v string) *EventBridgeRuleTemplateGroupSummary {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *EventBridgeRuleTemplateGroupSummary) SetId(v string) *EventBridgeRuleTemplateGroupSummary {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *EventBridgeRuleTemplateGroupSummary) SetModifiedAt(v time.Time) *EventBridgeRuleTemplateGroupSummary {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *EventBridgeRuleTemplateGroupSummary) SetName(v string) *EventBridgeRuleTemplateGroupSummary {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *EventBridgeRuleTemplateGroupSummary) SetTags(v map[string]*string) *EventBridgeRuleTemplateGroupSummary {
+	s.Tags = v
+	return s
+}
+
+// SetTemplateCount sets the TemplateCount field's value.
+func (s *EventBridgeRuleTemplateGroupSummary) SetTemplateCount(v int64) *EventBridgeRuleTemplateGroupSummary {
+	s.TemplateCount = &v
+	return s
+}
+
+type EventBridgeRuleTemplateSummary struct {
+	_ struct{} `type:"structure"`
+
+	// An eventbridge rule template's ARN (Amazon Resource Name)
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// CreatedAt is a required field
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// A resource's optional description.
+	Description *string `locationName:"description" type:"string"`
+
+	// The number of targets configured to send matching events.
+	//
+	// EventTargetCount is a required field
+	EventTargetCount *int64 `locationName:"eventTargetCount" type:"integer" required:"true"`
+
+	// The type of event to match with the rule.
+	//
+	// EventType is a required field
+	EventType *string `locationName:"eventType" type:"string" required:"true" enum:"EventBridgeRuleTemplateEventType"`
+
+	// An eventbridge rule template group's id. AWS provided template groups have
+	// ids that start with `aws-`
+	//
+	// GroupId is a required field
+	GroupId *string `locationName:"groupId" min:"7" type:"string" required:"true"`
+
+	// An eventbridge rule template's id. AWS provided templates have ids that start
+	// with `aws-`
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"7" type:"string" required:"true"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	// A resource's name. Names must be unique within the scope of a resource type
+	// in a specific region.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventBridgeRuleTemplateSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventBridgeRuleTemplateSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *EventBridgeRuleTemplateSummary) SetArn(v string) *EventBridgeRuleTemplateSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *EventBridgeRuleTemplateSummary) SetCreatedAt(v time.Time) *EventBridgeRuleTemplateSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *EventBridgeRuleTemplateSummary) SetDescription(v string) *EventBridgeRuleTemplateSummary {
+	s.Description = &v
+	return s
+}
+
+// SetEventTargetCount sets the EventTargetCount field's value.
+func (s *EventBridgeRuleTemplateSummary) SetEventTargetCount(v int64) *EventBridgeRuleTemplateSummary {
+	s.EventTargetCount = &v
+	return s
+}
+
+// SetEventType sets the EventType field's value.
+func (s *EventBridgeRuleTemplateSummary) SetEventType(v string) *EventBridgeRuleTemplateSummary {
+	s.EventType = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *EventBridgeRuleTemplateSummary) SetGroupId(v string) *EventBridgeRuleTemplateSummary {
+	s.GroupId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *EventBridgeRuleTemplateSummary) SetId(v string) *EventBridgeRuleTemplateSummary {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *EventBridgeRuleTemplateSummary) SetModifiedAt(v time.Time) *EventBridgeRuleTemplateSummary {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *EventBridgeRuleTemplateSummary) SetName(v string) *EventBridgeRuleTemplateSummary {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *EventBridgeRuleTemplateSummary) SetTags(v map[string]*string) *EventBridgeRuleTemplateSummary {
+	s.Tags = v
+	return s
+}
+
+// The target to which to send matching events.
+type EventBridgeRuleTemplateTarget struct {
+	_ struct{} `type:"structure"`
+
+	// Target ARNs must be either an SNS topic or CloudWatch log group.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventBridgeRuleTemplateTarget) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EventBridgeRuleTemplateTarget) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EventBridgeRuleTemplateTarget) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EventBridgeRuleTemplateTarget"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Arn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *EventBridgeRuleTemplateTarget) SetArn(v string) *EventBridgeRuleTemplateTarget {
+	s.Arn = &v
 	return s
 }
 
@@ -15411,6 +21287,11 @@ type FeatureActivations struct {
 	// an existing schedule, make sure that you first delete all input prepare actions
 	// from the schedule.
 	InputPrepareScheduleActions *string `locationName:"inputPrepareScheduleActions" type:"string" enum:"FeatureActivationsInputPrepareScheduleActions"`
+
+	// Enables the output static image overlay feature. Enabling this feature allows
+	// you to send channel schedule updatesto display/clear/modify image overlays
+	// on an output-by-output bases.
+	OutputStaticImageOverlayScheduleActions *string `locationName:"outputStaticImageOverlayScheduleActions" type:"string" enum:"FeatureActivationsOutputStaticImageOverlayScheduleActions"`
 }
 
 // String returns the string representation.
@@ -15434,6 +21315,12 @@ func (s FeatureActivations) GoString() string {
 // SetInputPrepareScheduleActions sets the InputPrepareScheduleActions field's value.
 func (s *FeatureActivations) SetInputPrepareScheduleActions(v string) *FeatureActivations {
 	s.InputPrepareScheduleActions = &v
+	return s
+}
+
+// SetOutputStaticImageOverlayScheduleActions sets the OutputStaticImageOverlayScheduleActions field's value.
+func (s *FeatureActivations) SetOutputStaticImageOverlayScheduleActions(v string) *FeatureActivations {
+	s.OutputStaticImageOverlayScheduleActions = &v
 	return s
 }
 
@@ -16053,6 +21940,841 @@ func (s *GatewayTimeoutException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type GetCloudWatchAlarmTemplateGroupInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCloudWatchAlarmTemplateGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCloudWatchAlarmTemplateGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCloudWatchAlarmTemplateGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCloudWatchAlarmTemplateGroupInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *GetCloudWatchAlarmTemplateGroupInput) SetIdentifier(v string) *GetCloudWatchAlarmTemplateGroupInput {
+	s.Identifier = &v
+	return s
+}
+
+type GetCloudWatchAlarmTemplateGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCloudWatchAlarmTemplateGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCloudWatchAlarmTemplateGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetCloudWatchAlarmTemplateGroupOutput) SetArn(v string) *GetCloudWatchAlarmTemplateGroupOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *GetCloudWatchAlarmTemplateGroupOutput) SetCreatedAt(v time.Time) *GetCloudWatchAlarmTemplateGroupOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *GetCloudWatchAlarmTemplateGroupOutput) SetDescription(v string) *GetCloudWatchAlarmTemplateGroupOutput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *GetCloudWatchAlarmTemplateGroupOutput) SetId(v string) *GetCloudWatchAlarmTemplateGroupOutput {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *GetCloudWatchAlarmTemplateGroupOutput) SetModifiedAt(v time.Time) *GetCloudWatchAlarmTemplateGroupOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetCloudWatchAlarmTemplateGroupOutput) SetName(v string) *GetCloudWatchAlarmTemplateGroupOutput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetCloudWatchAlarmTemplateGroupOutput) SetTags(v map[string]*string) *GetCloudWatchAlarmTemplateGroupOutput {
+	s.Tags = v
+	return s
+}
+
+type GetCloudWatchAlarmTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCloudWatchAlarmTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCloudWatchAlarmTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCloudWatchAlarmTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCloudWatchAlarmTemplateInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *GetCloudWatchAlarmTemplateInput) SetIdentifier(v string) *GetCloudWatchAlarmTemplateInput {
+	s.Identifier = &v
+	return s
+}
+
+type GetCloudWatchAlarmTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	// The comparison operator used to compare the specified statistic and the threshold.
+	ComparisonOperator *string `locationName:"comparisonOperator" type:"string" enum:"CloudWatchAlarmTemplateComparisonOperator"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	DatapointsToAlarm *int64 `locationName:"datapointsToAlarm" min:"1" type:"integer"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	EvaluationPeriods *int64 `locationName:"evaluationPeriods" min:"1" type:"integer"`
+
+	GroupId *string `locationName:"groupId" min:"7" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	MetricName *string `locationName:"metricName" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	Period *int64 `locationName:"period" min:"10" type:"integer"`
+
+	// The statistic to apply to the alarm's metric data.
+	Statistic *string `locationName:"statistic" type:"string" enum:"CloudWatchAlarmTemplateStatistic"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The resource type this template should dynamically generate cloudwatch metric
+	// alarms for.
+	TargetResourceType *string `locationName:"targetResourceType" type:"string" enum:"CloudWatchAlarmTemplateTargetResourceType"`
+
+	Threshold *float64 `locationName:"threshold" type:"double"`
+
+	// Specifies how missing data points are treated when evaluating the alarm's
+	// condition.
+	TreatMissingData *string `locationName:"treatMissingData" type:"string" enum:"CloudWatchAlarmTemplateTreatMissingData"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCloudWatchAlarmTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetCloudWatchAlarmTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetArn(v string) *GetCloudWatchAlarmTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetComparisonOperator sets the ComparisonOperator field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetComparisonOperator(v string) *GetCloudWatchAlarmTemplateOutput {
+	s.ComparisonOperator = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetCreatedAt(v time.Time) *GetCloudWatchAlarmTemplateOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDatapointsToAlarm sets the DatapointsToAlarm field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetDatapointsToAlarm(v int64) *GetCloudWatchAlarmTemplateOutput {
+	s.DatapointsToAlarm = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetDescription(v string) *GetCloudWatchAlarmTemplateOutput {
+	s.Description = &v
+	return s
+}
+
+// SetEvaluationPeriods sets the EvaluationPeriods field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetEvaluationPeriods(v int64) *GetCloudWatchAlarmTemplateOutput {
+	s.EvaluationPeriods = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetGroupId(v string) *GetCloudWatchAlarmTemplateOutput {
+	s.GroupId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetId(v string) *GetCloudWatchAlarmTemplateOutput {
+	s.Id = &v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetMetricName(v string) *GetCloudWatchAlarmTemplateOutput {
+	s.MetricName = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetModifiedAt(v time.Time) *GetCloudWatchAlarmTemplateOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetName(v string) *GetCloudWatchAlarmTemplateOutput {
+	s.Name = &v
+	return s
+}
+
+// SetPeriod sets the Period field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetPeriod(v int64) *GetCloudWatchAlarmTemplateOutput {
+	s.Period = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetStatistic(v string) *GetCloudWatchAlarmTemplateOutput {
+	s.Statistic = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetTags(v map[string]*string) *GetCloudWatchAlarmTemplateOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTargetResourceType sets the TargetResourceType field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetTargetResourceType(v string) *GetCloudWatchAlarmTemplateOutput {
+	s.TargetResourceType = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetThreshold(v float64) *GetCloudWatchAlarmTemplateOutput {
+	s.Threshold = &v
+	return s
+}
+
+// SetTreatMissingData sets the TreatMissingData field's value.
+func (s *GetCloudWatchAlarmTemplateOutput) SetTreatMissingData(v string) *GetCloudWatchAlarmTemplateOutput {
+	s.TreatMissingData = &v
+	return s
+}
+
+type GetEventBridgeRuleTemplateGroupInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventBridgeRuleTemplateGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventBridgeRuleTemplateGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetEventBridgeRuleTemplateGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetEventBridgeRuleTemplateGroupInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *GetEventBridgeRuleTemplateGroupInput) SetIdentifier(v string) *GetEventBridgeRuleTemplateGroupInput {
+	s.Identifier = &v
+	return s
+}
+
+type GetEventBridgeRuleTemplateGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventBridgeRuleTemplateGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventBridgeRuleTemplateGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetEventBridgeRuleTemplateGroupOutput) SetArn(v string) *GetEventBridgeRuleTemplateGroupOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *GetEventBridgeRuleTemplateGroupOutput) SetCreatedAt(v time.Time) *GetEventBridgeRuleTemplateGroupOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *GetEventBridgeRuleTemplateGroupOutput) SetDescription(v string) *GetEventBridgeRuleTemplateGroupOutput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *GetEventBridgeRuleTemplateGroupOutput) SetId(v string) *GetEventBridgeRuleTemplateGroupOutput {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *GetEventBridgeRuleTemplateGroupOutput) SetModifiedAt(v time.Time) *GetEventBridgeRuleTemplateGroupOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetEventBridgeRuleTemplateGroupOutput) SetName(v string) *GetEventBridgeRuleTemplateGroupOutput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetEventBridgeRuleTemplateGroupOutput) SetTags(v map[string]*string) *GetEventBridgeRuleTemplateGroupOutput {
+	s.Tags = v
+	return s
+}
+
+type GetEventBridgeRuleTemplateInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventBridgeRuleTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventBridgeRuleTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetEventBridgeRuleTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetEventBridgeRuleTemplateInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *GetEventBridgeRuleTemplateInput) SetIdentifier(v string) *GetEventBridgeRuleTemplateInput {
+	s.Identifier = &v
+	return s
+}
+
+type GetEventBridgeRuleTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	EventTargets []*EventBridgeRuleTemplateTarget `locationName:"eventTargets" type:"list"`
+
+	// The type of event to match with the rule.
+	EventType *string `locationName:"eventType" type:"string" enum:"EventBridgeRuleTemplateEventType"`
+
+	GroupId *string `locationName:"groupId" min:"7" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventBridgeRuleTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEventBridgeRuleTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetEventBridgeRuleTemplateOutput) SetArn(v string) *GetEventBridgeRuleTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *GetEventBridgeRuleTemplateOutput) SetCreatedAt(v time.Time) *GetEventBridgeRuleTemplateOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *GetEventBridgeRuleTemplateOutput) SetDescription(v string) *GetEventBridgeRuleTemplateOutput {
+	s.Description = &v
+	return s
+}
+
+// SetEventTargets sets the EventTargets field's value.
+func (s *GetEventBridgeRuleTemplateOutput) SetEventTargets(v []*EventBridgeRuleTemplateTarget) *GetEventBridgeRuleTemplateOutput {
+	s.EventTargets = v
+	return s
+}
+
+// SetEventType sets the EventType field's value.
+func (s *GetEventBridgeRuleTemplateOutput) SetEventType(v string) *GetEventBridgeRuleTemplateOutput {
+	s.EventType = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *GetEventBridgeRuleTemplateOutput) SetGroupId(v string) *GetEventBridgeRuleTemplateOutput {
+	s.GroupId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *GetEventBridgeRuleTemplateOutput) SetId(v string) *GetEventBridgeRuleTemplateOutput {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *GetEventBridgeRuleTemplateOutput) SetModifiedAt(v time.Time) *GetEventBridgeRuleTemplateOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetEventBridgeRuleTemplateOutput) SetName(v string) *GetEventBridgeRuleTemplateOutput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetEventBridgeRuleTemplateOutput) SetTags(v map[string]*string) *GetEventBridgeRuleTemplateOutput {
+	s.Tags = v
+	return s
+}
+
+type GetSignalMapInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSignalMapInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSignalMapInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSignalMapInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetSignalMapInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *GetSignalMapInput) SetIdentifier(v string) *GetSignalMapInput {
+	s.Identifier = &v
+	return s
+}
+
+type GetSignalMapOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CloudWatchAlarmTemplateGroupIds []*string `locationName:"cloudWatchAlarmTemplateGroupIds" type:"list"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	DiscoveryEntryPointArn *string `locationName:"discoveryEntryPointArn" min:"1" type:"string"`
+
+	ErrorMessage *string `locationName:"errorMessage" min:"1" type:"string"`
+
+	EventBridgeRuleTemplateGroupIds []*string `locationName:"eventBridgeRuleTemplateGroupIds" type:"list"`
+
+	// A map representing an incomplete AWS media workflow as a graph.
+	FailedMediaResourceMap map[string]*MediaResource `locationName:"failedMediaResourceMap" type:"map"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	LastDiscoveredAt *time.Time `locationName:"lastDiscoveredAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	// Represents the latest successful monitor deployment of a signal map.
+	LastSuccessfulMonitorDeployment *SuccessfulMonitorDeployment `locationName:"lastSuccessfulMonitorDeployment" type:"structure"`
+
+	// A map representing an AWS media workflow as a graph.
+	MediaResourceMap map[string]*MediaResource `locationName:"mediaResourceMap" type:"map"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	MonitorChangesPendingDeployment *bool `locationName:"monitorChangesPendingDeployment" type:"boolean"`
+
+	// Represents the latest monitor deployment of a signal map.
+	MonitorDeployment *MonitorDeployment `locationName:"monitorDeployment" type:"structure"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// A signal map's current status which is dependent on its lifecycle actions
+	// or associated jobs.
+	Status *string `locationName:"status" type:"string" enum:"SignalMapStatus"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSignalMapOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSignalMapOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *GetSignalMapOutput) SetArn(v string) *GetSignalMapOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCloudWatchAlarmTemplateGroupIds sets the CloudWatchAlarmTemplateGroupIds field's value.
+func (s *GetSignalMapOutput) SetCloudWatchAlarmTemplateGroupIds(v []*string) *GetSignalMapOutput {
+	s.CloudWatchAlarmTemplateGroupIds = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *GetSignalMapOutput) SetCreatedAt(v time.Time) *GetSignalMapOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *GetSignalMapOutput) SetDescription(v string) *GetSignalMapOutput {
+	s.Description = &v
+	return s
+}
+
+// SetDiscoveryEntryPointArn sets the DiscoveryEntryPointArn field's value.
+func (s *GetSignalMapOutput) SetDiscoveryEntryPointArn(v string) *GetSignalMapOutput {
+	s.DiscoveryEntryPointArn = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *GetSignalMapOutput) SetErrorMessage(v string) *GetSignalMapOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetEventBridgeRuleTemplateGroupIds sets the EventBridgeRuleTemplateGroupIds field's value.
+func (s *GetSignalMapOutput) SetEventBridgeRuleTemplateGroupIds(v []*string) *GetSignalMapOutput {
+	s.EventBridgeRuleTemplateGroupIds = v
+	return s
+}
+
+// SetFailedMediaResourceMap sets the FailedMediaResourceMap field's value.
+func (s *GetSignalMapOutput) SetFailedMediaResourceMap(v map[string]*MediaResource) *GetSignalMapOutput {
+	s.FailedMediaResourceMap = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *GetSignalMapOutput) SetId(v string) *GetSignalMapOutput {
+	s.Id = &v
+	return s
+}
+
+// SetLastDiscoveredAt sets the LastDiscoveredAt field's value.
+func (s *GetSignalMapOutput) SetLastDiscoveredAt(v time.Time) *GetSignalMapOutput {
+	s.LastDiscoveredAt = &v
+	return s
+}
+
+// SetLastSuccessfulMonitorDeployment sets the LastSuccessfulMonitorDeployment field's value.
+func (s *GetSignalMapOutput) SetLastSuccessfulMonitorDeployment(v *SuccessfulMonitorDeployment) *GetSignalMapOutput {
+	s.LastSuccessfulMonitorDeployment = v
+	return s
+}
+
+// SetMediaResourceMap sets the MediaResourceMap field's value.
+func (s *GetSignalMapOutput) SetMediaResourceMap(v map[string]*MediaResource) *GetSignalMapOutput {
+	s.MediaResourceMap = v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *GetSignalMapOutput) SetModifiedAt(v time.Time) *GetSignalMapOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetMonitorChangesPendingDeployment sets the MonitorChangesPendingDeployment field's value.
+func (s *GetSignalMapOutput) SetMonitorChangesPendingDeployment(v bool) *GetSignalMapOutput {
+	s.MonitorChangesPendingDeployment = &v
+	return s
+}
+
+// SetMonitorDeployment sets the MonitorDeployment field's value.
+func (s *GetSignalMapOutput) SetMonitorDeployment(v *MonitorDeployment) *GetSignalMapOutput {
+	s.MonitorDeployment = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetSignalMapOutput) SetName(v string) *GetSignalMapOutput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GetSignalMapOutput) SetStatus(v string) *GetSignalMapOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetSignalMapOutput) SetTags(v map[string]*string) *GetSignalMapOutput {
+	s.Tags = v
+	return s
+}
+
 // Global Configuration
 type GlobalConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -16076,6 +22798,9 @@ type GlobalConfiguration struct {
 	// - MediaLive will attempt to synchronize the output of each pipeline to the
 	// Unix epoch.
 	OutputLockingMode *string `locationName:"outputLockingMode" type:"string" enum:"GlobalConfigurationOutputLockingMode"`
+
+	// Advanced output locking settings
+	OutputLockingSettings *OutputLockingSettings `locationName:"outputLockingSettings" type:"structure"`
 
 	// Indicates whether the rate of frames emitted by the Live encoder should be
 	// paced by its system clock (which optionally may be locked to another source
@@ -16146,6 +22871,12 @@ func (s *GlobalConfiguration) SetInputLossBehavior(v *InputLossBehavior) *Global
 // SetOutputLockingMode sets the OutputLockingMode field's value.
 func (s *GlobalConfiguration) SetOutputLockingMode(v string) *GlobalConfiguration {
 	s.OutputLockingMode = &v
+	return s
+}
+
+// SetOutputLockingSettings sets the OutputLockingSettings field's value.
+func (s *GlobalConfiguration) SetOutputLockingSettings(v *OutputLockingSettings) *GlobalConfiguration {
+	s.OutputLockingSettings = v
 	return s
 }
 
@@ -16980,6 +23711,14 @@ type H265Settings struct {
 	// next GOP. Note: Maximum GOP stretch = GOP size + Min-I-interval - 1
 	MinIInterval *int64 `locationName:"minIInterval" type:"integer"`
 
+	// If you are setting up the picture as a tile, you must set this to "disabled".
+	// In all other configurations, you typically enter "enabled".
+	MvOverPictureBoundaries *string `locationName:"mvOverPictureBoundaries" type:"string" enum:"H265MvOverPictureBoundaries"`
+
+	// If you are setting up the picture as a tile, you must set this to "disabled".
+	// In other configurations, you typically enter "enabled".
+	MvTemporalPredictor *string `locationName:"mvTemporalPredictor" type:"string" enum:"H265MvTemporalPredictor"`
+
 	// Pixel Aspect Ratio denominator.
 	ParDenominator *int64 `locationName:"parDenominator" min:"1" type:"integer"`
 
@@ -17023,6 +23762,23 @@ type H265Settings struct {
 	// H.265 Tier.
 	Tier *string `locationName:"tier" type:"string" enum:"H265Tier"`
 
+	// Set this field to set up the picture as a tile. You must also set tileWidth.The
+	// tile height must result in 22 or fewer rows in the frame. The tile widthmust
+	// result in 20 or fewer columns in the frame. And finally, the product of thecolumn
+	// count and row count must be 64 of less.If the tile width and height are specified,
+	// MediaLive will override the videocodec slices field with a value that MediaLive
+	// calculates
+	TileHeight *int64 `locationName:"tileHeight" min:"64" type:"integer"`
+
+	// Set to "padded" to force MediaLive to add padding to the frame, to obtain
+	// a frame that is a whole multiple of the tile size.If you are setting up the
+	// picture as a tile, you must enter "padded".In all other configurations, you
+	// typically enter "none".
+	TilePadding *string `locationName:"tilePadding" type:"string" enum:"H265TilePadding"`
+
+	// Set this field to set up the picture as a tile. See tileHeight for more information.
+	TileWidth *int64 `locationName:"tileWidth" min:"256" type:"integer"`
+
 	// Timecode burn-in settings
 	TimecodeBurninSettings *TimecodeBurninSettings `locationName:"timecodeBurninSettings" type:"structure"`
 
@@ -17030,6 +23786,12 @@ type H265Settings struct {
 	// 'disabled': Do not include timecodes- 'picTimingSei': Pass through picture
 	// timing SEI messages from the source specified in Timecode Config
 	TimecodeInsertion *string `locationName:"timecodeInsertion" type:"string" enum:"H265TimecodeInsertionBehavior"`
+
+	// Select the tree block size used for encoding. If you enter "auto", the encoder
+	// will pick the best size. If you are setting up the picture as a tile, you
+	// must set this to 32x32. In all other configurations, you typically enter
+	// "auto".
+	TreeblockSize *string `locationName:"treeblockSize" type:"string" enum:"H265TreeblockSize"`
 }
 
 // String returns the string representation.
@@ -17085,6 +23847,12 @@ func (s *H265Settings) Validate() error {
 	}
 	if s.Slices != nil && *s.Slices < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Slices", 1))
+	}
+	if s.TileHeight != nil && *s.TileHeight < 64 {
+		invalidParams.Add(request.NewErrParamMinValue("TileHeight", 64))
+	}
+	if s.TileWidth != nil && *s.TileWidth < 256 {
+		invalidParams.Add(request.NewErrParamMinValue("TileWidth", 256))
 	}
 	if s.TimecodeBurninSettings != nil {
 		if err := s.TimecodeBurninSettings.Validate(); err != nil {
@@ -17212,6 +23980,18 @@ func (s *H265Settings) SetMinIInterval(v int64) *H265Settings {
 	return s
 }
 
+// SetMvOverPictureBoundaries sets the MvOverPictureBoundaries field's value.
+func (s *H265Settings) SetMvOverPictureBoundaries(v string) *H265Settings {
+	s.MvOverPictureBoundaries = &v
+	return s
+}
+
+// SetMvTemporalPredictor sets the MvTemporalPredictor field's value.
+func (s *H265Settings) SetMvTemporalPredictor(v string) *H265Settings {
+	s.MvTemporalPredictor = &v
+	return s
+}
+
 // SetParDenominator sets the ParDenominator field's value.
 func (s *H265Settings) SetParDenominator(v int64) *H265Settings {
 	s.ParDenominator = &v
@@ -17266,6 +24046,24 @@ func (s *H265Settings) SetTier(v string) *H265Settings {
 	return s
 }
 
+// SetTileHeight sets the TileHeight field's value.
+func (s *H265Settings) SetTileHeight(v int64) *H265Settings {
+	s.TileHeight = &v
+	return s
+}
+
+// SetTilePadding sets the TilePadding field's value.
+func (s *H265Settings) SetTilePadding(v string) *H265Settings {
+	s.TilePadding = &v
+	return s
+}
+
+// SetTileWidth sets the TileWidth field's value.
+func (s *H265Settings) SetTileWidth(v int64) *H265Settings {
+	s.TileWidth = &v
+	return s
+}
+
 // SetTimecodeBurninSettings sets the TimecodeBurninSettings field's value.
 func (s *H265Settings) SetTimecodeBurninSettings(v *TimecodeBurninSettings) *H265Settings {
 	s.TimecodeBurninSettings = v
@@ -17275,6 +24073,12 @@ func (s *H265Settings) SetTimecodeBurninSettings(v *TimecodeBurninSettings) *H26
 // SetTimecodeInsertion sets the TimecodeInsertion field's value.
 func (s *H265Settings) SetTimecodeInsertion(v string) *H265Settings {
 	s.TimecodeInsertion = &v
+	return s
+}
+
+// SetTreeblockSize sets the TreeblockSize field's value.
+func (s *H265Settings) SetTreeblockSize(v string) *H265Settings {
+	s.TreeblockSize = &v
 	return s
 }
 
@@ -19174,9 +25978,67 @@ func (s *InputDestinationVpc) SetNetworkInterfaceId(v string) *InputDestinationV
 	return s
 }
 
+// One audio configuration that specifies the format for one audio pair that
+// the device produces as output.
+type InputDeviceConfigurableAudioChannelPairConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The ID for one audio pair configuration, a value from 1 to 8.
+	Id *int64 `locationName:"id" type:"integer"`
+
+	// The profile to set for one audio pair configuration. Choose an enumeration
+	// value. Each value describes one audio configuration using the format (rate
+	// control algorithm)-(codec)_(quality)-(bitrate in bytes). For example, CBR-AAC_HQ-192000.
+	// Or choose DISABLED, in which case the device won't produce audio for this
+	// pair.
+	Profile *string `locationName:"profile" type:"string" enum:"InputDeviceConfigurableAudioChannelPairProfile"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputDeviceConfigurableAudioChannelPairConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputDeviceConfigurableAudioChannelPairConfig) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *InputDeviceConfigurableAudioChannelPairConfig) SetId(v int64) *InputDeviceConfigurableAudioChannelPairConfig {
+	s.Id = &v
+	return s
+}
+
+// SetProfile sets the Profile field's value.
+func (s *InputDeviceConfigurableAudioChannelPairConfig) SetProfile(v string) *InputDeviceConfigurableAudioChannelPairConfig {
+	s.Profile = &v
+	return s
+}
+
 // Configurable settings for the input device.
 type InputDeviceConfigurableSettings struct {
 	_ struct{} `type:"structure"`
+
+	// An array of eight audio configurations, one for each audio pair in the source.
+	// Set up each audio configuration either to exclude the pair, or to format
+	// it and include it in the output from the device. This parameter applies only
+	// to UHD devices, and only when the device is configured as the source for
+	// a MediaConnect flow. For an HD device, you configure the audio by setting
+	// up audio selectors in the channel configuration.
+	AudioChannelPairs []*InputDeviceConfigurableAudioChannelPairConfig `locationName:"audioChannelPairs" type:"list"`
+
+	// Choose the codec for the video that the device produces. Only UHD devices
+	// can specify this parameter.
+	Codec *string `locationName:"codec" type:"string" enum:"InputDeviceCodec"`
 
 	// The input source that you want to use. If the device has a source connected
 	// to only one of its input ports, or if you don't care which source the device
@@ -19190,6 +26052,11 @@ type InputDeviceConfigurableSettings struct {
 	// The maximum bitrate in bits per second. Set a value here to throttle the
 	// bitrate of the source video.
 	MaxBitrate *int64 `locationName:"maxBitrate" type:"integer"`
+
+	// To attach this device to a MediaConnect flow, specify these parameters. To
+	// detach an existing flow, enter {} for the value of mediaconnectSettings.
+	// Only UHD devices can specify this parameter.
+	MediaconnectSettings *InputDeviceMediaConnectConfigurableSettings `locationName:"mediaconnectSettings" type:"structure"`
 }
 
 // String returns the string representation.
@@ -19210,6 +26077,18 @@ func (s InputDeviceConfigurableSettings) GoString() string {
 	return s.String()
 }
 
+// SetAudioChannelPairs sets the AudioChannelPairs field's value.
+func (s *InputDeviceConfigurableSettings) SetAudioChannelPairs(v []*InputDeviceConfigurableAudioChannelPairConfig) *InputDeviceConfigurableSettings {
+	s.AudioChannelPairs = v
+	return s
+}
+
+// SetCodec sets the Codec field's value.
+func (s *InputDeviceConfigurableSettings) SetCodec(v string) *InputDeviceConfigurableSettings {
+	s.Codec = &v
+	return s
+}
+
 // SetConfiguredInput sets the ConfiguredInput field's value.
 func (s *InputDeviceConfigurableSettings) SetConfiguredInput(v string) *InputDeviceConfigurableSettings {
 	s.ConfiguredInput = &v
@@ -19225,6 +26104,12 @@ func (s *InputDeviceConfigurableSettings) SetLatencyMs(v int64) *InputDeviceConf
 // SetMaxBitrate sets the MaxBitrate field's value.
 func (s *InputDeviceConfigurableSettings) SetMaxBitrate(v int64) *InputDeviceConfigurableSettings {
 	s.MaxBitrate = &v
+	return s
+}
+
+// SetMediaconnectSettings sets the MediaconnectSettings field's value.
+func (s *InputDeviceConfigurableSettings) SetMediaconnectSettings(v *InputDeviceMediaConnectConfigurableSettings) *InputDeviceConfigurableSettings {
+	s.MediaconnectSettings = v
 	return s
 }
 
@@ -19334,6 +26219,128 @@ func (s *InputDeviceHdSettings) SetScanType(v string) *InputDeviceHdSettings {
 // SetWidth sets the Width field's value.
 func (s *InputDeviceHdSettings) SetWidth(v int64) *InputDeviceHdSettings {
 	s.Width = &v
+	return s
+}
+
+// Parameters required to attach a MediaConnect flow to the device.
+type InputDeviceMediaConnectConfigurableSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the MediaConnect flow to attach this device to.
+	FlowArn *string `locationName:"flowArn" type:"string"`
+
+	// The ARN for the role that MediaLive assumes to access the attached flow and
+	// secret. For more information about how to create this role, see the MediaLive
+	// user guide.
+	RoleArn *string `locationName:"roleArn" type:"string"`
+
+	// The ARN for the secret that holds the encryption key to encrypt the content
+	// output by the device.
+	SecretArn *string `locationName:"secretArn" type:"string"`
+
+	// The name of the MediaConnect Flow source to stream to.
+	SourceName *string `locationName:"sourceName" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputDeviceMediaConnectConfigurableSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputDeviceMediaConnectConfigurableSettings) GoString() string {
+	return s.String()
+}
+
+// SetFlowArn sets the FlowArn field's value.
+func (s *InputDeviceMediaConnectConfigurableSettings) SetFlowArn(v string) *InputDeviceMediaConnectConfigurableSettings {
+	s.FlowArn = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *InputDeviceMediaConnectConfigurableSettings) SetRoleArn(v string) *InputDeviceMediaConnectConfigurableSettings {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *InputDeviceMediaConnectConfigurableSettings) SetSecretArn(v string) *InputDeviceMediaConnectConfigurableSettings {
+	s.SecretArn = &v
+	return s
+}
+
+// SetSourceName sets the SourceName field's value.
+func (s *InputDeviceMediaConnectConfigurableSettings) SetSourceName(v string) *InputDeviceMediaConnectConfigurableSettings {
+	s.SourceName = &v
+	return s
+}
+
+// Information about the MediaConnect flow attached to the device.
+type InputDeviceMediaConnectSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the MediaConnect flow.
+	FlowArn *string `locationName:"flowArn" type:"string"`
+
+	// The ARN for the role that MediaLive assumes to access the attached flow and
+	// secret.
+	RoleArn *string `locationName:"roleArn" type:"string"`
+
+	// The ARN of the secret used to encrypt the stream.
+	SecretArn *string `locationName:"secretArn" type:"string"`
+
+	// The name of the MediaConnect flow source.
+	SourceName *string `locationName:"sourceName" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputDeviceMediaConnectSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputDeviceMediaConnectSettings) GoString() string {
+	return s.String()
+}
+
+// SetFlowArn sets the FlowArn field's value.
+func (s *InputDeviceMediaConnectSettings) SetFlowArn(v string) *InputDeviceMediaConnectSettings {
+	s.FlowArn = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *InputDeviceMediaConnectSettings) SetRoleArn(v string) *InputDeviceMediaConnectSettings {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *InputDeviceMediaConnectSettings) SetSecretArn(v string) *InputDeviceMediaConnectSettings {
+	s.SecretArn = &v
+	return s
+}
+
+// SetSourceName sets the SourceName field's value.
+func (s *InputDeviceMediaConnectSettings) SetSourceName(v string) *InputDeviceMediaConnectSettings {
+	s.SourceName = &v
 	return s
 }
 
@@ -19477,6 +26484,9 @@ type InputDeviceSummary struct {
 	// The unique ARN of the input device.
 	Arn *string `locationName:"arn" type:"string"`
 
+	// The Availability Zone associated with this input device.
+	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
+
 	// The state of the connection between the input device and AWS.
 	ConnectionState *string `locationName:"connectionState" type:"string" enum:"InputDeviceConnectionState"`
 
@@ -19499,11 +26509,20 @@ type InputDeviceSummary struct {
 	// The network MAC address of the input device.
 	MacAddress *string `locationName:"macAddress" type:"string"`
 
+	// An array of the ARNs for the MediaLive inputs attached to the device. Returned
+	// only if the outputType is MEDIALIVE_INPUT.
+	MedialiveInputArns []*string `locationName:"medialiveInputArns" type:"list"`
+
 	// A name that you specify for the input device.
 	Name *string `locationName:"name" type:"string"`
 
 	// Network settings for the input device.
 	NetworkSettings *InputDeviceNetworkSettings `locationName:"networkSettings" type:"structure"`
+
+	// The output attachment type of the input device. Specifies MEDIACONNECT_FLOW
+	// if this device is the source for a MediaConnect flow. Specifies MEDIALIVE_INPUT
+	// if this device is the source for a MediaLive input.
+	OutputType *string `locationName:"outputType" type:"string" enum:"InputDeviceOutputType"`
 
 	// The unique serial number of the input device.
 	SerialNumber *string `locationName:"serialNumber" type:"string"`
@@ -19539,6 +26558,12 @@ func (s InputDeviceSummary) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *InputDeviceSummary) SetArn(v string) *InputDeviceSummary {
 	s.Arn = &v
+	return s
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *InputDeviceSummary) SetAvailabilityZone(v string) *InputDeviceSummary {
+	s.AvailabilityZone = &v
 	return s
 }
 
@@ -19578,6 +26603,12 @@ func (s *InputDeviceSummary) SetMacAddress(v string) *InputDeviceSummary {
 	return s
 }
 
+// SetMedialiveInputArns sets the MedialiveInputArns field's value.
+func (s *InputDeviceSummary) SetMedialiveInputArns(v []*string) *InputDeviceSummary {
+	s.MedialiveInputArns = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *InputDeviceSummary) SetName(v string) *InputDeviceSummary {
 	s.Name = &v
@@ -19587,6 +26618,12 @@ func (s *InputDeviceSummary) SetName(v string) *InputDeviceSummary {
 // SetNetworkSettings sets the NetworkSettings field's value.
 func (s *InputDeviceSummary) SetNetworkSettings(v *InputDeviceNetworkSettings) *InputDeviceSummary {
 	s.NetworkSettings = v
+	return s
+}
+
+// SetOutputType sets the OutputType field's value.
+func (s *InputDeviceSummary) SetOutputType(v string) *InputDeviceSummary {
+	s.OutputType = &v
 	return s
 }
 
@@ -19614,6 +26651,51 @@ func (s *InputDeviceSummary) SetUhdDeviceSettings(v *InputDeviceUhdSettings) *In
 	return s
 }
 
+// One audio configuration that specifies the format for one audio pair that
+// the device produces as output.
+type InputDeviceUhdAudioChannelPairConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The ID for one audio pair configuration, a value from 1 to 8.
+	Id *int64 `locationName:"id" type:"integer"`
+
+	// The profile for one audio pair configuration. This property describes one
+	// audio configuration in the format (rate control algorithm)-(codec)_(quality)-(bitrate
+	// in bytes). For example, CBR-AAC_HQ-192000. Or DISABLED, in which case the
+	// device won't produce audio for this pair.
+	Profile *string `locationName:"profile" type:"string" enum:"InputDeviceUhdAudioChannelPairProfile"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputDeviceUhdAudioChannelPairConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InputDeviceUhdAudioChannelPairConfig) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *InputDeviceUhdAudioChannelPairConfig) SetId(v int64) *InputDeviceUhdAudioChannelPairConfig {
+	s.Id = &v
+	return s
+}
+
+// SetProfile sets the Profile field's value.
+func (s *InputDeviceUhdAudioChannelPairConfig) SetProfile(v string) *InputDeviceUhdAudioChannelPairConfig {
+	s.Profile = &v
+	return s
+}
+
 // Settings that describe the active source from the input device, and the video
 // characteristics of that source.
 type InputDeviceUhdSettings struct {
@@ -19622,6 +26704,15 @@ type InputDeviceUhdSettings struct {
 	// If you specified Auto as the configured input, specifies which of the sources
 	// is currently active (SDI or HDMI).
 	ActiveInput *string `locationName:"activeInput" type:"string" enum:"InputDeviceActiveInput"`
+
+	// An array of eight audio configurations, one for each audio pair in the source.
+	// Each audio configuration specifies either to exclude the pair, or to format
+	// it and include it in the output from the UHD device. Applies only when the
+	// device is configured as the source for a MediaConnect flow.
+	AudioChannelPairs []*InputDeviceUhdAudioChannelPairConfig `locationName:"audioChannelPairs" type:"list"`
+
+	// The codec for the video that the device produces.
+	Codec *string `locationName:"codec" type:"string" enum:"InputDeviceCodec"`
 
 	// The source at the input device that is currently active. You can specify
 	// this source.
@@ -19643,6 +26734,10 @@ type InputDeviceUhdSettings struct {
 	// The current maximum bitrate for ingesting this source, in bits per second.
 	// You can specify this maximum.
 	MaxBitrate *int64 `locationName:"maxBitrate" type:"integer"`
+
+	// Information about the MediaConnect flow attached to the device. Returned
+	// only if the outputType is MEDIACONNECT_FLOW.
+	MediaconnectSettings *InputDeviceMediaConnectSettings `locationName:"mediaconnectSettings" type:"structure"`
 
 	// The scan type of the video source.
 	ScanType *string `locationName:"scanType" type:"string" enum:"InputDeviceScanType"`
@@ -19672,6 +26767,18 @@ func (s InputDeviceUhdSettings) GoString() string {
 // SetActiveInput sets the ActiveInput field's value.
 func (s *InputDeviceUhdSettings) SetActiveInput(v string) *InputDeviceUhdSettings {
 	s.ActiveInput = &v
+	return s
+}
+
+// SetAudioChannelPairs sets the AudioChannelPairs field's value.
+func (s *InputDeviceUhdSettings) SetAudioChannelPairs(v []*InputDeviceUhdAudioChannelPairConfig) *InputDeviceUhdSettings {
+	s.AudioChannelPairs = v
+	return s
+}
+
+// SetCodec sets the Codec field's value.
+func (s *InputDeviceUhdSettings) SetCodec(v string) *InputDeviceUhdSettings {
+	s.Codec = &v
 	return s
 }
 
@@ -19708,6 +26815,12 @@ func (s *InputDeviceUhdSettings) SetLatencyMs(v int64) *InputDeviceUhdSettings {
 // SetMaxBitrate sets the MaxBitrate field's value.
 func (s *InputDeviceUhdSettings) SetMaxBitrate(v int64) *InputDeviceUhdSettings {
 	s.MaxBitrate = &v
+	return s
+}
+
+// SetMediaconnectSettings sets the MediaconnectSettings field's value.
+func (s *InputDeviceUhdSettings) SetMediaconnectSettings(v *InputDeviceMediaConnectSettings) *InputDeviceUhdSettings {
+	s.MediaconnectSettings = v
 	return s
 }
 
@@ -20800,6 +27913,426 @@ func (s *ListChannelsOutput) SetNextToken(v string) *ListChannelsOutput {
 	return s
 }
 
+type ListCloudWatchAlarmTemplateGroupsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	Scope *string `location:"querystring" locationName:"scope" type:"string"`
+
+	SignalMapIdentifier *string `location:"querystring" locationName:"signalMapIdentifier" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCloudWatchAlarmTemplateGroupsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCloudWatchAlarmTemplateGroupsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCloudWatchAlarmTemplateGroupsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCloudWatchAlarmTemplateGroupsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCloudWatchAlarmTemplateGroupsInput) SetMaxResults(v int64) *ListCloudWatchAlarmTemplateGroupsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCloudWatchAlarmTemplateGroupsInput) SetNextToken(v string) *ListCloudWatchAlarmTemplateGroupsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetScope sets the Scope field's value.
+func (s *ListCloudWatchAlarmTemplateGroupsInput) SetScope(v string) *ListCloudWatchAlarmTemplateGroupsInput {
+	s.Scope = &v
+	return s
+}
+
+// SetSignalMapIdentifier sets the SignalMapIdentifier field's value.
+func (s *ListCloudWatchAlarmTemplateGroupsInput) SetSignalMapIdentifier(v string) *ListCloudWatchAlarmTemplateGroupsInput {
+	s.SignalMapIdentifier = &v
+	return s
+}
+
+type ListCloudWatchAlarmTemplateGroupsOutput struct {
+	_ struct{} `type:"structure"`
+
+	CloudWatchAlarmTemplateGroups []*CloudWatchAlarmTemplateGroupSummary `locationName:"cloudWatchAlarmTemplateGroups" type:"list"`
+
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCloudWatchAlarmTemplateGroupsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCloudWatchAlarmTemplateGroupsOutput) GoString() string {
+	return s.String()
+}
+
+// SetCloudWatchAlarmTemplateGroups sets the CloudWatchAlarmTemplateGroups field's value.
+func (s *ListCloudWatchAlarmTemplateGroupsOutput) SetCloudWatchAlarmTemplateGroups(v []*CloudWatchAlarmTemplateGroupSummary) *ListCloudWatchAlarmTemplateGroupsOutput {
+	s.CloudWatchAlarmTemplateGroups = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCloudWatchAlarmTemplateGroupsOutput) SetNextToken(v string) *ListCloudWatchAlarmTemplateGroupsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListCloudWatchAlarmTemplatesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	GroupIdentifier *string `location:"querystring" locationName:"groupIdentifier" type:"string"`
+
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	Scope *string `location:"querystring" locationName:"scope" type:"string"`
+
+	SignalMapIdentifier *string `location:"querystring" locationName:"signalMapIdentifier" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCloudWatchAlarmTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCloudWatchAlarmTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCloudWatchAlarmTemplatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCloudWatchAlarmTemplatesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGroupIdentifier sets the GroupIdentifier field's value.
+func (s *ListCloudWatchAlarmTemplatesInput) SetGroupIdentifier(v string) *ListCloudWatchAlarmTemplatesInput {
+	s.GroupIdentifier = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCloudWatchAlarmTemplatesInput) SetMaxResults(v int64) *ListCloudWatchAlarmTemplatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCloudWatchAlarmTemplatesInput) SetNextToken(v string) *ListCloudWatchAlarmTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetScope sets the Scope field's value.
+func (s *ListCloudWatchAlarmTemplatesInput) SetScope(v string) *ListCloudWatchAlarmTemplatesInput {
+	s.Scope = &v
+	return s
+}
+
+// SetSignalMapIdentifier sets the SignalMapIdentifier field's value.
+func (s *ListCloudWatchAlarmTemplatesInput) SetSignalMapIdentifier(v string) *ListCloudWatchAlarmTemplatesInput {
+	s.SignalMapIdentifier = &v
+	return s
+}
+
+type ListCloudWatchAlarmTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	CloudWatchAlarmTemplates []*CloudWatchAlarmTemplateSummary `locationName:"cloudWatchAlarmTemplates" type:"list"`
+
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCloudWatchAlarmTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCloudWatchAlarmTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetCloudWatchAlarmTemplates sets the CloudWatchAlarmTemplates field's value.
+func (s *ListCloudWatchAlarmTemplatesOutput) SetCloudWatchAlarmTemplates(v []*CloudWatchAlarmTemplateSummary) *ListCloudWatchAlarmTemplatesOutput {
+	s.CloudWatchAlarmTemplates = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCloudWatchAlarmTemplatesOutput) SetNextToken(v string) *ListCloudWatchAlarmTemplatesOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListEventBridgeRuleTemplateGroupsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	SignalMapIdentifier *string `location:"querystring" locationName:"signalMapIdentifier" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventBridgeRuleTemplateGroupsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventBridgeRuleTemplateGroupsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListEventBridgeRuleTemplateGroupsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListEventBridgeRuleTemplateGroupsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListEventBridgeRuleTemplateGroupsInput) SetMaxResults(v int64) *ListEventBridgeRuleTemplateGroupsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEventBridgeRuleTemplateGroupsInput) SetNextToken(v string) *ListEventBridgeRuleTemplateGroupsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSignalMapIdentifier sets the SignalMapIdentifier field's value.
+func (s *ListEventBridgeRuleTemplateGroupsInput) SetSignalMapIdentifier(v string) *ListEventBridgeRuleTemplateGroupsInput {
+	s.SignalMapIdentifier = &v
+	return s
+}
+
+type ListEventBridgeRuleTemplateGroupsOutput struct {
+	_ struct{} `type:"structure"`
+
+	EventBridgeRuleTemplateGroups []*EventBridgeRuleTemplateGroupSummary `locationName:"eventBridgeRuleTemplateGroups" type:"list"`
+
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventBridgeRuleTemplateGroupsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventBridgeRuleTemplateGroupsOutput) GoString() string {
+	return s.String()
+}
+
+// SetEventBridgeRuleTemplateGroups sets the EventBridgeRuleTemplateGroups field's value.
+func (s *ListEventBridgeRuleTemplateGroupsOutput) SetEventBridgeRuleTemplateGroups(v []*EventBridgeRuleTemplateGroupSummary) *ListEventBridgeRuleTemplateGroupsOutput {
+	s.EventBridgeRuleTemplateGroups = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEventBridgeRuleTemplateGroupsOutput) SetNextToken(v string) *ListEventBridgeRuleTemplateGroupsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListEventBridgeRuleTemplatesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	GroupIdentifier *string `location:"querystring" locationName:"groupIdentifier" type:"string"`
+
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	SignalMapIdentifier *string `location:"querystring" locationName:"signalMapIdentifier" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventBridgeRuleTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventBridgeRuleTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListEventBridgeRuleTemplatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListEventBridgeRuleTemplatesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGroupIdentifier sets the GroupIdentifier field's value.
+func (s *ListEventBridgeRuleTemplatesInput) SetGroupIdentifier(v string) *ListEventBridgeRuleTemplatesInput {
+	s.GroupIdentifier = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListEventBridgeRuleTemplatesInput) SetMaxResults(v int64) *ListEventBridgeRuleTemplatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEventBridgeRuleTemplatesInput) SetNextToken(v string) *ListEventBridgeRuleTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSignalMapIdentifier sets the SignalMapIdentifier field's value.
+func (s *ListEventBridgeRuleTemplatesInput) SetSignalMapIdentifier(v string) *ListEventBridgeRuleTemplatesInput {
+	s.SignalMapIdentifier = &v
+	return s
+}
+
+type ListEventBridgeRuleTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	EventBridgeRuleTemplates []*EventBridgeRuleTemplateSummary `locationName:"eventBridgeRuleTemplates" type:"list"`
+
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventBridgeRuleTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListEventBridgeRuleTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetEventBridgeRuleTemplates sets the EventBridgeRuleTemplates field's value.
+func (s *ListEventBridgeRuleTemplatesOutput) SetEventBridgeRuleTemplates(v []*EventBridgeRuleTemplateSummary) *ListEventBridgeRuleTemplatesOutput {
+	s.EventBridgeRuleTemplates = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEventBridgeRuleTemplatesOutput) SetNextToken(v string) *ListEventBridgeRuleTemplatesOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListInputDeviceTransfersInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -21683,6 +29216,111 @@ func (s *ListReservationsOutput) SetReservations(v []*Reservation) *ListReservat
 	return s
 }
 
+type ListSignalMapsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	CloudWatchAlarmTemplateGroupIdentifier *string `location:"querystring" locationName:"cloudWatchAlarmTemplateGroupIdentifier" type:"string"`
+
+	EventBridgeRuleTemplateGroupIdentifier *string `location:"querystring" locationName:"eventBridgeRuleTemplateGroupIdentifier" type:"string"`
+
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSignalMapsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSignalMapsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSignalMapsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSignalMapsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCloudWatchAlarmTemplateGroupIdentifier sets the CloudWatchAlarmTemplateGroupIdentifier field's value.
+func (s *ListSignalMapsInput) SetCloudWatchAlarmTemplateGroupIdentifier(v string) *ListSignalMapsInput {
+	s.CloudWatchAlarmTemplateGroupIdentifier = &v
+	return s
+}
+
+// SetEventBridgeRuleTemplateGroupIdentifier sets the EventBridgeRuleTemplateGroupIdentifier field's value.
+func (s *ListSignalMapsInput) SetEventBridgeRuleTemplateGroupIdentifier(v string) *ListSignalMapsInput {
+	s.EventBridgeRuleTemplateGroupIdentifier = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSignalMapsInput) SetMaxResults(v int64) *ListSignalMapsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSignalMapsInput) SetNextToken(v string) *ListSignalMapsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListSignalMapsOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	SignalMaps []*SignalMapSummary `locationName:"signalMaps" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSignalMapsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSignalMapsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSignalMapsOutput) SetNextToken(v string) *ListSignalMapsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSignalMaps sets the SignalMaps field's value.
+func (s *ListSignalMapsOutput) SetSignalMaps(v []*SignalMapSummary) *ListSignalMapsOutput {
+	s.SignalMaps = v
+	return s
+}
+
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -22347,6 +29985,16 @@ type M3u8Settings struct {
 	// This parameter is unused and deprecated.
 	EcmPid *string `locationName:"ecmPid" type:"string"`
 
+	// If set to passthrough, passes any KLV data from the input source to this
+	// output.
+	KlvBehavior *string `locationName:"klvBehavior" type:"string" enum:"M3u8KlvBehavior"`
+
+	// Packet Identifier (PID) for input source KLV data to this output. Multiple
+	// values are accepted, and can be entered in ranges and/or by comma separation.
+	// Can be entered as decimal or hexadecimal values. Each PID specified must
+	// be in the range of 32 (or 0x20)..8182 (or 0x1ff6).
+	KlvDataPids *string `locationName:"klvDataPids" type:"string"`
+
 	// If set to passthrough, Nielsen inaudible tones for media tracking will be
 	// detected in the input audio and an equivalent ID3 tag will be inserted in
 	// the output.
@@ -22438,6 +30086,18 @@ func (s *M3u8Settings) SetAudioPids(v string) *M3u8Settings {
 // SetEcmPid sets the EcmPid field's value.
 func (s *M3u8Settings) SetEcmPid(v string) *M3u8Settings {
 	s.EcmPid = &v
+	return s
+}
+
+// SetKlvBehavior sets the KlvBehavior field's value.
+func (s *M3u8Settings) SetKlvBehavior(v string) *M3u8Settings {
+	s.KlvBehavior = &v
+	return s
+}
+
+// SetKlvDataPids sets the KlvDataPids field's value.
+func (s *M3u8Settings) SetKlvDataPids(v string) *M3u8Settings {
+	s.KlvDataPids = &v
 	return s
 }
 
@@ -22859,6 +30519,149 @@ func (s MediaPackageOutputSettings) String() string {
 // value will be replaced with "sensitive".
 func (s MediaPackageOutputSettings) GoString() string {
 	return s.String()
+}
+
+// An AWS resource used in media workflows.
+type MediaResource struct {
+	_ struct{} `type:"structure"`
+
+	Destinations []*MediaResourceNeighbor `locationName:"destinations" type:"list"`
+
+	// The logical name of an AWS media resource.
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	Sources []*MediaResourceNeighbor `locationName:"sources" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaResource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaResource) GoString() string {
+	return s.String()
+}
+
+// SetDestinations sets the Destinations field's value.
+func (s *MediaResource) SetDestinations(v []*MediaResourceNeighbor) *MediaResource {
+	s.Destinations = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *MediaResource) SetName(v string) *MediaResource {
+	s.Name = &v
+	return s
+}
+
+// SetSources sets the Sources field's value.
+func (s *MediaResource) SetSources(v []*MediaResourceNeighbor) *MediaResource {
+	s.Sources = v
+	return s
+}
+
+// A direct source or destination neighbor to an AWS media resource.
+type MediaResourceNeighbor struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of a resource used in AWS media workflows.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+
+	// The logical name of an AWS media resource.
+	Name *string `locationName:"name" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaResourceNeighbor) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaResourceNeighbor) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *MediaResourceNeighbor) SetArn(v string) *MediaResourceNeighbor {
+	s.Arn = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *MediaResourceNeighbor) SetName(v string) *MediaResourceNeighbor {
+	s.Name = &v
+	return s
+}
+
+// Represents the latest monitor deployment of a signal map.
+type MonitorDeployment struct {
+	_ struct{} `type:"structure"`
+
+	// URI associated with a signal map's monitor deployment.
+	DetailsUri *string `locationName:"detailsUri" min:"1" type:"string"`
+
+	// Error message associated with a failed monitor deployment of a signal map.
+	ErrorMessage *string `locationName:"errorMessage" min:"1" type:"string"`
+
+	// A signal map's monitor deployment status.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"SignalMapMonitorDeploymentStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MonitorDeployment) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MonitorDeployment) GoString() string {
+	return s.String()
+}
+
+// SetDetailsUri sets the DetailsUri field's value.
+func (s *MonitorDeployment) SetDetailsUri(v string) *MonitorDeployment {
+	s.DetailsUri = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *MonitorDeployment) SetErrorMessage(v string) *MonitorDeployment {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *MonitorDeployment) SetStatus(v string) *MonitorDeployment {
+	s.Status = &v
+	return s
 }
 
 // Settings to specify the rendering of motion graphics into the video stream.
@@ -25564,6 +33367,9 @@ type OutputGroupSettings struct {
 	// Archive Group Settings
 	ArchiveGroupSettings *ArchiveGroupSettings `locationName:"archiveGroupSettings" type:"structure"`
 
+	// Cmaf Ingest Group Settings
+	CmafIngestGroupSettings *CmafIngestGroupSettings `locationName:"cmafIngestGroupSettings" type:"structure"`
+
 	// Frame Capture Group Settings
 	FrameCaptureGroupSettings *FrameCaptureGroupSettings `locationName:"frameCaptureGroupSettings" type:"structure"`
 
@@ -25612,6 +33418,11 @@ func (s *OutputGroupSettings) Validate() error {
 			invalidParams.AddNested("ArchiveGroupSettings", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.CmafIngestGroupSettings != nil {
+		if err := s.CmafIngestGroupSettings.Validate(); err != nil {
+			invalidParams.AddNested("CmafIngestGroupSettings", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.FrameCaptureGroupSettings != nil {
 		if err := s.FrameCaptureGroupSettings.Validate(); err != nil {
 			invalidParams.AddNested("FrameCaptureGroupSettings", err.(request.ErrInvalidParams))
@@ -25647,6 +33458,12 @@ func (s *OutputGroupSettings) Validate() error {
 // SetArchiveGroupSettings sets the ArchiveGroupSettings field's value.
 func (s *OutputGroupSettings) SetArchiveGroupSettings(v *ArchiveGroupSettings) *OutputGroupSettings {
 	s.ArchiveGroupSettings = v
+	return s
+}
+
+// SetCmafIngestGroupSettings sets the CmafIngestGroupSettings field's value.
+func (s *OutputGroupSettings) SetCmafIngestGroupSettings(v *CmafIngestGroupSettings) *OutputGroupSettings {
+	s.CmafIngestGroupSettings = v
 	return s
 }
 
@@ -25723,12 +33540,56 @@ func (s *OutputLocationRef) SetDestinationRefId(v string) *OutputLocationRef {
 	return s
 }
 
+// Output Locking Settings
+type OutputLockingSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Epoch Locking Settings
+	EpochLockingSettings *EpochLockingSettings `locationName:"epochLockingSettings" type:"structure"`
+
+	// Pipeline Locking Settings
+	PipelineLockingSettings *PipelineLockingSettings `locationName:"pipelineLockingSettings" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OutputLockingSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OutputLockingSettings) GoString() string {
+	return s.String()
+}
+
+// SetEpochLockingSettings sets the EpochLockingSettings field's value.
+func (s *OutputLockingSettings) SetEpochLockingSettings(v *EpochLockingSettings) *OutputLockingSettings {
+	s.EpochLockingSettings = v
+	return s
+}
+
+// SetPipelineLockingSettings sets the PipelineLockingSettings field's value.
+func (s *OutputLockingSettings) SetPipelineLockingSettings(v *PipelineLockingSettings) *OutputLockingSettings {
+	s.PipelineLockingSettings = v
+	return s
+}
+
 // Output Settings
 type OutputSettings struct {
 	_ struct{} `type:"structure"`
 
 	// Archive Output Settings
 	ArchiveOutputSettings *ArchiveOutputSettings `locationName:"archiveOutputSettings" type:"structure"`
+
+	// Cmaf Ingest Output Settings
+	CmafIngestOutputSettings *CmafIngestOutputSettings `locationName:"cmafIngestOutputSettings" type:"structure"`
 
 	// Frame Capture Output Settings
 	FrameCaptureOutputSettings *FrameCaptureOutputSettings `locationName:"frameCaptureOutputSettings" type:"structure"`
@@ -25808,6 +33669,12 @@ func (s *OutputSettings) Validate() error {
 // SetArchiveOutputSettings sets the ArchiveOutputSettings field's value.
 func (s *OutputSettings) SetArchiveOutputSettings(v *ArchiveOutputSettings) *OutputSettings {
 	s.ArchiveOutputSettings = v
+	return s
+}
+
+// SetCmafIngestOutputSettings sets the CmafIngestOutputSettings field's value.
+func (s *OutputSettings) SetCmafIngestOutputSettings(v *CmafIngestOutputSettings) *OutputSettings {
+	s.CmafIngestOutputSettings = v
 	return s
 }
 
@@ -25997,6 +33864,29 @@ func (s *PipelineDetail) SetActiveMotionGraphicsUri(v string) *PipelineDetail {
 func (s *PipelineDetail) SetPipelineId(v string) *PipelineDetail {
 	s.PipelineId = &v
 	return s
+}
+
+// Pipeline Locking Settings
+type PipelineLockingSettings struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PipelineLockingSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PipelineLockingSettings) GoString() string {
+	return s.String()
 }
 
 // Settings for pausing a pipeline.
@@ -26826,6 +34716,241 @@ func (s *ReservationResourceSpecification) SetVideoQuality(v string) *Reservatio
 	return s
 }
 
+type RestartChannelPipelinesInput struct {
+	_ struct{} `type:"structure"`
+
+	// ChannelId is a required field
+	ChannelId *string `location:"uri" locationName:"channelId" type:"string" required:"true"`
+
+	// An array of pipelines to restart in this channel. Format PIPELINE_0 or PIPELINE_1.
+	PipelineIds []*string `locationName:"pipelineIds" type:"list" enum:"ChannelPipelineIdToRestart"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestartChannelPipelinesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestartChannelPipelinesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RestartChannelPipelinesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RestartChannelPipelinesInput"}
+	if s.ChannelId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ChannelId"))
+	}
+	if s.ChannelId != nil && len(*s.ChannelId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ChannelId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannelId sets the ChannelId field's value.
+func (s *RestartChannelPipelinesInput) SetChannelId(v string) *RestartChannelPipelinesInput {
+	s.ChannelId = &v
+	return s
+}
+
+// SetPipelineIds sets the PipelineIds field's value.
+func (s *RestartChannelPipelinesInput) SetPipelineIds(v []*string) *RestartChannelPipelinesInput {
+	s.PipelineIds = v
+	return s
+}
+
+type RestartChannelPipelinesOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CdiInputSpecification *CdiInputSpecification `locationName:"cdiInputSpecification" type:"structure"`
+
+	// A standard channel has two encoding pipelines and a single pipeline channel
+	// only has one.
+	ChannelClass *string `locationName:"channelClass" type:"string" enum:"ChannelClass"`
+
+	Destinations []*OutputDestination `locationName:"destinations" type:"list"`
+
+	EgressEndpoints []*ChannelEgressEndpoint `locationName:"egressEndpoints" type:"list"`
+
+	// Encoder Settings
+	EncoderSettings *EncoderSettings `locationName:"encoderSettings" type:"structure"`
+
+	Id *string `locationName:"id" type:"string"`
+
+	InputAttachments []*InputAttachment `locationName:"inputAttachments" type:"list"`
+
+	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
+
+	// The log level the user wants for their channel.
+	LogLevel *string `locationName:"logLevel" type:"string" enum:"LogLevel"`
+
+	Maintenance *MaintenanceStatus `locationName:"maintenance" type:"structure"`
+
+	MaintenanceStatus *string `locationName:"maintenanceStatus" type:"string"`
+
+	Name *string `locationName:"name" type:"string"`
+
+	PipelineDetails []*PipelineDetail `locationName:"pipelineDetails" type:"list"`
+
+	PipelinesRunningCount *int64 `locationName:"pipelinesRunningCount" type:"integer"`
+
+	RoleArn *string `locationName:"roleArn" type:"string"`
+
+	State *string `locationName:"state" type:"string" enum:"ChannelState"`
+
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The properties for a private VPC Output
+	Vpc *VpcOutputSettingsDescription `locationName:"vpc" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestartChannelPipelinesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestartChannelPipelinesOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *RestartChannelPipelinesOutput) SetArn(v string) *RestartChannelPipelinesOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCdiInputSpecification sets the CdiInputSpecification field's value.
+func (s *RestartChannelPipelinesOutput) SetCdiInputSpecification(v *CdiInputSpecification) *RestartChannelPipelinesOutput {
+	s.CdiInputSpecification = v
+	return s
+}
+
+// SetChannelClass sets the ChannelClass field's value.
+func (s *RestartChannelPipelinesOutput) SetChannelClass(v string) *RestartChannelPipelinesOutput {
+	s.ChannelClass = &v
+	return s
+}
+
+// SetDestinations sets the Destinations field's value.
+func (s *RestartChannelPipelinesOutput) SetDestinations(v []*OutputDestination) *RestartChannelPipelinesOutput {
+	s.Destinations = v
+	return s
+}
+
+// SetEgressEndpoints sets the EgressEndpoints field's value.
+func (s *RestartChannelPipelinesOutput) SetEgressEndpoints(v []*ChannelEgressEndpoint) *RestartChannelPipelinesOutput {
+	s.EgressEndpoints = v
+	return s
+}
+
+// SetEncoderSettings sets the EncoderSettings field's value.
+func (s *RestartChannelPipelinesOutput) SetEncoderSettings(v *EncoderSettings) *RestartChannelPipelinesOutput {
+	s.EncoderSettings = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *RestartChannelPipelinesOutput) SetId(v string) *RestartChannelPipelinesOutput {
+	s.Id = &v
+	return s
+}
+
+// SetInputAttachments sets the InputAttachments field's value.
+func (s *RestartChannelPipelinesOutput) SetInputAttachments(v []*InputAttachment) *RestartChannelPipelinesOutput {
+	s.InputAttachments = v
+	return s
+}
+
+// SetInputSpecification sets the InputSpecification field's value.
+func (s *RestartChannelPipelinesOutput) SetInputSpecification(v *InputSpecification) *RestartChannelPipelinesOutput {
+	s.InputSpecification = v
+	return s
+}
+
+// SetLogLevel sets the LogLevel field's value.
+func (s *RestartChannelPipelinesOutput) SetLogLevel(v string) *RestartChannelPipelinesOutput {
+	s.LogLevel = &v
+	return s
+}
+
+// SetMaintenance sets the Maintenance field's value.
+func (s *RestartChannelPipelinesOutput) SetMaintenance(v *MaintenanceStatus) *RestartChannelPipelinesOutput {
+	s.Maintenance = v
+	return s
+}
+
+// SetMaintenanceStatus sets the MaintenanceStatus field's value.
+func (s *RestartChannelPipelinesOutput) SetMaintenanceStatus(v string) *RestartChannelPipelinesOutput {
+	s.MaintenanceStatus = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *RestartChannelPipelinesOutput) SetName(v string) *RestartChannelPipelinesOutput {
+	s.Name = &v
+	return s
+}
+
+// SetPipelineDetails sets the PipelineDetails field's value.
+func (s *RestartChannelPipelinesOutput) SetPipelineDetails(v []*PipelineDetail) *RestartChannelPipelinesOutput {
+	s.PipelineDetails = v
+	return s
+}
+
+// SetPipelinesRunningCount sets the PipelinesRunningCount field's value.
+func (s *RestartChannelPipelinesOutput) SetPipelinesRunningCount(v int64) *RestartChannelPipelinesOutput {
+	s.PipelinesRunningCount = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *RestartChannelPipelinesOutput) SetRoleArn(v string) *RestartChannelPipelinesOutput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *RestartChannelPipelinesOutput) SetState(v string) *RestartChannelPipelinesOutput {
+	s.State = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *RestartChannelPipelinesOutput) SetTags(v map[string]*string) *RestartChannelPipelinesOutput {
+	s.Tags = v
+	return s
+}
+
+// SetVpc sets the Vpc field's value.
+func (s *RestartChannelPipelinesOutput) SetVpc(v *VpcOutputSettingsDescription) *RestartChannelPipelinesOutput {
+	s.Vpc = v
+	return s
+}
+
 // Rtmp Caption Info Destination Settings
 type RtmpCaptionInfoDestinationSettings struct {
 	_ struct{} `type:"structure"`
@@ -26879,6 +35004,13 @@ type RtmpGroupSettings struct {
 	// be passed. If set to 'field1608' then only the data carried in 608 from field
 	// 1 video will be passed.
 	CaptionData *string `locationName:"captionData" type:"string" enum:"RtmpCaptionData"`
+
+	// Applies only when the rate control mode (in the codec settings) is CBR (constant
+	// bit rate). Controls whether the RTMP output stream is padded (with FILL NAL
+	// units) in order to achieve a constant bit rate that is truly constant. When
+	// there is no padding, the bandwidth varies (up to the bitrate value in the
+	// codec settings). We recommend that you choose Auto.
+	IncludeFillerNalUnits *string `locationName:"includeFillerNalUnits" type:"string" enum:"IncludeFillerNalUnits"`
 
 	// Controls the behavior of this RTMP group if input becomes unavailable.- emitOutput:
 	// Emit a slate until input returns.- pauseOutput: Stop transmitting data until
@@ -26948,6 +35080,12 @@ func (s *RtmpGroupSettings) SetCacheLength(v int64) *RtmpGroupSettings {
 // SetCaptionData sets the CaptionData field's value.
 func (s *RtmpGroupSettings) SetCaptionData(v string) *RtmpGroupSettings {
 	s.CaptionData = &v
+	return s
+}
+
+// SetIncludeFillerNalUnits sets the IncludeFillerNalUnits field's value.
+func (s *RtmpGroupSettings) SetIncludeFillerNalUnits(v string) *RtmpGroupSettings {
+	s.IncludeFillerNalUnits = &v
 	return s
 }
 
@@ -27176,6 +35314,12 @@ type ScheduleActionSettings struct {
 
 	// Action to deactivate a static image overlay
 	StaticImageDeactivateSettings *StaticImageDeactivateScheduleActionSettings `locationName:"staticImageDeactivateSettings" type:"structure"`
+
+	// Action to activate a static image overlay in one or more specified outputs
+	StaticImageOutputActivateSettings *StaticImageOutputActivateScheduleActionSettings `locationName:"staticImageOutputActivateSettings" type:"structure"`
+
+	// Action to deactivate a static image overlay in one or more specified outputs
+	StaticImageOutputDeactivateSettings *StaticImageOutputDeactivateScheduleActionSettings `locationName:"staticImageOutputDeactivateSettings" type:"structure"`
 }
 
 // String returns the string representation.
@@ -27242,6 +35386,16 @@ func (s *ScheduleActionSettings) Validate() error {
 	if s.StaticImageActivateSettings != nil {
 		if err := s.StaticImageActivateSettings.Validate(); err != nil {
 			invalidParams.AddNested("StaticImageActivateSettings", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.StaticImageOutputActivateSettings != nil {
+		if err := s.StaticImageOutputActivateSettings.Validate(); err != nil {
+			invalidParams.AddNested("StaticImageOutputActivateSettings", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.StaticImageOutputDeactivateSettings != nil {
+		if err := s.StaticImageOutputDeactivateSettings.Validate(); err != nil {
+			invalidParams.AddNested("StaticImageOutputDeactivateSettings", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -27326,6 +35480,18 @@ func (s *ScheduleActionSettings) SetStaticImageActivateSettings(v *StaticImageAc
 // SetStaticImageDeactivateSettings sets the StaticImageDeactivateSettings field's value.
 func (s *ScheduleActionSettings) SetStaticImageDeactivateSettings(v *StaticImageDeactivateScheduleActionSettings) *ScheduleActionSettings {
 	s.StaticImageDeactivateSettings = v
+	return s
+}
+
+// SetStaticImageOutputActivateSettings sets the StaticImageOutputActivateSettings field's value.
+func (s *ScheduleActionSettings) SetStaticImageOutputActivateSettings(v *StaticImageOutputActivateScheduleActionSettings) *ScheduleActionSettings {
+	s.StaticImageOutputActivateSettings = v
+	return s
+}
+
+// SetStaticImageOutputDeactivateSettings sets the StaticImageOutputDeactivateSettings field's value.
+func (s *ScheduleActionSettings) SetStaticImageOutputDeactivateSettings(v *StaticImageOutputDeactivateScheduleActionSettings) *ScheduleActionSettings {
+	s.StaticImageOutputDeactivateSettings = v
 	return s
 }
 
@@ -28284,6 +36450,120 @@ func (s *Scte35TimeSignalScheduleActionSettings) SetScte35Descriptors(v []*Scte3
 	return s
 }
 
+type SignalMapSummary struct {
+	_ struct{} `type:"structure"`
+
+	// A signal map's ARN (Amazon Resource Name)
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" type:"string" required:"true"`
+
+	// CreatedAt is a required field
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601" required:"true"`
+
+	// A resource's optional description.
+	Description *string `locationName:"description" type:"string"`
+
+	// A signal map's id.
+	//
+	// Id is a required field
+	Id *string `locationName:"id" min:"7" type:"string" required:"true"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	// A signal map's monitor deployment status.
+	//
+	// MonitorDeploymentStatus is a required field
+	MonitorDeploymentStatus *string `locationName:"monitorDeploymentStatus" type:"string" required:"true" enum:"SignalMapMonitorDeploymentStatus"`
+
+	// A resource's name. Names must be unique within the scope of a resource type
+	// in a specific region.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// A signal map's current status which is dependent on its lifecycle actions
+	// or associated jobs.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"SignalMapStatus"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SignalMapSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SignalMapSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *SignalMapSummary) SetArn(v string) *SignalMapSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *SignalMapSummary) SetCreatedAt(v time.Time) *SignalMapSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *SignalMapSummary) SetDescription(v string) *SignalMapSummary {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *SignalMapSummary) SetId(v string) *SignalMapSummary {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *SignalMapSummary) SetModifiedAt(v time.Time) *SignalMapSummary {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetMonitorDeploymentStatus sets the MonitorDeploymentStatus field's value.
+func (s *SignalMapSummary) SetMonitorDeploymentStatus(v string) *SignalMapSummary {
+	s.MonitorDeploymentStatus = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *SignalMapSummary) SetName(v string) *SignalMapSummary {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *SignalMapSummary) SetStatus(v string) *SignalMapSummary {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *SignalMapSummary) SetTags(v map[string]*string) *SignalMapSummary {
+	s.Tags = v
+	return s
+}
+
 // Smpte Tt Destination Settings
 type SmpteTtDestinationSettings struct {
 	_ struct{} `type:"structure"`
@@ -28582,6 +36862,273 @@ func (s *StartChannelOutput) SetVpc(v *VpcOutputSettingsDescription) *StartChann
 	return s
 }
 
+type StartDeleteMonitorDeploymentInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartDeleteMonitorDeploymentInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartDeleteMonitorDeploymentInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartDeleteMonitorDeploymentInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartDeleteMonitorDeploymentInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *StartDeleteMonitorDeploymentInput) SetIdentifier(v string) *StartDeleteMonitorDeploymentInput {
+	s.Identifier = &v
+	return s
+}
+
+type StartDeleteMonitorDeploymentOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CloudWatchAlarmTemplateGroupIds []*string `locationName:"cloudWatchAlarmTemplateGroupIds" type:"list"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	DiscoveryEntryPointArn *string `locationName:"discoveryEntryPointArn" min:"1" type:"string"`
+
+	ErrorMessage *string `locationName:"errorMessage" min:"1" type:"string"`
+
+	EventBridgeRuleTemplateGroupIds []*string `locationName:"eventBridgeRuleTemplateGroupIds" type:"list"`
+
+	// A map representing an incomplete AWS media workflow as a graph.
+	FailedMediaResourceMap map[string]*MediaResource `locationName:"failedMediaResourceMap" type:"map"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	LastDiscoveredAt *time.Time `locationName:"lastDiscoveredAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	// Represents the latest successful monitor deployment of a signal map.
+	LastSuccessfulMonitorDeployment *SuccessfulMonitorDeployment `locationName:"lastSuccessfulMonitorDeployment" type:"structure"`
+
+	// A map representing an AWS media workflow as a graph.
+	MediaResourceMap map[string]*MediaResource `locationName:"mediaResourceMap" type:"map"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	MonitorChangesPendingDeployment *bool `locationName:"monitorChangesPendingDeployment" type:"boolean"`
+
+	// Represents the latest monitor deployment of a signal map.
+	MonitorDeployment *MonitorDeployment `locationName:"monitorDeployment" type:"structure"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// A signal map's current status which is dependent on its lifecycle actions
+	// or associated jobs.
+	Status *string `locationName:"status" type:"string" enum:"SignalMapStatus"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartDeleteMonitorDeploymentOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartDeleteMonitorDeploymentOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetArn(v string) *StartDeleteMonitorDeploymentOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCloudWatchAlarmTemplateGroupIds sets the CloudWatchAlarmTemplateGroupIds field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetCloudWatchAlarmTemplateGroupIds(v []*string) *StartDeleteMonitorDeploymentOutput {
+	s.CloudWatchAlarmTemplateGroupIds = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetCreatedAt(v time.Time) *StartDeleteMonitorDeploymentOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetDescription(v string) *StartDeleteMonitorDeploymentOutput {
+	s.Description = &v
+	return s
+}
+
+// SetDiscoveryEntryPointArn sets the DiscoveryEntryPointArn field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetDiscoveryEntryPointArn(v string) *StartDeleteMonitorDeploymentOutput {
+	s.DiscoveryEntryPointArn = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetErrorMessage(v string) *StartDeleteMonitorDeploymentOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetEventBridgeRuleTemplateGroupIds sets the EventBridgeRuleTemplateGroupIds field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetEventBridgeRuleTemplateGroupIds(v []*string) *StartDeleteMonitorDeploymentOutput {
+	s.EventBridgeRuleTemplateGroupIds = v
+	return s
+}
+
+// SetFailedMediaResourceMap sets the FailedMediaResourceMap field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetFailedMediaResourceMap(v map[string]*MediaResource) *StartDeleteMonitorDeploymentOutput {
+	s.FailedMediaResourceMap = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetId(v string) *StartDeleteMonitorDeploymentOutput {
+	s.Id = &v
+	return s
+}
+
+// SetLastDiscoveredAt sets the LastDiscoveredAt field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetLastDiscoveredAt(v time.Time) *StartDeleteMonitorDeploymentOutput {
+	s.LastDiscoveredAt = &v
+	return s
+}
+
+// SetLastSuccessfulMonitorDeployment sets the LastSuccessfulMonitorDeployment field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetLastSuccessfulMonitorDeployment(v *SuccessfulMonitorDeployment) *StartDeleteMonitorDeploymentOutput {
+	s.LastSuccessfulMonitorDeployment = v
+	return s
+}
+
+// SetMediaResourceMap sets the MediaResourceMap field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetMediaResourceMap(v map[string]*MediaResource) *StartDeleteMonitorDeploymentOutput {
+	s.MediaResourceMap = v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetModifiedAt(v time.Time) *StartDeleteMonitorDeploymentOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetMonitorChangesPendingDeployment sets the MonitorChangesPendingDeployment field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetMonitorChangesPendingDeployment(v bool) *StartDeleteMonitorDeploymentOutput {
+	s.MonitorChangesPendingDeployment = &v
+	return s
+}
+
+// SetMonitorDeployment sets the MonitorDeployment field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetMonitorDeployment(v *MonitorDeployment) *StartDeleteMonitorDeploymentOutput {
+	s.MonitorDeployment = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetName(v string) *StartDeleteMonitorDeploymentOutput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetStatus(v string) *StartDeleteMonitorDeploymentOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *StartDeleteMonitorDeploymentOutput) SetTags(v map[string]*string) *StartDeleteMonitorDeploymentOutput {
+	s.Tags = v
+	return s
+}
+
+type StartInputDeviceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// InputDeviceId is a required field
+	InputDeviceId *string `location:"uri" locationName:"inputDeviceId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartInputDeviceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartInputDeviceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartInputDeviceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartInputDeviceInput"}
+	if s.InputDeviceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputDeviceId"))
+	}
+	if s.InputDeviceId != nil && len(*s.InputDeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputDeviceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputDeviceId sets the InputDeviceId field's value.
+func (s *StartInputDeviceInput) SetInputDeviceId(v string) *StartInputDeviceInput {
+	s.InputDeviceId = &v
+	return s
+}
+
 type StartInputDeviceMaintenanceWindowInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -28649,6 +37196,256 @@ func (s StartInputDeviceMaintenanceWindowOutput) String() string {
 // value will be replaced with "sensitive".
 func (s StartInputDeviceMaintenanceWindowOutput) GoString() string {
 	return s.String()
+}
+
+type StartInputDeviceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartInputDeviceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartInputDeviceOutput) GoString() string {
+	return s.String()
+}
+
+type StartMonitorDeploymentInput struct {
+	_ struct{} `type:"structure"`
+
+	DryRun *bool `locationName:"dryRun" type:"boolean"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMonitorDeploymentInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMonitorDeploymentInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartMonitorDeploymentInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartMonitorDeploymentInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *StartMonitorDeploymentInput) SetDryRun(v bool) *StartMonitorDeploymentInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *StartMonitorDeploymentInput) SetIdentifier(v string) *StartMonitorDeploymentInput {
+	s.Identifier = &v
+	return s
+}
+
+type StartMonitorDeploymentOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CloudWatchAlarmTemplateGroupIds []*string `locationName:"cloudWatchAlarmTemplateGroupIds" type:"list"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	DiscoveryEntryPointArn *string `locationName:"discoveryEntryPointArn" min:"1" type:"string"`
+
+	ErrorMessage *string `locationName:"errorMessage" min:"1" type:"string"`
+
+	EventBridgeRuleTemplateGroupIds []*string `locationName:"eventBridgeRuleTemplateGroupIds" type:"list"`
+
+	// A map representing an incomplete AWS media workflow as a graph.
+	FailedMediaResourceMap map[string]*MediaResource `locationName:"failedMediaResourceMap" type:"map"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	LastDiscoveredAt *time.Time `locationName:"lastDiscoveredAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	// Represents the latest successful monitor deployment of a signal map.
+	LastSuccessfulMonitorDeployment *SuccessfulMonitorDeployment `locationName:"lastSuccessfulMonitorDeployment" type:"structure"`
+
+	// A map representing an AWS media workflow as a graph.
+	MediaResourceMap map[string]*MediaResource `locationName:"mediaResourceMap" type:"map"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	MonitorChangesPendingDeployment *bool `locationName:"monitorChangesPendingDeployment" type:"boolean"`
+
+	// Represents the latest monitor deployment of a signal map.
+	MonitorDeployment *MonitorDeployment `locationName:"monitorDeployment" type:"structure"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// A signal map's current status which is dependent on its lifecycle actions
+	// or associated jobs.
+	Status *string `locationName:"status" type:"string" enum:"SignalMapStatus"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMonitorDeploymentOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartMonitorDeploymentOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *StartMonitorDeploymentOutput) SetArn(v string) *StartMonitorDeploymentOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCloudWatchAlarmTemplateGroupIds sets the CloudWatchAlarmTemplateGroupIds field's value.
+func (s *StartMonitorDeploymentOutput) SetCloudWatchAlarmTemplateGroupIds(v []*string) *StartMonitorDeploymentOutput {
+	s.CloudWatchAlarmTemplateGroupIds = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *StartMonitorDeploymentOutput) SetCreatedAt(v time.Time) *StartMonitorDeploymentOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *StartMonitorDeploymentOutput) SetDescription(v string) *StartMonitorDeploymentOutput {
+	s.Description = &v
+	return s
+}
+
+// SetDiscoveryEntryPointArn sets the DiscoveryEntryPointArn field's value.
+func (s *StartMonitorDeploymentOutput) SetDiscoveryEntryPointArn(v string) *StartMonitorDeploymentOutput {
+	s.DiscoveryEntryPointArn = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *StartMonitorDeploymentOutput) SetErrorMessage(v string) *StartMonitorDeploymentOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetEventBridgeRuleTemplateGroupIds sets the EventBridgeRuleTemplateGroupIds field's value.
+func (s *StartMonitorDeploymentOutput) SetEventBridgeRuleTemplateGroupIds(v []*string) *StartMonitorDeploymentOutput {
+	s.EventBridgeRuleTemplateGroupIds = v
+	return s
+}
+
+// SetFailedMediaResourceMap sets the FailedMediaResourceMap field's value.
+func (s *StartMonitorDeploymentOutput) SetFailedMediaResourceMap(v map[string]*MediaResource) *StartMonitorDeploymentOutput {
+	s.FailedMediaResourceMap = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *StartMonitorDeploymentOutput) SetId(v string) *StartMonitorDeploymentOutput {
+	s.Id = &v
+	return s
+}
+
+// SetLastDiscoveredAt sets the LastDiscoveredAt field's value.
+func (s *StartMonitorDeploymentOutput) SetLastDiscoveredAt(v time.Time) *StartMonitorDeploymentOutput {
+	s.LastDiscoveredAt = &v
+	return s
+}
+
+// SetLastSuccessfulMonitorDeployment sets the LastSuccessfulMonitorDeployment field's value.
+func (s *StartMonitorDeploymentOutput) SetLastSuccessfulMonitorDeployment(v *SuccessfulMonitorDeployment) *StartMonitorDeploymentOutput {
+	s.LastSuccessfulMonitorDeployment = v
+	return s
+}
+
+// SetMediaResourceMap sets the MediaResourceMap field's value.
+func (s *StartMonitorDeploymentOutput) SetMediaResourceMap(v map[string]*MediaResource) *StartMonitorDeploymentOutput {
+	s.MediaResourceMap = v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *StartMonitorDeploymentOutput) SetModifiedAt(v time.Time) *StartMonitorDeploymentOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetMonitorChangesPendingDeployment sets the MonitorChangesPendingDeployment field's value.
+func (s *StartMonitorDeploymentOutput) SetMonitorChangesPendingDeployment(v bool) *StartMonitorDeploymentOutput {
+	s.MonitorChangesPendingDeployment = &v
+	return s
+}
+
+// SetMonitorDeployment sets the MonitorDeployment field's value.
+func (s *StartMonitorDeploymentOutput) SetMonitorDeployment(v *MonitorDeployment) *StartMonitorDeploymentOutput {
+	s.MonitorDeployment = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *StartMonitorDeploymentOutput) SetName(v string) *StartMonitorDeploymentOutput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *StartMonitorDeploymentOutput) SetStatus(v string) *StartMonitorDeploymentOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *StartMonitorDeploymentOutput) SetTags(v map[string]*string) *StartMonitorDeploymentOutput {
+	s.Tags = v
+	return s
 }
 
 type StartMultiplexInput struct {
@@ -28833,6 +37630,280 @@ func (s StartTimecode) GoString() string {
 // SetTimecode sets the Timecode field's value.
 func (s *StartTimecode) SetTimecode(v string) *StartTimecode {
 	s.Timecode = &v
+	return s
+}
+
+type StartUpdateSignalMapInput struct {
+	_ struct{} `type:"structure"`
+
+	CloudWatchAlarmTemplateGroupIdentifiers []*string `locationName:"cloudWatchAlarmTemplateGroupIdentifiers" type:"list"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	DiscoveryEntryPointArn *string `locationName:"discoveryEntryPointArn" min:"1" type:"string"`
+
+	EventBridgeRuleTemplateGroupIdentifiers []*string `locationName:"eventBridgeRuleTemplateGroupIdentifiers" type:"list"`
+
+	ForceRediscovery *bool `locationName:"forceRediscovery" type:"boolean"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartUpdateSignalMapInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartUpdateSignalMapInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartUpdateSignalMapInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartUpdateSignalMapInput"}
+	if s.DiscoveryEntryPointArn != nil && len(*s.DiscoveryEntryPointArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DiscoveryEntryPointArn", 1))
+	}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCloudWatchAlarmTemplateGroupIdentifiers sets the CloudWatchAlarmTemplateGroupIdentifiers field's value.
+func (s *StartUpdateSignalMapInput) SetCloudWatchAlarmTemplateGroupIdentifiers(v []*string) *StartUpdateSignalMapInput {
+	s.CloudWatchAlarmTemplateGroupIdentifiers = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *StartUpdateSignalMapInput) SetDescription(v string) *StartUpdateSignalMapInput {
+	s.Description = &v
+	return s
+}
+
+// SetDiscoveryEntryPointArn sets the DiscoveryEntryPointArn field's value.
+func (s *StartUpdateSignalMapInput) SetDiscoveryEntryPointArn(v string) *StartUpdateSignalMapInput {
+	s.DiscoveryEntryPointArn = &v
+	return s
+}
+
+// SetEventBridgeRuleTemplateGroupIdentifiers sets the EventBridgeRuleTemplateGroupIdentifiers field's value.
+func (s *StartUpdateSignalMapInput) SetEventBridgeRuleTemplateGroupIdentifiers(v []*string) *StartUpdateSignalMapInput {
+	s.EventBridgeRuleTemplateGroupIdentifiers = v
+	return s
+}
+
+// SetForceRediscovery sets the ForceRediscovery field's value.
+func (s *StartUpdateSignalMapInput) SetForceRediscovery(v bool) *StartUpdateSignalMapInput {
+	s.ForceRediscovery = &v
+	return s
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *StartUpdateSignalMapInput) SetIdentifier(v string) *StartUpdateSignalMapInput {
+	s.Identifier = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *StartUpdateSignalMapInput) SetName(v string) *StartUpdateSignalMapInput {
+	s.Name = &v
+	return s
+}
+
+type StartUpdateSignalMapOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CloudWatchAlarmTemplateGroupIds []*string `locationName:"cloudWatchAlarmTemplateGroupIds" type:"list"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	DiscoveryEntryPointArn *string `locationName:"discoveryEntryPointArn" min:"1" type:"string"`
+
+	ErrorMessage *string `locationName:"errorMessage" min:"1" type:"string"`
+
+	EventBridgeRuleTemplateGroupIds []*string `locationName:"eventBridgeRuleTemplateGroupIds" type:"list"`
+
+	// A map representing an incomplete AWS media workflow as a graph.
+	FailedMediaResourceMap map[string]*MediaResource `locationName:"failedMediaResourceMap" type:"map"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	LastDiscoveredAt *time.Time `locationName:"lastDiscoveredAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	// Represents the latest successful monitor deployment of a signal map.
+	LastSuccessfulMonitorDeployment *SuccessfulMonitorDeployment `locationName:"lastSuccessfulMonitorDeployment" type:"structure"`
+
+	// A map representing an AWS media workflow as a graph.
+	MediaResourceMap map[string]*MediaResource `locationName:"mediaResourceMap" type:"map"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	MonitorChangesPendingDeployment *bool `locationName:"monitorChangesPendingDeployment" type:"boolean"`
+
+	// Represents the latest monitor deployment of a signal map.
+	MonitorDeployment *MonitorDeployment `locationName:"monitorDeployment" type:"structure"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// A signal map's current status which is dependent on its lifecycle actions
+	// or associated jobs.
+	Status *string `locationName:"status" type:"string" enum:"SignalMapStatus"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartUpdateSignalMapOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StartUpdateSignalMapOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *StartUpdateSignalMapOutput) SetArn(v string) *StartUpdateSignalMapOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCloudWatchAlarmTemplateGroupIds sets the CloudWatchAlarmTemplateGroupIds field's value.
+func (s *StartUpdateSignalMapOutput) SetCloudWatchAlarmTemplateGroupIds(v []*string) *StartUpdateSignalMapOutput {
+	s.CloudWatchAlarmTemplateGroupIds = v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *StartUpdateSignalMapOutput) SetCreatedAt(v time.Time) *StartUpdateSignalMapOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *StartUpdateSignalMapOutput) SetDescription(v string) *StartUpdateSignalMapOutput {
+	s.Description = &v
+	return s
+}
+
+// SetDiscoveryEntryPointArn sets the DiscoveryEntryPointArn field's value.
+func (s *StartUpdateSignalMapOutput) SetDiscoveryEntryPointArn(v string) *StartUpdateSignalMapOutput {
+	s.DiscoveryEntryPointArn = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *StartUpdateSignalMapOutput) SetErrorMessage(v string) *StartUpdateSignalMapOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetEventBridgeRuleTemplateGroupIds sets the EventBridgeRuleTemplateGroupIds field's value.
+func (s *StartUpdateSignalMapOutput) SetEventBridgeRuleTemplateGroupIds(v []*string) *StartUpdateSignalMapOutput {
+	s.EventBridgeRuleTemplateGroupIds = v
+	return s
+}
+
+// SetFailedMediaResourceMap sets the FailedMediaResourceMap field's value.
+func (s *StartUpdateSignalMapOutput) SetFailedMediaResourceMap(v map[string]*MediaResource) *StartUpdateSignalMapOutput {
+	s.FailedMediaResourceMap = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *StartUpdateSignalMapOutput) SetId(v string) *StartUpdateSignalMapOutput {
+	s.Id = &v
+	return s
+}
+
+// SetLastDiscoveredAt sets the LastDiscoveredAt field's value.
+func (s *StartUpdateSignalMapOutput) SetLastDiscoveredAt(v time.Time) *StartUpdateSignalMapOutput {
+	s.LastDiscoveredAt = &v
+	return s
+}
+
+// SetLastSuccessfulMonitorDeployment sets the LastSuccessfulMonitorDeployment field's value.
+func (s *StartUpdateSignalMapOutput) SetLastSuccessfulMonitorDeployment(v *SuccessfulMonitorDeployment) *StartUpdateSignalMapOutput {
+	s.LastSuccessfulMonitorDeployment = v
+	return s
+}
+
+// SetMediaResourceMap sets the MediaResourceMap field's value.
+func (s *StartUpdateSignalMapOutput) SetMediaResourceMap(v map[string]*MediaResource) *StartUpdateSignalMapOutput {
+	s.MediaResourceMap = v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *StartUpdateSignalMapOutput) SetModifiedAt(v time.Time) *StartUpdateSignalMapOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetMonitorChangesPendingDeployment sets the MonitorChangesPendingDeployment field's value.
+func (s *StartUpdateSignalMapOutput) SetMonitorChangesPendingDeployment(v bool) *StartUpdateSignalMapOutput {
+	s.MonitorChangesPendingDeployment = &v
+	return s
+}
+
+// SetMonitorDeployment sets the MonitorDeployment field's value.
+func (s *StartUpdateSignalMapOutput) SetMonitorDeployment(v *MonitorDeployment) *StartUpdateSignalMapOutput {
+	s.MonitorDeployment = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *StartUpdateSignalMapOutput) SetName(v string) *StartUpdateSignalMapOutput {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *StartUpdateSignalMapOutput) SetStatus(v string) *StartUpdateSignalMapOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *StartUpdateSignalMapOutput) SetTags(v map[string]*string) *StartUpdateSignalMapOutput {
+	s.Tags = v
 	return s
 }
 
@@ -29034,6 +38105,245 @@ func (s *StaticImageDeactivateScheduleActionSettings) SetFadeOut(v int64) *Stati
 // SetLayer sets the Layer field's value.
 func (s *StaticImageDeactivateScheduleActionSettings) SetLayer(v int64) *StaticImageDeactivateScheduleActionSettings {
 	s.Layer = &v
+	return s
+}
+
+// Settings for the action to activate a static image.
+type StaticImageOutputActivateScheduleActionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The duration in milliseconds for the image to remain on the video. If omitted
+	// or set to 0 the duration is unlimited and the image will remain until it
+	// is explicitly deactivated.
+	Duration *int64 `locationName:"duration" type:"integer"`
+
+	// The time in milliseconds for the image to fade in. The fade-in starts at
+	// the start time of the overlay. Default is 0 (no fade-in).
+	FadeIn *int64 `locationName:"fadeIn" type:"integer"`
+
+	// Applies only if a duration is specified. The time in milliseconds for the
+	// image to fade out. The fade-out starts when the duration time is hit, so
+	// it effectively extends the duration. Default is 0 (no fade-out).
+	FadeOut *int64 `locationName:"fadeOut" type:"integer"`
+
+	// The height of the image when inserted into the video, in pixels. The overlay
+	// will be scaled up or down to the specified height. Leave blank to use the
+	// native height of the overlay.
+	Height *int64 `locationName:"height" min:"1" type:"integer"`
+
+	// The location and filename of the image file to overlay on the video. The
+	// file must be a 32-bit BMP, PNG, or TGA file, and must not be larger (in pixels)
+	// than the input video.
+	//
+	// Image is a required field
+	Image *InputLocation `locationName:"image" type:"structure" required:"true"`
+
+	// Placement of the left edge of the overlay relative to the left edge of the
+	// video frame, in pixels. 0 (the default) is the left edge of the frame. If
+	// the placement causes the overlay to extend beyond the right edge of the underlying
+	// video, then the overlay is cropped on the right.
+	ImageX *int64 `locationName:"imageX" type:"integer"`
+
+	// Placement of the top edge of the overlay relative to the top edge of the
+	// video frame, in pixels. 0 (the default) is the top edge of the frame. If
+	// the placement causes the overlay to extend beyond the bottom edge of the
+	// underlying video, then the overlay is cropped on the bottom.
+	ImageY *int64 `locationName:"imageY" type:"integer"`
+
+	// The number of the layer, 0 to 7. There are 8 layers that can be overlaid
+	// on the video, each layer with a different image. The layers are in Z order,
+	// which means that overlays with higher values of layer are inserted on top
+	// of overlays with lower values of layer. Default is 0.
+	Layer *int64 `locationName:"layer" type:"integer"`
+
+	// Opacity of image where 0 is transparent and 100 is fully opaque. Default
+	// is 100.
+	Opacity *int64 `locationName:"opacity" type:"integer"`
+
+	// The name(s) of the output(s) the activation should apply to.
+	//
+	// OutputNames is a required field
+	OutputNames []*string `locationName:"outputNames" type:"list" required:"true"`
+
+	// The width of the image when inserted into the video, in pixels. The overlay
+	// will be scaled up or down to the specified width. Leave blank to use the
+	// native width of the overlay.
+	Width *int64 `locationName:"width" min:"1" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StaticImageOutputActivateScheduleActionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StaticImageOutputActivateScheduleActionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StaticImageOutputActivateScheduleActionSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StaticImageOutputActivateScheduleActionSettings"}
+	if s.Height != nil && *s.Height < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Height", 1))
+	}
+	if s.Image == nil {
+		invalidParams.Add(request.NewErrParamRequired("Image"))
+	}
+	if s.OutputNames == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutputNames"))
+	}
+	if s.Width != nil && *s.Width < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Width", 1))
+	}
+	if s.Image != nil {
+		if err := s.Image.Validate(); err != nil {
+			invalidParams.AddNested("Image", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDuration sets the Duration field's value.
+func (s *StaticImageOutputActivateScheduleActionSettings) SetDuration(v int64) *StaticImageOutputActivateScheduleActionSettings {
+	s.Duration = &v
+	return s
+}
+
+// SetFadeIn sets the FadeIn field's value.
+func (s *StaticImageOutputActivateScheduleActionSettings) SetFadeIn(v int64) *StaticImageOutputActivateScheduleActionSettings {
+	s.FadeIn = &v
+	return s
+}
+
+// SetFadeOut sets the FadeOut field's value.
+func (s *StaticImageOutputActivateScheduleActionSettings) SetFadeOut(v int64) *StaticImageOutputActivateScheduleActionSettings {
+	s.FadeOut = &v
+	return s
+}
+
+// SetHeight sets the Height field's value.
+func (s *StaticImageOutputActivateScheduleActionSettings) SetHeight(v int64) *StaticImageOutputActivateScheduleActionSettings {
+	s.Height = &v
+	return s
+}
+
+// SetImage sets the Image field's value.
+func (s *StaticImageOutputActivateScheduleActionSettings) SetImage(v *InputLocation) *StaticImageOutputActivateScheduleActionSettings {
+	s.Image = v
+	return s
+}
+
+// SetImageX sets the ImageX field's value.
+func (s *StaticImageOutputActivateScheduleActionSettings) SetImageX(v int64) *StaticImageOutputActivateScheduleActionSettings {
+	s.ImageX = &v
+	return s
+}
+
+// SetImageY sets the ImageY field's value.
+func (s *StaticImageOutputActivateScheduleActionSettings) SetImageY(v int64) *StaticImageOutputActivateScheduleActionSettings {
+	s.ImageY = &v
+	return s
+}
+
+// SetLayer sets the Layer field's value.
+func (s *StaticImageOutputActivateScheduleActionSettings) SetLayer(v int64) *StaticImageOutputActivateScheduleActionSettings {
+	s.Layer = &v
+	return s
+}
+
+// SetOpacity sets the Opacity field's value.
+func (s *StaticImageOutputActivateScheduleActionSettings) SetOpacity(v int64) *StaticImageOutputActivateScheduleActionSettings {
+	s.Opacity = &v
+	return s
+}
+
+// SetOutputNames sets the OutputNames field's value.
+func (s *StaticImageOutputActivateScheduleActionSettings) SetOutputNames(v []*string) *StaticImageOutputActivateScheduleActionSettings {
+	s.OutputNames = v
+	return s
+}
+
+// SetWidth sets the Width field's value.
+func (s *StaticImageOutputActivateScheduleActionSettings) SetWidth(v int64) *StaticImageOutputActivateScheduleActionSettings {
+	s.Width = &v
+	return s
+}
+
+// Settings for the action to deactivate the image in a specific layer.
+type StaticImageOutputDeactivateScheduleActionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The time in milliseconds for the image to fade out. Default is 0 (no fade-out).
+	FadeOut *int64 `locationName:"fadeOut" type:"integer"`
+
+	// The image overlay layer to deactivate, 0 to 7. Default is 0.
+	Layer *int64 `locationName:"layer" type:"integer"`
+
+	// The name(s) of the output(s) the deactivation should apply to.
+	//
+	// OutputNames is a required field
+	OutputNames []*string `locationName:"outputNames" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StaticImageOutputDeactivateScheduleActionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StaticImageOutputDeactivateScheduleActionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StaticImageOutputDeactivateScheduleActionSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StaticImageOutputDeactivateScheduleActionSettings"}
+	if s.OutputNames == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutputNames"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFadeOut sets the FadeOut field's value.
+func (s *StaticImageOutputDeactivateScheduleActionSettings) SetFadeOut(v int64) *StaticImageOutputDeactivateScheduleActionSettings {
+	s.FadeOut = &v
+	return s
+}
+
+// SetLayer sets the Layer field's value.
+func (s *StaticImageOutputDeactivateScheduleActionSettings) SetLayer(v int64) *StaticImageOutputDeactivateScheduleActionSettings {
+	s.Layer = &v
+	return s
+}
+
+// SetOutputNames sets the OutputNames field's value.
+func (s *StaticImageOutputDeactivateScheduleActionSettings) SetOutputNames(v []*string) *StaticImageOutputDeactivateScheduleActionSettings {
+	s.OutputNames = v
 	return s
 }
 
@@ -29319,6 +38629,75 @@ func (s *StopChannelOutput) SetVpc(v *VpcOutputSettingsDescription) *StopChannel
 	return s
 }
 
+type StopInputDeviceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// InputDeviceId is a required field
+	InputDeviceId *string `location:"uri" locationName:"inputDeviceId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopInputDeviceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopInputDeviceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopInputDeviceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopInputDeviceInput"}
+	if s.InputDeviceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputDeviceId"))
+	}
+	if s.InputDeviceId != nil && len(*s.InputDeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputDeviceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputDeviceId sets the InputDeviceId field's value.
+func (s *StopInputDeviceInput) SetInputDeviceId(v string) *StopInputDeviceInput {
+	s.InputDeviceId = &v
+	return s
+}
+
+type StopInputDeviceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopInputDeviceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopInputDeviceOutput) GoString() string {
+	return s.String()
+}
+
 type StopMultiplexInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -29515,6 +38894,51 @@ func (s *StopTimecode) SetTimecode(v string) *StopTimecode {
 	return s
 }
 
+// Represents the latest successful monitor deployment of a signal map.
+type SuccessfulMonitorDeployment struct {
+	_ struct{} `type:"structure"`
+
+	// URI associated with a signal map's monitor deployment.
+	//
+	// DetailsUri is a required field
+	DetailsUri *string `locationName:"detailsUri" min:"1" type:"string" required:"true"`
+
+	// A signal map's monitor deployment status.
+	//
+	// Status is a required field
+	Status *string `locationName:"status" type:"string" required:"true" enum:"SignalMapMonitorDeploymentStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuccessfulMonitorDeployment) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SuccessfulMonitorDeployment) GoString() string {
+	return s.String()
+}
+
+// SetDetailsUri sets the DetailsUri field's value.
+func (s *SuccessfulMonitorDeployment) SetDetailsUri(v string) *SuccessfulMonitorDeployment {
+	s.DetailsUri = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *SuccessfulMonitorDeployment) SetStatus(v string) *SuccessfulMonitorDeployment {
+	s.Status = &v
+	return s
+}
+
 // Teletext Destination Settings
 type TeletextDestinationSettings struct {
 	_ struct{} `type:"structure"`
@@ -29638,6 +39062,154 @@ func (s *TemporalFilterSettings) SetPostFilterSharpening(v string) *TemporalFilt
 // SetStrength sets the Strength field's value.
 func (s *TemporalFilterSettings) SetStrength(v string) *TemporalFilterSettings {
 	s.Strength = &v
+	return s
+}
+
+// Details of a single thumbnail
+type Thumbnail struct {
+	_ struct{} `type:"structure"`
+
+	// The binary data for the latest thumbnail.
+	Body *string `locationName:"body" type:"string"`
+
+	// The content type for the latest thumbnail.
+	ContentType *string `locationName:"contentType" type:"string"`
+
+	// Thumbnail Type
+	ThumbnailType *string `locationName:"thumbnailType" type:"string" enum:"ThumbnailType"`
+
+	TimeStamp *time.Time `locationName:"timeStamp" type:"timestamp" timestampFormat:"iso8601"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Thumbnail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Thumbnail) GoString() string {
+	return s.String()
+}
+
+// SetBody sets the Body field's value.
+func (s *Thumbnail) SetBody(v string) *Thumbnail {
+	s.Body = &v
+	return s
+}
+
+// SetContentType sets the ContentType field's value.
+func (s *Thumbnail) SetContentType(v string) *Thumbnail {
+	s.ContentType = &v
+	return s
+}
+
+// SetThumbnailType sets the ThumbnailType field's value.
+func (s *Thumbnail) SetThumbnailType(v string) *Thumbnail {
+	s.ThumbnailType = &v
+	return s
+}
+
+// SetTimeStamp sets the TimeStamp field's value.
+func (s *Thumbnail) SetTimeStamp(v time.Time) *Thumbnail {
+	s.TimeStamp = &v
+	return s
+}
+
+// Thumbnail Configuration
+type ThumbnailConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Enables the thumbnail feature. The feature generates thumbnails of the incoming
+	// video in each pipeline in the channel. AUTO turns the feature on, DISABLE
+	// turns the feature off.
+	//
+	// State is a required field
+	State *string `locationName:"state" type:"string" required:"true" enum:"ThumbnailState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThumbnailConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThumbnailConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ThumbnailConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ThumbnailConfiguration"}
+	if s.State == nil {
+		invalidParams.Add(request.NewErrParamRequired("State"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetState sets the State field's value.
+func (s *ThumbnailConfiguration) SetState(v string) *ThumbnailConfiguration {
+	s.State = &v
+	return s
+}
+
+// Thumbnail details for one pipeline of a running channel.
+type ThumbnailDetail struct {
+	_ struct{} `type:"structure"`
+
+	// Pipeline ID
+	PipelineId *string `locationName:"pipelineId" type:"string"`
+
+	// thumbnails of a single pipeline
+	Thumbnails []*Thumbnail `locationName:"thumbnails" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThumbnailDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ThumbnailDetail) GoString() string {
+	return s.String()
+}
+
+// SetPipelineId sets the PipelineId field's value.
+func (s *ThumbnailDetail) SetPipelineId(v string) *ThumbnailDetail {
+	s.PipelineId = &v
+	return s
+}
+
+// SetThumbnails sets the Thumbnails field's value.
+func (s *ThumbnailDetail) SetThumbnails(v []*Thumbnail) *ThumbnailDetail {
+	s.Thumbnails = v
 	return s
 }
 
@@ -30289,6 +39861,66 @@ func (s *UnprocessableEntityException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type UpdateAccountConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	AccountConfiguration *AccountConfiguration `locationName:"accountConfiguration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAccountConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAccountConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// SetAccountConfiguration sets the AccountConfiguration field's value.
+func (s *UpdateAccountConfigurationInput) SetAccountConfiguration(v *AccountConfiguration) *UpdateAccountConfigurationInput {
+	s.AccountConfiguration = v
+	return s
+}
+
+type UpdateAccountConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	AccountConfiguration *AccountConfiguration `locationName:"accountConfiguration" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAccountConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateAccountConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccountConfiguration sets the AccountConfiguration field's value.
+func (s *UpdateAccountConfigurationOutput) SetAccountConfiguration(v *AccountConfiguration) *UpdateAccountConfigurationOutput {
+	s.AccountConfiguration = v
+	return s
+}
+
 type UpdateChannelClassInput struct {
 	_ struct{} `type:"structure"`
 
@@ -30575,8 +40207,809 @@ func (s *UpdateChannelOutput) SetChannel(v *Channel) *UpdateChannelOutput {
 	return s
 }
 
+type UpdateCloudWatchAlarmTemplateGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCloudWatchAlarmTemplateGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCloudWatchAlarmTemplateGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateCloudWatchAlarmTemplateGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateCloudWatchAlarmTemplateGroupInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateCloudWatchAlarmTemplateGroupInput) SetDescription(v string) *UpdateCloudWatchAlarmTemplateGroupInput {
+	s.Description = &v
+	return s
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *UpdateCloudWatchAlarmTemplateGroupInput) SetIdentifier(v string) *UpdateCloudWatchAlarmTemplateGroupInput {
+	s.Identifier = &v
+	return s
+}
+
+type UpdateCloudWatchAlarmTemplateGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCloudWatchAlarmTemplateGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCloudWatchAlarmTemplateGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateCloudWatchAlarmTemplateGroupOutput) SetArn(v string) *UpdateCloudWatchAlarmTemplateGroupOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *UpdateCloudWatchAlarmTemplateGroupOutput) SetCreatedAt(v time.Time) *UpdateCloudWatchAlarmTemplateGroupOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateCloudWatchAlarmTemplateGroupOutput) SetDescription(v string) *UpdateCloudWatchAlarmTemplateGroupOutput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateCloudWatchAlarmTemplateGroupOutput) SetId(v string) *UpdateCloudWatchAlarmTemplateGroupOutput {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *UpdateCloudWatchAlarmTemplateGroupOutput) SetModifiedAt(v time.Time) *UpdateCloudWatchAlarmTemplateGroupOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateCloudWatchAlarmTemplateGroupOutput) SetName(v string) *UpdateCloudWatchAlarmTemplateGroupOutput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateCloudWatchAlarmTemplateGroupOutput) SetTags(v map[string]*string) *UpdateCloudWatchAlarmTemplateGroupOutput {
+	s.Tags = v
+	return s
+}
+
+type UpdateCloudWatchAlarmTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The comparison operator used to compare the specified statistic and the threshold.
+	ComparisonOperator *string `locationName:"comparisonOperator" type:"string" enum:"CloudWatchAlarmTemplateComparisonOperator"`
+
+	DatapointsToAlarm *int64 `locationName:"datapointsToAlarm" min:"1" type:"integer"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	EvaluationPeriods *int64 `locationName:"evaluationPeriods" min:"1" type:"integer"`
+
+	GroupIdentifier *string `locationName:"groupIdentifier" type:"string"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+
+	MetricName *string `locationName:"metricName" type:"string"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	Period *int64 `locationName:"period" min:"10" type:"integer"`
+
+	// The statistic to apply to the alarm's metric data.
+	Statistic *string `locationName:"statistic" type:"string" enum:"CloudWatchAlarmTemplateStatistic"`
+
+	// The resource type this template should dynamically generate cloudwatch metric
+	// alarms for.
+	TargetResourceType *string `locationName:"targetResourceType" type:"string" enum:"CloudWatchAlarmTemplateTargetResourceType"`
+
+	Threshold *float64 `locationName:"threshold" type:"double"`
+
+	// Specifies how missing data points are treated when evaluating the alarm's
+	// condition.
+	TreatMissingData *string `locationName:"treatMissingData" type:"string" enum:"CloudWatchAlarmTemplateTreatMissingData"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCloudWatchAlarmTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCloudWatchAlarmTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateCloudWatchAlarmTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateCloudWatchAlarmTemplateInput"}
+	if s.DatapointsToAlarm != nil && *s.DatapointsToAlarm < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("DatapointsToAlarm", 1))
+	}
+	if s.EvaluationPeriods != nil && *s.EvaluationPeriods < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("EvaluationPeriods", 1))
+	}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Period != nil && *s.Period < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("Period", 10))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetComparisonOperator sets the ComparisonOperator field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetComparisonOperator(v string) *UpdateCloudWatchAlarmTemplateInput {
+	s.ComparisonOperator = &v
+	return s
+}
+
+// SetDatapointsToAlarm sets the DatapointsToAlarm field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetDatapointsToAlarm(v int64) *UpdateCloudWatchAlarmTemplateInput {
+	s.DatapointsToAlarm = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetDescription(v string) *UpdateCloudWatchAlarmTemplateInput {
+	s.Description = &v
+	return s
+}
+
+// SetEvaluationPeriods sets the EvaluationPeriods field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetEvaluationPeriods(v int64) *UpdateCloudWatchAlarmTemplateInput {
+	s.EvaluationPeriods = &v
+	return s
+}
+
+// SetGroupIdentifier sets the GroupIdentifier field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetGroupIdentifier(v string) *UpdateCloudWatchAlarmTemplateInput {
+	s.GroupIdentifier = &v
+	return s
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetIdentifier(v string) *UpdateCloudWatchAlarmTemplateInput {
+	s.Identifier = &v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetMetricName(v string) *UpdateCloudWatchAlarmTemplateInput {
+	s.MetricName = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetName(v string) *UpdateCloudWatchAlarmTemplateInput {
+	s.Name = &v
+	return s
+}
+
+// SetPeriod sets the Period field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetPeriod(v int64) *UpdateCloudWatchAlarmTemplateInput {
+	s.Period = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetStatistic(v string) *UpdateCloudWatchAlarmTemplateInput {
+	s.Statistic = &v
+	return s
+}
+
+// SetTargetResourceType sets the TargetResourceType field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetTargetResourceType(v string) *UpdateCloudWatchAlarmTemplateInput {
+	s.TargetResourceType = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetThreshold(v float64) *UpdateCloudWatchAlarmTemplateInput {
+	s.Threshold = &v
+	return s
+}
+
+// SetTreatMissingData sets the TreatMissingData field's value.
+func (s *UpdateCloudWatchAlarmTemplateInput) SetTreatMissingData(v string) *UpdateCloudWatchAlarmTemplateInput {
+	s.TreatMissingData = &v
+	return s
+}
+
+type UpdateCloudWatchAlarmTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	// The comparison operator used to compare the specified statistic and the threshold.
+	ComparisonOperator *string `locationName:"comparisonOperator" type:"string" enum:"CloudWatchAlarmTemplateComparisonOperator"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	DatapointsToAlarm *int64 `locationName:"datapointsToAlarm" min:"1" type:"integer"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	EvaluationPeriods *int64 `locationName:"evaluationPeriods" min:"1" type:"integer"`
+
+	GroupId *string `locationName:"groupId" min:"7" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	MetricName *string `locationName:"metricName" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	Period *int64 `locationName:"period" min:"10" type:"integer"`
+
+	// The statistic to apply to the alarm's metric data.
+	Statistic *string `locationName:"statistic" type:"string" enum:"CloudWatchAlarmTemplateStatistic"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The resource type this template should dynamically generate cloudwatch metric
+	// alarms for.
+	TargetResourceType *string `locationName:"targetResourceType" type:"string" enum:"CloudWatchAlarmTemplateTargetResourceType"`
+
+	Threshold *float64 `locationName:"threshold" type:"double"`
+
+	// Specifies how missing data points are treated when evaluating the alarm's
+	// condition.
+	TreatMissingData *string `locationName:"treatMissingData" type:"string" enum:"CloudWatchAlarmTemplateTreatMissingData"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCloudWatchAlarmTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateCloudWatchAlarmTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetArn(v string) *UpdateCloudWatchAlarmTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetComparisonOperator sets the ComparisonOperator field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetComparisonOperator(v string) *UpdateCloudWatchAlarmTemplateOutput {
+	s.ComparisonOperator = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetCreatedAt(v time.Time) *UpdateCloudWatchAlarmTemplateOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDatapointsToAlarm sets the DatapointsToAlarm field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetDatapointsToAlarm(v int64) *UpdateCloudWatchAlarmTemplateOutput {
+	s.DatapointsToAlarm = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetDescription(v string) *UpdateCloudWatchAlarmTemplateOutput {
+	s.Description = &v
+	return s
+}
+
+// SetEvaluationPeriods sets the EvaluationPeriods field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetEvaluationPeriods(v int64) *UpdateCloudWatchAlarmTemplateOutput {
+	s.EvaluationPeriods = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetGroupId(v string) *UpdateCloudWatchAlarmTemplateOutput {
+	s.GroupId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetId(v string) *UpdateCloudWatchAlarmTemplateOutput {
+	s.Id = &v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetMetricName(v string) *UpdateCloudWatchAlarmTemplateOutput {
+	s.MetricName = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetModifiedAt(v time.Time) *UpdateCloudWatchAlarmTemplateOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetName(v string) *UpdateCloudWatchAlarmTemplateOutput {
+	s.Name = &v
+	return s
+}
+
+// SetPeriod sets the Period field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetPeriod(v int64) *UpdateCloudWatchAlarmTemplateOutput {
+	s.Period = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetStatistic(v string) *UpdateCloudWatchAlarmTemplateOutput {
+	s.Statistic = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetTags(v map[string]*string) *UpdateCloudWatchAlarmTemplateOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTargetResourceType sets the TargetResourceType field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetTargetResourceType(v string) *UpdateCloudWatchAlarmTemplateOutput {
+	s.TargetResourceType = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetThreshold(v float64) *UpdateCloudWatchAlarmTemplateOutput {
+	s.Threshold = &v
+	return s
+}
+
+// SetTreatMissingData sets the TreatMissingData field's value.
+func (s *UpdateCloudWatchAlarmTemplateOutput) SetTreatMissingData(v string) *UpdateCloudWatchAlarmTemplateOutput {
+	s.TreatMissingData = &v
+	return s
+}
+
+type UpdateEventBridgeRuleTemplateGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventBridgeRuleTemplateGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventBridgeRuleTemplateGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateEventBridgeRuleTemplateGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateEventBridgeRuleTemplateGroupInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateEventBridgeRuleTemplateGroupInput) SetDescription(v string) *UpdateEventBridgeRuleTemplateGroupInput {
+	s.Description = &v
+	return s
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *UpdateEventBridgeRuleTemplateGroupInput) SetIdentifier(v string) *UpdateEventBridgeRuleTemplateGroupInput {
+	s.Identifier = &v
+	return s
+}
+
+type UpdateEventBridgeRuleTemplateGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventBridgeRuleTemplateGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventBridgeRuleTemplateGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateEventBridgeRuleTemplateGroupOutput) SetArn(v string) *UpdateEventBridgeRuleTemplateGroupOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *UpdateEventBridgeRuleTemplateGroupOutput) SetCreatedAt(v time.Time) *UpdateEventBridgeRuleTemplateGroupOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateEventBridgeRuleTemplateGroupOutput) SetDescription(v string) *UpdateEventBridgeRuleTemplateGroupOutput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateEventBridgeRuleTemplateGroupOutput) SetId(v string) *UpdateEventBridgeRuleTemplateGroupOutput {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *UpdateEventBridgeRuleTemplateGroupOutput) SetModifiedAt(v time.Time) *UpdateEventBridgeRuleTemplateGroupOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateEventBridgeRuleTemplateGroupOutput) SetName(v string) *UpdateEventBridgeRuleTemplateGroupOutput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateEventBridgeRuleTemplateGroupOutput) SetTags(v map[string]*string) *UpdateEventBridgeRuleTemplateGroupOutput {
+	s.Tags = v
+	return s
+}
+
+type UpdateEventBridgeRuleTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	EventTargets []*EventBridgeRuleTemplateTarget `locationName:"eventTargets" type:"list"`
+
+	// The type of event to match with the rule.
+	EventType *string `locationName:"eventType" type:"string" enum:"EventBridgeRuleTemplateEventType"`
+
+	GroupIdentifier *string `locationName:"groupIdentifier" type:"string"`
+
+	// Identifier is a required field
+	Identifier *string `location:"uri" locationName:"identifier" type:"string" required:"true"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventBridgeRuleTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventBridgeRuleTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateEventBridgeRuleTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateEventBridgeRuleTemplateInput"}
+	if s.Identifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("Identifier"))
+	}
+	if s.Identifier != nil && len(*s.Identifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Identifier", 1))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.EventTargets != nil {
+		for i, v := range s.EventTargets {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "EventTargets", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateEventBridgeRuleTemplateInput) SetDescription(v string) *UpdateEventBridgeRuleTemplateInput {
+	s.Description = &v
+	return s
+}
+
+// SetEventTargets sets the EventTargets field's value.
+func (s *UpdateEventBridgeRuleTemplateInput) SetEventTargets(v []*EventBridgeRuleTemplateTarget) *UpdateEventBridgeRuleTemplateInput {
+	s.EventTargets = v
+	return s
+}
+
+// SetEventType sets the EventType field's value.
+func (s *UpdateEventBridgeRuleTemplateInput) SetEventType(v string) *UpdateEventBridgeRuleTemplateInput {
+	s.EventType = &v
+	return s
+}
+
+// SetGroupIdentifier sets the GroupIdentifier field's value.
+func (s *UpdateEventBridgeRuleTemplateInput) SetGroupIdentifier(v string) *UpdateEventBridgeRuleTemplateInput {
+	s.GroupIdentifier = &v
+	return s
+}
+
+// SetIdentifier sets the Identifier field's value.
+func (s *UpdateEventBridgeRuleTemplateInput) SetIdentifier(v string) *UpdateEventBridgeRuleTemplateInput {
+	s.Identifier = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateEventBridgeRuleTemplateInput) SetName(v string) *UpdateEventBridgeRuleTemplateInput {
+	s.Name = &v
+	return s
+}
+
+type UpdateEventBridgeRuleTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	EventTargets []*EventBridgeRuleTemplateTarget `locationName:"eventTargets" type:"list"`
+
+	// The type of event to match with the rule.
+	EventType *string `locationName:"eventType" type:"string" enum:"EventBridgeRuleTemplateEventType"`
+
+	GroupId *string `locationName:"groupId" min:"7" type:"string"`
+
+	Id *string `locationName:"id" min:"7" type:"string"`
+
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp" timestampFormat:"iso8601"`
+
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Represents the tags associated with a resource.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventBridgeRuleTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateEventBridgeRuleTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateEventBridgeRuleTemplateOutput) SetArn(v string) *UpdateEventBridgeRuleTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *UpdateEventBridgeRuleTemplateOutput) SetCreatedAt(v time.Time) *UpdateEventBridgeRuleTemplateOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateEventBridgeRuleTemplateOutput) SetDescription(v string) *UpdateEventBridgeRuleTemplateOutput {
+	s.Description = &v
+	return s
+}
+
+// SetEventTargets sets the EventTargets field's value.
+func (s *UpdateEventBridgeRuleTemplateOutput) SetEventTargets(v []*EventBridgeRuleTemplateTarget) *UpdateEventBridgeRuleTemplateOutput {
+	s.EventTargets = v
+	return s
+}
+
+// SetEventType sets the EventType field's value.
+func (s *UpdateEventBridgeRuleTemplateOutput) SetEventType(v string) *UpdateEventBridgeRuleTemplateOutput {
+	s.EventType = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *UpdateEventBridgeRuleTemplateOutput) SetGroupId(v string) *UpdateEventBridgeRuleTemplateOutput {
+	s.GroupId = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateEventBridgeRuleTemplateOutput) SetId(v string) *UpdateEventBridgeRuleTemplateOutput {
+	s.Id = &v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *UpdateEventBridgeRuleTemplateOutput) SetModifiedAt(v time.Time) *UpdateEventBridgeRuleTemplateOutput {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateEventBridgeRuleTemplateOutput) SetName(v string) *UpdateEventBridgeRuleTemplateOutput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateEventBridgeRuleTemplateOutput) SetTags(v map[string]*string) *UpdateEventBridgeRuleTemplateOutput {
+	s.Tags = v
+	return s
+}
+
 type UpdateInputDeviceInput struct {
 	_ struct{} `type:"structure"`
+
+	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
 
 	// Configurable settings for the input device.
 	HdDeviceSettings *InputDeviceConfigurableSettings `locationName:"hdDeviceSettings" type:"structure"`
@@ -30624,6 +41057,12 @@ func (s *UpdateInputDeviceInput) Validate() error {
 	return nil
 }
 
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *UpdateInputDeviceInput) SetAvailabilityZone(v string) *UpdateInputDeviceInput {
+	s.AvailabilityZone = &v
+	return s
+}
+
 // SetHdDeviceSettings sets the HdDeviceSettings field's value.
 func (s *UpdateInputDeviceInput) SetHdDeviceSettings(v *InputDeviceConfigurableSettings) *UpdateInputDeviceInput {
 	s.HdDeviceSettings = v
@@ -30653,6 +41092,8 @@ type UpdateInputDeviceOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
+
 	// The state of the connection between the input device and AWS.
 	ConnectionState *string `locationName:"connectionState" type:"string" enum:"InputDeviceConnectionState"`
 
@@ -30674,10 +41115,15 @@ type UpdateInputDeviceOutput struct {
 
 	MacAddress *string `locationName:"macAddress" type:"string"`
 
+	MedialiveInputArns []*string `locationName:"medialiveInputArns" type:"list"`
+
 	Name *string `locationName:"name" type:"string"`
 
 	// The network settings for the input device.
 	NetworkSettings *InputDeviceNetworkSettings `locationName:"networkSettings" type:"structure"`
+
+	// The output attachment type of the input device.
+	OutputType *string `locationName:"outputType" type:"string" enum:"InputDeviceOutputType"`
 
 	SerialNumber *string `locationName:"serialNumber" type:"string"`
 
@@ -30713,6 +41159,12 @@ func (s UpdateInputDeviceOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *UpdateInputDeviceOutput) SetArn(v string) *UpdateInputDeviceOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *UpdateInputDeviceOutput) SetAvailabilityZone(v string) *UpdateInputDeviceOutput {
+	s.AvailabilityZone = &v
 	return s
 }
 
@@ -30752,6 +41204,12 @@ func (s *UpdateInputDeviceOutput) SetMacAddress(v string) *UpdateInputDeviceOutp
 	return s
 }
 
+// SetMedialiveInputArns sets the MedialiveInputArns field's value.
+func (s *UpdateInputDeviceOutput) SetMedialiveInputArns(v []*string) *UpdateInputDeviceOutput {
+	s.MedialiveInputArns = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *UpdateInputDeviceOutput) SetName(v string) *UpdateInputDeviceOutput {
 	s.Name = &v
@@ -30761,6 +41219,12 @@ func (s *UpdateInputDeviceOutput) SetName(v string) *UpdateInputDeviceOutput {
 // SetNetworkSettings sets the NetworkSettings field's value.
 func (s *UpdateInputDeviceOutput) SetNetworkSettings(v *InputDeviceNetworkSettings) *UpdateInputDeviceOutput {
 	s.NetworkSettings = v
+	return s
+}
+
+// SetOutputType sets the OutputType field's value.
+func (s *UpdateInputDeviceOutput) SetOutputType(v string) *UpdateInputDeviceOutput {
+	s.OutputType = &v
 	return s
 }
 
@@ -32173,6 +42637,23 @@ func AacVbrQuality_Values() []string {
 	}
 }
 
+// Ac3 Attenuation Control
+const (
+	// Ac3AttenuationControlAttenuate3Db is a Ac3AttenuationControl enum value
+	Ac3AttenuationControlAttenuate3Db = "ATTENUATE_3_DB"
+
+	// Ac3AttenuationControlNone is a Ac3AttenuationControl enum value
+	Ac3AttenuationControlNone = "NONE"
+)
+
+// Ac3AttenuationControl_Values returns all elements of the Ac3AttenuationControl enum
+func Ac3AttenuationControl_Values() []string {
+	return []string{
+		Ac3AttenuationControlAttenuate3Db,
+		Ac3AttenuationControlNone,
+	}
+}
+
 // Ac3 Bitstream Mode
 const (
 	// Ac3BitstreamModeCommentary is a Ac3BitstreamMode enum value
@@ -32747,6 +43228,23 @@ func ChannelClass_Values() []string {
 	}
 }
 
+// Property of RestartChannelPipelinesRequest
+const (
+	// ChannelPipelineIdToRestartPipeline0 is a ChannelPipelineIdToRestart enum value
+	ChannelPipelineIdToRestartPipeline0 = "PIPELINE_0"
+
+	// ChannelPipelineIdToRestartPipeline1 is a ChannelPipelineIdToRestart enum value
+	ChannelPipelineIdToRestartPipeline1 = "PIPELINE_1"
+)
+
+// ChannelPipelineIdToRestart_Values returns all elements of the ChannelPipelineIdToRestart enum
+func ChannelPipelineIdToRestart_Values() []string {
+	return []string{
+		ChannelPipelineIdToRestartPipeline0,
+		ChannelPipelineIdToRestartPipeline1,
+	}
+}
+
 const (
 	// ChannelStateCreating is a ChannelState enum value
 	ChannelStateCreating = "CREATING"
@@ -32799,6 +43297,188 @@ func ChannelState_Values() []string {
 	}
 }
 
+// The comparison operator used to compare the specified statistic and the threshold.
+const (
+	// CloudWatchAlarmTemplateComparisonOperatorGreaterThanOrEqualToThreshold is a CloudWatchAlarmTemplateComparisonOperator enum value
+	CloudWatchAlarmTemplateComparisonOperatorGreaterThanOrEqualToThreshold = "GreaterThanOrEqualToThreshold"
+
+	// CloudWatchAlarmTemplateComparisonOperatorGreaterThanThreshold is a CloudWatchAlarmTemplateComparisonOperator enum value
+	CloudWatchAlarmTemplateComparisonOperatorGreaterThanThreshold = "GreaterThanThreshold"
+
+	// CloudWatchAlarmTemplateComparisonOperatorLessThanThreshold is a CloudWatchAlarmTemplateComparisonOperator enum value
+	CloudWatchAlarmTemplateComparisonOperatorLessThanThreshold = "LessThanThreshold"
+
+	// CloudWatchAlarmTemplateComparisonOperatorLessThanOrEqualToThreshold is a CloudWatchAlarmTemplateComparisonOperator enum value
+	CloudWatchAlarmTemplateComparisonOperatorLessThanOrEqualToThreshold = "LessThanOrEqualToThreshold"
+)
+
+// CloudWatchAlarmTemplateComparisonOperator_Values returns all elements of the CloudWatchAlarmTemplateComparisonOperator enum
+func CloudWatchAlarmTemplateComparisonOperator_Values() []string {
+	return []string{
+		CloudWatchAlarmTemplateComparisonOperatorGreaterThanOrEqualToThreshold,
+		CloudWatchAlarmTemplateComparisonOperatorGreaterThanThreshold,
+		CloudWatchAlarmTemplateComparisonOperatorLessThanThreshold,
+		CloudWatchAlarmTemplateComparisonOperatorLessThanOrEqualToThreshold,
+	}
+}
+
+// The statistic to apply to the alarm's metric data.
+const (
+	// CloudWatchAlarmTemplateStatisticSampleCount is a CloudWatchAlarmTemplateStatistic enum value
+	CloudWatchAlarmTemplateStatisticSampleCount = "SampleCount"
+
+	// CloudWatchAlarmTemplateStatisticAverage is a CloudWatchAlarmTemplateStatistic enum value
+	CloudWatchAlarmTemplateStatisticAverage = "Average"
+
+	// CloudWatchAlarmTemplateStatisticSum is a CloudWatchAlarmTemplateStatistic enum value
+	CloudWatchAlarmTemplateStatisticSum = "Sum"
+
+	// CloudWatchAlarmTemplateStatisticMinimum is a CloudWatchAlarmTemplateStatistic enum value
+	CloudWatchAlarmTemplateStatisticMinimum = "Minimum"
+
+	// CloudWatchAlarmTemplateStatisticMaximum is a CloudWatchAlarmTemplateStatistic enum value
+	CloudWatchAlarmTemplateStatisticMaximum = "Maximum"
+)
+
+// CloudWatchAlarmTemplateStatistic_Values returns all elements of the CloudWatchAlarmTemplateStatistic enum
+func CloudWatchAlarmTemplateStatistic_Values() []string {
+	return []string{
+		CloudWatchAlarmTemplateStatisticSampleCount,
+		CloudWatchAlarmTemplateStatisticAverage,
+		CloudWatchAlarmTemplateStatisticSum,
+		CloudWatchAlarmTemplateStatisticMinimum,
+		CloudWatchAlarmTemplateStatisticMaximum,
+	}
+}
+
+// The resource type this template should dynamically generate cloudwatch metric
+// alarms for.
+const (
+	// CloudWatchAlarmTemplateTargetResourceTypeCloudfrontDistribution is a CloudWatchAlarmTemplateTargetResourceType enum value
+	CloudWatchAlarmTemplateTargetResourceTypeCloudfrontDistribution = "CLOUDFRONT_DISTRIBUTION"
+
+	// CloudWatchAlarmTemplateTargetResourceTypeMedialiveMultiplex is a CloudWatchAlarmTemplateTargetResourceType enum value
+	CloudWatchAlarmTemplateTargetResourceTypeMedialiveMultiplex = "MEDIALIVE_MULTIPLEX"
+
+	// CloudWatchAlarmTemplateTargetResourceTypeMedialiveChannel is a CloudWatchAlarmTemplateTargetResourceType enum value
+	CloudWatchAlarmTemplateTargetResourceTypeMedialiveChannel = "MEDIALIVE_CHANNEL"
+
+	// CloudWatchAlarmTemplateTargetResourceTypeMedialiveInputDevice is a CloudWatchAlarmTemplateTargetResourceType enum value
+	CloudWatchAlarmTemplateTargetResourceTypeMedialiveInputDevice = "MEDIALIVE_INPUT_DEVICE"
+
+	// CloudWatchAlarmTemplateTargetResourceTypeMediapackageChannel is a CloudWatchAlarmTemplateTargetResourceType enum value
+	CloudWatchAlarmTemplateTargetResourceTypeMediapackageChannel = "MEDIAPACKAGE_CHANNEL"
+
+	// CloudWatchAlarmTemplateTargetResourceTypeMediapackageOriginEndpoint is a CloudWatchAlarmTemplateTargetResourceType enum value
+	CloudWatchAlarmTemplateTargetResourceTypeMediapackageOriginEndpoint = "MEDIAPACKAGE_ORIGIN_ENDPOINT"
+
+	// CloudWatchAlarmTemplateTargetResourceTypeMediaconnectFlow is a CloudWatchAlarmTemplateTargetResourceType enum value
+	CloudWatchAlarmTemplateTargetResourceTypeMediaconnectFlow = "MEDIACONNECT_FLOW"
+
+	// CloudWatchAlarmTemplateTargetResourceTypeS3Bucket is a CloudWatchAlarmTemplateTargetResourceType enum value
+	CloudWatchAlarmTemplateTargetResourceTypeS3Bucket = "S3_BUCKET"
+)
+
+// CloudWatchAlarmTemplateTargetResourceType_Values returns all elements of the CloudWatchAlarmTemplateTargetResourceType enum
+func CloudWatchAlarmTemplateTargetResourceType_Values() []string {
+	return []string{
+		CloudWatchAlarmTemplateTargetResourceTypeCloudfrontDistribution,
+		CloudWatchAlarmTemplateTargetResourceTypeMedialiveMultiplex,
+		CloudWatchAlarmTemplateTargetResourceTypeMedialiveChannel,
+		CloudWatchAlarmTemplateTargetResourceTypeMedialiveInputDevice,
+		CloudWatchAlarmTemplateTargetResourceTypeMediapackageChannel,
+		CloudWatchAlarmTemplateTargetResourceTypeMediapackageOriginEndpoint,
+		CloudWatchAlarmTemplateTargetResourceTypeMediaconnectFlow,
+		CloudWatchAlarmTemplateTargetResourceTypeS3Bucket,
+	}
+}
+
+// Specifies how missing data points are treated when evaluating the alarm's
+// condition.
+const (
+	// CloudWatchAlarmTemplateTreatMissingDataNotBreaching is a CloudWatchAlarmTemplateTreatMissingData enum value
+	CloudWatchAlarmTemplateTreatMissingDataNotBreaching = "notBreaching"
+
+	// CloudWatchAlarmTemplateTreatMissingDataBreaching is a CloudWatchAlarmTemplateTreatMissingData enum value
+	CloudWatchAlarmTemplateTreatMissingDataBreaching = "breaching"
+
+	// CloudWatchAlarmTemplateTreatMissingDataIgnore is a CloudWatchAlarmTemplateTreatMissingData enum value
+	CloudWatchAlarmTemplateTreatMissingDataIgnore = "ignore"
+
+	// CloudWatchAlarmTemplateTreatMissingDataMissing is a CloudWatchAlarmTemplateTreatMissingData enum value
+	CloudWatchAlarmTemplateTreatMissingDataMissing = "missing"
+)
+
+// CloudWatchAlarmTemplateTreatMissingData_Values returns all elements of the CloudWatchAlarmTemplateTreatMissingData enum
+func CloudWatchAlarmTemplateTreatMissingData_Values() []string {
+	return []string{
+		CloudWatchAlarmTemplateTreatMissingDataNotBreaching,
+		CloudWatchAlarmTemplateTreatMissingDataBreaching,
+		CloudWatchAlarmTemplateTreatMissingDataIgnore,
+		CloudWatchAlarmTemplateTreatMissingDataMissing,
+	}
+}
+
+// Cmaf Ingest Segment Length Units
+const (
+	// CmafIngestSegmentLengthUnitsMilliseconds is a CmafIngestSegmentLengthUnits enum value
+	CmafIngestSegmentLengthUnitsMilliseconds = "MILLISECONDS"
+
+	// CmafIngestSegmentLengthUnitsSeconds is a CmafIngestSegmentLengthUnits enum value
+	CmafIngestSegmentLengthUnitsSeconds = "SECONDS"
+)
+
+// CmafIngestSegmentLengthUnits_Values returns all elements of the CmafIngestSegmentLengthUnits enum
+func CmafIngestSegmentLengthUnits_Values() []string {
+	return []string{
+		CmafIngestSegmentLengthUnitsMilliseconds,
+		CmafIngestSegmentLengthUnitsSeconds,
+	}
+}
+
+// Cmaf Nielsen Id3 Behavior
+const (
+	// CmafNielsenId3BehaviorNoPassthrough is a CmafNielsenId3Behavior enum value
+	CmafNielsenId3BehaviorNoPassthrough = "NO_PASSTHROUGH"
+
+	// CmafNielsenId3BehaviorPassthrough is a CmafNielsenId3Behavior enum value
+	CmafNielsenId3BehaviorPassthrough = "PASSTHROUGH"
+)
+
+// CmafNielsenId3Behavior_Values returns all elements of the CmafNielsenId3Behavior enum
+func CmafNielsenId3Behavior_Values() []string {
+	return []string{
+		CmafNielsenId3BehaviorNoPassthrough,
+		CmafNielsenId3BehaviorPassthrough,
+	}
+}
+
+// Property of colorCorrections. When you are using 3D LUT files to perform
+// color conversion on video, these are the supported color spaces.
+const (
+	// ColorSpaceHdr10 is a ColorSpace enum value
+	ColorSpaceHdr10 = "HDR10"
+
+	// ColorSpaceHlg2020 is a ColorSpace enum value
+	ColorSpaceHlg2020 = "HLG_2020"
+
+	// ColorSpaceRec601 is a ColorSpace enum value
+	ColorSpaceRec601 = "REC_601"
+
+	// ColorSpaceRec709 is a ColorSpace enum value
+	ColorSpaceRec709 = "REC_709"
+)
+
+// ColorSpace_Values returns all elements of the ColorSpace enum
+func ColorSpace_Values() []string {
+	return []string{
+		ColorSpaceHdr10,
+		ColorSpaceHlg2020,
+		ColorSpaceRec601,
+		ColorSpaceRec709,
+	}
+}
+
 const (
 	// ContentTypeImageJpeg is a ContentType enum value
 	ContentTypeImageJpeg = "image/jpeg"
@@ -32808,6 +43488,112 @@ const (
 func ContentType_Values() []string {
 	return []string{
 		ContentTypeImageJpeg,
+	}
+}
+
+// Dash Role Audio
+const (
+	// DashRoleAudioAlternate is a DashRoleAudio enum value
+	DashRoleAudioAlternate = "ALTERNATE"
+
+	// DashRoleAudioCommentary is a DashRoleAudio enum value
+	DashRoleAudioCommentary = "COMMENTARY"
+
+	// DashRoleAudioDescription is a DashRoleAudio enum value
+	DashRoleAudioDescription = "DESCRIPTION"
+
+	// DashRoleAudioDub is a DashRoleAudio enum value
+	DashRoleAudioDub = "DUB"
+
+	// DashRoleAudioEmergency is a DashRoleAudio enum value
+	DashRoleAudioEmergency = "EMERGENCY"
+
+	// DashRoleAudioEnhancedAudioIntelligibility is a DashRoleAudio enum value
+	DashRoleAudioEnhancedAudioIntelligibility = "ENHANCED-AUDIO-INTELLIGIBILITY"
+
+	// DashRoleAudioKaraoke is a DashRoleAudio enum value
+	DashRoleAudioKaraoke = "KARAOKE"
+
+	// DashRoleAudioMain is a DashRoleAudio enum value
+	DashRoleAudioMain = "MAIN"
+
+	// DashRoleAudioSupplementary is a DashRoleAudio enum value
+	DashRoleAudioSupplementary = "SUPPLEMENTARY"
+)
+
+// DashRoleAudio_Values returns all elements of the DashRoleAudio enum
+func DashRoleAudio_Values() []string {
+	return []string{
+		DashRoleAudioAlternate,
+		DashRoleAudioCommentary,
+		DashRoleAudioDescription,
+		DashRoleAudioDub,
+		DashRoleAudioEmergency,
+		DashRoleAudioEnhancedAudioIntelligibility,
+		DashRoleAudioKaraoke,
+		DashRoleAudioMain,
+		DashRoleAudioSupplementary,
+	}
+}
+
+// Dash Role Caption
+const (
+	// DashRoleCaptionAlternate is a DashRoleCaption enum value
+	DashRoleCaptionAlternate = "ALTERNATE"
+
+	// DashRoleCaptionCaption is a DashRoleCaption enum value
+	DashRoleCaptionCaption = "CAPTION"
+
+	// DashRoleCaptionCommentary is a DashRoleCaption enum value
+	DashRoleCaptionCommentary = "COMMENTARY"
+
+	// DashRoleCaptionDescription is a DashRoleCaption enum value
+	DashRoleCaptionDescription = "DESCRIPTION"
+
+	// DashRoleCaptionDub is a DashRoleCaption enum value
+	DashRoleCaptionDub = "DUB"
+
+	// DashRoleCaptionEasyreader is a DashRoleCaption enum value
+	DashRoleCaptionEasyreader = "EASYREADER"
+
+	// DashRoleCaptionEmergency is a DashRoleCaption enum value
+	DashRoleCaptionEmergency = "EMERGENCY"
+
+	// DashRoleCaptionForcedSubtitle is a DashRoleCaption enum value
+	DashRoleCaptionForcedSubtitle = "FORCED-SUBTITLE"
+
+	// DashRoleCaptionKaraoke is a DashRoleCaption enum value
+	DashRoleCaptionKaraoke = "KARAOKE"
+
+	// DashRoleCaptionMain is a DashRoleCaption enum value
+	DashRoleCaptionMain = "MAIN"
+
+	// DashRoleCaptionMetadata is a DashRoleCaption enum value
+	DashRoleCaptionMetadata = "METADATA"
+
+	// DashRoleCaptionSubtitle is a DashRoleCaption enum value
+	DashRoleCaptionSubtitle = "SUBTITLE"
+
+	// DashRoleCaptionSupplementary is a DashRoleCaption enum value
+	DashRoleCaptionSupplementary = "SUPPLEMENTARY"
+)
+
+// DashRoleCaption_Values returns all elements of the DashRoleCaption enum
+func DashRoleCaption_Values() []string {
+	return []string{
+		DashRoleCaptionAlternate,
+		DashRoleCaptionCaption,
+		DashRoleCaptionCommentary,
+		DashRoleCaptionDescription,
+		DashRoleCaptionDub,
+		DashRoleCaptionEasyreader,
+		DashRoleCaptionEmergency,
+		DashRoleCaptionForcedSubtitle,
+		DashRoleCaptionKaraoke,
+		DashRoleCaptionMain,
+		DashRoleCaptionMetadata,
+		DashRoleCaptionSubtitle,
+		DashRoleCaptionSupplementary,
 	}
 }
 
@@ -32895,6 +43681,43 @@ func DolbyEProgramSelection_Values() []string {
 		DolbyEProgramSelectionProgram6,
 		DolbyEProgramSelectionProgram7,
 		DolbyEProgramSelectionProgram8,
+	}
+}
+
+// Dvb Dash Accessibility
+const (
+	// DvbDashAccessibilityDvbdash1VisuallyImpaired is a DvbDashAccessibility enum value
+	DvbDashAccessibilityDvbdash1VisuallyImpaired = "DVBDASH_1_VISUALLY_IMPAIRED"
+
+	// DvbDashAccessibilityDvbdash2HardOfHearing is a DvbDashAccessibility enum value
+	DvbDashAccessibilityDvbdash2HardOfHearing = "DVBDASH_2_HARD_OF_HEARING"
+
+	// DvbDashAccessibilityDvbdash3SupplementalCommentary is a DvbDashAccessibility enum value
+	DvbDashAccessibilityDvbdash3SupplementalCommentary = "DVBDASH_3_SUPPLEMENTAL_COMMENTARY"
+
+	// DvbDashAccessibilityDvbdash4DirectorsCommentary is a DvbDashAccessibility enum value
+	DvbDashAccessibilityDvbdash4DirectorsCommentary = "DVBDASH_4_DIRECTORS_COMMENTARY"
+
+	// DvbDashAccessibilityDvbdash5EducationalNotes is a DvbDashAccessibility enum value
+	DvbDashAccessibilityDvbdash5EducationalNotes = "DVBDASH_5_EDUCATIONAL_NOTES"
+
+	// DvbDashAccessibilityDvbdash6MainProgram is a DvbDashAccessibility enum value
+	DvbDashAccessibilityDvbdash6MainProgram = "DVBDASH_6_MAIN_PROGRAM"
+
+	// DvbDashAccessibilityDvbdash7CleanFeed is a DvbDashAccessibility enum value
+	DvbDashAccessibilityDvbdash7CleanFeed = "DVBDASH_7_CLEAN_FEED"
+)
+
+// DvbDashAccessibility_Values returns all elements of the DvbDashAccessibility enum
+func DvbDashAccessibility_Values() []string {
+	return []string{
+		DvbDashAccessibilityDvbdash1VisuallyImpaired,
+		DvbDashAccessibilityDvbdash2HardOfHearing,
+		DvbDashAccessibilityDvbdash3SupplementalCommentary,
+		DvbDashAccessibilityDvbdash4DirectorsCommentary,
+		DvbDashAccessibilityDvbdash5EducationalNotes,
+		DvbDashAccessibilityDvbdash6MainProgram,
+		DvbDashAccessibilityDvbdash7CleanFeed,
 	}
 }
 
@@ -33559,6 +44382,67 @@ func EmbeddedScte20Detection_Values() []string {
 	}
 }
 
+// The type of event to match with the rule.
+const (
+	// EventBridgeRuleTemplateEventTypeMedialiveMultiplexAlert is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMedialiveMultiplexAlert = "MEDIALIVE_MULTIPLEX_ALERT"
+
+	// EventBridgeRuleTemplateEventTypeMedialiveMultiplexStateChange is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMedialiveMultiplexStateChange = "MEDIALIVE_MULTIPLEX_STATE_CHANGE"
+
+	// EventBridgeRuleTemplateEventTypeMedialiveChannelAlert is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMedialiveChannelAlert = "MEDIALIVE_CHANNEL_ALERT"
+
+	// EventBridgeRuleTemplateEventTypeMedialiveChannelInputChange is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMedialiveChannelInputChange = "MEDIALIVE_CHANNEL_INPUT_CHANGE"
+
+	// EventBridgeRuleTemplateEventTypeMedialiveChannelStateChange is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMedialiveChannelStateChange = "MEDIALIVE_CHANNEL_STATE_CHANGE"
+
+	// EventBridgeRuleTemplateEventTypeMediapackageInputNotification is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMediapackageInputNotification = "MEDIAPACKAGE_INPUT_NOTIFICATION"
+
+	// EventBridgeRuleTemplateEventTypeMediapackageKeyProviderNotification is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMediapackageKeyProviderNotification = "MEDIAPACKAGE_KEY_PROVIDER_NOTIFICATION"
+
+	// EventBridgeRuleTemplateEventTypeMediapackageHarvestJobNotification is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMediapackageHarvestJobNotification = "MEDIAPACKAGE_HARVEST_JOB_NOTIFICATION"
+
+	// EventBridgeRuleTemplateEventTypeSignalMapActiveAlarm is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeSignalMapActiveAlarm = "SIGNAL_MAP_ACTIVE_ALARM"
+
+	// EventBridgeRuleTemplateEventTypeMediaconnectAlert is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMediaconnectAlert = "MEDIACONNECT_ALERT"
+
+	// EventBridgeRuleTemplateEventTypeMediaconnectSourceHealth is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMediaconnectSourceHealth = "MEDIACONNECT_SOURCE_HEALTH"
+
+	// EventBridgeRuleTemplateEventTypeMediaconnectOutputHealth is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMediaconnectOutputHealth = "MEDIACONNECT_OUTPUT_HEALTH"
+
+	// EventBridgeRuleTemplateEventTypeMediaconnectFlowStatusChange is a EventBridgeRuleTemplateEventType enum value
+	EventBridgeRuleTemplateEventTypeMediaconnectFlowStatusChange = "MEDIACONNECT_FLOW_STATUS_CHANGE"
+)
+
+// EventBridgeRuleTemplateEventType_Values returns all elements of the EventBridgeRuleTemplateEventType enum
+func EventBridgeRuleTemplateEventType_Values() []string {
+	return []string{
+		EventBridgeRuleTemplateEventTypeMedialiveMultiplexAlert,
+		EventBridgeRuleTemplateEventTypeMedialiveMultiplexStateChange,
+		EventBridgeRuleTemplateEventTypeMedialiveChannelAlert,
+		EventBridgeRuleTemplateEventTypeMedialiveChannelInputChange,
+		EventBridgeRuleTemplateEventTypeMedialiveChannelStateChange,
+		EventBridgeRuleTemplateEventTypeMediapackageInputNotification,
+		EventBridgeRuleTemplateEventTypeMediapackageKeyProviderNotification,
+		EventBridgeRuleTemplateEventTypeMediapackageHarvestJobNotification,
+		EventBridgeRuleTemplateEventTypeSignalMapActiveAlarm,
+		EventBridgeRuleTemplateEventTypeMediaconnectAlert,
+		EventBridgeRuleTemplateEventTypeMediaconnectSourceHealth,
+		EventBridgeRuleTemplateEventTypeMediaconnectOutputHealth,
+		EventBridgeRuleTemplateEventTypeMediaconnectFlowStatusChange,
+	}
+}
+
 // Feature Activations Input Prepare Schedule Actions
 const (
 	// FeatureActivationsInputPrepareScheduleActionsDisabled is a FeatureActivationsInputPrepareScheduleActions enum value
@@ -33573,6 +44457,23 @@ func FeatureActivationsInputPrepareScheduleActions_Values() []string {
 	return []string{
 		FeatureActivationsInputPrepareScheduleActionsDisabled,
 		FeatureActivationsInputPrepareScheduleActionsEnabled,
+	}
+}
+
+// Feature Activations Output Static Image Overlay Schedule Actions
+const (
+	// FeatureActivationsOutputStaticImageOverlayScheduleActionsDisabled is a FeatureActivationsOutputStaticImageOverlayScheduleActions enum value
+	FeatureActivationsOutputStaticImageOverlayScheduleActionsDisabled = "DISABLED"
+
+	// FeatureActivationsOutputStaticImageOverlayScheduleActionsEnabled is a FeatureActivationsOutputStaticImageOverlayScheduleActions enum value
+	FeatureActivationsOutputStaticImageOverlayScheduleActionsEnabled = "ENABLED"
+)
+
+// FeatureActivationsOutputStaticImageOverlayScheduleActions_Values returns all elements of the FeatureActivationsOutputStaticImageOverlayScheduleActions enum
+func FeatureActivationsOutputStaticImageOverlayScheduleActions_Values() []string {
+	return []string{
+		FeatureActivationsOutputStaticImageOverlayScheduleActionsDisabled,
+		FeatureActivationsOutputStaticImageOverlayScheduleActionsEnabled,
 	}
 }
 
@@ -34438,6 +45339,40 @@ func H265LookAheadRateControl_Values() []string {
 	}
 }
 
+// H265 Mv Over Picture Boundaries
+const (
+	// H265MvOverPictureBoundariesDisabled is a H265MvOverPictureBoundaries enum value
+	H265MvOverPictureBoundariesDisabled = "DISABLED"
+
+	// H265MvOverPictureBoundariesEnabled is a H265MvOverPictureBoundaries enum value
+	H265MvOverPictureBoundariesEnabled = "ENABLED"
+)
+
+// H265MvOverPictureBoundaries_Values returns all elements of the H265MvOverPictureBoundaries enum
+func H265MvOverPictureBoundaries_Values() []string {
+	return []string{
+		H265MvOverPictureBoundariesDisabled,
+		H265MvOverPictureBoundariesEnabled,
+	}
+}
+
+// H265 Mv Temporal Predictor
+const (
+	// H265MvTemporalPredictorDisabled is a H265MvTemporalPredictor enum value
+	H265MvTemporalPredictorDisabled = "DISABLED"
+
+	// H265MvTemporalPredictorEnabled is a H265MvTemporalPredictor enum value
+	H265MvTemporalPredictorEnabled = "ENABLED"
+)
+
+// H265MvTemporalPredictor_Values returns all elements of the H265MvTemporalPredictor enum
+func H265MvTemporalPredictor_Values() []string {
+	return []string{
+		H265MvTemporalPredictorDisabled,
+		H265MvTemporalPredictorEnabled,
+	}
+}
+
 // H265 Profile
 const (
 	// H265ProfileMain is a H265Profile enum value
@@ -34527,6 +45462,23 @@ func H265Tier_Values() []string {
 	}
 }
 
+// H265 Tile Padding
+const (
+	// H265TilePaddingNone is a H265TilePadding enum value
+	H265TilePaddingNone = "NONE"
+
+	// H265TilePaddingPadded is a H265TilePadding enum value
+	H265TilePaddingPadded = "PADDED"
+)
+
+// H265TilePadding_Values returns all elements of the H265TilePadding enum
+func H265TilePadding_Values() []string {
+	return []string{
+		H265TilePaddingNone,
+		H265TilePaddingPadded,
+	}
+}
+
 // H265 Timecode Insertion Behavior
 const (
 	// H265TimecodeInsertionBehaviorDisabled is a H265TimecodeInsertionBehavior enum value
@@ -34541,6 +45493,23 @@ func H265TimecodeInsertionBehavior_Values() []string {
 	return []string{
 		H265TimecodeInsertionBehaviorDisabled,
 		H265TimecodeInsertionBehaviorPicTimingSei,
+	}
+}
+
+// H265 Treeblock Size
+const (
+	// H265TreeblockSizeAuto is a H265TreeblockSize enum value
+	H265TreeblockSizeAuto = "AUTO"
+
+	// H265TreeblockSizeTreeSize32x32 is a H265TreeblockSize enum value
+	H265TreeblockSizeTreeSize32x32 = "TREE_SIZE_32X32"
+)
+
+// H265TreeblockSize_Values returns all elements of the H265TreeblockSize enum
+func H265TreeblockSize_Values() []string {
+	return []string{
+		H265TreeblockSizeAuto,
+		H265TreeblockSizeTreeSize32x32,
 	}
 }
 
@@ -35034,6 +46003,27 @@ func IFrameOnlyPlaylistType_Values() []string {
 	}
 }
 
+// Include Filler Nal Units
+const (
+	// IncludeFillerNalUnitsAuto is a IncludeFillerNalUnits enum value
+	IncludeFillerNalUnitsAuto = "AUTO"
+
+	// IncludeFillerNalUnitsDrop is a IncludeFillerNalUnits enum value
+	IncludeFillerNalUnitsDrop = "DROP"
+
+	// IncludeFillerNalUnitsInclude is a IncludeFillerNalUnits enum value
+	IncludeFillerNalUnitsInclude = "INCLUDE"
+)
+
+// IncludeFillerNalUnits_Values returns all elements of the IncludeFillerNalUnits enum
+func IncludeFillerNalUnits_Values() []string {
+	return []string{
+		IncludeFillerNalUnitsAuto,
+		IncludeFillerNalUnitsDrop,
+		IncludeFillerNalUnitsInclude,
+	}
+}
+
 // A standard input has two sources and a single pipeline input only has one.
 const (
 	// InputClassStandard is a InputClass enum value
@@ -35123,6 +46113,65 @@ func InputDeviceActiveInput_Values() []string {
 	}
 }
 
+// The codec to use on the video that the device produces.
+const (
+	// InputDeviceCodecHevc is a InputDeviceCodec enum value
+	InputDeviceCodecHevc = "HEVC"
+
+	// InputDeviceCodecAvc is a InputDeviceCodec enum value
+	InputDeviceCodecAvc = "AVC"
+)
+
+// InputDeviceCodec_Values returns all elements of the InputDeviceCodec enum
+func InputDeviceCodec_Values() []string {
+	return []string{
+		InputDeviceCodecHevc,
+		InputDeviceCodecAvc,
+	}
+}
+
+// Property of InputDeviceConfigurableAudioChannelPairConfig, which configures
+// one audio channel that the device produces.
+const (
+	// InputDeviceConfigurableAudioChannelPairProfileDisabled is a InputDeviceConfigurableAudioChannelPairProfile enum value
+	InputDeviceConfigurableAudioChannelPairProfileDisabled = "DISABLED"
+
+	// InputDeviceConfigurableAudioChannelPairProfileVbrAacHhe16000 is a InputDeviceConfigurableAudioChannelPairProfile enum value
+	InputDeviceConfigurableAudioChannelPairProfileVbrAacHhe16000 = "VBR-AAC_HHE-16000"
+
+	// InputDeviceConfigurableAudioChannelPairProfileVbrAacHe64000 is a InputDeviceConfigurableAudioChannelPairProfile enum value
+	InputDeviceConfigurableAudioChannelPairProfileVbrAacHe64000 = "VBR-AAC_HE-64000"
+
+	// InputDeviceConfigurableAudioChannelPairProfileVbrAacLc128000 is a InputDeviceConfigurableAudioChannelPairProfile enum value
+	InputDeviceConfigurableAudioChannelPairProfileVbrAacLc128000 = "VBR-AAC_LC-128000"
+
+	// InputDeviceConfigurableAudioChannelPairProfileCbrAacHq192000 is a InputDeviceConfigurableAudioChannelPairProfile enum value
+	InputDeviceConfigurableAudioChannelPairProfileCbrAacHq192000 = "CBR-AAC_HQ-192000"
+
+	// InputDeviceConfigurableAudioChannelPairProfileCbrAacHq256000 is a InputDeviceConfigurableAudioChannelPairProfile enum value
+	InputDeviceConfigurableAudioChannelPairProfileCbrAacHq256000 = "CBR-AAC_HQ-256000"
+
+	// InputDeviceConfigurableAudioChannelPairProfileCbrAacHq384000 is a InputDeviceConfigurableAudioChannelPairProfile enum value
+	InputDeviceConfigurableAudioChannelPairProfileCbrAacHq384000 = "CBR-AAC_HQ-384000"
+
+	// InputDeviceConfigurableAudioChannelPairProfileCbrAacHq512000 is a InputDeviceConfigurableAudioChannelPairProfile enum value
+	InputDeviceConfigurableAudioChannelPairProfileCbrAacHq512000 = "CBR-AAC_HQ-512000"
+)
+
+// InputDeviceConfigurableAudioChannelPairProfile_Values returns all elements of the InputDeviceConfigurableAudioChannelPairProfile enum
+func InputDeviceConfigurableAudioChannelPairProfile_Values() []string {
+	return []string{
+		InputDeviceConfigurableAudioChannelPairProfileDisabled,
+		InputDeviceConfigurableAudioChannelPairProfileVbrAacHhe16000,
+		InputDeviceConfigurableAudioChannelPairProfileVbrAacHe64000,
+		InputDeviceConfigurableAudioChannelPairProfileVbrAacLc128000,
+		InputDeviceConfigurableAudioChannelPairProfileCbrAacHq192000,
+		InputDeviceConfigurableAudioChannelPairProfileCbrAacHq256000,
+		InputDeviceConfigurableAudioChannelPairProfileCbrAacHq384000,
+		InputDeviceConfigurableAudioChannelPairProfileCbrAacHq512000,
+	}
+}
+
 // The source to activate (use) from the input device.
 const (
 	// InputDeviceConfiguredInputAuto is a InputDeviceConfiguredInput enum value
@@ -35176,6 +46225,27 @@ func InputDeviceIpScheme_Values() []string {
 	return []string{
 		InputDeviceIpSchemeStatic,
 		InputDeviceIpSchemeDhcp,
+	}
+}
+
+// The output attachment type of the input device.
+const (
+	// InputDeviceOutputTypeNone is a InputDeviceOutputType enum value
+	InputDeviceOutputTypeNone = "NONE"
+
+	// InputDeviceOutputTypeMedialiveInput is a InputDeviceOutputType enum value
+	InputDeviceOutputTypeMedialiveInput = "MEDIALIVE_INPUT"
+
+	// InputDeviceOutputTypeMediaconnectFlow is a InputDeviceOutputType enum value
+	InputDeviceOutputTypeMediaconnectFlow = "MEDIACONNECT_FLOW"
+)
+
+// InputDeviceOutputType_Values returns all elements of the InputDeviceOutputType enum
+func InputDeviceOutputType_Values() []string {
+	return []string{
+		InputDeviceOutputTypeNone,
+		InputDeviceOutputTypeMedialiveInput,
+		InputDeviceOutputTypeMediaconnectFlow,
 	}
 }
 
@@ -35247,6 +46317,48 @@ func InputDeviceType_Values() []string {
 	return []string{
 		InputDeviceTypeHd,
 		InputDeviceTypeUhd,
+	}
+}
+
+// Property of InputDeviceUhdAudioChannelPairConfig, which describes one audio
+// channel that the device is configured to produce.
+const (
+	// InputDeviceUhdAudioChannelPairProfileDisabled is a InputDeviceUhdAudioChannelPairProfile enum value
+	InputDeviceUhdAudioChannelPairProfileDisabled = "DISABLED"
+
+	// InputDeviceUhdAudioChannelPairProfileVbrAacHhe16000 is a InputDeviceUhdAudioChannelPairProfile enum value
+	InputDeviceUhdAudioChannelPairProfileVbrAacHhe16000 = "VBR-AAC_HHE-16000"
+
+	// InputDeviceUhdAudioChannelPairProfileVbrAacHe64000 is a InputDeviceUhdAudioChannelPairProfile enum value
+	InputDeviceUhdAudioChannelPairProfileVbrAacHe64000 = "VBR-AAC_HE-64000"
+
+	// InputDeviceUhdAudioChannelPairProfileVbrAacLc128000 is a InputDeviceUhdAudioChannelPairProfile enum value
+	InputDeviceUhdAudioChannelPairProfileVbrAacLc128000 = "VBR-AAC_LC-128000"
+
+	// InputDeviceUhdAudioChannelPairProfileCbrAacHq192000 is a InputDeviceUhdAudioChannelPairProfile enum value
+	InputDeviceUhdAudioChannelPairProfileCbrAacHq192000 = "CBR-AAC_HQ-192000"
+
+	// InputDeviceUhdAudioChannelPairProfileCbrAacHq256000 is a InputDeviceUhdAudioChannelPairProfile enum value
+	InputDeviceUhdAudioChannelPairProfileCbrAacHq256000 = "CBR-AAC_HQ-256000"
+
+	// InputDeviceUhdAudioChannelPairProfileCbrAacHq384000 is a InputDeviceUhdAudioChannelPairProfile enum value
+	InputDeviceUhdAudioChannelPairProfileCbrAacHq384000 = "CBR-AAC_HQ-384000"
+
+	// InputDeviceUhdAudioChannelPairProfileCbrAacHq512000 is a InputDeviceUhdAudioChannelPairProfile enum value
+	InputDeviceUhdAudioChannelPairProfileCbrAacHq512000 = "CBR-AAC_HQ-512000"
+)
+
+// InputDeviceUhdAudioChannelPairProfile_Values returns all elements of the InputDeviceUhdAudioChannelPairProfile enum
+func InputDeviceUhdAudioChannelPairProfile_Values() []string {
+	return []string{
+		InputDeviceUhdAudioChannelPairProfileDisabled,
+		InputDeviceUhdAudioChannelPairProfileVbrAacHhe16000,
+		InputDeviceUhdAudioChannelPairProfileVbrAacHe64000,
+		InputDeviceUhdAudioChannelPairProfileVbrAacLc128000,
+		InputDeviceUhdAudioChannelPairProfileCbrAacHq192000,
+		InputDeviceUhdAudioChannelPairProfileCbrAacHq256000,
+		InputDeviceUhdAudioChannelPairProfileCbrAacHq384000,
+		InputDeviceUhdAudioChannelPairProfileCbrAacHq512000,
 	}
 }
 
@@ -35969,6 +47081,23 @@ func M2tsTimedMetadataBehavior_Values() []string {
 	return []string{
 		M2tsTimedMetadataBehaviorNoPassthrough,
 		M2tsTimedMetadataBehaviorPassthrough,
+	}
+}
+
+// M3u8 Klv Behavior
+const (
+	// M3u8KlvBehaviorNoPassthrough is a M3u8KlvBehavior enum value
+	M3u8KlvBehaviorNoPassthrough = "NO_PASSTHROUGH"
+
+	// M3u8KlvBehaviorPassthrough is a M3u8KlvBehavior enum value
+	M3u8KlvBehaviorPassthrough = "PASSTHROUGH"
+)
+
+// M3u8KlvBehavior_Values returns all elements of the M3u8KlvBehavior enum
+func M3u8KlvBehavior_Values() []string {
+	return []string{
+		M3u8KlvBehaviorNoPassthrough,
+		M3u8KlvBehaviorPassthrough,
 	}
 }
 
@@ -37048,6 +48177,23 @@ func Scte35SpliceInsertWebDeliveryAllowedBehavior_Values() []string {
 	}
 }
 
+// Scte35 Type
+const (
+	// Scte35TypeNone is a Scte35Type enum value
+	Scte35TypeNone = "NONE"
+
+	// Scte35TypeScte35WithoutSegmentation is a Scte35Type enum value
+	Scte35TypeScte35WithoutSegmentation = "SCTE_35_WITHOUT_SEGMENTATION"
+)
+
+// Scte35Type_Values returns all elements of the Scte35Type enum
+func Scte35Type_Values() []string {
+	return []string{
+		Scte35TypeNone,
+		Scte35TypeScte35WithoutSegmentation,
+	}
+}
+
 // Corresponds to the web_delivery_allowed_flag parameter. A value of WEB_DELIVERY_NOT_ALLOWED
 // corresponds to 0 (false) in the SCTE-35 specification. If you include one
 // of the "restriction" flags then you must include all four of them.
@@ -37064,6 +48210,101 @@ func Scte35WebDeliveryAllowedFlag_Values() []string {
 	return []string{
 		Scte35WebDeliveryAllowedFlagWebDeliveryNotAllowed,
 		Scte35WebDeliveryAllowedFlagWebDeliveryAllowed,
+	}
+}
+
+// A signal map's monitor deployment status.
+const (
+	// SignalMapMonitorDeploymentStatusNotDeployed is a SignalMapMonitorDeploymentStatus enum value
+	SignalMapMonitorDeploymentStatusNotDeployed = "NOT_DEPLOYED"
+
+	// SignalMapMonitorDeploymentStatusDryRunDeploymentComplete is a SignalMapMonitorDeploymentStatus enum value
+	SignalMapMonitorDeploymentStatusDryRunDeploymentComplete = "DRY_RUN_DEPLOYMENT_COMPLETE"
+
+	// SignalMapMonitorDeploymentStatusDryRunDeploymentFailed is a SignalMapMonitorDeploymentStatus enum value
+	SignalMapMonitorDeploymentStatusDryRunDeploymentFailed = "DRY_RUN_DEPLOYMENT_FAILED"
+
+	// SignalMapMonitorDeploymentStatusDryRunDeploymentInProgress is a SignalMapMonitorDeploymentStatus enum value
+	SignalMapMonitorDeploymentStatusDryRunDeploymentInProgress = "DRY_RUN_DEPLOYMENT_IN_PROGRESS"
+
+	// SignalMapMonitorDeploymentStatusDeploymentComplete is a SignalMapMonitorDeploymentStatus enum value
+	SignalMapMonitorDeploymentStatusDeploymentComplete = "DEPLOYMENT_COMPLETE"
+
+	// SignalMapMonitorDeploymentStatusDeploymentFailed is a SignalMapMonitorDeploymentStatus enum value
+	SignalMapMonitorDeploymentStatusDeploymentFailed = "DEPLOYMENT_FAILED"
+
+	// SignalMapMonitorDeploymentStatusDeploymentInProgress is a SignalMapMonitorDeploymentStatus enum value
+	SignalMapMonitorDeploymentStatusDeploymentInProgress = "DEPLOYMENT_IN_PROGRESS"
+
+	// SignalMapMonitorDeploymentStatusDeleteComplete is a SignalMapMonitorDeploymentStatus enum value
+	SignalMapMonitorDeploymentStatusDeleteComplete = "DELETE_COMPLETE"
+
+	// SignalMapMonitorDeploymentStatusDeleteFailed is a SignalMapMonitorDeploymentStatus enum value
+	SignalMapMonitorDeploymentStatusDeleteFailed = "DELETE_FAILED"
+
+	// SignalMapMonitorDeploymentStatusDeleteInProgress is a SignalMapMonitorDeploymentStatus enum value
+	SignalMapMonitorDeploymentStatusDeleteInProgress = "DELETE_IN_PROGRESS"
+)
+
+// SignalMapMonitorDeploymentStatus_Values returns all elements of the SignalMapMonitorDeploymentStatus enum
+func SignalMapMonitorDeploymentStatus_Values() []string {
+	return []string{
+		SignalMapMonitorDeploymentStatusNotDeployed,
+		SignalMapMonitorDeploymentStatusDryRunDeploymentComplete,
+		SignalMapMonitorDeploymentStatusDryRunDeploymentFailed,
+		SignalMapMonitorDeploymentStatusDryRunDeploymentInProgress,
+		SignalMapMonitorDeploymentStatusDeploymentComplete,
+		SignalMapMonitorDeploymentStatusDeploymentFailed,
+		SignalMapMonitorDeploymentStatusDeploymentInProgress,
+		SignalMapMonitorDeploymentStatusDeleteComplete,
+		SignalMapMonitorDeploymentStatusDeleteFailed,
+		SignalMapMonitorDeploymentStatusDeleteInProgress,
+	}
+}
+
+// A signal map's current status which is dependent on its lifecycle actions
+// or associated jobs.
+const (
+	// SignalMapStatusCreateInProgress is a SignalMapStatus enum value
+	SignalMapStatusCreateInProgress = "CREATE_IN_PROGRESS"
+
+	// SignalMapStatusCreateComplete is a SignalMapStatus enum value
+	SignalMapStatusCreateComplete = "CREATE_COMPLETE"
+
+	// SignalMapStatusCreateFailed is a SignalMapStatus enum value
+	SignalMapStatusCreateFailed = "CREATE_FAILED"
+
+	// SignalMapStatusUpdateInProgress is a SignalMapStatus enum value
+	SignalMapStatusUpdateInProgress = "UPDATE_IN_PROGRESS"
+
+	// SignalMapStatusUpdateComplete is a SignalMapStatus enum value
+	SignalMapStatusUpdateComplete = "UPDATE_COMPLETE"
+
+	// SignalMapStatusUpdateReverted is a SignalMapStatus enum value
+	SignalMapStatusUpdateReverted = "UPDATE_REVERTED"
+
+	// SignalMapStatusUpdateFailed is a SignalMapStatus enum value
+	SignalMapStatusUpdateFailed = "UPDATE_FAILED"
+
+	// SignalMapStatusReady is a SignalMapStatus enum value
+	SignalMapStatusReady = "READY"
+
+	// SignalMapStatusNotReady is a SignalMapStatus enum value
+	SignalMapStatusNotReady = "NOT_READY"
+)
+
+// SignalMapStatus_Values returns all elements of the SignalMapStatus enum
+func SignalMapStatus_Values() []string {
+	return []string{
+		SignalMapStatusCreateInProgress,
+		SignalMapStatusCreateComplete,
+		SignalMapStatusCreateFailed,
+		SignalMapStatusUpdateInProgress,
+		SignalMapStatusUpdateComplete,
+		SignalMapStatusUpdateReverted,
+		SignalMapStatusUpdateFailed,
+		SignalMapStatusReady,
+		SignalMapStatusNotReady,
 	}
 }
 
@@ -37323,6 +48564,40 @@ func TemporalFilterStrength_Values() []string {
 		TemporalFilterStrengthStrength14,
 		TemporalFilterStrengthStrength15,
 		TemporalFilterStrengthStrength16,
+	}
+}
+
+// Thumbnail State
+const (
+	// ThumbnailStateAuto is a ThumbnailState enum value
+	ThumbnailStateAuto = "AUTO"
+
+	// ThumbnailStateDisabled is a ThumbnailState enum value
+	ThumbnailStateDisabled = "DISABLED"
+)
+
+// ThumbnailState_Values returns all elements of the ThumbnailState enum
+func ThumbnailState_Values() []string {
+	return []string{
+		ThumbnailStateAuto,
+		ThumbnailStateDisabled,
+	}
+}
+
+// Thumbnail type.
+const (
+	// ThumbnailTypeUnspecified is a ThumbnailType enum value
+	ThumbnailTypeUnspecified = "UNSPECIFIED"
+
+	// ThumbnailTypeCurrentActive is a ThumbnailType enum value
+	ThumbnailTypeCurrentActive = "CURRENT_ACTIVE"
+)
+
+// ThumbnailType_Values returns all elements of the ThumbnailType enum
+func ThumbnailType_Values() []string {
+	return []string{
+		ThumbnailTypeUnspecified,
+		ThumbnailTypeCurrentActive,
 	}
 }
 

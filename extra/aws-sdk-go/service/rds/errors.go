@@ -86,6 +86,20 @@ const (
 	// The user already has a DB cluster with the given identifier.
 	ErrCodeDBClusterAlreadyExistsFault = "DBClusterAlreadyExistsFault"
 
+	// ErrCodeDBClusterAutomatedBackupNotFoundFault for service response error code
+	// "DBClusterAutomatedBackupNotFoundFault".
+	//
+	// No automated backup for this DB cluster was found.
+	ErrCodeDBClusterAutomatedBackupNotFoundFault = "DBClusterAutomatedBackupNotFoundFault"
+
+	// ErrCodeDBClusterAutomatedBackupQuotaExceededFault for service response error code
+	// "DBClusterAutomatedBackupQuotaExceededFault".
+	//
+	// The quota for retained automated backups was exceeded. This prevents you
+	// from retaining any additional automated backups. The retained automated backups
+	// quota is the same as your DB cluster quota.
+	ErrCodeDBClusterAutomatedBackupQuotaExceededFault = "DBClusterAutomatedBackupQuotaExceededFault"
+
 	// ErrCodeDBClusterBacktrackNotFoundFault for service response error code
 	// "DBClusterBacktrackNotFoundFault".
 	//
@@ -180,7 +194,7 @@ const (
 	//
 	// The quota for retained automated backups was exceeded. This prevents you
 	// from retaining any additional automated backups. The retained automated backups
-	// quota is the same as your DB Instance quota.
+	// quota is the same as your DB instance quota.
 	ErrCodeDBInstanceAutomatedBackupQuotaExceededFault = "DBInstanceAutomatedBackupQuotaExceeded"
 
 	// ErrCodeDBInstanceNotFoundFault for service response error code
@@ -324,6 +338,19 @@ const (
 	// groups.
 	ErrCodeDBSecurityGroupQuotaExceededFault = "QuotaExceeded.DBSecurityGroup"
 
+	// ErrCodeDBShardGroupAlreadyExistsFault for service response error code
+	// "DBShardGroupAlreadyExists".
+	//
+	// The specified DB shard group name must be unique in your Amazon Web Services
+	// account in the specified Amazon Web Services Region.
+	ErrCodeDBShardGroupAlreadyExistsFault = "DBShardGroupAlreadyExists"
+
+	// ErrCodeDBShardGroupNotFoundFault for service response error code
+	// "DBShardGroupNotFound".
+	//
+	// The specified DB shard group name wasn't found.
+	ErrCodeDBShardGroupNotFoundFault = "DBShardGroupNotFound"
+
 	// ErrCodeDBSnapshotAlreadyExistsFault for service response error code
 	// "DBSnapshotAlreadyExists".
 	//
@@ -335,6 +362,12 @@ const (
 	//
 	// DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 	ErrCodeDBSnapshotNotFoundFault = "DBSnapshotNotFound"
+
+	// ErrCodeDBSnapshotTenantDatabaseNotFoundFault for service response error code
+	// "DBSnapshotTenantDatabaseNotFoundFault".
+	//
+	// The specified snapshot tenant database wasn't found.
+	ErrCodeDBSnapshotTenantDatabaseNotFoundFault = "DBSnapshotTenantDatabaseNotFoundFault"
 
 	// ErrCodeDBSubnetGroupAlreadyExistsFault for service response error code
 	// "DBSubnetGroupAlreadyExists".
@@ -480,6 +513,34 @@ const (
 	// Availability Zones that have more storage available.
 	ErrCodeInsufficientStorageClusterCapacityFault = "InsufficientStorageClusterCapacity"
 
+	// ErrCodeIntegrationAlreadyExistsFault for service response error code
+	// "IntegrationAlreadyExistsFault".
+	//
+	// The integration you are trying to create already exists.
+	ErrCodeIntegrationAlreadyExistsFault = "IntegrationAlreadyExistsFault"
+
+	// ErrCodeIntegrationConflictOperationFault for service response error code
+	// "IntegrationConflictOperationFault".
+	//
+	// A conflicting conditional operation is currently in progress against this
+	// resource. Typically occurs when there are multiple requests being made to
+	// the same resource at the same time, and these requests conflict with each
+	// other.
+	ErrCodeIntegrationConflictOperationFault = "IntegrationConflictOperationFault"
+
+	// ErrCodeIntegrationNotFoundFault for service response error code
+	// "IntegrationNotFoundFault".
+	//
+	// The specified integration could not be found.
+	ErrCodeIntegrationNotFoundFault = "IntegrationNotFoundFault"
+
+	// ErrCodeIntegrationQuotaExceededFault for service response error code
+	// "IntegrationQuotaExceededFault".
+	//
+	// You can't crate any more zero-ETL integrations because the quota has been
+	// reached.
+	ErrCodeIntegrationQuotaExceededFault = "IntegrationQuotaExceededFault"
+
 	// ErrCodeInvalidBlueGreenDeploymentStateFault for service response error code
 	// "InvalidBlueGreenDeploymentStateFault".
 	//
@@ -492,6 +553,13 @@ const (
 	//
 	// You can't delete the CEV.
 	ErrCodeInvalidCustomDBEngineVersionStateFault = "InvalidCustomDBEngineVersionStateFault"
+
+	// ErrCodeInvalidDBClusterAutomatedBackupStateFault for service response error code
+	// "InvalidDBClusterAutomatedBackupStateFault".
+	//
+	// The automated backup is in an invalid state. For example, this automated
+	// backup is associated with an active cluster.
+	ErrCodeInvalidDBClusterAutomatedBackupStateFault = "InvalidDBClusterAutomatedBackupStateFault"
 
 	// ErrCodeInvalidDBClusterCapacityFault for service response error code
 	// "InvalidDBClusterCapacityFault".
@@ -559,6 +627,12 @@ const (
 	// The state of the DB security group doesn't allow deletion.
 	ErrCodeInvalidDBSecurityGroupStateFault = "InvalidDBSecurityGroupState"
 
+	// ErrCodeInvalidDBShardGroupStateFault for service response error code
+	// "InvalidDBShardGroupState".
+	//
+	// The DB shard group must be in the available state.
+	ErrCodeInvalidDBShardGroupStateFault = "InvalidDBShardGroupState"
+
 	// ErrCodeInvalidDBSnapshotStateFault for service response error code
 	// "InvalidDBSnapshotState".
 	//
@@ -617,11 +691,30 @@ const (
 	// operation.
 	ErrCodeInvalidGlobalClusterStateFault = "InvalidGlobalClusterStateFault"
 
+	// ErrCodeInvalidIntegrationStateFault for service response error code
+	// "InvalidIntegrationStateFault".
+	//
+	// The integration is in an invalid state and can't perform the requested operation.
+	ErrCodeInvalidIntegrationStateFault = "InvalidIntegrationStateFault"
+
+	// ErrCodeInvalidMaxAcuFault for service response error code
+	// "InvalidMaxAcu".
+	//
+	// The maximum capacity of the DB shard group must be 48-7168 Aurora capacity
+	// units (ACUs).
+	ErrCodeInvalidMaxAcuFault = "InvalidMaxAcu"
+
 	// ErrCodeInvalidOptionGroupStateFault for service response error code
 	// "InvalidOptionGroupStateFault".
 	//
 	// The option group isn't in the available state.
 	ErrCodeInvalidOptionGroupStateFault = "InvalidOptionGroupStateFault"
+
+	// ErrCodeInvalidResourceStateFault for service response error code
+	// "InvalidResourceStateFault".
+	//
+	// The operation can't be performed because another operation is in progress.
+	ErrCodeInvalidResourceStateFault = "InvalidResourceStateFault"
 
 	// ErrCodeInvalidRestoreFault for service response error code
 	// "InvalidRestoreFault".
@@ -656,6 +749,13 @@ const (
 	//
 	// An error occurred accessing an Amazon Web Services KMS key.
 	ErrCodeKMSKeyNotAccessibleFault = "KMSKeyNotAccessibleFault"
+
+	// ErrCodeMaxDBShardGroupLimitReached for service response error code
+	// "MaxDBShardGroupLimitReached".
+	//
+	// The maximum number of DB shard groups for your Amazon Web Services account
+	// in the specified Amazon Web Services Region has been reached.
+	ErrCodeMaxDBShardGroupLimitReached = "MaxDBShardGroupLimitReached"
 
 	// ErrCodeNetworkTypeNotSupported for service response error code
 	// "NetworkTypeNotSupported".
@@ -781,10 +881,17 @@ const (
 	// available across all DB instances.
 	ErrCodeStorageQuotaExceededFault = "StorageQuotaExceeded"
 
+	// ErrCodeStorageTypeNotAvailableFault for service response error code
+	// "StorageTypeNotAvailableFault".
+	//
+	// The aurora-iopt1 storage type isn't available, because you modified the DB
+	// cluster to use this storage type less than one month ago.
+	ErrCodeStorageTypeNotAvailableFault = "StorageTypeNotAvailableFault"
+
 	// ErrCodeStorageTypeNotSupportedFault for service response error code
 	// "StorageTypeNotSupported".
 	//
-	// Storage of the StorageType specified can't be associated with the DB instance.
+	// The specified StorageType can't be associated with the DB instance.
 	ErrCodeStorageTypeNotSupportedFault = "StorageTypeNotSupported"
 
 	// ErrCodeSubnetAlreadyInUse for service response error code
@@ -810,4 +917,30 @@ const (
 	//
 	// The subscription name does not exist.
 	ErrCodeSubscriptionNotFoundFault = "SubscriptionNotFound"
+
+	// ErrCodeTenantDatabaseAlreadyExistsFault for service response error code
+	// "TenantDatabaseAlreadyExists".
+	//
+	// You attempted to either create a tenant database that already exists or modify
+	// a tenant database to use the name of an existing tenant database.
+	ErrCodeTenantDatabaseAlreadyExistsFault = "TenantDatabaseAlreadyExists"
+
+	// ErrCodeTenantDatabaseNotFoundFault for service response error code
+	// "TenantDatabaseNotFound".
+	//
+	// The specified tenant database wasn't found in the DB instance.
+	ErrCodeTenantDatabaseNotFoundFault = "TenantDatabaseNotFound"
+
+	// ErrCodeTenantDatabaseQuotaExceededFault for service response error code
+	// "TenantDatabaseQuotaExceeded".
+	//
+	// You attempted to create more tenant databases than are permitted in your
+	// Amazon Web Services account.
+	ErrCodeTenantDatabaseQuotaExceededFault = "TenantDatabaseQuotaExceeded"
+
+	// ErrCodeUnsupportedDBEngineVersionFault for service response error code
+	// "UnsupportedDBEngineVersion".
+	//
+	// The specified DB engine version isn't supported for Aurora Limitless Database.
+	ErrCodeUnsupportedDBEngineVersionFault = "UnsupportedDBEngineVersion"
 )

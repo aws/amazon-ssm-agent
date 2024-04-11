@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon WorkSpaces Web.
-//    func myFunc(svc workspaceswebiface.WorkSpacesWebAPI) bool {
-//        // Make svc.AssociateBrowserSettings request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon WorkSpaces Web.
+//	func myFunc(svc workspaceswebiface.WorkSpacesWebAPI) bool {
+//	    // Make svc.AssociateBrowserSettings request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := workspacesweb.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := workspacesweb.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockWorkSpacesWebClient struct {
-//        workspaceswebiface.WorkSpacesWebAPI
-//    }
-//    func (m *mockWorkSpacesWebClient) AssociateBrowserSettings(input *workspacesweb.AssociateBrowserSettingsInput) (*workspacesweb.AssociateBrowserSettingsOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockWorkSpacesWebClient struct {
+//	    workspaceswebiface.WorkSpacesWebAPI
+//	}
+//	func (m *mockWorkSpacesWebClient) AssociateBrowserSettings(input *workspacesweb.AssociateBrowserSettingsInput) (*workspacesweb.AssociateBrowserSettingsOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockWorkSpacesWebClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockWorkSpacesWebClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -63,6 +63,10 @@ type WorkSpacesWebAPI interface {
 	AssociateBrowserSettings(*workspacesweb.AssociateBrowserSettingsInput) (*workspacesweb.AssociateBrowserSettingsOutput, error)
 	AssociateBrowserSettingsWithContext(aws.Context, *workspacesweb.AssociateBrowserSettingsInput, ...request.Option) (*workspacesweb.AssociateBrowserSettingsOutput, error)
 	AssociateBrowserSettingsRequest(*workspacesweb.AssociateBrowserSettingsInput) (*request.Request, *workspacesweb.AssociateBrowserSettingsOutput)
+
+	AssociateIpAccessSettings(*workspacesweb.AssociateIpAccessSettingsInput) (*workspacesweb.AssociateIpAccessSettingsOutput, error)
+	AssociateIpAccessSettingsWithContext(aws.Context, *workspacesweb.AssociateIpAccessSettingsInput, ...request.Option) (*workspacesweb.AssociateIpAccessSettingsOutput, error)
+	AssociateIpAccessSettingsRequest(*workspacesweb.AssociateIpAccessSettingsInput) (*request.Request, *workspacesweb.AssociateIpAccessSettingsOutput)
 
 	AssociateNetworkSettings(*workspacesweb.AssociateNetworkSettingsInput) (*workspacesweb.AssociateNetworkSettingsOutput, error)
 	AssociateNetworkSettingsWithContext(aws.Context, *workspacesweb.AssociateNetworkSettingsInput, ...request.Option) (*workspacesweb.AssociateNetworkSettingsOutput, error)
@@ -87,6 +91,10 @@ type WorkSpacesWebAPI interface {
 	CreateIdentityProvider(*workspacesweb.CreateIdentityProviderInput) (*workspacesweb.CreateIdentityProviderOutput, error)
 	CreateIdentityProviderWithContext(aws.Context, *workspacesweb.CreateIdentityProviderInput, ...request.Option) (*workspacesweb.CreateIdentityProviderOutput, error)
 	CreateIdentityProviderRequest(*workspacesweb.CreateIdentityProviderInput) (*request.Request, *workspacesweb.CreateIdentityProviderOutput)
+
+	CreateIpAccessSettings(*workspacesweb.CreateIpAccessSettingsInput) (*workspacesweb.CreateIpAccessSettingsOutput, error)
+	CreateIpAccessSettingsWithContext(aws.Context, *workspacesweb.CreateIpAccessSettingsInput, ...request.Option) (*workspacesweb.CreateIpAccessSettingsOutput, error)
+	CreateIpAccessSettingsRequest(*workspacesweb.CreateIpAccessSettingsInput) (*request.Request, *workspacesweb.CreateIpAccessSettingsOutput)
 
 	CreateNetworkSettings(*workspacesweb.CreateNetworkSettingsInput) (*workspacesweb.CreateNetworkSettingsOutput, error)
 	CreateNetworkSettingsWithContext(aws.Context, *workspacesweb.CreateNetworkSettingsInput, ...request.Option) (*workspacesweb.CreateNetworkSettingsOutput, error)
@@ -116,6 +124,10 @@ type WorkSpacesWebAPI interface {
 	DeleteIdentityProviderWithContext(aws.Context, *workspacesweb.DeleteIdentityProviderInput, ...request.Option) (*workspacesweb.DeleteIdentityProviderOutput, error)
 	DeleteIdentityProviderRequest(*workspacesweb.DeleteIdentityProviderInput) (*request.Request, *workspacesweb.DeleteIdentityProviderOutput)
 
+	DeleteIpAccessSettings(*workspacesweb.DeleteIpAccessSettingsInput) (*workspacesweb.DeleteIpAccessSettingsOutput, error)
+	DeleteIpAccessSettingsWithContext(aws.Context, *workspacesweb.DeleteIpAccessSettingsInput, ...request.Option) (*workspacesweb.DeleteIpAccessSettingsOutput, error)
+	DeleteIpAccessSettingsRequest(*workspacesweb.DeleteIpAccessSettingsInput) (*request.Request, *workspacesweb.DeleteIpAccessSettingsOutput)
+
 	DeleteNetworkSettings(*workspacesweb.DeleteNetworkSettingsInput) (*workspacesweb.DeleteNetworkSettingsOutput, error)
 	DeleteNetworkSettingsWithContext(aws.Context, *workspacesweb.DeleteNetworkSettingsInput, ...request.Option) (*workspacesweb.DeleteNetworkSettingsOutput, error)
 	DeleteNetworkSettingsRequest(*workspacesweb.DeleteNetworkSettingsInput) (*request.Request, *workspacesweb.DeleteNetworkSettingsOutput)
@@ -140,6 +152,10 @@ type WorkSpacesWebAPI interface {
 	DisassociateBrowserSettingsWithContext(aws.Context, *workspacesweb.DisassociateBrowserSettingsInput, ...request.Option) (*workspacesweb.DisassociateBrowserSettingsOutput, error)
 	DisassociateBrowserSettingsRequest(*workspacesweb.DisassociateBrowserSettingsInput) (*request.Request, *workspacesweb.DisassociateBrowserSettingsOutput)
 
+	DisassociateIpAccessSettings(*workspacesweb.DisassociateIpAccessSettingsInput) (*workspacesweb.DisassociateIpAccessSettingsOutput, error)
+	DisassociateIpAccessSettingsWithContext(aws.Context, *workspacesweb.DisassociateIpAccessSettingsInput, ...request.Option) (*workspacesweb.DisassociateIpAccessSettingsOutput, error)
+	DisassociateIpAccessSettingsRequest(*workspacesweb.DisassociateIpAccessSettingsInput) (*request.Request, *workspacesweb.DisassociateIpAccessSettingsOutput)
+
 	DisassociateNetworkSettings(*workspacesweb.DisassociateNetworkSettingsInput) (*workspacesweb.DisassociateNetworkSettingsOutput, error)
 	DisassociateNetworkSettingsWithContext(aws.Context, *workspacesweb.DisassociateNetworkSettingsInput, ...request.Option) (*workspacesweb.DisassociateNetworkSettingsOutput, error)
 	DisassociateNetworkSettingsRequest(*workspacesweb.DisassociateNetworkSettingsInput) (*request.Request, *workspacesweb.DisassociateNetworkSettingsOutput)
@@ -163,6 +179,10 @@ type WorkSpacesWebAPI interface {
 	GetIdentityProvider(*workspacesweb.GetIdentityProviderInput) (*workspacesweb.GetIdentityProviderOutput, error)
 	GetIdentityProviderWithContext(aws.Context, *workspacesweb.GetIdentityProviderInput, ...request.Option) (*workspacesweb.GetIdentityProviderOutput, error)
 	GetIdentityProviderRequest(*workspacesweb.GetIdentityProviderInput) (*request.Request, *workspacesweb.GetIdentityProviderOutput)
+
+	GetIpAccessSettings(*workspacesweb.GetIpAccessSettingsInput) (*workspacesweb.GetIpAccessSettingsOutput, error)
+	GetIpAccessSettingsWithContext(aws.Context, *workspacesweb.GetIpAccessSettingsInput, ...request.Option) (*workspacesweb.GetIpAccessSettingsOutput, error)
+	GetIpAccessSettingsRequest(*workspacesweb.GetIpAccessSettingsInput) (*request.Request, *workspacesweb.GetIpAccessSettingsOutput)
 
 	GetNetworkSettings(*workspacesweb.GetNetworkSettingsInput) (*workspacesweb.GetNetworkSettingsOutput, error)
 	GetNetworkSettingsWithContext(aws.Context, *workspacesweb.GetNetworkSettingsInput, ...request.Option) (*workspacesweb.GetNetworkSettingsOutput, error)
@@ -205,6 +225,13 @@ type WorkSpacesWebAPI interface {
 
 	ListIdentityProvidersPages(*workspacesweb.ListIdentityProvidersInput, func(*workspacesweb.ListIdentityProvidersOutput, bool) bool) error
 	ListIdentityProvidersPagesWithContext(aws.Context, *workspacesweb.ListIdentityProvidersInput, func(*workspacesweb.ListIdentityProvidersOutput, bool) bool, ...request.Option) error
+
+	ListIpAccessSettings(*workspacesweb.ListIpAccessSettingsInput) (*workspacesweb.ListIpAccessSettingsOutput, error)
+	ListIpAccessSettingsWithContext(aws.Context, *workspacesweb.ListIpAccessSettingsInput, ...request.Option) (*workspacesweb.ListIpAccessSettingsOutput, error)
+	ListIpAccessSettingsRequest(*workspacesweb.ListIpAccessSettingsInput) (*request.Request, *workspacesweb.ListIpAccessSettingsOutput)
+
+	ListIpAccessSettingsPages(*workspacesweb.ListIpAccessSettingsInput, func(*workspacesweb.ListIpAccessSettingsOutput, bool) bool) error
+	ListIpAccessSettingsPagesWithContext(aws.Context, *workspacesweb.ListIpAccessSettingsInput, func(*workspacesweb.ListIpAccessSettingsOutput, bool) bool, ...request.Option) error
 
 	ListNetworkSettings(*workspacesweb.ListNetworkSettingsInput) (*workspacesweb.ListNetworkSettingsOutput, error)
 	ListNetworkSettingsWithContext(aws.Context, *workspacesweb.ListNetworkSettingsInput, ...request.Option) (*workspacesweb.ListNetworkSettingsOutput, error)
@@ -267,6 +294,10 @@ type WorkSpacesWebAPI interface {
 	UpdateIdentityProvider(*workspacesweb.UpdateIdentityProviderInput) (*workspacesweb.UpdateIdentityProviderOutput, error)
 	UpdateIdentityProviderWithContext(aws.Context, *workspacesweb.UpdateIdentityProviderInput, ...request.Option) (*workspacesweb.UpdateIdentityProviderOutput, error)
 	UpdateIdentityProviderRequest(*workspacesweb.UpdateIdentityProviderInput) (*request.Request, *workspacesweb.UpdateIdentityProviderOutput)
+
+	UpdateIpAccessSettings(*workspacesweb.UpdateIpAccessSettingsInput) (*workspacesweb.UpdateIpAccessSettingsOutput, error)
+	UpdateIpAccessSettingsWithContext(aws.Context, *workspacesweb.UpdateIpAccessSettingsInput, ...request.Option) (*workspacesweb.UpdateIpAccessSettingsOutput, error)
+	UpdateIpAccessSettingsRequest(*workspacesweb.UpdateIpAccessSettingsInput) (*request.Request, *workspacesweb.UpdateIpAccessSettingsOutput)
 
 	UpdateNetworkSettings(*workspacesweb.UpdateNetworkSettingsInput) (*workspacesweb.UpdateNetworkSettingsOutput, error)
 	UpdateNetworkSettingsWithContext(aws.Context, *workspacesweb.UpdateNetworkSettingsInput, ...request.Option) (*workspacesweb.UpdateNetworkSettingsOutput, error)

@@ -29,14 +29,13 @@ const opCancelSolNetworkOperation = "CancelSolNetworkOperation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelSolNetworkOperationRequest method.
+//	req, resp := client.CancelSolNetworkOperationRequest(params)
 //
-//    // Example sending a request using the CancelSolNetworkOperationRequest method.
-//    req, resp := client.CancelSolNetworkOperationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/CancelSolNetworkOperation
 func (c *Tnb) CancelSolNetworkOperationRequest(input *CancelSolNetworkOperationInput) (req *request.Request, output *CancelSolNetworkOperationOutput) {
@@ -71,21 +70,22 @@ func (c *Tnb) CancelSolNetworkOperationRequest(input *CancelSolNetworkOperationI
 // API operation CancelSolNetworkOperation for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/CancelSolNetworkOperation
 func (c *Tnb) CancelSolNetworkOperation(input *CancelSolNetworkOperationInput) (*CancelSolNetworkOperationOutput, error) {
@@ -125,14 +125,13 @@ const opCreateSolFunctionPackage = "CreateSolFunctionPackage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSolFunctionPackageRequest method.
+//	req, resp := client.CreateSolFunctionPackageRequest(params)
 //
-//    // Example sending a request using the CreateSolFunctionPackageRequest method.
-//    req, resp := client.CreateSolFunctionPackageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/CreateSolFunctionPackage
 func (c *Tnb) CreateSolFunctionPackageRequest(input *CreateSolFunctionPackageInput) (req *request.Request, output *CreateSolFunctionPackageOutput) {
@@ -175,21 +174,22 @@ func (c *Tnb) CreateSolFunctionPackageRequest(input *CreateSolFunctionPackageInp
 // API operation CreateSolFunctionPackage for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ServiceQuotaExceededException
-//   Service quotas have been exceeded.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - ServiceQuotaExceededException
+//     Service quotas have been exceeded.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/CreateSolFunctionPackage
 func (c *Tnb) CreateSolFunctionPackage(input *CreateSolFunctionPackageInput) (*CreateSolFunctionPackageOutput, error) {
@@ -229,14 +229,13 @@ const opCreateSolNetworkInstance = "CreateSolNetworkInstance"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSolNetworkInstanceRequest method.
+//	req, resp := client.CreateSolNetworkInstanceRequest(params)
 //
-//    // Example sending a request using the CreateSolNetworkInstanceRequest method.
-//    req, resp := client.CreateSolNetworkInstanceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/CreateSolNetworkInstance
 func (c *Tnb) CreateSolNetworkInstanceRequest(input *CreateSolNetworkInstanceInput) (req *request.Request, output *CreateSolNetworkInstanceOutput) {
@@ -277,24 +276,25 @@ func (c *Tnb) CreateSolNetworkInstanceRequest(input *CreateSolNetworkInstanceInp
 // API operation CreateSolNetworkInstance for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ServiceQuotaExceededException
-//   Service quotas have been exceeded.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - ServiceQuotaExceededException
+//     Service quotas have been exceeded.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/CreateSolNetworkInstance
 func (c *Tnb) CreateSolNetworkInstance(input *CreateSolNetworkInstanceInput) (*CreateSolNetworkInstanceOutput, error) {
@@ -334,14 +334,13 @@ const opCreateSolNetworkPackage = "CreateSolNetworkPackage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSolNetworkPackageRequest method.
+//	req, resp := client.CreateSolNetworkPackageRequest(params)
 //
-//    // Example sending a request using the CreateSolNetworkPackageRequest method.
-//    req, resp := client.CreateSolNetworkPackageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/CreateSolNetworkPackage
 func (c *Tnb) CreateSolNetworkPackageRequest(input *CreateSolNetworkPackageInput) (req *request.Request, output *CreateSolNetworkPackageOutput) {
@@ -387,21 +386,22 @@ func (c *Tnb) CreateSolNetworkPackageRequest(input *CreateSolNetworkPackageInput
 // API operation CreateSolNetworkPackage for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ServiceQuotaExceededException
-//   Service quotas have been exceeded.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - ServiceQuotaExceededException
+//     Service quotas have been exceeded.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/CreateSolNetworkPackage
 func (c *Tnb) CreateSolNetworkPackage(input *CreateSolNetworkPackageInput) (*CreateSolNetworkPackageOutput, error) {
@@ -441,14 +441,13 @@ const opDeleteSolFunctionPackage = "DeleteSolFunctionPackage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSolFunctionPackageRequest method.
+//	req, resp := client.DeleteSolFunctionPackageRequest(params)
 //
-//    // Example sending a request using the DeleteSolFunctionPackageRequest method.
-//    req, resp := client.DeleteSolFunctionPackageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/DeleteSolFunctionPackage
 func (c *Tnb) DeleteSolFunctionPackageRequest(input *DeleteSolFunctionPackageInput) (req *request.Request, output *DeleteSolFunctionPackageOutput) {
@@ -488,21 +487,22 @@ func (c *Tnb) DeleteSolFunctionPackageRequest(input *DeleteSolFunctionPackageInp
 // API operation DeleteSolFunctionPackage for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/DeleteSolFunctionPackage
 func (c *Tnb) DeleteSolFunctionPackage(input *DeleteSolFunctionPackageInput) (*DeleteSolFunctionPackageOutput, error) {
@@ -542,14 +542,13 @@ const opDeleteSolNetworkInstance = "DeleteSolNetworkInstance"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSolNetworkInstanceRequest method.
+//	req, resp := client.DeleteSolNetworkInstanceRequest(params)
 //
-//    // Example sending a request using the DeleteSolNetworkInstanceRequest method.
-//    req, resp := client.DeleteSolNetworkInstanceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/DeleteSolNetworkInstance
 func (c *Tnb) DeleteSolNetworkInstanceRequest(input *DeleteSolNetworkInstanceInput) (req *request.Request, output *DeleteSolNetworkInstanceOutput) {
@@ -588,21 +587,22 @@ func (c *Tnb) DeleteSolNetworkInstanceRequest(input *DeleteSolNetworkInstanceInp
 // API operation DeleteSolNetworkInstance for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/DeleteSolNetworkInstance
 func (c *Tnb) DeleteSolNetworkInstance(input *DeleteSolNetworkInstanceInput) (*DeleteSolNetworkInstanceOutput, error) {
@@ -642,14 +642,13 @@ const opDeleteSolNetworkPackage = "DeleteSolNetworkPackage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSolNetworkPackageRequest method.
+//	req, resp := client.DeleteSolNetworkPackageRequest(params)
 //
-//    // Example sending a request using the DeleteSolNetworkPackageRequest method.
-//    req, resp := client.DeleteSolNetworkPackageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/DeleteSolNetworkPackage
 func (c *Tnb) DeleteSolNetworkPackageRequest(input *DeleteSolNetworkPackageInput) (req *request.Request, output *DeleteSolNetworkPackageOutput) {
@@ -688,21 +687,22 @@ func (c *Tnb) DeleteSolNetworkPackageRequest(input *DeleteSolNetworkPackageInput
 // API operation DeleteSolNetworkPackage for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/DeleteSolNetworkPackage
 func (c *Tnb) DeleteSolNetworkPackage(input *DeleteSolNetworkPackageInput) (*DeleteSolNetworkPackageOutput, error) {
@@ -742,14 +742,13 @@ const opGetSolFunctionInstance = "GetSolFunctionInstance"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSolFunctionInstanceRequest method.
+//	req, resp := client.GetSolFunctionInstanceRequest(params)
 //
-//    // Example sending a request using the GetSolFunctionInstanceRequest method.
-//    req, resp := client.GetSolFunctionInstanceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolFunctionInstance
 func (c *Tnb) GetSolFunctionInstanceRequest(input *GetSolFunctionInstanceInput) (req *request.Request, output *GetSolFunctionInstanceOutput) {
@@ -784,21 +783,22 @@ func (c *Tnb) GetSolFunctionInstanceRequest(input *GetSolFunctionInstanceInput) 
 // API operation GetSolFunctionInstance for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolFunctionInstance
 func (c *Tnb) GetSolFunctionInstance(input *GetSolFunctionInstanceInput) (*GetSolFunctionInstanceOutput, error) {
@@ -838,14 +838,13 @@ const opGetSolFunctionPackage = "GetSolFunctionPackage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSolFunctionPackageRequest method.
+//	req, resp := client.GetSolFunctionPackageRequest(params)
 //
-//    // Example sending a request using the GetSolFunctionPackageRequest method.
-//    req, resp := client.GetSolFunctionPackageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolFunctionPackage
 func (c *Tnb) GetSolFunctionPackageRequest(input *GetSolFunctionPackageInput) (req *request.Request, output *GetSolFunctionPackageOutput) {
@@ -882,21 +881,22 @@ func (c *Tnb) GetSolFunctionPackageRequest(input *GetSolFunctionPackageInput) (r
 // API operation GetSolFunctionPackage for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolFunctionPackage
 func (c *Tnb) GetSolFunctionPackage(input *GetSolFunctionPackageInput) (*GetSolFunctionPackageOutput, error) {
@@ -936,14 +936,13 @@ const opGetSolFunctionPackageContent = "GetSolFunctionPackageContent"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSolFunctionPackageContentRequest method.
+//	req, resp := client.GetSolFunctionPackageContentRequest(params)
 //
-//    // Example sending a request using the GetSolFunctionPackageContentRequest method.
-//    req, resp := client.GetSolFunctionPackageContentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolFunctionPackageContent
 func (c *Tnb) GetSolFunctionPackageContentRequest(input *GetSolFunctionPackageContentInput) (req *request.Request, output *GetSolFunctionPackageContentOutput) {
@@ -979,21 +978,22 @@ func (c *Tnb) GetSolFunctionPackageContentRequest(input *GetSolFunctionPackageCo
 // API operation GetSolFunctionPackageContent for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolFunctionPackageContent
 func (c *Tnb) GetSolFunctionPackageContent(input *GetSolFunctionPackageContentInput) (*GetSolFunctionPackageContentOutput, error) {
@@ -1033,14 +1033,13 @@ const opGetSolFunctionPackageDescriptor = "GetSolFunctionPackageDescriptor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSolFunctionPackageDescriptorRequest method.
+//	req, resp := client.GetSolFunctionPackageDescriptorRequest(params)
 //
-//    // Example sending a request using the GetSolFunctionPackageDescriptorRequest method.
-//    req, resp := client.GetSolFunctionPackageDescriptorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolFunctionPackageDescriptor
 func (c *Tnb) GetSolFunctionPackageDescriptorRequest(input *GetSolFunctionPackageDescriptorInput) (req *request.Request, output *GetSolFunctionPackageDescriptorOutput) {
@@ -1080,21 +1079,22 @@ func (c *Tnb) GetSolFunctionPackageDescriptorRequest(input *GetSolFunctionPackag
 // API operation GetSolFunctionPackageDescriptor for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolFunctionPackageDescriptor
 func (c *Tnb) GetSolFunctionPackageDescriptor(input *GetSolFunctionPackageDescriptorInput) (*GetSolFunctionPackageDescriptorOutput, error) {
@@ -1134,14 +1134,13 @@ const opGetSolNetworkInstance = "GetSolNetworkInstance"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSolNetworkInstanceRequest method.
+//	req, resp := client.GetSolNetworkInstanceRequest(params)
 //
-//    // Example sending a request using the GetSolNetworkInstanceRequest method.
-//    req, resp := client.GetSolNetworkInstanceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolNetworkInstance
 func (c *Tnb) GetSolNetworkInstanceRequest(input *GetSolNetworkInstanceInput) (req *request.Request, output *GetSolNetworkInstanceOutput) {
@@ -1176,21 +1175,22 @@ func (c *Tnb) GetSolNetworkInstanceRequest(input *GetSolNetworkInstanceInput) (r
 // API operation GetSolNetworkInstance for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolNetworkInstance
 func (c *Tnb) GetSolNetworkInstance(input *GetSolNetworkInstanceInput) (*GetSolNetworkInstanceOutput, error) {
@@ -1230,14 +1230,13 @@ const opGetSolNetworkOperation = "GetSolNetworkOperation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSolNetworkOperationRequest method.
+//	req, resp := client.GetSolNetworkOperationRequest(params)
 //
-//    // Example sending a request using the GetSolNetworkOperationRequest method.
-//    req, resp := client.GetSolNetworkOperationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolNetworkOperation
 func (c *Tnb) GetSolNetworkOperationRequest(input *GetSolNetworkOperationInput) (req *request.Request, output *GetSolNetworkOperationOutput) {
@@ -1272,21 +1271,22 @@ func (c *Tnb) GetSolNetworkOperationRequest(input *GetSolNetworkOperationInput) 
 // API operation GetSolNetworkOperation for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolNetworkOperation
 func (c *Tnb) GetSolNetworkOperation(input *GetSolNetworkOperationInput) (*GetSolNetworkOperationOutput, error) {
@@ -1326,14 +1326,13 @@ const opGetSolNetworkPackage = "GetSolNetworkPackage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSolNetworkPackageRequest method.
+//	req, resp := client.GetSolNetworkPackageRequest(params)
 //
-//    // Example sending a request using the GetSolNetworkPackageRequest method.
-//    req, resp := client.GetSolNetworkPackageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolNetworkPackage
 func (c *Tnb) GetSolNetworkPackageRequest(input *GetSolNetworkPackageInput) (req *request.Request, output *GetSolNetworkPackageOutput) {
@@ -1368,21 +1367,22 @@ func (c *Tnb) GetSolNetworkPackageRequest(input *GetSolNetworkPackageInput) (req
 // API operation GetSolNetworkPackage for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolNetworkPackage
 func (c *Tnb) GetSolNetworkPackage(input *GetSolNetworkPackageInput) (*GetSolNetworkPackageOutput, error) {
@@ -1422,14 +1422,13 @@ const opGetSolNetworkPackageContent = "GetSolNetworkPackageContent"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSolNetworkPackageContentRequest method.
+//	req, resp := client.GetSolNetworkPackageContentRequest(params)
 //
-//    // Example sending a request using the GetSolNetworkPackageContentRequest method.
-//    req, resp := client.GetSolNetworkPackageContentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolNetworkPackageContent
 func (c *Tnb) GetSolNetworkPackageContentRequest(input *GetSolNetworkPackageContentInput) (req *request.Request, output *GetSolNetworkPackageContentOutput) {
@@ -1464,21 +1463,22 @@ func (c *Tnb) GetSolNetworkPackageContentRequest(input *GetSolNetworkPackageCont
 // API operation GetSolNetworkPackageContent for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolNetworkPackageContent
 func (c *Tnb) GetSolNetworkPackageContent(input *GetSolNetworkPackageContentInput) (*GetSolNetworkPackageContentOutput, error) {
@@ -1518,14 +1518,13 @@ const opGetSolNetworkPackageDescriptor = "GetSolNetworkPackageDescriptor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSolNetworkPackageDescriptorRequest method.
+//	req, resp := client.GetSolNetworkPackageDescriptorRequest(params)
 //
-//    // Example sending a request using the GetSolNetworkPackageDescriptorRequest method.
-//    req, resp := client.GetSolNetworkPackageDescriptorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolNetworkPackageDescriptor
 func (c *Tnb) GetSolNetworkPackageDescriptorRequest(input *GetSolNetworkPackageDescriptorInput) (req *request.Request, output *GetSolNetworkPackageDescriptorOutput) {
@@ -1561,21 +1560,22 @@ func (c *Tnb) GetSolNetworkPackageDescriptorRequest(input *GetSolNetworkPackageD
 // API operation GetSolNetworkPackageDescriptor for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/GetSolNetworkPackageDescriptor
 func (c *Tnb) GetSolNetworkPackageDescriptor(input *GetSolNetworkPackageDescriptorInput) (*GetSolNetworkPackageDescriptorOutput, error) {
@@ -1615,14 +1615,13 @@ const opInstantiateSolNetworkInstance = "InstantiateSolNetworkInstance"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the InstantiateSolNetworkInstanceRequest method.
+//	req, resp := client.InstantiateSolNetworkInstanceRequest(params)
 //
-//    // Example sending a request using the InstantiateSolNetworkInstanceRequest method.
-//    req, resp := client.InstantiateSolNetworkInstanceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/InstantiateSolNetworkInstance
 func (c *Tnb) InstantiateSolNetworkInstanceRequest(input *InstantiateSolNetworkInstanceInput) (req *request.Request, output *InstantiateSolNetworkInstanceOutput) {
@@ -1660,24 +1659,25 @@ func (c *Tnb) InstantiateSolNetworkInstanceRequest(input *InstantiateSolNetworkI
 // API operation InstantiateSolNetworkInstance for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ServiceQuotaExceededException
-//   Service quotas have been exceeded.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - ServiceQuotaExceededException
+//     Service quotas have been exceeded.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/InstantiateSolNetworkInstance
 func (c *Tnb) InstantiateSolNetworkInstance(input *InstantiateSolNetworkInstanceInput) (*InstantiateSolNetworkInstanceOutput, error) {
@@ -1717,14 +1717,13 @@ const opListSolFunctionInstances = "ListSolFunctionInstances"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSolFunctionInstancesRequest method.
+//	req, resp := client.ListSolFunctionInstancesRequest(params)
 //
-//    // Example sending a request using the ListSolFunctionInstancesRequest method.
-//    req, resp := client.ListSolFunctionInstancesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListSolFunctionInstances
 func (c *Tnb) ListSolFunctionInstancesRequest(input *ListSolFunctionInstancesInput) (req *request.Request, output *ListSolFunctionInstancesOutput) {
@@ -1763,18 +1762,19 @@ func (c *Tnb) ListSolFunctionInstancesRequest(input *ListSolFunctionInstancesInp
 // API operation ListSolFunctionInstances for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListSolFunctionInstances
 func (c *Tnb) ListSolFunctionInstances(input *ListSolFunctionInstancesInput) (*ListSolFunctionInstancesOutput, error) {
@@ -1806,15 +1806,14 @@ func (c *Tnb) ListSolFunctionInstancesWithContext(ctx aws.Context, input *ListSo
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSolFunctionInstances operation.
-//    pageNum := 0
-//    err := client.ListSolFunctionInstancesPages(params,
-//        func(page *tnb.ListSolFunctionInstancesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSolFunctionInstances operation.
+//	pageNum := 0
+//	err := client.ListSolFunctionInstancesPages(params,
+//	    func(page *tnb.ListSolFunctionInstancesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Tnb) ListSolFunctionInstancesPages(input *ListSolFunctionInstancesInput, fn func(*ListSolFunctionInstancesOutput, bool) bool) error {
 	return c.ListSolFunctionInstancesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1866,14 +1865,13 @@ const opListSolFunctionPackages = "ListSolFunctionPackages"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSolFunctionPackagesRequest method.
+//	req, resp := client.ListSolFunctionPackagesRequest(params)
 //
-//    // Example sending a request using the ListSolFunctionPackagesRequest method.
-//    req, resp := client.ListSolFunctionPackagesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListSolFunctionPackages
 func (c *Tnb) ListSolFunctionPackagesRequest(input *ListSolFunctionPackagesInput) (req *request.Request, output *ListSolFunctionPackagesOutput) {
@@ -1915,18 +1913,19 @@ func (c *Tnb) ListSolFunctionPackagesRequest(input *ListSolFunctionPackagesInput
 // API operation ListSolFunctionPackages for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListSolFunctionPackages
 func (c *Tnb) ListSolFunctionPackages(input *ListSolFunctionPackagesInput) (*ListSolFunctionPackagesOutput, error) {
@@ -1958,15 +1957,14 @@ func (c *Tnb) ListSolFunctionPackagesWithContext(ctx aws.Context, input *ListSol
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSolFunctionPackages operation.
-//    pageNum := 0
-//    err := client.ListSolFunctionPackagesPages(params,
-//        func(page *tnb.ListSolFunctionPackagesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSolFunctionPackages operation.
+//	pageNum := 0
+//	err := client.ListSolFunctionPackagesPages(params,
+//	    func(page *tnb.ListSolFunctionPackagesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Tnb) ListSolFunctionPackagesPages(input *ListSolFunctionPackagesInput, fn func(*ListSolFunctionPackagesOutput, bool) bool) error {
 	return c.ListSolFunctionPackagesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2018,14 +2016,13 @@ const opListSolNetworkInstances = "ListSolNetworkInstances"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSolNetworkInstancesRequest method.
+//	req, resp := client.ListSolNetworkInstancesRequest(params)
 //
-//    // Example sending a request using the ListSolNetworkInstancesRequest method.
-//    req, resp := client.ListSolNetworkInstancesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListSolNetworkInstances
 func (c *Tnb) ListSolNetworkInstancesRequest(input *ListSolNetworkInstancesInput) (req *request.Request, output *ListSolNetworkInstancesOutput) {
@@ -2066,18 +2063,19 @@ func (c *Tnb) ListSolNetworkInstancesRequest(input *ListSolNetworkInstancesInput
 // API operation ListSolNetworkInstances for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListSolNetworkInstances
 func (c *Tnb) ListSolNetworkInstances(input *ListSolNetworkInstancesInput) (*ListSolNetworkInstancesOutput, error) {
@@ -2109,15 +2107,14 @@ func (c *Tnb) ListSolNetworkInstancesWithContext(ctx aws.Context, input *ListSol
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSolNetworkInstances operation.
-//    pageNum := 0
-//    err := client.ListSolNetworkInstancesPages(params,
-//        func(page *tnb.ListSolNetworkInstancesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSolNetworkInstances operation.
+//	pageNum := 0
+//	err := client.ListSolNetworkInstancesPages(params,
+//	    func(page *tnb.ListSolNetworkInstancesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Tnb) ListSolNetworkInstancesPages(input *ListSolNetworkInstancesInput, fn func(*ListSolNetworkInstancesOutput, bool) bool) error {
 	return c.ListSolNetworkInstancesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2169,14 +2166,13 @@ const opListSolNetworkOperations = "ListSolNetworkOperations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSolNetworkOperationsRequest method.
+//	req, resp := client.ListSolNetworkOperationsRequest(params)
 //
-//    // Example sending a request using the ListSolNetworkOperationsRequest method.
-//    req, resp := client.ListSolNetworkOperationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListSolNetworkOperations
 func (c *Tnb) ListSolNetworkOperationsRequest(input *ListSolNetworkOperationsInput) (req *request.Request, output *ListSolNetworkOperationsOutput) {
@@ -2217,18 +2213,19 @@ func (c *Tnb) ListSolNetworkOperationsRequest(input *ListSolNetworkOperationsInp
 // API operation ListSolNetworkOperations for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListSolNetworkOperations
 func (c *Tnb) ListSolNetworkOperations(input *ListSolNetworkOperationsInput) (*ListSolNetworkOperationsOutput, error) {
@@ -2260,15 +2257,14 @@ func (c *Tnb) ListSolNetworkOperationsWithContext(ctx aws.Context, input *ListSo
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSolNetworkOperations operation.
-//    pageNum := 0
-//    err := client.ListSolNetworkOperationsPages(params,
-//        func(page *tnb.ListSolNetworkOperationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSolNetworkOperations operation.
+//	pageNum := 0
+//	err := client.ListSolNetworkOperationsPages(params,
+//	    func(page *tnb.ListSolNetworkOperationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Tnb) ListSolNetworkOperationsPages(input *ListSolNetworkOperationsInput, fn func(*ListSolNetworkOperationsOutput, bool) bool) error {
 	return c.ListSolNetworkOperationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2320,14 +2316,13 @@ const opListSolNetworkPackages = "ListSolNetworkPackages"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSolNetworkPackagesRequest method.
+//	req, resp := client.ListSolNetworkPackagesRequest(params)
 //
-//    // Example sending a request using the ListSolNetworkPackagesRequest method.
-//    req, resp := client.ListSolNetworkPackagesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListSolNetworkPackages
 func (c *Tnb) ListSolNetworkPackagesRequest(input *ListSolNetworkPackagesInput) (req *request.Request, output *ListSolNetworkPackagesOutput) {
@@ -2368,18 +2363,19 @@ func (c *Tnb) ListSolNetworkPackagesRequest(input *ListSolNetworkPackagesInput) 
 // API operation ListSolNetworkPackages for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListSolNetworkPackages
 func (c *Tnb) ListSolNetworkPackages(input *ListSolNetworkPackagesInput) (*ListSolNetworkPackagesOutput, error) {
@@ -2411,15 +2407,14 @@ func (c *Tnb) ListSolNetworkPackagesWithContext(ctx aws.Context, input *ListSolN
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSolNetworkPackages operation.
-//    pageNum := 0
-//    err := client.ListSolNetworkPackagesPages(params,
-//        func(page *tnb.ListSolNetworkPackagesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSolNetworkPackages operation.
+//	pageNum := 0
+//	err := client.ListSolNetworkPackagesPages(params,
+//	    func(page *tnb.ListSolNetworkPackagesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Tnb) ListSolNetworkPackagesPages(input *ListSolNetworkPackagesInput, fn func(*ListSolNetworkPackagesOutput, bool) bool) error {
 	return c.ListSolNetworkPackagesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2471,14 +2466,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListTagsForResource
 func (c *Tnb) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2509,21 +2503,22 @@ func (c *Tnb) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ListTagsForResource
 func (c *Tnb) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2563,14 +2558,13 @@ const opPutSolFunctionPackageContent = "PutSolFunctionPackageContent"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutSolFunctionPackageContentRequest method.
+//	req, resp := client.PutSolFunctionPackageContentRequest(params)
 //
-//    // Example sending a request using the PutSolFunctionPackageContentRequest method.
-//    req, resp := client.PutSolFunctionPackageContentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/PutSolFunctionPackageContent
 func (c *Tnb) PutSolFunctionPackageContentRequest(input *PutSolFunctionPackageContentInput) (req *request.Request, output *PutSolFunctionPackageContentOutput) {
@@ -2606,21 +2600,22 @@ func (c *Tnb) PutSolFunctionPackageContentRequest(input *PutSolFunctionPackageCo
 // API operation PutSolFunctionPackageContent for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/PutSolFunctionPackageContent
 func (c *Tnb) PutSolFunctionPackageContent(input *PutSolFunctionPackageContentInput) (*PutSolFunctionPackageContentOutput, error) {
@@ -2660,14 +2655,13 @@ const opPutSolNetworkPackageContent = "PutSolNetworkPackageContent"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutSolNetworkPackageContentRequest method.
+//	req, resp := client.PutSolNetworkPackageContentRequest(params)
 //
-//    // Example sending a request using the PutSolNetworkPackageContentRequest method.
-//    req, resp := client.PutSolNetworkPackageContentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/PutSolNetworkPackageContent
 func (c *Tnb) PutSolNetworkPackageContentRequest(input *PutSolNetworkPackageContentInput) (req *request.Request, output *PutSolNetworkPackageContentOutput) {
@@ -2702,21 +2696,22 @@ func (c *Tnb) PutSolNetworkPackageContentRequest(input *PutSolNetworkPackageCont
 // API operation PutSolNetworkPackageContent for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/PutSolNetworkPackageContent
 func (c *Tnb) PutSolNetworkPackageContent(input *PutSolNetworkPackageContentInput) (*PutSolNetworkPackageContentOutput, error) {
@@ -2756,14 +2751,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/TagResource
 func (c *Tnb) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2799,21 +2793,22 @@ func (c *Tnb) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/TagResource
 func (c *Tnb) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2853,14 +2848,13 @@ const opTerminateSolNetworkInstance = "TerminateSolNetworkInstance"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TerminateSolNetworkInstanceRequest method.
+//	req, resp := client.TerminateSolNetworkInstanceRequest(params)
 //
-//    // Example sending a request using the TerminateSolNetworkInstanceRequest method.
-//    req, resp := client.TerminateSolNetworkInstanceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/TerminateSolNetworkInstance
 func (c *Tnb) TerminateSolNetworkInstanceRequest(input *TerminateSolNetworkInstanceInput) (req *request.Request, output *TerminateSolNetworkInstanceOutput) {
@@ -2897,24 +2891,25 @@ func (c *Tnb) TerminateSolNetworkInstanceRequest(input *TerminateSolNetworkInsta
 // API operation TerminateSolNetworkInstance for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ServiceQuotaExceededException
-//   Service quotas have been exceeded.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - ServiceQuotaExceededException
+//     Service quotas have been exceeded.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/TerminateSolNetworkInstance
 func (c *Tnb) TerminateSolNetworkInstance(input *TerminateSolNetworkInstanceInput) (*TerminateSolNetworkInstanceOutput, error) {
@@ -2954,14 +2949,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/UntagResource
 func (c *Tnb) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2997,21 +2991,22 @@ func (c *Tnb) UntagResourceRequest(input *UntagResourceInput) (req *request.Requ
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/UntagResource
 func (c *Tnb) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -3051,14 +3046,13 @@ const opUpdateSolFunctionPackage = "UpdateSolFunctionPackage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSolFunctionPackageRequest method.
+//	req, resp := client.UpdateSolFunctionPackageRequest(params)
 //
-//    // Example sending a request using the UpdateSolFunctionPackageRequest method.
-//    req, resp := client.UpdateSolFunctionPackageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/UpdateSolFunctionPackage
 func (c *Tnb) UpdateSolFunctionPackageRequest(input *UpdateSolFunctionPackageInput) (req *request.Request, output *UpdateSolFunctionPackageOutput) {
@@ -3094,21 +3088,22 @@ func (c *Tnb) UpdateSolFunctionPackageRequest(input *UpdateSolFunctionPackageInp
 // API operation UpdateSolFunctionPackage for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/UpdateSolFunctionPackage
 func (c *Tnb) UpdateSolFunctionPackage(input *UpdateSolFunctionPackageInput) (*UpdateSolFunctionPackageOutput, error) {
@@ -3148,14 +3143,13 @@ const opUpdateSolNetworkInstance = "UpdateSolNetworkInstance"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSolNetworkInstanceRequest method.
+//	req, resp := client.UpdateSolNetworkInstanceRequest(params)
 //
-//    // Example sending a request using the UpdateSolNetworkInstanceRequest method.
-//    req, resp := client.UpdateSolNetworkInstanceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/UpdateSolNetworkInstance
 func (c *Tnb) UpdateSolNetworkInstanceRequest(input *UpdateSolNetworkInstanceInput) (req *request.Request, output *UpdateSolNetworkInstanceOutput) {
@@ -3190,24 +3184,25 @@ func (c *Tnb) UpdateSolNetworkInstanceRequest(input *UpdateSolNetworkInstanceInp
 // API operation UpdateSolNetworkInstance for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ServiceQuotaExceededException
-//   Service quotas have been exceeded.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - ServiceQuotaExceededException
+//     Service quotas have been exceeded.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/UpdateSolNetworkInstance
 func (c *Tnb) UpdateSolNetworkInstance(input *UpdateSolNetworkInstanceInput) (*UpdateSolNetworkInstanceOutput, error) {
@@ -3247,14 +3242,13 @@ const opUpdateSolNetworkPackage = "UpdateSolNetworkPackage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSolNetworkPackageRequest method.
+//	req, resp := client.UpdateSolNetworkPackageRequest(params)
 //
-//    // Example sending a request using the UpdateSolNetworkPackageRequest method.
-//    req, resp := client.UpdateSolNetworkPackageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/UpdateSolNetworkPackage
 func (c *Tnb) UpdateSolNetworkPackageRequest(input *UpdateSolNetworkPackageInput) (req *request.Request, output *UpdateSolNetworkPackageOutput) {
@@ -3294,21 +3288,22 @@ func (c *Tnb) UpdateSolNetworkPackageRequest(input *UpdateSolNetworkPackageInput
 // API operation UpdateSolNetworkPackage for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/UpdateSolNetworkPackage
 func (c *Tnb) UpdateSolNetworkPackage(input *UpdateSolNetworkPackageInput) (*UpdateSolNetworkPackageOutput, error) {
@@ -3348,14 +3343,13 @@ const opValidateSolFunctionPackageContent = "ValidateSolFunctionPackageContent"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ValidateSolFunctionPackageContentRequest method.
+//	req, resp := client.ValidateSolFunctionPackageContentRequest(params)
 //
-//    // Example sending a request using the ValidateSolFunctionPackageContentRequest method.
-//    req, resp := client.ValidateSolFunctionPackageContentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ValidateSolFunctionPackageContent
 func (c *Tnb) ValidateSolFunctionPackageContentRequest(input *ValidateSolFunctionPackageContentInput) (req *request.Request, output *ValidateSolFunctionPackageContentOutput) {
@@ -3392,21 +3386,22 @@ func (c *Tnb) ValidateSolFunctionPackageContentRequest(input *ValidateSolFunctio
 // API operation ValidateSolFunctionPackageContent for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ValidateSolFunctionPackageContent
 func (c *Tnb) ValidateSolFunctionPackageContent(input *ValidateSolFunctionPackageContentInput) (*ValidateSolFunctionPackageContentOutput, error) {
@@ -3446,14 +3441,13 @@ const opValidateSolNetworkPackageContent = "ValidateSolNetworkPackageContent"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ValidateSolNetworkPackageContentRequest method.
+//	req, resp := client.ValidateSolNetworkPackageContentRequest(params)
 //
-//    // Example sending a request using the ValidateSolNetworkPackageContentRequest method.
-//    req, resp := client.ValidateSolNetworkPackageContentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ValidateSolNetworkPackageContent
 func (c *Tnb) ValidateSolNetworkPackageContentRequest(input *ValidateSolNetworkPackageContentInput) (req *request.Request, output *ValidateSolNetworkPackageContentOutput) {
@@ -3489,21 +3483,22 @@ func (c *Tnb) ValidateSolNetworkPackageContentRequest(input *ValidateSolNetworkP
 // API operation ValidateSolNetworkPackageContent for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   Unexpected error occurred. Problem on the server.
 //
-//   * ThrottlingException
-//   Exception caused by throttling.
+//   - InternalServerException
+//     Unexpected error occurred. Problem on the server.
 //
-//   * ValidationException
-//   Unable to process the request because the client provided input failed to
-//   satisfy request constraints.
+//   - ThrottlingException
+//     Exception caused by throttling.
 //
-//   * ResourceNotFoundException
-//   Request references a resource that doesn't exist.
+//   - ValidationException
+//     Unable to process the request because the client provided input failed to
+//     satisfy request constraints.
 //
-//   * AccessDeniedException
-//   Insufficient permissions to make request.
+//   - ResourceNotFoundException
+//     Request references a resource that doesn't exist.
+//
+//   - AccessDeniedException
+//     Insufficient permissions to make request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/tnb-2008-10-21/ValidateSolNetworkPackageContent
 func (c *Tnb) ValidateSolNetworkPackageContent(input *ValidateSolNetworkPackageContentInput) (*ValidateSolNetworkPackageContentOutput, error) {

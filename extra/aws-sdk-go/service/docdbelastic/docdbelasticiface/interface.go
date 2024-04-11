@@ -23,43 +23,47 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon DocumentDB Elastic Clusters.
-//    func myFunc(svc docdbelasticiface.DocDBElasticAPI) bool {
-//        // Make svc.CreateCluster request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon DocumentDB Elastic Clusters.
+//	func myFunc(svc docdbelasticiface.DocDBElasticAPI) bool {
+//	    // Make svc.CopyClusterSnapshot request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := docdbelastic.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := docdbelastic.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockDocDBElasticClient struct {
-//        docdbelasticiface.DocDBElasticAPI
-//    }
-//    func (m *mockDocDBElasticClient) CreateCluster(input *docdbelastic.CreateClusterInput) (*docdbelastic.CreateClusterOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockDocDBElasticClient struct {
+//	    docdbelasticiface.DocDBElasticAPI
+//	}
+//	func (m *mockDocDBElasticClient) CopyClusterSnapshot(input *docdbelastic.CopyClusterSnapshotInput) (*docdbelastic.CopyClusterSnapshotOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockDocDBElasticClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockDocDBElasticClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type DocDBElasticAPI interface {
+	CopyClusterSnapshot(*docdbelastic.CopyClusterSnapshotInput) (*docdbelastic.CopyClusterSnapshotOutput, error)
+	CopyClusterSnapshotWithContext(aws.Context, *docdbelastic.CopyClusterSnapshotInput, ...request.Option) (*docdbelastic.CopyClusterSnapshotOutput, error)
+	CopyClusterSnapshotRequest(*docdbelastic.CopyClusterSnapshotInput) (*request.Request, *docdbelastic.CopyClusterSnapshotOutput)
+
 	CreateCluster(*docdbelastic.CreateClusterInput) (*docdbelastic.CreateClusterOutput, error)
 	CreateClusterWithContext(aws.Context, *docdbelastic.CreateClusterInput, ...request.Option) (*docdbelastic.CreateClusterOutput, error)
 	CreateClusterRequest(*docdbelastic.CreateClusterInput) (*request.Request, *docdbelastic.CreateClusterOutput)
@@ -105,6 +109,14 @@ type DocDBElasticAPI interface {
 	RestoreClusterFromSnapshot(*docdbelastic.RestoreClusterFromSnapshotInput) (*docdbelastic.RestoreClusterFromSnapshotOutput, error)
 	RestoreClusterFromSnapshotWithContext(aws.Context, *docdbelastic.RestoreClusterFromSnapshotInput, ...request.Option) (*docdbelastic.RestoreClusterFromSnapshotOutput, error)
 	RestoreClusterFromSnapshotRequest(*docdbelastic.RestoreClusterFromSnapshotInput) (*request.Request, *docdbelastic.RestoreClusterFromSnapshotOutput)
+
+	StartCluster(*docdbelastic.StartClusterInput) (*docdbelastic.StartClusterOutput, error)
+	StartClusterWithContext(aws.Context, *docdbelastic.StartClusterInput, ...request.Option) (*docdbelastic.StartClusterOutput, error)
+	StartClusterRequest(*docdbelastic.StartClusterInput) (*request.Request, *docdbelastic.StartClusterOutput)
+
+	StopCluster(*docdbelastic.StopClusterInput) (*docdbelastic.StopClusterOutput, error)
+	StopClusterWithContext(aws.Context, *docdbelastic.StopClusterInput, ...request.Option) (*docdbelastic.StopClusterOutput, error)
+	StopClusterRequest(*docdbelastic.StopClusterInput) (*request.Request, *docdbelastic.StopClusterOutput)
 
 	TagResource(*docdbelastic.TagResourceInput) (*docdbelastic.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *docdbelastic.TagResourceInput, ...request.Option) (*docdbelastic.TagResourceOutput, error)

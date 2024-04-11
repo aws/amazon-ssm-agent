@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon CloudWatch Internet Monitor.
-//    func myFunc(svc internetmonitoriface.InternetMonitorAPI) bool {
-//        // Make svc.CreateMonitor request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon CloudWatch Internet Monitor.
+//	func myFunc(svc internetmonitoriface.InternetMonitorAPI) bool {
+//	    // Make svc.CreateMonitor request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := internetmonitor.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := internetmonitor.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockInternetMonitorClient struct {
-//        internetmonitoriface.InternetMonitorAPI
-//    }
-//    func (m *mockInternetMonitorClient) CreateMonitor(input *internetmonitor.CreateMonitorInput) (*internetmonitor.CreateMonitorOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockInternetMonitorClient struct {
+//	    internetmonitoriface.InternetMonitorAPI
+//	}
+//	func (m *mockInternetMonitorClient) CreateMonitor(input *internetmonitor.CreateMonitorInput) (*internetmonitor.CreateMonitorOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockInternetMonitorClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockInternetMonitorClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -76,6 +76,17 @@ type InternetMonitorAPI interface {
 	GetMonitorWithContext(aws.Context, *internetmonitor.GetMonitorInput, ...request.Option) (*internetmonitor.GetMonitorOutput, error)
 	GetMonitorRequest(*internetmonitor.GetMonitorInput) (*request.Request, *internetmonitor.GetMonitorOutput)
 
+	GetQueryResults(*internetmonitor.GetQueryResultsInput) (*internetmonitor.GetQueryResultsOutput, error)
+	GetQueryResultsWithContext(aws.Context, *internetmonitor.GetQueryResultsInput, ...request.Option) (*internetmonitor.GetQueryResultsOutput, error)
+	GetQueryResultsRequest(*internetmonitor.GetQueryResultsInput) (*request.Request, *internetmonitor.GetQueryResultsOutput)
+
+	GetQueryResultsPages(*internetmonitor.GetQueryResultsInput, func(*internetmonitor.GetQueryResultsOutput, bool) bool) error
+	GetQueryResultsPagesWithContext(aws.Context, *internetmonitor.GetQueryResultsInput, func(*internetmonitor.GetQueryResultsOutput, bool) bool, ...request.Option) error
+
+	GetQueryStatus(*internetmonitor.GetQueryStatusInput) (*internetmonitor.GetQueryStatusOutput, error)
+	GetQueryStatusWithContext(aws.Context, *internetmonitor.GetQueryStatusInput, ...request.Option) (*internetmonitor.GetQueryStatusOutput, error)
+	GetQueryStatusRequest(*internetmonitor.GetQueryStatusInput) (*request.Request, *internetmonitor.GetQueryStatusOutput)
+
 	ListHealthEvents(*internetmonitor.ListHealthEventsInput) (*internetmonitor.ListHealthEventsOutput, error)
 	ListHealthEventsWithContext(aws.Context, *internetmonitor.ListHealthEventsInput, ...request.Option) (*internetmonitor.ListHealthEventsOutput, error)
 	ListHealthEventsRequest(*internetmonitor.ListHealthEventsInput) (*request.Request, *internetmonitor.ListHealthEventsOutput)
@@ -93,6 +104,14 @@ type InternetMonitorAPI interface {
 	ListTagsForResource(*internetmonitor.ListTagsForResourceInput) (*internetmonitor.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *internetmonitor.ListTagsForResourceInput, ...request.Option) (*internetmonitor.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*internetmonitor.ListTagsForResourceInput) (*request.Request, *internetmonitor.ListTagsForResourceOutput)
+
+	StartQuery(*internetmonitor.StartQueryInput) (*internetmonitor.StartQueryOutput, error)
+	StartQueryWithContext(aws.Context, *internetmonitor.StartQueryInput, ...request.Option) (*internetmonitor.StartQueryOutput, error)
+	StartQueryRequest(*internetmonitor.StartQueryInput) (*request.Request, *internetmonitor.StartQueryOutput)
+
+	StopQuery(*internetmonitor.StopQueryInput) (*internetmonitor.StopQueryOutput, error)
+	StopQueryWithContext(aws.Context, *internetmonitor.StopQueryInput, ...request.Option) (*internetmonitor.StopQueryOutput, error)
+	StopQueryRequest(*internetmonitor.StopQueryInput) (*request.Request, *internetmonitor.StopQueryOutput)
 
 	TagResource(*internetmonitor.TagResourceInput) (*internetmonitor.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *internetmonitor.TagResourceInput, ...request.Option) (*internetmonitor.TagResourceOutput, error)

@@ -29,14 +29,13 @@ const opBatchUpdateRule = "BatchUpdateRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchUpdateRuleRequest method.
+//	req, resp := client.BatchUpdateRuleRequest(params)
 //
-//    // Example sending a request using the BatchUpdateRuleRequest method.
-//    req, resp := client.BatchUpdateRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/BatchUpdateRule
 func (c *VPCLattice) BatchUpdateRuleRequest(input *BatchUpdateRuleInput) (req *request.Request, output *BatchUpdateRuleOutput) {
@@ -69,25 +68,26 @@ func (c *VPCLattice) BatchUpdateRuleRequest(input *BatchUpdateRuleInput) (req *r
 // API operation BatchUpdateRule for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/BatchUpdateRule
 func (c *VPCLattice) BatchUpdateRule(input *BatchUpdateRuleInput) (*BatchUpdateRuleOutput, error) {
@@ -127,14 +127,13 @@ const opCreateAccessLogSubscription = "CreateAccessLogSubscription"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateAccessLogSubscriptionRequest method.
+//	req, resp := client.CreateAccessLogSubscriptionRequest(params)
 //
-//    // Example sending a request using the CreateAccessLogSubscriptionRequest method.
-//    req, resp := client.CreateAccessLogSubscriptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateAccessLogSubscription
 func (c *VPCLattice) CreateAccessLogSubscriptionRequest(input *CreateAccessLogSubscriptionInput) (req *request.Request, output *CreateAccessLogSubscriptionOutput) {
@@ -171,25 +170,26 @@ func (c *VPCLattice) CreateAccessLogSubscriptionRequest(input *CreateAccessLogSu
 // API operation CreateAccessLogSubscription for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateAccessLogSubscription
 func (c *VPCLattice) CreateAccessLogSubscription(input *CreateAccessLogSubscriptionInput) (*CreateAccessLogSubscriptionOutput, error) {
@@ -229,14 +229,13 @@ const opCreateListener = "CreateListener"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateListenerRequest method.
+//	req, resp := client.CreateListenerRequest(params)
 //
-//    // Example sending a request using the CreateListenerRequest method.
-//    req, resp := client.CreateListenerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateListener
 func (c *VPCLattice) CreateListenerRequest(input *CreateListenerInput) (req *request.Request, output *CreateListenerOutput) {
@@ -271,28 +270,29 @@ func (c *VPCLattice) CreateListenerRequest(input *CreateListenerInput) (req *req
 // API operation CreateListener for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateListener
 func (c *VPCLattice) CreateListener(input *CreateListenerInput) (*CreateListenerOutput, error) {
@@ -332,14 +332,13 @@ const opCreateRule = "CreateRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRuleRequest method.
+//	req, resp := client.CreateRuleRequest(params)
 //
-//    // Example sending a request using the CreateRuleRequest method.
-//    req, resp := client.CreateRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateRule
 func (c *VPCLattice) CreateRuleRequest(input *CreateRuleInput) (req *request.Request, output *CreateRuleOutput) {
@@ -374,28 +373,29 @@ func (c *VPCLattice) CreateRuleRequest(input *CreateRuleInput) (req *request.Req
 // API operation CreateRule for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateRule
 func (c *VPCLattice) CreateRule(input *CreateRuleInput) (*CreateRuleOutput, error) {
@@ -435,14 +435,13 @@ const opCreateService = "CreateService"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateServiceRequest method.
+//	req, resp := client.CreateServiceRequest(params)
 //
-//    // Example sending a request using the CreateServiceRequest method.
-//    req, resp := client.CreateServiceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateService
 func (c *VPCLattice) CreateServiceRequest(input *CreateServiceInput) (req *request.Request, output *CreateServiceOutput) {
@@ -478,28 +477,29 @@ func (c *VPCLattice) CreateServiceRequest(input *CreateServiceInput) (req *reque
 // API operation CreateService for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateService
 func (c *VPCLattice) CreateService(input *CreateServiceInput) (*CreateServiceOutput, error) {
@@ -539,14 +539,13 @@ const opCreateServiceNetwork = "CreateServiceNetwork"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateServiceNetworkRequest method.
+//	req, resp := client.CreateServiceNetworkRequest(params)
 //
-//    // Example sending a request using the CreateServiceNetworkRequest method.
-//    req, resp := client.CreateServiceNetworkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateServiceNetwork
 func (c *VPCLattice) CreateServiceNetworkRequest(input *CreateServiceNetworkInput) (req *request.Request, output *CreateServiceNetworkOutput) {
@@ -582,28 +581,29 @@ func (c *VPCLattice) CreateServiceNetworkRequest(input *CreateServiceNetworkInpu
 // API operation CreateServiceNetwork for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateServiceNetwork
 func (c *VPCLattice) CreateServiceNetwork(input *CreateServiceNetworkInput) (*CreateServiceNetworkOutput, error) {
@@ -643,14 +643,13 @@ const opCreateServiceNetworkServiceAssociation = "CreateServiceNetworkServiceAss
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateServiceNetworkServiceAssociationRequest method.
+//	req, resp := client.CreateServiceNetworkServiceAssociationRequest(params)
 //
-//    // Example sending a request using the CreateServiceNetworkServiceAssociationRequest method.
-//    req, resp := client.CreateServiceNetworkServiceAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateServiceNetworkServiceAssociation
 func (c *VPCLattice) CreateServiceNetworkServiceAssociationRequest(input *CreateServiceNetworkServiceAssociationInput) (req *request.Request, output *CreateServiceNetworkServiceAssociationOutput) {
@@ -692,25 +691,29 @@ func (c *VPCLattice) CreateServiceNetworkServiceAssociationRequest(input *Create
 // API operation CreateServiceNetworkServiceAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateServiceNetworkServiceAssociation
 func (c *VPCLattice) CreateServiceNetworkServiceAssociation(input *CreateServiceNetworkServiceAssociationInput) (*CreateServiceNetworkServiceAssociationOutput, error) {
@@ -750,14 +753,13 @@ const opCreateServiceNetworkVpcAssociation = "CreateServiceNetworkVpcAssociation
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateServiceNetworkVpcAssociationRequest method.
+//	req, resp := client.CreateServiceNetworkVpcAssociationRequest(params)
 //
-//    // Example sending a request using the CreateServiceNetworkVpcAssociationRequest method.
-//    req, resp := client.CreateServiceNetworkVpcAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateServiceNetworkVpcAssociation
 func (c *VPCLattice) CreateServiceNetworkVpcAssociationRequest(input *CreateServiceNetworkVpcAssociationInput) (req *request.Request, output *CreateServiceNetworkVpcAssociationOutput) {
@@ -790,11 +792,10 @@ func (c *VPCLattice) CreateServiceNetworkVpcAssociationRequest(input *CreateServ
 // As a result of this operation, the association gets created in the service
 // network account and the VPC owner account.
 //
-// If you add a security group to the service network and VPC association, the
-// association must continue to always have at least one security group. You
-// can add or edit security groups at any time. However, to remove all security
-// groups, you must first delete the association and recreate it without security
-// groups.
+// Once a security group is added to the VPC association it cannot be removed.
+// You can add or update the security groups being used for the VPC association
+// once a security group is attached. To remove all security groups you must
+// reassociate the VPC.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -804,28 +805,29 @@ func (c *VPCLattice) CreateServiceNetworkVpcAssociationRequest(input *CreateServ
 // API operation CreateServiceNetworkVpcAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateServiceNetworkVpcAssociation
 func (c *VPCLattice) CreateServiceNetworkVpcAssociation(input *CreateServiceNetworkVpcAssociationInput) (*CreateServiceNetworkVpcAssociationOutput, error) {
@@ -865,14 +867,13 @@ const opCreateTargetGroup = "CreateTargetGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateTargetGroupRequest method.
+//	req, resp := client.CreateTargetGroupRequest(params)
 //
-//    // Example sending a request using the CreateTargetGroupRequest method.
-//    req, resp := client.CreateTargetGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateTargetGroup
 func (c *VPCLattice) CreateTargetGroupRequest(input *CreateTargetGroupInput) (req *request.Request, output *CreateTargetGroupOutput) {
@@ -908,28 +909,29 @@ func (c *VPCLattice) CreateTargetGroupRequest(input *CreateTargetGroupInput) (re
 // API operation CreateTargetGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/CreateTargetGroup
 func (c *VPCLattice) CreateTargetGroup(input *CreateTargetGroupInput) (*CreateTargetGroupOutput, error) {
@@ -969,14 +971,13 @@ const opDeleteAccessLogSubscription = "DeleteAccessLogSubscription"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAccessLogSubscriptionRequest method.
+//	req, resp := client.DeleteAccessLogSubscriptionRequest(params)
 //
-//    // Example sending a request using the DeleteAccessLogSubscriptionRequest method.
-//    req, resp := client.DeleteAccessLogSubscriptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteAccessLogSubscription
 func (c *VPCLattice) DeleteAccessLogSubscriptionRequest(input *DeleteAccessLogSubscriptionInput) (req *request.Request, output *DeleteAccessLogSubscriptionOutput) {
@@ -1008,21 +1009,22 @@ func (c *VPCLattice) DeleteAccessLogSubscriptionRequest(input *DeleteAccessLogSu
 // API operation DeleteAccessLogSubscription for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteAccessLogSubscription
 func (c *VPCLattice) DeleteAccessLogSubscription(input *DeleteAccessLogSubscriptionInput) (*DeleteAccessLogSubscriptionOutput, error) {
@@ -1062,14 +1064,13 @@ const opDeleteAuthPolicy = "DeleteAuthPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAuthPolicyRequest method.
+//	req, resp := client.DeleteAuthPolicyRequest(params)
 //
-//    // Example sending a request using the DeleteAuthPolicyRequest method.
-//    req, resp := client.DeleteAuthPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteAuthPolicy
 func (c *VPCLattice) DeleteAuthPolicyRequest(input *DeleteAuthPolicyInput) (req *request.Request, output *DeleteAuthPolicyOutput) {
@@ -1091,11 +1092,11 @@ func (c *VPCLattice) DeleteAuthPolicyRequest(input *DeleteAuthPolicyInput) (req 
 
 // DeleteAuthPolicy API operation for Amazon VPC Lattice.
 //
-// Deletes the specified auth policy. If an auth is set to AWS_IAM and the auth
-// policy is deleted, all requests will be denied by default. If you are trying
-// to remove the auth policy completely, you must set the auth_type to NONE.
-// If auth is enabled on the resource, but no auth policy is set, all requests
-// will be denied.
+// Deletes the specified auth policy. If an auth is set to Amazon Web Services_IAM
+// and the auth policy is deleted, all requests will be denied by default. If
+// you are trying to remove the auth policy completely, you must set the auth_type
+// to NONE. If auth is enabled on the resource, but no auth policy is set, all
+// requests will be denied.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1105,21 +1106,22 @@ func (c *VPCLattice) DeleteAuthPolicyRequest(input *DeleteAuthPolicyInput) (req 
 // API operation DeleteAuthPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteAuthPolicy
 func (c *VPCLattice) DeleteAuthPolicy(input *DeleteAuthPolicyInput) (*DeleteAuthPolicyOutput, error) {
@@ -1159,14 +1161,13 @@ const opDeleteListener = "DeleteListener"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteListenerRequest method.
+//	req, resp := client.DeleteListenerRequest(params)
 //
-//    // Example sending a request using the DeleteListenerRequest method.
-//    req, resp := client.DeleteListenerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteListener
 func (c *VPCLattice) DeleteListenerRequest(input *DeleteListenerInput) (req *request.Request, output *DeleteListenerOutput) {
@@ -1198,25 +1199,26 @@ func (c *VPCLattice) DeleteListenerRequest(input *DeleteListenerInput) (req *req
 // API operation DeleteListener for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteListener
 func (c *VPCLattice) DeleteListener(input *DeleteListenerInput) (*DeleteListenerOutput, error) {
@@ -1256,14 +1258,13 @@ const opDeleteResourcePolicy = "DeleteResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResourcePolicyRequest method.
+//	req, resp := client.DeleteResourcePolicyRequest(params)
 //
-//    // Example sending a request using the DeleteResourcePolicyRequest method.
-//    req, resp := client.DeleteResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteResourcePolicy
 func (c *VPCLattice) DeleteResourcePolicyRequest(input *DeleteResourcePolicyInput) (req *request.Request, output *DeleteResourcePolicyOutput) {
@@ -1295,21 +1296,22 @@ func (c *VPCLattice) DeleteResourcePolicyRequest(input *DeleteResourcePolicyInpu
 // API operation DeleteResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteResourcePolicy
 func (c *VPCLattice) DeleteResourcePolicy(input *DeleteResourcePolicyInput) (*DeleteResourcePolicyOutput, error) {
@@ -1349,14 +1351,13 @@ const opDeleteRule = "DeleteRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRuleRequest method.
+//	req, resp := client.DeleteRuleRequest(params)
 //
-//    // Example sending a request using the DeleteRuleRequest method.
-//    req, resp := client.DeleteRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteRule
 func (c *VPCLattice) DeleteRuleRequest(input *DeleteRuleInput) (req *request.Request, output *DeleteRuleOutput) {
@@ -1394,25 +1395,26 @@ func (c *VPCLattice) DeleteRuleRequest(input *DeleteRuleInput) (req *request.Req
 // API operation DeleteRule for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteRule
 func (c *VPCLattice) DeleteRule(input *DeleteRuleInput) (*DeleteRuleOutput, error) {
@@ -1452,14 +1454,13 @@ const opDeleteService = "DeleteService"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteServiceRequest method.
+//	req, resp := client.DeleteServiceRequest(params)
 //
-//    // Example sending a request using the DeleteServiceRequest method.
-//    req, resp := client.DeleteServiceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteService
 func (c *VPCLattice) DeleteServiceRequest(input *DeleteServiceInput) (req *request.Request, output *DeleteServiceOutput) {
@@ -1495,25 +1496,26 @@ func (c *VPCLattice) DeleteServiceRequest(input *DeleteServiceInput) (req *reque
 // API operation DeleteService for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteService
 func (c *VPCLattice) DeleteService(input *DeleteServiceInput) (*DeleteServiceOutput, error) {
@@ -1553,14 +1555,13 @@ const opDeleteServiceNetwork = "DeleteServiceNetwork"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteServiceNetworkRequest method.
+//	req, resp := client.DeleteServiceNetworkRequest(params)
 //
-//    // Example sending a request using the DeleteServiceNetworkRequest method.
-//    req, resp := client.DeleteServiceNetworkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteServiceNetwork
 func (c *VPCLattice) DeleteServiceNetworkRequest(input *DeleteServiceNetworkInput) (req *request.Request, output *DeleteServiceNetworkOutput) {
@@ -1597,25 +1598,26 @@ func (c *VPCLattice) DeleteServiceNetworkRequest(input *DeleteServiceNetworkInpu
 // API operation DeleteServiceNetwork for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteServiceNetwork
 func (c *VPCLattice) DeleteServiceNetwork(input *DeleteServiceNetworkInput) (*DeleteServiceNetworkOutput, error) {
@@ -1655,14 +1657,13 @@ const opDeleteServiceNetworkServiceAssociation = "DeleteServiceNetworkServiceAss
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteServiceNetworkServiceAssociationRequest method.
+//	req, resp := client.DeleteServiceNetworkServiceAssociationRequest(params)
 //
-//    // Example sending a request using the DeleteServiceNetworkServiceAssociationRequest method.
-//    req, resp := client.DeleteServiceNetworkServiceAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteServiceNetworkServiceAssociation
 func (c *VPCLattice) DeleteServiceNetworkServiceAssociationRequest(input *DeleteServiceNetworkServiceAssociationInput) (req *request.Request, output *DeleteServiceNetworkServiceAssociationOutput) {
@@ -1694,25 +1695,26 @@ func (c *VPCLattice) DeleteServiceNetworkServiceAssociationRequest(input *Delete
 // API operation DeleteServiceNetworkServiceAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteServiceNetworkServiceAssociation
 func (c *VPCLattice) DeleteServiceNetworkServiceAssociation(input *DeleteServiceNetworkServiceAssociationInput) (*DeleteServiceNetworkServiceAssociationOutput, error) {
@@ -1752,14 +1754,13 @@ const opDeleteServiceNetworkVpcAssociation = "DeleteServiceNetworkVpcAssociation
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteServiceNetworkVpcAssociationRequest method.
+//	req, resp := client.DeleteServiceNetworkVpcAssociationRequest(params)
 //
-//    // Example sending a request using the DeleteServiceNetworkVpcAssociationRequest method.
-//    req, resp := client.DeleteServiceNetworkVpcAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteServiceNetworkVpcAssociation
 func (c *VPCLattice) DeleteServiceNetworkVpcAssociationRequest(input *DeleteServiceNetworkVpcAssociationInput) (req *request.Request, output *DeleteServiceNetworkVpcAssociationOutput) {
@@ -1791,25 +1792,26 @@ func (c *VPCLattice) DeleteServiceNetworkVpcAssociationRequest(input *DeleteServ
 // API operation DeleteServiceNetworkVpcAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteServiceNetworkVpcAssociation
 func (c *VPCLattice) DeleteServiceNetworkVpcAssociation(input *DeleteServiceNetworkVpcAssociationInput) (*DeleteServiceNetworkVpcAssociationOutput, error) {
@@ -1849,14 +1851,13 @@ const opDeleteTargetGroup = "DeleteTargetGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteTargetGroupRequest method.
+//	req, resp := client.DeleteTargetGroupRequest(params)
 //
-//    // Example sending a request using the DeleteTargetGroupRequest method.
-//    req, resp := client.DeleteTargetGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteTargetGroup
 func (c *VPCLattice) DeleteTargetGroupRequest(input *DeleteTargetGroupInput) (req *request.Request, output *DeleteTargetGroupOutput) {
@@ -1888,22 +1889,23 @@ func (c *VPCLattice) DeleteTargetGroupRequest(input *DeleteTargetGroupInput) (re
 // API operation DeleteTargetGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeleteTargetGroup
 func (c *VPCLattice) DeleteTargetGroup(input *DeleteTargetGroupInput) (*DeleteTargetGroupOutput, error) {
@@ -1943,14 +1945,13 @@ const opDeregisterTargets = "DeregisterTargets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeregisterTargetsRequest method.
+//	req, resp := client.DeregisterTargetsRequest(params)
 //
-//    // Example sending a request using the DeregisterTargetsRequest method.
-//    req, resp := client.DeregisterTargetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeregisterTargets
 func (c *VPCLattice) DeregisterTargetsRequest(input *DeregisterTargetsInput) (req *request.Request, output *DeregisterTargetsOutput) {
@@ -1981,25 +1982,26 @@ func (c *VPCLattice) DeregisterTargetsRequest(input *DeregisterTargetsInput) (re
 // API operation DeregisterTargets for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/DeregisterTargets
 func (c *VPCLattice) DeregisterTargets(input *DeregisterTargetsInput) (*DeregisterTargetsOutput, error) {
@@ -2039,14 +2041,13 @@ const opGetAccessLogSubscription = "GetAccessLogSubscription"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAccessLogSubscriptionRequest method.
+//	req, resp := client.GetAccessLogSubscriptionRequest(params)
 //
-//    // Example sending a request using the GetAccessLogSubscriptionRequest method.
-//    req, resp := client.GetAccessLogSubscriptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetAccessLogSubscription
 func (c *VPCLattice) GetAccessLogSubscriptionRequest(input *GetAccessLogSubscriptionInput) (req *request.Request, output *GetAccessLogSubscriptionOutput) {
@@ -2077,21 +2078,22 @@ func (c *VPCLattice) GetAccessLogSubscriptionRequest(input *GetAccessLogSubscrip
 // API operation GetAccessLogSubscription for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetAccessLogSubscription
 func (c *VPCLattice) GetAccessLogSubscription(input *GetAccessLogSubscriptionInput) (*GetAccessLogSubscriptionOutput, error) {
@@ -2131,14 +2133,13 @@ const opGetAuthPolicy = "GetAuthPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAuthPolicyRequest method.
+//	req, resp := client.GetAuthPolicyRequest(params)
 //
-//    // Example sending a request using the GetAuthPolicyRequest method.
-//    req, resp := client.GetAuthPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetAuthPolicy
 func (c *VPCLattice) GetAuthPolicyRequest(input *GetAuthPolicyInput) (req *request.Request, output *GetAuthPolicyOutput) {
@@ -2170,21 +2171,22 @@ func (c *VPCLattice) GetAuthPolicyRequest(input *GetAuthPolicyInput) (req *reque
 // API operation GetAuthPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetAuthPolicy
 func (c *VPCLattice) GetAuthPolicy(input *GetAuthPolicyInput) (*GetAuthPolicyOutput, error) {
@@ -2224,14 +2226,13 @@ const opGetListener = "GetListener"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetListenerRequest method.
+//	req, resp := client.GetListenerRequest(params)
 //
-//    // Example sending a request using the GetListenerRequest method.
-//    req, resp := client.GetListenerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetListener
 func (c *VPCLattice) GetListenerRequest(input *GetListenerInput) (req *request.Request, output *GetListenerOutput) {
@@ -2262,21 +2263,22 @@ func (c *VPCLattice) GetListenerRequest(input *GetListenerInput) (req *request.R
 // API operation GetListener for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetListener
 func (c *VPCLattice) GetListener(input *GetListenerInput) (*GetListenerOutput, error) {
@@ -2316,14 +2318,13 @@ const opGetResourcePolicy = "GetResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResourcePolicyRequest method.
+//	req, resp := client.GetResourcePolicyRequest(params)
 //
-//    // Example sending a request using the GetResourcePolicyRequest method.
-//    req, resp := client.GetResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetResourcePolicy
 func (c *VPCLattice) GetResourcePolicyRequest(input *GetResourcePolicyInput) (req *request.Request, output *GetResourcePolicyOutput) {
@@ -2345,7 +2346,8 @@ func (c *VPCLattice) GetResourcePolicyRequest(input *GetResourcePolicyInput) (re
 // GetResourcePolicy API operation for Amazon VPC Lattice.
 //
 // Retrieves information about the resource policy. The resource policy is an
-// IAM policy created on behalf of the resource owner when they share a resource.
+// IAM policy created by AWS RAM on behalf of the resource owner when they share
+// a resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2355,21 +2357,22 @@ func (c *VPCLattice) GetResourcePolicyRequest(input *GetResourcePolicyInput) (re
 // API operation GetResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetResourcePolicy
 func (c *VPCLattice) GetResourcePolicy(input *GetResourcePolicyInput) (*GetResourcePolicyOutput, error) {
@@ -2409,14 +2412,13 @@ const opGetRule = "GetRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRuleRequest method.
+//	req, resp := client.GetRuleRequest(params)
 //
-//    // Example sending a request using the GetRuleRequest method.
-//    req, resp := client.GetRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetRule
 func (c *VPCLattice) GetRuleRequest(input *GetRuleInput) (req *request.Request, output *GetRuleOutput) {
@@ -2450,21 +2452,22 @@ func (c *VPCLattice) GetRuleRequest(input *GetRuleInput) (req *request.Request, 
 // API operation GetRule for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetRule
 func (c *VPCLattice) GetRule(input *GetRuleInput) (*GetRuleOutput, error) {
@@ -2504,14 +2507,13 @@ const opGetService = "GetService"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetServiceRequest method.
+//	req, resp := client.GetServiceRequest(params)
 //
-//    // Example sending a request using the GetServiceRequest method.
-//    req, resp := client.GetServiceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetService
 func (c *VPCLattice) GetServiceRequest(input *GetServiceInput) (req *request.Request, output *GetServiceOutput) {
@@ -2542,21 +2544,22 @@ func (c *VPCLattice) GetServiceRequest(input *GetServiceInput) (req *request.Req
 // API operation GetService for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetService
 func (c *VPCLattice) GetService(input *GetServiceInput) (*GetServiceOutput, error) {
@@ -2596,14 +2599,13 @@ const opGetServiceNetwork = "GetServiceNetwork"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetServiceNetworkRequest method.
+//	req, resp := client.GetServiceNetworkRequest(params)
 //
-//    // Example sending a request using the GetServiceNetworkRequest method.
-//    req, resp := client.GetServiceNetworkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetServiceNetwork
 func (c *VPCLattice) GetServiceNetworkRequest(input *GetServiceNetworkInput) (req *request.Request, output *GetServiceNetworkOutput) {
@@ -2634,21 +2636,22 @@ func (c *VPCLattice) GetServiceNetworkRequest(input *GetServiceNetworkInput) (re
 // API operation GetServiceNetwork for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetServiceNetwork
 func (c *VPCLattice) GetServiceNetwork(input *GetServiceNetworkInput) (*GetServiceNetworkOutput, error) {
@@ -2688,14 +2691,13 @@ const opGetServiceNetworkServiceAssociation = "GetServiceNetworkServiceAssociati
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetServiceNetworkServiceAssociationRequest method.
+//	req, resp := client.GetServiceNetworkServiceAssociationRequest(params)
 //
-//    // Example sending a request using the GetServiceNetworkServiceAssociationRequest method.
-//    req, resp := client.GetServiceNetworkServiceAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetServiceNetworkServiceAssociation
 func (c *VPCLattice) GetServiceNetworkServiceAssociationRequest(input *GetServiceNetworkServiceAssociationInput) (req *request.Request, output *GetServiceNetworkServiceAssociationOutput) {
@@ -2727,21 +2729,22 @@ func (c *VPCLattice) GetServiceNetworkServiceAssociationRequest(input *GetServic
 // API operation GetServiceNetworkServiceAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetServiceNetworkServiceAssociation
 func (c *VPCLattice) GetServiceNetworkServiceAssociation(input *GetServiceNetworkServiceAssociationInput) (*GetServiceNetworkServiceAssociationOutput, error) {
@@ -2781,14 +2784,13 @@ const opGetServiceNetworkVpcAssociation = "GetServiceNetworkVpcAssociation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetServiceNetworkVpcAssociationRequest method.
+//	req, resp := client.GetServiceNetworkVpcAssociationRequest(params)
 //
-//    // Example sending a request using the GetServiceNetworkVpcAssociationRequest method.
-//    req, resp := client.GetServiceNetworkVpcAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetServiceNetworkVpcAssociation
 func (c *VPCLattice) GetServiceNetworkVpcAssociationRequest(input *GetServiceNetworkVpcAssociationInput) (req *request.Request, output *GetServiceNetworkVpcAssociationOutput) {
@@ -2820,21 +2822,22 @@ func (c *VPCLattice) GetServiceNetworkVpcAssociationRequest(input *GetServiceNet
 // API operation GetServiceNetworkVpcAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetServiceNetworkVpcAssociation
 func (c *VPCLattice) GetServiceNetworkVpcAssociation(input *GetServiceNetworkVpcAssociationInput) (*GetServiceNetworkVpcAssociationOutput, error) {
@@ -2874,14 +2877,13 @@ const opGetTargetGroup = "GetTargetGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTargetGroupRequest method.
+//	req, resp := client.GetTargetGroupRequest(params)
 //
-//    // Example sending a request using the GetTargetGroupRequest method.
-//    req, resp := client.GetTargetGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetTargetGroup
 func (c *VPCLattice) GetTargetGroupRequest(input *GetTargetGroupInput) (req *request.Request, output *GetTargetGroupOutput) {
@@ -2912,18 +2914,22 @@ func (c *VPCLattice) GetTargetGroupRequest(input *GetTargetGroupInput) (req *req
 // API operation GetTargetGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/GetTargetGroup
 func (c *VPCLattice) GetTargetGroup(input *GetTargetGroupInput) (*GetTargetGroupOutput, error) {
@@ -2963,14 +2969,13 @@ const opListAccessLogSubscriptions = "ListAccessLogSubscriptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAccessLogSubscriptionsRequest method.
+//	req, resp := client.ListAccessLogSubscriptionsRequest(params)
 //
-//    // Example sending a request using the ListAccessLogSubscriptionsRequest method.
-//    req, resp := client.ListAccessLogSubscriptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListAccessLogSubscriptions
 func (c *VPCLattice) ListAccessLogSubscriptionsRequest(input *ListAccessLogSubscriptionsInput) (req *request.Request, output *ListAccessLogSubscriptionsOutput) {
@@ -3007,15 +3012,19 @@ func (c *VPCLattice) ListAccessLogSubscriptionsRequest(input *ListAccessLogSubsc
 // API operation ListAccessLogSubscriptions for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
+//
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListAccessLogSubscriptions
 func (c *VPCLattice) ListAccessLogSubscriptions(input *ListAccessLogSubscriptionsInput) (*ListAccessLogSubscriptionsOutput, error) {
@@ -3047,15 +3056,14 @@ func (c *VPCLattice) ListAccessLogSubscriptionsWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAccessLogSubscriptions operation.
-//    pageNum := 0
-//    err := client.ListAccessLogSubscriptionsPages(params,
-//        func(page *vpclattice.ListAccessLogSubscriptionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAccessLogSubscriptions operation.
+//	pageNum := 0
+//	err := client.ListAccessLogSubscriptionsPages(params,
+//	    func(page *vpclattice.ListAccessLogSubscriptionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *VPCLattice) ListAccessLogSubscriptionsPages(input *ListAccessLogSubscriptionsInput, fn func(*ListAccessLogSubscriptionsOutput, bool) bool) error {
 	return c.ListAccessLogSubscriptionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3107,14 +3115,13 @@ const opListListeners = "ListListeners"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListListenersRequest method.
+//	req, resp := client.ListListenersRequest(params)
 //
-//    // Example sending a request using the ListListenersRequest method.
-//    req, resp := client.ListListenersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListListeners
 func (c *VPCLattice) ListListenersRequest(input *ListListenersInput) (req *request.Request, output *ListListenersOutput) {
@@ -3151,21 +3158,22 @@ func (c *VPCLattice) ListListenersRequest(input *ListListenersInput) (req *reque
 // API operation ListListeners for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListListeners
 func (c *VPCLattice) ListListeners(input *ListListenersInput) (*ListListenersOutput, error) {
@@ -3197,15 +3205,14 @@ func (c *VPCLattice) ListListenersWithContext(ctx aws.Context, input *ListListen
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListListeners operation.
-//    pageNum := 0
-//    err := client.ListListenersPages(params,
-//        func(page *vpclattice.ListListenersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListListeners operation.
+//	pageNum := 0
+//	err := client.ListListenersPages(params,
+//	    func(page *vpclattice.ListListenersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *VPCLattice) ListListenersPages(input *ListListenersInput, fn func(*ListListenersOutput, bool) bool) error {
 	return c.ListListenersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3257,14 +3264,13 @@ const opListRules = "ListRules"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRulesRequest method.
+//	req, resp := client.ListRulesRequest(params)
 //
-//    // Example sending a request using the ListRulesRequest method.
-//    req, resp := client.ListRulesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListRules
 func (c *VPCLattice) ListRulesRequest(input *ListRulesInput) (req *request.Request, output *ListRulesOutput) {
@@ -3301,21 +3307,22 @@ func (c *VPCLattice) ListRulesRequest(input *ListRulesInput) (req *request.Reque
 // API operation ListRules for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListRules
 func (c *VPCLattice) ListRules(input *ListRulesInput) (*ListRulesOutput, error) {
@@ -3347,15 +3354,14 @@ func (c *VPCLattice) ListRulesWithContext(ctx aws.Context, input *ListRulesInput
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRules operation.
-//    pageNum := 0
-//    err := client.ListRulesPages(params,
-//        func(page *vpclattice.ListRulesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRules operation.
+//	pageNum := 0
+//	err := client.ListRulesPages(params,
+//	    func(page *vpclattice.ListRulesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *VPCLattice) ListRulesPages(input *ListRulesInput, fn func(*ListRulesOutput, bool) bool) error {
 	return c.ListRulesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3407,14 +3413,13 @@ const opListServiceNetworkServiceAssociations = "ListServiceNetworkServiceAssoci
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListServiceNetworkServiceAssociationsRequest method.
+//	req, resp := client.ListServiceNetworkServiceAssociationsRequest(params)
 //
-//    // Example sending a request using the ListServiceNetworkServiceAssociationsRequest method.
-//    req, resp := client.ListServiceNetworkServiceAssociationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListServiceNetworkServiceAssociations
 func (c *VPCLattice) ListServiceNetworkServiceAssociationsRequest(input *ListServiceNetworkServiceAssociationsInput) (req *request.Request, output *ListServiceNetworkServiceAssociationsOutput) {
@@ -3460,18 +3465,19 @@ func (c *VPCLattice) ListServiceNetworkServiceAssociationsRequest(input *ListSer
 // API operation ListServiceNetworkServiceAssociations for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListServiceNetworkServiceAssociations
 func (c *VPCLattice) ListServiceNetworkServiceAssociations(input *ListServiceNetworkServiceAssociationsInput) (*ListServiceNetworkServiceAssociationsOutput, error) {
@@ -3503,15 +3509,14 @@ func (c *VPCLattice) ListServiceNetworkServiceAssociationsWithContext(ctx aws.Co
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListServiceNetworkServiceAssociations operation.
-//    pageNum := 0
-//    err := client.ListServiceNetworkServiceAssociationsPages(params,
-//        func(page *vpclattice.ListServiceNetworkServiceAssociationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListServiceNetworkServiceAssociations operation.
+//	pageNum := 0
+//	err := client.ListServiceNetworkServiceAssociationsPages(params,
+//	    func(page *vpclattice.ListServiceNetworkServiceAssociationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *VPCLattice) ListServiceNetworkServiceAssociationsPages(input *ListServiceNetworkServiceAssociationsInput, fn func(*ListServiceNetworkServiceAssociationsOutput, bool) bool) error {
 	return c.ListServiceNetworkServiceAssociationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3563,14 +3568,13 @@ const opListServiceNetworkVpcAssociations = "ListServiceNetworkVpcAssociations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListServiceNetworkVpcAssociationsRequest method.
+//	req, resp := client.ListServiceNetworkVpcAssociationsRequest(params)
 //
-//    // Example sending a request using the ListServiceNetworkVpcAssociationsRequest method.
-//    req, resp := client.ListServiceNetworkVpcAssociationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListServiceNetworkVpcAssociations
 func (c *VPCLattice) ListServiceNetworkVpcAssociationsRequest(input *ListServiceNetworkVpcAssociationsInput) (req *request.Request, output *ListServiceNetworkVpcAssociationsOutput) {
@@ -3609,18 +3613,19 @@ func (c *VPCLattice) ListServiceNetworkVpcAssociationsRequest(input *ListService
 // API operation ListServiceNetworkVpcAssociations for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListServiceNetworkVpcAssociations
 func (c *VPCLattice) ListServiceNetworkVpcAssociations(input *ListServiceNetworkVpcAssociationsInput) (*ListServiceNetworkVpcAssociationsOutput, error) {
@@ -3652,15 +3657,14 @@ func (c *VPCLattice) ListServiceNetworkVpcAssociationsWithContext(ctx aws.Contex
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListServiceNetworkVpcAssociations operation.
-//    pageNum := 0
-//    err := client.ListServiceNetworkVpcAssociationsPages(params,
-//        func(page *vpclattice.ListServiceNetworkVpcAssociationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListServiceNetworkVpcAssociations operation.
+//	pageNum := 0
+//	err := client.ListServiceNetworkVpcAssociationsPages(params,
+//	    func(page *vpclattice.ListServiceNetworkVpcAssociationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *VPCLattice) ListServiceNetworkVpcAssociationsPages(input *ListServiceNetworkVpcAssociationsInput, fn func(*ListServiceNetworkVpcAssociationsOutput, bool) bool) error {
 	return c.ListServiceNetworkVpcAssociationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3712,14 +3716,13 @@ const opListServiceNetworks = "ListServiceNetworks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListServiceNetworksRequest method.
+//	req, resp := client.ListServiceNetworksRequest(params)
 //
-//    // Example sending a request using the ListServiceNetworksRequest method.
-//    req, resp := client.ListServiceNetworksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListServiceNetworks
 func (c *VPCLattice) ListServiceNetworksRequest(input *ListServiceNetworksInput) (req *request.Request, output *ListServiceNetworksOutput) {
@@ -3758,18 +3761,19 @@ func (c *VPCLattice) ListServiceNetworksRequest(input *ListServiceNetworksInput)
 // API operation ListServiceNetworks for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListServiceNetworks
 func (c *VPCLattice) ListServiceNetworks(input *ListServiceNetworksInput) (*ListServiceNetworksOutput, error) {
@@ -3801,15 +3805,14 @@ func (c *VPCLattice) ListServiceNetworksWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListServiceNetworks operation.
-//    pageNum := 0
-//    err := client.ListServiceNetworksPages(params,
-//        func(page *vpclattice.ListServiceNetworksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListServiceNetworks operation.
+//	pageNum := 0
+//	err := client.ListServiceNetworksPages(params,
+//	    func(page *vpclattice.ListServiceNetworksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *VPCLattice) ListServiceNetworksPages(input *ListServiceNetworksInput, fn func(*ListServiceNetworksOutput, bool) bool) error {
 	return c.ListServiceNetworksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3861,14 +3864,13 @@ const opListServices = "ListServices"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListServicesRequest method.
+//	req, resp := client.ListServicesRequest(params)
 //
-//    // Example sending a request using the ListServicesRequest method.
-//    req, resp := client.ListServicesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListServices
 func (c *VPCLattice) ListServicesRequest(input *ListServicesInput) (req *request.Request, output *ListServicesOutput) {
@@ -3906,18 +3908,19 @@ func (c *VPCLattice) ListServicesRequest(input *ListServicesInput) (req *request
 // API operation ListServices for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListServices
 func (c *VPCLattice) ListServices(input *ListServicesInput) (*ListServicesOutput, error) {
@@ -3949,15 +3952,14 @@ func (c *VPCLattice) ListServicesWithContext(ctx aws.Context, input *ListService
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListServices operation.
-//    pageNum := 0
-//    err := client.ListServicesPages(params,
-//        func(page *vpclattice.ListServicesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListServices operation.
+//	pageNum := 0
+//	err := client.ListServicesPages(params,
+//	    func(page *vpclattice.ListServicesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *VPCLattice) ListServicesPages(input *ListServicesInput, fn func(*ListServicesOutput, bool) bool) error {
 	return c.ListServicesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4009,14 +4011,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListTagsForResource
 func (c *VPCLattice) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -4047,15 +4048,19 @@ func (c *VPCLattice) ListTagsForResourceRequest(input *ListTagsForResourceInput)
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListTagsForResource
 func (c *VPCLattice) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -4095,14 +4100,13 @@ const opListTargetGroups = "ListTargetGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTargetGroupsRequest method.
+//	req, resp := client.ListTargetGroupsRequest(params)
 //
-//    // Example sending a request using the ListTargetGroupsRequest method.
-//    req, resp := client.ListTargetGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListTargetGroups
 func (c *VPCLattice) ListTargetGroupsRequest(input *ListTargetGroupsInput) (req *request.Request, output *ListTargetGroupsOutput) {
@@ -4140,18 +4144,19 @@ func (c *VPCLattice) ListTargetGroupsRequest(input *ListTargetGroupsInput) (req 
 // API operation ListTargetGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListTargetGroups
 func (c *VPCLattice) ListTargetGroups(input *ListTargetGroupsInput) (*ListTargetGroupsOutput, error) {
@@ -4183,15 +4188,14 @@ func (c *VPCLattice) ListTargetGroupsWithContext(ctx aws.Context, input *ListTar
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTargetGroups operation.
-//    pageNum := 0
-//    err := client.ListTargetGroupsPages(params,
-//        func(page *vpclattice.ListTargetGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTargetGroups operation.
+//	pageNum := 0
+//	err := client.ListTargetGroupsPages(params,
+//	    func(page *vpclattice.ListTargetGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *VPCLattice) ListTargetGroupsPages(input *ListTargetGroupsInput, fn func(*ListTargetGroupsOutput, bool) bool) error {
 	return c.ListTargetGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4243,14 +4247,13 @@ const opListTargets = "ListTargets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTargetsRequest method.
+//	req, resp := client.ListTargetsRequest(params)
 //
-//    // Example sending a request using the ListTargetsRequest method.
-//    req, resp := client.ListTargetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListTargets
 func (c *VPCLattice) ListTargetsRequest(input *ListTargetsInput) (req *request.Request, output *ListTargetsOutput) {
@@ -4289,21 +4292,22 @@ func (c *VPCLattice) ListTargetsRequest(input *ListTargetsInput) (req *request.R
 // API operation ListTargets for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/ListTargets
 func (c *VPCLattice) ListTargets(input *ListTargetsInput) (*ListTargetsOutput, error) {
@@ -4335,15 +4339,14 @@ func (c *VPCLattice) ListTargetsWithContext(ctx aws.Context, input *ListTargetsI
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTargets operation.
-//    pageNum := 0
-//    err := client.ListTargetsPages(params,
-//        func(page *vpclattice.ListTargetsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTargets operation.
+//	pageNum := 0
+//	err := client.ListTargetsPages(params,
+//	    func(page *vpclattice.ListTargetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *VPCLattice) ListTargetsPages(input *ListTargetsInput, fn func(*ListTargetsOutput, bool) bool) error {
 	return c.ListTargetsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4395,14 +4398,13 @@ const opPutAuthPolicy = "PutAuthPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutAuthPolicyRequest method.
+//	req, resp := client.PutAuthPolicyRequest(params)
 //
-//    // Example sending a request using the PutAuthPolicyRequest method.
-//    req, resp := client.PutAuthPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/PutAuthPolicy
 func (c *VPCLattice) PutAuthPolicyRequest(input *PutAuthPolicyInput) (req *request.Request, output *PutAuthPolicyOutput) {
@@ -4423,8 +4425,7 @@ func (c *VPCLattice) PutAuthPolicyRequest(input *PutAuthPolicyInput) (req *reque
 
 // PutAuthPolicy API operation for Amazon VPC Lattice.
 //
-// Creates or updates the auth policy. The policy string in JSON must not contain
-// newlines or blank lines.
+// Creates or updates the auth policy.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4434,21 +4435,22 @@ func (c *VPCLattice) PutAuthPolicyRequest(input *PutAuthPolicyInput) (req *reque
 // API operation PutAuthPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/PutAuthPolicy
 func (c *VPCLattice) PutAuthPolicy(input *PutAuthPolicyInput) (*PutAuthPolicyOutput, error) {
@@ -4488,14 +4490,13 @@ const opPutResourcePolicy = "PutResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutResourcePolicyRequest method.
+//	req, resp := client.PutResourcePolicyRequest(params)
 //
-//    // Example sending a request using the PutResourcePolicyRequest method.
-//    req, resp := client.PutResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/PutResourcePolicy
 func (c *VPCLattice) PutResourcePolicyRequest(input *PutResourcePolicyInput) (req *request.Request, output *PutResourcePolicyOutput) {
@@ -4530,21 +4531,22 @@ func (c *VPCLattice) PutResourcePolicyRequest(input *PutResourcePolicyInput) (re
 // API operation PutResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/PutResourcePolicy
 func (c *VPCLattice) PutResourcePolicy(input *PutResourcePolicyInput) (*PutResourcePolicyOutput, error) {
@@ -4584,14 +4586,13 @@ const opRegisterTargets = "RegisterTargets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterTargetsRequest method.
+//	req, resp := client.RegisterTargetsRequest(params)
 //
-//    // Example sending a request using the RegisterTargetsRequest method.
-//    req, resp := client.RegisterTargetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/RegisterTargets
 func (c *VPCLattice) RegisterTargetsRequest(input *RegisterTargetsInput) (req *request.Request, output *RegisterTargetsOutput) {
@@ -4623,28 +4624,29 @@ func (c *VPCLattice) RegisterTargetsRequest(input *RegisterTargetsInput) (req *r
 // API operation RegisterTargets for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/RegisterTargets
 func (c *VPCLattice) RegisterTargets(input *RegisterTargetsInput) (*RegisterTargetsOutput, error) {
@@ -4684,14 +4686,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/TagResource
 func (c *VPCLattice) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -4723,21 +4724,22 @@ func (c *VPCLattice) TagResourceRequest(input *TagResourceInput) (req *request.R
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/TagResource
 func (c *VPCLattice) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -4777,14 +4779,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UntagResource
 func (c *VPCLattice) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -4816,15 +4817,19 @@ func (c *VPCLattice) UntagResourceRequest(input *UntagResourceInput) (req *reque
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UntagResource
 func (c *VPCLattice) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -4864,14 +4869,13 @@ const opUpdateAccessLogSubscription = "UpdateAccessLogSubscription"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAccessLogSubscriptionRequest method.
+//	req, resp := client.UpdateAccessLogSubscriptionRequest(params)
 //
-//    // Example sending a request using the UpdateAccessLogSubscriptionRequest method.
-//    req, resp := client.UpdateAccessLogSubscriptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateAccessLogSubscription
 func (c *VPCLattice) UpdateAccessLogSubscriptionRequest(input *UpdateAccessLogSubscriptionInput) (req *request.Request, output *UpdateAccessLogSubscriptionOutput) {
@@ -4902,25 +4906,26 @@ func (c *VPCLattice) UpdateAccessLogSubscriptionRequest(input *UpdateAccessLogSu
 // API operation UpdateAccessLogSubscription for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateAccessLogSubscription
 func (c *VPCLattice) UpdateAccessLogSubscription(input *UpdateAccessLogSubscriptionInput) (*UpdateAccessLogSubscriptionOutput, error) {
@@ -4960,14 +4965,13 @@ const opUpdateListener = "UpdateListener"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateListenerRequest method.
+//	req, resp := client.UpdateListenerRequest(params)
 //
-//    // Example sending a request using the UpdateListenerRequest method.
-//    req, resp := client.UpdateListenerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateListener
 func (c *VPCLattice) UpdateListenerRequest(input *UpdateListenerInput) (req *request.Request, output *UpdateListenerOutput) {
@@ -4998,25 +5002,26 @@ func (c *VPCLattice) UpdateListenerRequest(input *UpdateListenerInput) (req *req
 // API operation UpdateListener for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateListener
 func (c *VPCLattice) UpdateListener(input *UpdateListenerInput) (*UpdateListenerOutput, error) {
@@ -5056,14 +5061,13 @@ const opUpdateRule = "UpdateRule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRuleRequest method.
+//	req, resp := client.UpdateRuleRequest(params)
 //
-//    // Example sending a request using the UpdateRuleRequest method.
-//    req, resp := client.UpdateRuleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateRule
 func (c *VPCLattice) UpdateRuleRequest(input *UpdateRuleInput) (req *request.Request, output *UpdateRuleOutput) {
@@ -5095,25 +5099,26 @@ func (c *VPCLattice) UpdateRuleRequest(input *UpdateRuleInput) (req *request.Req
 // API operation UpdateRule for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateRule
 func (c *VPCLattice) UpdateRule(input *UpdateRuleInput) (*UpdateRuleOutput, error) {
@@ -5153,14 +5158,13 @@ const opUpdateService = "UpdateService"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateServiceRequest method.
+//	req, resp := client.UpdateServiceRequest(params)
 //
-//    // Example sending a request using the UpdateServiceRequest method.
-//    req, resp := client.UpdateServiceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateService
 func (c *VPCLattice) UpdateServiceRequest(input *UpdateServiceInput) (req *request.Request, output *UpdateServiceOutput) {
@@ -5191,25 +5195,26 @@ func (c *VPCLattice) UpdateServiceRequest(input *UpdateServiceInput) (req *reque
 // API operation UpdateService for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateService
 func (c *VPCLattice) UpdateService(input *UpdateServiceInput) (*UpdateServiceOutput, error) {
@@ -5249,14 +5254,13 @@ const opUpdateServiceNetwork = "UpdateServiceNetwork"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateServiceNetworkRequest method.
+//	req, resp := client.UpdateServiceNetworkRequest(params)
 //
-//    // Example sending a request using the UpdateServiceNetworkRequest method.
-//    req, resp := client.UpdateServiceNetworkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateServiceNetwork
 func (c *VPCLattice) UpdateServiceNetworkRequest(input *UpdateServiceNetworkInput) (req *request.Request, output *UpdateServiceNetworkOutput) {
@@ -5287,25 +5291,26 @@ func (c *VPCLattice) UpdateServiceNetworkRequest(input *UpdateServiceNetworkInpu
 // API operation UpdateServiceNetwork for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateServiceNetwork
 func (c *VPCLattice) UpdateServiceNetwork(input *UpdateServiceNetworkInput) (*UpdateServiceNetworkOutput, error) {
@@ -5345,14 +5350,13 @@ const opUpdateServiceNetworkVpcAssociation = "UpdateServiceNetworkVpcAssociation
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateServiceNetworkVpcAssociationRequest method.
+//	req, resp := client.UpdateServiceNetworkVpcAssociationRequest(params)
 //
-//    // Example sending a request using the UpdateServiceNetworkVpcAssociationRequest method.
-//    req, resp := client.UpdateServiceNetworkVpcAssociationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateServiceNetworkVpcAssociation
 func (c *VPCLattice) UpdateServiceNetworkVpcAssociationRequest(input *UpdateServiceNetworkVpcAssociationInput) (req *request.Request, output *UpdateServiceNetworkVpcAssociationOutput) {
@@ -5373,11 +5377,8 @@ func (c *VPCLattice) UpdateServiceNetworkVpcAssociationRequest(input *UpdateServ
 
 // UpdateServiceNetworkVpcAssociation API operation for Amazon VPC Lattice.
 //
-// Updates the service network and VPC association. If you add a security group
-// to the service network and VPC association, the association must continue
-// to always have at least one security group. You can add or edit security
-// groups at any time. However, to remove all security groups, you must first
-// delete the association and recreate it without security groups.
+// Updates the service network and VPC association. Once you add a security
+// group, it cannot be removed.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5387,25 +5388,26 @@ func (c *VPCLattice) UpdateServiceNetworkVpcAssociationRequest(input *UpdateServ
 // API operation UpdateServiceNetworkVpcAssociation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * AccessDeniedException
-//   The user does not have sufficient access to perform this action.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateServiceNetworkVpcAssociation
 func (c *VPCLattice) UpdateServiceNetworkVpcAssociation(input *UpdateServiceNetworkVpcAssociationInput) (*UpdateServiceNetworkVpcAssociationOutput, error) {
@@ -5445,14 +5447,13 @@ const opUpdateTargetGroup = "UpdateTargetGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateTargetGroupRequest method.
+//	req, resp := client.UpdateTargetGroupRequest(params)
 //
-//    // Example sending a request using the UpdateTargetGroupRequest method.
-//    req, resp := client.UpdateTargetGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateTargetGroup
 func (c *VPCLattice) UpdateTargetGroupRequest(input *UpdateTargetGroupInput) (req *request.Request, output *UpdateTargetGroupOutput) {
@@ -5483,22 +5484,26 @@ func (c *VPCLattice) UpdateTargetGroupRequest(input *UpdateTargetGroupInput) (re
 // API operation UpdateTargetGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input does not satisfy the constraints specified by an Amazon Web Services
-//   service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ValidationException
+//     The input does not satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - AccessDeniedException
+//     The user does not have sufficient access to perform this action.
 //
-//   * ConflictException
-//   The request conflicts with the current state of the resource. Updating or
-//   deleting a resource can cause an inconsistent state.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An unexpected error occurred while processing the request.
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
+//
+//   - ConflictException
+//     The request conflicts with the current state of the resource. Updating or
+//     deleting a resource can cause an inconsistent state.
+//
+//   - InternalServerException
+//     An unexpected error occurred while processing the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/vpc-lattice-2022-11-30/UpdateTargetGroup
 func (c *VPCLattice) UpdateTargetGroup(input *UpdateTargetGroupInput) (*UpdateTargetGroupOutput, error) {
@@ -8798,10 +8803,10 @@ type GetAuthPolicyOutput struct {
 	Policy *string `locationName:"policy" type:"string"`
 
 	// The state of the auth policy. The auth policy is only active when the auth
-	// type is set to AWS_IAM. If you provide a policy, then authentication and
-	// authorization decisions are made based on this policy and the client's IAM
-	// policy. If the auth type is NONE, then any auth policy you provide will remain
-	// inactive. For more information, see Create a service network (https://docs.aws.amazon.com/vpc-lattice/latest/ug/service-networks.html#create-service-network)
+	// type is set to Amazon Web Services_IAM. If you provide a policy, then authentication
+	// and authorization decisions are made based on this policy and the client's
+	// IAM policy. If the auth type is NONE, then any auth policy you provide will
+	// remain inactive. For more information, see Create a service network (https://docs.aws.amazon.com/vpc-lattice/latest/ug/service-networks.html#create-service-network)
 	// in the Amazon VPC Lattice User Guide.
 	State *string `locationName:"state" type:"string" enum:"AuthPolicyState"`
 }
@@ -9030,7 +9035,7 @@ func (s *GetListenerOutput) SetServiceId(v string) *GetListenerOutput {
 type GetResourcePolicyInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
-	// The Amazon Resource Name (ARN) of the service network or service.
+	// An IAM policy.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"20" type:"string" required:"true"`
@@ -9079,7 +9084,7 @@ func (s *GetResourcePolicyInput) SetResourceArn(v string) *GetResourcePolicyInpu
 type GetResourcePolicyOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An IAM policy.
+	// The Amazon Resource Name (ARN) of the service network or service.
 	Policy *string `locationName:"policy" min:"1" type:"string"`
 }
 
@@ -11989,8 +11994,7 @@ func (s *PathMatchType) SetPrefix(v string) *PathMatchType {
 type PutAuthPolicyInput struct {
 	_ struct{} `type:"structure"`
 
-	// The auth policy. The policy string in JSON must not contain newlines or blank
-	// lines.
+	// The auth policy.
 	//
 	// Policy is a required field
 	Policy *string `locationName:"policy" type:"string" required:"true"`
@@ -12054,14 +12058,13 @@ func (s *PutAuthPolicyInput) SetResourceIdentifier(v string) *PutAuthPolicyInput
 type PutAuthPolicyOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The auth policy. The policy string in JSON must not contain newlines or blank
-	// lines.
+	// The auth policy.
 	Policy *string `locationName:"policy" type:"string"`
 
 	// The state of the auth policy. The auth policy is only active when the auth
-	// type is set to AWS_IAM. If you provide a policy, then authentication and
-	// authorization decisions are made based on this policy and the client's IAM
-	// policy. If the Auth type is NONE, then, any auth policy you provide will
+	// type is set to Amazon Web Services_IAM. If you provide a policy, then authentication
+	// and authorization decisions are made based on this policy and the client's
+	// IAM policy. If the Auth type is NONE, then, any auth policy you provide will
 	// remain inactive. For more information, see Create a service network (https://docs.aws.amazon.com/vpc-lattice/latest/ug/service-networks.html#create-service-network)
 	// in the Amazon VPC Lattice User Guide.
 	State *string `locationName:"state" type:"string" enum:"AuthPolicyState"`
@@ -12100,8 +12103,7 @@ func (s *PutAuthPolicyOutput) SetState(v string) *PutAuthPolicyOutput {
 type PutResourcePolicyInput struct {
 	_ struct{} `type:"structure"`
 
-	// An IAM policy. The policy string in JSON must not contain newlines or blank
-	// lines.
+	// An IAM policy.
 	//
 	// Policy is a required field
 	Policy *string `locationName:"policy" min:"1" type:"string" required:"true"`
@@ -13554,25 +13556,22 @@ type TargetGroupConfig struct {
 	// type defaults to ipv4.
 	IpAddressType *string `locationName:"ipAddressType" type:"string" enum:"IpAddressType"`
 
+	// Lambda event structure version
+	LambdaEventStructureVersion *string `locationName:"lambdaEventStructureVersion" type:"string" enum:"LambdaEventStructureVersion"`
+
 	// The port on which the targets are listening. For HTTP, the default is 80.
 	// For HTTPS, the default is 443
-	//
-	// Port is a required field
-	Port *int64 `locationName:"port" min:"1" type:"integer" required:"true"`
+	Port *int64 `locationName:"port" min:"1" type:"integer"`
 
 	// The protocol to use for routing traffic to the targets. Default is the protocol
 	// of a target group.
-	//
-	// Protocol is a required field
-	Protocol *string `locationName:"protocol" type:"string" required:"true" enum:"TargetGroupProtocol"`
+	Protocol *string `locationName:"protocol" type:"string" enum:"TargetGroupProtocol"`
 
 	// The protocol version. Default value is HTTP1.
 	ProtocolVersion *string `locationName:"protocolVersion" type:"string" enum:"TargetGroupProtocolVersion"`
 
 	// The ID of the VPC.
-	//
-	// VpcIdentifier is a required field
-	VpcIdentifier *string `locationName:"vpcIdentifier" min:"5" type:"string" required:"true"`
+	VpcIdentifier *string `locationName:"vpcIdentifier" min:"5" type:"string"`
 }
 
 // String returns the string representation.
@@ -13596,17 +13595,8 @@ func (s TargetGroupConfig) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *TargetGroupConfig) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "TargetGroupConfig"}
-	if s.Port == nil {
-		invalidParams.Add(request.NewErrParamRequired("Port"))
-	}
 	if s.Port != nil && *s.Port < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Port", 1))
-	}
-	if s.Protocol == nil {
-		invalidParams.Add(request.NewErrParamRequired("Protocol"))
-	}
-	if s.VpcIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("VpcIdentifier"))
 	}
 	if s.VpcIdentifier != nil && len(*s.VpcIdentifier) < 5 {
 		invalidParams.Add(request.NewErrParamMinLen("VpcIdentifier", 5))
@@ -13627,6 +13617,12 @@ func (s *TargetGroupConfig) SetHealthCheck(v *HealthCheckConfig) *TargetGroupCon
 // SetIpAddressType sets the IpAddressType field's value.
 func (s *TargetGroupConfig) SetIpAddressType(v string) *TargetGroupConfig {
 	s.IpAddressType = &v
+	return s
+}
+
+// SetLambdaEventStructureVersion sets the LambdaEventStructureVersion field's value.
+func (s *TargetGroupConfig) SetLambdaEventStructureVersion(v string) *TargetGroupConfig {
+	s.LambdaEventStructureVersion = &v
 	return s
 }
 
@@ -13672,6 +13668,9 @@ type TargetGroupSummary struct {
 	// ipv4 and ipv6. This is an optional parameter. If not specified, the IP address
 	// type defaults to ipv4.
 	IpAddressType *string `locationName:"ipAddressType" type:"string" enum:"IpAddressType"`
+
+	// Lambda event structure version
+	LambdaEventStructureVersion *string `locationName:"lambdaEventStructureVersion" type:"string" enum:"LambdaEventStructureVersion"`
 
 	// The date and time that the target group was last updated, specified in ISO-8601
 	// format.
@@ -13738,6 +13737,12 @@ func (s *TargetGroupSummary) SetId(v string) *TargetGroupSummary {
 // SetIpAddressType sets the IpAddressType field's value.
 func (s *TargetGroupSummary) SetIpAddressType(v string) *TargetGroupSummary {
 	s.IpAddressType = &v
+	return s
+}
+
+// SetLambdaEventStructureVersion sets the LambdaEventStructureVersion field's value.
+func (s *TargetGroupSummary) SetLambdaEventStructureVersion(v string) *TargetGroupSummary {
+	s.LambdaEventStructureVersion = &v
 	return s
 }
 
@@ -14754,7 +14759,8 @@ func (s *UpdateServiceNetworkOutput) SetName(v string) *UpdateServiceNetworkOutp
 type UpdateServiceNetworkVpcAssociationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The IDs of the security groups.
+	// The IDs of the security groups. Once you add a security group, it cannot
+	// be removed.
 	//
 	// SecurityGroupIds is a required field
 	SecurityGroupIds []*string `locationName:"securityGroupIds" min:"1" type:"list" required:"true"`
@@ -15345,6 +15351,22 @@ func IpAddressType_Values() []string {
 	return []string{
 		IpAddressTypeIpv4,
 		IpAddressTypeIpv6,
+	}
+}
+
+const (
+	// LambdaEventStructureVersionV1 is a LambdaEventStructureVersion enum value
+	LambdaEventStructureVersionV1 = "V1"
+
+	// LambdaEventStructureVersionV2 is a LambdaEventStructureVersion enum value
+	LambdaEventStructureVersionV2 = "V2"
+)
+
+// LambdaEventStructureVersion_Values returns all elements of the LambdaEventStructureVersion enum
+func LambdaEventStructureVersion_Values() []string {
+	return []string{
+		LambdaEventStructureVersionV1,
+		LambdaEventStructureVersionV2,
 	}
 }
 

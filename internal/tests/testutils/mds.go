@@ -33,13 +33,13 @@ import (
 	"github.com/twinj/uuid"
 )
 
-func NewMdsSdkMock() *mdssdkmock.SSMMDSAPI {
-	sdkMock := new(mdssdkmock.SSMMDSAPI)
+func NewMdsSdkMock() *mdssdkmock.SsmmdsAPI {
+	sdkMock := new(mdssdkmock.SsmmdsAPI)
 	sdkMock.On("AcknowledgeMessageRequest", mock.AnythingOfType("*ssmmds.AcknowledgeMessageInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, &ssmmds.AcknowledgeMessageOutput{})
 	return sdkMock
 }
 
-func NewMdsService(context context.T, msgSvc ssmmdsiface.SSMMDSAPI, sendMdsSdkRequest mdsService.SendSdkRequest) mdsService.Service {
+func NewMdsService(context context.T, msgSvc ssmmdsiface.SsmmdsAPI, sendMdsSdkRequest mdsService.SendSdkRequest) mdsService.Service {
 	cancelMdsSDKRequest := func(trans *http.Transport, req *request.Request) {
 		return
 	}

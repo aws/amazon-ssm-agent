@@ -4,17 +4,17 @@
 // requests to AWS Migration Hub Orchestrator.
 //
 // This API reference provides descriptions, syntax, and other details about
-// each of the actions and data types for AWS Migration Hub Orchestrator. he
-// topic for each action shows the API request parameters and the response.
-// Alternatively, you can use one of the AWS SDKs to access an API that is tailored
-// to the programming language or platform that you're using.
+// each of the actions and data types for AWS Migration Hub Orchestrator. The
+// topic for each action shows the API request parameters and responses. Alternatively,
+// you can use one of the AWS SDKs to access an API that is tailored to the
+// programming language or platform that you're using.
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/migrationhuborchestrator-2021-08-28 for more information on this service.
 //
 // See migrationhuborchestrator package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/migrationhuborchestrator/
 //
-// Using the Client
+// # Using the Client
 //
 // To contact AWS Migration Hub Orchestrator with the SDK use the New function to create
 // a new service client. With that client you can make API requests to the service.

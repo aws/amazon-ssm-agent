@@ -29,14 +29,13 @@ const opCreateRescoreExecutionPlan = "CreateRescoreExecutionPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRescoreExecutionPlanRequest method.
+//	req, resp := client.CreateRescoreExecutionPlanRequest(params)
 //
-//    // Example sending a request using the CreateRescoreExecutionPlanRequest method.
-//    req, resp := client.CreateRescoreExecutionPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/CreateRescoreExecutionPlan
 func (c *KendraRanking) CreateRescoreExecutionPlanRequest(input *CreateRescoreExecutionPlanInput) (req *request.Request, output *CreateRescoreExecutionPlanOutput) {
@@ -74,32 +73,33 @@ func (c *KendraRanking) CreateRescoreExecutionPlanRequest(input *CreateRescoreEx
 // API operation CreateRescoreExecutionPlan for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don’t have sufficient access to perform this action. Please ensure
-//   you have the required permission policies and user accounts and try again.
 //
-//   * ConflictException
-//   A conflict occurred with the request. Please fix any inconsistencies with
-//   your resources and try again.
+//   - AccessDeniedException
+//     You don’t have sufficient access to perform this action. Please ensure
+//     you have the required permission policies and user accounts and try again.
 //
-//   * ServiceQuotaExceededException
-//   You have exceeded the set limits for your Amazon Kendra Intelligent Ranking
-//   service. Please see Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html)
-//   for more information, or contact Support (http://aws.amazon.com/contact-us/)
-//   to inquire about an increase of limits.
+//   - ConflictException
+//     A conflict occurred with the request. Please fix any inconsistencies with
+//     your resources and try again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling. Please reduce the number
-//   of requests and try again.
+//   - ServiceQuotaExceededException
+//     You have exceeded the set limits for your Amazon Kendra Intelligent Ranking
+//     service. Please see Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html)
+//     for more information, or contact Support (http://aws.amazon.com/contact-us/)
+//     to inquire about an increase of limits.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
-//   Ranking service. Please provide the correct input and try again.
+//   - ThrottlingException
+//     The request was denied due to request throttling. Please reduce the number
+//     of requests and try again.
 //
-//   * InternalServerException
-//   An issue occurred with the internal server used for your Amazon Kendra Intelligent
-//   Ranking service. Please wait a few minutes and try again, or contact Support
-//   (http://aws.amazon.com/contact-us/) for help.
+//   - ValidationException
+//     The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
+//     Ranking service. Please provide the correct input and try again.
+//
+//   - InternalServerException
+//     An issue occurred with the internal server used for your Amazon Kendra Intelligent
+//     Ranking service. Please wait a few minutes and try again, or contact Support
+//     (http://aws.amazon.com/contact-us/) for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/CreateRescoreExecutionPlan
 func (c *KendraRanking) CreateRescoreExecutionPlan(input *CreateRescoreExecutionPlanInput) (*CreateRescoreExecutionPlanOutput, error) {
@@ -139,14 +139,13 @@ const opDeleteRescoreExecutionPlan = "DeleteRescoreExecutionPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRescoreExecutionPlanRequest method.
+//	req, resp := client.DeleteRescoreExecutionPlanRequest(params)
 //
-//    // Example sending a request using the DeleteRescoreExecutionPlanRequest method.
-//    req, resp := client.DeleteRescoreExecutionPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/DeleteRescoreExecutionPlan
 func (c *KendraRanking) DeleteRescoreExecutionPlanRequest(input *DeleteRescoreExecutionPlanInput) (req *request.Request, output *DeleteRescoreExecutionPlanOutput) {
@@ -179,30 +178,31 @@ func (c *KendraRanking) DeleteRescoreExecutionPlanRequest(input *DeleteRescoreEx
 // API operation DeleteRescoreExecutionPlan for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You don’t have sufficient access to perform this action. Please ensure
-//   you have the required permission policies and user accounts and try again.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
-//   Ranking service. Please provide the correct input and try again.
+//   - AccessDeniedException
+//     You don’t have sufficient access to perform this action. Please ensure
+//     you have the required permission policies and user accounts and try again.
 //
-//   * ConflictException
-//   A conflict occurred with the request. Please fix any inconsistencies with
-//   your resources and try again.
+//   - ValidationException
+//     The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
+//     Ranking service. Please provide the correct input and try again.
 //
-//   * ResourceNotFoundException
-//   The resource you want to use doesn't exist. Please check you have provided
-//   the correct resource and try again.
+//   - ConflictException
+//     A conflict occurred with the request. Please fix any inconsistencies with
+//     your resources and try again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling. Please reduce the number
-//   of requests and try again.
+//   - ResourceNotFoundException
+//     The resource you want to use doesn't exist. Please check you have provided
+//     the correct resource and try again.
 //
-//   * InternalServerException
-//   An issue occurred with the internal server used for your Amazon Kendra Intelligent
-//   Ranking service. Please wait a few minutes and try again, or contact Support
-//   (http://aws.amazon.com/contact-us/) for help.
+//   - ThrottlingException
+//     The request was denied due to request throttling. Please reduce the number
+//     of requests and try again.
+//
+//   - InternalServerException
+//     An issue occurred with the internal server used for your Amazon Kendra Intelligent
+//     Ranking service. Please wait a few minutes and try again, or contact Support
+//     (http://aws.amazon.com/contact-us/) for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/DeleteRescoreExecutionPlan
 func (c *KendraRanking) DeleteRescoreExecutionPlan(input *DeleteRescoreExecutionPlanInput) (*DeleteRescoreExecutionPlanOutput, error) {
@@ -242,14 +242,13 @@ const opDescribeRescoreExecutionPlan = "DescribeRescoreExecutionPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeRescoreExecutionPlanRequest method.
+//	req, resp := client.DescribeRescoreExecutionPlanRequest(params)
 //
-//    // Example sending a request using the DescribeRescoreExecutionPlanRequest method.
-//    req, resp := client.DescribeRescoreExecutionPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/DescribeRescoreExecutionPlan
 func (c *KendraRanking) DescribeRescoreExecutionPlanRequest(input *DescribeRescoreExecutionPlanInput) (req *request.Request, output *DescribeRescoreExecutionPlanOutput) {
@@ -282,26 +281,27 @@ func (c *KendraRanking) DescribeRescoreExecutionPlanRequest(input *DescribeResco
 // API operation DescribeRescoreExecutionPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
-//   Ranking service. Please provide the correct input and try again.
 //
-//   * ResourceNotFoundException
-//   The resource you want to use doesn't exist. Please check you have provided
-//   the correct resource and try again.
+//   - ValidationException
+//     The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
+//     Ranking service. Please provide the correct input and try again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling. Please reduce the number
-//   of requests and try again.
+//   - ResourceNotFoundException
+//     The resource you want to use doesn't exist. Please check you have provided
+//     the correct resource and try again.
 //
-//   * AccessDeniedException
-//   You don’t have sufficient access to perform this action. Please ensure
-//   you have the required permission policies and user accounts and try again.
+//   - ThrottlingException
+//     The request was denied due to request throttling. Please reduce the number
+//     of requests and try again.
 //
-//   * InternalServerException
-//   An issue occurred with the internal server used for your Amazon Kendra Intelligent
-//   Ranking service. Please wait a few minutes and try again, or contact Support
-//   (http://aws.amazon.com/contact-us/) for help.
+//   - AccessDeniedException
+//     You don’t have sufficient access to perform this action. Please ensure
+//     you have the required permission policies and user accounts and try again.
+//
+//   - InternalServerException
+//     An issue occurred with the internal server used for your Amazon Kendra Intelligent
+//     Ranking service. Please wait a few minutes and try again, or contact Support
+//     (http://aws.amazon.com/contact-us/) for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/DescribeRescoreExecutionPlan
 func (c *KendraRanking) DescribeRescoreExecutionPlan(input *DescribeRescoreExecutionPlanInput) (*DescribeRescoreExecutionPlanOutput, error) {
@@ -341,14 +341,13 @@ const opListRescoreExecutionPlans = "ListRescoreExecutionPlans"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRescoreExecutionPlansRequest method.
+//	req, resp := client.ListRescoreExecutionPlansRequest(params)
 //
-//    // Example sending a request using the ListRescoreExecutionPlansRequest method.
-//    req, resp := client.ListRescoreExecutionPlansRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/ListRescoreExecutionPlans
 func (c *KendraRanking) ListRescoreExecutionPlansRequest(input *ListRescoreExecutionPlansInput) (req *request.Request, output *ListRescoreExecutionPlansOutput) {
@@ -386,22 +385,23 @@ func (c *KendraRanking) ListRescoreExecutionPlansRequest(input *ListRescoreExecu
 // API operation ListRescoreExecutionPlans for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
-//   Ranking service. Please provide the correct input and try again.
 //
-//   * AccessDeniedException
-//   You don’t have sufficient access to perform this action. Please ensure
-//   you have the required permission policies and user accounts and try again.
+//   - ValidationException
+//     The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
+//     Ranking service. Please provide the correct input and try again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling. Please reduce the number
-//   of requests and try again.
+//   - AccessDeniedException
+//     You don’t have sufficient access to perform this action. Please ensure
+//     you have the required permission policies and user accounts and try again.
 //
-//   * InternalServerException
-//   An issue occurred with the internal server used for your Amazon Kendra Intelligent
-//   Ranking service. Please wait a few minutes and try again, or contact Support
-//   (http://aws.amazon.com/contact-us/) for help.
+//   - ThrottlingException
+//     The request was denied due to request throttling. Please reduce the number
+//     of requests and try again.
+//
+//   - InternalServerException
+//     An issue occurred with the internal server used for your Amazon Kendra Intelligent
+//     Ranking service. Please wait a few minutes and try again, or contact Support
+//     (http://aws.amazon.com/contact-us/) for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/ListRescoreExecutionPlans
 func (c *KendraRanking) ListRescoreExecutionPlans(input *ListRescoreExecutionPlansInput) (*ListRescoreExecutionPlansOutput, error) {
@@ -433,15 +433,14 @@ func (c *KendraRanking) ListRescoreExecutionPlansWithContext(ctx aws.Context, in
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRescoreExecutionPlans operation.
-//    pageNum := 0
-//    err := client.ListRescoreExecutionPlansPages(params,
-//        func(page *kendraranking.ListRescoreExecutionPlansOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRescoreExecutionPlans operation.
+//	pageNum := 0
+//	err := client.ListRescoreExecutionPlansPages(params,
+//	    func(page *kendraranking.ListRescoreExecutionPlansOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *KendraRanking) ListRescoreExecutionPlansPages(input *ListRescoreExecutionPlansInput, fn func(*ListRescoreExecutionPlansOutput, bool) bool) error {
 	return c.ListRescoreExecutionPlansPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -493,14 +492,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/ListTagsForResource
 func (c *KendraRanking) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -532,26 +530,27 @@ func (c *KendraRanking) ListTagsForResourceRequest(input *ListTagsForResourceInp
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
-//   Ranking service. Please provide the correct input and try again.
 //
-//   * ResourceUnavailableException
-//   The resource you want to use is unavailable. Please check you have provided
-//   the correct resource information and try again.
+//   - ValidationException
+//     The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
+//     Ranking service. Please provide the correct input and try again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling. Please reduce the number
-//   of requests and try again.
+//   - ResourceUnavailableException
+//     The resource you want to use is unavailable. Please check you have provided
+//     the correct resource information and try again.
 //
-//   * AccessDeniedException
-//   You don’t have sufficient access to perform this action. Please ensure
-//   you have the required permission policies and user accounts and try again.
+//   - ThrottlingException
+//     The request was denied due to request throttling. Please reduce the number
+//     of requests and try again.
 //
-//   * InternalServerException
-//   An issue occurred with the internal server used for your Amazon Kendra Intelligent
-//   Ranking service. Please wait a few minutes and try again, or contact Support
-//   (http://aws.amazon.com/contact-us/) for help.
+//   - AccessDeniedException
+//     You don’t have sufficient access to perform this action. Please ensure
+//     you have the required permission policies and user accounts and try again.
+//
+//   - InternalServerException
+//     An issue occurred with the internal server used for your Amazon Kendra Intelligent
+//     Ranking service. Please wait a few minutes and try again, or contact Support
+//     (http://aws.amazon.com/contact-us/) for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/ListTagsForResource
 func (c *KendraRanking) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -591,14 +590,13 @@ const opRescore = "Rescore"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RescoreRequest method.
+//	req, resp := client.RescoreRequest(params)
 //
-//    // Example sending a request using the RescoreRequest method.
-//    req, resp := client.RescoreRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/Rescore
 func (c *KendraRanking) RescoreRequest(input *RescoreInput) (req *request.Request, output *RescoreOutput) {
@@ -631,30 +629,31 @@ func (c *KendraRanking) RescoreRequest(input *RescoreInput) (req *request.Reques
 // API operation Rescore for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
-//   Ranking service. Please provide the correct input and try again.
 //
-//   * ConflictException
-//   A conflict occurred with the request. Please fix any inconsistencies with
-//   your resources and try again.
+//   - ValidationException
+//     The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
+//     Ranking service. Please provide the correct input and try again.
 //
-//   * AccessDeniedException
-//   You don’t have sufficient access to perform this action. Please ensure
-//   you have the required permission policies and user accounts and try again.
+//   - ConflictException
+//     A conflict occurred with the request. Please fix any inconsistencies with
+//     your resources and try again.
 //
-//   * ResourceNotFoundException
-//   The resource you want to use doesn't exist. Please check you have provided
-//   the correct resource and try again.
+//   - AccessDeniedException
+//     You don’t have sufficient access to perform this action. Please ensure
+//     you have the required permission policies and user accounts and try again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling. Please reduce the number
-//   of requests and try again.
+//   - ResourceNotFoundException
+//     The resource you want to use doesn't exist. Please check you have provided
+//     the correct resource and try again.
 //
-//   * InternalServerException
-//   An issue occurred with the internal server used for your Amazon Kendra Intelligent
-//   Ranking service. Please wait a few minutes and try again, or contact Support
-//   (http://aws.amazon.com/contact-us/) for help.
+//   - ThrottlingException
+//     The request was denied due to request throttling. Please reduce the number
+//     of requests and try again.
+//
+//   - InternalServerException
+//     An issue occurred with the internal server used for your Amazon Kendra Intelligent
+//     Ranking service. Please wait a few minutes and try again, or contact Support
+//     (http://aws.amazon.com/contact-us/) for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/Rescore
 func (c *KendraRanking) Rescore(input *RescoreInput) (*RescoreOutput, error) {
@@ -694,14 +693,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/TagResource
 func (c *KendraRanking) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -736,26 +734,27 @@ func (c *KendraRanking) TagResourceRequest(input *TagResourceInput) (req *reques
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
-//   Ranking service. Please provide the correct input and try again.
 //
-//   * ResourceUnavailableException
-//   The resource you want to use is unavailable. Please check you have provided
-//   the correct resource information and try again.
+//   - ValidationException
+//     The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
+//     Ranking service. Please provide the correct input and try again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling. Please reduce the number
-//   of requests and try again.
+//   - ResourceUnavailableException
+//     The resource you want to use is unavailable. Please check you have provided
+//     the correct resource information and try again.
 //
-//   * AccessDeniedException
-//   You don’t have sufficient access to perform this action. Please ensure
-//   you have the required permission policies and user accounts and try again.
+//   - ThrottlingException
+//     The request was denied due to request throttling. Please reduce the number
+//     of requests and try again.
 //
-//   * InternalServerException
-//   An issue occurred with the internal server used for your Amazon Kendra Intelligent
-//   Ranking service. Please wait a few minutes and try again, or contact Support
-//   (http://aws.amazon.com/contact-us/) for help.
+//   - AccessDeniedException
+//     You don’t have sufficient access to perform this action. Please ensure
+//     you have the required permission policies and user accounts and try again.
+//
+//   - InternalServerException
+//     An issue occurred with the internal server used for your Amazon Kendra Intelligent
+//     Ranking service. Please wait a few minutes and try again, or contact Support
+//     (http://aws.amazon.com/contact-us/) for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/TagResource
 func (c *KendraRanking) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -795,14 +794,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/UntagResource
 func (c *KendraRanking) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -836,26 +834,27 @@ func (c *KendraRanking) UntagResourceRequest(input *UntagResourceInput) (req *re
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
-//   Ranking service. Please provide the correct input and try again.
 //
-//   * ResourceUnavailableException
-//   The resource you want to use is unavailable. Please check you have provided
-//   the correct resource information and try again.
+//   - ValidationException
+//     The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
+//     Ranking service. Please provide the correct input and try again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling. Please reduce the number
-//   of requests and try again.
+//   - ResourceUnavailableException
+//     The resource you want to use is unavailable. Please check you have provided
+//     the correct resource information and try again.
 //
-//   * AccessDeniedException
-//   You don’t have sufficient access to perform this action. Please ensure
-//   you have the required permission policies and user accounts and try again.
+//   - ThrottlingException
+//     The request was denied due to request throttling. Please reduce the number
+//     of requests and try again.
 //
-//   * InternalServerException
-//   An issue occurred with the internal server used for your Amazon Kendra Intelligent
-//   Ranking service. Please wait a few minutes and try again, or contact Support
-//   (http://aws.amazon.com/contact-us/) for help.
+//   - AccessDeniedException
+//     You don’t have sufficient access to perform this action. Please ensure
+//     you have the required permission policies and user accounts and try again.
+//
+//   - InternalServerException
+//     An issue occurred with the internal server used for your Amazon Kendra Intelligent
+//     Ranking service. Please wait a few minutes and try again, or contact Support
+//     (http://aws.amazon.com/contact-us/) for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/UntagResource
 func (c *KendraRanking) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -895,14 +894,13 @@ const opUpdateRescoreExecutionPlan = "UpdateRescoreExecutionPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRescoreExecutionPlanRequest method.
+//	req, resp := client.UpdateRescoreExecutionPlanRequest(params)
 //
-//    // Example sending a request using the UpdateRescoreExecutionPlanRequest method.
-//    req, resp := client.UpdateRescoreExecutionPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/UpdateRescoreExecutionPlan
 func (c *KendraRanking) UpdateRescoreExecutionPlanRequest(input *UpdateRescoreExecutionPlanInput) (req *request.Request, output *UpdateRescoreExecutionPlanOutput) {
@@ -937,36 +935,37 @@ func (c *KendraRanking) UpdateRescoreExecutionPlanRequest(input *UpdateRescoreEx
 // API operation UpdateRescoreExecutionPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
-//   Ranking service. Please provide the correct input and try again.
 //
-//   * ResourceNotFoundException
-//   The resource you want to use doesn't exist. Please check you have provided
-//   the correct resource and try again.
+//   - ValidationException
+//     The input fails to satisfy the constraints set by the Amazon Kendra Intelligent
+//     Ranking service. Please provide the correct input and try again.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling. Please reduce the number
-//   of requests and try again.
+//   - ResourceNotFoundException
+//     The resource you want to use doesn't exist. Please check you have provided
+//     the correct resource and try again.
 //
-//   * AccessDeniedException
-//   You don’t have sufficient access to perform this action. Please ensure
-//   you have the required permission policies and user accounts and try again.
+//   - ThrottlingException
+//     The request was denied due to request throttling. Please reduce the number
+//     of requests and try again.
 //
-//   * ServiceQuotaExceededException
-//   You have exceeded the set limits for your Amazon Kendra Intelligent Ranking
-//   service. Please see Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html)
-//   for more information, or contact Support (http://aws.amazon.com/contact-us/)
-//   to inquire about an increase of limits.
+//   - AccessDeniedException
+//     You don’t have sufficient access to perform this action. Please ensure
+//     you have the required permission policies and user accounts and try again.
 //
-//   * ConflictException
-//   A conflict occurred with the request. Please fix any inconsistencies with
-//   your resources and try again.
+//   - ServiceQuotaExceededException
+//     You have exceeded the set limits for your Amazon Kendra Intelligent Ranking
+//     service. Please see Quotas (https://docs.aws.amazon.com/kendra/latest/dg/quotas.html)
+//     for more information, or contact Support (http://aws.amazon.com/contact-us/)
+//     to inquire about an increase of limits.
 //
-//   * InternalServerException
-//   An issue occurred with the internal server used for your Amazon Kendra Intelligent
-//   Ranking service. Please wait a few minutes and try again, or contact Support
-//   (http://aws.amazon.com/contact-us/) for help.
+//   - ConflictException
+//     A conflict occurred with the request. Please fix any inconsistencies with
+//     your resources and try again.
+//
+//   - InternalServerException
+//     An issue occurred with the internal server used for your Amazon Kendra Intelligent
+//     Ranking service. Please wait a few minutes and try again, or contact Support
+//     (http://aws.amazon.com/contact-us/) for help.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-ranking-2022-10-19/UpdateRescoreExecutionPlan
 func (c *KendraRanking) UpdateRescoreExecutionPlan(input *UpdateRescoreExecutionPlanInput) (*UpdateRescoreExecutionPlanOutput, error) {

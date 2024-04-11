@@ -30,14 +30,13 @@ const opDeleteEarthObservationJob = "DeleteEarthObservationJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteEarthObservationJobRequest method.
+//	req, resp := client.DeleteEarthObservationJobRequest(params)
 //
-//    // Example sending a request using the DeleteEarthObservationJobRequest method.
-//    req, resp := client.DeleteEarthObservationJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/DeleteEarthObservationJob
 func (c *SageMakerGeospatial) DeleteEarthObservationJobRequest(input *DeleteEarthObservationJobInput) (req *request.Request, output *DeleteEarthObservationJobOutput) {
@@ -69,25 +68,26 @@ func (c *SageMakerGeospatial) DeleteEarthObservationJobRequest(input *DeleteEart
 // API operation DeleteEarthObservationJob for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/DeleteEarthObservationJob
 func (c *SageMakerGeospatial) DeleteEarthObservationJob(input *DeleteEarthObservationJobInput) (*DeleteEarthObservationJobOutput, error) {
@@ -127,14 +127,13 @@ const opDeleteVectorEnrichmentJob = "DeleteVectorEnrichmentJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteVectorEnrichmentJobRequest method.
+//	req, resp := client.DeleteVectorEnrichmentJobRequest(params)
 //
-//    // Example sending a request using the DeleteVectorEnrichmentJobRequest method.
-//    req, resp := client.DeleteVectorEnrichmentJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/DeleteVectorEnrichmentJob
 func (c *SageMakerGeospatial) DeleteVectorEnrichmentJobRequest(input *DeleteVectorEnrichmentJobInput) (req *request.Request, output *DeleteVectorEnrichmentJobOutput) {
@@ -166,25 +165,26 @@ func (c *SageMakerGeospatial) DeleteVectorEnrichmentJobRequest(input *DeleteVect
 // API operation DeleteVectorEnrichmentJob for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/DeleteVectorEnrichmentJob
 func (c *SageMakerGeospatial) DeleteVectorEnrichmentJob(input *DeleteVectorEnrichmentJobInput) (*DeleteVectorEnrichmentJobOutput, error) {
@@ -224,14 +224,13 @@ const opExportEarthObservationJob = "ExportEarthObservationJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ExportEarthObservationJobRequest method.
+//	req, resp := client.ExportEarthObservationJobRequest(params)
 //
-//    // Example sending a request using the ExportEarthObservationJobRequest method.
-//    req, resp := client.ExportEarthObservationJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ExportEarthObservationJob
 func (c *SageMakerGeospatial) ExportEarthObservationJobRequest(input *ExportEarthObservationJobInput) (req *request.Request, output *ExportEarthObservationJobOutput) {
@@ -263,28 +262,29 @@ func (c *SageMakerGeospatial) ExportEarthObservationJobRequest(input *ExportEart
 // API operation ExportEarthObservationJob for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceQuotaExceededException
-//   You have exceeded the service quota.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ServiceQuotaExceededException
+//     You have exceeded the service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ExportEarthObservationJob
 func (c *SageMakerGeospatial) ExportEarthObservationJob(input *ExportEarthObservationJobInput) (*ExportEarthObservationJobOutput, error) {
@@ -324,14 +324,13 @@ const opExportVectorEnrichmentJob = "ExportVectorEnrichmentJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ExportVectorEnrichmentJobRequest method.
+//	req, resp := client.ExportVectorEnrichmentJobRequest(params)
 //
-//    // Example sending a request using the ExportVectorEnrichmentJobRequest method.
-//    req, resp := client.ExportVectorEnrichmentJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ExportVectorEnrichmentJob
 func (c *SageMakerGeospatial) ExportVectorEnrichmentJobRequest(input *ExportVectorEnrichmentJobInput) (req *request.Request, output *ExportVectorEnrichmentJobOutput) {
@@ -363,28 +362,29 @@ func (c *SageMakerGeospatial) ExportVectorEnrichmentJobRequest(input *ExportVect
 // API operation ExportVectorEnrichmentJob for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceQuotaExceededException
-//   You have exceeded the service quota.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ServiceQuotaExceededException
+//     You have exceeded the service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ExportVectorEnrichmentJob
 func (c *SageMakerGeospatial) ExportVectorEnrichmentJob(input *ExportVectorEnrichmentJobInput) (*ExportVectorEnrichmentJobOutput, error) {
@@ -424,14 +424,13 @@ const opGetEarthObservationJob = "GetEarthObservationJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetEarthObservationJobRequest method.
+//	req, resp := client.GetEarthObservationJobRequest(params)
 //
-//    // Example sending a request using the GetEarthObservationJobRequest method.
-//    req, resp := client.GetEarthObservationJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/GetEarthObservationJob
 func (c *SageMakerGeospatial) GetEarthObservationJobRequest(input *GetEarthObservationJobInput) (req *request.Request, output *GetEarthObservationJobOutput) {
@@ -462,22 +461,23 @@ func (c *SageMakerGeospatial) GetEarthObservationJobRequest(input *GetEarthObser
 // API operation GetEarthObservationJob for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/GetEarthObservationJob
 func (c *SageMakerGeospatial) GetEarthObservationJob(input *GetEarthObservationJobInput) (*GetEarthObservationJobOutput, error) {
@@ -517,14 +517,13 @@ const opGetRasterDataCollection = "GetRasterDataCollection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRasterDataCollectionRequest method.
+//	req, resp := client.GetRasterDataCollectionRequest(params)
 //
-//    // Example sending a request using the GetRasterDataCollectionRequest method.
-//    req, resp := client.GetRasterDataCollectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/GetRasterDataCollection
 func (c *SageMakerGeospatial) GetRasterDataCollectionRequest(input *GetRasterDataCollectionInput) (req *request.Request, output *GetRasterDataCollectionOutput) {
@@ -555,22 +554,23 @@ func (c *SageMakerGeospatial) GetRasterDataCollectionRequest(input *GetRasterDat
 // API operation GetRasterDataCollection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/GetRasterDataCollection
 func (c *SageMakerGeospatial) GetRasterDataCollection(input *GetRasterDataCollectionInput) (*GetRasterDataCollectionOutput, error) {
@@ -610,14 +610,13 @@ const opGetTile = "GetTile"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTileRequest method.
+//	req, resp := client.GetTileRequest(params)
 //
-//    // Example sending a request using the GetTileRequest method.
-//    req, resp := client.GetTileRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/GetTile
 func (c *SageMakerGeospatial) GetTileRequest(input *GetTileInput) (req *request.Request, output *GetTileOutput) {
@@ -648,22 +647,23 @@ func (c *SageMakerGeospatial) GetTileRequest(input *GetTileInput) (req *request.
 // API operation GetTile for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/GetTile
 func (c *SageMakerGeospatial) GetTile(input *GetTileInput) (*GetTileOutput, error) {
@@ -703,14 +703,13 @@ const opGetVectorEnrichmentJob = "GetVectorEnrichmentJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetVectorEnrichmentJobRequest method.
+//	req, resp := client.GetVectorEnrichmentJobRequest(params)
 //
-//    // Example sending a request using the GetVectorEnrichmentJobRequest method.
-//    req, resp := client.GetVectorEnrichmentJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/GetVectorEnrichmentJob
 func (c *SageMakerGeospatial) GetVectorEnrichmentJobRequest(input *GetVectorEnrichmentJobInput) (req *request.Request, output *GetVectorEnrichmentJobOutput) {
@@ -742,22 +741,23 @@ func (c *SageMakerGeospatial) GetVectorEnrichmentJobRequest(input *GetVectorEnri
 // API operation GetVectorEnrichmentJob for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/GetVectorEnrichmentJob
 func (c *SageMakerGeospatial) GetVectorEnrichmentJob(input *GetVectorEnrichmentJobInput) (*GetVectorEnrichmentJobOutput, error) {
@@ -797,14 +797,13 @@ const opListEarthObservationJobs = "ListEarthObservationJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListEarthObservationJobsRequest method.
+//	req, resp := client.ListEarthObservationJobsRequest(params)
 //
-//    // Example sending a request using the ListEarthObservationJobsRequest method.
-//    req, resp := client.ListEarthObservationJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ListEarthObservationJobs
 func (c *SageMakerGeospatial) ListEarthObservationJobsRequest(input *ListEarthObservationJobsInput) (req *request.Request, output *ListEarthObservationJobsOutput) {
@@ -842,22 +841,23 @@ func (c *SageMakerGeospatial) ListEarthObservationJobsRequest(input *ListEarthOb
 // API operation ListEarthObservationJobs for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ListEarthObservationJobs
 func (c *SageMakerGeospatial) ListEarthObservationJobs(input *ListEarthObservationJobsInput) (*ListEarthObservationJobsOutput, error) {
@@ -889,15 +889,14 @@ func (c *SageMakerGeospatial) ListEarthObservationJobsWithContext(ctx aws.Contex
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListEarthObservationJobs operation.
-//    pageNum := 0
-//    err := client.ListEarthObservationJobsPages(params,
-//        func(page *sagemakergeospatial.ListEarthObservationJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListEarthObservationJobs operation.
+//	pageNum := 0
+//	err := client.ListEarthObservationJobsPages(params,
+//	    func(page *sagemakergeospatial.ListEarthObservationJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SageMakerGeospatial) ListEarthObservationJobsPages(input *ListEarthObservationJobsInput, fn func(*ListEarthObservationJobsOutput, bool) bool) error {
 	return c.ListEarthObservationJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -949,14 +948,13 @@ const opListRasterDataCollections = "ListRasterDataCollections"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRasterDataCollectionsRequest method.
+//	req, resp := client.ListRasterDataCollectionsRequest(params)
 //
-//    // Example sending a request using the ListRasterDataCollectionsRequest method.
-//    req, resp := client.ListRasterDataCollectionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ListRasterDataCollections
 func (c *SageMakerGeospatial) ListRasterDataCollectionsRequest(input *ListRasterDataCollectionsInput) (req *request.Request, output *ListRasterDataCollectionsOutput) {
@@ -993,22 +991,23 @@ func (c *SageMakerGeospatial) ListRasterDataCollectionsRequest(input *ListRaster
 // API operation ListRasterDataCollections for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ListRasterDataCollections
 func (c *SageMakerGeospatial) ListRasterDataCollections(input *ListRasterDataCollectionsInput) (*ListRasterDataCollectionsOutput, error) {
@@ -1040,15 +1039,14 @@ func (c *SageMakerGeospatial) ListRasterDataCollectionsWithContext(ctx aws.Conte
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRasterDataCollections operation.
-//    pageNum := 0
-//    err := client.ListRasterDataCollectionsPages(params,
-//        func(page *sagemakergeospatial.ListRasterDataCollectionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRasterDataCollections operation.
+//	pageNum := 0
+//	err := client.ListRasterDataCollectionsPages(params,
+//	    func(page *sagemakergeospatial.ListRasterDataCollectionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SageMakerGeospatial) ListRasterDataCollectionsPages(input *ListRasterDataCollectionsInput, fn func(*ListRasterDataCollectionsOutput, bool) bool) error {
 	return c.ListRasterDataCollectionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1100,14 +1098,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ListTagsForResource
 func (c *SageMakerGeospatial) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1138,22 +1135,23 @@ func (c *SageMakerGeospatial) ListTagsForResourceRequest(input *ListTagsForResou
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ListTagsForResource
 func (c *SageMakerGeospatial) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1193,14 +1191,13 @@ const opListVectorEnrichmentJobs = "ListVectorEnrichmentJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListVectorEnrichmentJobsRequest method.
+//	req, resp := client.ListVectorEnrichmentJobsRequest(params)
 //
-//    // Example sending a request using the ListVectorEnrichmentJobsRequest method.
-//    req, resp := client.ListVectorEnrichmentJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ListVectorEnrichmentJobs
 func (c *SageMakerGeospatial) ListVectorEnrichmentJobsRequest(input *ListVectorEnrichmentJobsInput) (req *request.Request, output *ListVectorEnrichmentJobsOutput) {
@@ -1237,22 +1234,23 @@ func (c *SageMakerGeospatial) ListVectorEnrichmentJobsRequest(input *ListVectorE
 // API operation ListVectorEnrichmentJobs for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/ListVectorEnrichmentJobs
 func (c *SageMakerGeospatial) ListVectorEnrichmentJobs(input *ListVectorEnrichmentJobsInput) (*ListVectorEnrichmentJobsOutput, error) {
@@ -1284,15 +1282,14 @@ func (c *SageMakerGeospatial) ListVectorEnrichmentJobsWithContext(ctx aws.Contex
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListVectorEnrichmentJobs operation.
-//    pageNum := 0
-//    err := client.ListVectorEnrichmentJobsPages(params,
-//        func(page *sagemakergeospatial.ListVectorEnrichmentJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListVectorEnrichmentJobs operation.
+//	pageNum := 0
+//	err := client.ListVectorEnrichmentJobsPages(params,
+//	    func(page *sagemakergeospatial.ListVectorEnrichmentJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SageMakerGeospatial) ListVectorEnrichmentJobsPages(input *ListVectorEnrichmentJobsInput, fn func(*ListVectorEnrichmentJobsOutput, bool) bool) error {
 	return c.ListVectorEnrichmentJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1344,14 +1341,13 @@ const opSearchRasterDataCollection = "SearchRasterDataCollection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchRasterDataCollectionRequest method.
+//	req, resp := client.SearchRasterDataCollectionRequest(params)
 //
-//    // Example sending a request using the SearchRasterDataCollectionRequest method.
-//    req, resp := client.SearchRasterDataCollectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/SearchRasterDataCollection
 func (c *SageMakerGeospatial) SearchRasterDataCollectionRequest(input *SearchRasterDataCollectionInput) (req *request.Request, output *SearchRasterDataCollectionOutput) {
@@ -1389,22 +1385,23 @@ func (c *SageMakerGeospatial) SearchRasterDataCollectionRequest(input *SearchRas
 // API operation SearchRasterDataCollection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/SearchRasterDataCollection
 func (c *SageMakerGeospatial) SearchRasterDataCollection(input *SearchRasterDataCollectionInput) (*SearchRasterDataCollectionOutput, error) {
@@ -1436,15 +1433,14 @@ func (c *SageMakerGeospatial) SearchRasterDataCollectionWithContext(ctx aws.Cont
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchRasterDataCollection operation.
-//    pageNum := 0
-//    err := client.SearchRasterDataCollectionPages(params,
-//        func(page *sagemakergeospatial.SearchRasterDataCollectionOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchRasterDataCollection operation.
+//	pageNum := 0
+//	err := client.SearchRasterDataCollectionPages(params,
+//	    func(page *sagemakergeospatial.SearchRasterDataCollectionOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SageMakerGeospatial) SearchRasterDataCollectionPages(input *SearchRasterDataCollectionInput, fn func(*SearchRasterDataCollectionOutput, bool) bool) error {
 	return c.SearchRasterDataCollectionPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1496,14 +1492,13 @@ const opStartEarthObservationJob = "StartEarthObservationJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartEarthObservationJobRequest method.
+//	req, resp := client.StartEarthObservationJobRequest(params)
 //
-//    // Example sending a request using the StartEarthObservationJobRequest method.
-//    req, resp := client.StartEarthObservationJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/StartEarthObservationJob
 func (c *SageMakerGeospatial) StartEarthObservationJobRequest(input *StartEarthObservationJobInput) (req *request.Request, output *StartEarthObservationJobOutput) {
@@ -1534,28 +1529,29 @@ func (c *SageMakerGeospatial) StartEarthObservationJobRequest(input *StartEarthO
 // API operation StartEarthObservationJob for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceQuotaExceededException
-//   You have exceeded the service quota.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ServiceQuotaExceededException
+//     You have exceeded the service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/StartEarthObservationJob
 func (c *SageMakerGeospatial) StartEarthObservationJob(input *StartEarthObservationJobInput) (*StartEarthObservationJobOutput, error) {
@@ -1595,14 +1591,13 @@ const opStartVectorEnrichmentJob = "StartVectorEnrichmentJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartVectorEnrichmentJobRequest method.
+//	req, resp := client.StartVectorEnrichmentJobRequest(params)
 //
-//    // Example sending a request using the StartVectorEnrichmentJobRequest method.
-//    req, resp := client.StartVectorEnrichmentJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/StartVectorEnrichmentJob
 func (c *SageMakerGeospatial) StartVectorEnrichmentJobRequest(input *StartVectorEnrichmentJobInput) (req *request.Request, output *StartVectorEnrichmentJobOutput) {
@@ -1634,28 +1629,29 @@ func (c *SageMakerGeospatial) StartVectorEnrichmentJobRequest(input *StartVector
 // API operation StartVectorEnrichmentJob for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceQuotaExceededException
-//   You have exceeded the service quota.
 //
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   - ServiceQuotaExceededException
+//     You have exceeded the service quota.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/StartVectorEnrichmentJob
 func (c *SageMakerGeospatial) StartVectorEnrichmentJob(input *StartVectorEnrichmentJobInput) (*StartVectorEnrichmentJobOutput, error) {
@@ -1695,14 +1691,13 @@ const opStopEarthObservationJob = "StopEarthObservationJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopEarthObservationJobRequest method.
+//	req, resp := client.StopEarthObservationJobRequest(params)
 //
-//    // Example sending a request using the StopEarthObservationJobRequest method.
-//    req, resp := client.StopEarthObservationJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/StopEarthObservationJob
 func (c *SageMakerGeospatial) StopEarthObservationJobRequest(input *StopEarthObservationJobInput) (req *request.Request, output *StopEarthObservationJobOutput) {
@@ -1734,25 +1729,26 @@ func (c *SageMakerGeospatial) StopEarthObservationJobRequest(input *StopEarthObs
 // API operation StopEarthObservationJob for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/StopEarthObservationJob
 func (c *SageMakerGeospatial) StopEarthObservationJob(input *StopEarthObservationJobInput) (*StopEarthObservationJobOutput, error) {
@@ -1792,14 +1788,13 @@ const opStopVectorEnrichmentJob = "StopVectorEnrichmentJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopVectorEnrichmentJobRequest method.
+//	req, resp := client.StopVectorEnrichmentJobRequest(params)
 //
-//    // Example sending a request using the StopVectorEnrichmentJobRequest method.
-//    req, resp := client.StopVectorEnrichmentJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/StopVectorEnrichmentJob
 func (c *SageMakerGeospatial) StopVectorEnrichmentJobRequest(input *StopVectorEnrichmentJobInput) (req *request.Request, output *StopVectorEnrichmentJobOutput) {
@@ -1831,25 +1826,26 @@ func (c *SageMakerGeospatial) StopVectorEnrichmentJobRequest(input *StopVectorEn
 // API operation StopVectorEnrichmentJob for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
 //
-//   * ConflictException
-//   Updating or deleting a resource can cause an inconsistent state.
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
+//
+//   - ConflictException
+//     Updating or deleting a resource can cause an inconsistent state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/StopVectorEnrichmentJob
 func (c *SageMakerGeospatial) StopVectorEnrichmentJob(input *StopVectorEnrichmentJobInput) (*StopVectorEnrichmentJobOutput, error) {
@@ -1889,14 +1885,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/TagResource
 func (c *SageMakerGeospatial) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1928,22 +1923,23 @@ func (c *SageMakerGeospatial) TagResourceRequest(input *TagResourceInput) (req *
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/TagResource
 func (c *SageMakerGeospatial) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1983,14 +1979,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/UntagResource
 func (c *SageMakerGeospatial) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2022,22 +2017,23 @@ func (c *SageMakerGeospatial) UntagResourceRequest(input *UntagResourceInput) (r
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - AccessDeniedException
+//     You do not have sufficient access to perform this action.
 //
-//   * ThrottlingException
-//   The request was denied due to request throttling.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * InternalServerException
-//   The request processing has failed because of an unknown error, exception,
-//   or failure.
+//   - ThrottlingException
+//     The request was denied due to request throttling.
 //
-//   * ResourceNotFoundException
-//   The request references a resource which does not exist.
+//   - InternalServerException
+//     The request processing has failed because of an unknown error, exception,
+//     or failure.
+//
+//   - ResourceNotFoundException
+//     The request references a resource which does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sagemaker-geospatial-2020-05-27/UntagResource
 func (c *SageMakerGeospatial) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2775,55 +2771,6 @@ func (s *EoCloudCoverInput_) SetLowerBound(v float64) *EoCloudCoverInput_ {
 // SetUpperBound sets the UpperBound field's value.
 func (s *EoCloudCoverInput_) SetUpperBound(v float64) *EoCloudCoverInput_ {
 	s.UpperBound = &v
-	return s
-}
-
-// Union representing different data sources to be used as input for an Earth
-// Observation job.
-type EojDataSourceConfigInput_ struct {
-	_ struct{} `type:"structure"`
-
-	// The input structure for S3Data; representing the Amazon S3 location of the
-	// input data objects.
-	S3Data *S3DataInput_ `type:"structure"`
-}
-
-// String returns the string representation.
-//
-// API parameter values that are decorated as "sensitive" in the API will not
-// be included in the string output. The member name will be present, but the
-// value will be replaced with "sensitive".
-func (s EojDataSourceConfigInput_) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation.
-//
-// API parameter values that are decorated as "sensitive" in the API will not
-// be included in the string output. The member name will be present, but the
-// value will be replaced with "sensitive".
-func (s EojDataSourceConfigInput_) GoString() string {
-	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *EojDataSourceConfigInput_) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "EojDataSourceConfigInput_"}
-	if s.S3Data != nil {
-		if err := s.S3Data.Validate(); err != nil {
-			invalidParams.AddNested("S3Data", err.(request.ErrInvalidParams))
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
-// SetS3Data sets the S3Data field's value.
-func (s *EojDataSourceConfigInput_) SetS3Data(v *S3DataInput_) *EojDataSourceConfigInput_ {
-	s.S3Data = v
 	return s
 }
 
@@ -4347,9 +4294,6 @@ func (s *GetVectorEnrichmentJobOutput) SetType(v string) *GetVectorEnrichmentJob
 type InputConfigInput_ struct {
 	_ struct{} `type:"structure"`
 
-	// The location of the input data.>
-	DataSourceConfig *EojDataSourceConfigInput_ `type:"structure"`
-
 	// The Amazon Resource Name (ARN) of the previous Earth Observation job.
 	PreviousEarthObservationJobArn *string `type:"string"`
 
@@ -4379,11 +4323,6 @@ func (s InputConfigInput_) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *InputConfigInput_) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "InputConfigInput_"}
-	if s.DataSourceConfig != nil {
-		if err := s.DataSourceConfig.Validate(); err != nil {
-			invalidParams.AddNested("DataSourceConfig", err.(request.ErrInvalidParams))
-		}
-	}
 	if s.RasterDataCollectionQuery != nil {
 		if err := s.RasterDataCollectionQuery.Validate(); err != nil {
 			invalidParams.AddNested("RasterDataCollectionQuery", err.(request.ErrInvalidParams))
@@ -4394,12 +4333,6 @@ func (s *InputConfigInput_) Validate() error {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetDataSourceConfig sets the DataSourceConfig field's value.
-func (s *InputConfigInput_) SetDataSourceConfig(v *EojDataSourceConfigInput_) *InputConfigInput_ {
-	s.DataSourceConfig = v
-	return s
 }
 
 // SetPreviousEarthObservationJobArn sets the PreviousEarthObservationJobArn field's value.
@@ -4417,9 +4350,6 @@ func (s *InputConfigInput_) SetRasterDataCollectionQuery(v *RasterDataCollection
 // The InputConfig for an EarthObservationJob response.
 type InputConfigOutput_ struct {
 	_ struct{} `type:"structure"`
-
-	// The location of the input data.
-	DataSourceConfig *EojDataSourceConfigInput_ `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the previous Earth Observation job.
 	PreviousEarthObservationJobArn *string `type:"string"`
@@ -4446,12 +4376,6 @@ func (s InputConfigOutput_) String() string {
 // value will be replaced with "sensitive".
 func (s InputConfigOutput_) GoString() string {
 	return s.String()
-}
-
-// SetDataSourceConfig sets the DataSourceConfig field's value.
-func (s *InputConfigOutput_) SetDataSourceConfig(v *EojDataSourceConfigInput_) *InputConfigOutput_ {
-	s.DataSourceConfig = v
-	return s
 }
 
 // SetPreviousEarthObservationJobArn sets the PreviousEarthObservationJobArn field's value.
@@ -6915,76 +6839,6 @@ func (s *ReverseGeocodingConfig) SetYAttributeName(v string) *ReverseGeocodingCo
 	return s
 }
 
-// Path to Amazon S3 storage location for input data.
-type S3DataInput_ struct {
-	_ struct{} `type:"structure"`
-
-	// The Key Management Service key ID for server-side encryption.
-	KmsKeyId *string `type:"string"`
-
-	// Metadata provider from whom the Amazon S3 data has been acquired.
-	//
-	// MetadataProvider is a required field
-	MetadataProvider *string `type:"string" required:"true" enum:"MetadataProvider"`
-
-	// The URL to the Amazon S3 input.
-	//
-	// S3Uri is a required field
-	S3Uri *string `type:"string" required:"true"`
-}
-
-// String returns the string representation.
-//
-// API parameter values that are decorated as "sensitive" in the API will not
-// be included in the string output. The member name will be present, but the
-// value will be replaced with "sensitive".
-func (s S3DataInput_) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation.
-//
-// API parameter values that are decorated as "sensitive" in the API will not
-// be included in the string output. The member name will be present, but the
-// value will be replaced with "sensitive".
-func (s S3DataInput_) GoString() string {
-	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *S3DataInput_) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "S3DataInput_"}
-	if s.MetadataProvider == nil {
-		invalidParams.Add(request.NewErrParamRequired("MetadataProvider"))
-	}
-	if s.S3Uri == nil {
-		invalidParams.Add(request.NewErrParamRequired("S3Uri"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
-// SetKmsKeyId sets the KmsKeyId field's value.
-func (s *S3DataInput_) SetKmsKeyId(v string) *S3DataInput_ {
-	s.KmsKeyId = &v
-	return s
-}
-
-// SetMetadataProvider sets the MetadataProvider field's value.
-func (s *S3DataInput_) SetMetadataProvider(v string) *S3DataInput_ {
-	s.MetadataProvider = &v
-	return s
-}
-
-// SetS3Uri sets the S3Uri field's value.
-func (s *S3DataInput_) SetS3Uri(v string) *S3DataInput_ {
-	s.S3Uri = &v
-	return s
-}
-
 type SearchRasterDataCollectionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7260,7 +7114,9 @@ type StartEarthObservationJobInput struct {
 
 	// The Amazon Resource Name (ARN) of the IAM role that you specified for the
 	// job.
-	ExecutionRoleArn *string `min:"20" type:"string"`
+	//
+	// ExecutionRoleArn is a required field
+	ExecutionRoleArn *string `min:"20" type:"string" required:"true"`
 
 	// Input configuration information for the Earth Observation job.
 	//
@@ -7307,6 +7163,9 @@ func (s *StartEarthObservationJobInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartEarthObservationJobInput"}
 	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
+	}
+	if s.ExecutionRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExecutionRoleArn"))
 	}
 	if s.ExecutionRoleArn != nil && len(*s.ExecutionRoleArn) < 20 {
 		invalidParams.Add(request.NewErrParamMinLen("ExecutionRoleArn", 20))
@@ -7399,7 +7258,9 @@ type StartEarthObservationJobOutput struct {
 
 	// The Amazon Resource Name (ARN) of the IAM role that you specified for the
 	// job.
-	ExecutionRoleArn *string `min:"20" type:"string"`
+	//
+	// ExecutionRoleArn is a required field
+	ExecutionRoleArn *string `min:"20" type:"string" required:"true"`
 
 	// Input configuration information for the Earth Observation job.
 	InputConfig *InputConfigOutput_ `type:"structure"`
@@ -9362,18 +9223,6 @@ const (
 func LogicalOperator_Values() []string {
 	return []string{
 		LogicalOperatorAnd,
-	}
-}
-
-const (
-	// MetadataProviderPlanetOrder is a MetadataProvider enum value
-	MetadataProviderPlanetOrder = "PLANET_ORDER"
-)
-
-// MetadataProvider_Values returns all elements of the MetadataProvider enum
-func MetadataProvider_Values() []string {
-	return []string{
-		MetadataProviderPlanetOrder,
 	}
 }
 

@@ -26,7 +26,6 @@ func parseTime(layout, value string) *time.Time {
 }
 
 // To create a new cluster
-//
 // This example creates a cluster in your default region.
 func ExampleECS_CreateCluster_shared00() {
 	svc := ecs.New(session.New())
@@ -61,9 +60,8 @@ func ExampleECS_CreateCluster_shared00() {
 }
 
 // To create a new service
-//
-// This example creates a service in your default region called ``ecs-simple-service``.
-// The service uses the ``hello_world`` task definition and it maintains 10 copies of
+// This example creates a service in your default region called “ecs-simple-service“.
+// The service uses the “hello_world“ task definition and it maintains 10 copies of
 // that task.
 func ExampleECS_CreateService_shared00() {
 	svc := ecs.New(session.New())
@@ -110,9 +108,8 @@ func ExampleECS_CreateService_shared00() {
 }
 
 // To create a new service behind a load balancer
-//
-// This example creates a service in your default region called ``ecs-simple-service-elb``.
-// The service uses the ``ecs-demo`` task definition and it maintains 10 copies of that
+// This example creates a service in your default region called “ecs-simple-service-elb“.
+// The service uses the “ecs-demo“ task definition and it maintains 10 copies of that
 // task. You must reference an existing load balancer in the same region by its name.
 func ExampleECS_CreateService_shared01() {
 	svc := ecs.New(session.New())
@@ -167,7 +164,6 @@ func ExampleECS_CreateService_shared01() {
 }
 
 // To delete your account setting
-//
 // This example deletes the account setting for your user for the specified resource
 // type.
 func ExampleECS_DeleteAccountSetting_shared00() {
@@ -201,7 +197,6 @@ func ExampleECS_DeleteAccountSetting_shared00() {
 }
 
 // To delete the account settings for a specific IAM user or IAM role
-//
 // This example deletes the account setting for a specific IAM user or IAM role for
 // the specified resource type. Only the root user can view or modify the account settings
 // for another user.
@@ -237,7 +232,6 @@ func ExampleECS_DeleteAccountSetting_shared01() {
 }
 
 // To delete an empty cluster
-//
 // This example deletes an empty cluster in your default region.
 func ExampleECS_DeleteCluster_shared00() {
 	svc := ecs.New(session.New())
@@ -280,7 +274,6 @@ func ExampleECS_DeleteCluster_shared00() {
 }
 
 // To delete a service
-//
 // This example deletes the my-http-service service. The service must have a desired
 // count and running count of 0 before you can delete it.
 func ExampleECS_DeleteService_shared00() {
@@ -318,7 +311,6 @@ func ExampleECS_DeleteService_shared00() {
 }
 
 // To deregister a container instance from a cluster
-//
 // This example deregisters a container instance from the specified cluster in your
 // default region. If there are still tasks running on the container instance, you must
 // either stop those tasks before deregistering, or use the force option.
@@ -357,7 +349,6 @@ func ExampleECS_DeregisterContainerInstance_shared00() {
 }
 
 // To describe a cluster
-//
 // This example provides a description of the specified cluster in your default region.
 func ExampleECS_DescribeClusters_shared00() {
 	svc := ecs.New(session.New())
@@ -392,7 +383,6 @@ func ExampleECS_DescribeClusters_shared00() {
 }
 
 // To describe container instance
-//
 // This example provides a description of the specified container instance in your default
 // region, using the container instance UUID as an identifier.
 func ExampleECS_DescribeContainerInstances_shared00() {
@@ -431,8 +421,7 @@ func ExampleECS_DescribeContainerInstances_shared00() {
 }
 
 // To describe a service
-//
-// This example provides descriptive information about the service named ``ecs-simple-service``.
+// This example provides descriptive information about the service named “ecs-simple-service“.
 func ExampleECS_DescribeServices_shared00() {
 	svc := ecs.New(session.New())
 	input := &ecs.DescribeServicesInput{
@@ -468,7 +457,6 @@ func ExampleECS_DescribeServices_shared00() {
 }
 
 // To describe a task definition
-//
 // This example provides a description of the specified task definition.
 func ExampleECS_DescribeTaskDefinition_shared00() {
 	svc := ecs.New(session.New())
@@ -501,7 +489,6 @@ func ExampleECS_DescribeTaskDefinition_shared00() {
 }
 
 // To describe a task
-//
 // This example provides a description of the specified task, using the task UUID as
 // an identifier.
 func ExampleECS_DescribeTasks_shared00() {
@@ -539,7 +526,6 @@ func ExampleECS_DescribeTasks_shared00() {
 }
 
 // To get the protection status of a task
-//
 // In this example, we get the protection status for a single task.
 func ExampleECS_GetTaskProtection_shared00() {
 	svc := ecs.New(session.New())
@@ -583,7 +569,6 @@ func ExampleECS_GetTaskProtection_shared00() {
 }
 
 // To view your effective account settings
-//
 // This example displays the effective account settings for your account.
 func ExampleECS_ListAccountSettings_shared00() {
 	svc := ecs.New(session.New())
@@ -616,7 +601,6 @@ func ExampleECS_ListAccountSettings_shared00() {
 }
 
 // To view the effective account settings for a specific IAM user or IAM role
-//
 // This example displays the effective account settings for the specified user or role.
 func ExampleECS_ListAccountSettings_shared01() {
 	svc := ecs.New(session.New())
@@ -650,7 +634,6 @@ func ExampleECS_ListAccountSettings_shared01() {
 }
 
 // To list your available clusters
-//
 // This example lists all of your available clusters in your default region.
 func ExampleECS_ListClusters_shared00() {
 	svc := ecs.New(session.New())
@@ -681,7 +664,6 @@ func ExampleECS_ListClusters_shared00() {
 }
 
 // To list your available container instances in a cluster
-//
 // This example lists all of your available container instances in the specified cluster
 // in your default region.
 func ExampleECS_ListContainerInstances_shared00() {
@@ -717,7 +699,6 @@ func ExampleECS_ListContainerInstances_shared00() {
 }
 
 // To list the services in a cluster
-//
 // This example lists the services running in the default cluster for an account.
 func ExampleECS_ListServices_shared00() {
 	svc := ecs.New(session.New())
@@ -750,7 +731,6 @@ func ExampleECS_ListServices_shared00() {
 }
 
 // To list the tags for a cluster.
-//
 // This example lists the tags for the 'dev' cluster.
 func ExampleECS_ListTagsForResource_shared00() {
 	svc := ecs.New(session.New())
@@ -785,7 +765,6 @@ func ExampleECS_ListTagsForResource_shared00() {
 }
 
 // To list your registered task definition families
-//
 // This example lists all of your registered task definition families.
 func ExampleECS_ListTaskDefinitionFamilies_shared00() {
 	svc := ecs.New(session.New())
@@ -816,7 +795,6 @@ func ExampleECS_ListTaskDefinitionFamilies_shared00() {
 }
 
 // To filter your registered task definition families
-//
 // This example lists the task definition revisions that start with "hpcc".
 func ExampleECS_ListTaskDefinitionFamilies_shared01() {
 	svc := ecs.New(session.New())
@@ -849,7 +827,6 @@ func ExampleECS_ListTaskDefinitionFamilies_shared01() {
 }
 
 // To list your registered task definitions
-//
 // This example lists all of your registered task definitions.
 func ExampleECS_ListTaskDefinitions_shared00() {
 	svc := ecs.New(session.New())
@@ -880,7 +857,6 @@ func ExampleECS_ListTaskDefinitions_shared00() {
 }
 
 // To list the registered task definitions in a family
-//
 // This example lists the task definition revisions of a specified family.
 func ExampleECS_ListTaskDefinitions_shared01() {
 	svc := ecs.New(session.New())
@@ -913,7 +889,6 @@ func ExampleECS_ListTaskDefinitions_shared01() {
 }
 
 // To list the tasks in a cluster
-//
 // This example lists all of the tasks in a cluster.
 func ExampleECS_ListTasks_shared00() {
 	svc := ecs.New(session.New())
@@ -950,8 +925,7 @@ func ExampleECS_ListTasks_shared00() {
 }
 
 // To list the tasks on a particular container instance
-//
-// This example lists the tasks of a specified container instance. Specifying a ``containerInstance``
+// This example lists the tasks of a specified container instance. Specifying a “containerInstance“
 // value limits the results to tasks that belong to that container instance.
 func ExampleECS_ListTasks_shared01() {
 	svc := ecs.New(session.New())
@@ -989,7 +963,6 @@ func ExampleECS_ListTasks_shared01() {
 }
 
 // To modify your account settings
-//
 // This example modifies your account settings to opt in to the new ARN and resource
 // ID format for Amazon ECS services. If you’re using this command as the root user,
 // then changes apply to the entire AWS account, unless an IAM user or role explicitly
@@ -1026,7 +999,6 @@ func ExampleECS_PutAccountSetting_shared00() {
 }
 
 // To modify the account settings for a specific IAM user or IAM role
-//
 // This example modifies the account setting for a specific IAM user or IAM role to
 // opt in to the new ARN and resource ID format for Amazon ECS container instances.
 // If you’re using this command as the root user, then changes apply to the entire
@@ -1064,7 +1036,6 @@ func ExampleECS_PutAccountSetting_shared01() {
 }
 
 // To modify the default account settings for all IAM users or roles on an account
-//
 // This example modifies the default account setting for the specified resource for
 // all IAM users or roles on an account. These changes apply to the entire AWS account,
 // unless an IAM user or role explicitly overrides these settings for themselves.
@@ -1100,7 +1071,6 @@ func ExampleECS_PutAccountSettingDefault_shared00() {
 }
 
 // To register a task definition
-//
 // This example registers a task definition to the specified family.
 func ExampleECS_RegisterTaskDefinition_shared00() {
 	svc := ecs.New(session.New())
@@ -1147,7 +1117,6 @@ func ExampleECS_RegisterTaskDefinition_shared00() {
 }
 
 // To run a task on your default cluster
-//
 // This example runs the specified task definition on your default cluster.
 func ExampleECS_RunTask_shared00() {
 	svc := ecs.New(session.New())
@@ -1178,6 +1147,8 @@ func ExampleECS_RunTask_shared00() {
 				fmt.Println(ecs.ErrCodeAccessDeniedException, aerr.Error())
 			case ecs.ErrCodeBlockedException:
 				fmt.Println(ecs.ErrCodeBlockedException, aerr.Error())
+			case ecs.ErrCodeConflictException:
+				fmt.Println(ecs.ErrCodeConflictException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1193,7 +1164,6 @@ func ExampleECS_RunTask_shared00() {
 }
 
 // To tag a cluster.
-//
 // This example tags the 'dev' cluster with key 'team' and value 'dev'.
 func ExampleECS_TagResource_shared00() {
 	svc := ecs.New(session.New())
@@ -1236,7 +1206,6 @@ func ExampleECS_TagResource_shared00() {
 }
 
 // To untag a cluster.
-//
 // This example deletes the 'team' tag from the 'dev' cluster.
 func ExampleECS_UntagResource_shared00() {
 	svc := ecs.New(session.New())
@@ -1276,7 +1245,6 @@ func ExampleECS_UntagResource_shared00() {
 }
 
 // To change the task definition used in a service
-//
 // This example updates the my-http-service service to use the amazon-ecs-sample task
 // definition.
 func ExampleECS_UpdateService_shared00() {
@@ -1310,6 +1278,8 @@ func ExampleECS_UpdateService_shared00() {
 				fmt.Println(ecs.ErrCodeAccessDeniedException, aerr.Error())
 			case ecs.ErrCodeNamespaceNotFoundException:
 				fmt.Println(ecs.ErrCodeNamespaceNotFoundException, aerr.Error())
+			case ecs.ErrCodeUnsupportedFeatureException:
+				fmt.Println(ecs.ErrCodeUnsupportedFeatureException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1325,7 +1295,6 @@ func ExampleECS_UpdateService_shared00() {
 }
 
 // To change the number of tasks in a service
-//
 // This example updates the desired count of the my-http-service service to 10.
 func ExampleECS_UpdateService_shared01() {
 	svc := ecs.New(session.New())
@@ -1358,6 +1327,8 @@ func ExampleECS_UpdateService_shared01() {
 				fmt.Println(ecs.ErrCodeAccessDeniedException, aerr.Error())
 			case ecs.ErrCodeNamespaceNotFoundException:
 				fmt.Println(ecs.ErrCodeNamespaceNotFoundException, aerr.Error())
+			case ecs.ErrCodeUnsupportedFeatureException:
+				fmt.Println(ecs.ErrCodeUnsupportedFeatureException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1373,7 +1344,6 @@ func ExampleECS_UpdateService_shared01() {
 }
 
 // To set task scale-in protection for a task for 60 minutes
-//
 // This example enables scale-in protection for a task for 60 minutes.
 func ExampleECS_UpdateTaskProtection_shared00() {
 	svc := ecs.New(session.New())
@@ -1419,7 +1389,6 @@ func ExampleECS_UpdateTaskProtection_shared00() {
 }
 
 // To set task scale-in protection for the default time period in minutes
-//
 // This example enables task scale-in protection for a task, without specifying the
 // expiresInMinutes parameter, for the default protection period of 120 minutes.
 func ExampleECS_UpdateTaskProtection_shared01() {
@@ -1465,7 +1434,6 @@ func ExampleECS_UpdateTaskProtection_shared01() {
 }
 
 // To remove task scale-in protection
-//
 // This example removes scale-in protection for a task.
 func ExampleECS_UpdateTaskProtection_shared02() {
 	svc := ecs.New(session.New())

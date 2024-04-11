@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a SageMakerGeospatial client from just a session.
-//     svc := sagemakergeospatial.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a SageMakerGeospatial client with additional configuration
-//     svc := sagemakergeospatial.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a SageMakerGeospatial client from just a session.
+//	svc := sagemakergeospatial.New(mySession)
+//
+//	// Create a SageMakerGeospatial client with additional configuration
+//	svc := sagemakergeospatial.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *SageMakerGeospatial {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a LicenseManagerLinuxSubscriptions client from just a session.
-//     svc := licensemanagerlinuxsubscriptions.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a LicenseManagerLinuxSubscriptions client with additional configuration
-//     svc := licensemanagerlinuxsubscriptions.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a LicenseManagerLinuxSubscriptions client from just a session.
+//	svc := licensemanagerlinuxsubscriptions.New(mySession)
+//
+//	// Create a LicenseManagerLinuxSubscriptions client with additional configuration
+//	svc := licensemanagerlinuxsubscriptions.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *LicenseManagerLinuxSubscriptions {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

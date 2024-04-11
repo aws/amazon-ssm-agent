@@ -26,7 +26,6 @@ func parseTime(layout, value string) *time.Time {
 }
 
 // To delete a scaling policy
-//
 // This example deletes a scaling policy for the Amazon ECS service called web-app,
 // which is running in the default cluster.
 func ExampleApplicationAutoScaling_DeleteScalingPolicy_shared00() {
@@ -65,7 +64,6 @@ func ExampleApplicationAutoScaling_DeleteScalingPolicy_shared00() {
 }
 
 // To delete a scheduled action
-//
 // This example deletes a scheduled action for the AppStream 2.0 fleet called sample-fleet.
 func ExampleApplicationAutoScaling_DeleteScheduledAction_shared00() {
 	svc := applicationautoscaling.New(session.New())
@@ -103,7 +101,6 @@ func ExampleApplicationAutoScaling_DeleteScheduledAction_shared00() {
 }
 
 // To deregister a scalable target
-//
 // This example deregisters a scalable target for an Amazon ECS service called web-app
 // that is running in the default cluster.
 func ExampleApplicationAutoScaling_DeregisterScalableTarget_shared00() {
@@ -141,7 +138,6 @@ func ExampleApplicationAutoScaling_DeregisterScalableTarget_shared00() {
 }
 
 // To describe scalable targets
-//
 // This example describes the scalable targets for the ECS service namespace.
 func ExampleApplicationAutoScaling_DescribeScalableTargets_shared00() {
 	svc := applicationautoscaling.New(session.New())
@@ -176,7 +172,6 @@ func ExampleApplicationAutoScaling_DescribeScalableTargets_shared00() {
 }
 
 // To describe scaling activities for a scalable target
-//
 // This example describes the scaling activities for an Amazon ECS service called web-app
 // that is running in the default cluster.
 func ExampleApplicationAutoScaling_DescribeScalingActivities_shared00() {
@@ -214,7 +209,6 @@ func ExampleApplicationAutoScaling_DescribeScalingActivities_shared00() {
 }
 
 // To describe scaling policies
-//
 // This example describes the scaling policies for the ECS service namespace.
 func ExampleApplicationAutoScaling_DescribeScalingPolicies_shared00() {
 	svc := applicationautoscaling.New(session.New())
@@ -251,7 +245,6 @@ func ExampleApplicationAutoScaling_DescribeScalingPolicies_shared00() {
 }
 
 // To describe scheduled actions
-//
 // This example describes the scheduled actions for the dynamodb service namespace.
 func ExampleApplicationAutoScaling_DescribeScheduledActions_shared00() {
 	svc := applicationautoscaling.New(session.New())
@@ -286,7 +279,6 @@ func ExampleApplicationAutoScaling_DescribeScheduledActions_shared00() {
 }
 
 // To list tags for a scalable target
-//
 // This example lists the tag key names and values that are attached to the scalable
 // target specified by its ARN.
 func ExampleApplicationAutoScaling_ListTagsForResource_shared00() {
@@ -316,7 +308,6 @@ func ExampleApplicationAutoScaling_ListTagsForResource_shared00() {
 }
 
 // To apply a target tracking scaling policy with a predefined metric specification
-//
 // The following example applies a target tracking scaling policy with a predefined
 // metric specification to an Amazon ECS service called web-app in the default cluster.
 // The policy keeps the average CPU utilization of the service at 75 percent, with scale-out
@@ -370,7 +361,6 @@ func ExampleApplicationAutoScaling_PutScalingPolicy_shared00() {
 }
 
 // To create a recurring scheduled action
-//
 // This example adds a scheduled action to a DynamoDB table called TestTable to scale
 // out on a recurring schedule. On the specified schedule (every day at 12:15pm UTC),
 // if the current capacity is below the value specified for MinCapacity, Application
@@ -417,7 +407,6 @@ func ExampleApplicationAutoScaling_PutScheduledAction_shared00() {
 }
 
 // To register an ECS service as a scalable target
-//
 // This example registers a scalable target from an Amazon ECS service called web-app
 // that is running on the default cluster, with a minimum desired count of 1 task and
 // a maximum desired count of 10 tasks.
@@ -458,7 +447,6 @@ func ExampleApplicationAutoScaling_RegisterScalableTarget_shared00() {
 }
 
 // To add a tag to a scalable target
-//
 // This example adds a tag with the key name "environment" and the value "production"
 // to the scalable target specified by its ARN.
 func ExampleApplicationAutoScaling_TagResource_shared00() {
@@ -495,7 +483,6 @@ func ExampleApplicationAutoScaling_TagResource_shared00() {
 }
 
 // To remove a tag from a scalable target
-//
 // This example removes the tag pair with the key name "environment" from the scalable
 // target specified by its ARN.
 func ExampleApplicationAutoScaling_UntagResource_shared00() {

@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Application Migration Service.
-//    func myFunc(svc mgniface.MgnAPI) bool {
-//        // Make svc.ArchiveApplication request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Application Migration Service.
+//	func myFunc(svc mgniface.MgnAPI) bool {
+//	    // Make svc.ArchiveApplication request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := mgn.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := mgn.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockMgnClient struct {
-//        mgniface.MgnAPI
-//    }
-//    func (m *mockMgnClient) ArchiveApplication(input *mgn.ArchiveApplicationInput) (*mgn.ArchiveApplicationOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockMgnClient struct {
+//	    mgniface.MgnAPI
+//	}
+//	func (m *mockMgnClient) ArchiveApplication(input *mgn.ArchiveApplicationInput) (*mgn.ArchiveApplicationOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockMgnClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockMgnClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -84,6 +84,10 @@ type MgnAPI interface {
 	CreateApplicationWithContext(aws.Context, *mgn.CreateApplicationInput, ...request.Option) (*mgn.CreateApplicationOutput, error)
 	CreateApplicationRequest(*mgn.CreateApplicationInput) (*request.Request, *mgn.CreateApplicationOutput)
 
+	CreateConnector(*mgn.CreateConnectorInput) (*mgn.CreateConnectorOutput, error)
+	CreateConnectorWithContext(aws.Context, *mgn.CreateConnectorInput, ...request.Option) (*mgn.CreateConnectorOutput, error)
+	CreateConnectorRequest(*mgn.CreateConnectorInput) (*request.Request, *mgn.CreateConnectorOutput)
+
 	CreateLaunchConfigurationTemplate(*mgn.CreateLaunchConfigurationTemplateInput) (*mgn.CreateLaunchConfigurationTemplateOutput, error)
 	CreateLaunchConfigurationTemplateWithContext(aws.Context, *mgn.CreateLaunchConfigurationTemplateInput, ...request.Option) (*mgn.CreateLaunchConfigurationTemplateOutput, error)
 	CreateLaunchConfigurationTemplateRequest(*mgn.CreateLaunchConfigurationTemplateInput) (*request.Request, *mgn.CreateLaunchConfigurationTemplateOutput)
@@ -99,6 +103,10 @@ type MgnAPI interface {
 	DeleteApplication(*mgn.DeleteApplicationInput) (*mgn.DeleteApplicationOutput, error)
 	DeleteApplicationWithContext(aws.Context, *mgn.DeleteApplicationInput, ...request.Option) (*mgn.DeleteApplicationOutput, error)
 	DeleteApplicationRequest(*mgn.DeleteApplicationInput) (*request.Request, *mgn.DeleteApplicationOutput)
+
+	DeleteConnector(*mgn.DeleteConnectorInput) (*mgn.DeleteConnectorOutput, error)
+	DeleteConnectorWithContext(aws.Context, *mgn.DeleteConnectorInput, ...request.Option) (*mgn.DeleteConnectorOutput, error)
+	DeleteConnectorRequest(*mgn.DeleteConnectorInput) (*request.Request, *mgn.DeleteConnectorOutput)
 
 	DeleteJob(*mgn.DeleteJobInput) (*mgn.DeleteJobOutput, error)
 	DeleteJobWithContext(aws.Context, *mgn.DeleteJobInput, ...request.Option) (*mgn.DeleteJobOutput, error)
@@ -201,6 +209,13 @@ type MgnAPI interface {
 	ListApplicationsPages(*mgn.ListApplicationsInput, func(*mgn.ListApplicationsOutput, bool) bool) error
 	ListApplicationsPagesWithContext(aws.Context, *mgn.ListApplicationsInput, func(*mgn.ListApplicationsOutput, bool) bool, ...request.Option) error
 
+	ListConnectors(*mgn.ListConnectorsInput) (*mgn.ListConnectorsOutput, error)
+	ListConnectorsWithContext(aws.Context, *mgn.ListConnectorsInput, ...request.Option) (*mgn.ListConnectorsOutput, error)
+	ListConnectorsRequest(*mgn.ListConnectorsInput) (*request.Request, *mgn.ListConnectorsOutput)
+
+	ListConnectorsPages(*mgn.ListConnectorsInput, func(*mgn.ListConnectorsOutput, bool) bool) error
+	ListConnectorsPagesWithContext(aws.Context, *mgn.ListConnectorsInput, func(*mgn.ListConnectorsOutput, bool) bool, ...request.Option) error
+
 	ListExportErrors(*mgn.ListExportErrorsInput) (*mgn.ListExportErrorsOutput, error)
 	ListExportErrorsWithContext(aws.Context, *mgn.ListExportErrorsInput, ...request.Option) (*mgn.ListExportErrorsOutput, error)
 	ListExportErrorsRequest(*mgn.ListExportErrorsInput) (*request.Request, *mgn.ListExportErrorsOutput)
@@ -228,6 +243,13 @@ type MgnAPI interface {
 
 	ListImportsPages(*mgn.ListImportsInput, func(*mgn.ListImportsOutput, bool) bool) error
 	ListImportsPagesWithContext(aws.Context, *mgn.ListImportsInput, func(*mgn.ListImportsOutput, bool) bool, ...request.Option) error
+
+	ListManagedAccounts(*mgn.ListManagedAccountsInput) (*mgn.ListManagedAccountsOutput, error)
+	ListManagedAccountsWithContext(aws.Context, *mgn.ListManagedAccountsInput, ...request.Option) (*mgn.ListManagedAccountsOutput, error)
+	ListManagedAccountsRequest(*mgn.ListManagedAccountsInput) (*request.Request, *mgn.ListManagedAccountsOutput)
+
+	ListManagedAccountsPages(*mgn.ListManagedAccountsInput, func(*mgn.ListManagedAccountsOutput, bool) bool) error
+	ListManagedAccountsPagesWithContext(aws.Context, *mgn.ListManagedAccountsInput, func(*mgn.ListManagedAccountsOutput, bool) bool, ...request.Option) error
 
 	ListSourceServerActions(*mgn.ListSourceServerActionsInput) (*mgn.ListSourceServerActionsOutput, error)
 	ListSourceServerActionsWithContext(aws.Context, *mgn.ListSourceServerActionsInput, ...request.Option) (*mgn.ListSourceServerActionsOutput, error)
@@ -258,6 +280,10 @@ type MgnAPI interface {
 	MarkAsArchivedWithContext(aws.Context, *mgn.MarkAsArchivedInput, ...request.Option) (*mgn.MarkAsArchivedOutput, error)
 	MarkAsArchivedRequest(*mgn.MarkAsArchivedInput) (*request.Request, *mgn.MarkAsArchivedOutput)
 
+	PauseReplication(*mgn.PauseReplicationInput) (*mgn.PauseReplicationOutput, error)
+	PauseReplicationWithContext(aws.Context, *mgn.PauseReplicationInput, ...request.Option) (*mgn.PauseReplicationOutput, error)
+	PauseReplicationRequest(*mgn.PauseReplicationInput) (*request.Request, *mgn.PauseReplicationOutput)
+
 	PutSourceServerAction(*mgn.PutSourceServerActionInput) (*mgn.PutSourceServerActionOutput, error)
 	PutSourceServerActionWithContext(aws.Context, *mgn.PutSourceServerActionInput, ...request.Option) (*mgn.PutSourceServerActionOutput, error)
 	PutSourceServerActionRequest(*mgn.PutSourceServerActionInput) (*request.Request, *mgn.PutSourceServerActionOutput)
@@ -273,6 +299,10 @@ type MgnAPI interface {
 	RemoveTemplateAction(*mgn.RemoveTemplateActionInput) (*mgn.RemoveTemplateActionOutput, error)
 	RemoveTemplateActionWithContext(aws.Context, *mgn.RemoveTemplateActionInput, ...request.Option) (*mgn.RemoveTemplateActionOutput, error)
 	RemoveTemplateActionRequest(*mgn.RemoveTemplateActionInput) (*request.Request, *mgn.RemoveTemplateActionOutput)
+
+	ResumeReplication(*mgn.ResumeReplicationInput) (*mgn.ResumeReplicationOutput, error)
+	ResumeReplicationWithContext(aws.Context, *mgn.ResumeReplicationInput, ...request.Option) (*mgn.ResumeReplicationOutput, error)
+	ResumeReplicationRequest(*mgn.ResumeReplicationInput) (*request.Request, *mgn.ResumeReplicationOutput)
 
 	RetryDataReplication(*mgn.RetryDataReplicationInput) (*mgn.RetryDataReplicationOutput, error)
 	RetryDataReplicationWithContext(aws.Context, *mgn.RetryDataReplicationInput, ...request.Option) (*mgn.RetryDataReplicationOutput, error)
@@ -298,6 +328,10 @@ type MgnAPI interface {
 	StartTestWithContext(aws.Context, *mgn.StartTestInput, ...request.Option) (*mgn.StartTestOutput, error)
 	StartTestRequest(*mgn.StartTestInput) (*request.Request, *mgn.StartTestOutput)
 
+	StopReplication(*mgn.StopReplicationInput) (*mgn.StopReplicationOutput, error)
+	StopReplicationWithContext(aws.Context, *mgn.StopReplicationInput, ...request.Option) (*mgn.StopReplicationOutput, error)
+	StopReplicationRequest(*mgn.StopReplicationInput) (*request.Request, *mgn.StopReplicationOutput)
+
 	TagResource(*mgn.TagResourceInput) (*mgn.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *mgn.TagResourceInput, ...request.Option) (*mgn.TagResourceOutput, error)
 	TagResourceRequest(*mgn.TagResourceInput) (*request.Request, *mgn.TagResourceOutput)
@@ -322,6 +356,10 @@ type MgnAPI interface {
 	UpdateApplicationWithContext(aws.Context, *mgn.UpdateApplicationInput, ...request.Option) (*mgn.UpdateApplicationOutput, error)
 	UpdateApplicationRequest(*mgn.UpdateApplicationInput) (*request.Request, *mgn.UpdateApplicationOutput)
 
+	UpdateConnector(*mgn.UpdateConnectorInput) (*mgn.UpdateConnectorOutput, error)
+	UpdateConnectorWithContext(aws.Context, *mgn.UpdateConnectorInput, ...request.Option) (*mgn.UpdateConnectorOutput, error)
+	UpdateConnectorRequest(*mgn.UpdateConnectorInput) (*request.Request, *mgn.UpdateConnectorOutput)
+
 	UpdateLaunchConfiguration(*mgn.UpdateLaunchConfigurationInput) (*mgn.UpdateLaunchConfigurationOutput, error)
 	UpdateLaunchConfigurationWithContext(aws.Context, *mgn.UpdateLaunchConfigurationInput, ...request.Option) (*mgn.UpdateLaunchConfigurationOutput, error)
 	UpdateLaunchConfigurationRequest(*mgn.UpdateLaunchConfigurationInput) (*request.Request, *mgn.UpdateLaunchConfigurationOutput)
@@ -337,6 +375,10 @@ type MgnAPI interface {
 	UpdateReplicationConfigurationTemplate(*mgn.UpdateReplicationConfigurationTemplateInput) (*mgn.UpdateReplicationConfigurationTemplateOutput, error)
 	UpdateReplicationConfigurationTemplateWithContext(aws.Context, *mgn.UpdateReplicationConfigurationTemplateInput, ...request.Option) (*mgn.UpdateReplicationConfigurationTemplateOutput, error)
 	UpdateReplicationConfigurationTemplateRequest(*mgn.UpdateReplicationConfigurationTemplateInput) (*request.Request, *mgn.UpdateReplicationConfigurationTemplateOutput)
+
+	UpdateSourceServer(*mgn.UpdateSourceServerInput) (*mgn.UpdateSourceServerOutput, error)
+	UpdateSourceServerWithContext(aws.Context, *mgn.UpdateSourceServerInput, ...request.Option) (*mgn.UpdateSourceServerOutput, error)
+	UpdateSourceServerRequest(*mgn.UpdateSourceServerInput) (*request.Request, *mgn.UpdateSourceServerOutput)
 
 	UpdateSourceServerReplicationType(*mgn.UpdateSourceServerReplicationTypeInput) (*mgn.UpdateSourceServerReplicationTypeOutput, error)
 	UpdateSourceServerReplicationTypeWithContext(aws.Context, *mgn.UpdateSourceServerReplicationTypeInput, ...request.Option) (*mgn.UpdateSourceServerReplicationTypeOutput, error)

@@ -23,43 +23,47 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWS Marketplace Catalog Service.
-//    func myFunc(svc marketplacecatalogiface.MarketplaceCatalogAPI) bool {
-//        // Make svc.CancelChangeSet request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWS Marketplace Catalog Service.
+//	func myFunc(svc marketplacecatalogiface.MarketplaceCatalogAPI) bool {
+//	    // Make svc.BatchDescribeEntities request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := marketplacecatalog.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := marketplacecatalog.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockMarketplaceCatalogClient struct {
-//        marketplacecatalogiface.MarketplaceCatalogAPI
-//    }
-//    func (m *mockMarketplaceCatalogClient) CancelChangeSet(input *marketplacecatalog.CancelChangeSetInput) (*marketplacecatalog.CancelChangeSetOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockMarketplaceCatalogClient struct {
+//	    marketplacecatalogiface.MarketplaceCatalogAPI
+//	}
+//	func (m *mockMarketplaceCatalogClient) BatchDescribeEntities(input *marketplacecatalog.BatchDescribeEntitiesInput) (*marketplacecatalog.BatchDescribeEntitiesOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockMarketplaceCatalogClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockMarketplaceCatalogClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type MarketplaceCatalogAPI interface {
+	BatchDescribeEntities(*marketplacecatalog.BatchDescribeEntitiesInput) (*marketplacecatalog.BatchDescribeEntitiesOutput, error)
+	BatchDescribeEntitiesWithContext(aws.Context, *marketplacecatalog.BatchDescribeEntitiesInput, ...request.Option) (*marketplacecatalog.BatchDescribeEntitiesOutput, error)
+	BatchDescribeEntitiesRequest(*marketplacecatalog.BatchDescribeEntitiesInput) (*request.Request, *marketplacecatalog.BatchDescribeEntitiesOutput)
+
 	CancelChangeSet(*marketplacecatalog.CancelChangeSetInput) (*marketplacecatalog.CancelChangeSetOutput, error)
 	CancelChangeSetWithContext(aws.Context, *marketplacecatalog.CancelChangeSetInput, ...request.Option) (*marketplacecatalog.CancelChangeSetOutput, error)
 	CancelChangeSetRequest(*marketplacecatalog.CancelChangeSetInput) (*request.Request, *marketplacecatalog.CancelChangeSetOutput)

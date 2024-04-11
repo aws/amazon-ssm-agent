@@ -29,14 +29,13 @@ const opCreateSnapshot = "CreateSnapshot"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSnapshotRequest method.
+//	req, resp := client.CreateSnapshotRequest(params)
 //
-//    // Example sending a request using the CreateSnapshotRequest method.
-//    req, resp := client.CreateSnapshotRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/CreateSnapshot
 func (c *SimSpaceWeaver) CreateSnapshotRequest(input *CreateSnapshotInput) (req *request.Request, output *CreateSnapshotOutput) {
@@ -74,17 +73,17 @@ func (c *SimSpaceWeaver) CreateSnapshotRequest(input *CreateSnapshotInput) (req 
 // The snapshot file is an Amazon S3 object. It has an object key with the form:
 // object-key-prefix/snapshot/simulation-name-YYMMdd-HHmm-ss.zip, where:
 //
-//    * YY is the 2-digit year
+//   - YY is the 2-digit year
 //
-//    * MM is the 2-digit month
+//   - MM is the 2-digit month
 //
-//    * dd is the 2-digit day of the month
+//   - dd is the 2-digit day of the month
 //
-//    * HH is the 2-digit hour (24-hour clock)
+//   - HH is the 2-digit hour (24-hour clock)
 //
-//    * mm is the 2-digit minutes
+//   - mm is the 2-digit minutes
 //
-//    * ss is the 2-digit seconds
+//   - ss is the 2-digit seconds
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -94,15 +93,16 @@ func (c *SimSpaceWeaver) CreateSnapshotRequest(input *CreateSnapshotInput) (req 
 // API operation CreateSnapshot for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ConflictException
+//   - ValidationException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/CreateSnapshot
 func (c *SimSpaceWeaver) CreateSnapshot(input *CreateSnapshotInput) (*CreateSnapshotOutput, error) {
@@ -142,14 +142,13 @@ const opDeleteApp = "DeleteApp"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAppRequest method.
+//	req, resp := client.DeleteAppRequest(params)
 //
-//    // Example sending a request using the DeleteAppRequest method.
-//    req, resp := client.DeleteAppRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/DeleteApp
 func (c *SimSpaceWeaver) DeleteAppRequest(input *DeleteAppInput) (req *request.Request, output *DeleteAppOutput) {
@@ -181,15 +180,16 @@ func (c *SimSpaceWeaver) DeleteAppRequest(input *DeleteAppInput) (req *request.R
 // API operation DeleteApp for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ConflictException
+//   - ValidationException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/DeleteApp
 func (c *SimSpaceWeaver) DeleteApp(input *DeleteAppInput) (*DeleteAppOutput, error) {
@@ -229,14 +229,13 @@ const opDeleteSimulation = "DeleteSimulation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSimulationRequest method.
+//	req, resp := client.DeleteSimulationRequest(params)
 //
-//    // Example sending a request using the DeleteSimulationRequest method.
-//    req, resp := client.DeleteSimulationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/DeleteSimulation
 func (c *SimSpaceWeaver) DeleteSimulationRequest(input *DeleteSimulationInput) (req *request.Request, output *DeleteSimulationOutput) {
@@ -271,15 +270,16 @@ func (c *SimSpaceWeaver) DeleteSimulationRequest(input *DeleteSimulationInput) (
 // API operation DeleteSimulation for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ConflictException
+//   - ValidationException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/DeleteSimulation
 func (c *SimSpaceWeaver) DeleteSimulation(input *DeleteSimulationInput) (*DeleteSimulationOutput, error) {
@@ -319,14 +319,13 @@ const opDescribeApp = "DescribeApp"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeAppRequest method.
+//	req, resp := client.DescribeAppRequest(params)
 //
-//    // Example sending a request using the DescribeAppRequest method.
-//    req, resp := client.DescribeAppRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/DescribeApp
 func (c *SimSpaceWeaver) DescribeAppRequest(input *DescribeAppInput) (req *request.Request, output *DescribeAppOutput) {
@@ -357,13 +356,14 @@ func (c *SimSpaceWeaver) DescribeAppRequest(input *DescribeAppInput) (req *reque
 // API operation DescribeApp for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/DescribeApp
 func (c *SimSpaceWeaver) DescribeApp(input *DescribeAppInput) (*DescribeAppOutput, error) {
@@ -403,14 +403,13 @@ const opDescribeSimulation = "DescribeSimulation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeSimulationRequest method.
+//	req, resp := client.DescribeSimulationRequest(params)
 //
-//    // Example sending a request using the DescribeSimulationRequest method.
-//    req, resp := client.DescribeSimulationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/DescribeSimulation
 func (c *SimSpaceWeaver) DescribeSimulationRequest(input *DescribeSimulationInput) (req *request.Request, output *DescribeSimulationOutput) {
@@ -441,13 +440,14 @@ func (c *SimSpaceWeaver) DescribeSimulationRequest(input *DescribeSimulationInpu
 // API operation DescribeSimulation for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/DescribeSimulation
 func (c *SimSpaceWeaver) DescribeSimulation(input *DescribeSimulationInput) (*DescribeSimulationOutput, error) {
@@ -487,14 +487,13 @@ const opListApps = "ListApps"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAppsRequest method.
+//	req, resp := client.ListAppsRequest(params)
 //
-//    // Example sending a request using the ListAppsRequest method.
-//    req, resp := client.ListAppsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/ListApps
 func (c *SimSpaceWeaver) ListAppsRequest(input *ListAppsInput) (req *request.Request, output *ListAppsOutput) {
@@ -531,13 +530,14 @@ func (c *SimSpaceWeaver) ListAppsRequest(input *ListAppsInput) (req *request.Req
 // API operation ListApps for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/ListApps
 func (c *SimSpaceWeaver) ListApps(input *ListAppsInput) (*ListAppsOutput, error) {
@@ -569,15 +569,14 @@ func (c *SimSpaceWeaver) ListAppsWithContext(ctx aws.Context, input *ListAppsInp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListApps operation.
-//    pageNum := 0
-//    err := client.ListAppsPages(params,
-//        func(page *simspaceweaver.ListAppsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListApps operation.
+//	pageNum := 0
+//	err := client.ListAppsPages(params,
+//	    func(page *simspaceweaver.ListAppsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SimSpaceWeaver) ListAppsPages(input *ListAppsInput, fn func(*ListAppsOutput, bool) bool) error {
 	return c.ListAppsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -629,14 +628,13 @@ const opListSimulations = "ListSimulations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSimulationsRequest method.
+//	req, resp := client.ListSimulationsRequest(params)
 //
-//    // Example sending a request using the ListSimulationsRequest method.
-//    req, resp := client.ListSimulationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/ListSimulations
 func (c *SimSpaceWeaver) ListSimulationsRequest(input *ListSimulationsInput) (req *request.Request, output *ListSimulationsOutput) {
@@ -674,11 +672,12 @@ func (c *SimSpaceWeaver) ListSimulationsRequest(input *ListSimulationsInput) (re
 // API operation ListSimulations for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/ListSimulations
 func (c *SimSpaceWeaver) ListSimulations(input *ListSimulationsInput) (*ListSimulationsOutput, error) {
@@ -710,15 +709,14 @@ func (c *SimSpaceWeaver) ListSimulationsWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSimulations operation.
-//    pageNum := 0
-//    err := client.ListSimulationsPages(params,
-//        func(page *simspaceweaver.ListSimulationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSimulations operation.
+//	pageNum := 0
+//	err := client.ListSimulationsPages(params,
+//	    func(page *simspaceweaver.ListSimulationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *SimSpaceWeaver) ListSimulationsPages(input *ListSimulationsInput, fn func(*ListSimulationsOutput, bool) bool) error {
 	return c.ListSimulationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -770,14 +768,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/ListTagsForResource
 func (c *SimSpaceWeaver) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -808,9 +805,10 @@ func (c *SimSpaceWeaver) ListTagsForResourceRequest(input *ListTagsForResourceIn
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * ValidationException
+//   - ResourceNotFoundException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/ListTagsForResource
 func (c *SimSpaceWeaver) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -850,14 +848,13 @@ const opStartApp = "StartApp"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartAppRequest method.
+//	req, resp := client.StartAppRequest(params)
 //
-//    // Example sending a request using the StartAppRequest method.
-//    req, resp := client.StartAppRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StartApp
 func (c *SimSpaceWeaver) StartAppRequest(input *StartAppInput) (req *request.Request, output *StartAppOutput) {
@@ -888,15 +885,16 @@ func (c *SimSpaceWeaver) StartAppRequest(input *StartAppInput) (req *request.Req
 // API operation StartApp for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ServiceQuotaExceededException
+//   - ValidationException
 //
-//   * ConflictException
+//   - ServiceQuotaExceededException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StartApp
 func (c *SimSpaceWeaver) StartApp(input *StartAppInput) (*StartAppOutput, error) {
@@ -936,14 +934,13 @@ const opStartClock = "StartClock"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartClockRequest method.
+//	req, resp := client.StartClockRequest(params)
 //
-//    // Example sending a request using the StartClockRequest method.
-//    req, resp := client.StartClockRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StartClock
 func (c *SimSpaceWeaver) StartClockRequest(input *StartClockInput) (req *request.Request, output *StartClockOutput) {
@@ -975,15 +972,16 @@ func (c *SimSpaceWeaver) StartClockRequest(input *StartClockInput) (req *request
 // API operation StartClock for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ConflictException
+//   - ValidationException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StartClock
 func (c *SimSpaceWeaver) StartClock(input *StartClockInput) (*StartClockOutput, error) {
@@ -1023,14 +1021,13 @@ const opStartSimulation = "StartSimulation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartSimulationRequest method.
+//	req, resp := client.StartSimulationRequest(params)
 //
-//    // Example sending a request using the StartSimulationRequest method.
-//    req, resp := client.StartSimulationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StartSimulation
 func (c *SimSpaceWeaver) StartSimulationRequest(input *StartSimulationInput) (req *request.Request, output *StartSimulationOutput) {
@@ -1066,15 +1063,16 @@ func (c *SimSpaceWeaver) StartSimulationRequest(input *StartSimulationInput) (re
 // API operation StartSimulation for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ServiceQuotaExceededException
+//   - ValidationException
 //
-//   * ConflictException
+//   - ServiceQuotaExceededException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StartSimulation
 func (c *SimSpaceWeaver) StartSimulation(input *StartSimulationInput) (*StartSimulationOutput, error) {
@@ -1114,14 +1112,13 @@ const opStopApp = "StopApp"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopAppRequest method.
+//	req, resp := client.StopAppRequest(params)
 //
-//    // Example sending a request using the StopAppRequest method.
-//    req, resp := client.StopAppRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StopApp
 func (c *SimSpaceWeaver) StopAppRequest(input *StopAppInput) (req *request.Request, output *StopAppOutput) {
@@ -1153,15 +1150,16 @@ func (c *SimSpaceWeaver) StopAppRequest(input *StopAppInput) (req *request.Reque
 // API operation StopApp for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ConflictException
+//   - ValidationException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StopApp
 func (c *SimSpaceWeaver) StopApp(input *StopAppInput) (*StopAppOutput, error) {
@@ -1201,14 +1199,13 @@ const opStopClock = "StopClock"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopClockRequest method.
+//	req, resp := client.StopClockRequest(params)
 //
-//    // Example sending a request using the StopClockRequest method.
-//    req, resp := client.StopClockRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StopClock
 func (c *SimSpaceWeaver) StopClockRequest(input *StopClockInput) (req *request.Request, output *StopClockOutput) {
@@ -1240,15 +1237,16 @@ func (c *SimSpaceWeaver) StopClockRequest(input *StopClockInput) (req *request.R
 // API operation StopClock for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ConflictException
+//   - ValidationException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StopClock
 func (c *SimSpaceWeaver) StopClock(input *StopClockInput) (*StopClockOutput, error) {
@@ -1288,14 +1286,13 @@ const opStopSimulation = "StopSimulation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopSimulationRequest method.
+//	req, resp := client.StopSimulationRequest(params)
 //
-//    // Example sending a request using the StopSimulationRequest method.
-//    req, resp := client.StopSimulationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StopSimulation
 func (c *SimSpaceWeaver) StopSimulationRequest(input *StopSimulationInput) (req *request.Request, output *StopSimulationOutput) {
@@ -1331,15 +1328,16 @@ func (c *SimSpaceWeaver) StopSimulationRequest(input *StopSimulationInput) (req 
 // API operation StopSimulation for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * InternalServerException
+//   - ResourceNotFoundException
 //
-//   * AccessDeniedException
+//   - InternalServerException
 //
-//   * ValidationException
+//   - AccessDeniedException
 //
-//   * ConflictException
+//   - ValidationException
+//
+//   - ConflictException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/StopSimulation
 func (c *SimSpaceWeaver) StopSimulation(input *StopSimulationInput) (*StopSimulationOutput, error) {
@@ -1379,14 +1377,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/TagResource
 func (c *SimSpaceWeaver) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1420,11 +1417,12 @@ func (c *SimSpaceWeaver) TagResourceRequest(input *TagResourceInput) (req *reque
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * TooManyTagsException
 //
-//   * ResourceNotFoundException
+//   - TooManyTagsException
 //
-//   * ValidationException
+//   - ResourceNotFoundException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/TagResource
 func (c *SimSpaceWeaver) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1464,14 +1462,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/UntagResource
 func (c *SimSpaceWeaver) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -1505,9 +1502,10 @@ func (c *SimSpaceWeaver) UntagResourceRequest(input *UntagResourceInput) (req *r
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
 //
-//   * ValidationException
+//   - ResourceNotFoundException
+//
+//   - ValidationException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/simspaceweaver-2022-10-28/UntagResource
 func (c *SimSpaceWeaver) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -1701,6 +1699,9 @@ type CreateSnapshotInput struct {
 
 	// The Amazon S3 bucket and optional folder (object key prefix) where SimSpace
 	// Weaver creates the snapshot file.
+	//
+	// The Amazon S3 bucket must be in the same Amazon Web Services Region as the
+	// simulation.
 	//
 	// Destination is a required field
 	Destination *S3Destination `type:"structure" required:"true"`
@@ -3021,7 +3022,9 @@ type S3Destination struct {
 	// The name of an Amazon S3 bucket. For more information about buckets, see
 	// Creating, configuring, and working with Amazon S3 buckets (https://docs.aws.amazon.com/AmazonS3/latest/userguide/creating-buckets-s3.html)
 	// in the Amazon Simple Storage Service User Guide.
-	BucketName *string `min:"3" type:"string"`
+	//
+	// BucketName is a required field
+	BucketName *string `min:"3" type:"string" required:"true"`
 
 	// A string prefix for an Amazon S3 object key. It's usually a folder name.
 	// For more information about folders in Amazon S3, see Organizing objects in
@@ -3051,6 +3054,9 @@ func (s S3Destination) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *S3Destination) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "S3Destination"}
+	if s.BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketName"))
+	}
 	if s.BucketName != nil && len(*s.BucketName) < 3 {
 		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
 	}
@@ -3083,13 +3089,17 @@ type S3Location struct {
 	// The name of an Amazon S3 bucket. For more information about buckets, see
 	// Creating, configuring, and working with Amazon S3 buckets (https://docs.aws.amazon.com/AmazonS3/latest/userguide/creating-buckets-s3.html)
 	// in the Amazon Simple Storage Service User Guide.
-	BucketName *string `min:"3" type:"string"`
+	//
+	// BucketName is a required field
+	BucketName *string `min:"3" type:"string" required:"true"`
 
 	// The key name of an object in Amazon S3. For more information about Amazon
 	// S3 objects and object keys, see Uploading, downloading, and working with
 	// objects in Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/uploading-downloading-objects.html)
 	// in the Amazon Simple Storage Service User Guide.
-	ObjectKey *string `min:"1" type:"string"`
+	//
+	// ObjectKey is a required field
+	ObjectKey *string `min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -3113,8 +3123,14 @@ func (s S3Location) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *S3Location) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "S3Location"}
+	if s.BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketName"))
+	}
 	if s.BucketName != nil && len(*s.BucketName) < 3 {
 		invalidParams.Add(request.NewErrParamMinLen("BucketName", 3))
+	}
+	if s.ObjectKey == nil {
+		invalidParams.Add(request.NewErrParamRequired("ObjectKey"))
 	}
 	if s.ObjectKey != nil && len(*s.ObjectKey) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ObjectKey", 1))
@@ -3765,6 +3781,9 @@ type StartSimulationInput struct {
 	// Service User Guide (https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html).
 	//
 	// Provide a SnapshotS3Location to start your simulation from a snapshot.
+	//
+	// The Amazon S3 bucket must be in the same Amazon Web Services Region as the
+	// simulation.
 	//
 	// If you provide a SnapshotS3Location then you can't provide a SchemaS3Location.
 	SnapshotS3Location *S3Location `type:"structure"`

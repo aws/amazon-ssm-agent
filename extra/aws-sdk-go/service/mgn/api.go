@@ -28,14 +28,13 @@ const opArchiveApplication = "ArchiveApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ArchiveApplicationRequest method.
+//	req, resp := client.ArchiveApplicationRequest(params)
 //
-//    // Example sending a request using the ArchiveApplicationRequest method.
-//    req, resp := client.ArchiveApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ArchiveApplication
 func (c *Mgn) ArchiveApplicationRequest(input *ArchiveApplicationInput) (req *request.Request, output *ArchiveApplicationOutput) {
@@ -66,18 +65,19 @@ func (c *Mgn) ArchiveApplicationRequest(input *ArchiveApplicationInput) (req *re
 // API operation ArchiveApplication for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ServiceQuotaExceededException
-//   The request could not be completed because its exceeded the service quota.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ArchiveApplication
 func (c *Mgn) ArchiveApplication(input *ArchiveApplicationInput) (*ArchiveApplicationOutput, error) {
@@ -117,14 +117,13 @@ const opArchiveWave = "ArchiveWave"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ArchiveWaveRequest method.
+//	req, resp := client.ArchiveWaveRequest(params)
 //
-//    // Example sending a request using the ArchiveWaveRequest method.
-//    req, resp := client.ArchiveWaveRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ArchiveWave
 func (c *Mgn) ArchiveWaveRequest(input *ArchiveWaveInput) (req *request.Request, output *ArchiveWaveOutput) {
@@ -155,18 +154,19 @@ func (c *Mgn) ArchiveWaveRequest(input *ArchiveWaveInput) (req *request.Request,
 // API operation ArchiveWave for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ServiceQuotaExceededException
-//   The request could not be completed because its exceeded the service quota.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ArchiveWave
 func (c *Mgn) ArchiveWave(input *ArchiveWaveInput) (*ArchiveWaveOutput, error) {
@@ -206,14 +206,13 @@ const opAssociateApplications = "AssociateApplications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateApplicationsRequest method.
+//	req, resp := client.AssociateApplicationsRequest(params)
 //
-//    // Example sending a request using the AssociateApplicationsRequest method.
-//    req, resp := client.AssociateApplicationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/AssociateApplications
 func (c *Mgn) AssociateApplicationsRequest(input *AssociateApplicationsInput) (req *request.Request, output *AssociateApplicationsOutput) {
@@ -245,18 +244,19 @@ func (c *Mgn) AssociateApplicationsRequest(input *AssociateApplicationsInput) (r
 // API operation AssociateApplications for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ServiceQuotaExceededException
-//   The request could not be completed because its exceeded the service quota.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/AssociateApplications
 func (c *Mgn) AssociateApplications(input *AssociateApplicationsInput) (*AssociateApplicationsOutput, error) {
@@ -296,14 +296,13 @@ const opAssociateSourceServers = "AssociateSourceServers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateSourceServersRequest method.
+//	req, resp := client.AssociateSourceServersRequest(params)
 //
-//    // Example sending a request using the AssociateSourceServersRequest method.
-//    req, resp := client.AssociateSourceServersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/AssociateSourceServers
 func (c *Mgn) AssociateSourceServersRequest(input *AssociateSourceServersInput) (req *request.Request, output *AssociateSourceServersOutput) {
@@ -335,18 +334,19 @@ func (c *Mgn) AssociateSourceServersRequest(input *AssociateSourceServersInput) 
 // API operation AssociateSourceServers for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ServiceQuotaExceededException
-//   The request could not be completed because its exceeded the service quota.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/AssociateSourceServers
 func (c *Mgn) AssociateSourceServers(input *AssociateSourceServersInput) (*AssociateSourceServersOutput, error) {
@@ -386,14 +386,13 @@ const opChangeServerLifeCycleState = "ChangeServerLifeCycleState"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ChangeServerLifeCycleStateRequest method.
+//	req, resp := client.ChangeServerLifeCycleStateRequest(params)
 //
-//    // Example sending a request using the ChangeServerLifeCycleStateRequest method.
-//    req, resp := client.ChangeServerLifeCycleStateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ChangeServerLifeCycleState
 func (c *Mgn) ChangeServerLifeCycleStateRequest(input *ChangeServerLifeCycleStateInput) (req *request.Request, output *ChangeServerLifeCycleStateOutput) {
@@ -427,18 +426,19 @@ func (c *Mgn) ChangeServerLifeCycleStateRequest(input *ChangeServerLifeCycleStat
 // API operation ChangeServerLifeCycleState for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ValidationException
+//     Validate exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ChangeServerLifeCycleState
 func (c *Mgn) ChangeServerLifeCycleState(input *ChangeServerLifeCycleStateInput) (*ChangeServerLifeCycleStateOutput, error) {
@@ -478,14 +478,13 @@ const opCreateApplication = "CreateApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateApplicationRequest method.
+//	req, resp := client.CreateApplicationRequest(params)
 //
-//    // Example sending a request using the CreateApplicationRequest method.
-//    req, resp := client.CreateApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateApplication
 func (c *Mgn) CreateApplicationRequest(input *CreateApplicationInput) (req *request.Request, output *CreateApplicationOutput) {
@@ -516,15 +515,16 @@ func (c *Mgn) CreateApplicationRequest(input *CreateApplicationInput) (req *requ
 // API operation CreateApplication for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ServiceQuotaExceededException
-//   The request could not be completed because its exceeded the service quota.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateApplication
 func (c *Mgn) CreateApplication(input *CreateApplicationInput) (*CreateApplicationOutput, error) {
@@ -548,6 +548,88 @@ func (c *Mgn) CreateApplicationWithContext(ctx aws.Context, input *CreateApplica
 	return out, req.Send()
 }
 
+const opCreateConnector = "CreateConnector"
+
+// CreateConnectorRequest generates a "aws/request.Request" representing the
+// client's request for the CreateConnector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateConnector for more information on using the CreateConnector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateConnectorRequest method.
+//	req, resp := client.CreateConnectorRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateConnector
+func (c *Mgn) CreateConnectorRequest(input *CreateConnectorInput) (req *request.Request, output *CreateConnectorOutput) {
+	op := &request.Operation{
+		Name:       opCreateConnector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/CreateConnector",
+	}
+
+	if input == nil {
+		input = &CreateConnectorInput{}
+	}
+
+	output = &CreateConnectorOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateConnector API operation for Application Migration Service.
+//
+// Create Connector.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation CreateConnector for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ValidationException
+//     Validate exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateConnector
+func (c *Mgn) CreateConnector(input *CreateConnectorInput) (*CreateConnectorOutput, error) {
+	req, out := c.CreateConnectorRequest(input)
+	return out, req.Send()
+}
+
+// CreateConnectorWithContext is the same as CreateConnector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateConnector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) CreateConnectorWithContext(ctx aws.Context, input *CreateConnectorInput, opts ...request.Option) (*CreateConnectorOutput, error) {
+	req, out := c.CreateConnectorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateLaunchConfigurationTemplate = "CreateLaunchConfigurationTemplate"
 
 // CreateLaunchConfigurationTemplateRequest generates a "aws/request.Request" representing the
@@ -564,14 +646,13 @@ const opCreateLaunchConfigurationTemplate = "CreateLaunchConfigurationTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateLaunchConfigurationTemplateRequest method.
+//	req, resp := client.CreateLaunchConfigurationTemplateRequest(params)
 //
-//    // Example sending a request using the CreateLaunchConfigurationTemplateRequest method.
-//    req, resp := client.CreateLaunchConfigurationTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateLaunchConfigurationTemplate
 func (c *Mgn) CreateLaunchConfigurationTemplateRequest(input *CreateLaunchConfigurationTemplateInput) (req *request.Request, output *CreateLaunchConfigurationTemplateOutput) {
@@ -602,14 +683,15 @@ func (c *Mgn) CreateLaunchConfigurationTemplateRequest(input *CreateLaunchConfig
 // API operation CreateLaunchConfigurationTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * AccessDeniedException
-//   Operating denied due to a file permission or access check error.
+//   - ValidationException
+//     Validate exception.
+//
+//   - AccessDeniedException
+//     Operating denied due to a file permission or access check error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateLaunchConfigurationTemplate
 func (c *Mgn) CreateLaunchConfigurationTemplate(input *CreateLaunchConfigurationTemplateInput) (*CreateLaunchConfigurationTemplateOutput, error) {
@@ -649,14 +731,13 @@ const opCreateReplicationConfigurationTemplate = "CreateReplicationConfiguration
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateReplicationConfigurationTemplateRequest method.
+//	req, resp := client.CreateReplicationConfigurationTemplateRequest(params)
 //
-//    // Example sending a request using the CreateReplicationConfigurationTemplateRequest method.
-//    req, resp := client.CreateReplicationConfigurationTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateReplicationConfigurationTemplate
 func (c *Mgn) CreateReplicationConfigurationTemplateRequest(input *CreateReplicationConfigurationTemplateInput) (req *request.Request, output *CreateReplicationConfigurationTemplateOutput) {
@@ -687,14 +768,15 @@ func (c *Mgn) CreateReplicationConfigurationTemplateRequest(input *CreateReplica
 // API operation CreateReplicationConfigurationTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * AccessDeniedException
-//   Operating denied due to a file permission or access check error.
+//   - ValidationException
+//     Validate exception.
+//
+//   - AccessDeniedException
+//     Operating denied due to a file permission or access check error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateReplicationConfigurationTemplate
 func (c *Mgn) CreateReplicationConfigurationTemplate(input *CreateReplicationConfigurationTemplateInput) (*CreateReplicationConfigurationTemplateOutput, error) {
@@ -734,14 +816,13 @@ const opCreateWave = "CreateWave"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWaveRequest method.
+//	req, resp := client.CreateWaveRequest(params)
 //
-//    // Example sending a request using the CreateWaveRequest method.
-//    req, resp := client.CreateWaveRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateWave
 func (c *Mgn) CreateWaveRequest(input *CreateWaveInput) (req *request.Request, output *CreateWaveOutput) {
@@ -772,15 +853,16 @@ func (c *Mgn) CreateWaveRequest(input *CreateWaveInput) (req *request.Request, o
 // API operation CreateWave for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ServiceQuotaExceededException
-//   The request could not be completed because its exceeded the service quota.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/CreateWave
 func (c *Mgn) CreateWave(input *CreateWaveInput) (*CreateWaveOutput, error) {
@@ -820,14 +902,13 @@ const opDeleteApplication = "DeleteApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApplicationRequest method.
+//	req, resp := client.DeleteApplicationRequest(params)
 //
-//    // Example sending a request using the DeleteApplicationRequest method.
-//    req, resp := client.DeleteApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteApplication
 func (c *Mgn) DeleteApplicationRequest(input *DeleteApplicationInput) (req *request.Request, output *DeleteApplicationOutput) {
@@ -859,15 +940,16 @@ func (c *Mgn) DeleteApplicationRequest(input *DeleteApplicationInput) (req *requ
 // API operation DeleteApplication for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteApplication
 func (c *Mgn) DeleteApplication(input *DeleteApplicationInput) (*DeleteApplicationOutput, error) {
@@ -891,6 +973,92 @@ func (c *Mgn) DeleteApplicationWithContext(ctx aws.Context, input *DeleteApplica
 	return out, req.Send()
 }
 
+const opDeleteConnector = "DeleteConnector"
+
+// DeleteConnectorRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteConnector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteConnector for more information on using the DeleteConnector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteConnectorRequest method.
+//	req, resp := client.DeleteConnectorRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteConnector
+func (c *Mgn) DeleteConnectorRequest(input *DeleteConnectorInput) (req *request.Request, output *DeleteConnectorOutput) {
+	op := &request.Operation{
+		Name:       opDeleteConnector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/DeleteConnector",
+	}
+
+	if input == nil {
+		input = &DeleteConnectorInput{}
+	}
+
+	output = &DeleteConnectorOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteConnector API operation for Application Migration Service.
+//
+// Delete Connector.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation DeleteConnector for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteConnector
+func (c *Mgn) DeleteConnector(input *DeleteConnectorInput) (*DeleteConnectorOutput, error) {
+	req, out := c.DeleteConnectorRequest(input)
+	return out, req.Send()
+}
+
+// DeleteConnectorWithContext is the same as DeleteConnector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteConnector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) DeleteConnectorWithContext(ctx aws.Context, input *DeleteConnectorInput, opts ...request.Option) (*DeleteConnectorOutput, error) {
+	req, out := c.DeleteConnectorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteJob = "DeleteJob"
 
 // DeleteJobRequest generates a "aws/request.Request" representing the
@@ -907,14 +1075,13 @@ const opDeleteJob = "DeleteJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteJobRequest method.
+//	req, resp := client.DeleteJobRequest(params)
 //
-//    // Example sending a request using the DeleteJobRequest method.
-//    req, resp := client.DeleteJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteJob
 func (c *Mgn) DeleteJobRequest(input *DeleteJobInput) (req *request.Request, output *DeleteJobOutput) {
@@ -946,15 +1113,16 @@ func (c *Mgn) DeleteJobRequest(input *DeleteJobInput) (req *request.Request, out
 // API operation DeleteJob for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteJob
 func (c *Mgn) DeleteJob(input *DeleteJobInput) (*DeleteJobOutput, error) {
@@ -994,14 +1162,13 @@ const opDeleteLaunchConfigurationTemplate = "DeleteLaunchConfigurationTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteLaunchConfigurationTemplateRequest method.
+//	req, resp := client.DeleteLaunchConfigurationTemplateRequest(params)
 //
-//    // Example sending a request using the DeleteLaunchConfigurationTemplateRequest method.
-//    req, resp := client.DeleteLaunchConfigurationTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteLaunchConfigurationTemplate
 func (c *Mgn) DeleteLaunchConfigurationTemplateRequest(input *DeleteLaunchConfigurationTemplateInput) (req *request.Request, output *DeleteLaunchConfigurationTemplateOutput) {
@@ -1033,15 +1200,16 @@ func (c *Mgn) DeleteLaunchConfigurationTemplateRequest(input *DeleteLaunchConfig
 // API operation DeleteLaunchConfigurationTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteLaunchConfigurationTemplate
 func (c *Mgn) DeleteLaunchConfigurationTemplate(input *DeleteLaunchConfigurationTemplateInput) (*DeleteLaunchConfigurationTemplateOutput, error) {
@@ -1081,14 +1249,13 @@ const opDeleteReplicationConfigurationTemplate = "DeleteReplicationConfiguration
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteReplicationConfigurationTemplateRequest method.
+//	req, resp := client.DeleteReplicationConfigurationTemplateRequest(params)
 //
-//    // Example sending a request using the DeleteReplicationConfigurationTemplateRequest method.
-//    req, resp := client.DeleteReplicationConfigurationTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteReplicationConfigurationTemplate
 func (c *Mgn) DeleteReplicationConfigurationTemplateRequest(input *DeleteReplicationConfigurationTemplateInput) (req *request.Request, output *DeleteReplicationConfigurationTemplateOutput) {
@@ -1110,7 +1277,7 @@ func (c *Mgn) DeleteReplicationConfigurationTemplateRequest(input *DeleteReplica
 
 // DeleteReplicationConfigurationTemplate API operation for Application Migration Service.
 //
-// Deletes a single Replication Configuration Template by ID
+// # Deletes a single Replication Configuration Template by ID
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1120,15 +1287,16 @@ func (c *Mgn) DeleteReplicationConfigurationTemplateRequest(input *DeleteReplica
 // API operation DeleteReplicationConfigurationTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteReplicationConfigurationTemplate
 func (c *Mgn) DeleteReplicationConfigurationTemplate(input *DeleteReplicationConfigurationTemplateInput) (*DeleteReplicationConfigurationTemplateOutput, error) {
@@ -1168,14 +1336,13 @@ const opDeleteSourceServer = "DeleteSourceServer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSourceServerRequest method.
+//	req, resp := client.DeleteSourceServerRequest(params)
 //
-//    // Example sending a request using the DeleteSourceServerRequest method.
-//    req, resp := client.DeleteSourceServerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteSourceServer
 func (c *Mgn) DeleteSourceServerRequest(input *DeleteSourceServerInput) (req *request.Request, output *DeleteSourceServerOutput) {
@@ -1207,15 +1374,16 @@ func (c *Mgn) DeleteSourceServerRequest(input *DeleteSourceServerInput) (req *re
 // API operation DeleteSourceServer for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteSourceServer
 func (c *Mgn) DeleteSourceServer(input *DeleteSourceServerInput) (*DeleteSourceServerOutput, error) {
@@ -1255,14 +1423,13 @@ const opDeleteVcenterClient = "DeleteVcenterClient"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteVcenterClientRequest method.
+//	req, resp := client.DeleteVcenterClientRequest(params)
 //
-//    // Example sending a request using the DeleteVcenterClientRequest method.
-//    req, resp := client.DeleteVcenterClientRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteVcenterClient
 func (c *Mgn) DeleteVcenterClientRequest(input *DeleteVcenterClientInput) (req *request.Request, output *DeleteVcenterClientOutput) {
@@ -1294,14 +1461,15 @@ func (c *Mgn) DeleteVcenterClientRequest(input *DeleteVcenterClientInput) (req *
 // API operation DeleteVcenterClient for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteVcenterClient
 func (c *Mgn) DeleteVcenterClient(input *DeleteVcenterClientInput) (*DeleteVcenterClientOutput, error) {
@@ -1341,14 +1509,13 @@ const opDeleteWave = "DeleteWave"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWaveRequest method.
+//	req, resp := client.DeleteWaveRequest(params)
 //
-//    // Example sending a request using the DeleteWaveRequest method.
-//    req, resp := client.DeleteWaveRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteWave
 func (c *Mgn) DeleteWaveRequest(input *DeleteWaveInput) (req *request.Request, output *DeleteWaveOutput) {
@@ -1380,15 +1547,16 @@ func (c *Mgn) DeleteWaveRequest(input *DeleteWaveInput) (req *request.Request, o
 // API operation DeleteWave for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DeleteWave
 func (c *Mgn) DeleteWave(input *DeleteWaveInput) (*DeleteWaveOutput, error) {
@@ -1428,14 +1596,13 @@ const opDescribeJobLogItems = "DescribeJobLogItems"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeJobLogItemsRequest method.
+//	req, resp := client.DescribeJobLogItemsRequest(params)
 //
-//    // Example sending a request using the DescribeJobLogItemsRequest method.
-//    req, resp := client.DescribeJobLogItemsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeJobLogItems
 func (c *Mgn) DescribeJobLogItemsRequest(input *DescribeJobLogItemsInput) (req *request.Request, output *DescribeJobLogItemsOutput) {
@@ -1472,11 +1639,12 @@ func (c *Mgn) DescribeJobLogItemsRequest(input *DescribeJobLogItemsInput) (req *
 // API operation DescribeJobLogItems for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeJobLogItems
 func (c *Mgn) DescribeJobLogItems(input *DescribeJobLogItemsInput) (*DescribeJobLogItemsOutput, error) {
@@ -1508,15 +1676,14 @@ func (c *Mgn) DescribeJobLogItemsWithContext(ctx aws.Context, input *DescribeJob
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeJobLogItems operation.
-//    pageNum := 0
-//    err := client.DescribeJobLogItemsPages(params,
-//        func(page *mgn.DescribeJobLogItemsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeJobLogItems operation.
+//	pageNum := 0
+//	err := client.DescribeJobLogItemsPages(params,
+//	    func(page *mgn.DescribeJobLogItemsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) DescribeJobLogItemsPages(input *DescribeJobLogItemsInput, fn func(*DescribeJobLogItemsOutput, bool) bool) error {
 	return c.DescribeJobLogItemsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1568,14 +1735,13 @@ const opDescribeJobs = "DescribeJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeJobsRequest method.
+//	req, resp := client.DescribeJobsRequest(params)
 //
-//    // Example sending a request using the DescribeJobsRequest method.
-//    req, resp := client.DescribeJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeJobs
 func (c *Mgn) DescribeJobsRequest(input *DescribeJobsInput) (req *request.Request, output *DescribeJobsOutput) {
@@ -1617,11 +1783,12 @@ func (c *Mgn) DescribeJobsRequest(input *DescribeJobsInput) (req *request.Reques
 // API operation DescribeJobs for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeJobs
 func (c *Mgn) DescribeJobs(input *DescribeJobsInput) (*DescribeJobsOutput, error) {
@@ -1653,15 +1820,14 @@ func (c *Mgn) DescribeJobsWithContext(ctx aws.Context, input *DescribeJobsInput,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeJobs operation.
-//    pageNum := 0
-//    err := client.DescribeJobsPages(params,
-//        func(page *mgn.DescribeJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeJobs operation.
+//	pageNum := 0
+//	err := client.DescribeJobsPages(params,
+//	    func(page *mgn.DescribeJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) DescribeJobsPages(input *DescribeJobsInput, fn func(*DescribeJobsOutput, bool) bool) error {
 	return c.DescribeJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1713,14 +1879,13 @@ const opDescribeLaunchConfigurationTemplates = "DescribeLaunchConfigurationTempl
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeLaunchConfigurationTemplatesRequest method.
+//	req, resp := client.DescribeLaunchConfigurationTemplatesRequest(params)
 //
-//    // Example sending a request using the DescribeLaunchConfigurationTemplatesRequest method.
-//    req, resp := client.DescribeLaunchConfigurationTemplatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeLaunchConfigurationTemplates
 func (c *Mgn) DescribeLaunchConfigurationTemplatesRequest(input *DescribeLaunchConfigurationTemplatesInput) (req *request.Request, output *DescribeLaunchConfigurationTemplatesOutput) {
@@ -1758,14 +1923,15 @@ func (c *Mgn) DescribeLaunchConfigurationTemplatesRequest(input *DescribeLaunchC
 // API operation DescribeLaunchConfigurationTemplates for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeLaunchConfigurationTemplates
 func (c *Mgn) DescribeLaunchConfigurationTemplates(input *DescribeLaunchConfigurationTemplatesInput) (*DescribeLaunchConfigurationTemplatesOutput, error) {
@@ -1797,15 +1963,14 @@ func (c *Mgn) DescribeLaunchConfigurationTemplatesWithContext(ctx aws.Context, i
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeLaunchConfigurationTemplates operation.
-//    pageNum := 0
-//    err := client.DescribeLaunchConfigurationTemplatesPages(params,
-//        func(page *mgn.DescribeLaunchConfigurationTemplatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeLaunchConfigurationTemplates operation.
+//	pageNum := 0
+//	err := client.DescribeLaunchConfigurationTemplatesPages(params,
+//	    func(page *mgn.DescribeLaunchConfigurationTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) DescribeLaunchConfigurationTemplatesPages(input *DescribeLaunchConfigurationTemplatesInput, fn func(*DescribeLaunchConfigurationTemplatesOutput, bool) bool) error {
 	return c.DescribeLaunchConfigurationTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1857,14 +2022,13 @@ const opDescribeReplicationConfigurationTemplates = "DescribeReplicationConfigur
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeReplicationConfigurationTemplatesRequest method.
+//	req, resp := client.DescribeReplicationConfigurationTemplatesRequest(params)
 //
-//    // Example sending a request using the DescribeReplicationConfigurationTemplatesRequest method.
-//    req, resp := client.DescribeReplicationConfigurationTemplatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeReplicationConfigurationTemplates
 func (c *Mgn) DescribeReplicationConfigurationTemplatesRequest(input *DescribeReplicationConfigurationTemplatesInput) (req *request.Request, output *DescribeReplicationConfigurationTemplatesOutput) {
@@ -1901,14 +2065,15 @@ func (c *Mgn) DescribeReplicationConfigurationTemplatesRequest(input *DescribeRe
 // API operation DescribeReplicationConfigurationTemplates for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeReplicationConfigurationTemplates
 func (c *Mgn) DescribeReplicationConfigurationTemplates(input *DescribeReplicationConfigurationTemplatesInput) (*DescribeReplicationConfigurationTemplatesOutput, error) {
@@ -1940,15 +2105,14 @@ func (c *Mgn) DescribeReplicationConfigurationTemplatesWithContext(ctx aws.Conte
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeReplicationConfigurationTemplates operation.
-//    pageNum := 0
-//    err := client.DescribeReplicationConfigurationTemplatesPages(params,
-//        func(page *mgn.DescribeReplicationConfigurationTemplatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeReplicationConfigurationTemplates operation.
+//	pageNum := 0
+//	err := client.DescribeReplicationConfigurationTemplatesPages(params,
+//	    func(page *mgn.DescribeReplicationConfigurationTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) DescribeReplicationConfigurationTemplatesPages(input *DescribeReplicationConfigurationTemplatesInput, fn func(*DescribeReplicationConfigurationTemplatesOutput, bool) bool) error {
 	return c.DescribeReplicationConfigurationTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2000,14 +2164,13 @@ const opDescribeSourceServers = "DescribeSourceServers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeSourceServersRequest method.
+//	req, resp := client.DescribeSourceServersRequest(params)
 //
-//    // Example sending a request using the DescribeSourceServersRequest method.
-//    req, resp := client.DescribeSourceServersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeSourceServers
 func (c *Mgn) DescribeSourceServersRequest(input *DescribeSourceServersInput) (req *request.Request, output *DescribeSourceServersOutput) {
@@ -2044,11 +2207,12 @@ func (c *Mgn) DescribeSourceServersRequest(input *DescribeSourceServersInput) (r
 // API operation DescribeSourceServers for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeSourceServers
 func (c *Mgn) DescribeSourceServers(input *DescribeSourceServersInput) (*DescribeSourceServersOutput, error) {
@@ -2080,15 +2244,14 @@ func (c *Mgn) DescribeSourceServersWithContext(ctx aws.Context, input *DescribeS
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeSourceServers operation.
-//    pageNum := 0
-//    err := client.DescribeSourceServersPages(params,
-//        func(page *mgn.DescribeSourceServersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeSourceServers operation.
+//	pageNum := 0
+//	err := client.DescribeSourceServersPages(params,
+//	    func(page *mgn.DescribeSourceServersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) DescribeSourceServersPages(input *DescribeSourceServersInput, fn func(*DescribeSourceServersOutput, bool) bool) error {
 	return c.DescribeSourceServersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2140,14 +2303,13 @@ const opDescribeVcenterClients = "DescribeVcenterClients"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeVcenterClientsRequest method.
+//	req, resp := client.DescribeVcenterClientsRequest(params)
 //
-//    // Example sending a request using the DescribeVcenterClientsRequest method.
-//    req, resp := client.DescribeVcenterClientsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeVcenterClients
 func (c *Mgn) DescribeVcenterClientsRequest(input *DescribeVcenterClientsInput) (req *request.Request, output *DescribeVcenterClientsOutput) {
@@ -2184,14 +2346,15 @@ func (c *Mgn) DescribeVcenterClientsRequest(input *DescribeVcenterClientsInput) 
 // API operation DescribeVcenterClients for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DescribeVcenterClients
 func (c *Mgn) DescribeVcenterClients(input *DescribeVcenterClientsInput) (*DescribeVcenterClientsOutput, error) {
@@ -2223,15 +2386,14 @@ func (c *Mgn) DescribeVcenterClientsWithContext(ctx aws.Context, input *Describe
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeVcenterClients operation.
-//    pageNum := 0
-//    err := client.DescribeVcenterClientsPages(params,
-//        func(page *mgn.DescribeVcenterClientsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeVcenterClients operation.
+//	pageNum := 0
+//	err := client.DescribeVcenterClientsPages(params,
+//	    func(page *mgn.DescribeVcenterClientsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) DescribeVcenterClientsPages(input *DescribeVcenterClientsInput, fn func(*DescribeVcenterClientsOutput, bool) bool) error {
 	return c.DescribeVcenterClientsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2283,14 +2445,13 @@ const opDisassociateApplications = "DisassociateApplications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateApplicationsRequest method.
+//	req, resp := client.DisassociateApplicationsRequest(params)
 //
-//    // Example sending a request using the DisassociateApplicationsRequest method.
-//    req, resp := client.DisassociateApplicationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DisassociateApplications
 func (c *Mgn) DisassociateApplicationsRequest(input *DisassociateApplicationsInput) (req *request.Request, output *DisassociateApplicationsOutput) {
@@ -2322,15 +2483,16 @@ func (c *Mgn) DisassociateApplicationsRequest(input *DisassociateApplicationsInp
 // API operation DisassociateApplications for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DisassociateApplications
 func (c *Mgn) DisassociateApplications(input *DisassociateApplicationsInput) (*DisassociateApplicationsOutput, error) {
@@ -2370,14 +2532,13 @@ const opDisassociateSourceServers = "DisassociateSourceServers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateSourceServersRequest method.
+//	req, resp := client.DisassociateSourceServersRequest(params)
 //
-//    // Example sending a request using the DisassociateSourceServersRequest method.
-//    req, resp := client.DisassociateSourceServersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DisassociateSourceServers
 func (c *Mgn) DisassociateSourceServersRequest(input *DisassociateSourceServersInput) (req *request.Request, output *DisassociateSourceServersOutput) {
@@ -2409,15 +2570,16 @@ func (c *Mgn) DisassociateSourceServersRequest(input *DisassociateSourceServersI
 // API operation DisassociateSourceServers for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DisassociateSourceServers
 func (c *Mgn) DisassociateSourceServers(input *DisassociateSourceServersInput) (*DisassociateSourceServersOutput, error) {
@@ -2457,14 +2619,13 @@ const opDisconnectFromService = "DisconnectFromService"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisconnectFromServiceRequest method.
+//	req, resp := client.DisconnectFromServiceRequest(params)
 //
-//    // Example sending a request using the DisconnectFromServiceRequest method.
-//    req, resp := client.DisconnectFromServiceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DisconnectFromService
 func (c *Mgn) DisconnectFromServiceRequest(input *DisconnectFromServiceInput) (req *request.Request, output *DisconnectFromServiceOutput) {
@@ -2506,15 +2667,16 @@ func (c *Mgn) DisconnectFromServiceRequest(input *DisconnectFromServiceInput) (r
 // API operation DisconnectFromService for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/DisconnectFromService
 func (c *Mgn) DisconnectFromService(input *DisconnectFromServiceInput) (*DisconnectFromServiceOutput, error) {
@@ -2554,14 +2716,13 @@ const opFinalizeCutover = "FinalizeCutover"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the FinalizeCutoverRequest method.
+//	req, resp := client.FinalizeCutoverRequest(params)
 //
-//    // Example sending a request using the FinalizeCutoverRequest method.
-//    req, resp := client.FinalizeCutoverRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/FinalizeCutover
 func (c *Mgn) FinalizeCutoverRequest(input *FinalizeCutoverInput) (req *request.Request, output *FinalizeCutoverOutput) {
@@ -2601,18 +2762,19 @@ func (c *Mgn) FinalizeCutoverRequest(input *FinalizeCutoverInput) (req *request.
 // API operation FinalizeCutover for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ValidationException
+//     Validate exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/FinalizeCutover
 func (c *Mgn) FinalizeCutover(input *FinalizeCutoverInput) (*FinalizeCutoverOutput, error) {
@@ -2652,14 +2814,13 @@ const opGetLaunchConfiguration = "GetLaunchConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLaunchConfigurationRequest method.
+//	req, resp := client.GetLaunchConfigurationRequest(params)
 //
-//    // Example sending a request using the GetLaunchConfigurationRequest method.
-//    req, resp := client.GetLaunchConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/GetLaunchConfiguration
 func (c *Mgn) GetLaunchConfigurationRequest(input *GetLaunchConfigurationInput) (req *request.Request, output *GetLaunchConfigurationOutput) {
@@ -2690,11 +2851,12 @@ func (c *Mgn) GetLaunchConfigurationRequest(input *GetLaunchConfigurationInput) 
 // API operation GetLaunchConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/GetLaunchConfiguration
 func (c *Mgn) GetLaunchConfiguration(input *GetLaunchConfigurationInput) (*GetLaunchConfigurationOutput, error) {
@@ -2734,14 +2896,13 @@ const opGetReplicationConfiguration = "GetReplicationConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetReplicationConfigurationRequest method.
+//	req, resp := client.GetReplicationConfigurationRequest(params)
 //
-//    // Example sending a request using the GetReplicationConfigurationRequest method.
-//    req, resp := client.GetReplicationConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/GetReplicationConfiguration
 func (c *Mgn) GetReplicationConfigurationRequest(input *GetReplicationConfigurationInput) (req *request.Request, output *GetReplicationConfigurationOutput) {
@@ -2772,11 +2933,12 @@ func (c *Mgn) GetReplicationConfigurationRequest(input *GetReplicationConfigurat
 // API operation GetReplicationConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/GetReplicationConfiguration
 func (c *Mgn) GetReplicationConfiguration(input *GetReplicationConfigurationInput) (*GetReplicationConfigurationOutput, error) {
@@ -2816,14 +2978,13 @@ const opInitializeService = "InitializeService"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the InitializeServiceRequest method.
+//	req, resp := client.InitializeServiceRequest(params)
 //
-//    // Example sending a request using the InitializeServiceRequest method.
-//    req, resp := client.InitializeServiceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/InitializeService
 func (c *Mgn) InitializeServiceRequest(input *InitializeServiceInput) (req *request.Request, output *InitializeServiceOutput) {
@@ -2855,11 +3016,12 @@ func (c *Mgn) InitializeServiceRequest(input *InitializeServiceInput) (req *requ
 // API operation InitializeService for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   Validate exception.
 //
-//   * AccessDeniedException
-//   Operating denied due to a file permission or access check error.
+//   - ValidationException
+//     Validate exception.
+//
+//   - AccessDeniedException
+//     Operating denied due to a file permission or access check error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/InitializeService
 func (c *Mgn) InitializeService(input *InitializeServiceInput) (*InitializeServiceOutput, error) {
@@ -2899,14 +3061,13 @@ const opListApplications = "ListApplications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListApplicationsRequest method.
+//	req, resp := client.ListApplicationsRequest(params)
 //
-//    // Example sending a request using the ListApplicationsRequest method.
-//    req, resp := client.ListApplicationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListApplications
 func (c *Mgn) ListApplicationsRequest(input *ListApplicationsInput) (req *request.Request, output *ListApplicationsOutput) {
@@ -2943,8 +3104,8 @@ func (c *Mgn) ListApplicationsRequest(input *ListApplicationsInput) (req *reques
 // API operation ListApplications for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListApplications
 func (c *Mgn) ListApplications(input *ListApplicationsInput) (*ListApplicationsOutput, error) {
@@ -2976,15 +3137,14 @@ func (c *Mgn) ListApplicationsWithContext(ctx aws.Context, input *ListApplicatio
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListApplications operation.
-//    pageNum := 0
-//    err := client.ListApplicationsPages(params,
-//        func(page *mgn.ListApplicationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListApplications operation.
+//	pageNum := 0
+//	err := client.ListApplicationsPages(params,
+//	    func(page *mgn.ListApplicationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) ListApplicationsPages(input *ListApplicationsInput, fn func(*ListApplicationsOutput, bool) bool) error {
 	return c.ListApplicationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3020,6 +3180,145 @@ func (c *Mgn) ListApplicationsPagesWithContext(ctx aws.Context, input *ListAppli
 	return p.Err()
 }
 
+const opListConnectors = "ListConnectors"
+
+// ListConnectorsRequest generates a "aws/request.Request" representing the
+// client's request for the ListConnectors operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListConnectors for more information on using the ListConnectors
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListConnectorsRequest method.
+//	req, resp := client.ListConnectorsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListConnectors
+func (c *Mgn) ListConnectorsRequest(input *ListConnectorsInput) (req *request.Request, output *ListConnectorsOutput) {
+	op := &request.Operation{
+		Name:       opListConnectors,
+		HTTPMethod: "POST",
+		HTTPPath:   "/ListConnectors",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListConnectorsInput{}
+	}
+
+	output = &ListConnectorsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListConnectors API operation for Application Migration Service.
+//
+// List Connectors.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation ListConnectors for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ValidationException
+//     Validate exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListConnectors
+func (c *Mgn) ListConnectors(input *ListConnectorsInput) (*ListConnectorsOutput, error) {
+	req, out := c.ListConnectorsRequest(input)
+	return out, req.Send()
+}
+
+// ListConnectorsWithContext is the same as ListConnectors with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListConnectors for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) ListConnectorsWithContext(ctx aws.Context, input *ListConnectorsInput, opts ...request.Option) (*ListConnectorsOutput, error) {
+	req, out := c.ListConnectorsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListConnectorsPages iterates over the pages of a ListConnectors operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListConnectors method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListConnectors operation.
+//	pageNum := 0
+//	err := client.ListConnectorsPages(params,
+//	    func(page *mgn.ListConnectorsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Mgn) ListConnectorsPages(input *ListConnectorsInput, fn func(*ListConnectorsOutput, bool) bool) error {
+	return c.ListConnectorsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListConnectorsPagesWithContext same as ListConnectorsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) ListConnectorsPagesWithContext(ctx aws.Context, input *ListConnectorsInput, fn func(*ListConnectorsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListConnectorsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListConnectorsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListConnectorsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListExportErrors = "ListExportErrors"
 
 // ListExportErrorsRequest generates a "aws/request.Request" representing the
@@ -3036,14 +3335,13 @@ const opListExportErrors = "ListExportErrors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListExportErrorsRequest method.
+//	req, resp := client.ListExportErrorsRequest(params)
 //
-//    // Example sending a request using the ListExportErrorsRequest method.
-//    req, resp := client.ListExportErrorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListExportErrors
 func (c *Mgn) ListExportErrorsRequest(input *ListExportErrorsInput) (req *request.Request, output *ListExportErrorsOutput) {
@@ -3080,11 +3378,12 @@ func (c *Mgn) ListExportErrorsRequest(input *ListExportErrorsInput) (req *reques
 // API operation ListExportErrors for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListExportErrors
 func (c *Mgn) ListExportErrors(input *ListExportErrorsInput) (*ListExportErrorsOutput, error) {
@@ -3116,15 +3415,14 @@ func (c *Mgn) ListExportErrorsWithContext(ctx aws.Context, input *ListExportErro
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListExportErrors operation.
-//    pageNum := 0
-//    err := client.ListExportErrorsPages(params,
-//        func(page *mgn.ListExportErrorsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListExportErrors operation.
+//	pageNum := 0
+//	err := client.ListExportErrorsPages(params,
+//	    func(page *mgn.ListExportErrorsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) ListExportErrorsPages(input *ListExportErrorsInput, fn func(*ListExportErrorsOutput, bool) bool) error {
 	return c.ListExportErrorsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3176,14 +3474,13 @@ const opListExports = "ListExports"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListExportsRequest method.
+//	req, resp := client.ListExportsRequest(params)
 //
-//    // Example sending a request using the ListExportsRequest method.
-//    req, resp := client.ListExportsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListExports
 func (c *Mgn) ListExportsRequest(input *ListExportsInput) (req *request.Request, output *ListExportsOutput) {
@@ -3220,8 +3517,8 @@ func (c *Mgn) ListExportsRequest(input *ListExportsInput) (req *request.Request,
 // API operation ListExports for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListExports
 func (c *Mgn) ListExports(input *ListExportsInput) (*ListExportsOutput, error) {
@@ -3253,15 +3550,14 @@ func (c *Mgn) ListExportsWithContext(ctx aws.Context, input *ListExportsInput, o
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListExports operation.
-//    pageNum := 0
-//    err := client.ListExportsPages(params,
-//        func(page *mgn.ListExportsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListExports operation.
+//	pageNum := 0
+//	err := client.ListExportsPages(params,
+//	    func(page *mgn.ListExportsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) ListExportsPages(input *ListExportsInput, fn func(*ListExportsOutput, bool) bool) error {
 	return c.ListExportsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3313,14 +3609,13 @@ const opListImportErrors = "ListImportErrors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListImportErrorsRequest method.
+//	req, resp := client.ListImportErrorsRequest(params)
 //
-//    // Example sending a request using the ListImportErrorsRequest method.
-//    req, resp := client.ListImportErrorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListImportErrors
 func (c *Mgn) ListImportErrorsRequest(input *ListImportErrorsInput) (req *request.Request, output *ListImportErrorsOutput) {
@@ -3357,11 +3652,12 @@ func (c *Mgn) ListImportErrorsRequest(input *ListImportErrorsInput) (req *reques
 // API operation ListImportErrors for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListImportErrors
 func (c *Mgn) ListImportErrors(input *ListImportErrorsInput) (*ListImportErrorsOutput, error) {
@@ -3393,15 +3689,14 @@ func (c *Mgn) ListImportErrorsWithContext(ctx aws.Context, input *ListImportErro
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListImportErrors operation.
-//    pageNum := 0
-//    err := client.ListImportErrorsPages(params,
-//        func(page *mgn.ListImportErrorsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListImportErrors operation.
+//	pageNum := 0
+//	err := client.ListImportErrorsPages(params,
+//	    func(page *mgn.ListImportErrorsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) ListImportErrorsPages(input *ListImportErrorsInput, fn func(*ListImportErrorsOutput, bool) bool) error {
 	return c.ListImportErrorsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3453,14 +3748,13 @@ const opListImports = "ListImports"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListImportsRequest method.
+//	req, resp := client.ListImportsRequest(params)
 //
-//    // Example sending a request using the ListImportsRequest method.
-//    req, resp := client.ListImportsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListImports
 func (c *Mgn) ListImportsRequest(input *ListImportsInput) (req *request.Request, output *ListImportsOutput) {
@@ -3497,11 +3791,12 @@ func (c *Mgn) ListImportsRequest(input *ListImportsInput) (req *request.Request,
 // API operation ListImports for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListImports
 func (c *Mgn) ListImports(input *ListImportsInput) (*ListImportsOutput, error) {
@@ -3533,15 +3828,14 @@ func (c *Mgn) ListImportsWithContext(ctx aws.Context, input *ListImportsInput, o
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListImports operation.
-//    pageNum := 0
-//    err := client.ListImportsPages(params,
-//        func(page *mgn.ListImportsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListImports operation.
+//	pageNum := 0
+//	err := client.ListImportsPages(params,
+//	    func(page *mgn.ListImportsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) ListImportsPages(input *ListImportsInput, fn func(*ListImportsOutput, bool) bool) error {
 	return c.ListImportsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3577,6 +3871,145 @@ func (c *Mgn) ListImportsPagesWithContext(ctx aws.Context, input *ListImportsInp
 	return p.Err()
 }
 
+const opListManagedAccounts = "ListManagedAccounts"
+
+// ListManagedAccountsRequest generates a "aws/request.Request" representing the
+// client's request for the ListManagedAccounts operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListManagedAccounts for more information on using the ListManagedAccounts
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListManagedAccountsRequest method.
+//	req, resp := client.ListManagedAccountsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListManagedAccounts
+func (c *Mgn) ListManagedAccountsRequest(input *ListManagedAccountsInput) (req *request.Request, output *ListManagedAccountsOutput) {
+	op := &request.Operation{
+		Name:       opListManagedAccounts,
+		HTTPMethod: "POST",
+		HTTPPath:   "/ListManagedAccounts",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListManagedAccountsInput{}
+	}
+
+	output = &ListManagedAccountsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListManagedAccounts API operation for Application Migration Service.
+//
+// List Managed Accounts.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation ListManagedAccounts for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ValidationException
+//     Validate exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListManagedAccounts
+func (c *Mgn) ListManagedAccounts(input *ListManagedAccountsInput) (*ListManagedAccountsOutput, error) {
+	req, out := c.ListManagedAccountsRequest(input)
+	return out, req.Send()
+}
+
+// ListManagedAccountsWithContext is the same as ListManagedAccounts with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListManagedAccounts for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) ListManagedAccountsWithContext(ctx aws.Context, input *ListManagedAccountsInput, opts ...request.Option) (*ListManagedAccountsOutput, error) {
+	req, out := c.ListManagedAccountsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListManagedAccountsPages iterates over the pages of a ListManagedAccounts operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListManagedAccounts method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListManagedAccounts operation.
+//	pageNum := 0
+//	err := client.ListManagedAccountsPages(params,
+//	    func(page *mgn.ListManagedAccountsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Mgn) ListManagedAccountsPages(input *ListManagedAccountsInput, fn func(*ListManagedAccountsOutput, bool) bool) error {
+	return c.ListManagedAccountsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListManagedAccountsPagesWithContext same as ListManagedAccountsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) ListManagedAccountsPagesWithContext(ctx aws.Context, input *ListManagedAccountsInput, fn func(*ListManagedAccountsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListManagedAccountsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListManagedAccountsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListManagedAccountsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListSourceServerActions = "ListSourceServerActions"
 
 // ListSourceServerActionsRequest generates a "aws/request.Request" representing the
@@ -3593,14 +4026,13 @@ const opListSourceServerActions = "ListSourceServerActions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSourceServerActionsRequest method.
+//	req, resp := client.ListSourceServerActionsRequest(params)
 //
-//    // Example sending a request using the ListSourceServerActionsRequest method.
-//    req, resp := client.ListSourceServerActionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListSourceServerActions
 func (c *Mgn) ListSourceServerActionsRequest(input *ListSourceServerActionsInput) (req *request.Request, output *ListSourceServerActionsOutput) {
@@ -3637,11 +4069,12 @@ func (c *Mgn) ListSourceServerActionsRequest(input *ListSourceServerActionsInput
 // API operation ListSourceServerActions for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListSourceServerActions
 func (c *Mgn) ListSourceServerActions(input *ListSourceServerActionsInput) (*ListSourceServerActionsOutput, error) {
@@ -3673,15 +4106,14 @@ func (c *Mgn) ListSourceServerActionsWithContext(ctx aws.Context, input *ListSou
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSourceServerActions operation.
-//    pageNum := 0
-//    err := client.ListSourceServerActionsPages(params,
-//        func(page *mgn.ListSourceServerActionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSourceServerActions operation.
+//	pageNum := 0
+//	err := client.ListSourceServerActionsPages(params,
+//	    func(page *mgn.ListSourceServerActionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) ListSourceServerActionsPages(input *ListSourceServerActionsInput, fn func(*ListSourceServerActionsOutput, bool) bool) error {
 	return c.ListSourceServerActionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3733,14 +4165,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListTagsForResource
 func (c *Mgn) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -3771,21 +4202,22 @@ func (c *Mgn) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Resource not found exception.
 //
-//   * ThrottlingException
-//   Reached throttling quota exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ThrottlingException
+//     Reached throttling quota exception.
 //
-//   * AccessDeniedException
-//   Operating denied due to a file permission or access check error.
+//   - ValidationException
+//     Validate exception.
 //
-//   * InternalServerException
-//   The server encountered an unexpected condition that prevented it from fulfilling
-//   the request.
+//   - AccessDeniedException
+//     Operating denied due to a file permission or access check error.
+//
+//   - InternalServerException
+//     The server encountered an unexpected condition that prevented it from fulfilling
+//     the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListTagsForResource
 func (c *Mgn) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -3825,14 +4257,13 @@ const opListTemplateActions = "ListTemplateActions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTemplateActionsRequest method.
+//	req, resp := client.ListTemplateActionsRequest(params)
 //
-//    // Example sending a request using the ListTemplateActionsRequest method.
-//    req, resp := client.ListTemplateActionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListTemplateActions
 func (c *Mgn) ListTemplateActionsRequest(input *ListTemplateActionsInput) (req *request.Request, output *ListTemplateActionsOutput) {
@@ -3869,11 +4300,12 @@ func (c *Mgn) ListTemplateActionsRequest(input *ListTemplateActionsInput) (req *
 // API operation ListTemplateActions for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListTemplateActions
 func (c *Mgn) ListTemplateActions(input *ListTemplateActionsInput) (*ListTemplateActionsOutput, error) {
@@ -3905,15 +4337,14 @@ func (c *Mgn) ListTemplateActionsWithContext(ctx aws.Context, input *ListTemplat
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTemplateActions operation.
-//    pageNum := 0
-//    err := client.ListTemplateActionsPages(params,
-//        func(page *mgn.ListTemplateActionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTemplateActions operation.
+//	pageNum := 0
+//	err := client.ListTemplateActionsPages(params,
+//	    func(page *mgn.ListTemplateActionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) ListTemplateActionsPages(input *ListTemplateActionsInput, fn func(*ListTemplateActionsOutput, bool) bool) error {
 	return c.ListTemplateActionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3965,14 +4396,13 @@ const opListWaves = "ListWaves"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListWavesRequest method.
+//	req, resp := client.ListWavesRequest(params)
 //
-//    // Example sending a request using the ListWavesRequest method.
-//    req, resp := client.ListWavesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListWaves
 func (c *Mgn) ListWavesRequest(input *ListWavesInput) (req *request.Request, output *ListWavesOutput) {
@@ -4009,8 +4439,8 @@ func (c *Mgn) ListWavesRequest(input *ListWavesInput) (req *request.Request, out
 // API operation ListWaves for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ListWaves
 func (c *Mgn) ListWaves(input *ListWavesInput) (*ListWavesOutput, error) {
@@ -4042,15 +4472,14 @@ func (c *Mgn) ListWavesWithContext(ctx aws.Context, input *ListWavesInput, opts 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListWaves operation.
-//    pageNum := 0
-//    err := client.ListWavesPages(params,
-//        func(page *mgn.ListWavesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListWaves operation.
+//	pageNum := 0
+//	err := client.ListWavesPages(params,
+//	    func(page *mgn.ListWavesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Mgn) ListWavesPages(input *ListWavesInput, fn func(*ListWavesOutput, bool) bool) error {
 	return c.ListWavesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4102,14 +4531,13 @@ const opMarkAsArchived = "MarkAsArchived"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the MarkAsArchivedRequest method.
+//	req, resp := client.MarkAsArchivedRequest(params)
 //
-//    // Example sending a request using the MarkAsArchivedRequest method.
-//    req, resp := client.MarkAsArchivedRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/MarkAsArchived
 func (c *Mgn) MarkAsArchivedRequest(input *MarkAsArchivedInput) (req *request.Request, output *MarkAsArchivedOutput) {
@@ -4142,15 +4570,16 @@ func (c *Mgn) MarkAsArchivedRequest(input *MarkAsArchivedInput) (req *request.Re
 // API operation MarkAsArchived for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/MarkAsArchived
 func (c *Mgn) MarkAsArchived(input *MarkAsArchivedInput) (*MarkAsArchivedOutput, error) {
@@ -4174,6 +4603,98 @@ func (c *Mgn) MarkAsArchivedWithContext(ctx aws.Context, input *MarkAsArchivedIn
 	return out, req.Send()
 }
 
+const opPauseReplication = "PauseReplication"
+
+// PauseReplicationRequest generates a "aws/request.Request" representing the
+// client's request for the PauseReplication operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PauseReplication for more information on using the PauseReplication
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the PauseReplicationRequest method.
+//	req, resp := client.PauseReplicationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/PauseReplication
+func (c *Mgn) PauseReplicationRequest(input *PauseReplicationInput) (req *request.Request, output *PauseReplicationOutput) {
+	op := &request.Operation{
+		Name:       opPauseReplication,
+		HTTPMethod: "POST",
+		HTTPPath:   "/PauseReplication",
+	}
+
+	if input == nil {
+		input = &PauseReplicationInput{}
+	}
+
+	output = &PauseReplicationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PauseReplication API operation for Application Migration Service.
+//
+// Pause Replication.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation PauseReplication for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
+//
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/PauseReplication
+func (c *Mgn) PauseReplication(input *PauseReplicationInput) (*PauseReplicationOutput, error) {
+	req, out := c.PauseReplicationRequest(input)
+	return out, req.Send()
+}
+
+// PauseReplicationWithContext is the same as PauseReplication with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PauseReplication for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) PauseReplicationWithContext(ctx aws.Context, input *PauseReplicationInput, opts ...request.Option) (*PauseReplicationOutput, error) {
+	req, out := c.PauseReplicationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opPutSourceServerAction = "PutSourceServerAction"
 
 // PutSourceServerActionRequest generates a "aws/request.Request" representing the
@@ -4190,14 +4711,13 @@ const opPutSourceServerAction = "PutSourceServerAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutSourceServerActionRequest method.
+//	req, resp := client.PutSourceServerActionRequest(params)
 //
-//    // Example sending a request using the PutSourceServerActionRequest method.
-//    req, resp := client.PutSourceServerActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/PutSourceServerAction
 func (c *Mgn) PutSourceServerActionRequest(input *PutSourceServerActionInput) (req *request.Request, output *PutSourceServerActionOutput) {
@@ -4228,18 +4748,19 @@ func (c *Mgn) PutSourceServerActionRequest(input *PutSourceServerActionInput) (r
 // API operation PutSourceServerAction for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ValidationException
+//     Validate exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/PutSourceServerAction
 func (c *Mgn) PutSourceServerAction(input *PutSourceServerActionInput) (*PutSourceServerActionOutput, error) {
@@ -4279,14 +4800,13 @@ const opPutTemplateAction = "PutTemplateAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutTemplateActionRequest method.
+//	req, resp := client.PutTemplateActionRequest(params)
 //
-//    // Example sending a request using the PutTemplateActionRequest method.
-//    req, resp := client.PutTemplateActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/PutTemplateAction
 func (c *Mgn) PutTemplateActionRequest(input *PutTemplateActionInput) (req *request.Request, output *PutTemplateActionOutput) {
@@ -4317,18 +4837,19 @@ func (c *Mgn) PutTemplateActionRequest(input *PutTemplateActionInput) (req *requ
 // API operation PutTemplateAction for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ValidationException
+//     Validate exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/PutTemplateAction
 func (c *Mgn) PutTemplateAction(input *PutTemplateActionInput) (*PutTemplateActionOutput, error) {
@@ -4368,14 +4889,13 @@ const opRemoveSourceServerAction = "RemoveSourceServerAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveSourceServerActionRequest method.
+//	req, resp := client.RemoveSourceServerActionRequest(params)
 //
-//    // Example sending a request using the RemoveSourceServerActionRequest method.
-//    req, resp := client.RemoveSourceServerActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/RemoveSourceServerAction
 func (c *Mgn) RemoveSourceServerActionRequest(input *RemoveSourceServerActionInput) (req *request.Request, output *RemoveSourceServerActionOutput) {
@@ -4407,14 +4927,15 @@ func (c *Mgn) RemoveSourceServerActionRequest(input *RemoveSourceServerActionInp
 // API operation RemoveSourceServerAction for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/RemoveSourceServerAction
 func (c *Mgn) RemoveSourceServerAction(input *RemoveSourceServerActionInput) (*RemoveSourceServerActionOutput, error) {
@@ -4454,14 +4975,13 @@ const opRemoveTemplateAction = "RemoveTemplateAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveTemplateActionRequest method.
+//	req, resp := client.RemoveTemplateActionRequest(params)
 //
-//    // Example sending a request using the RemoveTemplateActionRequest method.
-//    req, resp := client.RemoveTemplateActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/RemoveTemplateAction
 func (c *Mgn) RemoveTemplateActionRequest(input *RemoveTemplateActionInput) (req *request.Request, output *RemoveTemplateActionOutput) {
@@ -4493,14 +5013,15 @@ func (c *Mgn) RemoveTemplateActionRequest(input *RemoveTemplateActionInput) (req
 // API operation RemoveTemplateAction for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/RemoveTemplateAction
 func (c *Mgn) RemoveTemplateAction(input *RemoveTemplateActionInput) (*RemoveTemplateActionOutput, error) {
@@ -4524,6 +5045,98 @@ func (c *Mgn) RemoveTemplateActionWithContext(ctx aws.Context, input *RemoveTemp
 	return out, req.Send()
 }
 
+const opResumeReplication = "ResumeReplication"
+
+// ResumeReplicationRequest generates a "aws/request.Request" representing the
+// client's request for the ResumeReplication operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ResumeReplication for more information on using the ResumeReplication
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ResumeReplicationRequest method.
+//	req, resp := client.ResumeReplicationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ResumeReplication
+func (c *Mgn) ResumeReplicationRequest(input *ResumeReplicationInput) (req *request.Request, output *ResumeReplicationOutput) {
+	op := &request.Operation{
+		Name:       opResumeReplication,
+		HTTPMethod: "POST",
+		HTTPPath:   "/ResumeReplication",
+	}
+
+	if input == nil {
+		input = &ResumeReplicationInput{}
+	}
+
+	output = &ResumeReplicationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ResumeReplication API operation for Application Migration Service.
+//
+// Resume Replication.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation ResumeReplication for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
+//
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/ResumeReplication
+func (c *Mgn) ResumeReplication(input *ResumeReplicationInput) (*ResumeReplicationOutput, error) {
+	req, out := c.ResumeReplicationRequest(input)
+	return out, req.Send()
+}
+
+// ResumeReplicationWithContext is the same as ResumeReplication with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ResumeReplication for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) ResumeReplicationWithContext(ctx aws.Context, input *ResumeReplicationInput, opts ...request.Option) (*ResumeReplicationOutput, error) {
+	req, out := c.ResumeReplicationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRetryDataReplication = "RetryDataReplication"
 
 // RetryDataReplicationRequest generates a "aws/request.Request" representing the
@@ -4540,14 +5153,13 @@ const opRetryDataReplication = "RetryDataReplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RetryDataReplicationRequest method.
+//	req, resp := client.RetryDataReplicationRequest(params)
 //
-//    // Example sending a request using the RetryDataReplicationRequest method.
-//    req, resp := client.RetryDataReplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/RetryDataReplication
 func (c *Mgn) RetryDataReplicationRequest(input *RetryDataReplicationInput) (req *request.Request, output *RetryDataReplicationOutput) {
@@ -4581,14 +5193,15 @@ func (c *Mgn) RetryDataReplicationRequest(input *RetryDataReplicationInput) (req
 // API operation RetryDataReplication for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/RetryDataReplication
 func (c *Mgn) RetryDataReplication(input *RetryDataReplicationInput) (*RetryDataReplicationOutput, error) {
@@ -4628,14 +5241,13 @@ const opStartCutover = "StartCutover"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartCutoverRequest method.
+//	req, resp := client.StartCutoverRequest(params)
 //
-//    // Example sending a request using the StartCutoverRequest method.
-//    req, resp := client.StartCutoverRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartCutover
 func (c *Mgn) StartCutoverRequest(input *StartCutoverInput) (req *request.Request, output *StartCutoverOutput) {
@@ -4668,15 +5280,16 @@ func (c *Mgn) StartCutoverRequest(input *StartCutoverInput) (req *request.Reques
 // API operation StartCutover for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ValidationException
+//     Validate exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartCutover
 func (c *Mgn) StartCutover(input *StartCutoverInput) (*StartCutoverOutput, error) {
@@ -4716,14 +5329,13 @@ const opStartExport = "StartExport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartExportRequest method.
+//	req, resp := client.StartExportRequest(params)
 //
-//    // Example sending a request using the StartExportRequest method.
-//    req, resp := client.StartExportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartExport
 func (c *Mgn) StartExportRequest(input *StartExportInput) (req *request.Request, output *StartExportOutput) {
@@ -4754,14 +5366,15 @@ func (c *Mgn) StartExportRequest(input *StartExportInput) (req *request.Request,
 // API operation StartExport for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ServiceQuotaExceededException
-//   The request could not be completed because its exceeded the service quota.
+//   - ValidationException
+//     Validate exception.
+//
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartExport
 func (c *Mgn) StartExport(input *StartExportInput) (*StartExportOutput, error) {
@@ -4801,14 +5414,13 @@ const opStartImport = "StartImport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartImportRequest method.
+//	req, resp := client.StartImportRequest(params)
 //
-//    // Example sending a request using the StartImportRequest method.
-//    req, resp := client.StartImportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartImport
 func (c *Mgn) StartImportRequest(input *StartImportInput) (req *request.Request, output *StartImportOutput) {
@@ -4839,21 +5451,22 @@ func (c *Mgn) StartImportRequest(input *StartImportInput) (req *request.Request,
 // API operation StartImport for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ServiceQuotaExceededException
-//   The request could not be completed because its exceeded the service quota.
+//   - ValidationException
+//     Validate exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartImport
 func (c *Mgn) StartImport(input *StartImportInput) (*StartImportOutput, error) {
@@ -4893,14 +5506,13 @@ const opStartReplication = "StartReplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartReplicationRequest method.
+//	req, resp := client.StartReplicationRequest(params)
 //
-//    // Example sending a request using the StartReplicationRequest method.
-//    req, resp := client.StartReplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartReplication
 func (c *Mgn) StartReplicationRequest(input *StartReplicationInput) (req *request.Request, output *StartReplicationOutput) {
@@ -4931,21 +5543,22 @@ func (c *Mgn) StartReplicationRequest(input *StartReplicationInput) (req *reques
 // API operation StartReplication for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ServiceQuotaExceededException
-//   The request could not be completed because its exceeded the service quota.
+//   - ValidationException
+//     Validate exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartReplication
 func (c *Mgn) StartReplication(input *StartReplicationInput) (*StartReplicationOutput, error) {
@@ -4985,14 +5598,13 @@ const opStartTest = "StartTest"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartTestRequest method.
+//	req, resp := client.StartTestRequest(params)
 //
-//    // Example sending a request using the StartTestRequest method.
-//    req, resp := client.StartTestRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartTest
 func (c *Mgn) StartTestRequest(input *StartTestInput) (req *request.Request, output *StartTestOutput) {
@@ -5025,15 +5637,16 @@ func (c *Mgn) StartTestRequest(input *StartTestInput) (req *request.Request, out
 // API operation StartTest for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ValidationException
+//     Validate exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StartTest
 func (c *Mgn) StartTest(input *StartTestInput) (*StartTestOutput, error) {
@@ -5057,6 +5670,98 @@ func (c *Mgn) StartTestWithContext(ctx aws.Context, input *StartTestInput, opts 
 	return out, req.Send()
 }
 
+const opStopReplication = "StopReplication"
+
+// StopReplicationRequest generates a "aws/request.Request" representing the
+// client's request for the StopReplication operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopReplication for more information on using the StopReplication
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the StopReplicationRequest method.
+//	req, resp := client.StopReplicationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StopReplication
+func (c *Mgn) StopReplicationRequest(input *StopReplicationInput) (req *request.Request, output *StopReplicationOutput) {
+	op := &request.Operation{
+		Name:       opStopReplication,
+		HTTPMethod: "POST",
+		HTTPPath:   "/StopReplication",
+	}
+
+	if input == nil {
+		input = &StopReplicationInput{}
+	}
+
+	output = &StopReplicationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StopReplication API operation for Application Migration Service.
+//
+// Stop Replication.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation StopReplication for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
+//
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/StopReplication
+func (c *Mgn) StopReplication(input *StopReplicationInput) (*StopReplicationOutput, error) {
+	req, out := c.StopReplicationRequest(input)
+	return out, req.Send()
+}
+
+// StopReplicationWithContext is the same as StopReplication with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopReplication for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) StopReplicationWithContext(ctx aws.Context, input *StopReplicationInput, opts ...request.Option) (*StopReplicationOutput, error) {
+	req, out := c.StopReplicationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opTagResource = "TagResource"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
@@ -5073,14 +5778,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/TagResource
 func (c *Mgn) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -5115,21 +5819,22 @@ func (c *Mgn) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Resource not found exception.
 //
-//   * ThrottlingException
-//   Reached throttling quota exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ThrottlingException
+//     Reached throttling quota exception.
 //
-//   * AccessDeniedException
-//   Operating denied due to a file permission or access check error.
+//   - ValidationException
+//     Validate exception.
 //
-//   * InternalServerException
-//   The server encountered an unexpected condition that prevented it from fulfilling
-//   the request.
+//   - AccessDeniedException
+//     Operating denied due to a file permission or access check error.
+//
+//   - InternalServerException
+//     The server encountered an unexpected condition that prevented it from fulfilling
+//     the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/TagResource
 func (c *Mgn) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -5169,14 +5874,13 @@ const opTerminateTargetInstances = "TerminateTargetInstances"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TerminateTargetInstancesRequest method.
+//	req, resp := client.TerminateTargetInstancesRequest(params)
 //
-//    // Example sending a request using the TerminateTargetInstancesRequest method.
-//    req, resp := client.TerminateTargetInstancesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/TerminateTargetInstances
 func (c *Mgn) TerminateTargetInstancesRequest(input *TerminateTargetInstancesInput) (req *request.Request, output *TerminateTargetInstancesOutput) {
@@ -5209,15 +5913,16 @@ func (c *Mgn) TerminateTargetInstancesRequest(input *TerminateTargetInstancesInp
 // API operation TerminateTargetInstances for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ValidationException
+//     Validate exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/TerminateTargetInstances
 func (c *Mgn) TerminateTargetInstances(input *TerminateTargetInstancesInput) (*TerminateTargetInstancesOutput, error) {
@@ -5257,14 +5962,13 @@ const opUnarchiveApplication = "UnarchiveApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UnarchiveApplicationRequest method.
+//	req, resp := client.UnarchiveApplicationRequest(params)
 //
-//    // Example sending a request using the UnarchiveApplicationRequest method.
-//    req, resp := client.UnarchiveApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UnarchiveApplication
 func (c *Mgn) UnarchiveApplicationRequest(input *UnarchiveApplicationInput) (req *request.Request, output *UnarchiveApplicationOutput) {
@@ -5295,14 +5999,15 @@ func (c *Mgn) UnarchiveApplicationRequest(input *UnarchiveApplicationInput) (req
 // API operation UnarchiveApplication for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ServiceQuotaExceededException
-//   The request could not be completed because its exceeded the service quota.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UnarchiveApplication
 func (c *Mgn) UnarchiveApplication(input *UnarchiveApplicationInput) (*UnarchiveApplicationOutput, error) {
@@ -5342,14 +6047,13 @@ const opUnarchiveWave = "UnarchiveWave"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UnarchiveWaveRequest method.
+//	req, resp := client.UnarchiveWaveRequest(params)
 //
-//    // Example sending a request using the UnarchiveWaveRequest method.
-//    req, resp := client.UnarchiveWaveRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UnarchiveWave
 func (c *Mgn) UnarchiveWaveRequest(input *UnarchiveWaveInput) (req *request.Request, output *UnarchiveWaveOutput) {
@@ -5380,14 +6084,15 @@ func (c *Mgn) UnarchiveWaveRequest(input *UnarchiveWaveInput) (req *request.Requ
 // API operation UnarchiveWave for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ServiceQuotaExceededException
-//   The request could not be completed because its exceeded the service quota.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ServiceQuotaExceededException
+//     The request could not be completed because its exceeded the service quota.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UnarchiveWave
 func (c *Mgn) UnarchiveWave(input *UnarchiveWaveInput) (*UnarchiveWaveOutput, error) {
@@ -5427,14 +6132,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UntagResource
 func (c *Mgn) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -5467,21 +6171,22 @@ func (c *Mgn) UntagResourceRequest(input *UntagResourceInput) (req *request.Requ
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Resource not found exception.
 //
-//   * ThrottlingException
-//   Reached throttling quota exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ThrottlingException
+//     Reached throttling quota exception.
 //
-//   * AccessDeniedException
-//   Operating denied due to a file permission or access check error.
+//   - ValidationException
+//     Validate exception.
 //
-//   * InternalServerException
-//   The server encountered an unexpected condition that prevented it from fulfilling
-//   the request.
+//   - AccessDeniedException
+//     Operating denied due to a file permission or access check error.
+//
+//   - InternalServerException
+//     The server encountered an unexpected condition that prevented it from fulfilling
+//     the request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UntagResource
 func (c *Mgn) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -5521,14 +6226,13 @@ const opUpdateApplication = "UpdateApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateApplicationRequest method.
+//	req, resp := client.UpdateApplicationRequest(params)
 //
-//    // Example sending a request using the UpdateApplicationRequest method.
-//    req, resp := client.UpdateApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateApplication
 func (c *Mgn) UpdateApplicationRequest(input *UpdateApplicationInput) (req *request.Request, output *UpdateApplicationOutput) {
@@ -5559,15 +6263,16 @@ func (c *Mgn) UpdateApplicationRequest(input *UpdateApplicationInput) (req *requ
 // API operation UpdateApplication for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateApplication
 func (c *Mgn) UpdateApplication(input *UpdateApplicationInput) (*UpdateApplicationOutput, error) {
@@ -5591,6 +6296,91 @@ func (c *Mgn) UpdateApplicationWithContext(ctx aws.Context, input *UpdateApplica
 	return out, req.Send()
 }
 
+const opUpdateConnector = "UpdateConnector"
+
+// UpdateConnectorRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateConnector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateConnector for more information on using the UpdateConnector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateConnectorRequest method.
+//	req, resp := client.UpdateConnectorRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateConnector
+func (c *Mgn) UpdateConnectorRequest(input *UpdateConnectorInput) (req *request.Request, output *UpdateConnectorOutput) {
+	op := &request.Operation{
+		Name:       opUpdateConnector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/UpdateConnector",
+	}
+
+	if input == nil {
+		input = &UpdateConnectorInput{}
+	}
+
+	output = &UpdateConnectorOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateConnector API operation for Application Migration Service.
+//
+// Update Connector.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation UpdateConnector for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ValidationException
+//     Validate exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateConnector
+func (c *Mgn) UpdateConnector(input *UpdateConnectorInput) (*UpdateConnectorOutput, error) {
+	req, out := c.UpdateConnectorRequest(input)
+	return out, req.Send()
+}
+
+// UpdateConnectorWithContext is the same as UpdateConnector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateConnector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) UpdateConnectorWithContext(ctx aws.Context, input *UpdateConnectorInput, opts ...request.Option) (*UpdateConnectorOutput, error) {
+	req, out := c.UpdateConnectorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateLaunchConfiguration = "UpdateLaunchConfiguration"
 
 // UpdateLaunchConfigurationRequest generates a "aws/request.Request" representing the
@@ -5607,14 +6397,13 @@ const opUpdateLaunchConfiguration = "UpdateLaunchConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateLaunchConfigurationRequest method.
+//	req, resp := client.UpdateLaunchConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateLaunchConfigurationRequest method.
-//    req, resp := client.UpdateLaunchConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateLaunchConfiguration
 func (c *Mgn) UpdateLaunchConfigurationRequest(input *UpdateLaunchConfigurationInput) (req *request.Request, output *UpdateLaunchConfigurationOutput) {
@@ -5637,6 +6426,8 @@ func (c *Mgn) UpdateLaunchConfigurationRequest(input *UpdateLaunchConfigurationI
 //
 // Updates multiple LaunchConfigurations by Source Server ID.
 //
+// bootMode valid values are LEGACY_BIOS | UEFI
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -5645,18 +6436,19 @@ func (c *Mgn) UpdateLaunchConfigurationRequest(input *UpdateLaunchConfigurationI
 // API operation UpdateLaunchConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ValidationException
+//     Validate exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateLaunchConfiguration
 func (c *Mgn) UpdateLaunchConfiguration(input *UpdateLaunchConfigurationInput) (*UpdateLaunchConfigurationOutput, error) {
@@ -5696,14 +6488,13 @@ const opUpdateLaunchConfigurationTemplate = "UpdateLaunchConfigurationTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateLaunchConfigurationTemplateRequest method.
+//	req, resp := client.UpdateLaunchConfigurationTemplateRequest(params)
 //
-//    // Example sending a request using the UpdateLaunchConfigurationTemplateRequest method.
-//    req, resp := client.UpdateLaunchConfigurationTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateLaunchConfigurationTemplate
 func (c *Mgn) UpdateLaunchConfigurationTemplateRequest(input *UpdateLaunchConfigurationTemplateInput) (req *request.Request, output *UpdateLaunchConfigurationTemplateOutput) {
@@ -5734,17 +6525,18 @@ func (c *Mgn) UpdateLaunchConfigurationTemplateRequest(input *UpdateLaunchConfig
 // API operation UpdateLaunchConfigurationTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * AccessDeniedException
-//   Operating denied due to a file permission or access check error.
+//   - ValidationException
+//     Validate exception.
+//
+//   - AccessDeniedException
+//     Operating denied due to a file permission or access check error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateLaunchConfigurationTemplate
 func (c *Mgn) UpdateLaunchConfigurationTemplate(input *UpdateLaunchConfigurationTemplateInput) (*UpdateLaunchConfigurationTemplateOutput, error) {
@@ -5784,14 +6576,13 @@ const opUpdateReplicationConfiguration = "UpdateReplicationConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateReplicationConfigurationRequest method.
+//	req, resp := client.UpdateReplicationConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateReplicationConfigurationRequest method.
-//    req, resp := client.UpdateReplicationConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateReplicationConfiguration
 func (c *Mgn) UpdateReplicationConfigurationRequest(input *UpdateReplicationConfigurationInput) (req *request.Request, output *UpdateReplicationConfigurationOutput) {
@@ -5823,21 +6614,22 @@ func (c *Mgn) UpdateReplicationConfigurationRequest(input *UpdateReplicationConf
 // API operation UpdateReplicationConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * AccessDeniedException
-//   Operating denied due to a file permission or access check error.
+//   - ValidationException
+//     Validate exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - AccessDeniedException
+//     Operating denied due to a file permission or access check error.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateReplicationConfiguration
 func (c *Mgn) UpdateReplicationConfiguration(input *UpdateReplicationConfigurationInput) (*UpdateReplicationConfigurationOutput, error) {
@@ -5877,14 +6669,13 @@ const opUpdateReplicationConfigurationTemplate = "UpdateReplicationConfiguration
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateReplicationConfigurationTemplateRequest method.
+//	req, resp := client.UpdateReplicationConfigurationTemplateRequest(params)
 //
-//    // Example sending a request using the UpdateReplicationConfigurationTemplateRequest method.
-//    req, resp := client.UpdateReplicationConfigurationTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateReplicationConfigurationTemplate
 func (c *Mgn) UpdateReplicationConfigurationTemplateRequest(input *UpdateReplicationConfigurationTemplateInput) (req *request.Request, output *UpdateReplicationConfigurationTemplateOutput) {
@@ -5915,17 +6706,18 @@ func (c *Mgn) UpdateReplicationConfigurationTemplateRequest(input *UpdateReplica
 // API operation UpdateReplicationConfigurationTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * AccessDeniedException
-//   Operating denied due to a file permission or access check error.
+//   - ValidationException
+//     Validate exception.
+//
+//   - AccessDeniedException
+//     Operating denied due to a file permission or access check error.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateReplicationConfigurationTemplate
 func (c *Mgn) UpdateReplicationConfigurationTemplate(input *UpdateReplicationConfigurationTemplateInput) (*UpdateReplicationConfigurationTemplateOutput, error) {
@@ -5949,6 +6741,92 @@ func (c *Mgn) UpdateReplicationConfigurationTemplateWithContext(ctx aws.Context,
 	return out, req.Send()
 }
 
+const opUpdateSourceServer = "UpdateSourceServer"
+
+// UpdateSourceServerRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateSourceServer operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateSourceServer for more information on using the UpdateSourceServer
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateSourceServerRequest method.
+//	req, resp := client.UpdateSourceServerRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateSourceServer
+func (c *Mgn) UpdateSourceServerRequest(input *UpdateSourceServerInput) (req *request.Request, output *UpdateSourceServerOutput) {
+	op := &request.Operation{
+		Name:       opUpdateSourceServer,
+		HTTPMethod: "POST",
+		HTTPPath:   "/UpdateSourceServer",
+	}
+
+	if input == nil {
+		input = &UpdateSourceServerInput{}
+	}
+
+	output = &UpdateSourceServerOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateSourceServer API operation for Application Migration Service.
+//
+// Update Source Server.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Application Migration Service's
+// API operation UpdateSourceServer for usage and error information.
+//
+// Returned Error Types:
+//
+//   - UninitializedAccountException
+//     Uninitialized account exception.
+//
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateSourceServer
+func (c *Mgn) UpdateSourceServer(input *UpdateSourceServerInput) (*UpdateSourceServerOutput, error) {
+	req, out := c.UpdateSourceServerRequest(input)
+	return out, req.Send()
+}
+
+// UpdateSourceServerWithContext is the same as UpdateSourceServer with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateSourceServer for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Mgn) UpdateSourceServerWithContext(ctx aws.Context, input *UpdateSourceServerInput, opts ...request.Option) (*UpdateSourceServerOutput, error) {
+	req, out := c.UpdateSourceServerRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateSourceServerReplicationType = "UpdateSourceServerReplicationType"
 
 // UpdateSourceServerReplicationTypeRequest generates a "aws/request.Request" representing the
@@ -5965,14 +6843,13 @@ const opUpdateSourceServerReplicationType = "UpdateSourceServerReplicationType"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSourceServerReplicationTypeRequest method.
+//	req, resp := client.UpdateSourceServerReplicationTypeRequest(params)
 //
-//    // Example sending a request using the UpdateSourceServerReplicationTypeRequest method.
-//    req, resp := client.UpdateSourceServerReplicationTypeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateSourceServerReplicationType
 func (c *Mgn) UpdateSourceServerReplicationTypeRequest(input *UpdateSourceServerReplicationTypeInput) (req *request.Request, output *UpdateSourceServerReplicationTypeOutput) {
@@ -6004,18 +6881,19 @@ func (c *Mgn) UpdateSourceServerReplicationTypeRequest(input *UpdateSourceServer
 // API operation UpdateSourceServerReplicationType for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ValidationException
-//   Validate exception.
+//   - ResourceNotFoundException
+//     Resource not found exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ValidationException
+//     Validate exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateSourceServerReplicationType
 func (c *Mgn) UpdateSourceServerReplicationType(input *UpdateSourceServerReplicationTypeInput) (*UpdateSourceServerReplicationTypeOutput, error) {
@@ -6055,14 +6933,13 @@ const opUpdateWave = "UpdateWave"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateWaveRequest method.
+//	req, resp := client.UpdateWaveRequest(params)
 //
-//    // Example sending a request using the UpdateWaveRequest method.
-//    req, resp := client.UpdateWaveRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateWave
 func (c *Mgn) UpdateWaveRequest(input *UpdateWaveInput) (req *request.Request, output *UpdateWaveOutput) {
@@ -6093,15 +6970,16 @@ func (c *Mgn) UpdateWaveRequest(input *UpdateWaveInput) (req *request.Request, o
 // API operation UpdateWave for usage and error information.
 //
 // Returned Error Types:
-//   * UninitializedAccountException
-//   Uninitialized account exception.
 //
-//   * ResourceNotFoundException
-//   Resource not found exception.
+//   - UninitializedAccountException
+//     Uninitialized account exception.
 //
-//   * ConflictException
-//   The request could not be completed due to a conflict with the current state
-//   of the target resource.
+//   - ResourceNotFoundException
+//     Resource not found exception.
+//
+//   - ConflictException
+//     The request could not be completed due to a conflict with the current state
+//     of the target resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mgn-2020-02-26/UpdateWave
 func (c *Mgn) UpdateWave(input *UpdateWaveInput) (*UpdateWaveOutput, error) {
@@ -6369,6 +7247,9 @@ func (s *ApplicationAggregatedStatus) SetTotalSourceServers(v int64) *Applicatio
 type ArchiveApplicationInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Application ID.
 	//
 	// ApplicationID is a required field
@@ -6396,6 +7277,9 @@ func (s ArchiveApplicationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ArchiveApplicationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ArchiveApplicationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.ApplicationID == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApplicationID"))
 	}
@@ -6407,6 +7291,12 @@ func (s *ArchiveApplicationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *ArchiveApplicationInput) SetAccountID(v string) *ArchiveApplicationInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetApplicationID sets the ApplicationID field's value.
@@ -6534,6 +7424,9 @@ func (s *ArchiveApplicationOutput) SetWaveID(v string) *ArchiveApplicationOutput
 type ArchiveWaveInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Wave ID.
 	//
 	// WaveID is a required field
@@ -6561,6 +7454,9 @@ func (s ArchiveWaveInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ArchiveWaveInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ArchiveWaveInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.WaveID == nil {
 		invalidParams.Add(request.NewErrParamRequired("WaveID"))
 	}
@@ -6572,6 +7468,12 @@ func (s *ArchiveWaveInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *ArchiveWaveInput) SetAccountID(v string) *ArchiveWaveInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetWaveID sets the WaveID field's value.
@@ -6690,6 +7592,9 @@ func (s *ArchiveWaveOutput) SetWaveID(v string) *ArchiveWaveOutput {
 type AssociateApplicationsInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Application IDs list.
 	//
 	// ApplicationIDs is a required field
@@ -6722,6 +7627,9 @@ func (s AssociateApplicationsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *AssociateApplicationsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "AssociateApplicationsInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.ApplicationIDs == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApplicationIDs"))
 	}
@@ -6739,6 +7647,12 @@ func (s *AssociateApplicationsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *AssociateApplicationsInput) SetAccountID(v string) *AssociateApplicationsInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetApplicationIDs sets the ApplicationIDs field's value.
@@ -6778,6 +7692,9 @@ func (s AssociateApplicationsOutput) GoString() string {
 type AssociateSourceServersInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Application ID.
 	//
 	// ApplicationID is a required field
@@ -6810,6 +7727,9 @@ func (s AssociateSourceServersInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *AssociateSourceServersInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "AssociateSourceServersInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.ApplicationID == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApplicationID"))
 	}
@@ -6827,6 +7747,12 @@ func (s *AssociateSourceServersInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *AssociateSourceServersInput) SetAccountID(v string) *AssociateSourceServersInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetApplicationID sets the ApplicationID field's value.
@@ -6907,6 +7833,9 @@ func (s *CPU) SetModelName(v string) *CPU {
 type ChangeServerLifeCycleStateInput struct {
 	_ struct{} `type:"structure"`
 
+	// The request to change the source server migration account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// The request to change the source server migration lifecycle state.
 	//
 	// LifeCycle is a required field
@@ -6940,6 +7869,9 @@ func (s ChangeServerLifeCycleStateInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ChangeServerLifeCycleStateInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ChangeServerLifeCycleStateInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.LifeCycle == nil {
 		invalidParams.Add(request.NewErrParamRequired("LifeCycle"))
 	}
@@ -6959,6 +7891,12 @@ func (s *ChangeServerLifeCycleStateInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *ChangeServerLifeCycleStateInput) SetAccountID(v string) *ChangeServerLifeCycleStateInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetLifeCycle sets the LifeCycle field's value.
@@ -6981,6 +7919,9 @@ type ChangeServerLifeCycleStateOutput struct {
 
 	// Source server ARN.
 	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
 
 	// Source server data replication info.
 	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
@@ -7047,6 +7988,12 @@ func (s *ChangeServerLifeCycleStateOutput) SetApplicationID(v string) *ChangeSer
 // SetArn sets the Arn field's value.
 func (s *ChangeServerLifeCycleStateOutput) SetArn(v string) *ChangeServerLifeCycleStateOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *ChangeServerLifeCycleStateOutput) SetConnectorAction(v *SourceServerConnectorAction) *ChangeServerLifeCycleStateOutput {
+	s.ConnectorAction = v
 	return s
 }
 
@@ -7239,8 +8186,173 @@ func (s *ConflictException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type Connector struct {
+	_ struct{} `type:"structure"`
+
+	// Connector arn.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Connector ID.
+	ConnectorID *string `locationName:"connectorID" min:"27" type:"string"`
+
+	// Connector name.
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Connector SSM command config.
+	SsmCommandConfig *ConnectorSsmCommandConfig `locationName:"ssmCommandConfig" type:"structure"`
+
+	// Connector SSM instance ID.
+	SsmInstanceID *string `locationName:"ssmInstanceID" min:"19" type:"string"`
+
+	// Connector tags.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by Connector's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Connector) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Connector) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *Connector) SetArn(v string) *Connector {
+	s.Arn = &v
+	return s
+}
+
+// SetConnectorID sets the ConnectorID field's value.
+func (s *Connector) SetConnectorID(v string) *Connector {
+	s.ConnectorID = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Connector) SetName(v string) *Connector {
+	s.Name = &v
+	return s
+}
+
+// SetSsmCommandConfig sets the SsmCommandConfig field's value.
+func (s *Connector) SetSsmCommandConfig(v *ConnectorSsmCommandConfig) *Connector {
+	s.SsmCommandConfig = v
+	return s
+}
+
+// SetSsmInstanceID sets the SsmInstanceID field's value.
+func (s *Connector) SetSsmInstanceID(v string) *Connector {
+	s.SsmInstanceID = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Connector) SetTags(v map[string]*string) *Connector {
+	s.Tags = v
+	return s
+}
+
+// Connector SSM command config.
+type ConnectorSsmCommandConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Connector SSM command config CloudWatch log group name.
+	CloudWatchLogGroupName *string `locationName:"cloudWatchLogGroupName" min:"1" type:"string"`
+
+	// Connector SSM command config CloudWatch output enabled.
+	//
+	// CloudWatchOutputEnabled is a required field
+	CloudWatchOutputEnabled *bool `locationName:"cloudWatchOutputEnabled" type:"boolean" required:"true"`
+
+	// Connector SSM command config output S3 bucket name.
+	OutputS3BucketName *string `locationName:"outputS3BucketName" type:"string"`
+
+	// Connector SSM command config S3 output enabled.
+	//
+	// S3OutputEnabled is a required field
+	S3OutputEnabled *bool `locationName:"s3OutputEnabled" type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConnectorSsmCommandConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ConnectorSsmCommandConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConnectorSsmCommandConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConnectorSsmCommandConfig"}
+	if s.CloudWatchLogGroupName != nil && len(*s.CloudWatchLogGroupName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CloudWatchLogGroupName", 1))
+	}
+	if s.CloudWatchOutputEnabled == nil {
+		invalidParams.Add(request.NewErrParamRequired("CloudWatchOutputEnabled"))
+	}
+	if s.S3OutputEnabled == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3OutputEnabled"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCloudWatchLogGroupName sets the CloudWatchLogGroupName field's value.
+func (s *ConnectorSsmCommandConfig) SetCloudWatchLogGroupName(v string) *ConnectorSsmCommandConfig {
+	s.CloudWatchLogGroupName = &v
+	return s
+}
+
+// SetCloudWatchOutputEnabled sets the CloudWatchOutputEnabled field's value.
+func (s *ConnectorSsmCommandConfig) SetCloudWatchOutputEnabled(v bool) *ConnectorSsmCommandConfig {
+	s.CloudWatchOutputEnabled = &v
+	return s
+}
+
+// SetOutputS3BucketName sets the OutputS3BucketName field's value.
+func (s *ConnectorSsmCommandConfig) SetOutputS3BucketName(v string) *ConnectorSsmCommandConfig {
+	s.OutputS3BucketName = &v
+	return s
+}
+
+// SetS3OutputEnabled sets the S3OutputEnabled field's value.
+func (s *ConnectorSsmCommandConfig) SetS3OutputEnabled(v bool) *ConnectorSsmCommandConfig {
+	s.S3OutputEnabled = &v
+	return s
+}
+
 type CreateApplicationInput struct {
 	_ struct{} `type:"structure"`
+
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
 
 	// Application description.
 	Description *string `locationName:"description" type:"string"`
@@ -7279,6 +8391,9 @@ func (s CreateApplicationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateApplicationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateApplicationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
@@ -7290,6 +8405,12 @@ func (s *CreateApplicationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *CreateApplicationInput) SetAccountID(v string) *CreateApplicationInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetDescription sets the Description field's value.
@@ -7426,6 +8547,179 @@ func (s *CreateApplicationOutput) SetWaveID(v string) *CreateApplicationOutput {
 	return s
 }
 
+type CreateConnectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// Create Connector request name.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// Create Connector request SSM command config.
+	SsmCommandConfig *ConnectorSsmCommandConfig `locationName:"ssmCommandConfig" type:"structure"`
+
+	// Create Connector request SSM instance ID.
+	//
+	// SsmInstanceID is a required field
+	SsmInstanceID *string `locationName:"ssmInstanceID" min:"19" type:"string" required:"true"`
+
+	// Create Connector request tags.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateConnectorInput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConnectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConnectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateConnectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateConnectorInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.SsmInstanceID == nil {
+		invalidParams.Add(request.NewErrParamRequired("SsmInstanceID"))
+	}
+	if s.SsmInstanceID != nil && len(*s.SsmInstanceID) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("SsmInstanceID", 19))
+	}
+	if s.SsmCommandConfig != nil {
+		if err := s.SsmCommandConfig.Validate(); err != nil {
+			invalidParams.AddNested("SsmCommandConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *CreateConnectorInput) SetName(v string) *CreateConnectorInput {
+	s.Name = &v
+	return s
+}
+
+// SetSsmCommandConfig sets the SsmCommandConfig field's value.
+func (s *CreateConnectorInput) SetSsmCommandConfig(v *ConnectorSsmCommandConfig) *CreateConnectorInput {
+	s.SsmCommandConfig = v
+	return s
+}
+
+// SetSsmInstanceID sets the SsmInstanceID field's value.
+func (s *CreateConnectorInput) SetSsmInstanceID(v string) *CreateConnectorInput {
+	s.SsmInstanceID = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateConnectorInput) SetTags(v map[string]*string) *CreateConnectorInput {
+	s.Tags = v
+	return s
+}
+
+type CreateConnectorOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Connector arn.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Connector ID.
+	ConnectorID *string `locationName:"connectorID" min:"27" type:"string"`
+
+	// Connector name.
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Connector SSM command config.
+	SsmCommandConfig *ConnectorSsmCommandConfig `locationName:"ssmCommandConfig" type:"structure"`
+
+	// Connector SSM instance ID.
+	SsmInstanceID *string `locationName:"ssmInstanceID" min:"19" type:"string"`
+
+	// Connector tags.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateConnectorOutput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConnectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateConnectorOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateConnectorOutput) SetArn(v string) *CreateConnectorOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetConnectorID sets the ConnectorID field's value.
+func (s *CreateConnectorOutput) SetConnectorID(v string) *CreateConnectorOutput {
+	s.ConnectorID = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateConnectorOutput) SetName(v string) *CreateConnectorOutput {
+	s.Name = &v
+	return s
+}
+
+// SetSsmCommandConfig sets the SsmCommandConfig field's value.
+func (s *CreateConnectorOutput) SetSsmCommandConfig(v *ConnectorSsmCommandConfig) *CreateConnectorOutput {
+	s.SsmCommandConfig = v
+	return s
+}
+
+// SetSsmInstanceID sets the SsmInstanceID field's value.
+func (s *CreateConnectorOutput) SetSsmInstanceID(v string) *CreateConnectorOutput {
+	s.SsmInstanceID = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateConnectorOutput) SetTags(v map[string]*string) *CreateConnectorOutput {
+	s.Tags = v
+	return s
+}
+
 type CreateLaunchConfigurationTemplateInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7497,9 +8791,19 @@ func (s CreateLaunchConfigurationTemplateInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateLaunchConfigurationTemplateInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateLaunchConfigurationTemplateInput"}
+	if s.LargeVolumeConf != nil {
+		if err := s.LargeVolumeConf.Validate(); err != nil {
+			invalidParams.AddNested("LargeVolumeConf", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.PostLaunchActions != nil {
 		if err := s.PostLaunchActions.Validate(); err != nil {
 			invalidParams.AddNested("PostLaunchActions", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SmallVolumeConf != nil {
+		if err := s.SmallVolumeConf.Validate(); err != nil {
+			invalidParams.AddNested("SmallVolumeConf", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -7856,6 +9160,9 @@ type CreateReplicationConfigurationTemplateInput struct {
 	//
 	// UseDedicatedReplicationServer is a required field
 	UseDedicatedReplicationServer *bool `locationName:"useDedicatedReplicationServer" type:"boolean" required:"true"`
+
+	// Request to use Fips Endpoint during Replication Settings template creation.
+	UseFipsEndpoint *bool `locationName:"useFipsEndpoint" type:"boolean"`
 }
 
 // String returns the string representation.
@@ -8000,6 +9307,12 @@ func (s *CreateReplicationConfigurationTemplateInput) SetUseDedicatedReplication
 	return s
 }
 
+// SetUseFipsEndpoint sets the UseFipsEndpoint field's value.
+func (s *CreateReplicationConfigurationTemplateInput) SetUseFipsEndpoint(v bool) *CreateReplicationConfigurationTemplateInput {
+	s.UseFipsEndpoint = &v
+	return s
+}
+
 type CreateReplicationConfigurationTemplateOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -8058,6 +9371,9 @@ type CreateReplicationConfigurationTemplateOutput struct {
 
 	// Replication Configuration template use Dedicated Replication Server.
 	UseDedicatedReplicationServer *bool `locationName:"useDedicatedReplicationServer" type:"boolean"`
+
+	// Replication Configuration template use Fips Endpoint.
+	UseFipsEndpoint *bool `locationName:"useFipsEndpoint" type:"boolean"`
 }
 
 // String returns the string representation.
@@ -8168,8 +9484,17 @@ func (s *CreateReplicationConfigurationTemplateOutput) SetUseDedicatedReplicatio
 	return s
 }
 
+// SetUseFipsEndpoint sets the UseFipsEndpoint field's value.
+func (s *CreateReplicationConfigurationTemplateOutput) SetUseFipsEndpoint(v bool) *CreateReplicationConfigurationTemplateOutput {
+	s.UseFipsEndpoint = &v
+	return s
+}
+
 type CreateWaveInput struct {
 	_ struct{} `type:"structure"`
+
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
 
 	// Wave description.
 	Description *string `locationName:"description" type:"string"`
@@ -8208,6 +9533,9 @@ func (s CreateWaveInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateWaveInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateWaveInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
@@ -8219,6 +9547,12 @@ func (s *CreateWaveInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *CreateWaveInput) SetAccountID(v string) *CreateWaveInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetDescription sets the Description field's value.
@@ -8635,6 +9969,9 @@ func (s *DataReplicationInitiationStep) SetStatus(v string) *DataReplicationInit
 type DeleteApplicationInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Application ID.
 	//
 	// ApplicationID is a required field
@@ -8662,6 +9999,9 @@ func (s DeleteApplicationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DeleteApplicationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteApplicationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.ApplicationID == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApplicationID"))
 	}
@@ -8673,6 +10013,12 @@ func (s *DeleteApplicationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *DeleteApplicationInput) SetAccountID(v string) *DeleteApplicationInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetApplicationID sets the ApplicationID field's value.
@@ -8703,8 +10049,82 @@ func (s DeleteApplicationOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteConnectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// Delete Connector request connector ID.
+	//
+	// ConnectorID is a required field
+	ConnectorID *string `locationName:"connectorID" min:"27" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConnectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConnectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteConnectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteConnectorInput"}
+	if s.ConnectorID == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorID"))
+	}
+	if s.ConnectorID != nil && len(*s.ConnectorID) < 27 {
+		invalidParams.Add(request.NewErrParamMinLen("ConnectorID", 27))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectorID sets the ConnectorID field's value.
+func (s *DeleteConnectorInput) SetConnectorID(v string) *DeleteConnectorInput {
+	s.ConnectorID = &v
+	return s
+}
+
+type DeleteConnectorOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConnectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteConnectorOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteJobInput struct {
 	_ struct{} `type:"structure"`
+
+	// Request to delete Job from service by Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
 
 	// Request to delete Job from service by Job ID.
 	//
@@ -8733,6 +10153,9 @@ func (s DeleteJobInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DeleteJobInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteJobInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.JobID == nil {
 		invalidParams.Add(request.NewErrParamRequired("JobID"))
 	}
@@ -8744,6 +10167,12 @@ func (s *DeleteJobInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *DeleteJobInput) SetAccountID(v string) *DeleteJobInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetJobID sets the JobID field's value.
@@ -8920,6 +10349,9 @@ func (s DeleteReplicationConfigurationTemplateOutput) GoString() string {
 type DeleteSourceServerInput struct {
 	_ struct{} `type:"structure"`
 
+	// Request to delete Source Server from service by Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Request to delete Source Server from service by Server ID.
 	//
 	// SourceServerID is a required field
@@ -8947,6 +10379,9 @@ func (s DeleteSourceServerInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DeleteSourceServerInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteSourceServerInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerID == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
 	}
@@ -8958,6 +10393,12 @@ func (s *DeleteSourceServerInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *DeleteSourceServerInput) SetAccountID(v string) *DeleteSourceServerInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetSourceServerID sets the SourceServerID field's value.
@@ -9062,6 +10503,9 @@ func (s DeleteVcenterClientOutput) GoString() string {
 type DeleteWaveInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Wave ID.
 	//
 	// WaveID is a required field
@@ -9089,6 +10533,9 @@ func (s DeleteWaveInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DeleteWaveInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteWaveInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.WaveID == nil {
 		invalidParams.Add(request.NewErrParamRequired("WaveID"))
 	}
@@ -9100,6 +10547,12 @@ func (s *DeleteWaveInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *DeleteWaveInput) SetAccountID(v string) *DeleteWaveInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetWaveID sets the WaveID field's value.
@@ -9132,6 +10585,9 @@ func (s DeleteWaveOutput) GoString() string {
 
 type DescribeJobLogItemsInput struct {
 	_ struct{} `type:"structure"`
+
+	// Request to describe Job log Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
 
 	// Request to describe Job log job ID.
 	//
@@ -9166,6 +10622,9 @@ func (s DescribeJobLogItemsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeJobLogItemsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeJobLogItemsInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.JobID == nil {
 		invalidParams.Add(request.NewErrParamRequired("JobID"))
 	}
@@ -9180,6 +10639,12 @@ func (s *DescribeJobLogItemsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *DescribeJobLogItemsInput) SetAccountID(v string) *DescribeJobLogItemsInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetJobID sets the JobID field's value.
@@ -9243,6 +10708,9 @@ func (s *DescribeJobLogItemsOutput) SetNextToken(v string) *DescribeJobLogItemsO
 type DescribeJobsInput struct {
 	_ struct{} `type:"structure"`
 
+	// Request to describe job log items by Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Request to describe Job log filters.
 	Filters *DescribeJobsRequestFilters `locationName:"filters" type:"structure"`
 
@@ -9274,6 +10742,9 @@ func (s DescribeJobsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeJobsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeJobsInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
@@ -9287,6 +10758,12 @@ func (s *DescribeJobsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *DescribeJobsInput) SetAccountID(v string) *DescribeJobsInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetFilters sets the Filters field's value.
@@ -9621,6 +11098,9 @@ func (s *DescribeReplicationConfigurationTemplatesOutput) SetNextToken(v string)
 type DescribeSourceServersInput struct {
 	_ struct{} `type:"structure"`
 
+	// Request to filter Source Servers list by Accoun ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Request to filter Source Servers list.
 	Filters *DescribeSourceServersRequestFilters `locationName:"filters" type:"structure"`
 
@@ -9652,6 +11132,9 @@ func (s DescribeSourceServersInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeSourceServersInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeSourceServersInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
@@ -9660,6 +11143,12 @@ func (s *DescribeSourceServersInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *DescribeSourceServersInput) SetAccountID(v string) *DescribeSourceServersInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetFilters sets the Filters field's value.
@@ -9884,6 +11373,9 @@ func (s *DescribeVcenterClientsOutput) SetNextToken(v string) *DescribeVcenterCl
 type DisassociateApplicationsInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Application IDs list.
 	//
 	// ApplicationIDs is a required field
@@ -9916,6 +11408,9 @@ func (s DisassociateApplicationsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DisassociateApplicationsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DisassociateApplicationsInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.ApplicationIDs == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApplicationIDs"))
 	}
@@ -9933,6 +11428,12 @@ func (s *DisassociateApplicationsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *DisassociateApplicationsInput) SetAccountID(v string) *DisassociateApplicationsInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetApplicationIDs sets the ApplicationIDs field's value.
@@ -9972,6 +11473,9 @@ func (s DisassociateApplicationsOutput) GoString() string {
 type DisassociateSourceServersInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Application ID.
 	//
 	// ApplicationID is a required field
@@ -10004,6 +11508,9 @@ func (s DisassociateSourceServersInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DisassociateSourceServersInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DisassociateSourceServersInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.ApplicationID == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApplicationID"))
 	}
@@ -10021,6 +11528,12 @@ func (s *DisassociateSourceServersInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *DisassociateSourceServersInput) SetAccountID(v string) *DisassociateSourceServersInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetApplicationID sets the ApplicationID field's value.
@@ -10060,6 +11573,9 @@ func (s DisassociateSourceServersOutput) GoString() string {
 type DisconnectFromServiceInput struct {
 	_ struct{} `type:"structure"`
 
+	// Request to disconnect Source Server from service by Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Request to disconnect Source Server from service by Server ID.
 	//
 	// SourceServerID is a required field
@@ -10087,6 +11603,9 @@ func (s DisconnectFromServiceInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DisconnectFromServiceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DisconnectFromServiceInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerID == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
 	}
@@ -10098,6 +11617,12 @@ func (s *DisconnectFromServiceInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *DisconnectFromServiceInput) SetAccountID(v string) *DisconnectFromServiceInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetSourceServerID sets the SourceServerID field's value.
@@ -10114,6 +11639,9 @@ type DisconnectFromServiceOutput struct {
 
 	// Source server ARN.
 	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
 
 	// Source server data replication info.
 	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
@@ -10180,6 +11708,12 @@ func (s *DisconnectFromServiceOutput) SetApplicationID(v string) *DisconnectFrom
 // SetArn sets the Arn field's value.
 func (s *DisconnectFromServiceOutput) SetArn(v string) *DisconnectFromServiceOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *DisconnectFromServiceOutput) SetConnectorAction(v *SourceServerConnectorAction) *DisconnectFromServiceOutput {
+	s.ConnectorAction = v
 	return s
 }
 
@@ -10579,6 +12113,9 @@ func (s *ExportTaskSummary) SetWavesCount(v int64) *ExportTaskSummary {
 type FinalizeCutoverInput struct {
 	_ struct{} `type:"structure"`
 
+	// Request to finalize Cutover by Source Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Request to finalize Cutover by Source Server ID.
 	//
 	// SourceServerID is a required field
@@ -10606,6 +12143,9 @@ func (s FinalizeCutoverInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *FinalizeCutoverInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "FinalizeCutoverInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerID == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
 	}
@@ -10617,6 +12157,12 @@ func (s *FinalizeCutoverInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *FinalizeCutoverInput) SetAccountID(v string) *FinalizeCutoverInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetSourceServerID sets the SourceServerID field's value.
@@ -10633,6 +12179,9 @@ type FinalizeCutoverOutput struct {
 
 	// Source server ARN.
 	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
 
 	// Source server data replication info.
 	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
@@ -10699,6 +12248,12 @@ func (s *FinalizeCutoverOutput) SetApplicationID(v string) *FinalizeCutoverOutpu
 // SetArn sets the Arn field's value.
 func (s *FinalizeCutoverOutput) SetArn(v string) *FinalizeCutoverOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *FinalizeCutoverOutput) SetConnectorAction(v *SourceServerConnectorAction) *FinalizeCutoverOutput {
+	s.ConnectorAction = v
 	return s
 }
 
@@ -10771,6 +12326,9 @@ func (s *FinalizeCutoverOutput) SetVcenterClientID(v string) *FinalizeCutoverOut
 type GetLaunchConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
+	// Request to get Launch Configuration information by Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Request to get Launch Configuration information by Source Server ID.
 	//
 	// SourceServerID is a required field
@@ -10798,6 +12356,9 @@ func (s GetLaunchConfigurationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *GetLaunchConfigurationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetLaunchConfigurationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerID == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
 	}
@@ -10809,6 +12370,12 @@ func (s *GetLaunchConfigurationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *GetLaunchConfigurationInput) SetAccountID(v string) *GetLaunchConfigurationInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetSourceServerID sets the SourceServerID field's value.
@@ -10950,6 +12517,9 @@ func (s *GetLaunchConfigurationOutput) SetTargetInstanceTypeRightSizingMethod(v 
 type GetReplicationConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
+	// Request to get Replication Configuration by Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Request to get Replication Configuration by Source Server ID.
 	//
 	// SourceServerID is a required field
@@ -10977,6 +12547,9 @@ func (s GetReplicationConfigurationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *GetReplicationConfigurationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetReplicationConfigurationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerID == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
 	}
@@ -10988,6 +12561,12 @@ func (s *GetReplicationConfigurationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *GetReplicationConfigurationInput) SetAccountID(v string) *GetReplicationConfigurationInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetSourceServerID sets the SourceServerID field's value.
@@ -11048,6 +12627,9 @@ type GetReplicationConfigurationOutput struct {
 
 	// Replication Configuration use Dedicated Replication Server.
 	UseDedicatedReplicationServer *bool `locationName:"useDedicatedReplicationServer" type:"boolean"`
+
+	// Replication Configuration use Fips Endpoint.
+	UseFipsEndpoint *bool `locationName:"useFipsEndpoint" type:"boolean"`
 }
 
 // String returns the string representation.
@@ -11158,6 +12740,12 @@ func (s *GetReplicationConfigurationOutput) SetUseDedicatedReplicationServer(v b
 	return s
 }
 
+// SetUseFipsEndpoint sets the UseFipsEndpoint field's value.
+func (s *GetReplicationConfigurationOutput) SetUseFipsEndpoint(v bool) *GetReplicationConfigurationOutput {
+	s.UseFipsEndpoint = &v
+	return s
+}
+
 // Identification hints.
 type IdentificationHints struct {
 	_ struct{} `type:"structure"`
@@ -11230,6 +12818,9 @@ func (s *IdentificationHints) SetVmWareUuid(v string) *IdentificationHints {
 type ImportErrorData struct {
 	_ struct{} `type:"structure"`
 
+	// Import error data source account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Import error data application ID.
 	ApplicationID *string `locationName:"applicationID" min:"21" type:"string"`
 
@@ -11265,6 +12856,12 @@ func (s ImportErrorData) String() string {
 // value will be replaced with "sensitive".
 func (s ImportErrorData) GoString() string {
 	return s.String()
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *ImportErrorData) SetAccountID(v string) *ImportErrorData {
+	s.AccountID = &v
+	return s
 }
 
 // SetApplicationID sets the ApplicationID field's value.
@@ -12199,10 +13796,10 @@ type LaunchTemplateDiskConf struct {
 	_ struct{} `type:"structure"`
 
 	// Launch template disk iops configuration.
-	Iops *int64 `locationName:"iops" type:"long"`
+	Iops *int64 `locationName:"iops" min:"100" type:"long"`
 
 	// Launch template disk throughput configuration.
-	Throughput *int64 `locationName:"throughput" type:"long"`
+	Throughput *int64 `locationName:"throughput" min:"125" type:"long"`
 
 	// Launch template disk volume type configuration.
 	VolumeType *string `locationName:"volumeType" type:"string" enum:"VolumeType"`
@@ -12224,6 +13821,22 @@ func (s LaunchTemplateDiskConf) String() string {
 // value will be replaced with "sensitive".
 func (s LaunchTemplateDiskConf) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *LaunchTemplateDiskConf) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "LaunchTemplateDiskConf"}
+	if s.Iops != nil && *s.Iops < 100 {
+		invalidParams.Add(request.NewErrParamMinValue("Iops", 100))
+	}
+	if s.Throughput != nil && *s.Throughput < 125 {
+		invalidParams.Add(request.NewErrParamMinValue("Throughput", 125))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetIops sets the Iops field's value.
@@ -12724,6 +14337,9 @@ func (s *LifeCycleLastTestReverted) SetApiCallDateTime(v string) *LifeCycleLastT
 type ListApplicationsInput struct {
 	_ struct{} `type:"structure"`
 
+	// Applications list Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Applications list filters.
 	Filters *ListApplicationsRequestFilters `locationName:"filters" type:"structure"`
 
@@ -12755,6 +14371,9 @@ func (s ListApplicationsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListApplicationsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListApplicationsInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
@@ -12763,6 +14382,12 @@ func (s *ListApplicationsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *ListApplicationsInput) SetAccountID(v string) *ListApplicationsInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetFilters sets the Filters field's value.
@@ -12870,6 +14495,140 @@ func (s *ListApplicationsRequestFilters) SetIsArchived(v bool) *ListApplications
 // SetWaveIDs sets the WaveIDs field's value.
 func (s *ListApplicationsRequestFilters) SetWaveIDs(v []*string) *ListApplicationsRequestFilters {
 	s.WaveIDs = v
+	return s
+}
+
+type ListConnectorsInput struct {
+	_ struct{} `type:"structure"`
+
+	// List Connectors Request filters.
+	Filters *ListConnectorsRequestFilters `locationName:"filters" type:"structure"`
+
+	// List Connectors Request max results.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// List Connectors Request next token.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConnectorsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConnectorsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListConnectorsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListConnectorsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListConnectorsInput) SetFilters(v *ListConnectorsRequestFilters) *ListConnectorsInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListConnectorsInput) SetMaxResults(v int64) *ListConnectorsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConnectorsInput) SetNextToken(v string) *ListConnectorsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListConnectorsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// List connectors response items.
+	Items []*Connector `locationName:"items" type:"list"`
+
+	// List connectors response next token.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConnectorsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConnectorsOutput) GoString() string {
+	return s.String()
+}
+
+// SetItems sets the Items field's value.
+func (s *ListConnectorsOutput) SetItems(v []*Connector) *ListConnectorsOutput {
+	s.Items = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConnectorsOutput) SetNextToken(v string) *ListConnectorsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// List Connectors Request Filters.
+type ListConnectorsRequestFilters struct {
+	_ struct{} `type:"structure"`
+
+	// List Connectors Request Filters connector IDs.
+	ConnectorIDs []*string `locationName:"connectorIDs" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConnectorsRequestFilters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListConnectorsRequestFilters) GoString() string {
+	return s.String()
+}
+
+// SetConnectorIDs sets the ConnectorIDs field's value.
+func (s *ListConnectorsRequestFilters) SetConnectorIDs(v []*string) *ListConnectorsRequestFilters {
+	s.ConnectorIDs = v
 	return s
 }
 
@@ -13369,8 +15128,108 @@ func (s *ListImportsRequestFilters) SetImportIDs(v []*string) *ListImportsReques
 	return s
 }
 
+// List managed accounts request.
+type ListManagedAccountsInput struct {
+	_ struct{} `type:"structure"`
+
+	// List managed accounts request max results.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// List managed accounts request next token.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListManagedAccountsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListManagedAccountsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListManagedAccountsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListManagedAccountsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListManagedAccountsInput) SetMaxResults(v int64) *ListManagedAccountsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListManagedAccountsInput) SetNextToken(v string) *ListManagedAccountsInput {
+	s.NextToken = &v
+	return s
+}
+
+// List managed accounts response.
+type ListManagedAccountsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// List managed accounts response items.
+	//
+	// Items is a required field
+	Items []*ManagedAccount `locationName:"items" type:"list" required:"true"`
+
+	// List managed accounts response next token.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListManagedAccountsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListManagedAccountsOutput) GoString() string {
+	return s.String()
+}
+
+// SetItems sets the Items field's value.
+func (s *ListManagedAccountsOutput) SetItems(v []*ManagedAccount) *ListManagedAccountsOutput {
+	s.Items = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListManagedAccountsOutput) SetNextToken(v string) *ListManagedAccountsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListSourceServerActionsInput struct {
 	_ struct{} `type:"structure"`
+
+	// Account ID to return when listing source server post migration custom actions.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
 
 	// Filters to apply when listing source server post migration custom actions.
 	Filters *SourceServerActionsRequestFilters `locationName:"filters" type:"structure"`
@@ -13409,6 +15268,9 @@ func (s ListSourceServerActionsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListSourceServerActionsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListSourceServerActionsInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
@@ -13423,6 +15285,12 @@ func (s *ListSourceServerActionsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *ListSourceServerActionsInput) SetAccountID(v string) *ListSourceServerActionsInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetFilters sets the Filters field's value.
@@ -13696,6 +15564,9 @@ func (s *ListTemplateActionsOutput) SetNextToken(v string) *ListTemplateActionsO
 type ListWavesInput struct {
 	_ struct{} `type:"structure"`
 
+	// Request account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Waves list filters.
 	Filters *ListWavesRequestFilters `locationName:"filters" type:"structure"`
 
@@ -13727,6 +15598,9 @@ func (s ListWavesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListWavesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListWavesInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
@@ -13735,6 +15609,12 @@ func (s *ListWavesInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *ListWavesInput) SetAccountID(v string) *ListWavesInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetFilters sets the Filters field's value.
@@ -13836,8 +15716,43 @@ func (s *ListWavesRequestFilters) SetWaveIDs(v []*string) *ListWavesRequestFilte
 	return s
 }
 
+// Managed account.
+type ManagedAccount struct {
+	_ struct{} `type:"structure"`
+
+	// Managed account, account ID.
+	AccountId *string `locationName:"accountId" min:"12" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ManagedAccount) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ManagedAccount) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *ManagedAccount) SetAccountId(v string) *ManagedAccount {
+	s.AccountId = &v
+	return s
+}
+
 type MarkAsArchivedInput struct {
 	_ struct{} `type:"structure"`
+
+	// Mark as archived by Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
 
 	// Mark as archived by Source Server ID.
 	//
@@ -13866,6 +15781,9 @@ func (s MarkAsArchivedInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *MarkAsArchivedInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "MarkAsArchivedInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerID == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
 	}
@@ -13877,6 +15795,12 @@ func (s *MarkAsArchivedInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *MarkAsArchivedInput) SetAccountID(v string) *MarkAsArchivedInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetSourceServerID sets the SourceServerID field's value.
@@ -13893,6 +15817,9 @@ type MarkAsArchivedOutput struct {
 
 	// Source server ARN.
 	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
 
 	// Source server data replication info.
 	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
@@ -13959,6 +15886,12 @@ func (s *MarkAsArchivedOutput) SetApplicationID(v string) *MarkAsArchivedOutput 
 // SetArn sets the Arn field's value.
 func (s *MarkAsArchivedOutput) SetArn(v string) *MarkAsArchivedOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *MarkAsArchivedOutput) SetConnectorAction(v *SourceServerConnectorAction) *MarkAsArchivedOutput {
+	s.ConnectorAction = v
 	return s
 }
 
@@ -14171,6 +16104,219 @@ func (s *ParticipatingServer) SetSourceServerID(v string) *ParticipatingServer {
 	return s
 }
 
+type PauseReplicationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Pause Replication Request account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
+	// Pause Replication Request source server ID.
+	//
+	// SourceServerID is a required field
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PauseReplicationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PauseReplicationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PauseReplicationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PauseReplicationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
+	if s.SourceServerID == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
+	}
+	if s.SourceServerID != nil && len(*s.SourceServerID) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceServerID", 19))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *PauseReplicationInput) SetAccountID(v string) *PauseReplicationInput {
+	s.AccountID = &v
+	return s
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *PauseReplicationInput) SetSourceServerID(v string) *PauseReplicationInput {
+	s.SourceServerID = &v
+	return s
+}
+
+type PauseReplicationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Source server application ID.
+	ApplicationID *string `locationName:"applicationID" min:"21" type:"string"`
+
+	// Source server ARN.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
+
+	// Source server data replication info.
+	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
+
+	// Source server fqdn for action framework.
+	FqdnForActionFramework *string `locationName:"fqdnForActionFramework" type:"string"`
+
+	// Source server archived status.
+	IsArchived *bool `locationName:"isArchived" type:"boolean"`
+
+	// Source server launched instance.
+	LaunchedInstance *LaunchedInstance `locationName:"launchedInstance" type:"structure"`
+
+	// Source server lifecycle state.
+	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
+
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
+	// Source server properties.
+	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
+
+	// Source server ID.
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string"`
+
+	// Source server Tags.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by PauseReplicationOutput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server user provided ID.
+	UserProvidedID *string `locationName:"userProvidedID" type:"string"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PauseReplicationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PauseReplicationOutput) GoString() string {
+	return s.String()
+}
+
+// SetApplicationID sets the ApplicationID field's value.
+func (s *PauseReplicationOutput) SetApplicationID(v string) *PauseReplicationOutput {
+	s.ApplicationID = &v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *PauseReplicationOutput) SetArn(v string) *PauseReplicationOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *PauseReplicationOutput) SetConnectorAction(v *SourceServerConnectorAction) *PauseReplicationOutput {
+	s.ConnectorAction = v
+	return s
+}
+
+// SetDataReplicationInfo sets the DataReplicationInfo field's value.
+func (s *PauseReplicationOutput) SetDataReplicationInfo(v *DataReplicationInfo) *PauseReplicationOutput {
+	s.DataReplicationInfo = v
+	return s
+}
+
+// SetFqdnForActionFramework sets the FqdnForActionFramework field's value.
+func (s *PauseReplicationOutput) SetFqdnForActionFramework(v string) *PauseReplicationOutput {
+	s.FqdnForActionFramework = &v
+	return s
+}
+
+// SetIsArchived sets the IsArchived field's value.
+func (s *PauseReplicationOutput) SetIsArchived(v bool) *PauseReplicationOutput {
+	s.IsArchived = &v
+	return s
+}
+
+// SetLaunchedInstance sets the LaunchedInstance field's value.
+func (s *PauseReplicationOutput) SetLaunchedInstance(v *LaunchedInstance) *PauseReplicationOutput {
+	s.LaunchedInstance = v
+	return s
+}
+
+// SetLifeCycle sets the LifeCycle field's value.
+func (s *PauseReplicationOutput) SetLifeCycle(v *LifeCycle) *PauseReplicationOutput {
+	s.LifeCycle = v
+	return s
+}
+
+// SetReplicationType sets the ReplicationType field's value.
+func (s *PauseReplicationOutput) SetReplicationType(v string) *PauseReplicationOutput {
+	s.ReplicationType = &v
+	return s
+}
+
+// SetSourceProperties sets the SourceProperties field's value.
+func (s *PauseReplicationOutput) SetSourceProperties(v *SourceProperties) *PauseReplicationOutput {
+	s.SourceProperties = v
+	return s
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *PauseReplicationOutput) SetSourceServerID(v string) *PauseReplicationOutput {
+	s.SourceServerID = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *PauseReplicationOutput) SetTags(v map[string]*string) *PauseReplicationOutput {
+	s.Tags = v
+	return s
+}
+
+// SetUserProvidedID sets the UserProvidedID field's value.
+func (s *PauseReplicationOutput) SetUserProvidedID(v string) *PauseReplicationOutput {
+	s.UserProvidedID = &v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *PauseReplicationOutput) SetVcenterClientID(v string) *PauseReplicationOutput {
+	s.VcenterClientID = &v
+	return s
+}
+
 // Post Launch Actions to executed on the Test or Cutover instance.
 type PostLaunchActions struct {
 	_ struct{} `type:"structure"`
@@ -14310,6 +16456,9 @@ func (s *PostLaunchActionsStatus) SetSsmAgentDiscoveryDatetime(v string) *PostLa
 type PutSourceServerActionInput struct {
 	_ struct{} `type:"structure"`
 
+	// Source server post migration custom account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Source server post migration custom action ID.
 	//
 	// ActionID is a required field
@@ -14381,6 +16530,9 @@ func (s PutSourceServerActionInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *PutSourceServerActionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "PutSourceServerActionInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.ActionID == nil {
 		invalidParams.Add(request.NewErrParamRequired("ActionID"))
 	}
@@ -14426,6 +16578,12 @@ func (s *PutSourceServerActionInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *PutSourceServerActionInput) SetAccountID(v string) *PutSourceServerActionInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetActionID sets the ActionID field's value.
@@ -14983,6 +17141,9 @@ func (s *PutTemplateActionOutput) SetTimeoutSeconds(v int64) *PutTemplateActionO
 type RemoveSourceServerActionInput struct {
 	_ struct{} `type:"structure"`
 
+	// Source server post migration account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Source server post migration custom action ID to remove.
 	//
 	// ActionID is a required field
@@ -15015,6 +17176,9 @@ func (s RemoveSourceServerActionInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *RemoveSourceServerActionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "RemoveSourceServerActionInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.ActionID == nil {
 		invalidParams.Add(request.NewErrParamRequired("ActionID"))
 	}
@@ -15032,6 +17196,12 @@ func (s *RemoveSourceServerActionInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *RemoveSourceServerActionInput) SetAccountID(v string) *RemoveSourceServerActionInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetActionID sets the ActionID field's value.
@@ -15282,6 +17452,9 @@ type ReplicationConfigurationTemplate struct {
 
 	// Replication Configuration template use Dedicated Replication Server.
 	UseDedicatedReplicationServer *bool `locationName:"useDedicatedReplicationServer" type:"boolean"`
+
+	// Replication Configuration template use Fips Endpoint.
+	UseFipsEndpoint *bool `locationName:"useFipsEndpoint" type:"boolean"`
 }
 
 // String returns the string representation.
@@ -15392,6 +17565,12 @@ func (s *ReplicationConfigurationTemplate) SetUseDedicatedReplicationServer(v bo
 	return s
 }
 
+// SetUseFipsEndpoint sets the UseFipsEndpoint field's value.
+func (s *ReplicationConfigurationTemplate) SetUseFipsEndpoint(v bool) *ReplicationConfigurationTemplate {
+	s.UseFipsEndpoint = &v
+	return s
+}
+
 // Resource not found exception.
 type ResourceNotFoundException struct {
 	_            struct{}                  `type:"structure"`
@@ -15464,8 +17643,224 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type ResumeReplicationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Resume Replication Request account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
+	// Resume Replication Request source server ID.
+	//
+	// SourceServerID is a required field
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResumeReplicationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResumeReplicationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ResumeReplicationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ResumeReplicationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
+	if s.SourceServerID == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
+	}
+	if s.SourceServerID != nil && len(*s.SourceServerID) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceServerID", 19))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *ResumeReplicationInput) SetAccountID(v string) *ResumeReplicationInput {
+	s.AccountID = &v
+	return s
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *ResumeReplicationInput) SetSourceServerID(v string) *ResumeReplicationInput {
+	s.SourceServerID = &v
+	return s
+}
+
+type ResumeReplicationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Source server application ID.
+	ApplicationID *string `locationName:"applicationID" min:"21" type:"string"`
+
+	// Source server ARN.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
+
+	// Source server data replication info.
+	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
+
+	// Source server fqdn for action framework.
+	FqdnForActionFramework *string `locationName:"fqdnForActionFramework" type:"string"`
+
+	// Source server archived status.
+	IsArchived *bool `locationName:"isArchived" type:"boolean"`
+
+	// Source server launched instance.
+	LaunchedInstance *LaunchedInstance `locationName:"launchedInstance" type:"structure"`
+
+	// Source server lifecycle state.
+	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
+
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
+	// Source server properties.
+	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
+
+	// Source server ID.
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string"`
+
+	// Source server Tags.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ResumeReplicationOutput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server user provided ID.
+	UserProvidedID *string `locationName:"userProvidedID" type:"string"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResumeReplicationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ResumeReplicationOutput) GoString() string {
+	return s.String()
+}
+
+// SetApplicationID sets the ApplicationID field's value.
+func (s *ResumeReplicationOutput) SetApplicationID(v string) *ResumeReplicationOutput {
+	s.ApplicationID = &v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *ResumeReplicationOutput) SetArn(v string) *ResumeReplicationOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *ResumeReplicationOutput) SetConnectorAction(v *SourceServerConnectorAction) *ResumeReplicationOutput {
+	s.ConnectorAction = v
+	return s
+}
+
+// SetDataReplicationInfo sets the DataReplicationInfo field's value.
+func (s *ResumeReplicationOutput) SetDataReplicationInfo(v *DataReplicationInfo) *ResumeReplicationOutput {
+	s.DataReplicationInfo = v
+	return s
+}
+
+// SetFqdnForActionFramework sets the FqdnForActionFramework field's value.
+func (s *ResumeReplicationOutput) SetFqdnForActionFramework(v string) *ResumeReplicationOutput {
+	s.FqdnForActionFramework = &v
+	return s
+}
+
+// SetIsArchived sets the IsArchived field's value.
+func (s *ResumeReplicationOutput) SetIsArchived(v bool) *ResumeReplicationOutput {
+	s.IsArchived = &v
+	return s
+}
+
+// SetLaunchedInstance sets the LaunchedInstance field's value.
+func (s *ResumeReplicationOutput) SetLaunchedInstance(v *LaunchedInstance) *ResumeReplicationOutput {
+	s.LaunchedInstance = v
+	return s
+}
+
+// SetLifeCycle sets the LifeCycle field's value.
+func (s *ResumeReplicationOutput) SetLifeCycle(v *LifeCycle) *ResumeReplicationOutput {
+	s.LifeCycle = v
+	return s
+}
+
+// SetReplicationType sets the ReplicationType field's value.
+func (s *ResumeReplicationOutput) SetReplicationType(v string) *ResumeReplicationOutput {
+	s.ReplicationType = &v
+	return s
+}
+
+// SetSourceProperties sets the SourceProperties field's value.
+func (s *ResumeReplicationOutput) SetSourceProperties(v *SourceProperties) *ResumeReplicationOutput {
+	s.SourceProperties = v
+	return s
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *ResumeReplicationOutput) SetSourceServerID(v string) *ResumeReplicationOutput {
+	s.SourceServerID = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ResumeReplicationOutput) SetTags(v map[string]*string) *ResumeReplicationOutput {
+	s.Tags = v
+	return s
+}
+
+// SetUserProvidedID sets the UserProvidedID field's value.
+func (s *ResumeReplicationOutput) SetUserProvidedID(v string) *ResumeReplicationOutput {
+	s.UserProvidedID = &v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *ResumeReplicationOutput) SetVcenterClientID(v string) *ResumeReplicationOutput {
+	s.VcenterClientID = &v
+	return s
+}
+
 type RetryDataReplicationInput struct {
 	_ struct{} `type:"structure"`
+
+	// Retry data replication for Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
 
 	// Retry data replication for Source Server ID.
 	//
@@ -15494,6 +17889,9 @@ func (s RetryDataReplicationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *RetryDataReplicationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "RetryDataReplicationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerID == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
 	}
@@ -15505,6 +17903,12 @@ func (s *RetryDataReplicationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *RetryDataReplicationInput) SetAccountID(v string) *RetryDataReplicationInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetSourceServerID sets the SourceServerID field's value.
@@ -15521,6 +17925,9 @@ type RetryDataReplicationOutput struct {
 
 	// Source server ARN.
 	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
 
 	// Source server data replication info.
 	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
@@ -15587,6 +17994,12 @@ func (s *RetryDataReplicationOutput) SetApplicationID(v string) *RetryDataReplic
 // SetArn sets the Arn field's value.
 func (s *RetryDataReplicationOutput) SetArn(v string) *RetryDataReplicationOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *RetryDataReplicationOutput) SetConnectorAction(v *SourceServerConnectorAction) *RetryDataReplicationOutput {
+	s.ConnectorAction = v
 	return s
 }
 
@@ -15914,6 +18327,9 @@ type SourceServer struct {
 	// Source server ARN.
 	Arn *string `locationName:"arn" min:"20" type:"string"`
 
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
+
 	// Source server data replication info.
 	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
 
@@ -15979,6 +18395,12 @@ func (s *SourceServer) SetApplicationID(v string) *SourceServer {
 // SetArn sets the Arn field's value.
 func (s *SourceServer) SetArn(v string) *SourceServer {
 	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *SourceServer) SetConnectorAction(v *SourceServerConnectorAction) *SourceServer {
+	s.ConnectorAction = v
 	return s
 }
 
@@ -16210,6 +18632,63 @@ func (s *SourceServerActionsRequestFilters) SetActionIDs(v []*string) *SourceSer
 	return s
 }
 
+// Source Server connector action.
+type SourceServerConnectorAction struct {
+	_ struct{} `type:"structure"`
+
+	// Source Server connector action connector arn.
+	ConnectorArn *string `locationName:"connectorArn" min:"27" type:"string"`
+
+	// Source Server connector action credentials secret arn.
+	CredentialsSecretArn *string `locationName:"credentialsSecretArn" min:"20" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceServerConnectorAction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SourceServerConnectorAction) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SourceServerConnectorAction) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SourceServerConnectorAction"}
+	if s.ConnectorArn != nil && len(*s.ConnectorArn) < 27 {
+		invalidParams.Add(request.NewErrParamMinLen("ConnectorArn", 27))
+	}
+	if s.CredentialsSecretArn != nil && len(*s.CredentialsSecretArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("CredentialsSecretArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectorArn sets the ConnectorArn field's value.
+func (s *SourceServerConnectorAction) SetConnectorArn(v string) *SourceServerConnectorAction {
+	s.ConnectorArn = &v
+	return s
+}
+
+// SetCredentialsSecretArn sets the CredentialsSecretArn field's value.
+func (s *SourceServerConnectorAction) SetCredentialsSecretArn(v string) *SourceServerConnectorAction {
+	s.CredentialsSecretArn = &v
+	return s
+}
+
 // AWS Systems Manager Document.
 type SsmDocument struct {
 	_ struct{} `type:"structure"`
@@ -16416,6 +18895,9 @@ func (s *SsmParameterStoreParameter) SetParameterType(v string) *SsmParameterSto
 type StartCutoverInput struct {
 	_ struct{} `type:"structure"`
 
+	// Start Cutover by Account IDs
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Start Cutover by Source Server IDs.
 	//
 	// SourceServerIDs is a required field
@@ -16450,6 +18932,9 @@ func (s StartCutoverInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StartCutoverInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartCutoverInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerIDs == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerIDs"))
 	}
@@ -16461,6 +18946,12 @@ func (s *StartCutoverInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *StartCutoverInput) SetAccountID(v string) *StartCutoverInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetSourceServerIDs sets the SourceServerIDs field's value.
@@ -16707,6 +19198,9 @@ func (s *StartImportOutput) SetImportTask(v *ImportTask) *StartImportOutput {
 type StartReplicationInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID on which to start replication.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// ID of source server on which to start replication.
 	//
 	// SourceServerID is a required field
@@ -16734,6 +19228,9 @@ func (s StartReplicationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StartReplicationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartReplicationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerID == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
 	}
@@ -16745,6 +19242,12 @@ func (s *StartReplicationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *StartReplicationInput) SetAccountID(v string) *StartReplicationInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetSourceServerID sets the SourceServerID field's value.
@@ -16761,6 +19264,9 @@ type StartReplicationOutput struct {
 
 	// Source server ARN.
 	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
 
 	// Source server data replication info.
 	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
@@ -16827,6 +19333,12 @@ func (s *StartReplicationOutput) SetApplicationID(v string) *StartReplicationOut
 // SetArn sets the Arn field's value.
 func (s *StartReplicationOutput) SetArn(v string) *StartReplicationOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *StartReplicationOutput) SetConnectorAction(v *SourceServerConnectorAction) *StartReplicationOutput {
+	s.ConnectorAction = v
 	return s
 }
 
@@ -16899,6 +19411,9 @@ func (s *StartReplicationOutput) SetVcenterClientID(v string) *StartReplicationO
 type StartTestInput struct {
 	_ struct{} `type:"structure"`
 
+	// Start Test for Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Start Test for Source Server IDs.
 	//
 	// SourceServerIDs is a required field
@@ -16933,6 +19448,9 @@ func (s StartTestInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StartTestInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartTestInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerIDs == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerIDs"))
 	}
@@ -16944,6 +19462,12 @@ func (s *StartTestInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *StartTestInput) SetAccountID(v string) *StartTestInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetSourceServerIDs sets the SourceServerIDs field's value.
@@ -16986,6 +19510,219 @@ func (s StartTestOutput) GoString() string {
 // SetJob sets the Job field's value.
 func (s *StartTestOutput) SetJob(v *Job) *StartTestOutput {
 	s.Job = v
+	return s
+}
+
+type StopReplicationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Stop Replication Request account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
+	// Stop Replication Request source server ID.
+	//
+	// SourceServerID is a required field
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopReplicationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopReplicationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopReplicationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopReplicationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
+	if s.SourceServerID == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
+	}
+	if s.SourceServerID != nil && len(*s.SourceServerID) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceServerID", 19))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *StopReplicationInput) SetAccountID(v string) *StopReplicationInput {
+	s.AccountID = &v
+	return s
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *StopReplicationInput) SetSourceServerID(v string) *StopReplicationInput {
+	s.SourceServerID = &v
+	return s
+}
+
+type StopReplicationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Source server application ID.
+	ApplicationID *string `locationName:"applicationID" min:"21" type:"string"`
+
+	// Source server ARN.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
+
+	// Source server data replication info.
+	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
+
+	// Source server fqdn for action framework.
+	FqdnForActionFramework *string `locationName:"fqdnForActionFramework" type:"string"`
+
+	// Source server archived status.
+	IsArchived *bool `locationName:"isArchived" type:"boolean"`
+
+	// Source server launched instance.
+	LaunchedInstance *LaunchedInstance `locationName:"launchedInstance" type:"structure"`
+
+	// Source server lifecycle state.
+	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
+
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
+	// Source server properties.
+	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
+
+	// Source server ID.
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string"`
+
+	// Source server Tags.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by StopReplicationOutput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server user provided ID.
+	UserProvidedID *string `locationName:"userProvidedID" type:"string"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopReplicationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StopReplicationOutput) GoString() string {
+	return s.String()
+}
+
+// SetApplicationID sets the ApplicationID field's value.
+func (s *StopReplicationOutput) SetApplicationID(v string) *StopReplicationOutput {
+	s.ApplicationID = &v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *StopReplicationOutput) SetArn(v string) *StopReplicationOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *StopReplicationOutput) SetConnectorAction(v *SourceServerConnectorAction) *StopReplicationOutput {
+	s.ConnectorAction = v
+	return s
+}
+
+// SetDataReplicationInfo sets the DataReplicationInfo field's value.
+func (s *StopReplicationOutput) SetDataReplicationInfo(v *DataReplicationInfo) *StopReplicationOutput {
+	s.DataReplicationInfo = v
+	return s
+}
+
+// SetFqdnForActionFramework sets the FqdnForActionFramework field's value.
+func (s *StopReplicationOutput) SetFqdnForActionFramework(v string) *StopReplicationOutput {
+	s.FqdnForActionFramework = &v
+	return s
+}
+
+// SetIsArchived sets the IsArchived field's value.
+func (s *StopReplicationOutput) SetIsArchived(v bool) *StopReplicationOutput {
+	s.IsArchived = &v
+	return s
+}
+
+// SetLaunchedInstance sets the LaunchedInstance field's value.
+func (s *StopReplicationOutput) SetLaunchedInstance(v *LaunchedInstance) *StopReplicationOutput {
+	s.LaunchedInstance = v
+	return s
+}
+
+// SetLifeCycle sets the LifeCycle field's value.
+func (s *StopReplicationOutput) SetLifeCycle(v *LifeCycle) *StopReplicationOutput {
+	s.LifeCycle = v
+	return s
+}
+
+// SetReplicationType sets the ReplicationType field's value.
+func (s *StopReplicationOutput) SetReplicationType(v string) *StopReplicationOutput {
+	s.ReplicationType = &v
+	return s
+}
+
+// SetSourceProperties sets the SourceProperties field's value.
+func (s *StopReplicationOutput) SetSourceProperties(v *SourceProperties) *StopReplicationOutput {
+	s.SourceProperties = v
+	return s
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *StopReplicationOutput) SetSourceServerID(v string) *StopReplicationOutput {
+	s.SourceServerID = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *StopReplicationOutput) SetTags(v map[string]*string) *StopReplicationOutput {
+	s.Tags = v
+	return s
+}
+
+// SetUserProvidedID sets the UserProvidedID field's value.
+func (s *StopReplicationOutput) SetUserProvidedID(v string) *StopReplicationOutput {
+	s.UserProvidedID = &v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *StopReplicationOutput) SetVcenterClientID(v string) *StopReplicationOutput {
+	s.VcenterClientID = &v
 	return s
 }
 
@@ -17252,6 +19989,9 @@ func (s *TemplateActionsRequestFilters) SetActionIDs(v []*string) *TemplateActio
 type TerminateTargetInstancesInput struct {
 	_ struct{} `type:"structure"`
 
+	// Terminate Target instance by Account ID
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Terminate Target instance by Source Server IDs.
 	//
 	// SourceServerIDs is a required field
@@ -17286,6 +20026,9 @@ func (s TerminateTargetInstancesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *TerminateTargetInstancesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "TerminateTargetInstancesInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerIDs == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerIDs"))
 	}
@@ -17297,6 +20040,12 @@ func (s *TerminateTargetInstancesInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *TerminateTargetInstancesInput) SetAccountID(v string) *TerminateTargetInstancesInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetSourceServerIDs sets the SourceServerIDs field's value.
@@ -17418,6 +20167,9 @@ func (s *ThrottlingException) RequestID() string {
 type UnarchiveApplicationInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Application ID.
 	//
 	// ApplicationID is a required field
@@ -17445,6 +20197,9 @@ func (s UnarchiveApplicationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UnarchiveApplicationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UnarchiveApplicationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.ApplicationID == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApplicationID"))
 	}
@@ -17456,6 +20211,12 @@ func (s *UnarchiveApplicationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *UnarchiveApplicationInput) SetAccountID(v string) *UnarchiveApplicationInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetApplicationID sets the ApplicationID field's value.
@@ -17583,6 +20344,9 @@ func (s *UnarchiveApplicationOutput) SetWaveID(v string) *UnarchiveApplicationOu
 type UnarchiveWaveInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Wave ID.
 	//
 	// WaveID is a required field
@@ -17610,6 +20374,9 @@ func (s UnarchiveWaveInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UnarchiveWaveInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UnarchiveWaveInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.WaveID == nil {
 		invalidParams.Add(request.NewErrParamRequired("WaveID"))
 	}
@@ -17621,6 +20388,12 @@ func (s *UnarchiveWaveInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *UnarchiveWaveInput) SetAccountID(v string) *UnarchiveWaveInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetWaveID sets the WaveID field's value.
@@ -17894,6 +20667,9 @@ func (s UntagResourceOutput) GoString() string {
 type UpdateApplicationInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Application ID.
 	//
 	// ApplicationID is a required field
@@ -17927,6 +20703,9 @@ func (s UpdateApplicationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateApplicationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateApplicationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.ApplicationID == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApplicationID"))
 	}
@@ -17941,6 +20720,12 @@ func (s *UpdateApplicationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *UpdateApplicationInput) SetAccountID(v string) *UpdateApplicationInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetApplicationID sets the ApplicationID field's value.
@@ -18077,8 +20862,166 @@ func (s *UpdateApplicationOutput) SetWaveID(v string) *UpdateApplicationOutput {
 	return s
 }
 
+type UpdateConnectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// Update Connector request connector ID.
+	//
+	// ConnectorID is a required field
+	ConnectorID *string `locationName:"connectorID" min:"27" type:"string" required:"true"`
+
+	// Update Connector request name.
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Update Connector request SSM command config.
+	SsmCommandConfig *ConnectorSsmCommandConfig `locationName:"ssmCommandConfig" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConnectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConnectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateConnectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateConnectorInput"}
+	if s.ConnectorID == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConnectorID"))
+	}
+	if s.ConnectorID != nil && len(*s.ConnectorID) < 27 {
+		invalidParams.Add(request.NewErrParamMinLen("ConnectorID", 27))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.SsmCommandConfig != nil {
+		if err := s.SsmCommandConfig.Validate(); err != nil {
+			invalidParams.AddNested("SsmCommandConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConnectorID sets the ConnectorID field's value.
+func (s *UpdateConnectorInput) SetConnectorID(v string) *UpdateConnectorInput {
+	s.ConnectorID = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateConnectorInput) SetName(v string) *UpdateConnectorInput {
+	s.Name = &v
+	return s
+}
+
+// SetSsmCommandConfig sets the SsmCommandConfig field's value.
+func (s *UpdateConnectorInput) SetSsmCommandConfig(v *ConnectorSsmCommandConfig) *UpdateConnectorInput {
+	s.SsmCommandConfig = v
+	return s
+}
+
+type UpdateConnectorOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Connector arn.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Connector ID.
+	ConnectorID *string `locationName:"connectorID" min:"27" type:"string"`
+
+	// Connector name.
+	Name *string `locationName:"name" min:"1" type:"string"`
+
+	// Connector SSM command config.
+	SsmCommandConfig *ConnectorSsmCommandConfig `locationName:"ssmCommandConfig" type:"structure"`
+
+	// Connector SSM instance ID.
+	SsmInstanceID *string `locationName:"ssmInstanceID" min:"19" type:"string"`
+
+	// Connector tags.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateConnectorOutput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConnectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateConnectorOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateConnectorOutput) SetArn(v string) *UpdateConnectorOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetConnectorID sets the ConnectorID field's value.
+func (s *UpdateConnectorOutput) SetConnectorID(v string) *UpdateConnectorOutput {
+	s.ConnectorID = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateConnectorOutput) SetName(v string) *UpdateConnectorOutput {
+	s.Name = &v
+	return s
+}
+
+// SetSsmCommandConfig sets the SsmCommandConfig field's value.
+func (s *UpdateConnectorOutput) SetSsmCommandConfig(v *ConnectorSsmCommandConfig) *UpdateConnectorOutput {
+	s.SsmCommandConfig = v
+	return s
+}
+
+// SetSsmInstanceID sets the SsmInstanceID field's value.
+func (s *UpdateConnectorOutput) SetSsmInstanceID(v string) *UpdateConnectorOutput {
+	s.SsmInstanceID = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateConnectorOutput) SetTags(v map[string]*string) *UpdateConnectorOutput {
+	s.Tags = v
+	return s
+}
+
 type UpdateLaunchConfigurationInput struct {
 	_ struct{} `type:"structure"`
+
+	// Update Launch configuration Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
 
 	// Update Launch configuration boot mode request.
 	BootMode *string `locationName:"bootMode" type:"string" enum:"BootMode"`
@@ -18137,6 +21080,9 @@ func (s UpdateLaunchConfigurationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateLaunchConfigurationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateLaunchConfigurationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.SourceServerID == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
 	}
@@ -18153,6 +21099,12 @@ func (s *UpdateLaunchConfigurationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *UpdateLaunchConfigurationInput) SetAccountID(v string) *UpdateLaunchConfigurationInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetBootMode sets the BootMode field's value.
@@ -18426,9 +21378,19 @@ func (s *UpdateLaunchConfigurationTemplateInput) Validate() error {
 	if s.LaunchConfigurationTemplateID != nil && len(*s.LaunchConfigurationTemplateID) < 21 {
 		invalidParams.Add(request.NewErrParamMinLen("LaunchConfigurationTemplateID", 21))
 	}
+	if s.LargeVolumeConf != nil {
+		if err := s.LargeVolumeConf.Validate(); err != nil {
+			invalidParams.AddNested("LargeVolumeConf", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.PostLaunchActions != nil {
 		if err := s.PostLaunchActions.Validate(); err != nil {
 			invalidParams.AddNested("PostLaunchActions", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SmallVolumeConf != nil {
+		if err := s.SmallVolumeConf.Validate(); err != nil {
+			invalidParams.AddNested("SmallVolumeConf", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -18706,6 +21668,9 @@ func (s *UpdateLaunchConfigurationTemplateOutput) SetTargetInstanceTypeRightSizi
 type UpdateReplicationConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
+	// Update replication configuration Account ID request.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Update replication configuration associate default Application Migration
 	// Service Security group request.
 	AssociateDefaultSecurityGroup *bool `locationName:"associateDefaultSecurityGroup" type:"boolean"`
@@ -18757,6 +21722,9 @@ type UpdateReplicationConfigurationInput struct {
 
 	// Update replication configuration use dedicated Replication Server request.
 	UseDedicatedReplicationServer *bool `locationName:"useDedicatedReplicationServer" type:"boolean"`
+
+	// Update replication configuration use Fips Endpoint.
+	UseFipsEndpoint *bool `locationName:"useFipsEndpoint" type:"boolean"`
 }
 
 // String returns the string representation.
@@ -18780,6 +21748,9 @@ func (s UpdateReplicationConfigurationInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateReplicationConfigurationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateReplicationConfigurationInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.EbsEncryptionKeyArn != nil && len(*s.EbsEncryptionKeyArn) < 20 {
 		invalidParams.Add(request.NewErrParamMinLen("EbsEncryptionKeyArn", 20))
 	}
@@ -18794,6 +21765,12 @@ func (s *UpdateReplicationConfigurationInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *UpdateReplicationConfigurationInput) SetAccountID(v string) *UpdateReplicationConfigurationInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetAssociateDefaultSecurityGroup sets the AssociateDefaultSecurityGroup field's value.
@@ -18886,6 +21863,12 @@ func (s *UpdateReplicationConfigurationInput) SetUseDedicatedReplicationServer(v
 	return s
 }
 
+// SetUseFipsEndpoint sets the UseFipsEndpoint field's value.
+func (s *UpdateReplicationConfigurationInput) SetUseFipsEndpoint(v bool) *UpdateReplicationConfigurationInput {
+	s.UseFipsEndpoint = &v
+	return s
+}
+
 type UpdateReplicationConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -18938,6 +21921,9 @@ type UpdateReplicationConfigurationOutput struct {
 
 	// Replication Configuration use Dedicated Replication Server.
 	UseDedicatedReplicationServer *bool `locationName:"useDedicatedReplicationServer" type:"boolean"`
+
+	// Replication Configuration use Fips Endpoint.
+	UseFipsEndpoint *bool `locationName:"useFipsEndpoint" type:"boolean"`
 }
 
 // String returns the string representation.
@@ -19048,6 +22034,12 @@ func (s *UpdateReplicationConfigurationOutput) SetUseDedicatedReplicationServer(
 	return s
 }
 
+// SetUseFipsEndpoint sets the UseFipsEndpoint field's value.
+func (s *UpdateReplicationConfigurationOutput) SetUseFipsEndpoint(v bool) *UpdateReplicationConfigurationOutput {
+	s.UseFipsEndpoint = &v
+	return s
+}
+
 type UpdateReplicationConfigurationTemplateInput struct {
 	_ struct{} `type:"structure"`
 
@@ -19103,6 +22095,9 @@ type UpdateReplicationConfigurationTemplateInput struct {
 	// Update replication configuration template use dedicated Replication Server
 	// request.
 	UseDedicatedReplicationServer *bool `locationName:"useDedicatedReplicationServer" type:"boolean"`
+
+	// Update replication configuration template use Fips Endpoint request.
+	UseFipsEndpoint *bool `locationName:"useFipsEndpoint" type:"boolean"`
 }
 
 // String returns the string representation.
@@ -19229,6 +22224,12 @@ func (s *UpdateReplicationConfigurationTemplateInput) SetUseDedicatedReplication
 	return s
 }
 
+// SetUseFipsEndpoint sets the UseFipsEndpoint field's value.
+func (s *UpdateReplicationConfigurationTemplateInput) SetUseFipsEndpoint(v bool) *UpdateReplicationConfigurationTemplateInput {
+	s.UseFipsEndpoint = &v
+	return s
+}
+
 type UpdateReplicationConfigurationTemplateOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -19287,6 +22288,9 @@ type UpdateReplicationConfigurationTemplateOutput struct {
 
 	// Replication Configuration template use Dedicated Replication Server.
 	UseDedicatedReplicationServer *bool `locationName:"useDedicatedReplicationServer" type:"boolean"`
+
+	// Replication Configuration template use Fips Endpoint.
+	UseFipsEndpoint *bool `locationName:"useFipsEndpoint" type:"boolean"`
 }
 
 // String returns the string representation.
@@ -19397,8 +22401,244 @@ func (s *UpdateReplicationConfigurationTemplateOutput) SetUseDedicatedReplicatio
 	return s
 }
 
+// SetUseFipsEndpoint sets the UseFipsEndpoint field's value.
+func (s *UpdateReplicationConfigurationTemplateOutput) SetUseFipsEndpoint(v bool) *UpdateReplicationConfigurationTemplateOutput {
+	s.UseFipsEndpoint = &v
+	return s
+}
+
+type UpdateSourceServerInput struct {
+	_ struct{} `type:"structure"`
+
+	// Update Source Server request account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
+	// Update Source Server request connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
+
+	// Update Source Server request source server ID.
+	//
+	// SourceServerID is a required field
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceServerInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceServerInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateSourceServerInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateSourceServerInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
+	if s.SourceServerID == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceServerID"))
+	}
+	if s.SourceServerID != nil && len(*s.SourceServerID) < 19 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceServerID", 19))
+	}
+	if s.ConnectorAction != nil {
+		if err := s.ConnectorAction.Validate(); err != nil {
+			invalidParams.AddNested("ConnectorAction", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *UpdateSourceServerInput) SetAccountID(v string) *UpdateSourceServerInput {
+	s.AccountID = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *UpdateSourceServerInput) SetConnectorAction(v *SourceServerConnectorAction) *UpdateSourceServerInput {
+	s.ConnectorAction = v
+	return s
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *UpdateSourceServerInput) SetSourceServerID(v string) *UpdateSourceServerInput {
+	s.SourceServerID = &v
+	return s
+}
+
+type UpdateSourceServerOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Source server application ID.
+	ApplicationID *string `locationName:"applicationID" min:"21" type:"string"`
+
+	// Source server ARN.
+	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
+
+	// Source server data replication info.
+	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
+
+	// Source server fqdn for action framework.
+	FqdnForActionFramework *string `locationName:"fqdnForActionFramework" type:"string"`
+
+	// Source server archived status.
+	IsArchived *bool `locationName:"isArchived" type:"boolean"`
+
+	// Source server launched instance.
+	LaunchedInstance *LaunchedInstance `locationName:"launchedInstance" type:"structure"`
+
+	// Source server lifecycle state.
+	LifeCycle *LifeCycle `locationName:"lifeCycle" type:"structure"`
+
+	// Source server replication type.
+	ReplicationType *string `locationName:"replicationType" type:"string" enum:"ReplicationType"`
+
+	// Source server properties.
+	SourceProperties *SourceProperties `locationName:"sourceProperties" type:"structure"`
+
+	// Source server ID.
+	SourceServerID *string `locationName:"sourceServerID" min:"19" type:"string"`
+
+	// Source server Tags.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by UpdateSourceServerOutput's
+	// String and GoString methods.
+	Tags map[string]*string `locationName:"tags" type:"map" sensitive:"true"`
+
+	// Source server user provided ID.
+	UserProvidedID *string `locationName:"userProvidedID" type:"string"`
+
+	// Source server vCenter client id.
+	VcenterClientID *string `locationName:"vcenterClientID" min:"21" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceServerOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateSourceServerOutput) GoString() string {
+	return s.String()
+}
+
+// SetApplicationID sets the ApplicationID field's value.
+func (s *UpdateSourceServerOutput) SetApplicationID(v string) *UpdateSourceServerOutput {
+	s.ApplicationID = &v
+	return s
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateSourceServerOutput) SetArn(v string) *UpdateSourceServerOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *UpdateSourceServerOutput) SetConnectorAction(v *SourceServerConnectorAction) *UpdateSourceServerOutput {
+	s.ConnectorAction = v
+	return s
+}
+
+// SetDataReplicationInfo sets the DataReplicationInfo field's value.
+func (s *UpdateSourceServerOutput) SetDataReplicationInfo(v *DataReplicationInfo) *UpdateSourceServerOutput {
+	s.DataReplicationInfo = v
+	return s
+}
+
+// SetFqdnForActionFramework sets the FqdnForActionFramework field's value.
+func (s *UpdateSourceServerOutput) SetFqdnForActionFramework(v string) *UpdateSourceServerOutput {
+	s.FqdnForActionFramework = &v
+	return s
+}
+
+// SetIsArchived sets the IsArchived field's value.
+func (s *UpdateSourceServerOutput) SetIsArchived(v bool) *UpdateSourceServerOutput {
+	s.IsArchived = &v
+	return s
+}
+
+// SetLaunchedInstance sets the LaunchedInstance field's value.
+func (s *UpdateSourceServerOutput) SetLaunchedInstance(v *LaunchedInstance) *UpdateSourceServerOutput {
+	s.LaunchedInstance = v
+	return s
+}
+
+// SetLifeCycle sets the LifeCycle field's value.
+func (s *UpdateSourceServerOutput) SetLifeCycle(v *LifeCycle) *UpdateSourceServerOutput {
+	s.LifeCycle = v
+	return s
+}
+
+// SetReplicationType sets the ReplicationType field's value.
+func (s *UpdateSourceServerOutput) SetReplicationType(v string) *UpdateSourceServerOutput {
+	s.ReplicationType = &v
+	return s
+}
+
+// SetSourceProperties sets the SourceProperties field's value.
+func (s *UpdateSourceServerOutput) SetSourceProperties(v *SourceProperties) *UpdateSourceServerOutput {
+	s.SourceProperties = v
+	return s
+}
+
+// SetSourceServerID sets the SourceServerID field's value.
+func (s *UpdateSourceServerOutput) SetSourceServerID(v string) *UpdateSourceServerOutput {
+	s.SourceServerID = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateSourceServerOutput) SetTags(v map[string]*string) *UpdateSourceServerOutput {
+	s.Tags = v
+	return s
+}
+
+// SetUserProvidedID sets the UserProvidedID field's value.
+func (s *UpdateSourceServerOutput) SetUserProvidedID(v string) *UpdateSourceServerOutput {
+	s.UserProvidedID = &v
+	return s
+}
+
+// SetVcenterClientID sets the VcenterClientID field's value.
+func (s *UpdateSourceServerOutput) SetVcenterClientID(v string) *UpdateSourceServerOutput {
+	s.VcenterClientID = &v
+	return s
+}
+
 type UpdateSourceServerReplicationTypeInput struct {
 	_ struct{} `type:"structure"`
+
+	// Account ID on which to update replication type.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
 
 	// Replication type to which to update source server.
 	//
@@ -19432,6 +22672,9 @@ func (s UpdateSourceServerReplicationTypeInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateSourceServerReplicationTypeInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateSourceServerReplicationTypeInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.ReplicationType == nil {
 		invalidParams.Add(request.NewErrParamRequired("ReplicationType"))
 	}
@@ -19446,6 +22689,12 @@ func (s *UpdateSourceServerReplicationTypeInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *UpdateSourceServerReplicationTypeInput) SetAccountID(v string) *UpdateSourceServerReplicationTypeInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetReplicationType sets the ReplicationType field's value.
@@ -19468,6 +22717,9 @@ type UpdateSourceServerReplicationTypeOutput struct {
 
 	// Source server ARN.
 	Arn *string `locationName:"arn" min:"20" type:"string"`
+
+	// Source Server connector action.
+	ConnectorAction *SourceServerConnectorAction `locationName:"connectorAction" type:"structure"`
 
 	// Source server data replication info.
 	DataReplicationInfo *DataReplicationInfo `locationName:"dataReplicationInfo" type:"structure"`
@@ -19534,6 +22786,12 @@ func (s *UpdateSourceServerReplicationTypeOutput) SetApplicationID(v string) *Up
 // SetArn sets the Arn field's value.
 func (s *UpdateSourceServerReplicationTypeOutput) SetArn(v string) *UpdateSourceServerReplicationTypeOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetConnectorAction sets the ConnectorAction field's value.
+func (s *UpdateSourceServerReplicationTypeOutput) SetConnectorAction(v *SourceServerConnectorAction) *UpdateSourceServerReplicationTypeOutput {
+	s.ConnectorAction = v
 	return s
 }
 
@@ -19606,6 +22864,9 @@ func (s *UpdateSourceServerReplicationTypeOutput) SetVcenterClientID(v string) *
 type UpdateWaveInput struct {
 	_ struct{} `type:"structure"`
 
+	// Account ID.
+	AccountID *string `locationName:"accountID" min:"12" type:"string"`
+
 	// Wave description.
 	Description *string `locationName:"description" type:"string"`
 
@@ -19639,6 +22900,9 @@ func (s UpdateWaveInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateWaveInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateWaveInput"}
+	if s.AccountID != nil && len(*s.AccountID) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("AccountID", 12))
+	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
@@ -19653,6 +22917,12 @@ func (s *UpdateWaveInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAccountID sets the AccountID field's value.
+func (s *UpdateWaveInput) SetAccountID(v string) *UpdateWaveInput {
+	s.AccountID = &v
+	return s
 }
 
 // SetDescription sets the Description field's value.
@@ -20187,6 +23457,9 @@ const (
 	// ActionCategoryObservability is a ActionCategory enum value
 	ActionCategoryObservability = "OBSERVABILITY"
 
+	// ActionCategoryRefactoring is a ActionCategory enum value
+	ActionCategoryRefactoring = "REFACTORING"
+
 	// ActionCategorySecurity is a ActionCategory enum value
 	ActionCategorySecurity = "SECURITY"
 
@@ -20211,6 +23484,7 @@ func ActionCategory_Values() []string {
 		ActionCategoryLicenseAndSubscription,
 		ActionCategoryValidation,
 		ActionCategoryObservability,
+		ActionCategoryRefactoring,
 		ActionCategorySecurity,
 		ActionCategoryNetworking,
 		ActionCategoryConfiguration,
@@ -20265,6 +23539,9 @@ const (
 
 	// BootModeUefi is a BootMode enum value
 	BootModeUefi = "UEFI"
+
+	// BootModeUseSource is a BootMode enum value
+	BootModeUseSource = "USE_SOURCE"
 )
 
 // BootMode_Values returns all elements of the BootMode enum
@@ -20272,6 +23549,7 @@ func BootMode_Values() []string {
 	return []string{
 		BootModeLegacyBios,
 		BootModeUefi,
+		BootModeUseSource,
 	}
 }
 

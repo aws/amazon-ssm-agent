@@ -30,14 +30,13 @@ const opAssociateExternalConnection = "AssociateExternalConnection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateExternalConnectionRequest method.
+//	req, resp := client.AssociateExternalConnectionRequest(params)
 //
-//    // Example sending a request using the AssociateExternalConnectionRequest method.
-//    req, resp := client.AssociateExternalConnectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/AssociateExternalConnection
 func (c *CodeArtifact) AssociateExternalConnectionRequest(input *AssociateExternalConnectionInput) (req *request.Request, output *AssociateExternalConnectionOutput) {
@@ -71,29 +70,30 @@ func (c *CodeArtifact) AssociateExternalConnectionRequest(input *AssociateExtern
 // API operation AssociateExternalConnection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ServiceQuotaExceededException
-//   The operation did not succeed because it would have exceeded a service limit
-//   for your account.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/AssociateExternalConnection
 func (c *CodeArtifact) AssociateExternalConnection(input *AssociateExternalConnectionInput) (*AssociateExternalConnectionOutput, error) {
@@ -133,14 +133,13 @@ const opCopyPackageVersions = "CopyPackageVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CopyPackageVersionsRequest method.
+//	req, resp := client.CopyPackageVersionsRequest(params)
 //
-//    // Example sending a request using the CopyPackageVersionsRequest method.
-//    req, resp := client.CopyPackageVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/CopyPackageVersions
 func (c *CodeArtifact) CopyPackageVersionsRequest(input *CopyPackageVersionsInput) (req *request.Request, output *CopyPackageVersionsOutput) {
@@ -174,29 +173,30 @@ func (c *CodeArtifact) CopyPackageVersionsRequest(input *CopyPackageVersionsInpu
 // API operation CopyPackageVersions for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ServiceQuotaExceededException
-//   The operation did not succeed because it would have exceeded a service limit
-//   for your account.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/CopyPackageVersions
 func (c *CodeArtifact) CopyPackageVersions(input *CopyPackageVersionsInput) (*CopyPackageVersionsOutput, error) {
@@ -236,14 +236,13 @@ const opCreateDomain = "CreateDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDomainRequest method.
+//	req, resp := client.CreateDomainRequest(params)
 //
-//    // Example sending a request using the CreateDomainRequest method.
-//    req, resp := client.CreateDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/CreateDomain
 func (c *CodeArtifact) CreateDomainRequest(input *CreateDomainInput) (req *request.Request, output *CreateDomainOutput) {
@@ -282,29 +281,30 @@ func (c *CodeArtifact) CreateDomainRequest(input *CreateDomainInput) (req *reque
 // API operation CreateDomain for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ServiceQuotaExceededException
-//   The operation did not succeed because it would have exceeded a service limit
-//   for your account.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/CreateDomain
 func (c *CodeArtifact) CreateDomain(input *CreateDomainInput) (*CreateDomainOutput, error) {
@@ -328,6 +328,108 @@ func (c *CodeArtifact) CreateDomainWithContext(ctx aws.Context, input *CreateDom
 	return out, req.Send()
 }
 
+const opCreatePackageGroup = "CreatePackageGroup"
+
+// CreatePackageGroupRequest generates a "aws/request.Request" representing the
+// client's request for the CreatePackageGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreatePackageGroup for more information on using the CreatePackageGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreatePackageGroupRequest method.
+//	req, resp := client.CreatePackageGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/CreatePackageGroup
+func (c *CodeArtifact) CreatePackageGroupRequest(input *CreatePackageGroupInput) (req *request.Request, output *CreatePackageGroupOutput) {
+	op := &request.Operation{
+		Name:       opCreatePackageGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/package-group",
+	}
+
+	if input == nil {
+		input = &CreatePackageGroupInput{}
+	}
+
+	output = &CreatePackageGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreatePackageGroup API operation for CodeArtifact.
+//
+// Creates a package group. For more information about creating package groups,
+// including example CLI commands, see Create a package group (https://docs.aws.amazon.com/codeartifact/latest/ug/create-package-group.html)
+// in the CodeArtifact User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for CodeArtifact's
+// API operation CreatePackageGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
+//
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
+//
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
+//
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
+//
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
+//
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/CreatePackageGroup
+func (c *CodeArtifact) CreatePackageGroup(input *CreatePackageGroupInput) (*CreatePackageGroupOutput, error) {
+	req, out := c.CreatePackageGroupRequest(input)
+	return out, req.Send()
+}
+
+// CreatePackageGroupWithContext is the same as CreatePackageGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreatePackageGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) CreatePackageGroupWithContext(ctx aws.Context, input *CreatePackageGroupInput, opts ...request.Option) (*CreatePackageGroupOutput, error) {
+	req, out := c.CreatePackageGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateRepository = "CreateRepository"
 
 // CreateRepositoryRequest generates a "aws/request.Request" representing the
@@ -344,14 +446,13 @@ const opCreateRepository = "CreateRepository"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRepositoryRequest method.
+//	req, resp := client.CreateRepositoryRequest(params)
 //
-//    // Example sending a request using the CreateRepositoryRequest method.
-//    req, resp := client.CreateRepositoryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/CreateRepository
 func (c *CodeArtifact) CreateRepositoryRequest(input *CreateRepositoryInput) (req *request.Request, output *CreateRepositoryOutput) {
@@ -382,29 +483,30 @@ func (c *CodeArtifact) CreateRepositoryRequest(input *CreateRepositoryInput) (re
 // API operation CreateRepository for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ServiceQuotaExceededException
-//   The operation did not succeed because it would have exceeded a service limit
-//   for your account.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/CreateRepository
 func (c *CodeArtifact) CreateRepository(input *CreateRepositoryInput) (*CreateRepositoryOutput, error) {
@@ -444,14 +546,13 @@ const opDeleteDomain = "DeleteDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDomainRequest method.
+//	req, resp := client.DeleteDomainRequest(params)
 //
-//    // Example sending a request using the DeleteDomainRequest method.
-//    req, resp := client.DeleteDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeleteDomain
 func (c *CodeArtifact) DeleteDomainRequest(input *DeleteDomainInput) (req *request.Request, output *DeleteDomainOutput) {
@@ -483,21 +584,22 @@ func (c *CodeArtifact) DeleteDomainRequest(input *DeleteDomainInput) (req *reque
 // API operation DeleteDomain for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeleteDomain
 func (c *CodeArtifact) DeleteDomain(input *DeleteDomainInput) (*DeleteDomainOutput, error) {
@@ -537,14 +639,13 @@ const opDeleteDomainPermissionsPolicy = "DeleteDomainPermissionsPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDomainPermissionsPolicyRequest method.
+//	req, resp := client.DeleteDomainPermissionsPolicyRequest(params)
 //
-//    // Example sending a request using the DeleteDomainPermissionsPolicyRequest method.
-//    req, resp := client.DeleteDomainPermissionsPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeleteDomainPermissionsPolicy
 func (c *CodeArtifact) DeleteDomainPermissionsPolicyRequest(input *DeleteDomainPermissionsPolicyInput) (req *request.Request, output *DeleteDomainPermissionsPolicyOutput) {
@@ -575,25 +676,26 @@ func (c *CodeArtifact) DeleteDomainPermissionsPolicyRequest(input *DeleteDomainP
 // API operation DeleteDomainPermissionsPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeleteDomainPermissionsPolicy
 func (c *CodeArtifact) DeleteDomainPermissionsPolicy(input *DeleteDomainPermissionsPolicyInput) (*DeleteDomainPermissionsPolicyOutput, error) {
@@ -633,14 +735,13 @@ const opDeletePackage = "DeletePackage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePackageRequest method.
+//	req, resp := client.DeletePackageRequest(params)
 //
-//    // Example sending a request using the DeletePackageRequest method.
-//    req, resp := client.DeletePackageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeletePackage
 func (c *CodeArtifact) DeletePackageRequest(input *DeletePackageInput) (req *request.Request, output *DeletePackageOutput) {
@@ -674,25 +775,26 @@ func (c *CodeArtifact) DeletePackageRequest(input *DeletePackageInput) (req *req
 // API operation DeletePackage for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeletePackage
 func (c *CodeArtifact) DeletePackage(input *DeletePackageInput) (*DeletePackageOutput, error) {
@@ -716,6 +818,110 @@ func (c *CodeArtifact) DeletePackageWithContext(ctx aws.Context, input *DeletePa
 	return out, req.Send()
 }
 
+const opDeletePackageGroup = "DeletePackageGroup"
+
+// DeletePackageGroupRequest generates a "aws/request.Request" representing the
+// client's request for the DeletePackageGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeletePackageGroup for more information on using the DeletePackageGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeletePackageGroupRequest method.
+//	req, resp := client.DeletePackageGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeletePackageGroup
+func (c *CodeArtifact) DeletePackageGroupRequest(input *DeletePackageGroupInput) (req *request.Request, output *DeletePackageGroupOutput) {
+	op := &request.Operation{
+		Name:       opDeletePackageGroup,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v1/package-group",
+	}
+
+	if input == nil {
+		input = &DeletePackageGroupInput{}
+	}
+
+	output = &DeletePackageGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeletePackageGroup API operation for CodeArtifact.
+//
+// Deletes a package group. Deleting a package group does not delete packages
+// or package versions associated with the package group. When a package group
+// is deleted, the direct child package groups will become children of the package
+// group's direct parent package group. Therefore, if any of the child groups
+// are inheriting any settings from the parent, those settings could change.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for CodeArtifact's
+// API operation DeletePackageGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
+//
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
+//
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
+//
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
+//
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
+//
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeletePackageGroup
+func (c *CodeArtifact) DeletePackageGroup(input *DeletePackageGroupInput) (*DeletePackageGroupOutput, error) {
+	req, out := c.DeletePackageGroupRequest(input)
+	return out, req.Send()
+}
+
+// DeletePackageGroupWithContext is the same as DeletePackageGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeletePackageGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) DeletePackageGroupWithContext(ctx aws.Context, input *DeletePackageGroupInput, opts ...request.Option) (*DeletePackageGroupOutput, error) {
+	req, out := c.DeletePackageGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeletePackageVersions = "DeletePackageVersions"
 
 // DeletePackageVersionsRequest generates a "aws/request.Request" representing the
@@ -732,14 +938,13 @@ const opDeletePackageVersions = "DeletePackageVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePackageVersionsRequest method.
+//	req, resp := client.DeletePackageVersionsRequest(params)
 //
-//    // Example sending a request using the DeletePackageVersionsRequest method.
-//    req, resp := client.DeletePackageVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeletePackageVersions
 func (c *CodeArtifact) DeletePackageVersionsRequest(input *DeletePackageVersionsInput) (req *request.Request, output *DeletePackageVersionsOutput) {
@@ -775,25 +980,26 @@ func (c *CodeArtifact) DeletePackageVersionsRequest(input *DeletePackageVersions
 // API operation DeletePackageVersions for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeletePackageVersions
 func (c *CodeArtifact) DeletePackageVersions(input *DeletePackageVersionsInput) (*DeletePackageVersionsOutput, error) {
@@ -833,14 +1039,13 @@ const opDeleteRepository = "DeleteRepository"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRepositoryRequest method.
+//	req, resp := client.DeleteRepositoryRequest(params)
 //
-//    // Example sending a request using the DeleteRepositoryRequest method.
-//    req, resp := client.DeleteRepositoryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeleteRepository
 func (c *CodeArtifact) DeleteRepositoryRequest(input *DeleteRepositoryInput) (req *request.Request, output *DeleteRepositoryOutput) {
@@ -871,25 +1076,26 @@ func (c *CodeArtifact) DeleteRepositoryRequest(input *DeleteRepositoryInput) (re
 // API operation DeleteRepository for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeleteRepository
 func (c *CodeArtifact) DeleteRepository(input *DeleteRepositoryInput) (*DeleteRepositoryOutput, error) {
@@ -929,14 +1135,13 @@ const opDeleteRepositoryPermissionsPolicy = "DeleteRepositoryPermissionsPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRepositoryPermissionsPolicyRequest method.
+//	req, resp := client.DeleteRepositoryPermissionsPolicyRequest(params)
 //
-//    // Example sending a request using the DeleteRepositoryPermissionsPolicyRequest method.
-//    req, resp := client.DeleteRepositoryPermissionsPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeleteRepositoryPermissionsPolicy
 func (c *CodeArtifact) DeleteRepositoryPermissionsPolicyRequest(input *DeleteRepositoryPermissionsPolicyInput) (req *request.Request, output *DeleteRepositoryPermissionsPolicyOutput) {
@@ -973,25 +1178,26 @@ func (c *CodeArtifact) DeleteRepositoryPermissionsPolicyRequest(input *DeleteRep
 // API operation DeleteRepositoryPermissionsPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DeleteRepositoryPermissionsPolicy
 func (c *CodeArtifact) DeleteRepositoryPermissionsPolicy(input *DeleteRepositoryPermissionsPolicyInput) (*DeleteRepositoryPermissionsPolicyOutput, error) {
@@ -1031,14 +1237,13 @@ const opDescribeDomain = "DescribeDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeDomainRequest method.
+//	req, resp := client.DescribeDomainRequest(params)
 //
-//    // Example sending a request using the DescribeDomainRequest method.
-//    req, resp := client.DescribeDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DescribeDomain
 func (c *CodeArtifact) DescribeDomainRequest(input *DescribeDomainInput) (req *request.Request, output *DescribeDomainOutput) {
@@ -1070,22 +1275,23 @@ func (c *CodeArtifact) DescribeDomainRequest(input *DescribeDomainInput) (req *r
 // API operation DescribeDomain for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DescribeDomain
 func (c *CodeArtifact) DescribeDomain(input *DescribeDomainInput) (*DescribeDomainOutput, error) {
@@ -1125,14 +1331,13 @@ const opDescribePackage = "DescribePackage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribePackageRequest method.
+//	req, resp := client.DescribePackageRequest(params)
 //
-//    // Example sending a request using the DescribePackageRequest method.
-//    req, resp := client.DescribePackageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DescribePackage
 func (c *CodeArtifact) DescribePackageRequest(input *DescribePackageInput) (req *request.Request, output *DescribePackageOutput) {
@@ -1164,22 +1369,23 @@ func (c *CodeArtifact) DescribePackageRequest(input *DescribePackageInput) (req 
 // API operation DescribePackage for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DescribePackage
 func (c *CodeArtifact) DescribePackage(input *DescribePackageInput) (*DescribePackageOutput, error) {
@@ -1203,6 +1409,100 @@ func (c *CodeArtifact) DescribePackageWithContext(ctx aws.Context, input *Descri
 	return out, req.Send()
 }
 
+const opDescribePackageGroup = "DescribePackageGroup"
+
+// DescribePackageGroupRequest generates a "aws/request.Request" representing the
+// client's request for the DescribePackageGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribePackageGroup for more information on using the DescribePackageGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DescribePackageGroupRequest method.
+//	req, resp := client.DescribePackageGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DescribePackageGroup
+func (c *CodeArtifact) DescribePackageGroupRequest(input *DescribePackageGroupInput) (req *request.Request, output *DescribePackageGroupOutput) {
+	op := &request.Operation{
+		Name:       opDescribePackageGroup,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/package-group",
+	}
+
+	if input == nil {
+		input = &DescribePackageGroupInput{}
+	}
+
+	output = &DescribePackageGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribePackageGroup API operation for CodeArtifact.
+//
+// Returns a PackageGroupDescription (https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageGroupDescription.html)
+// object that contains information about the requested package group.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for CodeArtifact's
+// API operation DescribePackageGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
+//
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
+//
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
+//
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DescribePackageGroup
+func (c *CodeArtifact) DescribePackageGroup(input *DescribePackageGroupInput) (*DescribePackageGroupOutput, error) {
+	req, out := c.DescribePackageGroupRequest(input)
+	return out, req.Send()
+}
+
+// DescribePackageGroupWithContext is the same as DescribePackageGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribePackageGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) DescribePackageGroupWithContext(ctx aws.Context, input *DescribePackageGroupInput, opts ...request.Option) (*DescribePackageGroupOutput, error) {
+	req, out := c.DescribePackageGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribePackageVersion = "DescribePackageVersion"
 
 // DescribePackageVersionRequest generates a "aws/request.Request" representing the
@@ -1219,14 +1519,13 @@ const opDescribePackageVersion = "DescribePackageVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribePackageVersionRequest method.
+//	req, resp := client.DescribePackageVersionRequest(params)
 //
-//    // Example sending a request using the DescribePackageVersionRequest method.
-//    req, resp := client.DescribePackageVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DescribePackageVersion
 func (c *CodeArtifact) DescribePackageVersionRequest(input *DescribePackageVersionInput) (req *request.Request, output *DescribePackageVersionOutput) {
@@ -1258,25 +1557,26 @@ func (c *CodeArtifact) DescribePackageVersionRequest(input *DescribePackageVersi
 // API operation DescribePackageVersion for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DescribePackageVersion
 func (c *CodeArtifact) DescribePackageVersion(input *DescribePackageVersionInput) (*DescribePackageVersionOutput, error) {
@@ -1316,14 +1616,13 @@ const opDescribeRepository = "DescribeRepository"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeRepositoryRequest method.
+//	req, resp := client.DescribeRepositoryRequest(params)
 //
-//    // Example sending a request using the DescribeRepositoryRequest method.
-//    req, resp := client.DescribeRepositoryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DescribeRepository
 func (c *CodeArtifact) DescribeRepositoryRequest(input *DescribeRepositoryInput) (req *request.Request, output *DescribeRepositoryOutput) {
@@ -1355,22 +1654,23 @@ func (c *CodeArtifact) DescribeRepositoryRequest(input *DescribeRepositoryInput)
 // API operation DescribeRepository for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DescribeRepository
 func (c *CodeArtifact) DescribeRepository(input *DescribeRepositoryInput) (*DescribeRepositoryOutput, error) {
@@ -1410,14 +1710,13 @@ const opDisassociateExternalConnection = "DisassociateExternalConnection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateExternalConnectionRequest method.
+//	req, resp := client.DisassociateExternalConnectionRequest(params)
 //
-//    // Example sending a request using the DisassociateExternalConnectionRequest method.
-//    req, resp := client.DisassociateExternalConnectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DisassociateExternalConnection
 func (c *CodeArtifact) DisassociateExternalConnectionRequest(input *DisassociateExternalConnectionInput) (req *request.Request, output *DisassociateExternalConnectionOutput) {
@@ -1448,29 +1747,30 @@ func (c *CodeArtifact) DisassociateExternalConnectionRequest(input *Disassociate
 // API operation DisassociateExternalConnection for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ServiceQuotaExceededException
-//   The operation did not succeed because it would have exceeded a service limit
-//   for your account.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DisassociateExternalConnection
 func (c *CodeArtifact) DisassociateExternalConnection(input *DisassociateExternalConnectionInput) (*DisassociateExternalConnectionOutput, error) {
@@ -1510,14 +1810,13 @@ const opDisposePackageVersions = "DisposePackageVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisposePackageVersionsRequest method.
+//	req, resp := client.DisposePackageVersionsRequest(params)
 //
-//    // Example sending a request using the DisposePackageVersionsRequest method.
-//    req, resp := client.DisposePackageVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DisposePackageVersions
 func (c *CodeArtifact) DisposePackageVersionsRequest(input *DisposePackageVersionsInput) (req *request.Request, output *DisposePackageVersionsOutput) {
@@ -1558,25 +1857,26 @@ func (c *CodeArtifact) DisposePackageVersionsRequest(input *DisposePackageVersio
 // API operation DisposePackageVersions for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/DisposePackageVersions
 func (c *CodeArtifact) DisposePackageVersions(input *DisposePackageVersionsInput) (*DisposePackageVersionsOutput, error) {
@@ -1600,6 +1900,105 @@ func (c *CodeArtifact) DisposePackageVersionsWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opGetAssociatedPackageGroup = "GetAssociatedPackageGroup"
+
+// GetAssociatedPackageGroupRequest generates a "aws/request.Request" representing the
+// client's request for the GetAssociatedPackageGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetAssociatedPackageGroup for more information on using the GetAssociatedPackageGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetAssociatedPackageGroupRequest method.
+//	req, resp := client.GetAssociatedPackageGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetAssociatedPackageGroup
+func (c *CodeArtifact) GetAssociatedPackageGroupRequest(input *GetAssociatedPackageGroupInput) (req *request.Request, output *GetAssociatedPackageGroupOutput) {
+	op := &request.Operation{
+		Name:       opGetAssociatedPackageGroup,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/get-associated-package-group",
+	}
+
+	if input == nil {
+		input = &GetAssociatedPackageGroupInput{}
+	}
+
+	output = &GetAssociatedPackageGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetAssociatedPackageGroup API operation for CodeArtifact.
+//
+// Returns the most closely associated package group to the specified package.
+// This API does not require that the package exist in any repository in the
+// domain. As such, GetAssociatedPackageGroup can be used to see which package
+// group's origin configuration applies to a package before that package is
+// in a repository. This can be helpful to check if public packages are blocked
+// without ingesting them.
+//
+// For information package group association and matching, see Package group
+// definition syntax and matching behavior (https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-definition-syntax-matching-behavior.html)
+// in the CodeArtifact User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for CodeArtifact's
+// API operation GetAssociatedPackageGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
+//
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
+//
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetAssociatedPackageGroup
+func (c *CodeArtifact) GetAssociatedPackageGroup(input *GetAssociatedPackageGroupInput) (*GetAssociatedPackageGroupOutput, error) {
+	req, out := c.GetAssociatedPackageGroupRequest(input)
+	return out, req.Send()
+}
+
+// GetAssociatedPackageGroupWithContext is the same as GetAssociatedPackageGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetAssociatedPackageGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) GetAssociatedPackageGroupWithContext(ctx aws.Context, input *GetAssociatedPackageGroupInput, opts ...request.Option) (*GetAssociatedPackageGroupOutput, error) {
+	req, out := c.GetAssociatedPackageGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetAuthorizationToken = "GetAuthorizationToken"
 
 // GetAuthorizationTokenRequest generates a "aws/request.Request" representing the
@@ -1616,14 +2015,13 @@ const opGetAuthorizationToken = "GetAuthorizationToken"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAuthorizationTokenRequest method.
+//	req, resp := client.GetAuthorizationTokenRequest(params)
 //
-//    // Example sending a request using the GetAuthorizationTokenRequest method.
-//    req, resp := client.GetAuthorizationTokenRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetAuthorizationToken
 func (c *CodeArtifact) GetAuthorizationTokenRequest(input *GetAuthorizationTokenInput) (req *request.Request, output *GetAuthorizationTokenOutput) {
@@ -1674,22 +2072,23 @@ func (c *CodeArtifact) GetAuthorizationTokenRequest(input *GetAuthorizationToken
 // API operation GetAuthorizationToken for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetAuthorizationToken
 func (c *CodeArtifact) GetAuthorizationToken(input *GetAuthorizationTokenInput) (*GetAuthorizationTokenOutput, error) {
@@ -1729,14 +2128,13 @@ const opGetDomainPermissionsPolicy = "GetDomainPermissionsPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDomainPermissionsPolicyRequest method.
+//	req, resp := client.GetDomainPermissionsPolicyRequest(params)
 //
-//    // Example sending a request using the GetDomainPermissionsPolicyRequest method.
-//    req, resp := client.GetDomainPermissionsPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetDomainPermissionsPolicy
 func (c *CodeArtifact) GetDomainPermissionsPolicyRequest(input *GetDomainPermissionsPolicyInput) (req *request.Request, output *GetDomainPermissionsPolicyOutput) {
@@ -1772,22 +2170,23 @@ func (c *CodeArtifact) GetDomainPermissionsPolicyRequest(input *GetDomainPermiss
 // API operation GetDomainPermissionsPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetDomainPermissionsPolicy
 func (c *CodeArtifact) GetDomainPermissionsPolicy(input *GetDomainPermissionsPolicyInput) (*GetDomainPermissionsPolicyOutput, error) {
@@ -1827,14 +2226,13 @@ const opGetPackageVersionAsset = "GetPackageVersionAsset"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPackageVersionAssetRequest method.
+//	req, resp := client.GetPackageVersionAssetRequest(params)
 //
-//    // Example sending a request using the GetPackageVersionAssetRequest method.
-//    req, resp := client.GetPackageVersionAssetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetPackageVersionAsset
 func (c *CodeArtifact) GetPackageVersionAssetRequest(input *GetPackageVersionAssetInput) (req *request.Request, output *GetPackageVersionAssetOutput) {
@@ -1867,25 +2265,26 @@ func (c *CodeArtifact) GetPackageVersionAssetRequest(input *GetPackageVersionAss
 // API operation GetPackageVersionAsset for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
+//
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetPackageVersionAsset
 func (c *CodeArtifact) GetPackageVersionAsset(input *GetPackageVersionAssetInput) (*GetPackageVersionAssetOutput, error) {
@@ -1925,14 +2324,13 @@ const opGetPackageVersionReadme = "GetPackageVersionReadme"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPackageVersionReadmeRequest method.
+//	req, resp := client.GetPackageVersionReadmeRequest(params)
 //
-//    // Example sending a request using the GetPackageVersionReadmeRequest method.
-//    req, resp := client.GetPackageVersionReadmeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetPackageVersionReadme
 func (c *CodeArtifact) GetPackageVersionReadmeRequest(input *GetPackageVersionReadmeInput) (req *request.Request, output *GetPackageVersionReadmeOutput) {
@@ -1966,22 +2364,23 @@ func (c *CodeArtifact) GetPackageVersionReadmeRequest(input *GetPackageVersionRe
 // API operation GetPackageVersionReadme for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetPackageVersionReadme
 func (c *CodeArtifact) GetPackageVersionReadme(input *GetPackageVersionReadmeInput) (*GetPackageVersionReadmeOutput, error) {
@@ -2021,14 +2420,13 @@ const opGetRepositoryEndpoint = "GetRepositoryEndpoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRepositoryEndpointRequest method.
+//	req, resp := client.GetRepositoryEndpointRequest(params)
 //
-//    // Example sending a request using the GetRepositoryEndpointRequest method.
-//    req, resp := client.GetRepositoryEndpointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetRepositoryEndpoint
 func (c *CodeArtifact) GetRepositoryEndpointRequest(input *GetRepositoryEndpointInput) (req *request.Request, output *GetRepositoryEndpointOutput) {
@@ -2052,13 +2450,17 @@ func (c *CodeArtifact) GetRepositoryEndpointRequest(input *GetRepositoryEndpoint
 // Returns the endpoint of a repository for a specific package format. A repository
 // has one endpoint for each package format:
 //
-//    * maven
+//   - generic
 //
-//    * npm
+//   - maven
 //
-//    * nuget
+//   - npm
 //
-//    * pypi
+//   - nuget
+//
+//   - pypi
+//
+//   - swift
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2068,22 +2470,23 @@ func (c *CodeArtifact) GetRepositoryEndpointRequest(input *GetRepositoryEndpoint
 // API operation GetRepositoryEndpoint for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetRepositoryEndpoint
 func (c *CodeArtifact) GetRepositoryEndpoint(input *GetRepositoryEndpointInput) (*GetRepositoryEndpointOutput, error) {
@@ -2123,14 +2526,13 @@ const opGetRepositoryPermissionsPolicy = "GetRepositoryPermissionsPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRepositoryPermissionsPolicyRequest method.
+//	req, resp := client.GetRepositoryPermissionsPolicyRequest(params)
 //
-//    // Example sending a request using the GetRepositoryPermissionsPolicyRequest method.
-//    req, resp := client.GetRepositoryPermissionsPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetRepositoryPermissionsPolicy
 func (c *CodeArtifact) GetRepositoryPermissionsPolicyRequest(input *GetRepositoryPermissionsPolicyInput) (req *request.Request, output *GetRepositoryPermissionsPolicyOutput) {
@@ -2161,22 +2563,23 @@ func (c *CodeArtifact) GetRepositoryPermissionsPolicyRequest(input *GetRepositor
 // API operation GetRepositoryPermissionsPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/GetRepositoryPermissionsPolicy
 func (c *CodeArtifact) GetRepositoryPermissionsPolicy(input *GetRepositoryPermissionsPolicyInput) (*GetRepositoryPermissionsPolicyOutput, error) {
@@ -2200,6 +2603,313 @@ func (c *CodeArtifact) GetRepositoryPermissionsPolicyWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
+const opListAllowedRepositoriesForGroup = "ListAllowedRepositoriesForGroup"
+
+// ListAllowedRepositoriesForGroupRequest generates a "aws/request.Request" representing the
+// client's request for the ListAllowedRepositoriesForGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAllowedRepositoriesForGroup for more information on using the ListAllowedRepositoriesForGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListAllowedRepositoriesForGroupRequest method.
+//	req, resp := client.ListAllowedRepositoriesForGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListAllowedRepositoriesForGroup
+func (c *CodeArtifact) ListAllowedRepositoriesForGroupRequest(input *ListAllowedRepositoriesForGroupInput) (req *request.Request, output *ListAllowedRepositoriesForGroupOutput) {
+	op := &request.Operation{
+		Name:       opListAllowedRepositoriesForGroup,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/package-group-allowed-repositories",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAllowedRepositoriesForGroupInput{}
+	}
+
+	output = &ListAllowedRepositoriesForGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListAllowedRepositoriesForGroup API operation for CodeArtifact.
+//
+// Lists the repositories in the added repositories list of the specified restriction
+// type for a package group. For more information about restriction types and
+// added repository lists, see Package group origin controls (https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-origin-controls.html)
+// in the CodeArtifact User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for CodeArtifact's
+// API operation ListAllowedRepositoriesForGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
+//
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
+//
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
+//
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
+//
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListAllowedRepositoriesForGroup
+func (c *CodeArtifact) ListAllowedRepositoriesForGroup(input *ListAllowedRepositoriesForGroupInput) (*ListAllowedRepositoriesForGroupOutput, error) {
+	req, out := c.ListAllowedRepositoriesForGroupRequest(input)
+	return out, req.Send()
+}
+
+// ListAllowedRepositoriesForGroupWithContext is the same as ListAllowedRepositoriesForGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAllowedRepositoriesForGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) ListAllowedRepositoriesForGroupWithContext(ctx aws.Context, input *ListAllowedRepositoriesForGroupInput, opts ...request.Option) (*ListAllowedRepositoriesForGroupOutput, error) {
+	req, out := c.ListAllowedRepositoriesForGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAllowedRepositoriesForGroupPages iterates over the pages of a ListAllowedRepositoriesForGroup operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAllowedRepositoriesForGroup method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListAllowedRepositoriesForGroup operation.
+//	pageNum := 0
+//	err := client.ListAllowedRepositoriesForGroupPages(params,
+//	    func(page *codeartifact.ListAllowedRepositoriesForGroupOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CodeArtifact) ListAllowedRepositoriesForGroupPages(input *ListAllowedRepositoriesForGroupInput, fn func(*ListAllowedRepositoriesForGroupOutput, bool) bool) error {
+	return c.ListAllowedRepositoriesForGroupPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAllowedRepositoriesForGroupPagesWithContext same as ListAllowedRepositoriesForGroupPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) ListAllowedRepositoriesForGroupPagesWithContext(ctx aws.Context, input *ListAllowedRepositoriesForGroupInput, fn func(*ListAllowedRepositoriesForGroupOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAllowedRepositoriesForGroupInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAllowedRepositoriesForGroupRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAllowedRepositoriesForGroupOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListAssociatedPackages = "ListAssociatedPackages"
+
+// ListAssociatedPackagesRequest generates a "aws/request.Request" representing the
+// client's request for the ListAssociatedPackages operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAssociatedPackages for more information on using the ListAssociatedPackages
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListAssociatedPackagesRequest method.
+//	req, resp := client.ListAssociatedPackagesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListAssociatedPackages
+func (c *CodeArtifact) ListAssociatedPackagesRequest(input *ListAssociatedPackagesInput) (req *request.Request, output *ListAssociatedPackagesOutput) {
+	op := &request.Operation{
+		Name:       opListAssociatedPackages,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/list-associated-packages",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAssociatedPackagesInput{}
+	}
+
+	output = &ListAssociatedPackagesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListAssociatedPackages API operation for CodeArtifact.
+//
+// Returns a list of packages associated with the requested package group. For
+// information package group association and matching, see Package group definition
+// syntax and matching behavior (https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-definition-syntax-matching-behavior.html)
+// in the CodeArtifact User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for CodeArtifact's
+// API operation ListAssociatedPackages for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
+//
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
+//
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListAssociatedPackages
+func (c *CodeArtifact) ListAssociatedPackages(input *ListAssociatedPackagesInput) (*ListAssociatedPackagesOutput, error) {
+	req, out := c.ListAssociatedPackagesRequest(input)
+	return out, req.Send()
+}
+
+// ListAssociatedPackagesWithContext is the same as ListAssociatedPackages with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAssociatedPackages for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) ListAssociatedPackagesWithContext(ctx aws.Context, input *ListAssociatedPackagesInput, opts ...request.Option) (*ListAssociatedPackagesOutput, error) {
+	req, out := c.ListAssociatedPackagesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAssociatedPackagesPages iterates over the pages of a ListAssociatedPackages operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAssociatedPackages method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListAssociatedPackages operation.
+//	pageNum := 0
+//	err := client.ListAssociatedPackagesPages(params,
+//	    func(page *codeartifact.ListAssociatedPackagesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CodeArtifact) ListAssociatedPackagesPages(input *ListAssociatedPackagesInput, fn func(*ListAssociatedPackagesOutput, bool) bool) error {
+	return c.ListAssociatedPackagesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAssociatedPackagesPagesWithContext same as ListAssociatedPackagesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) ListAssociatedPackagesPagesWithContext(ctx aws.Context, input *ListAssociatedPackagesInput, fn func(*ListAssociatedPackagesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAssociatedPackagesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAssociatedPackagesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAssociatedPackagesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListDomains = "ListDomains"
 
 // ListDomainsRequest generates a "aws/request.Request" representing the
@@ -2216,14 +2926,13 @@ const opListDomains = "ListDomains"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDomainsRequest method.
+//	req, resp := client.ListDomainsRequest(params)
 //
-//    // Example sending a request using the ListDomainsRequest method.
-//    req, resp := client.ListDomainsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListDomains
 func (c *CodeArtifact) ListDomainsRequest(input *ListDomainsInput) (req *request.Request, output *ListDomainsOutput) {
@@ -2263,18 +2972,19 @@ func (c *CodeArtifact) ListDomainsRequest(input *ListDomainsInput) (req *request
 // API operation ListDomains for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListDomains
 func (c *CodeArtifact) ListDomains(input *ListDomainsInput) (*ListDomainsOutput, error) {
@@ -2306,15 +3016,14 @@ func (c *CodeArtifact) ListDomainsWithContext(ctx aws.Context, input *ListDomain
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDomains operation.
-//    pageNum := 0
-//    err := client.ListDomainsPages(params,
-//        func(page *codeartifact.ListDomainsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDomains operation.
+//	pageNum := 0
+//	err := client.ListDomainsPages(params,
+//	    func(page *codeartifact.ListDomainsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeArtifact) ListDomainsPages(input *ListDomainsInput, fn func(*ListDomainsOutput, bool) bool) error {
 	return c.ListDomainsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2350,6 +3059,156 @@ func (c *CodeArtifact) ListDomainsPagesWithContext(ctx aws.Context, input *ListD
 	return p.Err()
 }
 
+const opListPackageGroups = "ListPackageGroups"
+
+// ListPackageGroupsRequest generates a "aws/request.Request" representing the
+// client's request for the ListPackageGroups operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListPackageGroups for more information on using the ListPackageGroups
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListPackageGroupsRequest method.
+//	req, resp := client.ListPackageGroupsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListPackageGroups
+func (c *CodeArtifact) ListPackageGroupsRequest(input *ListPackageGroupsInput) (req *request.Request, output *ListPackageGroupsOutput) {
+	op := &request.Operation{
+		Name:       opListPackageGroups,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/package-groups",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListPackageGroupsInput{}
+	}
+
+	output = &ListPackageGroupsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListPackageGroups API operation for CodeArtifact.
+//
+// Returns a list of package groups in the requested domain.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for CodeArtifact's
+// API operation ListPackageGroups for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
+//
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
+//
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
+//
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListPackageGroups
+func (c *CodeArtifact) ListPackageGroups(input *ListPackageGroupsInput) (*ListPackageGroupsOutput, error) {
+	req, out := c.ListPackageGroupsRequest(input)
+	return out, req.Send()
+}
+
+// ListPackageGroupsWithContext is the same as ListPackageGroups with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListPackageGroups for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) ListPackageGroupsWithContext(ctx aws.Context, input *ListPackageGroupsInput, opts ...request.Option) (*ListPackageGroupsOutput, error) {
+	req, out := c.ListPackageGroupsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListPackageGroupsPages iterates over the pages of a ListPackageGroups operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPackageGroups method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListPackageGroups operation.
+//	pageNum := 0
+//	err := client.ListPackageGroupsPages(params,
+//	    func(page *codeartifact.ListPackageGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CodeArtifact) ListPackageGroupsPages(input *ListPackageGroupsInput, fn func(*ListPackageGroupsOutput, bool) bool) error {
+	return c.ListPackageGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPackageGroupsPagesWithContext same as ListPackageGroupsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) ListPackageGroupsPagesWithContext(ctx aws.Context, input *ListPackageGroupsInput, fn func(*ListPackageGroupsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPackageGroupsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPackageGroupsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPackageGroupsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListPackageVersionAssets = "ListPackageVersionAssets"
 
 // ListPackageVersionAssetsRequest generates a "aws/request.Request" representing the
@@ -2366,14 +3225,13 @@ const opListPackageVersionAssets = "ListPackageVersionAssets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPackageVersionAssetsRequest method.
+//	req, resp := client.ListPackageVersionAssetsRequest(params)
 //
-//    // Example sending a request using the ListPackageVersionAssetsRequest method.
-//    req, resp := client.ListPackageVersionAssetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListPackageVersionAssets
 func (c *CodeArtifact) ListPackageVersionAssetsRequest(input *ListPackageVersionAssetsInput) (req *request.Request, output *ListPackageVersionAssetsOutput) {
@@ -2411,22 +3269,23 @@ func (c *CodeArtifact) ListPackageVersionAssetsRequest(input *ListPackageVersion
 // API operation ListPackageVersionAssets for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListPackageVersionAssets
 func (c *CodeArtifact) ListPackageVersionAssets(input *ListPackageVersionAssetsInput) (*ListPackageVersionAssetsOutput, error) {
@@ -2458,15 +3317,14 @@ func (c *CodeArtifact) ListPackageVersionAssetsWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPackageVersionAssets operation.
-//    pageNum := 0
-//    err := client.ListPackageVersionAssetsPages(params,
-//        func(page *codeartifact.ListPackageVersionAssetsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPackageVersionAssets operation.
+//	pageNum := 0
+//	err := client.ListPackageVersionAssetsPages(params,
+//	    func(page *codeartifact.ListPackageVersionAssetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeArtifact) ListPackageVersionAssetsPages(input *ListPackageVersionAssetsInput, fn func(*ListPackageVersionAssetsOutput, bool) bool) error {
 	return c.ListPackageVersionAssetsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2518,14 +3376,13 @@ const opListPackageVersionDependencies = "ListPackageVersionDependencies"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPackageVersionDependenciesRequest method.
+//	req, resp := client.ListPackageVersionDependenciesRequest(params)
 //
-//    // Example sending a request using the ListPackageVersionDependenciesRequest method.
-//    req, resp := client.ListPackageVersionDependenciesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListPackageVersionDependencies
 func (c *CodeArtifact) ListPackageVersionDependenciesRequest(input *ListPackageVersionDependenciesInput) (req *request.Request, output *ListPackageVersionDependenciesOutput) {
@@ -2561,22 +3418,23 @@ func (c *CodeArtifact) ListPackageVersionDependenciesRequest(input *ListPackageV
 // API operation ListPackageVersionDependencies for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListPackageVersionDependencies
 func (c *CodeArtifact) ListPackageVersionDependencies(input *ListPackageVersionDependenciesInput) (*ListPackageVersionDependenciesOutput, error) {
@@ -2616,14 +3474,13 @@ const opListPackageVersions = "ListPackageVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPackageVersionsRequest method.
+//	req, resp := client.ListPackageVersionsRequest(params)
 //
-//    // Example sending a request using the ListPackageVersionsRequest method.
-//    req, resp := client.ListPackageVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListPackageVersions
 func (c *CodeArtifact) ListPackageVersionsRequest(input *ListPackageVersionsInput) (req *request.Request, output *ListPackageVersionsOutput) {
@@ -2663,22 +3520,23 @@ func (c *CodeArtifact) ListPackageVersionsRequest(input *ListPackageVersionsInpu
 // API operation ListPackageVersions for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListPackageVersions
 func (c *CodeArtifact) ListPackageVersions(input *ListPackageVersionsInput) (*ListPackageVersionsOutput, error) {
@@ -2710,15 +3568,14 @@ func (c *CodeArtifact) ListPackageVersionsWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPackageVersions operation.
-//    pageNum := 0
-//    err := client.ListPackageVersionsPages(params,
-//        func(page *codeartifact.ListPackageVersionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPackageVersions operation.
+//	pageNum := 0
+//	err := client.ListPackageVersionsPages(params,
+//	    func(page *codeartifact.ListPackageVersionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeArtifact) ListPackageVersionsPages(input *ListPackageVersionsInput, fn func(*ListPackageVersionsOutput, bool) bool) error {
 	return c.ListPackageVersionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2770,14 +3627,13 @@ const opListPackages = "ListPackages"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPackagesRequest method.
+//	req, resp := client.ListPackagesRequest(params)
 //
-//    // Example sending a request using the ListPackagesRequest method.
-//    req, resp := client.ListPackagesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListPackages
 func (c *CodeArtifact) ListPackagesRequest(input *ListPackagesInput) (req *request.Request, output *ListPackagesOutput) {
@@ -2815,22 +3671,23 @@ func (c *CodeArtifact) ListPackagesRequest(input *ListPackagesInput) (req *reque
 // API operation ListPackages for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListPackages
 func (c *CodeArtifact) ListPackages(input *ListPackagesInput) (*ListPackagesOutput, error) {
@@ -2862,15 +3719,14 @@ func (c *CodeArtifact) ListPackagesWithContext(ctx aws.Context, input *ListPacka
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPackages operation.
-//    pageNum := 0
-//    err := client.ListPackagesPages(params,
-//        func(page *codeartifact.ListPackagesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPackages operation.
+//	pageNum := 0
+//	err := client.ListPackagesPages(params,
+//	    func(page *codeartifact.ListPackagesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeArtifact) ListPackagesPages(input *ListPackagesInput, fn func(*ListPackagesOutput, bool) bool) error {
 	return c.ListPackagesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2922,14 +3778,13 @@ const opListRepositories = "ListRepositories"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRepositoriesRequest method.
+//	req, resp := client.ListRepositoriesRequest(params)
 //
-//    // Example sending a request using the ListRepositoriesRequest method.
-//    req, resp := client.ListRepositoriesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListRepositories
 func (c *CodeArtifact) ListRepositoriesRequest(input *ListRepositoriesInput) (req *request.Request, output *ListRepositoriesOutput) {
@@ -2968,18 +3823,19 @@ func (c *CodeArtifact) ListRepositoriesRequest(input *ListRepositoriesInput) (re
 // API operation ListRepositories for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListRepositories
 func (c *CodeArtifact) ListRepositories(input *ListRepositoriesInput) (*ListRepositoriesOutput, error) {
@@ -3011,15 +3867,14 @@ func (c *CodeArtifact) ListRepositoriesWithContext(ctx aws.Context, input *ListR
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRepositories operation.
-//    pageNum := 0
-//    err := client.ListRepositoriesPages(params,
-//        func(page *codeartifact.ListRepositoriesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRepositories operation.
+//	pageNum := 0
+//	err := client.ListRepositoriesPages(params,
+//	    func(page *codeartifact.ListRepositoriesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeArtifact) ListRepositoriesPages(input *ListRepositoriesInput, fn func(*ListRepositoriesOutput, bool) bool) error {
 	return c.ListRepositoriesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3071,14 +3926,13 @@ const opListRepositoriesInDomain = "ListRepositoriesInDomain"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRepositoriesInDomainRequest method.
+//	req, resp := client.ListRepositoriesInDomainRequest(params)
 //
-//    // Example sending a request using the ListRepositoriesInDomainRequest method.
-//    req, resp := client.ListRepositoriesInDomainRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListRepositoriesInDomain
 func (c *CodeArtifact) ListRepositoriesInDomainRequest(input *ListRepositoriesInDomainInput) (req *request.Request, output *ListRepositoriesInDomainOutput) {
@@ -3117,22 +3971,23 @@ func (c *CodeArtifact) ListRepositoriesInDomainRequest(input *ListRepositoriesIn
 // API operation ListRepositoriesInDomain for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListRepositoriesInDomain
 func (c *CodeArtifact) ListRepositoriesInDomain(input *ListRepositoriesInDomainInput) (*ListRepositoriesInDomainOutput, error) {
@@ -3164,15 +4019,14 @@ func (c *CodeArtifact) ListRepositoriesInDomainWithContext(ctx aws.Context, inpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRepositoriesInDomain operation.
-//    pageNum := 0
-//    err := client.ListRepositoriesInDomainPages(params,
-//        func(page *codeartifact.ListRepositoriesInDomainOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRepositoriesInDomain operation.
+//	pageNum := 0
+//	err := client.ListRepositoriesInDomainPages(params,
+//	    func(page *codeartifact.ListRepositoriesInDomainOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeArtifact) ListRepositoriesInDomainPages(input *ListRepositoriesInDomainInput, fn func(*ListRepositoriesInDomainOutput, bool) bool) error {
 	return c.ListRepositoriesInDomainPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3208,6 +4062,160 @@ func (c *CodeArtifact) ListRepositoriesInDomainPagesWithContext(ctx aws.Context,
 	return p.Err()
 }
 
+const opListSubPackageGroups = "ListSubPackageGroups"
+
+// ListSubPackageGroupsRequest generates a "aws/request.Request" representing the
+// client's request for the ListSubPackageGroups operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSubPackageGroups for more information on using the ListSubPackageGroups
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListSubPackageGroupsRequest method.
+//	req, resp := client.ListSubPackageGroupsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListSubPackageGroups
+func (c *CodeArtifact) ListSubPackageGroupsRequest(input *ListSubPackageGroupsInput) (req *request.Request, output *ListSubPackageGroupsOutput) {
+	op := &request.Operation{
+		Name:       opListSubPackageGroups,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/package-groups/sub-groups",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSubPackageGroupsInput{}
+	}
+
+	output = &ListSubPackageGroupsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSubPackageGroups API operation for CodeArtifact.
+//
+// Returns a list of direct children of the specified package group.
+//
+// For information package group hierarchy, see Package group definition syntax
+// and matching behavior (https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-definition-syntax-matching-behavior.html)
+// in the CodeArtifact User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for CodeArtifact's
+// API operation ListSubPackageGroups for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
+//
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
+//
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
+//
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListSubPackageGroups
+func (c *CodeArtifact) ListSubPackageGroups(input *ListSubPackageGroupsInput) (*ListSubPackageGroupsOutput, error) {
+	req, out := c.ListSubPackageGroupsRequest(input)
+	return out, req.Send()
+}
+
+// ListSubPackageGroupsWithContext is the same as ListSubPackageGroups with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSubPackageGroups for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) ListSubPackageGroupsWithContext(ctx aws.Context, input *ListSubPackageGroupsInput, opts ...request.Option) (*ListSubPackageGroupsOutput, error) {
+	req, out := c.ListSubPackageGroupsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSubPackageGroupsPages iterates over the pages of a ListSubPackageGroups operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSubPackageGroups method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListSubPackageGroups operation.
+//	pageNum := 0
+//	err := client.ListSubPackageGroupsPages(params,
+//	    func(page *codeartifact.ListSubPackageGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CodeArtifact) ListSubPackageGroupsPages(input *ListSubPackageGroupsInput, fn func(*ListSubPackageGroupsOutput, bool) bool) error {
+	return c.ListSubPackageGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSubPackageGroupsPagesWithContext same as ListSubPackageGroupsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) ListSubPackageGroupsPagesWithContext(ctx aws.Context, input *ListSubPackageGroupsInput, fn func(*ListSubPackageGroupsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSubPackageGroupsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSubPackageGroupsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSubPackageGroupsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
@@ -3224,14 +4232,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListTagsForResource
 func (c *CodeArtifact) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -3263,19 +4270,20 @@ func (c *CodeArtifact) ListTagsForResourceRequest(input *ListTagsForResourceInpu
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/ListTagsForResource
 func (c *CodeArtifact) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -3315,14 +4323,13 @@ const opPublishPackageVersion = "PublishPackageVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PublishPackageVersionRequest method.
+//	req, resp := client.PublishPackageVersionRequest(params)
 //
-//    // Example sending a request using the PublishPackageVersionRequest method.
-//    req, resp := client.PublishPackageVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/PublishPackageVersion
 func (c *CodeArtifact) PublishPackageVersionRequest(input *PublishPackageVersionInput) (req *request.Request, output *PublishPackageVersionOutput) {
@@ -3366,29 +4373,30 @@ func (c *CodeArtifact) PublishPackageVersionRequest(input *PublishPackageVersion
 // API operation PublishPackageVersion for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ServiceQuotaExceededException
-//   The operation did not succeed because it would have exceeded a service limit
-//   for your account.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/PublishPackageVersion
 func (c *CodeArtifact) PublishPackageVersion(input *PublishPackageVersionInput) (*PublishPackageVersionOutput, error) {
@@ -3428,14 +4436,13 @@ const opPutDomainPermissionsPolicy = "PutDomainPermissionsPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutDomainPermissionsPolicyRequest method.
+//	req, resp := client.PutDomainPermissionsPolicyRequest(params)
 //
-//    // Example sending a request using the PutDomainPermissionsPolicyRequest method.
-//    req, resp := client.PutDomainPermissionsPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/PutDomainPermissionsPolicy
 func (c *CodeArtifact) PutDomainPermissionsPolicyRequest(input *PutDomainPermissionsPolicyInput) (req *request.Request, output *PutDomainPermissionsPolicyOutput) {
@@ -3471,29 +4478,30 @@ func (c *CodeArtifact) PutDomainPermissionsPolicyRequest(input *PutDomainPermiss
 // API operation PutDomainPermissionsPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ServiceQuotaExceededException
-//   The operation did not succeed because it would have exceeded a service limit
-//   for your account.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/PutDomainPermissionsPolicy
 func (c *CodeArtifact) PutDomainPermissionsPolicy(input *PutDomainPermissionsPolicyInput) (*PutDomainPermissionsPolicyOutput, error) {
@@ -3533,14 +4541,13 @@ const opPutPackageOriginConfiguration = "PutPackageOriginConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutPackageOriginConfigurationRequest method.
+//	req, resp := client.PutPackageOriginConfigurationRequest(params)
 //
-//    // Example sending a request using the PutPackageOriginConfigurationRequest method.
-//    req, resp := client.PutPackageOriginConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/PutPackageOriginConfiguration
 func (c *CodeArtifact) PutPackageOriginConfigurationRequest(input *PutPackageOriginConfigurationInput) (req *request.Request, output *PutPackageOriginConfigurationOutput) {
@@ -3587,22 +4594,23 @@ func (c *CodeArtifact) PutPackageOriginConfigurationRequest(input *PutPackageOri
 // API operation PutPackageOriginConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/PutPackageOriginConfiguration
 func (c *CodeArtifact) PutPackageOriginConfiguration(input *PutPackageOriginConfigurationInput) (*PutPackageOriginConfigurationOutput, error) {
@@ -3642,14 +4650,13 @@ const opPutRepositoryPermissionsPolicy = "PutRepositoryPermissionsPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutRepositoryPermissionsPolicyRequest method.
+//	req, resp := client.PutRepositoryPermissionsPolicyRequest(params)
 //
-//    // Example sending a request using the PutRepositoryPermissionsPolicyRequest method.
-//    req, resp := client.PutRepositoryPermissionsPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/PutRepositoryPermissionsPolicy
 func (c *CodeArtifact) PutRepositoryPermissionsPolicyRequest(input *PutRepositoryPermissionsPolicyInput) (req *request.Request, output *PutRepositoryPermissionsPolicyOutput) {
@@ -3686,29 +4693,30 @@ func (c *CodeArtifact) PutRepositoryPermissionsPolicyRequest(input *PutRepositor
 // API operation PutRepositoryPermissionsPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ServiceQuotaExceededException
-//   The operation did not succeed because it would have exceeded a service limit
-//   for your account.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/PutRepositoryPermissionsPolicy
 func (c *CodeArtifact) PutRepositoryPermissionsPolicy(input *PutRepositoryPermissionsPolicyInput) (*PutRepositoryPermissionsPolicyOutput, error) {
@@ -3748,14 +4756,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/TagResource
 func (c *CodeArtifact) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -3787,23 +4794,24 @@ func (c *CodeArtifact) TagResourceRequest(input *TagResourceInput) (req *request
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ServiceQuotaExceededException
-//   The operation did not succeed because it would have exceeded a service limit
-//   for your account.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/TagResource
 func (c *CodeArtifact) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -3843,14 +4851,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/UntagResource
 func (c *CodeArtifact) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -3882,19 +4889,20 @@ func (c *CodeArtifact) UntagResourceRequest(input *UntagResourceInput) (req *req
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/UntagResource
 func (c *CodeArtifact) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -3918,6 +4926,210 @@ func (c *CodeArtifact) UntagResourceWithContext(ctx aws.Context, input *UntagRes
 	return out, req.Send()
 }
 
+const opUpdatePackageGroup = "UpdatePackageGroup"
+
+// UpdatePackageGroupRequest generates a "aws/request.Request" representing the
+// client's request for the UpdatePackageGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdatePackageGroup for more information on using the UpdatePackageGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdatePackageGroupRequest method.
+//	req, resp := client.UpdatePackageGroupRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/UpdatePackageGroup
+func (c *CodeArtifact) UpdatePackageGroupRequest(input *UpdatePackageGroupInput) (req *request.Request, output *UpdatePackageGroupOutput) {
+	op := &request.Operation{
+		Name:       opUpdatePackageGroup,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v1/package-group",
+	}
+
+	if input == nil {
+		input = &UpdatePackageGroupInput{}
+	}
+
+	output = &UpdatePackageGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdatePackageGroup API operation for CodeArtifact.
+//
+// Updates a package group. This API cannot be used to update a package group's
+// origin configuration or pattern. To update a package group's origin configuration,
+// use UpdatePackageGroupOriginConfiguration (https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_UpdatePackageGroupOriginConfiguration.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for CodeArtifact's
+// API operation UpdatePackageGroup for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
+//
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
+//
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
+//
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
+//
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/UpdatePackageGroup
+func (c *CodeArtifact) UpdatePackageGroup(input *UpdatePackageGroupInput) (*UpdatePackageGroupOutput, error) {
+	req, out := c.UpdatePackageGroupRequest(input)
+	return out, req.Send()
+}
+
+// UpdatePackageGroupWithContext is the same as UpdatePackageGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdatePackageGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) UpdatePackageGroupWithContext(ctx aws.Context, input *UpdatePackageGroupInput, opts ...request.Option) (*UpdatePackageGroupOutput, error) {
+	req, out := c.UpdatePackageGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdatePackageGroupOriginConfiguration = "UpdatePackageGroupOriginConfiguration"
+
+// UpdatePackageGroupOriginConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdatePackageGroupOriginConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdatePackageGroupOriginConfiguration for more information on using the UpdatePackageGroupOriginConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdatePackageGroupOriginConfigurationRequest method.
+//	req, resp := client.UpdatePackageGroupOriginConfigurationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/UpdatePackageGroupOriginConfiguration
+func (c *CodeArtifact) UpdatePackageGroupOriginConfigurationRequest(input *UpdatePackageGroupOriginConfigurationInput) (req *request.Request, output *UpdatePackageGroupOriginConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opUpdatePackageGroupOriginConfiguration,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v1/package-group-origin-configuration",
+	}
+
+	if input == nil {
+		input = &UpdatePackageGroupOriginConfigurationInput{}
+	}
+
+	output = &UpdatePackageGroupOriginConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdatePackageGroupOriginConfiguration API operation for CodeArtifact.
+//
+// Updates the package origin configuration for a package group.
+//
+// The package origin configuration determines how new versions of a package
+// can be added to a repository. You can allow or block direct publishing of
+// new package versions, or ingestion and retaining of new package versions
+// from an external connection or upstream source. For more information about
+// package group origin controls and configuration, see Package group origin
+// controls (https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-origin-controls.html)
+// in the CodeArtifact User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for CodeArtifact's
+// API operation UpdatePackageGroupOriginConfiguration for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
+//
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
+//
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
+//
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
+//
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/UpdatePackageGroupOriginConfiguration
+func (c *CodeArtifact) UpdatePackageGroupOriginConfiguration(input *UpdatePackageGroupOriginConfigurationInput) (*UpdatePackageGroupOriginConfigurationOutput, error) {
+	req, out := c.UpdatePackageGroupOriginConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// UpdatePackageGroupOriginConfigurationWithContext is the same as UpdatePackageGroupOriginConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdatePackageGroupOriginConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeArtifact) UpdatePackageGroupOriginConfigurationWithContext(ctx aws.Context, input *UpdatePackageGroupOriginConfigurationInput, opts ...request.Option) (*UpdatePackageGroupOriginConfigurationOutput, error) {
+	req, out := c.UpdatePackageGroupOriginConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdatePackageVersionsStatus = "UpdatePackageVersionsStatus"
 
 // UpdatePackageVersionsStatusRequest generates a "aws/request.Request" representing the
@@ -3934,14 +5146,13 @@ const opUpdatePackageVersionsStatus = "UpdatePackageVersionsStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdatePackageVersionsStatusRequest method.
+//	req, resp := client.UpdatePackageVersionsStatusRequest(params)
 //
-//    // Example sending a request using the UpdatePackageVersionsStatusRequest method.
-//    req, resp := client.UpdatePackageVersionsStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/UpdatePackageVersionsStatus
 func (c *CodeArtifact) UpdatePackageVersionsStatusRequest(input *UpdatePackageVersionsStatusInput) (req *request.Request, output *UpdatePackageVersionsStatusOutput) {
@@ -3975,25 +5186,26 @@ func (c *CodeArtifact) UpdatePackageVersionsStatusRequest(input *UpdatePackageVe
 // API operation UpdatePackageVersionsStatus for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/UpdatePackageVersionsStatus
 func (c *CodeArtifact) UpdatePackageVersionsStatus(input *UpdatePackageVersionsStatusInput) (*UpdatePackageVersionsStatusOutput, error) {
@@ -4033,14 +5245,13 @@ const opUpdateRepository = "UpdateRepository"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRepositoryRequest method.
+//	req, resp := client.UpdateRepositoryRequest(params)
 //
-//    // Example sending a request using the UpdateRepositoryRequest method.
-//    req, resp := client.UpdateRepositoryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/UpdateRepository
 func (c *CodeArtifact) UpdateRepositoryRequest(input *UpdateRepositoryInput) (req *request.Request, output *UpdateRepositoryOutput) {
@@ -4071,29 +5282,30 @@ func (c *CodeArtifact) UpdateRepositoryRequest(input *UpdateRepositoryInput) (re
 // API operation UpdateRepository for usage and error information.
 //
 // Returned Error Types:
-//   * AccessDeniedException
-//   The operation did not succeed because of an unauthorized access attempt.
 //
-//   * ConflictException
-//   The operation did not succeed because prerequisites are not met.
+//   - AccessDeniedException
+//     The operation did not succeed because of an unauthorized access attempt.
 //
-//   * InternalServerException
-//   The operation did not succeed because of an error that occurred inside CodeArtifact.
+//   - ConflictException
+//     The operation did not succeed because prerequisites are not met.
 //
-//   * ResourceNotFoundException
-//   The operation did not succeed because the resource requested is not found
-//   in the service.
+//   - InternalServerException
+//     The operation did not succeed because of an error that occurred inside CodeArtifact.
 //
-//   * ServiceQuotaExceededException
-//   The operation did not succeed because it would have exceeded a service limit
-//   for your account.
+//   - ResourceNotFoundException
+//     The operation did not succeed because the resource requested is not found
+//     in the service.
 //
-//   * ThrottlingException
-//   The operation did not succeed because too many requests are sent to the service.
+//   - ServiceQuotaExceededException
+//     The operation did not succeed because it would have exceeded a service limit
+//     for your account.
 //
-//   * ValidationException
-//   The operation did not succeed because a parameter in the request was sent
-//   with an invalid value.
+//   - ThrottlingException
+//     The operation did not succeed because too many requests are sent to the service.
+//
+//   - ValidationException
+//     The operation did not succeed because a parameter in the request was sent
+//     with an invalid value.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codeartifact-2018-09-22/UpdateRepository
 func (c *CodeArtifact) UpdateRepository(input *UpdateRepositoryInput) (*UpdateRepositoryOutput, error) {
@@ -4377,6 +5589,81 @@ func (s *AssociateExternalConnectionOutput) SetRepository(v *RepositoryDescripti
 	return s
 }
 
+// A package associated with a package group.
+type AssociatedPackage struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the strength of the association between the package and package
+	// group. A strong match can be thought of as an exact match, and a weak match
+	// can be thought of as a variation match, for example, the package name matches
+	// a variation of the package group pattern. For more information about package
+	// group pattern matching, including strong and weak matches, see Package group
+	// definition syntax and matching behavior (https://docs.aws.amazon.com/codeartifact/latest/ug/package-group-definition-syntax-matching-behavior.html)
+	// in the CodeArtifact User Guide.
+	AssociationType *string `locationName:"associationType" type:"string" enum:"PackageGroupAssociationType"`
+
+	// A format that specifies the type of the associated package.
+	Format *string `locationName:"format" type:"string" enum:"PackageFormat"`
+
+	// The namespace of the associated package. The package component that specifies
+	// its namespace depends on its type. For example:
+	//
+	//    * The namespace of a Maven package version is its groupId.
+	//
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
+	//
+	//    * Python and NuGet package versions do not contain a corresponding component,
+	//    package versions of those formats do not have a namespace.
+	Namespace *string `locationName:"namespace" min:"1" type:"string"`
+
+	// The name of the associated package.
+	Package *string `locationName:"package" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatedPackage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AssociatedPackage) GoString() string {
+	return s.String()
+}
+
+// SetAssociationType sets the AssociationType field's value.
+func (s *AssociatedPackage) SetAssociationType(v string) *AssociatedPackage {
+	s.AssociationType = &v
+	return s
+}
+
+// SetFormat sets the Format field's value.
+func (s *AssociatedPackage) SetFormat(v string) *AssociatedPackage {
+	s.Format = &v
+	return s
+}
+
+// SetNamespace sets the Namespace field's value.
+func (s *AssociatedPackage) SetNamespace(v string) *AssociatedPackage {
+	s.Namespace = &v
+	return s
+}
+
+// SetPackage sets the Package field's value.
+func (s *AssociatedPackage) SetPackage(v string) *AssociatedPackage {
+	s.Package = &v
+	return s
+}
+
 // The operation did not succeed because prerequisites are not met.
 type ConflictException struct {
 	_            struct{}                  `type:"structure"`
@@ -4480,18 +5767,26 @@ type CopyPackageVersionsInput struct {
 	// For more information, see Working with upstream repositories (https://docs.aws.amazon.com/codeartifact/latest/ug/repos-upstream.html).
 	IncludeFromUpstream *bool `locationName:"includeFromUpstream" type:"boolean"`
 
-	// The namespace of the package versions to be copied. The package version component
+	// The namespace of the package versions to be copied. The package component
 	// that specifies its namespace depends on its type. For example:
 	//
-	//    * The namespace of a Maven package version is its groupId. The namespace
-	//    is required when copying Maven package versions.
+	// The namespace is required when copying package versions of the following
+	// formats:
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * Maven
+	//
+	//    * Swift
+	//
+	//    * generic
+	//
+	//    * The namespace of a Maven package version is its groupId.
+	//
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
-	//
-	//    * The namespace of a generic package is its namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The name of the package that contains the versions to be copied.
@@ -4821,6 +6116,154 @@ func (s CreateDomainOutput) GoString() string {
 // SetDomain sets the Domain field's value.
 func (s *CreateDomainOutput) SetDomain(v *DomainDescription) *CreateDomainOutput {
 	s.Domain = v
+	return s
+}
+
+type CreatePackageGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The contact information for the created package group.
+	ContactInfo *string `locationName:"contactInfo" type:"string"`
+
+	// A description of the package group.
+	Description *string `locationName:"description" type:"string"`
+
+	// The name of the domain in which you want to create a package group.
+	//
+	// Domain is a required field
+	Domain *string `location:"querystring" locationName:"domain" min:"2" type:"string" required:"true"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `location:"querystring" locationName:"domain-owner" min:"12" type:"string"`
+
+	// The pattern of the package group to create. The pattern is also the identifier
+	// of the package group.
+	//
+	// PackageGroup is a required field
+	PackageGroup *string `locationName:"packageGroup" min:"2" type:"string" required:"true"`
+
+	// One or more tag key-value pairs for the package group.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePackageGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePackageGroupInput"}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 2))
+	}
+	if s.DomainOwner != nil && len(*s.DomainOwner) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainOwner", 12))
+	}
+	if s.PackageGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageGroup"))
+	}
+	if s.PackageGroup != nil && len(*s.PackageGroup) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageGroup", 2))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactInfo sets the ContactInfo field's value.
+func (s *CreatePackageGroupInput) SetContactInfo(v string) *CreatePackageGroupInput {
+	s.ContactInfo = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreatePackageGroupInput) SetDescription(v string) *CreatePackageGroupInput {
+	s.Description = &v
+	return s
+}
+
+// SetDomain sets the Domain field's value.
+func (s *CreatePackageGroupInput) SetDomain(v string) *CreatePackageGroupInput {
+	s.Domain = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *CreatePackageGroupInput) SetDomainOwner(v string) *CreatePackageGroupInput {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *CreatePackageGroupInput) SetPackageGroup(v string) *CreatePackageGroupInput {
+	s.PackageGroup = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreatePackageGroupInput) SetTags(v []*Tag) *CreatePackageGroupInput {
+	s.Tags = v
+	return s
+}
+
+type CreatePackageGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the created package group after processing the request.
+	PackageGroup *PackageGroupDescription `locationName:"packageGroup" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreatePackageGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *CreatePackageGroupOutput) SetPackageGroup(v *PackageGroupDescription) *CreatePackageGroupOutput {
+	s.PackageGroup = v
 	return s
 }
 
@@ -5184,6 +6627,113 @@ func (s *DeleteDomainPermissionsPolicyOutput) SetPolicy(v *ResourcePolicy) *Dele
 	return s
 }
 
+type DeletePackageGroupInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The domain that contains the package group to be deleted.
+	//
+	// Domain is a required field
+	Domain *string `location:"querystring" locationName:"domain" min:"2" type:"string" required:"true"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `location:"querystring" locationName:"domain-owner" min:"12" type:"string"`
+
+	// The pattern of the package group to be deleted.
+	//
+	// PackageGroup is a required field
+	PackageGroup *string `location:"querystring" locationName:"package-group" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeletePackageGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeletePackageGroupInput"}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 2))
+	}
+	if s.DomainOwner != nil && len(*s.DomainOwner) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainOwner", 12))
+	}
+	if s.PackageGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageGroup"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomain sets the Domain field's value.
+func (s *DeletePackageGroupInput) SetDomain(v string) *DeletePackageGroupInput {
+	s.Domain = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *DeletePackageGroupInput) SetDomainOwner(v string) *DeletePackageGroupInput {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *DeletePackageGroupInput) SetPackageGroup(v string) *DeletePackageGroupInput {
+	s.PackageGroup = &v
+	return s
+}
+
+type DeletePackageGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the deleted package group after processing the request.
+	PackageGroup *PackageGroupDescription `locationName:"packageGroup" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeletePackageGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *DeletePackageGroupOutput) SetPackageGroup(v *PackageGroupDescription) *DeletePackageGroupOutput {
+	s.PackageGroup = v
+	return s
+}
+
 type DeletePackageInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -5204,15 +6754,22 @@ type DeletePackageInput struct {
 	// The namespace of the package to delete. The package component that specifies
 	// its namespace depends on its type. For example:
 	//
-	//    * The namespace of a Maven package is its groupId. The namespace is required
-	//    when deleting Maven package versions.
+	// The namespace is required when deleting packages of the following formats:
 	//
-	//    * The namespace of an npm package is its scope.
+	//    * Maven
 	//
-	//    * Python and NuGet packages do not contain corresponding components, packages
-	//    of those formats do not have a namespace.
+	//    * Swift
+	//
+	//    * generic
+	//
+	//    * The namespace of a Maven package version is its groupId.
+	//
+	//    * The namespace of an npm or Swift package version is its scope.
 	//
 	//    * The namespace of a generic package is its namespace.
+	//
+	//    * Python and NuGet package versions do not contain a corresponding component,
+	//    package versions of those formats do not have a namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The name of the package to delete.
@@ -5368,18 +6925,26 @@ type DeletePackageVersionsInput struct {
 	// Format is a required field
 	Format *string `location:"querystring" locationName:"format" type:"string" required:"true" enum:"PackageFormat"`
 
-	// The namespace of the package versions to be deleted. The package version
-	// component that specifies its namespace depends on its type. For example:
+	// The namespace of the package versions to be deleted. The package component
+	// that specifies its namespace depends on its type. For example:
 	//
-	//    * The namespace of a Maven package version is its groupId. The namespace
-	//    is required when deleting Maven package versions.
+	// The namespace is required when deleting package versions of the following
+	// formats:
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * Maven
+	//
+	//    * Swift
+	//
+	//    * generic
+	//
+	//    * The namespace of a Maven package version is its groupId.
+	//
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
-	//
-	//    * The namespace of a generic package is its namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The name of the package with the versions to delete.
@@ -5888,6 +7453,117 @@ func (s *DescribeDomainOutput) SetDomain(v *DomainDescription) *DescribeDomainOu
 	return s
 }
 
+type DescribePackageGroupInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name of the domain that contains the package group.
+	//
+	// Domain is a required field
+	Domain *string `location:"querystring" locationName:"domain" min:"2" type:"string" required:"true"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `location:"querystring" locationName:"domain-owner" min:"12" type:"string"`
+
+	// The pattern of the requested package group.
+	//
+	// PackageGroup is a required field
+	PackageGroup *string `location:"querystring" locationName:"package-group" min:"2" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePackageGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePackageGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribePackageGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribePackageGroupInput"}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 2))
+	}
+	if s.DomainOwner != nil && len(*s.DomainOwner) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainOwner", 12))
+	}
+	if s.PackageGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageGroup"))
+	}
+	if s.PackageGroup != nil && len(*s.PackageGroup) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageGroup", 2))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomain sets the Domain field's value.
+func (s *DescribePackageGroupInput) SetDomain(v string) *DescribePackageGroupInput {
+	s.Domain = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *DescribePackageGroupInput) SetDomainOwner(v string) *DescribePackageGroupInput {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *DescribePackageGroupInput) SetPackageGroup(v string) *DescribePackageGroupInput {
+	s.PackageGroup = &v
+	return s
+}
+
+type DescribePackageGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A PackageGroupDescription (https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageGroupDescription.html)
+	// object that contains information about the requested package group.
+	PackageGroup *PackageGroupDescription `locationName:"packageGroup" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePackageGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribePackageGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *DescribePackageGroupOutput) SetPackageGroup(v *PackageGroupDescription) *DescribePackageGroupOutput {
+	s.PackageGroup = v
+	return s
+}
+
 type DescribePackageInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -5908,15 +7584,22 @@ type DescribePackageInput struct {
 	// The namespace of the requested package. The package component that specifies
 	// its namespace depends on its type. For example:
 	//
-	//    * The namespace of a Maven package is its groupId. The namespace is required
-	//    when requesting Maven packages.
+	// The namespace is required when requesting packages of the following formats:
 	//
-	//    * The namespace of an npm package is its scope.
+	//    * Maven
 	//
-	//    * Python and NuGet packages do not contain a corresponding component,
-	//    packages of those formats do not have a namespace.
+	//    * Swift
+	//
+	//    * generic
+	//
+	//    * The namespace of a Maven package version is its groupId.
+	//
+	//    * The namespace of an npm or Swift package version is its scope.
 	//
 	//    * The namespace of a generic package is its namespace.
+	//
+	//    * Python and NuGet package versions do not contain a corresponding component,
+	//    package versions of those formats do not have a namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The name of the requested package.
@@ -6073,17 +7756,26 @@ type DescribePackageVersionInput struct {
 	// Format is a required field
 	Format *string `location:"querystring" locationName:"format" type:"string" required:"true" enum:"PackageFormat"`
 
-	// The namespace of the requested package version. The package version component
-	// that specifies its namespace depends on its type. For example:
+	// The namespace of the requested package version. The package component that
+	// specifies its namespace depends on its type. For example:
+	//
+	// The namespace is required when requesting package versions of the following
+	// formats:
+	//
+	//    * Maven
+	//
+	//    * Swift
+	//
+	//    * generic
 	//
 	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
-	//
-	//    * The namespace of a generic package is its namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The name of the requested package version.
@@ -6497,17 +8189,26 @@ type DisposePackageVersionsInput struct {
 	// Format is a required field
 	Format *string `location:"querystring" locationName:"format" type:"string" required:"true" enum:"PackageFormat"`
 
-	// The namespace of the package versions to be disposed. The package version
-	// component that specifies its namespace depends on its type. For example:
+	// The namespace of the package versions to be disposed. The package component
+	// that specifies its namespace depends on its type. For example:
+	//
+	// The namespace is required when disposing package versions of the following
+	// formats:
+	//
+	//    * Maven
+	//
+	//    * Swift
+	//
+	//    * generic
 	//
 	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
-	//
-	//    * The namespace of a generic package is its namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The name of the package with the versions you want to dispose.
@@ -6807,6 +8508,11 @@ func (s *DomainDescription) SetStatus(v string) *DomainDescription {
 // entry point is the external connection that it was ingested from. An external
 // connection is a CodeArtifact repository that is connected to an external
 // repository such as the npm registry or NuGet gallery.
+//
+// If a package version exists in a repository and is updated, for example if
+// a package of the same version is added with additional assets, the package
+// version's DomainEntryPoint will not change from the original package version's
+// value.
 type DomainEntryPoint struct {
 	_ struct{} `type:"structure"`
 
@@ -6927,6 +8633,174 @@ func (s *DomainSummary) SetStatus(v string) *DomainSummary {
 	return s
 }
 
+type GetAssociatedPackageGroupInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name of the domain that contains the package from which to get the associated
+	// package group.
+	//
+	// Domain is a required field
+	Domain *string `location:"querystring" locationName:"domain" min:"2" type:"string" required:"true"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `location:"querystring" locationName:"domain-owner" min:"12" type:"string"`
+
+	// The format of the package from which to get the associated package group.
+	//
+	// Format is a required field
+	Format *string `location:"querystring" locationName:"format" type:"string" required:"true" enum:"PackageFormat"`
+
+	// The namespace of the package from which to get the associated package group.
+	// The package component that specifies its namespace depends on its type. For
+	// example:
+	//
+	// The namespace is required when getting associated package groups from packages
+	// of the following formats:
+	//
+	//    * Maven
+	//
+	//    * Swift
+	//
+	//    * generic
+	//
+	//    * The namespace of a Maven package version is its groupId.
+	//
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
+	//
+	//    * Python and NuGet package versions do not contain a corresponding component,
+	//    package versions of those formats do not have a namespace.
+	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
+
+	// The package from which to get the associated package group.
+	//
+	// Package is a required field
+	Package *string `location:"querystring" locationName:"package" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAssociatedPackageGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAssociatedPackageGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetAssociatedPackageGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetAssociatedPackageGroupInput"}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 2))
+	}
+	if s.DomainOwner != nil && len(*s.DomainOwner) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainOwner", 12))
+	}
+	if s.Format == nil {
+		invalidParams.Add(request.NewErrParamRequired("Format"))
+	}
+	if s.Namespace != nil && len(*s.Namespace) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Namespace", 1))
+	}
+	if s.Package == nil {
+		invalidParams.Add(request.NewErrParamRequired("Package"))
+	}
+	if s.Package != nil && len(*s.Package) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Package", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomain sets the Domain field's value.
+func (s *GetAssociatedPackageGroupInput) SetDomain(v string) *GetAssociatedPackageGroupInput {
+	s.Domain = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *GetAssociatedPackageGroupInput) SetDomainOwner(v string) *GetAssociatedPackageGroupInput {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetFormat sets the Format field's value.
+func (s *GetAssociatedPackageGroupInput) SetFormat(v string) *GetAssociatedPackageGroupInput {
+	s.Format = &v
+	return s
+}
+
+// SetNamespace sets the Namespace field's value.
+func (s *GetAssociatedPackageGroupInput) SetNamespace(v string) *GetAssociatedPackageGroupInput {
+	s.Namespace = &v
+	return s
+}
+
+// SetPackage sets the Package field's value.
+func (s *GetAssociatedPackageGroupInput) SetPackage(v string) *GetAssociatedPackageGroupInput {
+	s.Package = &v
+	return s
+}
+
+type GetAssociatedPackageGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the strength of the association between the package and package
+	// group. A strong match is also known as an exact match, and a weak match is
+	// known as a relative match.
+	AssociationType *string `locationName:"associationType" type:"string" enum:"PackageGroupAssociationType"`
+
+	// The package group that is associated with the requested package.
+	PackageGroup *PackageGroupDescription `locationName:"packageGroup" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAssociatedPackageGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetAssociatedPackageGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetAssociationType sets the AssociationType field's value.
+func (s *GetAssociatedPackageGroupOutput) SetAssociationType(v string) *GetAssociatedPackageGroupOutput {
+	s.AssociationType = &v
+	return s
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *GetAssociatedPackageGroupOutput) SetPackageGroup(v *PackageGroupDescription) *GetAssociatedPackageGroupOutput {
+	s.PackageGroup = v
+	return s
+}
+
 type GetAuthorizationTokenInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -7002,7 +8876,7 @@ func (s *GetAuthorizationTokenInput) SetDurationSeconds(v int64) *GetAuthorizati
 }
 
 type GetAuthorizationTokenOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" sensitive:"true"`
 
 	// The returned authentication token.
 	AuthorizationToken *string `locationName:"authorizationToken" type:"string"`
@@ -7159,16 +9033,25 @@ type GetPackageVersionAssetInput struct {
 	Format *string `location:"querystring" locationName:"format" type:"string" required:"true" enum:"PackageFormat"`
 
 	// The namespace of the package version with the requested asset file. The package
-	// version component that specifies its namespace depends on its type. For example:
+	// component that specifies its namespace depends on its type. For example:
+	//
+	// The namespace is required when requesting assets from package versions of
+	// the following formats:
+	//
+	//    * Maven
+	//
+	//    * Swift
+	//
+	//    * generic
 	//
 	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
-	//
-	//    * The namespace of a generic package is its namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The name of the package that contains the requested asset.
@@ -7392,10 +9275,22 @@ type GetPackageVersionReadmeInput struct {
 	Format *string `location:"querystring" locationName:"format" type:"string" required:"true" enum:"PackageFormat"`
 
 	// The namespace of the package version with the requested readme file. The
-	// package version component that specifies its namespace depends on its type.
-	// For example:
+	// package component that specifies its namespace depends on its type. For example:
 	//
-	//    * The namespace of an npm package version is its scope.
+	// The namespace is required when requesting the readme from package versions
+	// of the following formats:
+	//
+	//    * Maven
+	//
+	//    * Swift
+	//
+	//    * generic
+	//
+	//    * The namespace of a Maven package version is its groupId.
+	//
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
@@ -7527,12 +9422,13 @@ type GetPackageVersionReadmeOutput struct {
 	Format *string `locationName:"format" type:"string" enum:"PackageFormat"`
 
 	// The namespace of the package version with the requested readme file. The
-	// package version component that specifies its namespace depends on its type.
-	// For example:
+	// package component that specifies its namespace depends on its type. For example:
 	//
 	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
@@ -7946,6 +9842,324 @@ func (s *LicenseInfo) SetUrl(v string) *LicenseInfo {
 	return s
 }
 
+type ListAllowedRepositoriesForGroupInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name of the domain that contains the package group from which to list
+	// allowed repositories.
+	//
+	// Domain is a required field
+	Domain *string `location:"querystring" locationName:"domain" min:"2" type:"string" required:"true"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `location:"querystring" locationName:"domain-owner" min:"12" type:"string"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"next-token" min:"1" type:"string"`
+
+	// The origin configuration restriction type of which to list allowed repositories.
+	//
+	// OriginRestrictionType is a required field
+	OriginRestrictionType *string `location:"querystring" locationName:"originRestrictionType" type:"string" required:"true" enum:"PackageGroupOriginRestrictionType"`
+
+	// The pattern of the package group from which to list allowed repositories.
+	//
+	// PackageGroup is a required field
+	PackageGroup *string `location:"querystring" locationName:"package-group" min:"2" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAllowedRepositoriesForGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAllowedRepositoriesForGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAllowedRepositoriesForGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAllowedRepositoriesForGroupInput"}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 2))
+	}
+	if s.DomainOwner != nil && len(*s.DomainOwner) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainOwner", 12))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.OriginRestrictionType == nil {
+		invalidParams.Add(request.NewErrParamRequired("OriginRestrictionType"))
+	}
+	if s.PackageGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageGroup"))
+	}
+	if s.PackageGroup != nil && len(*s.PackageGroup) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageGroup", 2))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomain sets the Domain field's value.
+func (s *ListAllowedRepositoriesForGroupInput) SetDomain(v string) *ListAllowedRepositoriesForGroupInput {
+	s.Domain = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *ListAllowedRepositoriesForGroupInput) SetDomainOwner(v string) *ListAllowedRepositoriesForGroupInput {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAllowedRepositoriesForGroupInput) SetMaxResults(v int64) *ListAllowedRepositoriesForGroupInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAllowedRepositoriesForGroupInput) SetNextToken(v string) *ListAllowedRepositoriesForGroupInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOriginRestrictionType sets the OriginRestrictionType field's value.
+func (s *ListAllowedRepositoriesForGroupInput) SetOriginRestrictionType(v string) *ListAllowedRepositoriesForGroupInput {
+	s.OriginRestrictionType = &v
+	return s
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *ListAllowedRepositoriesForGroupInput) SetPackageGroup(v string) *ListAllowedRepositoriesForGroupInput {
+	s.PackageGroup = &v
+	return s
+}
+
+type ListAllowedRepositoriesForGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of allowed repositories for the package group and origin configuration
+	// restriction type.
+	AllowedRepositories []*string `locationName:"allowedRepositories" type:"list"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAllowedRepositoriesForGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAllowedRepositoriesForGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetAllowedRepositories sets the AllowedRepositories field's value.
+func (s *ListAllowedRepositoriesForGroupOutput) SetAllowedRepositories(v []*string) *ListAllowedRepositoriesForGroupOutput {
+	s.AllowedRepositories = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAllowedRepositoriesForGroupOutput) SetNextToken(v string) *ListAllowedRepositoriesForGroupOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAssociatedPackagesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name of the domain that contains the package group from which to list
+	// associated packages.
+	//
+	// Domain is a required field
+	Domain *string `location:"querystring" locationName:"domain" min:"2" type:"string" required:"true"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `location:"querystring" locationName:"domain-owner" min:"12" type:"string"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"next-token" min:"1" type:"string"`
+
+	// The pattern of the package group from which to list associated packages.
+	//
+	// PackageGroup is a required field
+	PackageGroup *string `location:"querystring" locationName:"package-group" min:"2" type:"string" required:"true"`
+
+	// When this flag is included, ListAssociatedPackages will return a list of
+	// packages that would be associated with a package group, even if it does not
+	// exist.
+	Preview *bool `location:"querystring" locationName:"preview" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAssociatedPackagesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAssociatedPackagesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAssociatedPackagesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAssociatedPackagesInput"}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 2))
+	}
+	if s.DomainOwner != nil && len(*s.DomainOwner) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainOwner", 12))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.PackageGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageGroup"))
+	}
+	if s.PackageGroup != nil && len(*s.PackageGroup) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageGroup", 2))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomain sets the Domain field's value.
+func (s *ListAssociatedPackagesInput) SetDomain(v string) *ListAssociatedPackagesInput {
+	s.Domain = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *ListAssociatedPackagesInput) SetDomainOwner(v string) *ListAssociatedPackagesInput {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAssociatedPackagesInput) SetMaxResults(v int64) *ListAssociatedPackagesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAssociatedPackagesInput) SetNextToken(v string) *ListAssociatedPackagesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *ListAssociatedPackagesInput) SetPackageGroup(v string) *ListAssociatedPackagesInput {
+	s.PackageGroup = &v
+	return s
+}
+
+// SetPreview sets the Preview field's value.
+func (s *ListAssociatedPackagesInput) SetPreview(v bool) *ListAssociatedPackagesInput {
+	s.Preview = &v
+	return s
+}
+
+type ListAssociatedPackagesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// The list of packages associated with the requested package group.
+	Packages []*AssociatedPackage `locationName:"packages" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAssociatedPackagesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListAssociatedPackagesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAssociatedPackagesOutput) SetNextToken(v string) *ListAssociatedPackagesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPackages sets the Packages field's value.
+func (s *ListAssociatedPackagesOutput) SetPackages(v []*AssociatedPackage) *ListAssociatedPackagesOutput {
+	s.Packages = v
+	return s
+}
+
 type ListDomainsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8045,6 +10259,144 @@ func (s *ListDomainsOutput) SetNextToken(v string) *ListDomainsOutput {
 	return s
 }
 
+type ListPackageGroupsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The domain for which you want to list package groups.
+	//
+	// Domain is a required field
+	Domain *string `location:"querystring" locationName:"domain" min:"2" type:"string" required:"true"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `location:"querystring" locationName:"domain-owner" min:"12" type:"string"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"next-token" min:"1" type:"string"`
+
+	// A prefix for which to search package groups. When included, ListPackageGroups
+	// will return only package groups with patterns that match the prefix.
+	Prefix *string `location:"querystring" locationName:"prefix" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackageGroupsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackageGroupsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPackageGroupsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPackageGroupsInput"}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 2))
+	}
+	if s.DomainOwner != nil && len(*s.DomainOwner) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainOwner", 12))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomain sets the Domain field's value.
+func (s *ListPackageGroupsInput) SetDomain(v string) *ListPackageGroupsInput {
+	s.Domain = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *ListPackageGroupsInput) SetDomainOwner(v string) *ListPackageGroupsInput {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListPackageGroupsInput) SetMaxResults(v int64) *ListPackageGroupsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPackageGroupsInput) SetNextToken(v string) *ListPackageGroupsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPrefix sets the Prefix field's value.
+func (s *ListPackageGroupsInput) SetPrefix(v string) *ListPackageGroupsInput {
+	s.Prefix = &v
+	return s
+}
+
+type ListPackageGroupsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// The list of package groups in the requested domain.
+	PackageGroups []*PackageGroupSummary `locationName:"packageGroups" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackageGroupsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListPackageGroupsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPackageGroupsOutput) SetNextToken(v string) *ListPackageGroupsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPackageGroups sets the PackageGroups field's value.
+func (s *ListPackageGroupsOutput) SetPackageGroups(v []*PackageGroupSummary) *ListPackageGroupsOutput {
+	s.PackageGroups = v
+	return s
+}
+
 type ListPackageVersionAssetsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -8067,17 +10419,26 @@ type ListPackageVersionAssetsInput struct {
 	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
 
 	// The namespace of the package version that contains the requested package
-	// version assets. The package version component that specifies its namespace
-	// depends on its type. For example:
+	// version assets. The package component that specifies its namespace depends
+	// on its type. For example:
+	//
+	// The namespace is required requesting assets from package versions of the
+	// following formats:
+	//
+	//    * Maven
+	//
+	//    * Swift
+	//
+	//    * generic
 	//
 	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
-	//
-	//    * The namespace of a generic package is its namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The token for the next set of results. Use the value returned in the previous
@@ -8233,12 +10594,14 @@ type ListPackageVersionAssetsOutput struct {
 	Format *string `locationName:"format" type:"string" enum:"PackageFormat"`
 
 	// The namespace of the package version that contains the requested package
-	// version assets. The package version component that specifies its namespace
-	// depends on its type. For example:
+	// version assets. The package component that specifies its namespace depends
+	// on its type. For example:
 	//
 	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
@@ -8336,17 +10699,25 @@ type ListPackageVersionDependenciesInput struct {
 	Format *string `location:"querystring" locationName:"format" type:"string" required:"true" enum:"PackageFormat"`
 
 	// The namespace of the package version with the requested dependencies. The
-	// package version component that specifies its namespace depends on its type.
-	// For example:
+	// package component that specifies its namespace depends on its type. For example:
+	//
+	// The namespace is required when listing dependencies from package versions
+	// of the following formats:
+	//
+	//    * Maven
+	//
+	//    * Swift
+	//
+	//    * generic
 	//
 	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
-	//
-	//    * The namespace of a generic package is its namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The token for the next set of results. Use the value returned in the previous
@@ -8493,12 +10864,14 @@ type ListPackageVersionDependenciesOutput struct {
 	Format *string `locationName:"format" type:"string" enum:"PackageFormat"`
 
 	// The namespace of the package version that contains the returned dependencies.
-	// The package version component that specifies its namespace depends on its
-	// type. For example:
+	// The package component that specifies its namespace depends on its type. For
+	// example:
 	//
 	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
@@ -8603,14 +10976,23 @@ type ListPackageVersionsInput struct {
 	// The package component that specifies its namespace depends on its type. For
 	// example:
 	//
-	//    * The namespace of a Maven package is its groupId.
+	// The namespace is required when deleting package versions of the following
+	// formats:
 	//
-	//    * The namespace of an npm package is its scope.
+	//    * Maven
 	//
-	//    * Python and NuGet packages do not contain a corresponding component,
-	//    packages of those formats do not have a namespace.
+	//    * Swift
+	//
+	//    * generic
+	//
+	//    * The namespace of a Maven package version is its groupId.
+	//
+	//    * The namespace of an npm or Swift package version is its scope.
 	//
 	//    * The namespace of a generic package is its namespace.
+	//
+	//    * Python and NuGet package versions do not contain a corresponding component,
+	//    package versions of those formats do not have a namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The token for the next set of results. Use the value returned in the previous
@@ -8784,12 +11166,14 @@ type ListPackageVersionsOutput struct {
 	// The package component that specifies its namespace depends on its type. For
 	// example:
 	//
-	//    * The namespace of a Maven package is its groupId.
+	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
 	//
-	//    * Python and NuGet packages do not contain a corresponding component,
-	//    packages of those formats do not have a namespace.
+	//    * The namespace of a generic package is its namespace.
+	//
+	//    * Python and NuGet package versions do not contain a corresponding component,
+	//    package versions of those formats do not have a namespace.
 	Namespace *string `locationName:"namespace" min:"1" type:"string"`
 
 	// If there are additional results, this is the token for the next set of results.
@@ -8884,14 +11268,14 @@ type ListPackagesInput struct {
 	//
 	// Each package format uses namespace as follows:
 	//
-	//    * The namespace of a Maven package is its groupId.
+	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package is its scope.
-	//
-	//    * Python and NuGet packages do not contain a corresponding component,
-	//    packages of those formats do not have a namespace.
+	//    * The namespace of an npm or Swift package version is its scope.
 	//
 	//    * The namespace of a generic package is its namespace.
+	//
+	//    * Python and NuGet package versions do not contain a corresponding component,
+	//    package versions of those formats do not have a namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The token for the next set of results. Use the value returned in the previous
@@ -9338,6 +11722,151 @@ func (s *ListRepositoriesOutput) SetRepositories(v []*RepositorySummary) *ListRe
 	return s
 }
 
+type ListSubPackageGroupsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The name of the domain which contains the package group from which to list
+	// sub package groups.
+	//
+	// Domain is a required field
+	Domain *string `location:"querystring" locationName:"domain" min:"2" type:"string" required:"true"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `location:"querystring" locationName:"domain-owner" min:"12" type:"string"`
+
+	// The maximum number of results to return per page.
+	MaxResults *int64 `location:"querystring" locationName:"max-results" min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"next-token" min:"1" type:"string"`
+
+	// The pattern of the package group from which to list sub package groups.
+	//
+	// PackageGroup is a required field
+	PackageGroup *string `location:"querystring" locationName:"package-group" min:"2" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSubPackageGroupsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSubPackageGroupsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSubPackageGroupsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSubPackageGroupsInput"}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 2))
+	}
+	if s.DomainOwner != nil && len(*s.DomainOwner) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainOwner", 12))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.PackageGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageGroup"))
+	}
+	if s.PackageGroup != nil && len(*s.PackageGroup) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageGroup", 2))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomain sets the Domain field's value.
+func (s *ListSubPackageGroupsInput) SetDomain(v string) *ListSubPackageGroupsInput {
+	s.Domain = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *ListSubPackageGroupsInput) SetDomainOwner(v string) *ListSubPackageGroupsInput {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSubPackageGroupsInput) SetMaxResults(v int64) *ListSubPackageGroupsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSubPackageGroupsInput) SetNextToken(v string) *ListSubPackageGroupsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *ListSubPackageGroupsInput) SetPackageGroup(v string) *ListSubPackageGroupsInput {
+	s.PackageGroup = &v
+	return s
+}
+
+type ListSubPackageGroupsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If there are additional results, this is the token for the next set of results.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// A list of sub package groups for the requested package group.
+	PackageGroups []*PackageGroupSummary `locationName:"packageGroups" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSubPackageGroupsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSubPackageGroupsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSubPackageGroupsOutput) SetNextToken(v string) *ListSubPackageGroupsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPackageGroups sets the PackageGroups field's value.
+func (s *ListSubPackageGroupsOutput) SetPackageGroups(v []*PackageGroupSummary) *ListSubPackageGroupsOutput {
+	s.PackageGroups = v
+	return s
+}
+
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -9440,12 +11969,14 @@ type PackageDependency struct {
 	// The namespace of the package that this package depends on. The package component
 	// that specifies its namespace depends on its type. For example:
 	//
-	//    * The namespace of a Maven package is its groupId.
+	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
 	//
-	//    * Python and NuGet packages do not contain a corresponding component,
-	//    packages of those formats do not have a namespace.
+	//    * The namespace of a generic package is its namespace.
+	//
+	//    * Python and NuGet package versions do not contain a corresponding component,
+	//    package versions of those formats do not have a namespace.
 	Namespace *string `locationName:"namespace" min:"1" type:"string"`
 
 	// The name of the package that this package depends on.
@@ -9512,14 +12043,14 @@ type PackageDescription struct {
 	// The namespace of the package. The package component that specifies its namespace
 	// depends on its type. For example:
 	//
-	//    * The namespace of a Maven package is its groupId.
+	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package is its scope.
-	//
-	//    * Python and NuGet packages do not contain a corresponding component,
-	//    packages of those formats do not have a namespace.
+	//    * The namespace of an npm or Swift package version is its scope.
 	//
 	//    * The namespace of a generic package is its namespace.
+	//
+	//    * Python and NuGet package versions do not contain a corresponding component,
+	//    package versions of those formats do not have a namespace.
 	Namespace *string `locationName:"namespace" min:"1" type:"string"`
 
 	// The package origin configuration for the package.
@@ -9565,6 +12096,420 @@ func (s *PackageDescription) SetNamespace(v string) *PackageDescription {
 // SetOriginConfiguration sets the OriginConfiguration field's value.
 func (s *PackageDescription) SetOriginConfiguration(v *PackageOriginConfiguration) *PackageDescription {
 	s.OriginConfiguration = v
+	return s
+}
+
+// Details about an allowed repository for a package group, including its name
+// and origin configuration.
+type PackageGroupAllowedRepository struct {
+	_ struct{} `type:"structure"`
+
+	// The origin configuration restriction type of the allowed repository.
+	OriginRestrictionType *string `locationName:"originRestrictionType" type:"string" enum:"PackageGroupOriginRestrictionType"`
+
+	// The name of the allowed repository.
+	RepositoryName *string `locationName:"repositoryName" min:"2" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupAllowedRepository) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupAllowedRepository) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PackageGroupAllowedRepository) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PackageGroupAllowedRepository"}
+	if s.RepositoryName != nil && len(*s.RepositoryName) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("RepositoryName", 2))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOriginRestrictionType sets the OriginRestrictionType field's value.
+func (s *PackageGroupAllowedRepository) SetOriginRestrictionType(v string) *PackageGroupAllowedRepository {
+	s.OriginRestrictionType = &v
+	return s
+}
+
+// SetRepositoryName sets the RepositoryName field's value.
+func (s *PackageGroupAllowedRepository) SetRepositoryName(v string) *PackageGroupAllowedRepository {
+	s.RepositoryName = &v
+	return s
+}
+
+// The description of the package group.
+type PackageGroupDescription struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the package group.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The contact information of the package group.
+	ContactInfo *string `locationName:"contactInfo" type:"string"`
+
+	// A timestamp that represents the date and time the package group was created.
+	CreatedTime *time.Time `locationName:"createdTime" type:"timestamp"`
+
+	// The description of the package group.
+	Description *string `locationName:"description" type:"string"`
+
+	// The name of the domain that contains the package group.
+	DomainName *string `locationName:"domainName" min:"2" type:"string"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `locationName:"domainOwner" min:"12" type:"string"`
+
+	// The package group origin configuration that determines how package versions
+	// can enter repositories.
+	OriginConfiguration *PackageGroupOriginConfiguration `locationName:"originConfiguration" type:"structure"`
+
+	// The direct parent package group of the package group.
+	Parent *PackageGroupReference `locationName:"parent" type:"structure"`
+
+	// The pattern of the package group. The pattern determines which packages are
+	// associated with the package group.
+	Pattern *string `locationName:"pattern" min:"2" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupDescription) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *PackageGroupDescription) SetArn(v string) *PackageGroupDescription {
+	s.Arn = &v
+	return s
+}
+
+// SetContactInfo sets the ContactInfo field's value.
+func (s *PackageGroupDescription) SetContactInfo(v string) *PackageGroupDescription {
+	s.ContactInfo = &v
+	return s
+}
+
+// SetCreatedTime sets the CreatedTime field's value.
+func (s *PackageGroupDescription) SetCreatedTime(v time.Time) *PackageGroupDescription {
+	s.CreatedTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *PackageGroupDescription) SetDescription(v string) *PackageGroupDescription {
+	s.Description = &v
+	return s
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *PackageGroupDescription) SetDomainName(v string) *PackageGroupDescription {
+	s.DomainName = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *PackageGroupDescription) SetDomainOwner(v string) *PackageGroupDescription {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetOriginConfiguration sets the OriginConfiguration field's value.
+func (s *PackageGroupDescription) SetOriginConfiguration(v *PackageGroupOriginConfiguration) *PackageGroupDescription {
+	s.OriginConfiguration = v
+	return s
+}
+
+// SetParent sets the Parent field's value.
+func (s *PackageGroupDescription) SetParent(v *PackageGroupReference) *PackageGroupDescription {
+	s.Parent = v
+	return s
+}
+
+// SetPattern sets the Pattern field's value.
+func (s *PackageGroupDescription) SetPattern(v string) *PackageGroupDescription {
+	s.Pattern = &v
+	return s
+}
+
+// The package group origin configuration that determines how package versions
+// can enter repositories.
+type PackageGroupOriginConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The origin configuration settings that determine how package versions can
+	// enter repositories.
+	Restrictions map[string]*PackageGroupOriginRestriction `locationName:"restrictions" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupOriginConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupOriginConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetRestrictions sets the Restrictions field's value.
+func (s *PackageGroupOriginConfiguration) SetRestrictions(v map[string]*PackageGroupOriginRestriction) *PackageGroupOriginConfiguration {
+	s.Restrictions = v
+	return s
+}
+
+// Contains information about the configured restrictions of the origin controls
+// of a package group.
+type PackageGroupOriginRestriction struct {
+	_ struct{} `type:"structure"`
+
+	// The effective package group origin restriction setting. If the value of mode
+	// is ALLOW, ALLOW_SPECIFIC_REPOSITORIES, or BLOCK, then the value of effectiveMode
+	// is the same. Otherwise, when the value of mode is INHERIT, then the value
+	// of effectiveMode is the value of mode of the first parent group which does
+	// not have a value of INHERIT.
+	EffectiveMode *string `locationName:"effectiveMode" type:"string" enum:"PackageGroupOriginRestrictionMode"`
+
+	// The parent package group that the package group origin restrictions are inherited
+	// from.
+	InheritedFrom *PackageGroupReference `locationName:"inheritedFrom" type:"structure"`
+
+	// The package group origin restriction setting. If the value of mode is ALLOW,
+	// ALLOW_SPECIFIC_REPOSITORIES, or BLOCK, then the value of effectiveMode is
+	// the same. Otherwise, when the value is INHERIT, then the value of effectiveMode
+	// is the value of mode of the first parent group which does not have a value
+	// of INHERIT.
+	Mode *string `locationName:"mode" type:"string" enum:"PackageGroupOriginRestrictionMode"`
+
+	// The number of repositories in the allowed repository list.
+	RepositoriesCount *int64 `locationName:"repositoriesCount" type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupOriginRestriction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupOriginRestriction) GoString() string {
+	return s.String()
+}
+
+// SetEffectiveMode sets the EffectiveMode field's value.
+func (s *PackageGroupOriginRestriction) SetEffectiveMode(v string) *PackageGroupOriginRestriction {
+	s.EffectiveMode = &v
+	return s
+}
+
+// SetInheritedFrom sets the InheritedFrom field's value.
+func (s *PackageGroupOriginRestriction) SetInheritedFrom(v *PackageGroupReference) *PackageGroupOriginRestriction {
+	s.InheritedFrom = v
+	return s
+}
+
+// SetMode sets the Mode field's value.
+func (s *PackageGroupOriginRestriction) SetMode(v string) *PackageGroupOriginRestriction {
+	s.Mode = &v
+	return s
+}
+
+// SetRepositoriesCount sets the RepositoriesCount field's value.
+func (s *PackageGroupOriginRestriction) SetRepositoriesCount(v int64) *PackageGroupOriginRestriction {
+	s.RepositoriesCount = &v
+	return s
+}
+
+// Information about the identifiers of a package group.
+type PackageGroupReference struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the package group.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The pattern of the package group. The pattern determines which packages are
+	// associated with the package group, and is also the identifier of the package
+	// group.
+	Pattern *string `locationName:"pattern" min:"2" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupReference) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *PackageGroupReference) SetArn(v string) *PackageGroupReference {
+	s.Arn = &v
+	return s
+}
+
+// SetPattern sets the Pattern field's value.
+func (s *PackageGroupReference) SetPattern(v string) *PackageGroupReference {
+	s.Pattern = &v
+	return s
+}
+
+// Details about a package group.
+type PackageGroupSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the package group.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The contact information of the package group.
+	ContactInfo *string `locationName:"contactInfo" type:"string"`
+
+	// A timestamp that represents the date and time the repository was created.
+	CreatedTime *time.Time `locationName:"createdTime" type:"timestamp"`
+
+	// The description of the package group.
+	Description *string `locationName:"description" type:"string"`
+
+	// The domain that contains the package group.
+	DomainName *string `locationName:"domainName" min:"2" type:"string"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `locationName:"domainOwner" min:"12" type:"string"`
+
+	// Details about the package origin configuration of a package group.
+	OriginConfiguration *PackageGroupOriginConfiguration `locationName:"originConfiguration" type:"structure"`
+
+	// The direct parent package group of the package group.
+	Parent *PackageGroupReference `locationName:"parent" type:"structure"`
+
+	// The pattern of the package group. The pattern determines which packages are
+	// associated with the package group.
+	Pattern *string `locationName:"pattern" min:"2" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PackageGroupSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *PackageGroupSummary) SetArn(v string) *PackageGroupSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetContactInfo sets the ContactInfo field's value.
+func (s *PackageGroupSummary) SetContactInfo(v string) *PackageGroupSummary {
+	s.ContactInfo = &v
+	return s
+}
+
+// SetCreatedTime sets the CreatedTime field's value.
+func (s *PackageGroupSummary) SetCreatedTime(v time.Time) *PackageGroupSummary {
+	s.CreatedTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *PackageGroupSummary) SetDescription(v string) *PackageGroupSummary {
+	s.Description = &v
+	return s
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *PackageGroupSummary) SetDomainName(v string) *PackageGroupSummary {
+	s.DomainName = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *PackageGroupSummary) SetDomainOwner(v string) *PackageGroupSummary {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetOriginConfiguration sets the OriginConfiguration field's value.
+func (s *PackageGroupSummary) SetOriginConfiguration(v *PackageGroupOriginConfiguration) *PackageGroupSummary {
+	s.OriginConfiguration = v
+	return s
+}
+
+// SetParent sets the Parent field's value.
+func (s *PackageGroupSummary) SetParent(v *PackageGroupReference) *PackageGroupSummary {
+	s.Parent = v
+	return s
+}
+
+// SetPattern sets the Pattern field's value.
+func (s *PackageGroupSummary) SetPattern(v string) *PackageGroupSummary {
+	s.Pattern = &v
 	return s
 }
 
@@ -9676,14 +12621,14 @@ type PackageSummary struct {
 	// The namespace of the package. The package component that specifies its namespace
 	// depends on its type. For example:
 	//
-	//    * The namespace of a Maven package is its groupId.
+	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package is its scope.
-	//
-	//    * Python and NuGet packages do not contain a corresponding component,
-	//    packages of those formats do not have a namespace.
+	//    * The namespace of an npm or Swift package version is its scope.
 	//
 	//    * The namespace of a generic package is its namespace.
+	//
+	//    * Python and NuGet package versions do not contain a corresponding component,
+	//    package versions of those formats do not have a namespace.
 	Namespace *string `locationName:"namespace" min:"1" type:"string"`
 
 	// A PackageOriginConfiguration (https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageOriginConfiguration.html)
@@ -9757,17 +12702,17 @@ type PackageVersionDescription struct {
 	// Information about licenses associated with the package version.
 	Licenses []*LicenseInfo `locationName:"licenses" type:"list"`
 
-	// The namespace of the package version. The package version component that
-	// specifies its namespace depends on its type. For example:
+	// The namespace of the package version. The package component that specifies
+	// its namespace depends on its type. For example:
 	//
 	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
-	//
-	//    * The namespace of a generic package is its namespace.
 	Namespace *string `locationName:"namespace" min:"1" type:"string"`
 
 	// A PackageVersionOrigin (https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_PackageVersionOrigin.html)
@@ -10101,6 +13046,8 @@ type PublishPackageVersionInput struct {
 
 	// A format that specifies the type of the package version with the requested
 	// asset file.
+	//
+	// The only supported value is generic.
 	//
 	// Format is a required field
 	Format *string `location:"querystring" locationName:"format" type:"string" required:"true" enum:"PackageFormat"`
@@ -10507,14 +13454,14 @@ type PutPackageOriginConfigurationInput struct {
 	// The namespace of the package to be updated. The package component that specifies
 	// its namespace depends on its type. For example:
 	//
-	//    * The namespace of a Maven package is its groupId.
+	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package is its scope.
-	//
-	//    * Python and NuGet packages do not contain a corresponding component,
-	//    packages of those formats do not have a namespace.
+	//    * The namespace of an npm or Swift package version is its scope.
 	//
 	//    * The namespace of a generic package is its namespace.
+	//
+	//    * Python and NuGet package versions do not contain a corresponding component,
+	//    package versions of those formats do not have a namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The name of the package to be updated.
@@ -11635,6 +14582,305 @@ func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
 
+type UpdatePackageGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// Contact information which you want to update the requested package group
+	// with.
+	ContactInfo *string `locationName:"contactInfo" type:"string"`
+
+	// The description you want to update the requested package group with.
+	Description *string `locationName:"description" type:"string"`
+
+	// The name of the domain which contains the package group to be updated.
+	//
+	// Domain is a required field
+	Domain *string `location:"querystring" locationName:"domain" min:"2" type:"string" required:"true"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `location:"querystring" locationName:"domain-owner" min:"12" type:"string"`
+
+	// The pattern of the package group to be updated.
+	//
+	// PackageGroup is a required field
+	PackageGroup *string `locationName:"packageGroup" min:"2" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdatePackageGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdatePackageGroupInput"}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 2))
+	}
+	if s.DomainOwner != nil && len(*s.DomainOwner) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainOwner", 12))
+	}
+	if s.PackageGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageGroup"))
+	}
+	if s.PackageGroup != nil && len(*s.PackageGroup) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageGroup", 2))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactInfo sets the ContactInfo field's value.
+func (s *UpdatePackageGroupInput) SetContactInfo(v string) *UpdatePackageGroupInput {
+	s.ContactInfo = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdatePackageGroupInput) SetDescription(v string) *UpdatePackageGroupInput {
+	s.Description = &v
+	return s
+}
+
+// SetDomain sets the Domain field's value.
+func (s *UpdatePackageGroupInput) SetDomain(v string) *UpdatePackageGroupInput {
+	s.Domain = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *UpdatePackageGroupInput) SetDomainOwner(v string) *UpdatePackageGroupInput {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *UpdatePackageGroupInput) SetPackageGroup(v string) *UpdatePackageGroupInput {
+	s.PackageGroup = &v
+	return s
+}
+
+type UpdatePackageGroupOriginConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The repository name and restrictions to add to the allowed repository list
+	// of the specified package group.
+	AddAllowedRepositories []*PackageGroupAllowedRepository `locationName:"addAllowedRepositories" type:"list"`
+
+	// The name of the domain which contains the package group for which to update
+	// the origin configuration.
+	//
+	// Domain is a required field
+	Domain *string `location:"querystring" locationName:"domain" min:"2" type:"string" required:"true"`
+
+	// The 12-digit account number of the Amazon Web Services account that owns
+	// the domain. It does not include dashes or spaces.
+	DomainOwner *string `location:"querystring" locationName:"domain-owner" min:"12" type:"string"`
+
+	// The pattern of the package group for which to update the origin configuration.
+	//
+	// PackageGroup is a required field
+	PackageGroup *string `location:"querystring" locationName:"package-group" min:"2" type:"string" required:"true"`
+
+	// The repository name and restrictions to remove from the allowed repository
+	// list of the specified package group.
+	RemoveAllowedRepositories []*PackageGroupAllowedRepository `locationName:"removeAllowedRepositories" type:"list"`
+
+	// The origin configuration settings that determine how package versions can
+	// enter repositories.
+	Restrictions map[string]*string `locationName:"restrictions" type:"map"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageGroupOriginConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageGroupOriginConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdatePackageGroupOriginConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdatePackageGroupOriginConfigurationInput"}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 2))
+	}
+	if s.DomainOwner != nil && len(*s.DomainOwner) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainOwner", 12))
+	}
+	if s.PackageGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("PackageGroup"))
+	}
+	if s.PackageGroup != nil && len(*s.PackageGroup) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("PackageGroup", 2))
+	}
+	if s.AddAllowedRepositories != nil {
+		for i, v := range s.AddAllowedRepositories {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AddAllowedRepositories", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.RemoveAllowedRepositories != nil {
+		for i, v := range s.RemoveAllowedRepositories {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "RemoveAllowedRepositories", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAddAllowedRepositories sets the AddAllowedRepositories field's value.
+func (s *UpdatePackageGroupOriginConfigurationInput) SetAddAllowedRepositories(v []*PackageGroupAllowedRepository) *UpdatePackageGroupOriginConfigurationInput {
+	s.AddAllowedRepositories = v
+	return s
+}
+
+// SetDomain sets the Domain field's value.
+func (s *UpdatePackageGroupOriginConfigurationInput) SetDomain(v string) *UpdatePackageGroupOriginConfigurationInput {
+	s.Domain = &v
+	return s
+}
+
+// SetDomainOwner sets the DomainOwner field's value.
+func (s *UpdatePackageGroupOriginConfigurationInput) SetDomainOwner(v string) *UpdatePackageGroupOriginConfigurationInput {
+	s.DomainOwner = &v
+	return s
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *UpdatePackageGroupOriginConfigurationInput) SetPackageGroup(v string) *UpdatePackageGroupOriginConfigurationInput {
+	s.PackageGroup = &v
+	return s
+}
+
+// SetRemoveAllowedRepositories sets the RemoveAllowedRepositories field's value.
+func (s *UpdatePackageGroupOriginConfigurationInput) SetRemoveAllowedRepositories(v []*PackageGroupAllowedRepository) *UpdatePackageGroupOriginConfigurationInput {
+	s.RemoveAllowedRepositories = v
+	return s
+}
+
+// SetRestrictions sets the Restrictions field's value.
+func (s *UpdatePackageGroupOriginConfigurationInput) SetRestrictions(v map[string]*string) *UpdatePackageGroupOriginConfigurationInput {
+	s.Restrictions = v
+	return s
+}
+
+type UpdatePackageGroupOriginConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the updated allowed repositories after processing the request.
+	AllowedRepositoryUpdates map[string]map[string][]*string `locationName:"allowedRepositoryUpdates" type:"map"`
+
+	// The package group and information about it after processing the request.
+	PackageGroup *PackageGroupDescription `locationName:"packageGroup" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageGroupOriginConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageGroupOriginConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetAllowedRepositoryUpdates sets the AllowedRepositoryUpdates field's value.
+func (s *UpdatePackageGroupOriginConfigurationOutput) SetAllowedRepositoryUpdates(v map[string]map[string][]*string) *UpdatePackageGroupOriginConfigurationOutput {
+	s.AllowedRepositoryUpdates = v
+	return s
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *UpdatePackageGroupOriginConfigurationOutput) SetPackageGroup(v *PackageGroupDescription) *UpdatePackageGroupOriginConfigurationOutput {
+	s.PackageGroup = v
+	return s
+}
+
+type UpdatePackageGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The package group and information about it after the request has been processed.
+	PackageGroup *PackageGroupDescription `locationName:"packageGroup" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdatePackageGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetPackageGroup sets the PackageGroup field's value.
+func (s *UpdatePackageGroupOutput) SetPackageGroup(v *PackageGroupDescription) *UpdatePackageGroupOutput {
+	s.PackageGroup = v
+	return s
+}
+
 type UpdatePackageVersionsStatusInput struct {
 	_ struct{} `type:"structure"`
 
@@ -11658,17 +14904,17 @@ type UpdatePackageVersionsStatusInput struct {
 	// Format is a required field
 	Format *string `location:"querystring" locationName:"format" type:"string" required:"true" enum:"PackageFormat"`
 
-	// The namespace of the package version to be updated. The package version component
+	// The namespace of the package version to be updated. The package component
 	// that specifies its namespace depends on its type. For example:
 	//
 	//    * The namespace of a Maven package version is its groupId.
 	//
-	//    * The namespace of an npm package version is its scope.
+	//    * The namespace of an npm or Swift package version is its scope.
+	//
+	//    * The namespace of a generic package is its namespace.
 	//
 	//    * Python and NuGet package versions do not contain a corresponding component,
 	//    package versions of those formats do not have a namespace.
-	//
-	//    * The namespace of a generic package is its namespace.
 	Namespace *string `location:"querystring" locationName:"namespace" min:"1" type:"string"`
 
 	// The name of the package with the version statuses to update.
@@ -12253,6 +15499,9 @@ const (
 
 	// PackageFormatGeneric is a PackageFormat enum value
 	PackageFormatGeneric = "generic"
+
+	// PackageFormatSwift is a PackageFormat enum value
+	PackageFormatSwift = "swift"
 )
 
 // PackageFormat_Values returns all elements of the PackageFormat enum
@@ -12263,6 +15512,83 @@ func PackageFormat_Values() []string {
 		PackageFormatMaven,
 		PackageFormatNuget,
 		PackageFormatGeneric,
+		PackageFormatSwift,
+	}
+}
+
+const (
+	// PackageGroupAllowedRepositoryUpdateTypeAdded is a PackageGroupAllowedRepositoryUpdateType enum value
+	PackageGroupAllowedRepositoryUpdateTypeAdded = "ADDED"
+
+	// PackageGroupAllowedRepositoryUpdateTypeRemoved is a PackageGroupAllowedRepositoryUpdateType enum value
+	PackageGroupAllowedRepositoryUpdateTypeRemoved = "REMOVED"
+)
+
+// PackageGroupAllowedRepositoryUpdateType_Values returns all elements of the PackageGroupAllowedRepositoryUpdateType enum
+func PackageGroupAllowedRepositoryUpdateType_Values() []string {
+	return []string{
+		PackageGroupAllowedRepositoryUpdateTypeAdded,
+		PackageGroupAllowedRepositoryUpdateTypeRemoved,
+	}
+}
+
+const (
+	// PackageGroupAssociationTypeStrong is a PackageGroupAssociationType enum value
+	PackageGroupAssociationTypeStrong = "STRONG"
+
+	// PackageGroupAssociationTypeWeak is a PackageGroupAssociationType enum value
+	PackageGroupAssociationTypeWeak = "WEAK"
+)
+
+// PackageGroupAssociationType_Values returns all elements of the PackageGroupAssociationType enum
+func PackageGroupAssociationType_Values() []string {
+	return []string{
+		PackageGroupAssociationTypeStrong,
+		PackageGroupAssociationTypeWeak,
+	}
+}
+
+const (
+	// PackageGroupOriginRestrictionModeAllow is a PackageGroupOriginRestrictionMode enum value
+	PackageGroupOriginRestrictionModeAllow = "ALLOW"
+
+	// PackageGroupOriginRestrictionModeAllowSpecificRepositories is a PackageGroupOriginRestrictionMode enum value
+	PackageGroupOriginRestrictionModeAllowSpecificRepositories = "ALLOW_SPECIFIC_REPOSITORIES"
+
+	// PackageGroupOriginRestrictionModeBlock is a PackageGroupOriginRestrictionMode enum value
+	PackageGroupOriginRestrictionModeBlock = "BLOCK"
+
+	// PackageGroupOriginRestrictionModeInherit is a PackageGroupOriginRestrictionMode enum value
+	PackageGroupOriginRestrictionModeInherit = "INHERIT"
+)
+
+// PackageGroupOriginRestrictionMode_Values returns all elements of the PackageGroupOriginRestrictionMode enum
+func PackageGroupOriginRestrictionMode_Values() []string {
+	return []string{
+		PackageGroupOriginRestrictionModeAllow,
+		PackageGroupOriginRestrictionModeAllowSpecificRepositories,
+		PackageGroupOriginRestrictionModeBlock,
+		PackageGroupOriginRestrictionModeInherit,
+	}
+}
+
+const (
+	// PackageGroupOriginRestrictionTypeExternalUpstream is a PackageGroupOriginRestrictionType enum value
+	PackageGroupOriginRestrictionTypeExternalUpstream = "EXTERNAL_UPSTREAM"
+
+	// PackageGroupOriginRestrictionTypeInternalUpstream is a PackageGroupOriginRestrictionType enum value
+	PackageGroupOriginRestrictionTypeInternalUpstream = "INTERNAL_UPSTREAM"
+
+	// PackageGroupOriginRestrictionTypePublish is a PackageGroupOriginRestrictionType enum value
+	PackageGroupOriginRestrictionTypePublish = "PUBLISH"
+)
+
+// PackageGroupOriginRestrictionType_Values returns all elements of the PackageGroupOriginRestrictionType enum
+func PackageGroupOriginRestrictionType_Values() []string {
+	return []string{
+		PackageGroupOriginRestrictionTypeExternalUpstream,
+		PackageGroupOriginRestrictionTypeInternalUpstream,
+		PackageGroupOriginRestrictionTypePublish,
 	}
 }
 

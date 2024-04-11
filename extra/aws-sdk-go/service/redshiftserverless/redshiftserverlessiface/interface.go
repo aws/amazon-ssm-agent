@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Redshift Serverless.
-//    func myFunc(svc redshiftserverlessiface.RedshiftServerlessAPI) bool {
-//        // Make svc.ConvertRecoveryPointToSnapshot request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Redshift Serverless.
+//	func myFunc(svc redshiftserverlessiface.RedshiftServerlessAPI) bool {
+//	    // Make svc.ConvertRecoveryPointToSnapshot request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := redshiftserverless.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := redshiftserverless.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockRedshiftServerlessClient struct {
-//        redshiftserverlessiface.RedshiftServerlessAPI
-//    }
-//    func (m *mockRedshiftServerlessClient) ConvertRecoveryPointToSnapshot(input *redshiftserverless.ConvertRecoveryPointToSnapshotInput) (*redshiftserverless.ConvertRecoveryPointToSnapshotOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockRedshiftServerlessClient struct {
+//	    redshiftserverlessiface.RedshiftServerlessAPI
+//	}
+//	func (m *mockRedshiftServerlessClient) ConvertRecoveryPointToSnapshot(input *redshiftserverless.ConvertRecoveryPointToSnapshotInput) (*redshiftserverless.ConvertRecoveryPointToSnapshotOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockRedshiftServerlessClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockRedshiftServerlessClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -64,6 +64,10 @@ type RedshiftServerlessAPI interface {
 	ConvertRecoveryPointToSnapshotWithContext(aws.Context, *redshiftserverless.ConvertRecoveryPointToSnapshotInput, ...request.Option) (*redshiftserverless.ConvertRecoveryPointToSnapshotOutput, error)
 	ConvertRecoveryPointToSnapshotRequest(*redshiftserverless.ConvertRecoveryPointToSnapshotInput) (*request.Request, *redshiftserverless.ConvertRecoveryPointToSnapshotOutput)
 
+	CreateCustomDomainAssociation(*redshiftserverless.CreateCustomDomainAssociationInput) (*redshiftserverless.CreateCustomDomainAssociationOutput, error)
+	CreateCustomDomainAssociationWithContext(aws.Context, *redshiftserverless.CreateCustomDomainAssociationInput, ...request.Option) (*redshiftserverless.CreateCustomDomainAssociationOutput, error)
+	CreateCustomDomainAssociationRequest(*redshiftserverless.CreateCustomDomainAssociationInput) (*request.Request, *redshiftserverless.CreateCustomDomainAssociationOutput)
+
 	CreateEndpointAccess(*redshiftserverless.CreateEndpointAccessInput) (*redshiftserverless.CreateEndpointAccessOutput, error)
 	CreateEndpointAccessWithContext(aws.Context, *redshiftserverless.CreateEndpointAccessInput, ...request.Option) (*redshiftserverless.CreateEndpointAccessOutput, error)
 	CreateEndpointAccessRequest(*redshiftserverless.CreateEndpointAccessInput) (*request.Request, *redshiftserverless.CreateEndpointAccessOutput)
@@ -72,9 +76,17 @@ type RedshiftServerlessAPI interface {
 	CreateNamespaceWithContext(aws.Context, *redshiftserverless.CreateNamespaceInput, ...request.Option) (*redshiftserverless.CreateNamespaceOutput, error)
 	CreateNamespaceRequest(*redshiftserverless.CreateNamespaceInput) (*request.Request, *redshiftserverless.CreateNamespaceOutput)
 
+	CreateScheduledAction(*redshiftserverless.CreateScheduledActionInput) (*redshiftserverless.CreateScheduledActionOutput, error)
+	CreateScheduledActionWithContext(aws.Context, *redshiftserverless.CreateScheduledActionInput, ...request.Option) (*redshiftserverless.CreateScheduledActionOutput, error)
+	CreateScheduledActionRequest(*redshiftserverless.CreateScheduledActionInput) (*request.Request, *redshiftserverless.CreateScheduledActionOutput)
+
 	CreateSnapshot(*redshiftserverless.CreateSnapshotInput) (*redshiftserverless.CreateSnapshotOutput, error)
 	CreateSnapshotWithContext(aws.Context, *redshiftserverless.CreateSnapshotInput, ...request.Option) (*redshiftserverless.CreateSnapshotOutput, error)
 	CreateSnapshotRequest(*redshiftserverless.CreateSnapshotInput) (*request.Request, *redshiftserverless.CreateSnapshotOutput)
+
+	CreateSnapshotCopyConfiguration(*redshiftserverless.CreateSnapshotCopyConfigurationInput) (*redshiftserverless.CreateSnapshotCopyConfigurationOutput, error)
+	CreateSnapshotCopyConfigurationWithContext(aws.Context, *redshiftserverless.CreateSnapshotCopyConfigurationInput, ...request.Option) (*redshiftserverless.CreateSnapshotCopyConfigurationOutput, error)
+	CreateSnapshotCopyConfigurationRequest(*redshiftserverless.CreateSnapshotCopyConfigurationInput) (*request.Request, *redshiftserverless.CreateSnapshotCopyConfigurationOutput)
 
 	CreateUsageLimit(*redshiftserverless.CreateUsageLimitInput) (*redshiftserverless.CreateUsageLimitOutput, error)
 	CreateUsageLimitWithContext(aws.Context, *redshiftserverless.CreateUsageLimitInput, ...request.Option) (*redshiftserverless.CreateUsageLimitOutput, error)
@@ -83,6 +95,10 @@ type RedshiftServerlessAPI interface {
 	CreateWorkgroup(*redshiftserverless.CreateWorkgroupInput) (*redshiftserverless.CreateWorkgroupOutput, error)
 	CreateWorkgroupWithContext(aws.Context, *redshiftserverless.CreateWorkgroupInput, ...request.Option) (*redshiftserverless.CreateWorkgroupOutput, error)
 	CreateWorkgroupRequest(*redshiftserverless.CreateWorkgroupInput) (*request.Request, *redshiftserverless.CreateWorkgroupOutput)
+
+	DeleteCustomDomainAssociation(*redshiftserverless.DeleteCustomDomainAssociationInput) (*redshiftserverless.DeleteCustomDomainAssociationOutput, error)
+	DeleteCustomDomainAssociationWithContext(aws.Context, *redshiftserverless.DeleteCustomDomainAssociationInput, ...request.Option) (*redshiftserverless.DeleteCustomDomainAssociationOutput, error)
+	DeleteCustomDomainAssociationRequest(*redshiftserverless.DeleteCustomDomainAssociationInput) (*request.Request, *redshiftserverless.DeleteCustomDomainAssociationOutput)
 
 	DeleteEndpointAccess(*redshiftserverless.DeleteEndpointAccessInput) (*redshiftserverless.DeleteEndpointAccessOutput, error)
 	DeleteEndpointAccessWithContext(aws.Context, *redshiftserverless.DeleteEndpointAccessInput, ...request.Option) (*redshiftserverless.DeleteEndpointAccessOutput, error)
@@ -96,9 +112,17 @@ type RedshiftServerlessAPI interface {
 	DeleteResourcePolicyWithContext(aws.Context, *redshiftserverless.DeleteResourcePolicyInput, ...request.Option) (*redshiftserverless.DeleteResourcePolicyOutput, error)
 	DeleteResourcePolicyRequest(*redshiftserverless.DeleteResourcePolicyInput) (*request.Request, *redshiftserverless.DeleteResourcePolicyOutput)
 
+	DeleteScheduledAction(*redshiftserverless.DeleteScheduledActionInput) (*redshiftserverless.DeleteScheduledActionOutput, error)
+	DeleteScheduledActionWithContext(aws.Context, *redshiftserverless.DeleteScheduledActionInput, ...request.Option) (*redshiftserverless.DeleteScheduledActionOutput, error)
+	DeleteScheduledActionRequest(*redshiftserverless.DeleteScheduledActionInput) (*request.Request, *redshiftserverless.DeleteScheduledActionOutput)
+
 	DeleteSnapshot(*redshiftserverless.DeleteSnapshotInput) (*redshiftserverless.DeleteSnapshotOutput, error)
 	DeleteSnapshotWithContext(aws.Context, *redshiftserverless.DeleteSnapshotInput, ...request.Option) (*redshiftserverless.DeleteSnapshotOutput, error)
 	DeleteSnapshotRequest(*redshiftserverless.DeleteSnapshotInput) (*request.Request, *redshiftserverless.DeleteSnapshotOutput)
+
+	DeleteSnapshotCopyConfiguration(*redshiftserverless.DeleteSnapshotCopyConfigurationInput) (*redshiftserverless.DeleteSnapshotCopyConfigurationOutput, error)
+	DeleteSnapshotCopyConfigurationWithContext(aws.Context, *redshiftserverless.DeleteSnapshotCopyConfigurationInput, ...request.Option) (*redshiftserverless.DeleteSnapshotCopyConfigurationOutput, error)
+	DeleteSnapshotCopyConfigurationRequest(*redshiftserverless.DeleteSnapshotCopyConfigurationInput) (*request.Request, *redshiftserverless.DeleteSnapshotCopyConfigurationOutput)
 
 	DeleteUsageLimit(*redshiftserverless.DeleteUsageLimitInput) (*redshiftserverless.DeleteUsageLimitOutput, error)
 	DeleteUsageLimitWithContext(aws.Context, *redshiftserverless.DeleteUsageLimitInput, ...request.Option) (*redshiftserverless.DeleteUsageLimitOutput, error)
@@ -111,6 +135,10 @@ type RedshiftServerlessAPI interface {
 	GetCredentials(*redshiftserverless.GetCredentialsInput) (*redshiftserverless.GetCredentialsOutput, error)
 	GetCredentialsWithContext(aws.Context, *redshiftserverless.GetCredentialsInput, ...request.Option) (*redshiftserverless.GetCredentialsOutput, error)
 	GetCredentialsRequest(*redshiftserverless.GetCredentialsInput) (*request.Request, *redshiftserverless.GetCredentialsOutput)
+
+	GetCustomDomainAssociation(*redshiftserverless.GetCustomDomainAssociationInput) (*redshiftserverless.GetCustomDomainAssociationOutput, error)
+	GetCustomDomainAssociationWithContext(aws.Context, *redshiftserverless.GetCustomDomainAssociationInput, ...request.Option) (*redshiftserverless.GetCustomDomainAssociationOutput, error)
+	GetCustomDomainAssociationRequest(*redshiftserverless.GetCustomDomainAssociationInput) (*request.Request, *redshiftserverless.GetCustomDomainAssociationOutput)
 
 	GetEndpointAccess(*redshiftserverless.GetEndpointAccessInput) (*redshiftserverless.GetEndpointAccessOutput, error)
 	GetEndpointAccessWithContext(aws.Context, *redshiftserverless.GetEndpointAccessInput, ...request.Option) (*redshiftserverless.GetEndpointAccessOutput, error)
@@ -128,6 +156,10 @@ type RedshiftServerlessAPI interface {
 	GetResourcePolicyWithContext(aws.Context, *redshiftserverless.GetResourcePolicyInput, ...request.Option) (*redshiftserverless.GetResourcePolicyOutput, error)
 	GetResourcePolicyRequest(*redshiftserverless.GetResourcePolicyInput) (*request.Request, *redshiftserverless.GetResourcePolicyOutput)
 
+	GetScheduledAction(*redshiftserverless.GetScheduledActionInput) (*redshiftserverless.GetScheduledActionOutput, error)
+	GetScheduledActionWithContext(aws.Context, *redshiftserverless.GetScheduledActionInput, ...request.Option) (*redshiftserverless.GetScheduledActionOutput, error)
+	GetScheduledActionRequest(*redshiftserverless.GetScheduledActionInput) (*request.Request, *redshiftserverless.GetScheduledActionOutput)
+
 	GetSnapshot(*redshiftserverless.GetSnapshotInput) (*redshiftserverless.GetSnapshotOutput, error)
 	GetSnapshotWithContext(aws.Context, *redshiftserverless.GetSnapshotInput, ...request.Option) (*redshiftserverless.GetSnapshotOutput, error)
 	GetSnapshotRequest(*redshiftserverless.GetSnapshotInput) (*request.Request, *redshiftserverless.GetSnapshotOutput)
@@ -143,6 +175,13 @@ type RedshiftServerlessAPI interface {
 	GetWorkgroup(*redshiftserverless.GetWorkgroupInput) (*redshiftserverless.GetWorkgroupOutput, error)
 	GetWorkgroupWithContext(aws.Context, *redshiftserverless.GetWorkgroupInput, ...request.Option) (*redshiftserverless.GetWorkgroupOutput, error)
 	GetWorkgroupRequest(*redshiftserverless.GetWorkgroupInput) (*request.Request, *redshiftserverless.GetWorkgroupOutput)
+
+	ListCustomDomainAssociations(*redshiftserverless.ListCustomDomainAssociationsInput) (*redshiftserverless.ListCustomDomainAssociationsOutput, error)
+	ListCustomDomainAssociationsWithContext(aws.Context, *redshiftserverless.ListCustomDomainAssociationsInput, ...request.Option) (*redshiftserverless.ListCustomDomainAssociationsOutput, error)
+	ListCustomDomainAssociationsRequest(*redshiftserverless.ListCustomDomainAssociationsInput) (*request.Request, *redshiftserverless.ListCustomDomainAssociationsOutput)
+
+	ListCustomDomainAssociationsPages(*redshiftserverless.ListCustomDomainAssociationsInput, func(*redshiftserverless.ListCustomDomainAssociationsOutput, bool) bool) error
+	ListCustomDomainAssociationsPagesWithContext(aws.Context, *redshiftserverless.ListCustomDomainAssociationsInput, func(*redshiftserverless.ListCustomDomainAssociationsOutput, bool) bool, ...request.Option) error
 
 	ListEndpointAccess(*redshiftserverless.ListEndpointAccessInput) (*redshiftserverless.ListEndpointAccessOutput, error)
 	ListEndpointAccessWithContext(aws.Context, *redshiftserverless.ListEndpointAccessInput, ...request.Option) (*redshiftserverless.ListEndpointAccessOutput, error)
@@ -164,6 +203,20 @@ type RedshiftServerlessAPI interface {
 
 	ListRecoveryPointsPages(*redshiftserverless.ListRecoveryPointsInput, func(*redshiftserverless.ListRecoveryPointsOutput, bool) bool) error
 	ListRecoveryPointsPagesWithContext(aws.Context, *redshiftserverless.ListRecoveryPointsInput, func(*redshiftserverless.ListRecoveryPointsOutput, bool) bool, ...request.Option) error
+
+	ListScheduledActions(*redshiftserverless.ListScheduledActionsInput) (*redshiftserverless.ListScheduledActionsOutput, error)
+	ListScheduledActionsWithContext(aws.Context, *redshiftserverless.ListScheduledActionsInput, ...request.Option) (*redshiftserverless.ListScheduledActionsOutput, error)
+	ListScheduledActionsRequest(*redshiftserverless.ListScheduledActionsInput) (*request.Request, *redshiftserverless.ListScheduledActionsOutput)
+
+	ListScheduledActionsPages(*redshiftserverless.ListScheduledActionsInput, func(*redshiftserverless.ListScheduledActionsOutput, bool) bool) error
+	ListScheduledActionsPagesWithContext(aws.Context, *redshiftserverless.ListScheduledActionsInput, func(*redshiftserverless.ListScheduledActionsOutput, bool) bool, ...request.Option) error
+
+	ListSnapshotCopyConfigurations(*redshiftserverless.ListSnapshotCopyConfigurationsInput) (*redshiftserverless.ListSnapshotCopyConfigurationsOutput, error)
+	ListSnapshotCopyConfigurationsWithContext(aws.Context, *redshiftserverless.ListSnapshotCopyConfigurationsInput, ...request.Option) (*redshiftserverless.ListSnapshotCopyConfigurationsOutput, error)
+	ListSnapshotCopyConfigurationsRequest(*redshiftserverless.ListSnapshotCopyConfigurationsInput) (*request.Request, *redshiftserverless.ListSnapshotCopyConfigurationsOutput)
+
+	ListSnapshotCopyConfigurationsPages(*redshiftserverless.ListSnapshotCopyConfigurationsInput, func(*redshiftserverless.ListSnapshotCopyConfigurationsOutput, bool) bool) error
+	ListSnapshotCopyConfigurationsPagesWithContext(aws.Context, *redshiftserverless.ListSnapshotCopyConfigurationsInput, func(*redshiftserverless.ListSnapshotCopyConfigurationsOutput, bool) bool, ...request.Option) error
 
 	ListSnapshots(*redshiftserverless.ListSnapshotsInput) (*redshiftserverless.ListSnapshotsOutput, error)
 	ListSnapshotsWithContext(aws.Context, *redshiftserverless.ListSnapshotsInput, ...request.Option) (*redshiftserverless.ListSnapshotsOutput, error)
@@ -209,6 +262,10 @@ type RedshiftServerlessAPI interface {
 	RestoreFromSnapshotWithContext(aws.Context, *redshiftserverless.RestoreFromSnapshotInput, ...request.Option) (*redshiftserverless.RestoreFromSnapshotOutput, error)
 	RestoreFromSnapshotRequest(*redshiftserverless.RestoreFromSnapshotInput) (*request.Request, *redshiftserverless.RestoreFromSnapshotOutput)
 
+	RestoreTableFromRecoveryPoint(*redshiftserverless.RestoreTableFromRecoveryPointInput) (*redshiftserverless.RestoreTableFromRecoveryPointOutput, error)
+	RestoreTableFromRecoveryPointWithContext(aws.Context, *redshiftserverless.RestoreTableFromRecoveryPointInput, ...request.Option) (*redshiftserverless.RestoreTableFromRecoveryPointOutput, error)
+	RestoreTableFromRecoveryPointRequest(*redshiftserverless.RestoreTableFromRecoveryPointInput) (*request.Request, *redshiftserverless.RestoreTableFromRecoveryPointOutput)
+
 	RestoreTableFromSnapshot(*redshiftserverless.RestoreTableFromSnapshotInput) (*redshiftserverless.RestoreTableFromSnapshotOutput, error)
 	RestoreTableFromSnapshotWithContext(aws.Context, *redshiftserverless.RestoreTableFromSnapshotInput, ...request.Option) (*redshiftserverless.RestoreTableFromSnapshotOutput, error)
 	RestoreTableFromSnapshotRequest(*redshiftserverless.RestoreTableFromSnapshotInput) (*request.Request, *redshiftserverless.RestoreTableFromSnapshotOutput)
@@ -221,6 +278,10 @@ type RedshiftServerlessAPI interface {
 	UntagResourceWithContext(aws.Context, *redshiftserverless.UntagResourceInput, ...request.Option) (*redshiftserverless.UntagResourceOutput, error)
 	UntagResourceRequest(*redshiftserverless.UntagResourceInput) (*request.Request, *redshiftserverless.UntagResourceOutput)
 
+	UpdateCustomDomainAssociation(*redshiftserverless.UpdateCustomDomainAssociationInput) (*redshiftserverless.UpdateCustomDomainAssociationOutput, error)
+	UpdateCustomDomainAssociationWithContext(aws.Context, *redshiftserverless.UpdateCustomDomainAssociationInput, ...request.Option) (*redshiftserverless.UpdateCustomDomainAssociationOutput, error)
+	UpdateCustomDomainAssociationRequest(*redshiftserverless.UpdateCustomDomainAssociationInput) (*request.Request, *redshiftserverless.UpdateCustomDomainAssociationOutput)
+
 	UpdateEndpointAccess(*redshiftserverless.UpdateEndpointAccessInput) (*redshiftserverless.UpdateEndpointAccessOutput, error)
 	UpdateEndpointAccessWithContext(aws.Context, *redshiftserverless.UpdateEndpointAccessInput, ...request.Option) (*redshiftserverless.UpdateEndpointAccessOutput, error)
 	UpdateEndpointAccessRequest(*redshiftserverless.UpdateEndpointAccessInput) (*request.Request, *redshiftserverless.UpdateEndpointAccessOutput)
@@ -229,9 +290,17 @@ type RedshiftServerlessAPI interface {
 	UpdateNamespaceWithContext(aws.Context, *redshiftserverless.UpdateNamespaceInput, ...request.Option) (*redshiftserverless.UpdateNamespaceOutput, error)
 	UpdateNamespaceRequest(*redshiftserverless.UpdateNamespaceInput) (*request.Request, *redshiftserverless.UpdateNamespaceOutput)
 
+	UpdateScheduledAction(*redshiftserverless.UpdateScheduledActionInput) (*redshiftserverless.UpdateScheduledActionOutput, error)
+	UpdateScheduledActionWithContext(aws.Context, *redshiftserverless.UpdateScheduledActionInput, ...request.Option) (*redshiftserverless.UpdateScheduledActionOutput, error)
+	UpdateScheduledActionRequest(*redshiftserverless.UpdateScheduledActionInput) (*request.Request, *redshiftserverless.UpdateScheduledActionOutput)
+
 	UpdateSnapshot(*redshiftserverless.UpdateSnapshotInput) (*redshiftserverless.UpdateSnapshotOutput, error)
 	UpdateSnapshotWithContext(aws.Context, *redshiftserverless.UpdateSnapshotInput, ...request.Option) (*redshiftserverless.UpdateSnapshotOutput, error)
 	UpdateSnapshotRequest(*redshiftserverless.UpdateSnapshotInput) (*request.Request, *redshiftserverless.UpdateSnapshotOutput)
+
+	UpdateSnapshotCopyConfiguration(*redshiftserverless.UpdateSnapshotCopyConfigurationInput) (*redshiftserverless.UpdateSnapshotCopyConfigurationOutput, error)
+	UpdateSnapshotCopyConfigurationWithContext(aws.Context, *redshiftserverless.UpdateSnapshotCopyConfigurationInput, ...request.Option) (*redshiftserverless.UpdateSnapshotCopyConfigurationOutput, error)
+	UpdateSnapshotCopyConfigurationRequest(*redshiftserverless.UpdateSnapshotCopyConfigurationInput) (*request.Request, *redshiftserverless.UpdateSnapshotCopyConfigurationOutput)
 
 	UpdateUsageLimit(*redshiftserverless.UpdateUsageLimitInput) (*redshiftserverless.UpdateUsageLimitOutput, error)
 	UpdateUsageLimitWithContext(aws.Context, *redshiftserverless.UpdateUsageLimitInput, ...request.Option) (*redshiftserverless.UpdateUsageLimitOutput, error)

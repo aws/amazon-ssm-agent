@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a OAM client from just a session.
-//     svc := oam.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a OAM client with additional configuration
-//     svc := oam.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a OAM client from just a session.
+//	svc := oam.New(mySession)
+//
+//	// Create a OAM client with additional configuration
+//	svc := oam.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *OAM {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

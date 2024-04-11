@@ -29,14 +29,13 @@ const opAddTagsToOnPremisesInstances = "AddTagsToOnPremisesInstances"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddTagsToOnPremisesInstancesRequest method.
+//	req, resp := client.AddTagsToOnPremisesInstancesRequest(params)
 //
-//    // Example sending a request using the AddTagsToOnPremisesInstancesRequest method.
-//    req, resp := client.AddTagsToOnPremisesInstancesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/AddTagsToOnPremisesInstances
 func (c *CodeDeploy) AddTagsToOnPremisesInstancesRequest(input *AddTagsToOnPremisesInstancesInput) (req *request.Request, output *AddTagsToOnPremisesInstancesOutput) {
@@ -68,27 +67,28 @@ func (c *CodeDeploy) AddTagsToOnPremisesInstancesRequest(input *AddTagsToOnPremi
 // API operation AddTagsToOnPremisesInstances for usage and error information.
 //
 // Returned Error Types:
-//   * InstanceNameRequiredException
-//   An on-premises instance name was not specified.
 //
-//   * InvalidInstanceNameException
-//   The on-premises instance name was specified in an invalid format.
+//   - InstanceNameRequiredException
+//     An on-premises instance name was not specified.
 //
-//   * TagRequiredException
-//   A tag was not specified.
+//   - InvalidInstanceNameException
+//     The on-premises instance name was specified in an invalid format.
 //
-//   * InvalidTagException
-//   The tag was specified in an invalid format.
+//   - TagRequiredException
+//     A tag was not specified.
 //
-//   * TagLimitExceededException
-//   The maximum allowed number of tags was exceeded.
+//   - InvalidTagException
+//     The tag was specified in an invalid format.
 //
-//   * InstanceLimitExceededException
-//   The maximum number of allowed on-premises instances in a single call was
-//   exceeded.
+//   - TagLimitExceededException
+//     The maximum allowed number of tags was exceeded.
 //
-//   * InstanceNotRegisteredException
-//   The specified on-premises instance is not registered.
+//   - InstanceLimitExceededException
+//     The maximum number of allowed on-premises instances in a single call was
+//     exceeded.
+//
+//   - InstanceNotRegisteredException
+//     The specified on-premises instance is not registered.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/AddTagsToOnPremisesInstances
 func (c *CodeDeploy) AddTagsToOnPremisesInstances(input *AddTagsToOnPremisesInstancesInput) (*AddTagsToOnPremisesInstancesOutput, error) {
@@ -128,14 +128,13 @@ const opBatchGetApplicationRevisions = "BatchGetApplicationRevisions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetApplicationRevisionsRequest method.
+//	req, resp := client.BatchGetApplicationRevisionsRequest(params)
 //
-//    // Example sending a request using the BatchGetApplicationRevisionsRequest method.
-//    req, resp := client.BatchGetApplicationRevisionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetApplicationRevisions
 func (c *CodeDeploy) BatchGetApplicationRevisionsRequest(input *BatchGetApplicationRevisionsInput) (req *request.Request, output *BatchGetApplicationRevisionsOutput) {
@@ -167,23 +166,24 @@ func (c *CodeDeploy) BatchGetApplicationRevisionsRequest(input *BatchGetApplicat
 // API operation BatchGetApplicationRevisions for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
 //
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * RevisionRequiredException
-//   The revision ID was not specified.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * InvalidRevisionException
-//   The revision was specified in an invalid format.
+//   - RevisionRequiredException
+//     The revision ID was not specified.
 //
-//   * BatchLimitExceededException
-//   The maximum number of names or IDs allowed for this request (100) was exceeded.
+//   - InvalidRevisionException
+//     The revision was specified in an invalid format.
+//
+//   - BatchLimitExceededException
+//     The maximum number of names or IDs allowed for this request (100) was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetApplicationRevisions
 func (c *CodeDeploy) BatchGetApplicationRevisions(input *BatchGetApplicationRevisionsInput) (*BatchGetApplicationRevisionsOutput, error) {
@@ -223,14 +223,13 @@ const opBatchGetApplications = "BatchGetApplications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetApplicationsRequest method.
+//	req, resp := client.BatchGetApplicationsRequest(params)
 //
-//    // Example sending a request using the BatchGetApplicationsRequest method.
-//    req, resp := client.BatchGetApplicationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetApplications
 func (c *CodeDeploy) BatchGetApplicationsRequest(input *BatchGetApplicationsInput) (req *request.Request, output *BatchGetApplicationsOutput) {
@@ -262,17 +261,18 @@ func (c *CodeDeploy) BatchGetApplicationsRequest(input *BatchGetApplicationsInpu
 // API operation BatchGetApplications for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * BatchLimitExceededException
-//   The maximum number of names or IDs allowed for this request (100) was exceeded.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
+//
+//   - BatchLimitExceededException
+//     The maximum number of names or IDs allowed for this request (100) was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetApplications
 func (c *CodeDeploy) BatchGetApplications(input *BatchGetApplicationsInput) (*BatchGetApplicationsOutput, error) {
@@ -312,14 +312,13 @@ const opBatchGetDeploymentGroups = "BatchGetDeploymentGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetDeploymentGroupsRequest method.
+//	req, resp := client.BatchGetDeploymentGroupsRequest(params)
 //
-//    // Example sending a request using the BatchGetDeploymentGroupsRequest method.
-//    req, resp := client.BatchGetDeploymentGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetDeploymentGroups
 func (c *CodeDeploy) BatchGetDeploymentGroupsRequest(input *BatchGetDeploymentGroupsInput) (req *request.Request, output *BatchGetDeploymentGroupsOutput) {
@@ -350,27 +349,28 @@ func (c *CodeDeploy) BatchGetDeploymentGroupsRequest(input *BatchGetDeploymentGr
 // API operation BatchGetDeploymentGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * DeploymentGroupNameRequiredException
-//   The deployment group name was not specified.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * InvalidDeploymentGroupNameException
-//   The deployment group name was specified in an invalid format.
+//   - DeploymentGroupNameRequiredException
+//     The deployment group name was not specified.
 //
-//   * BatchLimitExceededException
-//   The maximum number of names or IDs allowed for this request (100) was exceeded.
+//   - InvalidDeploymentGroupNameException
+//     The deployment group name was specified in an invalid format.
 //
-//   * DeploymentConfigDoesNotExistException
-//   The deployment configuration does not exist with the IAM user or Amazon Web
-//   Services account.
+//   - BatchLimitExceededException
+//     The maximum number of names or IDs allowed for this request (100) was exceeded.
+//
+//   - DeploymentConfigDoesNotExistException
+//     The deployment configuration does not exist with the user or Amazon Web Services
+//     account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetDeploymentGroups
 func (c *CodeDeploy) BatchGetDeploymentGroups(input *BatchGetDeploymentGroupsInput) (*BatchGetDeploymentGroupsOutput, error) {
@@ -410,14 +410,13 @@ const opBatchGetDeploymentInstances = "BatchGetDeploymentInstances"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetDeploymentInstancesRequest method.
+//	req, resp := client.BatchGetDeploymentInstancesRequest(params)
 //
-//    // Example sending a request using the BatchGetDeploymentInstancesRequest method.
-//    req, resp := client.BatchGetDeploymentInstancesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetDeploymentInstances
 //
@@ -443,7 +442,6 @@ func (c *CodeDeploy) BatchGetDeploymentInstancesRequest(input *BatchGetDeploymen
 
 // BatchGetDeploymentInstances API operation for AWS CodeDeploy.
 //
-//
 // This method works, but is deprecated. Use BatchGetDeploymentTargets instead.
 //
 // Returns an array of one or more instances associated with a deployment. This
@@ -459,28 +457,28 @@ func (c *CodeDeploy) BatchGetDeploymentInstancesRequest(input *BatchGetDeploymen
 // API operation BatchGetDeploymentInstances for usage and error information.
 //
 // Returned Error Types:
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
 //
-//   * DeploymentDoesNotExistException
-//   The deployment with the IAM user or Amazon Web Services account does not
-//   exist.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * InstanceIdRequiredException
-//   The instance ID was not specified.
+//   - DeploymentDoesNotExistException
+//     The deployment with the user or Amazon Web Services account does not exist.
 //
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
+//   - InstanceIdRequiredException
+//     The instance ID was not specified.
 //
-//   * InvalidInstanceNameException
-//   The on-premises instance name was specified in an invalid format.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
 //
-//   * BatchLimitExceededException
-//   The maximum number of names or IDs allowed for this request (100) was exceeded.
+//   - InvalidInstanceNameException
+//     The on-premises instance name was specified in an invalid format.
 //
-//   * InvalidComputePlatformException
-//   The computePlatform is invalid. The computePlatform should be Lambda, Server,
-//   or ECS.
+//   - BatchLimitExceededException
+//     The maximum number of names or IDs allowed for this request (100) was exceeded.
+//
+//   - InvalidComputePlatformException
+//     The computePlatform is invalid. The computePlatform should be Lambda, Server,
+//     or ECS.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetDeploymentInstances
 //
@@ -524,14 +522,13 @@ const opBatchGetDeploymentTargets = "BatchGetDeploymentTargets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetDeploymentTargetsRequest method.
+//	req, resp := client.BatchGetDeploymentTargetsRequest(params)
 //
-//    // Example sending a request using the BatchGetDeploymentTargetsRequest method.
-//    req, resp := client.BatchGetDeploymentTargetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetDeploymentTargets
 func (c *CodeDeploy) BatchGetDeploymentTargetsRequest(input *BatchGetDeploymentTargetsInput) (req *request.Request, output *BatchGetDeploymentTargetsOutput) {
@@ -560,14 +557,14 @@ func (c *CodeDeploy) BatchGetDeploymentTargetsRequest(input *BatchGetDeploymentT
 // The type of targets returned depends on the deployment's compute platform
 // or deployment method:
 //
-//    * EC2/On-premises: Information about Amazon EC2 instance targets.
+//   - EC2/On-premises: Information about Amazon EC2 instance targets.
 //
-//    * Lambda: Information about Lambda functions targets.
+//   - Lambda: Information about Lambda functions targets.
 //
-//    * Amazon ECS: Information about Amazon ECS service targets.
+//   - Amazon ECS: Information about Amazon ECS service targets.
 //
-//    * CloudFormation: Information about targets of blue/green deployments
-//    initiated by a CloudFormation stack update.
+//   - CloudFormation: Information about targets of blue/green deployments
+//     initiated by a CloudFormation stack update.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -577,36 +574,36 @@ func (c *CodeDeploy) BatchGetDeploymentTargetsRequest(input *BatchGetDeploymentT
 // API operation BatchGetDeploymentTargets for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
 //
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
 //
-//   * DeploymentDoesNotExistException
-//   The deployment with the IAM user or Amazon Web Services account does not
-//   exist.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * DeploymentNotStartedException
-//   The specified deployment has not started.
+//   - DeploymentDoesNotExistException
+//     The deployment with the user or Amazon Web Services account does not exist.
 //
-//   * DeploymentTargetIdRequiredException
-//   A deployment target ID was not provided.
+//   - DeploymentNotStartedException
+//     The specified deployment has not started.
 //
-//   * InvalidDeploymentTargetIdException
-//   The target ID provided was not valid.
+//   - DeploymentTargetIdRequiredException
+//     A deployment target ID was not provided.
 //
-//   * DeploymentTargetDoesNotExistException
-//   The provided target ID does not belong to the attempted deployment.
+//   - InvalidDeploymentTargetIdException
+//     The target ID provided was not valid.
 //
-//   * DeploymentTargetListSizeExceededException
-//   The maximum number of targets that can be associated with an Amazon ECS or
-//   Lambda deployment was exceeded. The target list of both types of deployments
-//   must have exactly one item. This exception does not apply to EC2/On-premises
-//   deployments.
+//   - DeploymentTargetDoesNotExistException
+//     The provided target ID does not belong to the attempted deployment.
 //
-//   * InstanceDoesNotExistException
-//   The specified instance does not exist in the deployment group.
+//   - DeploymentTargetListSizeExceededException
+//     The maximum number of targets that can be associated with an Amazon ECS or
+//     Lambda deployment was exceeded. The target list of both types of deployments
+//     must have exactly one item. This exception does not apply to EC2/On-premises
+//     deployments.
+//
+//   - InstanceDoesNotExistException
+//     The specified instance does not exist in the deployment group.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetDeploymentTargets
 func (c *CodeDeploy) BatchGetDeploymentTargets(input *BatchGetDeploymentTargetsInput) (*BatchGetDeploymentTargetsOutput, error) {
@@ -646,14 +643,13 @@ const opBatchGetDeployments = "BatchGetDeployments"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetDeploymentsRequest method.
+//	req, resp := client.BatchGetDeploymentsRequest(params)
 //
-//    // Example sending a request using the BatchGetDeploymentsRequest method.
-//    req, resp := client.BatchGetDeploymentsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetDeployments
 func (c *CodeDeploy) BatchGetDeploymentsRequest(input *BatchGetDeploymentsInput) (req *request.Request, output *BatchGetDeploymentsOutput) {
@@ -685,14 +681,15 @@ func (c *CodeDeploy) BatchGetDeploymentsRequest(input *BatchGetDeploymentsInput)
 // API operation BatchGetDeployments for usage and error information.
 //
 // Returned Error Types:
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
 //
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * BatchLimitExceededException
-//   The maximum number of names or IDs allowed for this request (100) was exceeded.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
+//
+//   - BatchLimitExceededException
+//     The maximum number of names or IDs allowed for this request (100) was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetDeployments
 func (c *CodeDeploy) BatchGetDeployments(input *BatchGetDeploymentsInput) (*BatchGetDeploymentsOutput, error) {
@@ -732,14 +729,13 @@ const opBatchGetOnPremisesInstances = "BatchGetOnPremisesInstances"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetOnPremisesInstancesRequest method.
+//	req, resp := client.BatchGetOnPremisesInstancesRequest(params)
 //
-//    // Example sending a request using the BatchGetOnPremisesInstancesRequest method.
-//    req, resp := client.BatchGetOnPremisesInstancesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetOnPremisesInstances
 func (c *CodeDeploy) BatchGetOnPremisesInstancesRequest(input *BatchGetOnPremisesInstancesInput) (req *request.Request, output *BatchGetOnPremisesInstancesOutput) {
@@ -771,14 +767,15 @@ func (c *CodeDeploy) BatchGetOnPremisesInstancesRequest(input *BatchGetOnPremise
 // API operation BatchGetOnPremisesInstances for usage and error information.
 //
 // Returned Error Types:
-//   * InstanceNameRequiredException
-//   An on-premises instance name was not specified.
 //
-//   * InvalidInstanceNameException
-//   The on-premises instance name was specified in an invalid format.
+//   - InstanceNameRequiredException
+//     An on-premises instance name was not specified.
 //
-//   * BatchLimitExceededException
-//   The maximum number of names or IDs allowed for this request (100) was exceeded.
+//   - InvalidInstanceNameException
+//     The on-premises instance name was specified in an invalid format.
+//
+//   - BatchLimitExceededException
+//     The maximum number of names or IDs allowed for this request (100) was exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/BatchGetOnPremisesInstances
 func (c *CodeDeploy) BatchGetOnPremisesInstances(input *BatchGetOnPremisesInstancesInput) (*BatchGetOnPremisesInstancesOutput, error) {
@@ -818,14 +815,13 @@ const opContinueDeployment = "ContinueDeployment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ContinueDeploymentRequest method.
+//	req, resp := client.ContinueDeploymentRequest(params)
 //
-//    // Example sending a request using the ContinueDeploymentRequest method.
-//    req, resp := client.ContinueDeploymentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ContinueDeployment
 func (c *CodeDeploy) ContinueDeploymentRequest(input *ContinueDeploymentInput) (req *request.Request, output *ContinueDeploymentOutput) {
@@ -862,30 +858,30 @@ func (c *CodeDeploy) ContinueDeploymentRequest(input *ContinueDeploymentInput) (
 // API operation ContinueDeployment for usage and error information.
 //
 // Returned Error Types:
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
 //
-//   * DeploymentDoesNotExistException
-//   The deployment with the IAM user or Amazon Web Services account does not
-//   exist.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * DeploymentAlreadyCompletedException
-//   The deployment is already complete.
+//   - DeploymentDoesNotExistException
+//     The deployment with the user or Amazon Web Services account does not exist.
 //
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
+//   - DeploymentAlreadyCompletedException
+//     The deployment is already complete.
 //
-//   * DeploymentIsNotInReadyStateException
-//   The deployment does not have a status of Ready and can't continue yet.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
 //
-//   * UnsupportedActionForDeploymentTypeException
-//   A call was submitted that is not supported for the specified deployment type.
+//   - DeploymentIsNotInReadyStateException
+//     The deployment does not have a status of Ready and can't continue yet.
 //
-//   * InvalidDeploymentWaitTypeException
-//   The wait type is invalid.
+//   - UnsupportedActionForDeploymentTypeException
+//     A call was submitted that is not supported for the specified deployment type.
 //
-//   * InvalidDeploymentStatusException
-//   The specified deployment status doesn't exist or cannot be determined.
+//   - InvalidDeploymentWaitTypeException
+//     The wait type is invalid.
+//
+//   - InvalidDeploymentStatusException
+//     The specified deployment status doesn't exist or cannot be determined.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ContinueDeployment
 func (c *CodeDeploy) ContinueDeployment(input *ContinueDeploymentInput) (*ContinueDeploymentOutput, error) {
@@ -925,14 +921,13 @@ const opCreateApplication = "CreateApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateApplicationRequest method.
+//	req, resp := client.CreateApplicationRequest(params)
 //
-//    // Example sending a request using the CreateApplicationRequest method.
-//    req, resp := client.CreateApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/CreateApplication
 func (c *CodeDeploy) CreateApplicationRequest(input *CreateApplicationInput) (req *request.Request, output *CreateApplicationOutput) {
@@ -963,25 +958,26 @@ func (c *CodeDeploy) CreateApplicationRequest(input *CreateApplicationInput) (re
 // API operation CreateApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * ApplicationAlreadyExistsException
-//   An application with the specified name with the IAM user or Amazon Web Services
-//   account already exists.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * ApplicationLimitExceededException
-//   More applications were attempted to be created than are allowed.
+//   - ApplicationAlreadyExistsException
+//     An application with the specified name with the user or Amazon Web Services
+//     account already exists.
 //
-//   * InvalidComputePlatformException
-//   The computePlatform is invalid. The computePlatform should be Lambda, Server,
-//   or ECS.
+//   - ApplicationLimitExceededException
+//     More applications were attempted to be created than are allowed.
 //
-//   * InvalidTagsToAddException
-//   The specified tags are not valid.
+//   - InvalidComputePlatformException
+//     The computePlatform is invalid. The computePlatform should be Lambda, Server,
+//     or ECS.
+//
+//   - InvalidTagsToAddException
+//     The specified tags are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/CreateApplication
 func (c *CodeDeploy) CreateApplication(input *CreateApplicationInput) (*CreateApplicationOutput, error) {
@@ -1021,14 +1017,13 @@ const opCreateDeployment = "CreateDeployment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDeploymentRequest method.
+//	req, resp := client.CreateDeploymentRequest(params)
 //
-//    // Example sending a request using the CreateDeploymentRequest method.
-//    req, resp := client.CreateDeploymentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/CreateDeployment
 func (c *CodeDeploy) CreateDeploymentRequest(input *CreateDeploymentInput) (req *request.Request, output *CreateDeploymentOutput) {
@@ -1059,115 +1054,115 @@ func (c *CodeDeploy) CreateDeploymentRequest(input *CreateDeploymentInput) (req 
 // API operation CreateDeployment for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * DeploymentGroupNameRequiredException
-//   The deployment group name was not specified.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * InvalidDeploymentGroupNameException
-//   The deployment group name was specified in an invalid format.
+//   - DeploymentGroupNameRequiredException
+//     The deployment group name was not specified.
 //
-//   * DeploymentGroupDoesNotExistException
-//   The named deployment group with the IAM user or Amazon Web Services account
-//   does not exist.
+//   - InvalidDeploymentGroupNameException
+//     The deployment group name was specified in an invalid format.
 //
-//   * RevisionRequiredException
-//   The revision ID was not specified.
+//   - DeploymentGroupDoesNotExistException
+//     The named deployment group with the user or Amazon Web Services account does
+//     not exist.
 //
-//   * RevisionDoesNotExistException
-//   The named revision does not exist with the IAM user or Amazon Web Services
-//   account.
+//   - RevisionRequiredException
+//     The revision ID was not specified.
 //
-//   * InvalidRevisionException
-//   The revision was specified in an invalid format.
+//   - RevisionDoesNotExistException
+//     The named revision does not exist with the user or Amazon Web Services account.
 //
-//   * InvalidDeploymentConfigNameException
-//   The deployment configuration name was specified in an invalid format.
+//   - InvalidRevisionException
+//     The revision was specified in an invalid format.
 //
-//   * DeploymentConfigDoesNotExistException
-//   The deployment configuration does not exist with the IAM user or Amazon Web
-//   Services account.
+//   - InvalidDeploymentConfigNameException
+//     The deployment configuration name was specified in an invalid format.
 //
-//   * DescriptionTooLongException
-//   The description is too long.
+//   - DeploymentConfigDoesNotExistException
+//     The deployment configuration does not exist with the user or Amazon Web Services
+//     account.
 //
-//   * DeploymentLimitExceededException
-//   The number of allowed deployments was exceeded.
+//   - DescriptionTooLongException
+//     The description is too long.
 //
-//   * InvalidTargetInstancesException
-//   The target instance configuration is invalid. Possible causes include:
+//   - DeploymentLimitExceededException
+//     The number of allowed deployments was exceeded.
 //
-//      * Configuration data for target instances was entered for an in-place
-//      deployment.
+//   - InvalidTargetInstancesException
+//     The target instance configuration is invalid. Possible causes include:
 //
-//      * The limit of 10 tags for a tag type was exceeded.
+//   - Configuration data for target instances was entered for an in-place
+//     deployment.
 //
-//      * The combined length of the tag names exceeded the limit.
+//   - The limit of 10 tags for a tag type was exceeded.
 //
-//      * A specified tag is not currently applied to any instances.
+//   - The combined length of the tag names exceeded the limit.
 //
-//   * InvalidAlarmConfigException
-//   The format of the alarm configuration is invalid. Possible causes include:
+//   - A specified tag is not currently applied to any instances.
 //
-//      * The alarm list is null.
+//   - InvalidAlarmConfigException
+//     The format of the alarm configuration is invalid. Possible causes include:
 //
-//      * The alarm object is null.
+//   - The alarm list is null.
 //
-//      * The alarm name is empty or null or exceeds the limit of 255 characters.
+//   - The alarm object is null.
 //
-//      * Two alarms with the same name have been specified.
+//   - The alarm name is empty or null or exceeds the limit of 255 characters.
 //
-//      * The alarm configuration is enabled, but the alarm list is empty.
+//   - Two alarms with the same name have been specified.
 //
-//   * AlarmsLimitExceededException
-//   The maximum number of alarms for a deployment group (10) was exceeded.
+//   - The alarm configuration is enabled, but the alarm list is empty.
 //
-//   * InvalidAutoRollbackConfigException
-//   The automatic rollback configuration was specified in an invalid format.
-//   For example, automatic rollback is enabled, but an invalid triggering event
-//   type or no event types were listed.
+//   - AlarmsLimitExceededException
+//     The maximum number of alarms for a deployment group (10) was exceeded.
 //
-//   * InvalidLoadBalancerInfoException
-//   An invalid load balancer name, or no load balancer name, was specified.
+//   - InvalidAutoRollbackConfigException
+//     The automatic rollback configuration was specified in an invalid format.
+//     For example, automatic rollback is enabled, but an invalid triggering event
+//     type or no event types were listed.
 //
-//   * InvalidFileExistsBehaviorException
-//   An invalid fileExistsBehavior option was specified to determine how CodeDeploy
-//   handles files or directories that already exist in a deployment target location,
-//   but weren't part of the previous successful deployment. Valid values include
-//   "DISALLOW," "OVERWRITE," and "RETAIN."
+//   - InvalidLoadBalancerInfoException
+//     An invalid load balancer name, or no load balancer name, was specified.
 //
-//   * InvalidRoleException
-//   The service role ARN was specified in an invalid format. Or, if an Auto Scaling
-//   group was specified, the specified service role does not grant the appropriate
-//   permissions to Amazon EC2 Auto Scaling.
+//   - InvalidFileExistsBehaviorException
+//     An invalid fileExistsBehavior option was specified to determine how CodeDeploy
+//     handles files or directories that already exist in a deployment target location,
+//     but weren't part of the previous successful deployment. Valid values include
+//     "DISALLOW," "OVERWRITE," and "RETAIN."
 //
-//   * InvalidAutoScalingGroupException
-//   The Auto Scaling group was specified in an invalid format or does not exist.
+//   - InvalidRoleException
+//     The service role ARN was specified in an invalid format. Or, if an Auto Scaling
+//     group was specified, the specified service role does not grant the appropriate
+//     permissions to Amazon EC2 Auto Scaling.
 //
-//   * ThrottlingException
-//   An API function was called too frequently.
+//   - InvalidAutoScalingGroupException
+//     The Auto Scaling group was specified in an invalid format or does not exist.
 //
-//   * InvalidUpdateOutdatedInstancesOnlyValueException
-//   The UpdateOutdatedInstancesOnly value is invalid. For Lambda deployments,
-//   false is expected. For EC2/On-premises deployments, true or false is expected.
+//   - ThrottlingException
+//     An API function was called too frequently.
 //
-//   * InvalidIgnoreApplicationStopFailuresValueException
-//   The IgnoreApplicationStopFailures value is invalid. For Lambda deployments,
-//   false is expected. For EC2/On-premises deployments, true or false is expected.
+//   - InvalidUpdateOutdatedInstancesOnlyValueException
+//     The UpdateOutdatedInstancesOnly value is invalid. For Lambda deployments,
+//     false is expected. For EC2/On-premises deployments, true or false is expected.
 //
-//   * InvalidGitHubAccountTokenException
-//   The GitHub token is not valid.
+//   - InvalidIgnoreApplicationStopFailuresValueException
+//     The IgnoreApplicationStopFailures value is invalid. For Lambda deployments,
+//     false is expected. For EC2/On-premises deployments, true or false is expected.
 //
-//   * InvalidTrafficRoutingConfigurationException
-//   The configuration that specifies how traffic is routed during a deployment
-//   is invalid.
+//   - InvalidGitHubAccountTokenException
+//     The GitHub token is not valid.
+//
+//   - InvalidTrafficRoutingConfigurationException
+//     The configuration that specifies how traffic is routed during a deployment
+//     is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/CreateDeployment
 func (c *CodeDeploy) CreateDeployment(input *CreateDeploymentInput) (*CreateDeploymentOutput, error) {
@@ -1207,14 +1202,13 @@ const opCreateDeploymentConfig = "CreateDeploymentConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDeploymentConfigRequest method.
+//	req, resp := client.CreateDeploymentConfigRequest(params)
 //
-//    // Example sending a request using the CreateDeploymentConfigRequest method.
-//    req, resp := client.CreateDeploymentConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/CreateDeploymentConfig
 func (c *CodeDeploy) CreateDeploymentConfigRequest(input *CreateDeploymentConfigInput) (req *request.Request, output *CreateDeploymentConfigOutput) {
@@ -1245,29 +1239,33 @@ func (c *CodeDeploy) CreateDeploymentConfigRequest(input *CreateDeploymentConfig
 // API operation CreateDeploymentConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidDeploymentConfigNameException
-//   The deployment configuration name was specified in an invalid format.
 //
-//   * DeploymentConfigNameRequiredException
-//   The deployment configuration name was not specified.
+//   - InvalidDeploymentConfigNameException
+//     The deployment configuration name was specified in an invalid format.
 //
-//   * DeploymentConfigAlreadyExistsException
-//   A deployment configuration with the specified name with the IAM user or Amazon
-//   Web Services account already exists.
+//   - DeploymentConfigNameRequiredException
+//     The deployment configuration name was not specified.
 //
-//   * InvalidMinimumHealthyHostValueException
-//   The minimum healthy instance value was specified in an invalid format.
+//   - DeploymentConfigAlreadyExistsException
+//     A deployment configuration with the specified name with the user or Amazon
+//     Web Services account already exists.
 //
-//   * DeploymentConfigLimitExceededException
-//   The deployment configurations limit was exceeded.
+//   - InvalidMinimumHealthyHostValueException
+//     The minimum healthy instance value was specified in an invalid format.
 //
-//   * InvalidComputePlatformException
-//   The computePlatform is invalid. The computePlatform should be Lambda, Server,
-//   or ECS.
+//   - DeploymentConfigLimitExceededException
+//     The deployment configurations limit was exceeded.
 //
-//   * InvalidTrafficRoutingConfigurationException
-//   The configuration that specifies how traffic is routed during a deployment
-//   is invalid.
+//   - InvalidComputePlatformException
+//     The computePlatform is invalid. The computePlatform should be Lambda, Server,
+//     or ECS.
+//
+//   - InvalidTrafficRoutingConfigurationException
+//     The configuration that specifies how traffic is routed during a deployment
+//     is invalid.
+//
+//   - InvalidZonalDeploymentConfigurationException
+//     The ZonalConfig object is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/CreateDeploymentConfig
 func (c *CodeDeploy) CreateDeploymentConfig(input *CreateDeploymentConfigInput) (*CreateDeploymentConfigOutput, error) {
@@ -1307,14 +1305,13 @@ const opCreateDeploymentGroup = "CreateDeploymentGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDeploymentGroupRequest method.
+//	req, resp := client.CreateDeploymentGroupRequest(params)
 //
-//    // Example sending a request using the CreateDeploymentGroupRequest method.
-//    req, resp := client.CreateDeploymentGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/CreateDeploymentGroup
 func (c *CodeDeploy) CreateDeploymentGroupRequest(input *CreateDeploymentGroupInput) (req *request.Request, output *CreateDeploymentGroupOutput) {
@@ -1345,129 +1342,130 @@ func (c *CodeDeploy) CreateDeploymentGroupRequest(input *CreateDeploymentGroupIn
 // API operation CreateDeploymentGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * DeploymentGroupNameRequiredException
-//   The deployment group name was not specified.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * InvalidDeploymentGroupNameException
-//   The deployment group name was specified in an invalid format.
+//   - DeploymentGroupNameRequiredException
+//     The deployment group name was not specified.
 //
-//   * DeploymentGroupAlreadyExistsException
-//   A deployment group with the specified name with the IAM user or Amazon Web
-//   Services account already exists.
+//   - InvalidDeploymentGroupNameException
+//     The deployment group name was specified in an invalid format.
 //
-//   * InvalidEC2TagException
-//   The tag was specified in an invalid format.
+//   - DeploymentGroupAlreadyExistsException
+//     A deployment group with the specified name with the user or Amazon Web Services
+//     account already exists.
 //
-//   * InvalidTagException
-//   The tag was specified in an invalid format.
+//   - InvalidEC2TagException
+//     The tag was specified in an invalid format.
 //
-//   * InvalidAutoScalingGroupException
-//   The Auto Scaling group was specified in an invalid format or does not exist.
+//   - InvalidTagException
+//     The tag was specified in an invalid format.
 //
-//   * InvalidDeploymentConfigNameException
-//   The deployment configuration name was specified in an invalid format.
+//   - InvalidAutoScalingGroupException
+//     The Auto Scaling group was specified in an invalid format or does not exist.
 //
-//   * DeploymentConfigDoesNotExistException
-//   The deployment configuration does not exist with the IAM user or Amazon Web
-//   Services account.
+//   - InvalidDeploymentConfigNameException
+//     The deployment configuration name was specified in an invalid format.
 //
-//   * RoleRequiredException
-//   The role ID was not specified.
+//   - DeploymentConfigDoesNotExistException
+//     The deployment configuration does not exist with the user or Amazon Web Services
+//     account.
 //
-//   * InvalidRoleException
-//   The service role ARN was specified in an invalid format. Or, if an Auto Scaling
-//   group was specified, the specified service role does not grant the appropriate
-//   permissions to Amazon EC2 Auto Scaling.
+//   - RoleRequiredException
+//     The role ID was not specified.
 //
-//   * DeploymentGroupLimitExceededException
-//   The deployment groups limit was exceeded.
+//   - InvalidRoleException
+//     The service role ARN was specified in an invalid format. Or, if an Auto Scaling
+//     group was specified, the specified service role does not grant the appropriate
+//     permissions to Amazon EC2 Auto Scaling.
 //
-//   * LifecycleHookLimitExceededException
-//   The limit for lifecycle hooks was exceeded.
+//   - DeploymentGroupLimitExceededException
+//     The deployment groups limit was exceeded.
 //
-//   * InvalidTriggerConfigException
-//   The trigger was specified in an invalid format.
+//   - LifecycleHookLimitExceededException
+//     The limit for lifecycle hooks was exceeded.
 //
-//   * TriggerTargetsLimitExceededException
-//   The maximum allowed number of triggers was exceeded.
+//   - InvalidTriggerConfigException
+//     The trigger was specified in an invalid format.
 //
-//   * InvalidAlarmConfigException
-//   The format of the alarm configuration is invalid. Possible causes include:
+//   - TriggerTargetsLimitExceededException
+//     The maximum allowed number of triggers was exceeded.
 //
-//      * The alarm list is null.
+//   - InvalidAlarmConfigException
+//     The format of the alarm configuration is invalid. Possible causes include:
 //
-//      * The alarm object is null.
+//   - The alarm list is null.
 //
-//      * The alarm name is empty or null or exceeds the limit of 255 characters.
+//   - The alarm object is null.
 //
-//      * Two alarms with the same name have been specified.
+//   - The alarm name is empty or null or exceeds the limit of 255 characters.
 //
-//      * The alarm configuration is enabled, but the alarm list is empty.
+//   - Two alarms with the same name have been specified.
 //
-//   * AlarmsLimitExceededException
-//   The maximum number of alarms for a deployment group (10) was exceeded.
+//   - The alarm configuration is enabled, but the alarm list is empty.
 //
-//   * InvalidAutoRollbackConfigException
-//   The automatic rollback configuration was specified in an invalid format.
-//   For example, automatic rollback is enabled, but an invalid triggering event
-//   type or no event types were listed.
+//   - AlarmsLimitExceededException
+//     The maximum number of alarms for a deployment group (10) was exceeded.
 //
-//   * InvalidLoadBalancerInfoException
-//   An invalid load balancer name, or no load balancer name, was specified.
+//   - InvalidAutoRollbackConfigException
+//     The automatic rollback configuration was specified in an invalid format.
+//     For example, automatic rollback is enabled, but an invalid triggering event
+//     type or no event types were listed.
 //
-//   * InvalidDeploymentStyleException
-//   An invalid deployment style was specified. Valid deployment types include
-//   "IN_PLACE" and "BLUE_GREEN." Valid deployment options include "WITH_TRAFFIC_CONTROL"
-//   and "WITHOUT_TRAFFIC_CONTROL."
+//   - InvalidLoadBalancerInfoException
+//     An invalid load balancer name, or no load balancer name, was specified.
 //
-//   * InvalidBlueGreenDeploymentConfigurationException
-//   The configuration for the blue/green deployment group was provided in an
-//   invalid format. For information about deployment configuration format, see
-//   CreateDeploymentConfig.
+//   - InvalidDeploymentStyleException
+//     An invalid deployment style was specified. Valid deployment types include
+//     "IN_PLACE" and "BLUE_GREEN." Valid deployment options include "WITH_TRAFFIC_CONTROL"
+//     and "WITHOUT_TRAFFIC_CONTROL."
 //
-//   * InvalidEC2TagCombinationException
-//   A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but
-//   only one of these data types can be used in a single call.
+//   - InvalidBlueGreenDeploymentConfigurationException
+//     The configuration for the blue/green deployment group was provided in an
+//     invalid format. For information about deployment configuration format, see
+//     CreateDeploymentConfig.
 //
-//   * InvalidOnPremisesTagCombinationException
-//   A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet,
-//   but only one of these data types can be used in a single call.
+//   - InvalidEC2TagCombinationException
+//     A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but
+//     only one of these data types can be used in a single call.
 //
-//   * TagSetListLimitExceededException
-//   The number of tag groups included in the tag set list exceeded the maximum
-//   allowed limit of 3.
+//   - InvalidOnPremisesTagCombinationException
+//     A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet,
+//     but only one of these data types can be used in a single call.
 //
-//   * InvalidInputException
-//   The input was specified in an invalid format.
+//   - TagSetListLimitExceededException
+//     The number of tag groups included in the tag set list exceeded the maximum
+//     allowed limit of 3.
 //
-//   * ThrottlingException
-//   An API function was called too frequently.
+//   - InvalidInputException
+//     The input was specified in an invalid format.
 //
-//   * InvalidECSServiceException
-//   The Amazon ECS service identifier is not valid.
+//   - ThrottlingException
+//     An API function was called too frequently.
 //
-//   * InvalidTargetGroupPairException
-//   A target group pair associated with this deployment is not valid.
+//   - InvalidECSServiceException
+//     The Amazon ECS service identifier is not valid.
 //
-//   * ECSServiceMappingLimitExceededException
-//   The Amazon ECS service is associated with more than one deployment groups.
-//   An Amazon ECS service can be associated with only one deployment group.
+//   - InvalidTargetGroupPairException
+//     A target group pair associated with this deployment is not valid.
 //
-//   * InvalidTagsToAddException
-//   The specified tags are not valid.
+//   - ECSServiceMappingLimitExceededException
+//     The Amazon ECS service is associated with more than one deployment groups.
+//     An Amazon ECS service can be associated with only one deployment group.
 //
-//   * InvalidTrafficRoutingConfigurationException
-//   The configuration that specifies how traffic is routed during a deployment
-//   is invalid.
+//   - InvalidTagsToAddException
+//     The specified tags are not valid.
+//
+//   - InvalidTrafficRoutingConfigurationException
+//     The configuration that specifies how traffic is routed during a deployment
+//     is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/CreateDeploymentGroup
 func (c *CodeDeploy) CreateDeploymentGroup(input *CreateDeploymentGroupInput) (*CreateDeploymentGroupOutput, error) {
@@ -1507,14 +1505,13 @@ const opDeleteApplication = "DeleteApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApplicationRequest method.
+//	req, resp := client.DeleteApplicationRequest(params)
 //
-//    // Example sending a request using the DeleteApplicationRequest method.
-//    req, resp := client.DeleteApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/DeleteApplication
 func (c *CodeDeploy) DeleteApplicationRequest(input *DeleteApplicationInput) (req *request.Request, output *DeleteApplicationOutput) {
@@ -1546,16 +1543,17 @@ func (c *CodeDeploy) DeleteApplicationRequest(input *DeleteApplicationInput) (re
 // API operation DeleteApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * InvalidRoleException
-//   The service role ARN was specified in an invalid format. Or, if an Auto Scaling
-//   group was specified, the specified service role does not grant the appropriate
-//   permissions to Amazon EC2 Auto Scaling.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
+//
+//   - InvalidRoleException
+//     The service role ARN was specified in an invalid format. Or, if an Auto Scaling
+//     group was specified, the specified service role does not grant the appropriate
+//     permissions to Amazon EC2 Auto Scaling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/DeleteApplication
 func (c *CodeDeploy) DeleteApplication(input *DeleteApplicationInput) (*DeleteApplicationOutput, error) {
@@ -1595,14 +1593,13 @@ const opDeleteDeploymentConfig = "DeleteDeploymentConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDeploymentConfigRequest method.
+//	req, resp := client.DeleteDeploymentConfigRequest(params)
 //
-//    // Example sending a request using the DeleteDeploymentConfigRequest method.
-//    req, resp := client.DeleteDeploymentConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/DeleteDeploymentConfig
 func (c *CodeDeploy) DeleteDeploymentConfigRequest(input *DeleteDeploymentConfigInput) (req *request.Request, output *DeleteDeploymentConfigOutput) {
@@ -1637,17 +1634,18 @@ func (c *CodeDeploy) DeleteDeploymentConfigRequest(input *DeleteDeploymentConfig
 // API operation DeleteDeploymentConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidDeploymentConfigNameException
-//   The deployment configuration name was specified in an invalid format.
 //
-//   * DeploymentConfigNameRequiredException
-//   The deployment configuration name was not specified.
+//   - InvalidDeploymentConfigNameException
+//     The deployment configuration name was specified in an invalid format.
 //
-//   * DeploymentConfigInUseException
-//   The deployment configuration is still in use.
+//   - DeploymentConfigNameRequiredException
+//     The deployment configuration name was not specified.
 //
-//   * InvalidOperationException
-//   An invalid operation was detected.
+//   - DeploymentConfigInUseException
+//     The deployment configuration is still in use.
+//
+//   - InvalidOperationException
+//     An invalid operation was detected.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/DeleteDeploymentConfig
 func (c *CodeDeploy) DeleteDeploymentConfig(input *DeleteDeploymentConfigInput) (*DeleteDeploymentConfigOutput, error) {
@@ -1687,14 +1685,13 @@ const opDeleteDeploymentGroup = "DeleteDeploymentGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDeploymentGroupRequest method.
+//	req, resp := client.DeleteDeploymentGroupRequest(params)
 //
-//    // Example sending a request using the DeleteDeploymentGroupRequest method.
-//    req, resp := client.DeleteDeploymentGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/DeleteDeploymentGroup
 func (c *CodeDeploy) DeleteDeploymentGroupRequest(input *DeleteDeploymentGroupInput) (req *request.Request, output *DeleteDeploymentGroupOutput) {
@@ -1725,22 +1722,23 @@ func (c *CodeDeploy) DeleteDeploymentGroupRequest(input *DeleteDeploymentGroupIn
 // API operation DeleteDeploymentGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * DeploymentGroupNameRequiredException
-//   The deployment group name was not specified.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * InvalidDeploymentGroupNameException
-//   The deployment group name was specified in an invalid format.
+//   - DeploymentGroupNameRequiredException
+//     The deployment group name was not specified.
 //
-//   * InvalidRoleException
-//   The service role ARN was specified in an invalid format. Or, if an Auto Scaling
-//   group was specified, the specified service role does not grant the appropriate
-//   permissions to Amazon EC2 Auto Scaling.
+//   - InvalidDeploymentGroupNameException
+//     The deployment group name was specified in an invalid format.
+//
+//   - InvalidRoleException
+//     The service role ARN was specified in an invalid format. Or, if an Auto Scaling
+//     group was specified, the specified service role does not grant the appropriate
+//     permissions to Amazon EC2 Auto Scaling.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/DeleteDeploymentGroup
 func (c *CodeDeploy) DeleteDeploymentGroup(input *DeleteDeploymentGroupInput) (*DeleteDeploymentGroupOutput, error) {
@@ -1780,14 +1778,13 @@ const opDeleteGitHubAccountToken = "DeleteGitHubAccountToken"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteGitHubAccountTokenRequest method.
+//	req, resp := client.DeleteGitHubAccountTokenRequest(params)
 //
-//    // Example sending a request using the DeleteGitHubAccountTokenRequest method.
-//    req, resp := client.DeleteGitHubAccountTokenRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/DeleteGitHubAccountToken
 func (c *CodeDeploy) DeleteGitHubAccountTokenRequest(input *DeleteGitHubAccountTokenInput) (req *request.Request, output *DeleteGitHubAccountTokenOutput) {
@@ -1818,20 +1815,21 @@ func (c *CodeDeploy) DeleteGitHubAccountTokenRequest(input *DeleteGitHubAccountT
 // API operation DeleteGitHubAccountToken for usage and error information.
 //
 // Returned Error Types:
-//   * GitHubAccountTokenNameRequiredException
-//   The call is missing a required GitHub account connection name.
 //
-//   * GitHubAccountTokenDoesNotExistException
-//   No GitHub account connection exists with the named specified in the call.
+//   - GitHubAccountTokenNameRequiredException
+//     The call is missing a required GitHub account connection name.
 //
-//   * InvalidGitHubAccountTokenNameException
-//   The format of the specified GitHub account connection name is invalid.
+//   - GitHubAccountTokenDoesNotExistException
+//     No GitHub account connection exists with the named specified in the call.
 //
-//   * ResourceValidationException
-//   The specified resource could not be validated.
+//   - InvalidGitHubAccountTokenNameException
+//     The format of the specified GitHub account connection name is invalid.
 //
-//   * OperationNotSupportedException
-//   The API used does not support the deployment.
+//   - ResourceValidationException
+//     The specified resource could not be validated.
+//
+//   - OperationNotSupportedException
+//     The API used does not support the deployment.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/DeleteGitHubAccountToken
 func (c *CodeDeploy) DeleteGitHubAccountToken(input *DeleteGitHubAccountTokenInput) (*DeleteGitHubAccountTokenOutput, error) {
@@ -1871,14 +1869,13 @@ const opDeleteResourcesByExternalId = "DeleteResourcesByExternalId"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResourcesByExternalIdRequest method.
+//	req, resp := client.DeleteResourcesByExternalIdRequest(params)
 //
-//    // Example sending a request using the DeleteResourcesByExternalIdRequest method.
-//    req, resp := client.DeleteResourcesByExternalIdRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/DeleteResourcesByExternalId
 func (c *CodeDeploy) DeleteResourcesByExternalIdRequest(input *DeleteResourcesByExternalIdInput) (req *request.Request, output *DeleteResourcesByExternalIdOutput) {
@@ -1900,7 +1897,13 @@ func (c *CodeDeploy) DeleteResourcesByExternalIdRequest(input *DeleteResourcesBy
 
 // DeleteResourcesByExternalId API operation for AWS CodeDeploy.
 //
-// Deletes resources linked to an external ID.
+// Deletes resources linked to an external ID. This action only applies if you
+// have configured blue/green deployments through CloudFormation.
+//
+// It is not necessary to call this action directly. CloudFormation calls it
+// on your behalf when it needs to delete stack resources. This action is offered
+// publicly in case you need to delete resources to comply with General Data
+// Protection Regulation (GDPR) requirements.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1946,14 +1949,13 @@ const opDeregisterOnPremisesInstance = "DeregisterOnPremisesInstance"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeregisterOnPremisesInstanceRequest method.
+//	req, resp := client.DeregisterOnPremisesInstanceRequest(params)
 //
-//    // Example sending a request using the DeregisterOnPremisesInstanceRequest method.
-//    req, resp := client.DeregisterOnPremisesInstanceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/DeregisterOnPremisesInstance
 func (c *CodeDeploy) DeregisterOnPremisesInstanceRequest(input *DeregisterOnPremisesInstanceInput) (req *request.Request, output *DeregisterOnPremisesInstanceOutput) {
@@ -1985,11 +1987,12 @@ func (c *CodeDeploy) DeregisterOnPremisesInstanceRequest(input *DeregisterOnPrem
 // API operation DeregisterOnPremisesInstance for usage and error information.
 //
 // Returned Error Types:
-//   * InstanceNameRequiredException
-//   An on-premises instance name was not specified.
 //
-//   * InvalidInstanceNameException
-//   The on-premises instance name was specified in an invalid format.
+//   - InstanceNameRequiredException
+//     An on-premises instance name was not specified.
+//
+//   - InvalidInstanceNameException
+//     The on-premises instance name was specified in an invalid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/DeregisterOnPremisesInstance
 func (c *CodeDeploy) DeregisterOnPremisesInstance(input *DeregisterOnPremisesInstanceInput) (*DeregisterOnPremisesInstanceOutput, error) {
@@ -2029,14 +2032,13 @@ const opGetApplication = "GetApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetApplicationRequest method.
+//	req, resp := client.GetApplicationRequest(params)
 //
-//    // Example sending a request using the GetApplicationRequest method.
-//    req, resp := client.GetApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetApplication
 func (c *CodeDeploy) GetApplicationRequest(input *GetApplicationInput) (req *request.Request, output *GetApplicationOutput) {
@@ -2067,14 +2069,15 @@ func (c *CodeDeploy) GetApplicationRequest(input *GetApplicationInput) (req *req
 // API operation GetApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
+//
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetApplication
 func (c *CodeDeploy) GetApplication(input *GetApplicationInput) (*GetApplicationOutput, error) {
@@ -2114,14 +2117,13 @@ const opGetApplicationRevision = "GetApplicationRevision"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetApplicationRevisionRequest method.
+//	req, resp := client.GetApplicationRevisionRequest(params)
 //
-//    // Example sending a request using the GetApplicationRevisionRequest method.
-//    req, resp := client.GetApplicationRevisionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetApplicationRevision
 func (c *CodeDeploy) GetApplicationRevisionRequest(input *GetApplicationRevisionInput) (req *request.Request, output *GetApplicationRevisionOutput) {
@@ -2152,24 +2154,24 @@ func (c *CodeDeploy) GetApplicationRevisionRequest(input *GetApplicationRevision
 // API operation GetApplicationRevision for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
 //
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * RevisionDoesNotExistException
-//   The named revision does not exist with the IAM user or Amazon Web Services
-//   account.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * RevisionRequiredException
-//   The revision ID was not specified.
+//   - RevisionDoesNotExistException
+//     The named revision does not exist with the user or Amazon Web Services account.
 //
-//   * InvalidRevisionException
-//   The revision was specified in an invalid format.
+//   - RevisionRequiredException
+//     The revision ID was not specified.
+//
+//   - InvalidRevisionException
+//     The revision was specified in an invalid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetApplicationRevision
 func (c *CodeDeploy) GetApplicationRevision(input *GetApplicationRevisionInput) (*GetApplicationRevisionOutput, error) {
@@ -2209,14 +2211,13 @@ const opGetDeployment = "GetDeployment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDeploymentRequest method.
+//	req, resp := client.GetDeploymentRequest(params)
 //
-//    // Example sending a request using the GetDeploymentRequest method.
-//    req, resp := client.GetDeploymentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetDeployment
 func (c *CodeDeploy) GetDeploymentRequest(input *GetDeploymentInput) (req *request.Request, output *GetDeploymentOutput) {
@@ -2252,15 +2253,15 @@ func (c *CodeDeploy) GetDeploymentRequest(input *GetDeploymentInput) (req *reque
 // API operation GetDeployment for usage and error information.
 //
 // Returned Error Types:
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
 //
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * DeploymentDoesNotExistException
-//   The deployment with the IAM user or Amazon Web Services account does not
-//   exist.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
+//
+//   - DeploymentDoesNotExistException
+//     The deployment with the user or Amazon Web Services account does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetDeployment
 func (c *CodeDeploy) GetDeployment(input *GetDeploymentInput) (*GetDeploymentOutput, error) {
@@ -2300,14 +2301,13 @@ const opGetDeploymentConfig = "GetDeploymentConfig"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDeploymentConfigRequest method.
+//	req, resp := client.GetDeploymentConfigRequest(params)
 //
-//    // Example sending a request using the GetDeploymentConfigRequest method.
-//    req, resp := client.GetDeploymentConfigRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetDeploymentConfig
 func (c *CodeDeploy) GetDeploymentConfigRequest(input *GetDeploymentConfigInput) (req *request.Request, output *GetDeploymentConfigOutput) {
@@ -2338,19 +2338,20 @@ func (c *CodeDeploy) GetDeploymentConfigRequest(input *GetDeploymentConfigInput)
 // API operation GetDeploymentConfig for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidDeploymentConfigNameException
-//   The deployment configuration name was specified in an invalid format.
 //
-//   * DeploymentConfigNameRequiredException
-//   The deployment configuration name was not specified.
+//   - InvalidDeploymentConfigNameException
+//     The deployment configuration name was specified in an invalid format.
 //
-//   * DeploymentConfigDoesNotExistException
-//   The deployment configuration does not exist with the IAM user or Amazon Web
-//   Services account.
+//   - DeploymentConfigNameRequiredException
+//     The deployment configuration name was not specified.
 //
-//   * InvalidComputePlatformException
-//   The computePlatform is invalid. The computePlatform should be Lambda, Server,
-//   or ECS.
+//   - DeploymentConfigDoesNotExistException
+//     The deployment configuration does not exist with the user or Amazon Web Services
+//     account.
+//
+//   - InvalidComputePlatformException
+//     The computePlatform is invalid. The computePlatform should be Lambda, Server,
+//     or ECS.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetDeploymentConfig
 func (c *CodeDeploy) GetDeploymentConfig(input *GetDeploymentConfigInput) (*GetDeploymentConfigOutput, error) {
@@ -2390,14 +2391,13 @@ const opGetDeploymentGroup = "GetDeploymentGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDeploymentGroupRequest method.
+//	req, resp := client.GetDeploymentGroupRequest(params)
 //
-//    // Example sending a request using the GetDeploymentGroupRequest method.
-//    req, resp := client.GetDeploymentGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetDeploymentGroup
 func (c *CodeDeploy) GetDeploymentGroupRequest(input *GetDeploymentGroupInput) (req *request.Request, output *GetDeploymentGroupOutput) {
@@ -2428,28 +2428,29 @@ func (c *CodeDeploy) GetDeploymentGroupRequest(input *GetDeploymentGroupInput) (
 // API operation GetDeploymentGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * DeploymentGroupNameRequiredException
-//   The deployment group name was not specified.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * InvalidDeploymentGroupNameException
-//   The deployment group name was specified in an invalid format.
+//   - DeploymentGroupNameRequiredException
+//     The deployment group name was not specified.
 //
-//   * DeploymentGroupDoesNotExistException
-//   The named deployment group with the IAM user or Amazon Web Services account
-//   does not exist.
+//   - InvalidDeploymentGroupNameException
+//     The deployment group name was specified in an invalid format.
 //
-//   * DeploymentConfigDoesNotExistException
-//   The deployment configuration does not exist with the IAM user or Amazon Web
-//   Services account.
+//   - DeploymentGroupDoesNotExistException
+//     The named deployment group with the user or Amazon Web Services account does
+//     not exist.
+//
+//   - DeploymentConfigDoesNotExistException
+//     The deployment configuration does not exist with the user or Amazon Web Services
+//     account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetDeploymentGroup
 func (c *CodeDeploy) GetDeploymentGroup(input *GetDeploymentGroupInput) (*GetDeploymentGroupOutput, error) {
@@ -2489,14 +2490,13 @@ const opGetDeploymentInstance = "GetDeploymentInstance"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDeploymentInstanceRequest method.
+//	req, resp := client.GetDeploymentInstanceRequest(params)
 //
-//    // Example sending a request using the GetDeploymentInstanceRequest method.
-//    req, resp := client.GetDeploymentInstanceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetDeploymentInstance
 //
@@ -2532,28 +2532,28 @@ func (c *CodeDeploy) GetDeploymentInstanceRequest(input *GetDeploymentInstanceIn
 // API operation GetDeploymentInstance for usage and error information.
 //
 // Returned Error Types:
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
 //
-//   * DeploymentDoesNotExistException
-//   The deployment with the IAM user or Amazon Web Services account does not
-//   exist.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * InstanceIdRequiredException
-//   The instance ID was not specified.
+//   - DeploymentDoesNotExistException
+//     The deployment with the user or Amazon Web Services account does not exist.
 //
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
+//   - InstanceIdRequiredException
+//     The instance ID was not specified.
 //
-//   * InstanceDoesNotExistException
-//   The specified instance does not exist in the deployment group.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
 //
-//   * InvalidInstanceNameException
-//   The on-premises instance name was specified in an invalid format.
+//   - InstanceDoesNotExistException
+//     The specified instance does not exist in the deployment group.
 //
-//   * InvalidComputePlatformException
-//   The computePlatform is invalid. The computePlatform should be Lambda, Server,
-//   or ECS.
+//   - InvalidInstanceNameException
+//     The on-premises instance name was specified in an invalid format.
+//
+//   - InvalidComputePlatformException
+//     The computePlatform is invalid. The computePlatform should be Lambda, Server,
+//     or ECS.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetDeploymentInstance
 //
@@ -2597,14 +2597,13 @@ const opGetDeploymentTarget = "GetDeploymentTarget"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDeploymentTargetRequest method.
+//	req, resp := client.GetDeploymentTargetRequest(params)
 //
-//    // Example sending a request using the GetDeploymentTargetRequest method.
-//    req, resp := client.GetDeploymentTargetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetDeploymentTarget
 func (c *CodeDeploy) GetDeploymentTargetRequest(input *GetDeploymentTargetInput) (req *request.Request, output *GetDeploymentTargetOutput) {
@@ -2635,30 +2634,30 @@ func (c *CodeDeploy) GetDeploymentTargetRequest(input *GetDeploymentTargetInput)
 // API operation GetDeploymentTarget for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
 //
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
 //
-//   * DeploymentDoesNotExistException
-//   The deployment with the IAM user or Amazon Web Services account does not
-//   exist.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * DeploymentNotStartedException
-//   The specified deployment has not started.
+//   - DeploymentDoesNotExistException
+//     The deployment with the user or Amazon Web Services account does not exist.
 //
-//   * DeploymentTargetIdRequiredException
-//   A deployment target ID was not provided.
+//   - DeploymentNotStartedException
+//     The specified deployment has not started.
 //
-//   * InvalidDeploymentTargetIdException
-//   The target ID provided was not valid.
+//   - DeploymentTargetIdRequiredException
+//     A deployment target ID was not provided.
 //
-//   * DeploymentTargetDoesNotExistException
-//   The provided target ID does not belong to the attempted deployment.
+//   - InvalidDeploymentTargetIdException
+//     The target ID provided was not valid.
 //
-//   * InvalidInstanceNameException
-//   The on-premises instance name was specified in an invalid format.
+//   - DeploymentTargetDoesNotExistException
+//     The provided target ID does not belong to the attempted deployment.
+//
+//   - InvalidInstanceNameException
+//     The on-premises instance name was specified in an invalid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetDeploymentTarget
 func (c *CodeDeploy) GetDeploymentTarget(input *GetDeploymentTargetInput) (*GetDeploymentTargetOutput, error) {
@@ -2698,14 +2697,13 @@ const opGetOnPremisesInstance = "GetOnPremisesInstance"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetOnPremisesInstanceRequest method.
+//	req, resp := client.GetOnPremisesInstanceRequest(params)
 //
-//    // Example sending a request using the GetOnPremisesInstanceRequest method.
-//    req, resp := client.GetOnPremisesInstanceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetOnPremisesInstance
 func (c *CodeDeploy) GetOnPremisesInstanceRequest(input *GetOnPremisesInstanceInput) (req *request.Request, output *GetOnPremisesInstanceOutput) {
@@ -2736,14 +2734,15 @@ func (c *CodeDeploy) GetOnPremisesInstanceRequest(input *GetOnPremisesInstanceIn
 // API operation GetOnPremisesInstance for usage and error information.
 //
 // Returned Error Types:
-//   * InstanceNameRequiredException
-//   An on-premises instance name was not specified.
 //
-//   * InstanceNotRegisteredException
-//   The specified on-premises instance is not registered.
+//   - InstanceNameRequiredException
+//     An on-premises instance name was not specified.
 //
-//   * InvalidInstanceNameException
-//   The on-premises instance name was specified in an invalid format.
+//   - InstanceNotRegisteredException
+//     The specified on-premises instance is not registered.
+//
+//   - InvalidInstanceNameException
+//     The on-premises instance name was specified in an invalid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/GetOnPremisesInstance
 func (c *CodeDeploy) GetOnPremisesInstance(input *GetOnPremisesInstanceInput) (*GetOnPremisesInstanceOutput, error) {
@@ -2783,14 +2782,13 @@ const opListApplicationRevisions = "ListApplicationRevisions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListApplicationRevisionsRequest method.
+//	req, resp := client.ListApplicationRevisionsRequest(params)
 //
-//    // Example sending a request using the ListApplicationRevisionsRequest method.
-//    req, resp := client.ListApplicationRevisionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListApplicationRevisions
 func (c *CodeDeploy) ListApplicationRevisionsRequest(input *ListApplicationRevisionsInput) (req *request.Request, output *ListApplicationRevisionsOutput) {
@@ -2827,36 +2825,37 @@ func (c *CodeDeploy) ListApplicationRevisionsRequest(input *ListApplicationRevis
 // API operation ListApplicationRevisions for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
 //
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * InvalidSortByException
-//   The column name to sort by is either not present or was specified in an invalid
-//   format.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * InvalidSortOrderException
-//   The sort order was specified in an invalid format.
+//   - InvalidSortByException
+//     The column name to sort by is either not present or was specified in an invalid
+//     format.
 //
-//   * InvalidBucketNameFilterException
-//   The bucket name either doesn't exist or was specified in an invalid format.
+//   - InvalidSortOrderException
+//     The sort order was specified in an invalid format.
 //
-//   * InvalidKeyPrefixFilterException
-//   The specified key prefix filter was specified in an invalid format.
+//   - InvalidBucketNameFilterException
+//     The bucket name either doesn't exist or was specified in an invalid format.
 //
-//   * BucketNameFilterRequiredException
-//   A bucket name is required, but was not provided.
+//   - InvalidKeyPrefixFilterException
+//     The specified key prefix filter was specified in an invalid format.
 //
-//   * InvalidDeployedStateFilterException
-//   The deployed state filter was specified in an invalid format.
+//   - BucketNameFilterRequiredException
+//     A bucket name is required, but was not provided.
 //
-//   * InvalidNextTokenException
-//   The next token was specified in an invalid format.
+//   - InvalidDeployedStateFilterException
+//     The deployed state filter was specified in an invalid format.
+//
+//   - InvalidNextTokenException
+//     The next token was specified in an invalid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListApplicationRevisions
 func (c *CodeDeploy) ListApplicationRevisions(input *ListApplicationRevisionsInput) (*ListApplicationRevisionsOutput, error) {
@@ -2888,15 +2887,14 @@ func (c *CodeDeploy) ListApplicationRevisionsWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListApplicationRevisions operation.
-//    pageNum := 0
-//    err := client.ListApplicationRevisionsPages(params,
-//        func(page *codedeploy.ListApplicationRevisionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListApplicationRevisions operation.
+//	pageNum := 0
+//	err := client.ListApplicationRevisionsPages(params,
+//	    func(page *codedeploy.ListApplicationRevisionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeDeploy) ListApplicationRevisionsPages(input *ListApplicationRevisionsInput, fn func(*ListApplicationRevisionsOutput, bool) bool) error {
 	return c.ListApplicationRevisionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2948,14 +2946,13 @@ const opListApplications = "ListApplications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListApplicationsRequest method.
+//	req, resp := client.ListApplicationsRequest(params)
 //
-//    // Example sending a request using the ListApplicationsRequest method.
-//    req, resp := client.ListApplicationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListApplications
 func (c *CodeDeploy) ListApplicationsRequest(input *ListApplicationsInput) (req *request.Request, output *ListApplicationsOutput) {
@@ -2982,8 +2979,7 @@ func (c *CodeDeploy) ListApplicationsRequest(input *ListApplicationsInput) (req 
 
 // ListApplications API operation for AWS CodeDeploy.
 //
-// Lists the applications registered with the IAM user or Amazon Web Services
-// account.
+// Lists the applications registered with the user or Amazon Web Services account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2993,8 +2989,8 @@ func (c *CodeDeploy) ListApplicationsRequest(input *ListApplicationsInput) (req 
 // API operation ListApplications for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The next token was specified in an invalid format.
+//   - InvalidNextTokenException
+//     The next token was specified in an invalid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListApplications
 func (c *CodeDeploy) ListApplications(input *ListApplicationsInput) (*ListApplicationsOutput, error) {
@@ -3026,15 +3022,14 @@ func (c *CodeDeploy) ListApplicationsWithContext(ctx aws.Context, input *ListApp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListApplications operation.
-//    pageNum := 0
-//    err := client.ListApplicationsPages(params,
-//        func(page *codedeploy.ListApplicationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListApplications operation.
+//	pageNum := 0
+//	err := client.ListApplicationsPages(params,
+//	    func(page *codedeploy.ListApplicationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeDeploy) ListApplicationsPages(input *ListApplicationsInput, fn func(*ListApplicationsOutput, bool) bool) error {
 	return c.ListApplicationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3086,14 +3081,13 @@ const opListDeploymentConfigs = "ListDeploymentConfigs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDeploymentConfigsRequest method.
+//	req, resp := client.ListDeploymentConfigsRequest(params)
 //
-//    // Example sending a request using the ListDeploymentConfigsRequest method.
-//    req, resp := client.ListDeploymentConfigsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListDeploymentConfigs
 func (c *CodeDeploy) ListDeploymentConfigsRequest(input *ListDeploymentConfigsInput) (req *request.Request, output *ListDeploymentConfigsOutput) {
@@ -3120,7 +3114,7 @@ func (c *CodeDeploy) ListDeploymentConfigsRequest(input *ListDeploymentConfigsIn
 
 // ListDeploymentConfigs API operation for AWS CodeDeploy.
 //
-// Lists the deployment configurations with the IAM user or Amazon Web Services
+// Lists the deployment configurations with the user or Amazon Web Services
 // account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -3131,8 +3125,8 @@ func (c *CodeDeploy) ListDeploymentConfigsRequest(input *ListDeploymentConfigsIn
 // API operation ListDeploymentConfigs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The next token was specified in an invalid format.
+//   - InvalidNextTokenException
+//     The next token was specified in an invalid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListDeploymentConfigs
 func (c *CodeDeploy) ListDeploymentConfigs(input *ListDeploymentConfigsInput) (*ListDeploymentConfigsOutput, error) {
@@ -3164,15 +3158,14 @@ func (c *CodeDeploy) ListDeploymentConfigsWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDeploymentConfigs operation.
-//    pageNum := 0
-//    err := client.ListDeploymentConfigsPages(params,
-//        func(page *codedeploy.ListDeploymentConfigsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDeploymentConfigs operation.
+//	pageNum := 0
+//	err := client.ListDeploymentConfigsPages(params,
+//	    func(page *codedeploy.ListDeploymentConfigsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeDeploy) ListDeploymentConfigsPages(input *ListDeploymentConfigsInput, fn func(*ListDeploymentConfigsOutput, bool) bool) error {
 	return c.ListDeploymentConfigsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3224,14 +3217,13 @@ const opListDeploymentGroups = "ListDeploymentGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDeploymentGroupsRequest method.
+//	req, resp := client.ListDeploymentGroupsRequest(params)
 //
-//    // Example sending a request using the ListDeploymentGroupsRequest method.
-//    req, resp := client.ListDeploymentGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListDeploymentGroups
 func (c *CodeDeploy) ListDeploymentGroupsRequest(input *ListDeploymentGroupsInput) (req *request.Request, output *ListDeploymentGroupsOutput) {
@@ -3258,8 +3250,8 @@ func (c *CodeDeploy) ListDeploymentGroupsRequest(input *ListDeploymentGroupsInpu
 
 // ListDeploymentGroups API operation for AWS CodeDeploy.
 //
-// Lists the deployment groups for an application registered with the IAM user
-// or Amazon Web Services account.
+// Lists the deployment groups for an application registered with the Amazon
+// Web Services user or Amazon Web Services account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3269,17 +3261,18 @@ func (c *CodeDeploy) ListDeploymentGroupsRequest(input *ListDeploymentGroupsInpu
 // API operation ListDeploymentGroups for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * InvalidNextTokenException
-//   The next token was specified in an invalid format.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
+//
+//   - InvalidNextTokenException
+//     The next token was specified in an invalid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListDeploymentGroups
 func (c *CodeDeploy) ListDeploymentGroups(input *ListDeploymentGroupsInput) (*ListDeploymentGroupsOutput, error) {
@@ -3311,15 +3304,14 @@ func (c *CodeDeploy) ListDeploymentGroupsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDeploymentGroups operation.
-//    pageNum := 0
-//    err := client.ListDeploymentGroupsPages(params,
-//        func(page *codedeploy.ListDeploymentGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDeploymentGroups operation.
+//	pageNum := 0
+//	err := client.ListDeploymentGroupsPages(params,
+//	    func(page *codedeploy.ListDeploymentGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeDeploy) ListDeploymentGroupsPages(input *ListDeploymentGroupsInput, fn func(*ListDeploymentGroupsOutput, bool) bool) error {
 	return c.ListDeploymentGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3371,14 +3363,13 @@ const opListDeploymentInstances = "ListDeploymentInstances"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDeploymentInstancesRequest method.
+//	req, resp := client.ListDeploymentInstancesRequest(params)
 //
-//    // Example sending a request using the ListDeploymentInstancesRequest method.
-//    req, resp := client.ListDeploymentInstancesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListDeploymentInstances
 //
@@ -3410,13 +3401,12 @@ func (c *CodeDeploy) ListDeploymentInstancesRequest(input *ListDeploymentInstanc
 
 // ListDeploymentInstances API operation for AWS CodeDeploy.
 //
-//
 // The newer BatchGetDeploymentTargets should be used instead because it works
 // with all compute types. ListDeploymentInstances throws an exception if it
 // is used with a compute platform other than EC2/On-premises or Lambda.
 //
-// Lists the instance for a deployment associated with the IAM user or Amazon
-// Web Services account.
+// Lists the instance for a deployment associated with the user or Amazon Web
+// Services account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3426,40 +3416,40 @@ func (c *CodeDeploy) ListDeploymentInstancesRequest(input *ListDeploymentInstanc
 // API operation ListDeploymentInstances for usage and error information.
 //
 // Returned Error Types:
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
 //
-//   * DeploymentDoesNotExistException
-//   The deployment with the IAM user or Amazon Web Services account does not
-//   exist.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * DeploymentNotStartedException
-//   The specified deployment has not started.
+//   - DeploymentDoesNotExistException
+//     The deployment with the user or Amazon Web Services account does not exist.
 //
-//   * InvalidNextTokenException
-//   The next token was specified in an invalid format.
+//   - DeploymentNotStartedException
+//     The specified deployment has not started.
 //
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
+//   - InvalidNextTokenException
+//     The next token was specified in an invalid format.
 //
-//   * InvalidInstanceStatusException
-//   The specified instance status does not exist.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
 //
-//   * InvalidInstanceTypeException
-//   An invalid instance type was specified for instances in a blue/green deployment.
-//   Valid values include "Blue" for an original environment and "Green" for a
-//   replacement environment.
+//   - InvalidInstanceStatusException
+//     The specified instance status does not exist.
 //
-//   * InvalidDeploymentInstanceTypeException
-//   An instance type was specified for an in-place deployment. Instance types
-//   are supported for blue/green deployments only.
+//   - InvalidInstanceTypeException
+//     An invalid instance type was specified for instances in a blue/green deployment.
+//     Valid values include "Blue" for an original environment and "Green" for a
+//     replacement environment.
 //
-//   * InvalidTargetFilterNameException
-//   The target filter name is invalid.
+//   - InvalidDeploymentInstanceTypeException
+//     An instance type was specified for an in-place deployment. Instance types
+//     are supported for blue/green deployments only.
 //
-//   * InvalidComputePlatformException
-//   The computePlatform is invalid. The computePlatform should be Lambda, Server,
-//   or ECS.
+//   - InvalidTargetFilterNameException
+//     The target filter name is invalid.
+//
+//   - InvalidComputePlatformException
+//     The computePlatform is invalid. The computePlatform should be Lambda, Server,
+//     or ECS.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListDeploymentInstances
 //
@@ -3495,15 +3485,14 @@ func (c *CodeDeploy) ListDeploymentInstancesWithContext(ctx aws.Context, input *
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDeploymentInstances operation.
-//    pageNum := 0
-//    err := client.ListDeploymentInstancesPages(params,
-//        func(page *codedeploy.ListDeploymentInstancesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDeploymentInstances operation.
+//	pageNum := 0
+//	err := client.ListDeploymentInstancesPages(params,
+//	    func(page *codedeploy.ListDeploymentInstancesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 //
 // Deprecated: This operation is deprecated, use ListDeploymentTargets instead.
 func (c *CodeDeploy) ListDeploymentInstancesPages(input *ListDeploymentInstancesInput, fn func(*ListDeploymentInstancesOutput, bool) bool) error {
@@ -3559,14 +3548,13 @@ const opListDeploymentTargets = "ListDeploymentTargets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDeploymentTargetsRequest method.
+//	req, resp := client.ListDeploymentTargetsRequest(params)
 //
-//    // Example sending a request using the ListDeploymentTargetsRequest method.
-//    req, resp := client.ListDeploymentTargetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListDeploymentTargets
 func (c *CodeDeploy) ListDeploymentTargetsRequest(input *ListDeploymentTargetsInput) (req *request.Request, output *ListDeploymentTargetsOutput) {
@@ -3597,33 +3585,36 @@ func (c *CodeDeploy) ListDeploymentTargetsRequest(input *ListDeploymentTargetsIn
 // API operation ListDeploymentTargets for usage and error information.
 //
 // Returned Error Types:
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
 //
-//   * DeploymentDoesNotExistException
-//   The deployment with the IAM user or Amazon Web Services account does not
-//   exist.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * DeploymentNotStartedException
-//   The specified deployment has not started.
+//   - DeploymentDoesNotExistException
+//     The deployment with the user or Amazon Web Services account does not exist.
 //
-//   * InvalidNextTokenException
-//   The next token was specified in an invalid format.
+//   - DeploymentNotStartedException
+//     The specified deployment has not started.
 //
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
+//   - InvalidNextTokenException
+//     The next token was specified in an invalid format.
 //
-//   * InvalidInstanceStatusException
-//   The specified instance status does not exist.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
 //
-//   * InvalidInstanceTypeException
-//   An invalid instance type was specified for instances in a blue/green deployment.
-//   Valid values include "Blue" for an original environment and "Green" for a
-//   replacement environment.
+//   - InvalidInstanceStatusException
+//     The specified instance status does not exist.
 //
-//   * InvalidDeploymentInstanceTypeException
-//   An instance type was specified for an in-place deployment. Instance types
-//   are supported for blue/green deployments only.
+//   - InvalidInstanceTypeException
+//     An invalid instance type was specified for instances in a blue/green deployment.
+//     Valid values include "Blue" for an original environment and "Green" for a
+//     replacement environment.
+//
+//   - InvalidDeploymentInstanceTypeException
+//     An instance type was specified for an in-place deployment. Instance types
+//     are supported for blue/green deployments only.
+//
+//   - InvalidTargetFilterNameException
+//     The target filter name is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListDeploymentTargets
 func (c *CodeDeploy) ListDeploymentTargets(input *ListDeploymentTargetsInput) (*ListDeploymentTargetsOutput, error) {
@@ -3663,14 +3654,13 @@ const opListDeployments = "ListDeployments"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDeploymentsRequest method.
+//	req, resp := client.ListDeploymentsRequest(params)
 //
-//    // Example sending a request using the ListDeploymentsRequest method.
-//    req, resp := client.ListDeploymentsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListDeployments
 func (c *CodeDeploy) ListDeploymentsRequest(input *ListDeploymentsInput) (req *request.Request, output *ListDeploymentsOutput) {
@@ -3698,7 +3688,7 @@ func (c *CodeDeploy) ListDeploymentsRequest(input *ListDeploymentsInput) (req *r
 // ListDeployments API operation for AWS CodeDeploy.
 //
 // Lists the deployments in a deployment group for an application registered
-// with the IAM user or Amazon Web Services account.
+// with the user or Amazon Web Services account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3708,39 +3698,40 @@ func (c *CodeDeploy) ListDeploymentsRequest(input *ListDeploymentsInput) (req *r
 // API operation ListDeployments for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * InvalidDeploymentGroupNameException
-//   The deployment group name was specified in an invalid format.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * DeploymentGroupDoesNotExistException
-//   The named deployment group with the IAM user or Amazon Web Services account
-//   does not exist.
+//   - InvalidDeploymentGroupNameException
+//     The deployment group name was specified in an invalid format.
 //
-//   * DeploymentGroupNameRequiredException
-//   The deployment group name was not specified.
+//   - DeploymentGroupDoesNotExistException
+//     The named deployment group with the user or Amazon Web Services account does
+//     not exist.
 //
-//   * InvalidTimeRangeException
-//   The specified time range was specified in an invalid format.
+//   - DeploymentGroupNameRequiredException
+//     The deployment group name was not specified.
 //
-//   * InvalidDeploymentStatusException
-//   The specified deployment status doesn't exist or cannot be determined.
+//   - InvalidTimeRangeException
+//     The specified time range was specified in an invalid format.
 //
-//   * InvalidNextTokenException
-//   The next token was specified in an invalid format.
+//   - InvalidDeploymentStatusException
+//     The specified deployment status doesn't exist or cannot be determined.
 //
-//   * InvalidExternalIdException
-//   The external ID was specified in an invalid format.
+//   - InvalidNextTokenException
+//     The next token was specified in an invalid format.
 //
-//   * InvalidInputException
-//   The input was specified in an invalid format.
+//   - InvalidExternalIdException
+//     The external ID was specified in an invalid format.
+//
+//   - InvalidInputException
+//     The input was specified in an invalid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListDeployments
 func (c *CodeDeploy) ListDeployments(input *ListDeploymentsInput) (*ListDeploymentsOutput, error) {
@@ -3772,15 +3763,14 @@ func (c *CodeDeploy) ListDeploymentsWithContext(ctx aws.Context, input *ListDepl
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDeployments operation.
-//    pageNum := 0
-//    err := client.ListDeploymentsPages(params,
-//        func(page *codedeploy.ListDeploymentsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDeployments operation.
+//	pageNum := 0
+//	err := client.ListDeploymentsPages(params,
+//	    func(page *codedeploy.ListDeploymentsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeDeploy) ListDeploymentsPages(input *ListDeploymentsInput, fn func(*ListDeploymentsOutput, bool) bool) error {
 	return c.ListDeploymentsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3832,14 +3822,13 @@ const opListGitHubAccountTokenNames = "ListGitHubAccountTokenNames"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListGitHubAccountTokenNamesRequest method.
+//	req, resp := client.ListGitHubAccountTokenNamesRequest(params)
 //
-//    // Example sending a request using the ListGitHubAccountTokenNamesRequest method.
-//    req, resp := client.ListGitHubAccountTokenNamesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListGitHubAccountTokenNames
 func (c *CodeDeploy) ListGitHubAccountTokenNamesRequest(input *ListGitHubAccountTokenNamesInput) (req *request.Request, output *ListGitHubAccountTokenNamesOutput) {
@@ -3870,14 +3859,15 @@ func (c *CodeDeploy) ListGitHubAccountTokenNamesRequest(input *ListGitHubAccount
 // API operation ListGitHubAccountTokenNames for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidNextTokenException
-//   The next token was specified in an invalid format.
 //
-//   * ResourceValidationException
-//   The specified resource could not be validated.
+//   - InvalidNextTokenException
+//     The next token was specified in an invalid format.
 //
-//   * OperationNotSupportedException
-//   The API used does not support the deployment.
+//   - ResourceValidationException
+//     The specified resource could not be validated.
+//
+//   - OperationNotSupportedException
+//     The API used does not support the deployment.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListGitHubAccountTokenNames
 func (c *CodeDeploy) ListGitHubAccountTokenNames(input *ListGitHubAccountTokenNamesInput) (*ListGitHubAccountTokenNamesOutput, error) {
@@ -3917,14 +3907,13 @@ const opListOnPremisesInstances = "ListOnPremisesInstances"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListOnPremisesInstancesRequest method.
+//	req, resp := client.ListOnPremisesInstancesRequest(params)
 //
-//    // Example sending a request using the ListOnPremisesInstancesRequest method.
-//    req, resp := client.ListOnPremisesInstancesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListOnPremisesInstances
 func (c *CodeDeploy) ListOnPremisesInstancesRequest(input *ListOnPremisesInstancesInput) (req *request.Request, output *ListOnPremisesInstancesOutput) {
@@ -3959,14 +3948,15 @@ func (c *CodeDeploy) ListOnPremisesInstancesRequest(input *ListOnPremisesInstanc
 // API operation ListOnPremisesInstances for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRegistrationStatusException
-//   The registration status was specified in an invalid format.
 //
-//   * InvalidTagFilterException
-//   The tag filter was specified in an invalid format.
+//   - InvalidRegistrationStatusException
+//     The registration status was specified in an invalid format.
 //
-//   * InvalidNextTokenException
-//   The next token was specified in an invalid format.
+//   - InvalidTagFilterException
+//     The tag filter was specified in an invalid format.
+//
+//   - InvalidNextTokenException
+//     The next token was specified in an invalid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListOnPremisesInstances
 func (c *CodeDeploy) ListOnPremisesInstances(input *ListOnPremisesInstancesInput) (*ListOnPremisesInstancesOutput, error) {
@@ -4006,14 +3996,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListTagsForResource
 func (c *CodeDeploy) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -4046,15 +4035,16 @@ func (c *CodeDeploy) ListTagsForResourceRequest(input *ListTagsForResourceInput)
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ArnNotSupportedException
-//   The specified ARN is not supported. For example, it might be an ARN for a
-//   resource that is not expected.
 //
-//   * InvalidArnException
-//   The specified ARN is not in a valid format.
+//   - ArnNotSupportedException
+//     The specified ARN is not supported. For example, it might be an ARN for a
+//     resource that is not expected.
 //
-//   * ResourceArnRequiredException
-//   The ARN of a resource is required, but was not found.
+//   - InvalidArnException
+//     The specified ARN is not in a valid format.
+//
+//   - ResourceArnRequiredException
+//     The ARN of a resource is required, but was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/ListTagsForResource
 func (c *CodeDeploy) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -4094,14 +4084,13 @@ const opPutLifecycleEventHookExecutionStatus = "PutLifecycleEventHookExecutionSt
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutLifecycleEventHookExecutionStatusRequest method.
+//	req, resp := client.PutLifecycleEventHookExecutionStatusRequest(params)
 //
-//    // Example sending a request using the PutLifecycleEventHookExecutionStatusRequest method.
-//    req, resp := client.PutLifecycleEventHookExecutionStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/PutLifecycleEventHookExecutionStatus
 func (c *CodeDeploy) PutLifecycleEventHookExecutionStatusRequest(input *PutLifecycleEventHookExecutionStatusInput) (req *request.Request, output *PutLifecycleEventHookExecutionStatusOutput) {
@@ -4140,29 +4129,29 @@ func (c *CodeDeploy) PutLifecycleEventHookExecutionStatusRequest(input *PutLifec
 // API operation PutLifecycleEventHookExecutionStatus for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidLifecycleEventHookExecutionStatusException
-//   The result of a Lambda validation function that verifies a lifecycle event
-//   is invalid. It should return Succeeded or Failed.
 //
-//   * InvalidLifecycleEventHookExecutionIdException
-//   A lifecycle event hook is invalid. Review the hooks section in your AppSpec
-//   file to ensure the lifecycle events and hooks functions are valid.
+//   - InvalidLifecycleEventHookExecutionStatusException
+//     The result of a Lambda validation function that verifies a lifecycle event
+//     is invalid. It should return Succeeded or Failed.
 //
-//   * LifecycleEventAlreadyCompletedException
-//   An attempt to return the status of an already completed lifecycle event occurred.
+//   - InvalidLifecycleEventHookExecutionIdException
+//     A lifecycle event hook is invalid. Review the hooks section in your AppSpec
+//     file to ensure the lifecycle events and hooks functions are valid.
 //
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
+//   - LifecycleEventAlreadyCompletedException
+//     An attempt to return the status of an already completed lifecycle event occurred.
 //
-//   * DeploymentDoesNotExistException
-//   The deployment with the IAM user or Amazon Web Services account does not
-//   exist.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
+//   - DeploymentDoesNotExistException
+//     The deployment with the user or Amazon Web Services account does not exist.
 //
-//   * UnsupportedActionForDeploymentTypeException
-//   A call was submitted that is not supported for the specified deployment type.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
+//
+//   - UnsupportedActionForDeploymentTypeException
+//     A call was submitted that is not supported for the specified deployment type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/PutLifecycleEventHookExecutionStatus
 func (c *CodeDeploy) PutLifecycleEventHookExecutionStatus(input *PutLifecycleEventHookExecutionStatusInput) (*PutLifecycleEventHookExecutionStatusOutput, error) {
@@ -4202,14 +4191,13 @@ const opRegisterApplicationRevision = "RegisterApplicationRevision"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterApplicationRevisionRequest method.
+//	req, resp := client.RegisterApplicationRevisionRequest(params)
 //
-//    // Example sending a request using the RegisterApplicationRevisionRequest method.
-//    req, resp := client.RegisterApplicationRevisionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/RegisterApplicationRevision
 func (c *CodeDeploy) RegisterApplicationRevisionRequest(input *RegisterApplicationRevisionInput) (req *request.Request, output *RegisterApplicationRevisionOutput) {
@@ -4241,23 +4229,24 @@ func (c *CodeDeploy) RegisterApplicationRevisionRequest(input *RegisterApplicati
 // API operation RegisterApplicationRevision for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
 //
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * DescriptionTooLongException
-//   The description is too long.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * RevisionRequiredException
-//   The revision ID was not specified.
+//   - DescriptionTooLongException
+//     The description is too long.
 //
-//   * InvalidRevisionException
-//   The revision was specified in an invalid format.
+//   - RevisionRequiredException
+//     The revision ID was not specified.
+//
+//   - InvalidRevisionException
+//     The revision was specified in an invalid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/RegisterApplicationRevision
 func (c *CodeDeploy) RegisterApplicationRevision(input *RegisterApplicationRevisionInput) (*RegisterApplicationRevisionOutput, error) {
@@ -4297,14 +4286,13 @@ const opRegisterOnPremisesInstance = "RegisterOnPremisesInstance"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterOnPremisesInstanceRequest method.
+//	req, resp := client.RegisterOnPremisesInstanceRequest(params)
 //
-//    // Example sending a request using the RegisterOnPremisesInstanceRequest method.
-//    req, resp := client.RegisterOnPremisesInstanceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/RegisterOnPremisesInstance
 func (c *CodeDeploy) RegisterOnPremisesInstanceRequest(input *RegisterOnPremisesInstanceInput) (req *request.Request, output *RegisterOnPremisesInstanceOutput) {
@@ -4339,38 +4327,39 @@ func (c *CodeDeploy) RegisterOnPremisesInstanceRequest(input *RegisterOnPremises
 // API operation RegisterOnPremisesInstance for usage and error information.
 //
 // Returned Error Types:
-//   * InstanceNameAlreadyRegisteredException
-//   The specified on-premises instance name is already registered.
 //
-//   * IamArnRequiredException
-//   No IAM ARN was included in the request. You must use an IAM session ARN or
-//   IAM user ARN in the request.
+//   - InstanceNameAlreadyRegisteredException
+//     The specified on-premises instance name is already registered.
 //
-//   * IamSessionArnAlreadyRegisteredException
-//   The request included an IAM session ARN that has already been used to register
-//   a different instance.
+//   - IamArnRequiredException
+//     No IAM ARN was included in the request. You must use an IAM session ARN or
+//     user ARN in the request.
 //
-//   * IamUserArnAlreadyRegisteredException
-//   The specified IAM user ARN is already registered with an on-premises instance.
+//   - IamSessionArnAlreadyRegisteredException
+//     The request included an IAM session ARN that has already been used to register
+//     a different instance.
 //
-//   * InstanceNameRequiredException
-//   An on-premises instance name was not specified.
+//   - IamUserArnAlreadyRegisteredException
+//     The specified user ARN is already registered with an on-premises instance.
 //
-//   * IamUserArnRequiredException
-//   An IAM user ARN was not specified.
+//   - InstanceNameRequiredException
+//     An on-premises instance name was not specified.
 //
-//   * InvalidInstanceNameException
-//   The on-premises instance name was specified in an invalid format.
+//   - IamUserArnRequiredException
+//     An user ARN was not specified.
 //
-//   * InvalidIamSessionArnException
-//   The IAM session ARN was specified in an invalid format.
+//   - InvalidInstanceNameException
+//     The on-premises instance name was specified in an invalid format.
 //
-//   * InvalidIamUserArnException
-//   The IAM user ARN was specified in an invalid format.
+//   - InvalidIamSessionArnException
+//     The IAM session ARN was specified in an invalid format.
 //
-//   * MultipleIamArnsProvidedException
-//   Both an IAM user ARN and an IAM session ARN were included in the request.
-//   Use only one ARN type.
+//   - InvalidIamUserArnException
+//     The user ARN was specified in an invalid format.
+//
+//   - MultipleIamArnsProvidedException
+//     Both an user ARN and an IAM session ARN were included in the request. Use
+//     only one ARN type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/RegisterOnPremisesInstance
 func (c *CodeDeploy) RegisterOnPremisesInstance(input *RegisterOnPremisesInstanceInput) (*RegisterOnPremisesInstanceOutput, error) {
@@ -4410,14 +4399,13 @@ const opRemoveTagsFromOnPremisesInstances = "RemoveTagsFromOnPremisesInstances"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveTagsFromOnPremisesInstancesRequest method.
+//	req, resp := client.RemoveTagsFromOnPremisesInstancesRequest(params)
 //
-//    // Example sending a request using the RemoveTagsFromOnPremisesInstancesRequest method.
-//    req, resp := client.RemoveTagsFromOnPremisesInstancesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/RemoveTagsFromOnPremisesInstances
 func (c *CodeDeploy) RemoveTagsFromOnPremisesInstancesRequest(input *RemoveTagsFromOnPremisesInstancesInput) (req *request.Request, output *RemoveTagsFromOnPremisesInstancesOutput) {
@@ -4449,27 +4437,28 @@ func (c *CodeDeploy) RemoveTagsFromOnPremisesInstancesRequest(input *RemoveTagsF
 // API operation RemoveTagsFromOnPremisesInstances for usage and error information.
 //
 // Returned Error Types:
-//   * InstanceNameRequiredException
-//   An on-premises instance name was not specified.
 //
-//   * InvalidInstanceNameException
-//   The on-premises instance name was specified in an invalid format.
+//   - InstanceNameRequiredException
+//     An on-premises instance name was not specified.
 //
-//   * TagRequiredException
-//   A tag was not specified.
+//   - InvalidInstanceNameException
+//     The on-premises instance name was specified in an invalid format.
 //
-//   * InvalidTagException
-//   The tag was specified in an invalid format.
+//   - TagRequiredException
+//     A tag was not specified.
 //
-//   * TagLimitExceededException
-//   The maximum allowed number of tags was exceeded.
+//   - InvalidTagException
+//     The tag was specified in an invalid format.
 //
-//   * InstanceLimitExceededException
-//   The maximum number of allowed on-premises instances in a single call was
-//   exceeded.
+//   - TagLimitExceededException
+//     The maximum allowed number of tags was exceeded.
 //
-//   * InstanceNotRegisteredException
-//   The specified on-premises instance is not registered.
+//   - InstanceLimitExceededException
+//     The maximum number of allowed on-premises instances in a single call was
+//     exceeded.
+//
+//   - InstanceNotRegisteredException
+//     The specified on-premises instance is not registered.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/RemoveTagsFromOnPremisesInstances
 func (c *CodeDeploy) RemoveTagsFromOnPremisesInstances(input *RemoveTagsFromOnPremisesInstancesInput) (*RemoveTagsFromOnPremisesInstancesOutput, error) {
@@ -4509,14 +4498,13 @@ const opSkipWaitTimeForInstanceTermination = "SkipWaitTimeForInstanceTermination
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SkipWaitTimeForInstanceTerminationRequest method.
+//	req, resp := client.SkipWaitTimeForInstanceTerminationRequest(params)
 //
-//    // Example sending a request using the SkipWaitTimeForInstanceTerminationRequest method.
-//    req, resp := client.SkipWaitTimeForInstanceTerminationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/SkipWaitTimeForInstanceTermination
 //
@@ -4554,24 +4542,24 @@ func (c *CodeDeploy) SkipWaitTimeForInstanceTerminationRequest(input *SkipWaitTi
 // API operation SkipWaitTimeForInstanceTermination for usage and error information.
 //
 // Returned Error Types:
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
 //
-//   * DeploymentDoesNotExistException
-//   The deployment with the IAM user or Amazon Web Services account does not
-//   exist.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * DeploymentAlreadyCompletedException
-//   The deployment is already complete.
+//   - DeploymentDoesNotExistException
+//     The deployment with the user or Amazon Web Services account does not exist.
 //
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
+//   - DeploymentAlreadyCompletedException
+//     The deployment is already complete.
 //
-//   * DeploymentNotStartedException
-//   The specified deployment has not started.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
 //
-//   * UnsupportedActionForDeploymentTypeException
-//   A call was submitted that is not supported for the specified deployment type.
+//   - DeploymentNotStartedException
+//     The specified deployment has not started.
+//
+//   - UnsupportedActionForDeploymentTypeException
+//     A call was submitted that is not supported for the specified deployment type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/SkipWaitTimeForInstanceTermination
 //
@@ -4615,14 +4603,13 @@ const opStopDeployment = "StopDeployment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopDeploymentRequest method.
+//	req, resp := client.StopDeploymentRequest(params)
 //
-//    // Example sending a request using the StopDeploymentRequest method.
-//    req, resp := client.StopDeploymentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/StopDeployment
 func (c *CodeDeploy) StopDeploymentRequest(input *StopDeploymentInput) (req *request.Request, output *StopDeploymentOutput) {
@@ -4653,25 +4640,25 @@ func (c *CodeDeploy) StopDeploymentRequest(input *StopDeploymentInput) (req *req
 // API operation StopDeployment for usage and error information.
 //
 // Returned Error Types:
-//   * DeploymentIdRequiredException
-//   At least one deployment ID must be specified.
 //
-//   * DeploymentDoesNotExistException
-//   The deployment with the IAM user or Amazon Web Services account does not
-//   exist.
+//   - DeploymentIdRequiredException
+//     At least one deployment ID must be specified.
 //
-//   * DeploymentGroupDoesNotExistException
-//   The named deployment group with the IAM user or Amazon Web Services account
-//   does not exist.
+//   - DeploymentDoesNotExistException
+//     The deployment with the user or Amazon Web Services account does not exist.
 //
-//   * DeploymentAlreadyCompletedException
-//   The deployment is already complete.
+//   - DeploymentGroupDoesNotExistException
+//     The named deployment group with the user or Amazon Web Services account does
+//     not exist.
 //
-//   * InvalidDeploymentIdException
-//   At least one of the deployment IDs was specified in an invalid format.
+//   - DeploymentAlreadyCompletedException
+//     The deployment is already complete.
 //
-//   * UnsupportedActionForDeploymentTypeException
-//   A call was submitted that is not supported for the specified deployment type.
+//   - InvalidDeploymentIdException
+//     At least one of the deployment IDs was specified in an invalid format.
+//
+//   - UnsupportedActionForDeploymentTypeException
+//     A call was submitted that is not supported for the specified deployment type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/StopDeployment
 func (c *CodeDeploy) StopDeployment(input *StopDeploymentInput) (*StopDeploymentOutput, error) {
@@ -4711,14 +4698,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/TagResource
 func (c *CodeDeploy) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -4751,32 +4737,33 @@ func (c *CodeDeploy) TagResourceRequest(input *TagResourceInput) (req *request.R
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceArnRequiredException
-//   The ARN of a resource is required, but was not found.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - ResourceArnRequiredException
+//     The ARN of a resource is required, but was not found.
 //
-//   * DeploymentGroupDoesNotExistException
-//   The named deployment group with the IAM user or Amazon Web Services account
-//   does not exist.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * DeploymentConfigDoesNotExistException
-//   The deployment configuration does not exist with the IAM user or Amazon Web
-//   Services account.
+//   - DeploymentGroupDoesNotExistException
+//     The named deployment group with the user or Amazon Web Services account does
+//     not exist.
 //
-//   * TagRequiredException
-//   A tag was not specified.
+//   - DeploymentConfigDoesNotExistException
+//     The deployment configuration does not exist with the user or Amazon Web Services
+//     account.
 //
-//   * InvalidTagsToAddException
-//   The specified tags are not valid.
+//   - TagRequiredException
+//     A tag was not specified.
 //
-//   * ArnNotSupportedException
-//   The specified ARN is not supported. For example, it might be an ARN for a
-//   resource that is not expected.
+//   - InvalidTagsToAddException
+//     The specified tags are not valid.
 //
-//   * InvalidArnException
-//   The specified ARN is not in a valid format.
+//   - ArnNotSupportedException
+//     The specified ARN is not supported. For example, it might be an ARN for a
+//     resource that is not expected.
+//
+//   - InvalidArnException
+//     The specified ARN is not in a valid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/TagResource
 func (c *CodeDeploy) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -4816,14 +4803,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/UntagResource
 func (c *CodeDeploy) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -4857,32 +4843,33 @@ func (c *CodeDeploy) UntagResourceRequest(input *UntagResourceInput) (req *reque
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceArnRequiredException
-//   The ARN of a resource is required, but was not found.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - ResourceArnRequiredException
+//     The ARN of a resource is required, but was not found.
 //
-//   * DeploymentGroupDoesNotExistException
-//   The named deployment group with the IAM user or Amazon Web Services account
-//   does not exist.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * DeploymentConfigDoesNotExistException
-//   The deployment configuration does not exist with the IAM user or Amazon Web
-//   Services account.
+//   - DeploymentGroupDoesNotExistException
+//     The named deployment group with the user or Amazon Web Services account does
+//     not exist.
 //
-//   * TagRequiredException
-//   A tag was not specified.
+//   - DeploymentConfigDoesNotExistException
+//     The deployment configuration does not exist with the user or Amazon Web Services
+//     account.
 //
-//   * InvalidTagsToAddException
-//   The specified tags are not valid.
+//   - TagRequiredException
+//     A tag was not specified.
 //
-//   * ArnNotSupportedException
-//   The specified ARN is not supported. For example, it might be an ARN for a
-//   resource that is not expected.
+//   - InvalidTagsToAddException
+//     The specified tags are not valid.
 //
-//   * InvalidArnException
-//   The specified ARN is not in a valid format.
+//   - ArnNotSupportedException
+//     The specified ARN is not supported. For example, it might be an ARN for a
+//     resource that is not expected.
+//
+//   - InvalidArnException
+//     The specified ARN is not in a valid format.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/UntagResource
 func (c *CodeDeploy) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -4922,14 +4909,13 @@ const opUpdateApplication = "UpdateApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateApplicationRequest method.
+//	req, resp := client.UpdateApplicationRequest(params)
 //
-//    // Example sending a request using the UpdateApplicationRequest method.
-//    req, resp := client.UpdateApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/UpdateApplication
 func (c *CodeDeploy) UpdateApplicationRequest(input *UpdateApplicationInput) (req *request.Request, output *UpdateApplicationOutput) {
@@ -4961,18 +4947,19 @@ func (c *CodeDeploy) UpdateApplicationRequest(input *UpdateApplicationInput) (re
 // API operation UpdateApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * ApplicationAlreadyExistsException
-//   An application with the specified name with the IAM user or Amazon Web Services
-//   account already exists.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - ApplicationAlreadyExistsException
+//     An application with the specified name with the user or Amazon Web Services
+//     account already exists.
+//
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/UpdateApplication
 func (c *CodeDeploy) UpdateApplication(input *UpdateApplicationInput) (*UpdateApplicationOutput, error) {
@@ -5012,14 +4999,13 @@ const opUpdateDeploymentGroup = "UpdateDeploymentGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDeploymentGroupRequest method.
+//	req, resp := client.UpdateDeploymentGroupRequest(params)
 //
-//    // Example sending a request using the UpdateDeploymentGroupRequest method.
-//    req, resp := client.UpdateDeploymentGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/UpdateDeploymentGroup
 func (c *CodeDeploy) UpdateDeploymentGroupRequest(input *UpdateDeploymentGroupInput) (req *request.Request, output *UpdateDeploymentGroupOutput) {
@@ -5050,124 +5036,125 @@ func (c *CodeDeploy) UpdateDeploymentGroupRequest(input *UpdateDeploymentGroupIn
 // API operation UpdateDeploymentGroup for usage and error information.
 //
 // Returned Error Types:
-//   * ApplicationNameRequiredException
-//   The minimum number of required application names was not specified.
 //
-//   * InvalidApplicationNameException
-//   The application name was specified in an invalid format.
+//   - ApplicationNameRequiredException
+//     The minimum number of required application names was not specified.
 //
-//   * ApplicationDoesNotExistException
-//   The application does not exist with the IAM user or Amazon Web Services account.
+//   - InvalidApplicationNameException
+//     The application name was specified in an invalid format.
 //
-//   * InvalidDeploymentGroupNameException
-//   The deployment group name was specified in an invalid format.
+//   - ApplicationDoesNotExistException
+//     The application does not exist with the user or Amazon Web Services account.
 //
-//   * DeploymentGroupAlreadyExistsException
-//   A deployment group with the specified name with the IAM user or Amazon Web
-//   Services account already exists.
+//   - InvalidDeploymentGroupNameException
+//     The deployment group name was specified in an invalid format.
 //
-//   * DeploymentGroupNameRequiredException
-//   The deployment group name was not specified.
+//   - DeploymentGroupAlreadyExistsException
+//     A deployment group with the specified name with the user or Amazon Web Services
+//     account already exists.
 //
-//   * DeploymentGroupDoesNotExistException
-//   The named deployment group with the IAM user or Amazon Web Services account
-//   does not exist.
+//   - DeploymentGroupNameRequiredException
+//     The deployment group name was not specified.
 //
-//   * InvalidEC2TagException
-//   The tag was specified in an invalid format.
+//   - DeploymentGroupDoesNotExistException
+//     The named deployment group with the user or Amazon Web Services account does
+//     not exist.
 //
-//   * InvalidTagException
-//   The tag was specified in an invalid format.
+//   - InvalidEC2TagException
+//     The tag was specified in an invalid format.
 //
-//   * InvalidAutoScalingGroupException
-//   The Auto Scaling group was specified in an invalid format or does not exist.
+//   - InvalidTagException
+//     The tag was specified in an invalid format.
 //
-//   * InvalidDeploymentConfigNameException
-//   The deployment configuration name was specified in an invalid format.
+//   - InvalidAutoScalingGroupException
+//     The Auto Scaling group was specified in an invalid format or does not exist.
 //
-//   * DeploymentConfigDoesNotExistException
-//   The deployment configuration does not exist with the IAM user or Amazon Web
-//   Services account.
+//   - InvalidDeploymentConfigNameException
+//     The deployment configuration name was specified in an invalid format.
 //
-//   * InvalidRoleException
-//   The service role ARN was specified in an invalid format. Or, if an Auto Scaling
-//   group was specified, the specified service role does not grant the appropriate
-//   permissions to Amazon EC2 Auto Scaling.
+//   - DeploymentConfigDoesNotExistException
+//     The deployment configuration does not exist with the user or Amazon Web Services
+//     account.
 //
-//   * LifecycleHookLimitExceededException
-//   The limit for lifecycle hooks was exceeded.
+//   - InvalidRoleException
+//     The service role ARN was specified in an invalid format. Or, if an Auto Scaling
+//     group was specified, the specified service role does not grant the appropriate
+//     permissions to Amazon EC2 Auto Scaling.
 //
-//   * InvalidTriggerConfigException
-//   The trigger was specified in an invalid format.
+//   - LifecycleHookLimitExceededException
+//     The limit for lifecycle hooks was exceeded.
 //
-//   * TriggerTargetsLimitExceededException
-//   The maximum allowed number of triggers was exceeded.
+//   - InvalidTriggerConfigException
+//     The trigger was specified in an invalid format.
 //
-//   * InvalidAlarmConfigException
-//   The format of the alarm configuration is invalid. Possible causes include:
+//   - TriggerTargetsLimitExceededException
+//     The maximum allowed number of triggers was exceeded.
 //
-//      * The alarm list is null.
+//   - InvalidAlarmConfigException
+//     The format of the alarm configuration is invalid. Possible causes include:
 //
-//      * The alarm object is null.
+//   - The alarm list is null.
 //
-//      * The alarm name is empty or null or exceeds the limit of 255 characters.
+//   - The alarm object is null.
 //
-//      * Two alarms with the same name have been specified.
+//   - The alarm name is empty or null or exceeds the limit of 255 characters.
 //
-//      * The alarm configuration is enabled, but the alarm list is empty.
+//   - Two alarms with the same name have been specified.
 //
-//   * AlarmsLimitExceededException
-//   The maximum number of alarms for a deployment group (10) was exceeded.
+//   - The alarm configuration is enabled, but the alarm list is empty.
 //
-//   * InvalidAutoRollbackConfigException
-//   The automatic rollback configuration was specified in an invalid format.
-//   For example, automatic rollback is enabled, but an invalid triggering event
-//   type or no event types were listed.
+//   - AlarmsLimitExceededException
+//     The maximum number of alarms for a deployment group (10) was exceeded.
 //
-//   * InvalidLoadBalancerInfoException
-//   An invalid load balancer name, or no load balancer name, was specified.
+//   - InvalidAutoRollbackConfigException
+//     The automatic rollback configuration was specified in an invalid format.
+//     For example, automatic rollback is enabled, but an invalid triggering event
+//     type or no event types were listed.
 //
-//   * InvalidDeploymentStyleException
-//   An invalid deployment style was specified. Valid deployment types include
-//   "IN_PLACE" and "BLUE_GREEN." Valid deployment options include "WITH_TRAFFIC_CONTROL"
-//   and "WITHOUT_TRAFFIC_CONTROL."
+//   - InvalidLoadBalancerInfoException
+//     An invalid load balancer name, or no load balancer name, was specified.
 //
-//   * InvalidBlueGreenDeploymentConfigurationException
-//   The configuration for the blue/green deployment group was provided in an
-//   invalid format. For information about deployment configuration format, see
-//   CreateDeploymentConfig.
+//   - InvalidDeploymentStyleException
+//     An invalid deployment style was specified. Valid deployment types include
+//     "IN_PLACE" and "BLUE_GREEN." Valid deployment options include "WITH_TRAFFIC_CONTROL"
+//     and "WITHOUT_TRAFFIC_CONTROL."
 //
-//   * InvalidEC2TagCombinationException
-//   A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but
-//   only one of these data types can be used in a single call.
+//   - InvalidBlueGreenDeploymentConfigurationException
+//     The configuration for the blue/green deployment group was provided in an
+//     invalid format. For information about deployment configuration format, see
+//     CreateDeploymentConfig.
 //
-//   * InvalidOnPremisesTagCombinationException
-//   A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet,
-//   but only one of these data types can be used in a single call.
+//   - InvalidEC2TagCombinationException
+//     A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but
+//     only one of these data types can be used in a single call.
 //
-//   * TagSetListLimitExceededException
-//   The number of tag groups included in the tag set list exceeded the maximum
-//   allowed limit of 3.
+//   - InvalidOnPremisesTagCombinationException
+//     A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet,
+//     but only one of these data types can be used in a single call.
 //
-//   * InvalidInputException
-//   The input was specified in an invalid format.
+//   - TagSetListLimitExceededException
+//     The number of tag groups included in the tag set list exceeded the maximum
+//     allowed limit of 3.
 //
-//   * ThrottlingException
-//   An API function was called too frequently.
+//   - InvalidInputException
+//     The input was specified in an invalid format.
 //
-//   * InvalidECSServiceException
-//   The Amazon ECS service identifier is not valid.
+//   - ThrottlingException
+//     An API function was called too frequently.
 //
-//   * InvalidTargetGroupPairException
-//   A target group pair associated with this deployment is not valid.
+//   - InvalidECSServiceException
+//     The Amazon ECS service identifier is not valid.
 //
-//   * ECSServiceMappingLimitExceededException
-//   The Amazon ECS service is associated with more than one deployment groups.
-//   An Amazon ECS service can be associated with only one deployment group.
+//   - InvalidTargetGroupPairException
+//     A target group pair associated with this deployment is not valid.
 //
-//   * InvalidTrafficRoutingConfigurationException
-//   The configuration that specifies how traffic is routed during a deployment
-//   is invalid.
+//   - ECSServiceMappingLimitExceededException
+//     The Amazon ECS service is associated with more than one deployment groups.
+//     An Amazon ECS service can be associated with only one deployment group.
+//
+//   - InvalidTrafficRoutingConfigurationException
+//     The configuration that specifies how traffic is routed during a deployment
+//     is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codedeploy-2014-10-06/UpdateDeploymentGroup
 func (c *CodeDeploy) UpdateDeploymentGroup(input *UpdateDeploymentGroupInput) (*UpdateDeploymentGroupOutput, error) {
@@ -5488,7 +5475,7 @@ func (s *AppSpecContent) SetSha256(v string) *AppSpecContent {
 	return s
 }
 
-// An application with the specified name with the IAM user or Amazon Web Services
+// An application with the specified name with the user or Amazon Web Services
 // account already exists.
 type ApplicationAlreadyExistsException struct {
 	_            struct{}                  `type:"structure"`
@@ -5553,7 +5540,7 @@ func (s *ApplicationAlreadyExistsException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The application does not exist with the IAM user or Amazon Web Services account.
+// The application does not exist with the user or Amazon Web Services account.
 type ApplicationDoesNotExistException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -5936,11 +5923,24 @@ func (s *AutoRollbackConfiguration) SetEvents(v []*string) *AutoRollbackConfigur
 type AutoScalingGroup struct {
 	_ struct{} `type:"structure"`
 
-	// An Auto Scaling lifecycle event hook name.
+	// The name of the launch hook that CodeDeploy installed into the Auto Scaling
+	// group.
+	//
+	// For more information about the launch hook, see How Amazon EC2 Auto Scaling
+	// works with CodeDeploy (https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors)
+	// in the CodeDeploy User Guide.
 	Hook *string `locationName:"hook" type:"string"`
 
 	// The Auto Scaling group name.
 	Name *string `locationName:"name" type:"string"`
+
+	// The name of the termination hook that CodeDeploy installed into the Auto
+	// Scaling group.
+	//
+	// For more information about the termination hook, see Enabling termination
+	// deployments during Auto Scaling scale-in events (https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors-hook-enable)
+	// in the CodeDeploy User Guide.
+	TerminationHook *string `locationName:"terminationHook" type:"string"`
 }
 
 // String returns the string representation.
@@ -5970,6 +5970,12 @@ func (s *AutoScalingGroup) SetHook(v string) *AutoScalingGroup {
 // SetName sets the Name field's value.
 func (s *AutoScalingGroup) SetName(v string) *AutoScalingGroup {
 	s.Name = &v
+	return s
+}
+
+// SetTerminationHook sets the TerminationHook field's value.
+func (s *AutoScalingGroup) SetTerminationHook(v string) *AutoScalingGroup {
+	s.TerminationHook = &v
 	return s
 }
 
@@ -6173,7 +6179,7 @@ func (s *BatchGetApplicationsOutput) SetApplicationsInfo(v []*ApplicationInfo) *
 type BatchGetDeploymentGroupsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of an CodeDeploy application associated with the applicable IAM
+	// The name of an CodeDeploy application associated with the applicable user
 	// or Amazon Web Services account.
 	//
 	// ApplicationName is a required field
@@ -6382,7 +6388,9 @@ type BatchGetDeploymentTargetsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The unique ID of a deployment.
-	DeploymentId *string `locationName:"deploymentId" type:"string"`
+	//
+	// DeploymentId is a required field
+	DeploymentId *string `locationName:"deploymentId" type:"string" required:"true"`
 
 	// The unique IDs of the deployment targets. The compute platform of the deployment
 	// determines the type of the targets and their formats. The maximum number
@@ -6401,7 +6409,9 @@ type BatchGetDeploymentTargetsInput struct {
 	//
 	//    * For deployments that are deployed with CloudFormation, the target IDs
 	//    are CloudFormation stack IDs. Their target type is cloudFormationTarget.
-	TargetIds []*string `locationName:"targetIds" type:"list"`
+	//
+	// TargetIds is a required field
+	TargetIds []*string `locationName:"targetIds" type:"list" required:"true"`
 }
 
 // String returns the string representation.
@@ -6420,6 +6430,22 @@ func (s BatchGetDeploymentTargetsInput) String() string {
 // value will be replaced with "sensitive".
 func (s BatchGetDeploymentTargetsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchGetDeploymentTargetsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchGetDeploymentTargetsInput"}
+	if s.DeploymentId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeploymentId"))
+	}
+	if s.TargetIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetIds"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetDeploymentId sets the DeploymentId field's value.
@@ -7034,7 +7060,7 @@ type CreateApplicationInput struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the application. This name must be unique with the applicable
-	// IAM or Amazon Web Services account.
+	// user or Amazon Web Services account.
 	//
 	// ApplicationName is a required field
 	ApplicationName *string `locationName:"applicationName" min:"1" type:"string" required:"true"`
@@ -7167,6 +7193,15 @@ type CreateDeploymentConfigInput struct {
 
 	// The configuration that specifies how the deployment traffic is routed.
 	TrafficRoutingConfig *TrafficRoutingConfig `locationName:"trafficRoutingConfig" type:"structure"`
+
+	// Configure the ZonalConfig object if you want CodeDeploy to deploy your application
+	// to one Availability Zone (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones)
+	// at a time, within an Amazon Web Services Region.
+	//
+	// For more information about the zonal configuration feature, see zonal configuration
+	// (https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations-create.html#zonal-config)
+	// in the CodeDeploy User Guide.
+	ZonalConfig *ZonalConfig `locationName:"zonalConfig" type:"structure"`
 }
 
 // String returns the string representation.
@@ -7227,6 +7262,12 @@ func (s *CreateDeploymentConfigInput) SetTrafficRoutingConfig(v *TrafficRoutingC
 	return s
 }
 
+// SetZonalConfig sets the ZonalConfig field's value.
+func (s *CreateDeploymentConfigInput) SetZonalConfig(v *ZonalConfig) *CreateDeploymentConfigInput {
+	s.ZonalConfig = v
+	return s
+}
+
 // Represents the output of a CreateDeploymentConfig operation.
 type CreateDeploymentConfigOutput struct {
 	_ struct{} `type:"structure"`
@@ -7267,7 +7308,7 @@ type CreateDeploymentGroupInput struct {
 	// is created.
 	AlarmConfiguration *AlarmConfiguration `locationName:"alarmConfiguration" type:"structure"`
 
-	// The name of an CodeDeploy application associated with the IAM user or Amazon
+	// The name of an CodeDeploy application associated with the user or Amazon
 	// Web Services account.
 	//
 	// ApplicationName is a required field
@@ -7357,6 +7398,24 @@ type CreateDeploymentGroupInput struct {
 	// and categorize them. Each tag consists of a key and an optional value, both
 	// of which you define.
 	Tags []*Tag `locationName:"tags" type:"list"`
+
+	// This parameter only applies if you are using CodeDeploy with Amazon EC2 Auto
+	// Scaling. For more information, see Integrating CodeDeploy with Amazon EC2
+	// Auto Scaling (https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-auto-scaling.html)
+	// in the CodeDeploy User Guide.
+	//
+	// Set terminationHookEnabled to true to have CodeDeploy install a termination
+	// hook into your Auto Scaling group when you create a deployment group. When
+	// this hook is installed, CodeDeploy will perform termination deployments.
+	//
+	// For information about termination deployments, see Enabling termination deployments
+	// during Auto Scaling scale-in events (https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors-hook-enable)
+	// in the CodeDeploy User Guide.
+	//
+	// For more information about Auto Scaling scale-in events, see the Scale in
+	// (https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-lifecycle.html#as-lifecycle-scale-in)
+	// topic in the Amazon EC2 Auto Scaling User Guide.
+	TerminationHookEnabled *bool `locationName:"terminationHookEnabled" type:"boolean"`
 
 	// Information about triggers to create when the deployment group is created.
 	// For examples, see Create a Trigger for an CodeDeploy Event (https://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-sns.html)
@@ -7512,6 +7571,12 @@ func (s *CreateDeploymentGroupInput) SetTags(v []*Tag) *CreateDeploymentGroupInp
 	return s
 }
 
+// SetTerminationHookEnabled sets the TerminationHookEnabled field's value.
+func (s *CreateDeploymentGroupInput) SetTerminationHookEnabled(v bool) *CreateDeploymentGroupInput {
+	s.TerminationHookEnabled = &v
+	return s
+}
+
 // SetTriggerConfigurations sets the TriggerConfigurations field's value.
 func (s *CreateDeploymentGroupInput) SetTriggerConfigurations(v []*TriggerConfig) *CreateDeploymentGroupInput {
 	s.TriggerConfigurations = v
@@ -7554,7 +7619,7 @@ func (s *CreateDeploymentGroupOutput) SetDeploymentGroupId(v string) *CreateDepl
 type CreateDeploymentInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of an CodeDeploy application associated with the IAM user or Amazon
+	// The name of an CodeDeploy application associated with the user or Amazon
 	// Web Services account.
 	//
 	// ApplicationName is a required field
@@ -7564,7 +7629,7 @@ type CreateDeploymentInput struct {
 	// deployment is created.
 	AutoRollbackConfiguration *AutoRollbackConfiguration `locationName:"autoRollbackConfiguration" type:"structure"`
 
-	// The name of a deployment configuration associated with the IAM user or Amazon
+	// The name of a deployment configuration associated with the user or Amazon
 	// Web Services account.
 	//
 	// If not specified, the value configured in the deployment group is used as
@@ -7786,7 +7851,7 @@ func (s *CreateDeploymentOutput) SetDeploymentId(v string) *CreateDeploymentOutp
 type DeleteApplicationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of an CodeDeploy application associated with the IAM user or Amazon
+	// The name of an CodeDeploy application associated with the user or Amazon
 	// Web Services account.
 	//
 	// ApplicationName is a required field
@@ -7859,7 +7924,7 @@ func (s DeleteApplicationOutput) GoString() string {
 type DeleteDeploymentConfigInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of a deployment configuration associated with the IAM user or Amazon
+	// The name of a deployment configuration associated with the user or Amazon
 	// Web Services account.
 	//
 	// DeploymentConfigName is a required field
@@ -7932,7 +7997,7 @@ func (s DeleteDeploymentConfigOutput) GoString() string {
 type DeleteDeploymentGroupInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of an CodeDeploy application associated with the IAM user or Amazon
+	// The name of an CodeDeploy application associated with the user or Amazon
 	// Web Services account.
 	//
 	// ApplicationName is a required field
@@ -8215,7 +8280,7 @@ func (s *DeploymentAlreadyCompletedException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// A deployment configuration with the specified name with the IAM user or Amazon
+// A deployment configuration with the specified name with the user or Amazon
 // Web Services account already exists.
 type DeploymentConfigAlreadyExistsException struct {
 	_            struct{}                  `type:"structure"`
@@ -8280,8 +8345,8 @@ func (s *DeploymentConfigAlreadyExistsException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The deployment configuration does not exist with the IAM user or Amazon Web
-// Services account.
+// The deployment configuration does not exist with the user or Amazon Web Services
+// account.
 type DeploymentConfigDoesNotExistException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -8425,12 +8490,15 @@ type DeploymentConfigInfo struct {
 	// The deployment configuration name.
 	DeploymentConfigName *string `locationName:"deploymentConfigName" min:"1" type:"string"`
 
-	// Information about the number or percentage of minimum healthy instance.
+	// Information about the number or percentage of minimum healthy instances.
 	MinimumHealthyHosts *MinimumHealthyHosts `locationName:"minimumHealthyHosts" type:"structure"`
 
 	// The configuration that specifies how the deployment traffic is routed. Used
 	// for deployments with a Lambda or Amazon ECS compute platform only.
 	TrafficRoutingConfig *TrafficRoutingConfig `locationName:"trafficRoutingConfig" type:"structure"`
+
+	// Information about a zonal configuration.
+	ZonalConfig *ZonalConfig `locationName:"zonalConfig" type:"structure"`
 }
 
 // String returns the string representation.
@@ -8484,6 +8552,12 @@ func (s *DeploymentConfigInfo) SetMinimumHealthyHosts(v *MinimumHealthyHosts) *D
 // SetTrafficRoutingConfig sets the TrafficRoutingConfig field's value.
 func (s *DeploymentConfigInfo) SetTrafficRoutingConfig(v *TrafficRoutingConfig) *DeploymentConfigInfo {
 	s.TrafficRoutingConfig = v
+	return s
+}
+
+// SetZonalConfig sets the ZonalConfig field's value.
+func (s *DeploymentConfigInfo) SetZonalConfig(v *ZonalConfig) *DeploymentConfigInfo {
+	s.ZonalConfig = v
 	return s
 }
 
@@ -8615,8 +8689,7 @@ func (s *DeploymentConfigNameRequiredException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The deployment with the IAM user or Amazon Web Services account does not
-// exist.
+// The deployment with the user or Amazon Web Services account does not exist.
 type DeploymentDoesNotExistException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -8680,8 +8753,8 @@ func (s *DeploymentDoesNotExistException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// A deployment group with the specified name with the IAM user or Amazon Web
-// Services account already exists.
+// A deployment group with the specified name with the user or Amazon Web Services
+// account already exists.
 type DeploymentGroupAlreadyExistsException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -8745,8 +8818,8 @@ func (s *DeploymentGroupAlreadyExistsException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The named deployment group with the IAM user or Amazon Web Services account
-// does not exist.
+// The named deployment group with the user or Amazon Web Services account does
+// not exist.
 type DeploymentGroupDoesNotExistException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -8903,6 +8976,14 @@ type DeploymentGroupInfo struct {
 	// and location.
 	TargetRevision *RevisionLocation `locationName:"targetRevision" type:"structure"`
 
+	// Indicates whether the deployment group was configured to have CodeDeploy
+	// install a termination hook into an Auto Scaling group.
+	//
+	// For more information about the termination hook, see How Amazon EC2 Auto
+	// Scaling works with CodeDeploy (https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors)
+	// in the CodeDeploy User Guide.
+	TerminationHookEnabled *bool `locationName:"terminationHookEnabled" type:"boolean"`
+
 	// Information about triggers associated with the deployment group.
 	TriggerConfigurations []*TriggerConfig `locationName:"triggerConfigurations" type:"list"`
 }
@@ -9048,6 +9129,12 @@ func (s *DeploymentGroupInfo) SetServiceRoleArn(v string) *DeploymentGroupInfo {
 // SetTargetRevision sets the TargetRevision field's value.
 func (s *DeploymentGroupInfo) SetTargetRevision(v *RevisionLocation) *DeploymentGroupInfo {
 	s.TargetRevision = v
+	return s
+}
+
+// SetTerminationHookEnabled sets the TerminationHookEnabled field's value.
+func (s *DeploymentGroupInfo) SetTerminationHookEnabled(v bool) *DeploymentGroupInfo {
+	s.TerminationHookEnabled = &v
 	return s
 }
 
@@ -10843,17 +10930,18 @@ func (s *ECSTaskSet) SetTrafficWeight(v float64) *ECSTaskSet {
 	return s
 }
 
-// Information about a load balancer in Elastic Load Balancing to use in a deployment.
-// Instances are registered directly with a load balancer, and traffic is routed
-// to the load balancer.
+// Information about a Classic Load Balancer in Elastic Load Balancing to use
+// in a deployment. Instances are registered directly with a load balancer,
+// and traffic is routed to the load balancer.
 type ELBInfo struct {
 	_ struct{} `type:"structure"`
 
-	// For blue/green deployments, the name of the load balancer that is used to
-	// route traffic from original instances to replacement instances in a blue/green
-	// deployment. For in-place deployments, the name of the load balancer that
-	// instances are deregistered from so they are not serving traffic during a
-	// deployment, and then re-registered with after the deployment is complete.
+	// For blue/green deployments, the name of the Classic Load Balancer that is
+	// used to route traffic from original instances to replacement instances in
+	// a blue/green deployment. For in-place deployments, the name of the Classic
+	// Load Balancer that instances are deregistered from so they are not serving
+	// traffic during a deployment, and then re-registered with after the deployment
+	// is complete.
 	Name *string `locationName:"name" type:"string"`
 }
 
@@ -11033,7 +11121,7 @@ func (s *GenericRevisionInfo) SetRegisterTime(v time.Time) *GenericRevisionInfo 
 type GetApplicationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of an CodeDeploy application associated with the IAM user or Amazon
+	// The name of an CodeDeploy application associated with the user or Amazon
 	// Web Services account.
 	//
 	// ApplicationName is a required field
@@ -11230,7 +11318,7 @@ func (s *GetApplicationRevisionOutput) SetRevisionInfo(v *GenericRevisionInfo) *
 type GetDeploymentConfigInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of a deployment configuration associated with the IAM user or Amazon
+	// The name of a deployment configuration associated with the user or Amazon
 	// Web Services account.
 	//
 	// DeploymentConfigName is a required field
@@ -11313,7 +11401,7 @@ func (s *GetDeploymentConfigOutput) SetDeploymentConfigInfo(v *DeploymentConfigI
 type GetDeploymentGroupInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of an CodeDeploy application associated with the IAM user or Amazon
+	// The name of an CodeDeploy application associated with the user or Amazon
 	// Web Services account.
 	//
 	// ApplicationName is a required field
@@ -11413,8 +11501,8 @@ func (s *GetDeploymentGroupOutput) SetDeploymentGroupInfo(v *DeploymentGroupInfo
 type GetDeploymentInput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique ID of a deployment associated with the IAM user or Amazon Web
-	// Services account.
+	// The unique ID of a deployment associated with the user or Amazon Web Services
+	// account.
 	//
 	// DeploymentId is a required field
 	DeploymentId *string `locationName:"deploymentId" type:"string" required:"true"`
@@ -11586,10 +11674,14 @@ type GetDeploymentTargetInput struct {
 	_ struct{} `type:"structure"`
 
 	// The unique ID of a deployment.
-	DeploymentId *string `locationName:"deploymentId" type:"string"`
+	//
+	// DeploymentId is a required field
+	DeploymentId *string `locationName:"deploymentId" type:"string" required:"true"`
 
 	// The unique ID of a deployment target.
-	TargetId *string `locationName:"targetId" type:"string"`
+	//
+	// TargetId is a required field
+	TargetId *string `locationName:"targetId" type:"string" required:"true"`
 }
 
 // String returns the string representation.
@@ -11608,6 +11700,22 @@ func (s GetDeploymentTargetInput) String() string {
 // value will be replaced with "sensitive".
 func (s GetDeploymentTargetInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetDeploymentTargetInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetDeploymentTargetInput"}
+	if s.DeploymentId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeploymentId"))
+	}
+	if s.TargetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetDeploymentId sets the DeploymentId field's value.
@@ -11948,7 +12056,7 @@ func (s *GreenFleetProvisioningOption) SetAction(v string) *GreenFleetProvisioni
 }
 
 // No IAM ARN was included in the request. You must use an IAM session ARN or
-// IAM user ARN in the request.
+// user ARN in the request.
 type IamArnRequiredException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -12077,7 +12185,7 @@ func (s *IamSessionArnAlreadyRegisteredException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The specified IAM user ARN is already registered with an on-premises instance.
+// The specified user ARN is already registered with an on-premises instance.
 type IamUserArnAlreadyRegisteredException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -12141,7 +12249,7 @@ func (s *IamUserArnAlreadyRegisteredException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// An IAM user ARN was not specified.
+// An user ARN was not specified.
 type IamUserArnRequiredException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -12348,7 +12456,7 @@ type InstanceInfo struct {
 	// The ARN of the IAM session associated with the on-premises instance.
 	IamSessionArn *string `locationName:"iamSessionArn" type:"string"`
 
-	// The IAM user ARN associated with the on-premises instance.
+	// The user ARN associated with the on-premises instance.
 	IamUserArn *string `locationName:"iamUserArn" type:"string"`
 
 	// The ARN of the on-premises instance.
@@ -12867,15 +12975,15 @@ func (s *InstanceTarget) SetTargetId(v string) *InstanceTarget {
 
 // The format of the alarm configuration is invalid. Possible causes include:
 //
-//    * The alarm list is null.
+//   - The alarm list is null.
 //
-//    * The alarm object is null.
+//   - The alarm object is null.
 //
-//    * The alarm name is empty or null or exceeds the limit of 255 characters.
+//   - The alarm name is empty or null or exceeds the limit of 255 characters.
 //
-//    * Two alarms with the same name have been specified.
+//   - Two alarms with the same name have been specified.
 //
-//    * The alarm configuration is enabled, but the alarm list is empty.
+//   - The alarm configuration is enabled, but the alarm list is empty.
 type InvalidAlarmConfigException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -14487,7 +14595,7 @@ func (s *InvalidIamSessionArnException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The IAM user ARN was specified in an invalid format.
+// The user ARN was specified in an invalid format.
 type InvalidIamUserArnException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -16034,14 +16142,14 @@ func (s *InvalidTargetGroupPairException) RequestID() string {
 
 // The target instance configuration is invalid. Possible causes include:
 //
-//    * Configuration data for target instances was entered for an in-place
-//    deployment.
+//   - Configuration data for target instances was entered for an in-place
+//     deployment.
 //
-//    * The limit of 10 tags for a tag type was exceeded.
+//   - The limit of 10 tags for a tag type was exceeded.
 //
-//    * The combined length of the tag names exceeded the limit.
+//   - The combined length of the tag names exceeded the limit.
 //
-//    * A specified tag is not currently applied to any instances.
+//   - A specified tag is not currently applied to any instances.
 type InvalidTargetInstancesException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -16360,6 +16468,70 @@ func (s *InvalidUpdateOutdatedInstancesOnlyValueException) StatusCode() int {
 
 // RequestID returns the service's response RequestID for request.
 func (s *InvalidUpdateOutdatedInstancesOnlyValueException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The ZonalConfig object is not valid.
+type InvalidZonalDeploymentConfigurationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvalidZonalDeploymentConfigurationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InvalidZonalDeploymentConfigurationException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidZonalDeploymentConfigurationException(v protocol.ResponseMetadata) error {
+	return &InvalidZonalDeploymentConfigurationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidZonalDeploymentConfigurationException) Code() string {
+	return "InvalidZonalDeploymentConfigurationException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidZonalDeploymentConfigurationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidZonalDeploymentConfigurationException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidZonalDeploymentConfigurationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidZonalDeploymentConfigurationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidZonalDeploymentConfigurationException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
@@ -16796,7 +16968,7 @@ func (s *LifecycleHookLimitExceededException) RequestID() string {
 type ListApplicationRevisionsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of an CodeDeploy application associated with the IAM user or Amazon
+	// The name of an CodeDeploy application associated with the user or Amazon
 	// Web Services account.
 	//
 	// ApplicationName is a required field
@@ -17125,7 +17297,7 @@ func (s *ListDeploymentConfigsOutput) SetNextToken(v string) *ListDeploymentConf
 type ListDeploymentGroupsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of an CodeDeploy application associated with the IAM user or Amazon
+	// The name of an CodeDeploy application associated with the user or Amazon
 	// Web Services account.
 	//
 	// ApplicationName is a required field
@@ -17370,7 +17542,9 @@ type ListDeploymentTargetsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The unique ID of a deployment.
-	DeploymentId *string `locationName:"deploymentId" type:"string"`
+	//
+	// DeploymentId is a required field
+	DeploymentId *string `locationName:"deploymentId" type:"string" required:"true"`
 
 	// A token identifier returned from the previous ListDeploymentTargets call.
 	// It can be used to return the next set of deployment targets in the list.
@@ -17402,6 +17576,19 @@ func (s ListDeploymentTargetsInput) String() string {
 // value will be replaced with "sensitive".
 func (s ListDeploymentTargetsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListDeploymentTargetsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListDeploymentTargetsInput"}
+	if s.DeploymentId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeploymentId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetDeploymentId sets the DeploymentId field's value.
@@ -17468,7 +17655,7 @@ func (s *ListDeploymentTargetsOutput) SetTargetIds(v []*string) *ListDeploymentT
 type ListDeploymentsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of an CodeDeploy application associated with the IAM user or Amazon
+	// The name of an CodeDeploy application associated with the user or Amazon
 	// Web Services account.
 	//
 	// If applicationName is specified, then deploymentGroupName must be specified.
@@ -17903,21 +18090,32 @@ func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput
 
 // Information about the Elastic Load Balancing load balancer or target group
 // used in a deployment.
+//
+// You can use load balancers and target groups in combination. For example,
+// if you have two Classic Load Balancers, and five target groups tied to an
+// Application Load Balancer, you can specify the two Classic Load Balancers
+// in elbInfoList, and the five target groups in targetGroupInfoList.
 type LoadBalancerInfo struct {
 	_ struct{} `type:"structure"`
 
-	// An array that contains information about the load balancer to use for load
-	// balancing in a deployment. In Elastic Load Balancing, load balancers are
-	// used with Classic Load Balancers.
+	// An array that contains information about the load balancers to use for load
+	// balancing in a deployment. If you're using Classic Load Balancers, specify
+	// those load balancers in this array.
 	//
-	// Adding more than one load balancer to the array is not supported.
+	// You can add up to 10 load balancers to the array.
+	//
+	// If you're using Application Load Balancers or Network Load Balancers, use
+	// the targetGroupInfoList array instead of this one.
 	ElbInfoList []*ELBInfo `locationName:"elbInfoList" type:"list"`
 
-	// An array that contains information about the target group to use for load
-	// balancing in a deployment. In Elastic Load Balancing, target groups are used
-	// with Application Load Balancers.
+	// An array that contains information about the target groups to use for load
+	// balancing in a deployment. If you're using Application Load Balancers and
+	// Network Load Balancers, specify their associated target groups in this array.
 	//
-	// Adding more than one target group to the array is not supported.
+	// You can add up to 10 target groups to the array.
+	//
+	// If you're using Classic Load Balancers, use the elbInfoList array instead
+	// of this one.
 	TargetGroupInfoList []*TargetGroupInfo `locationName:"targetGroupInfoList" type:"list"`
 
 	// The target group pair information. This is an array of TargeGroupPairInfo
@@ -17961,7 +18159,7 @@ func (s *LoadBalancerInfo) SetTargetGroupPairInfoList(v []*TargetGroupPairInfo) 
 	return s
 }
 
-// Information about minimum healthy instance.
+// Information about the minimum number of healthy instances.
 type MinimumHealthyHosts struct {
 	_ struct{} `type:"structure"`
 
@@ -18027,8 +18225,50 @@ func (s *MinimumHealthyHosts) SetValue(v int64) *MinimumHealthyHosts {
 	return s
 }
 
-// Both an IAM user ARN and an IAM session ARN were included in the request.
-// Use only one ARN type.
+// Information about the minimum number of healthy instances per Availability
+// Zone.
+type MinimumHealthyHostsPerZone struct {
+	_ struct{} `type:"structure"`
+
+	// The type associated with the MinimumHealthyHostsPerZone option.
+	Type *string `locationName:"type" type:"string" enum:"MinimumHealthyHostsPerZoneType"`
+
+	// The value associated with the MinimumHealthyHostsPerZone option.
+	Value *int64 `locationName:"value" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MinimumHealthyHostsPerZone) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MinimumHealthyHostsPerZone) GoString() string {
+	return s.String()
+}
+
+// SetType sets the Type field's value.
+func (s *MinimumHealthyHostsPerZone) SetType(v string) *MinimumHealthyHostsPerZone {
+	s.Type = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *MinimumHealthyHostsPerZone) SetValue(v int64) *MinimumHealthyHostsPerZone {
+	s.Value = &v
+	return s
+}
+
+// Both an user ARN and an IAM session ARN were included in the request. Use
+// only one ARN type.
 type MultipleIamArnsProvidedException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -18326,7 +18566,7 @@ func (s *RawString) SetSha256(v string) *RawString {
 type RegisterApplicationRevisionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of an CodeDeploy application associated with the IAM user or Amazon
+	// The name of an CodeDeploy application associated with the user or Amazon
 	// Web Services account.
 	//
 	// ApplicationName is a required field
@@ -18426,7 +18666,7 @@ type RegisterOnPremisesInstanceInput struct {
 	// The ARN of the IAM session to associate with the on-premises instance.
 	IamSessionArn *string `locationName:"iamSessionArn" type:"string"`
 
-	// The ARN of the IAM user to associate with the on-premises instance.
+	// The ARN of the user to associate with the on-premises instance.
 	IamUserArn *string `locationName:"iamUserArn" type:"string"`
 
 	// The name of the on-premises instance to register.
@@ -18759,8 +18999,7 @@ func (s *ResourceValidationException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// The named revision does not exist with the IAM user or Amazon Web Services
-// account.
+// The named revision does not exist with the user or Amazon Web Services account.
 type RevisionDoesNotExistException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -19143,6 +19382,10 @@ type S3Location struct {
 	//    * tgz: A compressed tar archive file.
 	//
 	//    * zip: A zip archive file.
+	//
+	//    * YAML: A YAML-formatted file.
+	//
+	//    * JSON: A JSON-formatted file.
 	BundleType *string `locationName:"bundleType" type:"string" enum:"BundleType"`
 
 	// The ETag of the Amazon S3 object that represents the bundled artifacts for
@@ -20564,7 +20807,7 @@ type UpdateDeploymentGroupInput struct {
 	//    * To remove Auto Scaling groups, specify a non-null empty list of Auto
 	//    Scaling group names to detach all CodeDeploy-managed Auto Scaling lifecycle
 	//    hooks. For examples, see Amazon EC2 instances in an Amazon EC2 Auto Scaling
-	//    group fail to launch and receive the error "Heartbeat Timeout" (https://docs.aws.amazon.com/https:/docs.aws.amazon.com/codedeploy/latest/userguide/troubleshooting-auto-scaling.html#troubleshooting-auto-scaling-heartbeat)
+	//    group fail to launch and receive the error "Heartbeat Timeout" (https://docs.aws.amazon.com/codedeploy/latest/userguide/troubleshooting-auto-scaling.html#troubleshooting-auto-scaling-heartbeat)
 	//    in the CodeDeploy User Guide.
 	AutoScalingGroups []*string `locationName:"autoScalingGroups" type:"list"`
 
@@ -20628,6 +20871,24 @@ type UpdateDeploymentGroupInput struct {
 
 	// A replacement ARN for the service role, if you want to change it.
 	ServiceRoleArn *string `locationName:"serviceRoleArn" type:"string"`
+
+	// This parameter only applies if you are using CodeDeploy with Amazon EC2 Auto
+	// Scaling. For more information, see Integrating CodeDeploy with Amazon EC2
+	// Auto Scaling (https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-auto-scaling.html)
+	// in the CodeDeploy User Guide.
+	//
+	// Set terminationHookEnabled to true to have CodeDeploy install a termination
+	// hook into your Auto Scaling group when you update a deployment group. When
+	// this hook is installed, CodeDeploy will perform termination deployments.
+	//
+	// For information about termination deployments, see Enabling termination deployments
+	// during Auto Scaling scale-in events (https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors-hook-enable)
+	// in the CodeDeploy User Guide.
+	//
+	// For more information about Auto Scaling scale-in events, see the Scale in
+	// (https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-lifecycle.html#as-lifecycle-scale-in)
+	// topic in the Amazon EC2 Auto Scaling User Guide.
+	TerminationHookEnabled *bool `locationName:"terminationHookEnabled" type:"boolean"`
 
 	// Information about triggers to change when the deployment group is updated.
 	// For examples, see Edit a Trigger in a CodeDeploy Deployment Group (https://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-edit.html)
@@ -20783,6 +21044,12 @@ func (s *UpdateDeploymentGroupInput) SetServiceRoleArn(v string) *UpdateDeployme
 	return s
 }
 
+// SetTerminationHookEnabled sets the TerminationHookEnabled field's value.
+func (s *UpdateDeploymentGroupInput) SetTerminationHookEnabled(v bool) *UpdateDeploymentGroupInput {
+	s.TerminationHookEnabled = &v
+	return s
+}
+
 // SetTriggerConfigurations sets the TriggerConfigurations field's value.
 func (s *UpdateDeploymentGroupInput) SetTriggerConfigurations(v []*TriggerConfig) *UpdateDeploymentGroupInput {
 	s.TriggerConfigurations = v
@@ -20822,6 +21089,97 @@ func (s UpdateDeploymentGroupOutput) GoString() string {
 // SetHooksNotCleanedUp sets the HooksNotCleanedUp field's value.
 func (s *UpdateDeploymentGroupOutput) SetHooksNotCleanedUp(v []*AutoScalingGroup) *UpdateDeploymentGroupOutput {
 	s.HooksNotCleanedUp = v
+	return s
+}
+
+// Configure the ZonalConfig object if you want CodeDeploy to deploy your application
+// to one Availability Zone (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones)
+// at a time, within an Amazon Web Services Region. By deploying to one Availability
+// Zone at a time, you can expose your deployment to a progressively larger
+// audience as confidence in the deployment's performance and viability grows.
+// If you don't configure the ZonalConfig object, CodeDeploy deploys your application
+// to a random selection of hosts across a Region.
+//
+// For more information about the zonal configuration feature, see zonal configuration
+// (https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations-create.html#zonal-config)
+// in the CodeDeploy User Guide.
+type ZonalConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The period of time, in seconds, that CodeDeploy must wait after completing
+	// a deployment to the first Availability Zone. CodeDeploy will wait this amount
+	// of time before starting a deployment to the second Availability Zone. You
+	// might set this option if you want to allow extra bake time for the first
+	// Availability Zone. If you don't specify a value for firstZoneMonitorDurationInSeconds,
+	// then CodeDeploy uses the monitorDurationInSeconds value for the first Availability
+	// Zone.
+	//
+	// For more information about the zonal configuration feature, see zonal configuration
+	// (https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations-create.html#zonal-config)
+	// in the CodeDeploy User Guide.
+	FirstZoneMonitorDurationInSeconds *int64 `locationName:"firstZoneMonitorDurationInSeconds" type:"long"`
+
+	// The number or percentage of instances that must remain available per Availability
+	// Zone during a deployment. This option works in conjunction with the MinimumHealthyHosts
+	// option. For more information, see About the minimum number of healthy hosts
+	// per Availability Zone (https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html#minimum-healthy-hosts-az)
+	// in the CodeDeploy User Guide.
+	//
+	// If you don't specify the minimumHealthyHostsPerZone option, then CodeDeploy
+	// uses a default value of 0 percent.
+	//
+	// For more information about the zonal configuration feature, see zonal configuration
+	// (https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations-create.html#zonal-config)
+	// in the CodeDeploy User Guide.
+	MinimumHealthyHostsPerZone *MinimumHealthyHostsPerZone `locationName:"minimumHealthyHostsPerZone" type:"structure"`
+
+	// The period of time, in seconds, that CodeDeploy must wait after completing
+	// a deployment to an Availability Zone. CodeDeploy will wait this amount of
+	// time before starting a deployment to the next Availability Zone. Consider
+	// adding a monitor duration to give the deployment some time to prove itself
+	// (or 'bake') in one Availability Zone before it is released in the next zone.
+	// If you don't specify a monitorDurationInSeconds, CodeDeploy starts deploying
+	// to the next Availability Zone immediately.
+	//
+	// For more information about the zonal configuration feature, see zonal configuration
+	// (https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations-create.html#zonal-config)
+	// in the CodeDeploy User Guide.
+	MonitorDurationInSeconds *int64 `locationName:"monitorDurationInSeconds" type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ZonalConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ZonalConfig) GoString() string {
+	return s.String()
+}
+
+// SetFirstZoneMonitorDurationInSeconds sets the FirstZoneMonitorDurationInSeconds field's value.
+func (s *ZonalConfig) SetFirstZoneMonitorDurationInSeconds(v int64) *ZonalConfig {
+	s.FirstZoneMonitorDurationInSeconds = &v
+	return s
+}
+
+// SetMinimumHealthyHostsPerZone sets the MinimumHealthyHostsPerZone field's value.
+func (s *ZonalConfig) SetMinimumHealthyHostsPerZone(v *MinimumHealthyHostsPerZone) *ZonalConfig {
+	s.MinimumHealthyHostsPerZone = v
+	return s
+}
+
+// SetMonitorDurationInSeconds sets the MonitorDurationInSeconds field's value.
+func (s *ZonalConfig) SetMonitorDurationInSeconds(v int64) *ZonalConfig {
+	s.MonitorDurationInSeconds = &v
 	return s
 }
 
@@ -20934,6 +21292,9 @@ const (
 
 	// DeploymentCreatorCloudFormationRollback is a DeploymentCreator enum value
 	DeploymentCreatorCloudFormationRollback = "CloudFormationRollback"
+
+	// DeploymentCreatorAutoscalingTermination is a DeploymentCreator enum value
+	DeploymentCreatorAutoscalingTermination = "autoscalingTermination"
 )
 
 // DeploymentCreator_Values returns all elements of the DeploymentCreator enum
@@ -20946,6 +21307,7 @@ func DeploymentCreator_Values() []string {
 		DeploymentCreatorCodeDeployAutoUpdate,
 		DeploymentCreatorCloudFormation,
 		DeploymentCreatorCloudFormationRollback,
+		DeploymentCreatorAutoscalingTermination,
 	}
 }
 
@@ -21426,6 +21788,22 @@ func ListStateFilterAction_Values() []string {
 		ListStateFilterActionInclude,
 		ListStateFilterActionExclude,
 		ListStateFilterActionIgnore,
+	}
+}
+
+const (
+	// MinimumHealthyHostsPerZoneTypeHostCount is a MinimumHealthyHostsPerZoneType enum value
+	MinimumHealthyHostsPerZoneTypeHostCount = "HOST_COUNT"
+
+	// MinimumHealthyHostsPerZoneTypeFleetPercent is a MinimumHealthyHostsPerZoneType enum value
+	MinimumHealthyHostsPerZoneTypeFleetPercent = "FLEET_PERCENT"
+)
+
+// MinimumHealthyHostsPerZoneType_Values returns all elements of the MinimumHealthyHostsPerZoneType enum
+func MinimumHealthyHostsPerZoneType_Values() []string {
+	return []string{
+		MinimumHealthyHostsPerZoneTypeHostCount,
+		MinimumHealthyHostsPerZoneTypeFleetPercent,
 	}
 }
 

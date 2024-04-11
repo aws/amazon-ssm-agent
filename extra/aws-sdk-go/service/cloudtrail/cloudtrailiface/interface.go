@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWS CloudTrail.
-//    func myFunc(svc cloudtrailiface.CloudTrailAPI) bool {
-//        // Make svc.AddTags request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWS CloudTrail.
+//	func myFunc(svc cloudtrailiface.CloudTrailAPI) bool {
+//	    // Make svc.AddTags request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := cloudtrail.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := cloudtrail.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockCloudTrailClient struct {
-//        cloudtrailiface.CloudTrailAPI
-//    }
-//    func (m *mockCloudTrailClient) AddTags(input *cloudtrail.AddTagsInput) (*cloudtrail.AddTagsOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockCloudTrailClient struct {
+//	    cloudtrailiface.CloudTrailAPI
+//	}
+//	func (m *mockCloudTrailClient) AddTags(input *cloudtrail.AddTagsInput) (*cloudtrail.AddTagsOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockCloudTrailClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockCloudTrailClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -107,6 +107,14 @@ type CloudTrailAPI interface {
 	DescribeTrails(*cloudtrail.DescribeTrailsInput) (*cloudtrail.DescribeTrailsOutput, error)
 	DescribeTrailsWithContext(aws.Context, *cloudtrail.DescribeTrailsInput, ...request.Option) (*cloudtrail.DescribeTrailsOutput, error)
 	DescribeTrailsRequest(*cloudtrail.DescribeTrailsInput) (*request.Request, *cloudtrail.DescribeTrailsOutput)
+
+	DisableFederation(*cloudtrail.DisableFederationInput) (*cloudtrail.DisableFederationOutput, error)
+	DisableFederationWithContext(aws.Context, *cloudtrail.DisableFederationInput, ...request.Option) (*cloudtrail.DisableFederationOutput, error)
+	DisableFederationRequest(*cloudtrail.DisableFederationInput) (*request.Request, *cloudtrail.DisableFederationOutput)
+
+	EnableFederation(*cloudtrail.EnableFederationInput) (*cloudtrail.EnableFederationOutput, error)
+	EnableFederationWithContext(aws.Context, *cloudtrail.EnableFederationInput, ...request.Option) (*cloudtrail.EnableFederationOutput, error)
+	EnableFederationRequest(*cloudtrail.EnableFederationInput) (*request.Request, *cloudtrail.EnableFederationOutput)
 
 	GetChannel(*cloudtrail.GetChannelInput) (*cloudtrail.GetChannelOutput, error)
 	GetChannelWithContext(aws.Context, *cloudtrail.GetChannelInput, ...request.Option) (*cloudtrail.GetChannelOutput, error)
@@ -175,6 +183,13 @@ type CloudTrailAPI interface {
 	ListImportsPages(*cloudtrail.ListImportsInput, func(*cloudtrail.ListImportsOutput, bool) bool) error
 	ListImportsPagesWithContext(aws.Context, *cloudtrail.ListImportsInput, func(*cloudtrail.ListImportsOutput, bool) bool, ...request.Option) error
 
+	ListInsightsMetricData(*cloudtrail.ListInsightsMetricDataInput) (*cloudtrail.ListInsightsMetricDataOutput, error)
+	ListInsightsMetricDataWithContext(aws.Context, *cloudtrail.ListInsightsMetricDataInput, ...request.Option) (*cloudtrail.ListInsightsMetricDataOutput, error)
+	ListInsightsMetricDataRequest(*cloudtrail.ListInsightsMetricDataInput) (*request.Request, *cloudtrail.ListInsightsMetricDataOutput)
+
+	ListInsightsMetricDataPages(*cloudtrail.ListInsightsMetricDataInput, func(*cloudtrail.ListInsightsMetricDataOutput, bool) bool) error
+	ListInsightsMetricDataPagesWithContext(aws.Context, *cloudtrail.ListInsightsMetricDataInput, func(*cloudtrail.ListInsightsMetricDataOutput, bool) bool, ...request.Option) error
+
 	ListPublicKeys(*cloudtrail.ListPublicKeysInput) (*cloudtrail.ListPublicKeysOutput, error)
 	ListPublicKeysWithContext(aws.Context, *cloudtrail.ListPublicKeysInput, ...request.Option) (*cloudtrail.ListPublicKeysOutput, error)
 	ListPublicKeysRequest(*cloudtrail.ListPublicKeysInput) (*request.Request, *cloudtrail.ListPublicKeysOutput)
@@ -234,6 +249,10 @@ type CloudTrailAPI interface {
 	RestoreEventDataStoreWithContext(aws.Context, *cloudtrail.RestoreEventDataStoreInput, ...request.Option) (*cloudtrail.RestoreEventDataStoreOutput, error)
 	RestoreEventDataStoreRequest(*cloudtrail.RestoreEventDataStoreInput) (*request.Request, *cloudtrail.RestoreEventDataStoreOutput)
 
+	StartEventDataStoreIngestion(*cloudtrail.StartEventDataStoreIngestionInput) (*cloudtrail.StartEventDataStoreIngestionOutput, error)
+	StartEventDataStoreIngestionWithContext(aws.Context, *cloudtrail.StartEventDataStoreIngestionInput, ...request.Option) (*cloudtrail.StartEventDataStoreIngestionOutput, error)
+	StartEventDataStoreIngestionRequest(*cloudtrail.StartEventDataStoreIngestionInput) (*request.Request, *cloudtrail.StartEventDataStoreIngestionOutput)
+
 	StartImport(*cloudtrail.StartImportInput) (*cloudtrail.StartImportOutput, error)
 	StartImportWithContext(aws.Context, *cloudtrail.StartImportInput, ...request.Option) (*cloudtrail.StartImportOutput, error)
 	StartImportRequest(*cloudtrail.StartImportInput) (*request.Request, *cloudtrail.StartImportOutput)
@@ -245,6 +264,10 @@ type CloudTrailAPI interface {
 	StartQuery(*cloudtrail.StartQueryInput) (*cloudtrail.StartQueryOutput, error)
 	StartQueryWithContext(aws.Context, *cloudtrail.StartQueryInput, ...request.Option) (*cloudtrail.StartQueryOutput, error)
 	StartQueryRequest(*cloudtrail.StartQueryInput) (*request.Request, *cloudtrail.StartQueryOutput)
+
+	StopEventDataStoreIngestion(*cloudtrail.StopEventDataStoreIngestionInput) (*cloudtrail.StopEventDataStoreIngestionOutput, error)
+	StopEventDataStoreIngestionWithContext(aws.Context, *cloudtrail.StopEventDataStoreIngestionInput, ...request.Option) (*cloudtrail.StopEventDataStoreIngestionOutput, error)
+	StopEventDataStoreIngestionRequest(*cloudtrail.StopEventDataStoreIngestionInput) (*request.Request, *cloudtrail.StopEventDataStoreIngestionOutput)
 
 	StopImport(*cloudtrail.StopImportInput) (*cloudtrail.StopImportOutput, error)
 	StopImportWithContext(aws.Context, *cloudtrail.StopImportInput, ...request.Option) (*cloudtrail.StopImportOutput, error)

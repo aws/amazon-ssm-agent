@@ -29,14 +29,13 @@ const opAssociateGatewayToServer = "AssociateGatewayToServer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateGatewayToServerRequest method.
+//	req, resp := client.AssociateGatewayToServerRequest(params)
 //
-//    // Example sending a request using the AssociateGatewayToServerRequest method.
-//    req, resp := client.AssociateGatewayToServerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/AssociateGatewayToServer
 func (c *BackupGateway) AssociateGatewayToServerRequest(input *AssociateGatewayToServerInput) (req *request.Request, output *AssociateGatewayToServerOutput) {
@@ -68,19 +67,20 @@ func (c *BackupGateway) AssociateGatewayToServerRequest(input *AssociateGatewayT
 // API operation AssociateGatewayToServer for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * ConflictException
-//   The operation cannot proceed because it is not supported.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ConflictException
+//     The operation cannot proceed because it is not supported.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/AssociateGatewayToServer
 func (c *BackupGateway) AssociateGatewayToServer(input *AssociateGatewayToServerInput) (*AssociateGatewayToServerOutput, error) {
@@ -120,14 +120,13 @@ const opCreateGateway = "CreateGateway"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateGatewayRequest method.
+//	req, resp := client.CreateGatewayRequest(params)
 //
-//    // Example sending a request using the CreateGatewayRequest method.
-//    req, resp := client.CreateGatewayRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/CreateGateway
 func (c *BackupGateway) CreateGatewayRequest(input *CreateGatewayInput) (req *request.Request, output *CreateGatewayOutput) {
@@ -159,16 +158,17 @@ func (c *BackupGateway) CreateGatewayRequest(input *CreateGatewayInput) (req *re
 // API operation CreateGateway for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/CreateGateway
 func (c *BackupGateway) CreateGateway(input *CreateGatewayInput) (*CreateGatewayOutput, error) {
@@ -208,14 +208,13 @@ const opDeleteGateway = "DeleteGateway"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteGatewayRequest method.
+//	req, resp := client.DeleteGatewayRequest(params)
 //
-//    // Example sending a request using the DeleteGatewayRequest method.
-//    req, resp := client.DeleteGatewayRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/DeleteGateway
 func (c *BackupGateway) DeleteGatewayRequest(input *DeleteGatewayInput) (req *request.Request, output *DeleteGatewayOutput) {
@@ -246,19 +245,20 @@ func (c *BackupGateway) DeleteGatewayRequest(input *DeleteGatewayInput) (req *re
 // API operation DeleteGateway for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/DeleteGateway
 func (c *BackupGateway) DeleteGateway(input *DeleteGatewayInput) (*DeleteGatewayOutput, error) {
@@ -298,14 +298,13 @@ const opDeleteHypervisor = "DeleteHypervisor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteHypervisorRequest method.
+//	req, resp := client.DeleteHypervisorRequest(params)
 //
-//    // Example sending a request using the DeleteHypervisorRequest method.
-//    req, resp := client.DeleteHypervisorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/DeleteHypervisor
 func (c *BackupGateway) DeleteHypervisorRequest(input *DeleteHypervisorInput) (req *request.Request, output *DeleteHypervisorOutput) {
@@ -336,25 +335,26 @@ func (c *BackupGateway) DeleteHypervisorRequest(input *DeleteHypervisorInput) (r
 // API operation DeleteHypervisor for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * ConflictException
-//   The operation cannot proceed because it is not supported.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ConflictException
+//     The operation cannot proceed because it is not supported.
 //
-//   * AccessDeniedException
-//   The operation cannot proceed because you have insufficient permissions.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - AccessDeniedException
+//     The operation cannot proceed because you have insufficient permissions.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/DeleteHypervisor
 func (c *BackupGateway) DeleteHypervisor(input *DeleteHypervisorInput) (*DeleteHypervisorOutput, error) {
@@ -394,14 +394,13 @@ const opDisassociateGatewayFromServer = "DisassociateGatewayFromServer"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateGatewayFromServerRequest method.
+//	req, resp := client.DisassociateGatewayFromServerRequest(params)
 //
-//    // Example sending a request using the DisassociateGatewayFromServerRequest method.
-//    req, resp := client.DisassociateGatewayFromServerRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/DisassociateGatewayFromServer
 func (c *BackupGateway) DisassociateGatewayFromServerRequest(input *DisassociateGatewayFromServerInput) (req *request.Request, output *DisassociateGatewayFromServerOutput) {
@@ -434,22 +433,23 @@ func (c *BackupGateway) DisassociateGatewayFromServerRequest(input *Disassociate
 // API operation DisassociateGatewayFromServer for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * ConflictException
-//   The operation cannot proceed because it is not supported.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ConflictException
+//     The operation cannot proceed because it is not supported.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/DisassociateGatewayFromServer
 func (c *BackupGateway) DisassociateGatewayFromServer(input *DisassociateGatewayFromServerInput) (*DisassociateGatewayFromServerOutput, error) {
@@ -489,14 +489,13 @@ const opGetBandwidthRateLimitSchedule = "GetBandwidthRateLimitSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetBandwidthRateLimitScheduleRequest method.
+//	req, resp := client.GetBandwidthRateLimitScheduleRequest(params)
 //
-//    // Example sending a request using the GetBandwidthRateLimitScheduleRequest method.
-//    req, resp := client.GetBandwidthRateLimitScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/GetBandwidthRateLimitSchedule
 func (c *BackupGateway) GetBandwidthRateLimitScheduleRequest(input *GetBandwidthRateLimitScheduleInput) (req *request.Request, output *GetBandwidthRateLimitScheduleOutput) {
@@ -530,19 +529,20 @@ func (c *BackupGateway) GetBandwidthRateLimitScheduleRequest(input *GetBandwidth
 // API operation GetBandwidthRateLimitSchedule for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/GetBandwidthRateLimitSchedule
 func (c *BackupGateway) GetBandwidthRateLimitSchedule(input *GetBandwidthRateLimitScheduleInput) (*GetBandwidthRateLimitScheduleOutput, error) {
@@ -582,14 +582,13 @@ const opGetGateway = "GetGateway"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetGatewayRequest method.
+//	req, resp := client.GetGatewayRequest(params)
 //
-//    // Example sending a request using the GetGatewayRequest method.
-//    req, resp := client.GetGatewayRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/GetGateway
 func (c *BackupGateway) GetGatewayRequest(input *GetGatewayInput) (req *request.Request, output *GetGatewayOutput) {
@@ -620,19 +619,20 @@ func (c *BackupGateway) GetGatewayRequest(input *GetGatewayInput) (req *request.
 // API operation GetGateway for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/GetGateway
 func (c *BackupGateway) GetGateway(input *GetGatewayInput) (*GetGatewayOutput, error) {
@@ -672,14 +672,13 @@ const opGetHypervisor = "GetHypervisor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetHypervisorRequest method.
+//	req, resp := client.GetHypervisorRequest(params)
 //
-//    // Example sending a request using the GetHypervisorRequest method.
-//    req, resp := client.GetHypervisorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/GetHypervisor
 func (c *BackupGateway) GetHypervisorRequest(input *GetHypervisorInput) (req *request.Request, output *GetHypervisorOutput) {
@@ -712,19 +711,20 @@ func (c *BackupGateway) GetHypervisorRequest(input *GetHypervisorInput) (req *re
 // API operation GetHypervisor for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/GetHypervisor
 func (c *BackupGateway) GetHypervisor(input *GetHypervisorInput) (*GetHypervisorOutput, error) {
@@ -764,14 +764,13 @@ const opGetHypervisorPropertyMappings = "GetHypervisorPropertyMappings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetHypervisorPropertyMappingsRequest method.
+//	req, resp := client.GetHypervisorPropertyMappingsRequest(params)
 //
-//    // Example sending a request using the GetHypervisorPropertyMappingsRequest method.
-//    req, resp := client.GetHypervisorPropertyMappingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/GetHypervisorPropertyMappings
 func (c *BackupGateway) GetHypervisorPropertyMappingsRequest(input *GetHypervisorPropertyMappingsInput) (req *request.Request, output *GetHypervisorPropertyMappingsOutput) {
@@ -805,19 +804,20 @@ func (c *BackupGateway) GetHypervisorPropertyMappingsRequest(input *GetHyperviso
 // API operation GetHypervisorPropertyMappings for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/GetHypervisorPropertyMappings
 func (c *BackupGateway) GetHypervisorPropertyMappings(input *GetHypervisorPropertyMappingsInput) (*GetHypervisorPropertyMappingsOutput, error) {
@@ -857,14 +857,13 @@ const opGetVirtualMachine = "GetVirtualMachine"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetVirtualMachineRequest method.
+//	req, resp := client.GetVirtualMachineRequest(params)
 //
-//    // Example sending a request using the GetVirtualMachineRequest method.
-//    req, resp := client.GetVirtualMachineRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/GetVirtualMachine
 func (c *BackupGateway) GetVirtualMachineRequest(input *GetVirtualMachineInput) (req *request.Request, output *GetVirtualMachineOutput) {
@@ -896,19 +895,20 @@ func (c *BackupGateway) GetVirtualMachineRequest(input *GetVirtualMachineInput) 
 // API operation GetVirtualMachine for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/GetVirtualMachine
 func (c *BackupGateway) GetVirtualMachine(input *GetVirtualMachineInput) (*GetVirtualMachineOutput, error) {
@@ -948,14 +948,13 @@ const opImportHypervisorConfiguration = "ImportHypervisorConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ImportHypervisorConfigurationRequest method.
+//	req, resp := client.ImportHypervisorConfigurationRequest(params)
 //
-//    // Example sending a request using the ImportHypervisorConfigurationRequest method.
-//    req, resp := client.ImportHypervisorConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/ImportHypervisorConfiguration
 func (c *BackupGateway) ImportHypervisorConfigurationRequest(input *ImportHypervisorConfigurationInput) (req *request.Request, output *ImportHypervisorConfigurationOutput) {
@@ -986,22 +985,23 @@ func (c *BackupGateway) ImportHypervisorConfigurationRequest(input *ImportHyperv
 // API operation ImportHypervisorConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * ConflictException
-//   The operation cannot proceed because it is not supported.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ConflictException
+//     The operation cannot proceed because it is not supported.
 //
-//   * AccessDeniedException
-//   The operation cannot proceed because you have insufficient permissions.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - AccessDeniedException
+//     The operation cannot proceed because you have insufficient permissions.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/ImportHypervisorConfiguration
 func (c *BackupGateway) ImportHypervisorConfiguration(input *ImportHypervisorConfigurationInput) (*ImportHypervisorConfigurationOutput, error) {
@@ -1041,14 +1041,13 @@ const opListGateways = "ListGateways"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListGatewaysRequest method.
+//	req, resp := client.ListGatewaysRequest(params)
 //
-//    // Example sending a request using the ListGatewaysRequest method.
-//    req, resp := client.ListGatewaysRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/ListGateways
 func (c *BackupGateway) ListGatewaysRequest(input *ListGatewaysInput) (req *request.Request, output *ListGatewaysOutput) {
@@ -1087,16 +1086,17 @@ func (c *BackupGateway) ListGatewaysRequest(input *ListGatewaysInput) (req *requ
 // API operation ListGateways for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/ListGateways
 func (c *BackupGateway) ListGateways(input *ListGatewaysInput) (*ListGatewaysOutput, error) {
@@ -1128,15 +1128,14 @@ func (c *BackupGateway) ListGatewaysWithContext(ctx aws.Context, input *ListGate
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListGateways operation.
-//    pageNum := 0
-//    err := client.ListGatewaysPages(params,
-//        func(page *backupgateway.ListGatewaysOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListGateways operation.
+//	pageNum := 0
+//	err := client.ListGatewaysPages(params,
+//	    func(page *backupgateway.ListGatewaysOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BackupGateway) ListGatewaysPages(input *ListGatewaysInput, fn func(*ListGatewaysOutput, bool) bool) error {
 	return c.ListGatewaysPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1188,14 +1187,13 @@ const opListHypervisors = "ListHypervisors"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListHypervisorsRequest method.
+//	req, resp := client.ListHypervisorsRequest(params)
 //
-//    // Example sending a request using the ListHypervisorsRequest method.
-//    req, resp := client.ListHypervisorsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/ListHypervisors
 func (c *BackupGateway) ListHypervisorsRequest(input *ListHypervisorsInput) (req *request.Request, output *ListHypervisorsOutput) {
@@ -1232,16 +1230,17 @@ func (c *BackupGateway) ListHypervisorsRequest(input *ListHypervisorsInput) (req
 // API operation ListHypervisors for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/ListHypervisors
 func (c *BackupGateway) ListHypervisors(input *ListHypervisorsInput) (*ListHypervisorsOutput, error) {
@@ -1273,15 +1272,14 @@ func (c *BackupGateway) ListHypervisorsWithContext(ctx aws.Context, input *ListH
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListHypervisors operation.
-//    pageNum := 0
-//    err := client.ListHypervisorsPages(params,
-//        func(page *backupgateway.ListHypervisorsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListHypervisors operation.
+//	pageNum := 0
+//	err := client.ListHypervisorsPages(params,
+//	    func(page *backupgateway.ListHypervisorsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BackupGateway) ListHypervisorsPages(input *ListHypervisorsInput, fn func(*ListHypervisorsOutput, bool) bool) error {
 	return c.ListHypervisorsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1333,14 +1331,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/ListTagsForResource
 func (c *BackupGateway) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1372,19 +1369,20 @@ func (c *BackupGateway) ListTagsForResourceRequest(input *ListTagsForResourceInp
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/ListTagsForResource
 func (c *BackupGateway) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1424,14 +1422,13 @@ const opListVirtualMachines = "ListVirtualMachines"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListVirtualMachinesRequest method.
+//	req, resp := client.ListVirtualMachinesRequest(params)
 //
-//    // Example sending a request using the ListVirtualMachinesRequest method.
-//    req, resp := client.ListVirtualMachinesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/ListVirtualMachines
 func (c *BackupGateway) ListVirtualMachinesRequest(input *ListVirtualMachinesInput) (req *request.Request, output *ListVirtualMachinesOutput) {
@@ -1468,16 +1465,17 @@ func (c *BackupGateway) ListVirtualMachinesRequest(input *ListVirtualMachinesInp
 // API operation ListVirtualMachines for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/ListVirtualMachines
 func (c *BackupGateway) ListVirtualMachines(input *ListVirtualMachinesInput) (*ListVirtualMachinesOutput, error) {
@@ -1509,15 +1507,14 @@ func (c *BackupGateway) ListVirtualMachinesWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListVirtualMachines operation.
-//    pageNum := 0
-//    err := client.ListVirtualMachinesPages(params,
-//        func(page *backupgateway.ListVirtualMachinesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListVirtualMachines operation.
+//	pageNum := 0
+//	err := client.ListVirtualMachinesPages(params,
+//	    func(page *backupgateway.ListVirtualMachinesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *BackupGateway) ListVirtualMachinesPages(input *ListVirtualMachinesInput, fn func(*ListVirtualMachinesOutput, bool) bool) error {
 	return c.ListVirtualMachinesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1569,14 +1566,13 @@ const opPutBandwidthRateLimitSchedule = "PutBandwidthRateLimitSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutBandwidthRateLimitScheduleRequest method.
+//	req, resp := client.PutBandwidthRateLimitScheduleRequest(params)
 //
-//    // Example sending a request using the PutBandwidthRateLimitScheduleRequest method.
-//    req, resp := client.PutBandwidthRateLimitScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/PutBandwidthRateLimitSchedule
 func (c *BackupGateway) PutBandwidthRateLimitScheduleRequest(input *PutBandwidthRateLimitScheduleInput) (req *request.Request, output *PutBandwidthRateLimitScheduleOutput) {
@@ -1610,19 +1606,20 @@ func (c *BackupGateway) PutBandwidthRateLimitScheduleRequest(input *PutBandwidth
 // API operation PutBandwidthRateLimitSchedule for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/PutBandwidthRateLimitSchedule
 func (c *BackupGateway) PutBandwidthRateLimitSchedule(input *PutBandwidthRateLimitScheduleInput) (*PutBandwidthRateLimitScheduleOutput, error) {
@@ -1662,14 +1659,13 @@ const opPutHypervisorPropertyMappings = "PutHypervisorPropertyMappings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutHypervisorPropertyMappingsRequest method.
+//	req, resp := client.PutHypervisorPropertyMappingsRequest(params)
 //
-//    // Example sending a request using the PutHypervisorPropertyMappingsRequest method.
-//    req, resp := client.PutHypervisorPropertyMappingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/PutHypervisorPropertyMappings
 func (c *BackupGateway) PutHypervisorPropertyMappingsRequest(input *PutHypervisorPropertyMappingsInput) (req *request.Request, output *PutHypervisorPropertyMappingsOutput) {
@@ -1703,25 +1699,26 @@ func (c *BackupGateway) PutHypervisorPropertyMappingsRequest(input *PutHyperviso
 // API operation PutHypervisorPropertyMappings for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * ConflictException
-//   The operation cannot proceed because it is not supported.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ConflictException
+//     The operation cannot proceed because it is not supported.
 //
-//   * AccessDeniedException
-//   The operation cannot proceed because you have insufficient permissions.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - AccessDeniedException
+//     The operation cannot proceed because you have insufficient permissions.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/PutHypervisorPropertyMappings
 func (c *BackupGateway) PutHypervisorPropertyMappings(input *PutHypervisorPropertyMappingsInput) (*PutHypervisorPropertyMappingsOutput, error) {
@@ -1761,14 +1758,13 @@ const opPutMaintenanceStartTime = "PutMaintenanceStartTime"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutMaintenanceStartTimeRequest method.
+//	req, resp := client.PutMaintenanceStartTimeRequest(params)
 //
-//    // Example sending a request using the PutMaintenanceStartTimeRequest method.
-//    req, resp := client.PutMaintenanceStartTimeRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/PutMaintenanceStartTime
 func (c *BackupGateway) PutMaintenanceStartTimeRequest(input *PutMaintenanceStartTimeInput) (req *request.Request, output *PutMaintenanceStartTimeOutput) {
@@ -1799,22 +1795,23 @@ func (c *BackupGateway) PutMaintenanceStartTimeRequest(input *PutMaintenanceStar
 // API operation PutMaintenanceStartTime for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * ConflictException
-//   The operation cannot proceed because it is not supported.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ConflictException
+//     The operation cannot proceed because it is not supported.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/PutMaintenanceStartTime
 func (c *BackupGateway) PutMaintenanceStartTime(input *PutMaintenanceStartTimeInput) (*PutMaintenanceStartTimeOutput, error) {
@@ -1854,14 +1851,13 @@ const opStartVirtualMachinesMetadataSync = "StartVirtualMachinesMetadataSync"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartVirtualMachinesMetadataSyncRequest method.
+//	req, resp := client.StartVirtualMachinesMetadataSyncRequest(params)
 //
-//    // Example sending a request using the StartVirtualMachinesMetadataSyncRequest method.
-//    req, resp := client.StartVirtualMachinesMetadataSyncRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/StartVirtualMachinesMetadataSync
 func (c *BackupGateway) StartVirtualMachinesMetadataSyncRequest(input *StartVirtualMachinesMetadataSyncInput) (req *request.Request, output *StartVirtualMachinesMetadataSyncOutput) {
@@ -1893,22 +1889,23 @@ func (c *BackupGateway) StartVirtualMachinesMetadataSyncRequest(input *StartVirt
 // API operation StartVirtualMachinesMetadataSync for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * AccessDeniedException
-//   The operation cannot proceed because you have insufficient permissions.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - AccessDeniedException
+//     The operation cannot proceed because you have insufficient permissions.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/StartVirtualMachinesMetadataSync
 func (c *BackupGateway) StartVirtualMachinesMetadataSync(input *StartVirtualMachinesMetadataSyncInput) (*StartVirtualMachinesMetadataSyncOutput, error) {
@@ -1948,14 +1945,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/TagResource
 func (c *BackupGateway) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1986,19 +1982,20 @@ func (c *BackupGateway) TagResourceRequest(input *TagResourceInput) (req *reques
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/TagResource
 func (c *BackupGateway) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2038,14 +2035,13 @@ const opTestHypervisorConfiguration = "TestHypervisorConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TestHypervisorConfigurationRequest method.
+//	req, resp := client.TestHypervisorConfigurationRequest(params)
 //
-//    // Example sending a request using the TestHypervisorConfigurationRequest method.
-//    req, resp := client.TestHypervisorConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/TestHypervisorConfiguration
 func (c *BackupGateway) TestHypervisorConfigurationRequest(input *TestHypervisorConfigurationInput) (req *request.Request, output *TestHypervisorConfigurationOutput) {
@@ -2078,22 +2074,23 @@ func (c *BackupGateway) TestHypervisorConfigurationRequest(input *TestHypervisor
 // API operation TestHypervisorConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * ConflictException
-//   The operation cannot proceed because it is not supported.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ConflictException
+//     The operation cannot proceed because it is not supported.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/TestHypervisorConfiguration
 func (c *BackupGateway) TestHypervisorConfiguration(input *TestHypervisorConfigurationInput) (*TestHypervisorConfigurationOutput, error) {
@@ -2133,14 +2130,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/UntagResource
 func (c *BackupGateway) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2171,19 +2167,20 @@ func (c *BackupGateway) UntagResourceRequest(input *UntagResourceInput) (req *re
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/UntagResource
 func (c *BackupGateway) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2223,14 +2220,13 @@ const opUpdateGatewayInformation = "UpdateGatewayInformation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateGatewayInformationRequest method.
+//	req, resp := client.UpdateGatewayInformationRequest(params)
 //
-//    // Example sending a request using the UpdateGatewayInformationRequest method.
-//    req, resp := client.UpdateGatewayInformationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/UpdateGatewayInformation
 func (c *BackupGateway) UpdateGatewayInformationRequest(input *UpdateGatewayInformationInput) (req *request.Request, output *UpdateGatewayInformationOutput) {
@@ -2262,22 +2258,23 @@ func (c *BackupGateway) UpdateGatewayInformationRequest(input *UpdateGatewayInfo
 // API operation UpdateGatewayInformation for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * ConflictException
-//   The operation cannot proceed because it is not supported.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ConflictException
+//     The operation cannot proceed because it is not supported.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/UpdateGatewayInformation
 func (c *BackupGateway) UpdateGatewayInformation(input *UpdateGatewayInformationInput) (*UpdateGatewayInformationOutput, error) {
@@ -2317,14 +2314,13 @@ const opUpdateGatewaySoftwareNow = "UpdateGatewaySoftwareNow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateGatewaySoftwareNowRequest method.
+//	req, resp := client.UpdateGatewaySoftwareNowRequest(params)
 //
-//    // Example sending a request using the UpdateGatewaySoftwareNowRequest method.
-//    req, resp := client.UpdateGatewaySoftwareNowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/UpdateGatewaySoftwareNow
 func (c *BackupGateway) UpdateGatewaySoftwareNowRequest(input *UpdateGatewaySoftwareNowInput) (req *request.Request, output *UpdateGatewaySoftwareNowOutput) {
@@ -2359,19 +2355,20 @@ func (c *BackupGateway) UpdateGatewaySoftwareNowRequest(input *UpdateGatewaySoft
 // API operation UpdateGatewaySoftwareNow for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/UpdateGatewaySoftwareNow
 func (c *BackupGateway) UpdateGatewaySoftwareNow(input *UpdateGatewaySoftwareNowInput) (*UpdateGatewaySoftwareNowOutput, error) {
@@ -2411,14 +2408,13 @@ const opUpdateHypervisor = "UpdateHypervisor"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateHypervisorRequest method.
+//	req, resp := client.UpdateHypervisorRequest(params)
 //
-//    // Example sending a request using the UpdateHypervisorRequest method.
-//    req, resp := client.UpdateHypervisorRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/UpdateHypervisor
 func (c *BackupGateway) UpdateHypervisorRequest(input *UpdateHypervisorInput) (req *request.Request, output *UpdateHypervisorOutput) {
@@ -2451,25 +2447,26 @@ func (c *BackupGateway) UpdateHypervisorRequest(input *UpdateHypervisorInput) (r
 // API operation UpdateHypervisor for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The operation did not succeed because a validation error occurred.
 //
-//   * ConflictException
-//   The operation cannot proceed because it is not supported.
+//   - ValidationException
+//     The operation did not succeed because a validation error occurred.
 //
-//   * InternalServerException
-//   The operation did not succeed because an internal error occurred. Try again
-//   later.
+//   - ConflictException
+//     The operation cannot proceed because it is not supported.
 //
-//   * AccessDeniedException
-//   The operation cannot proceed because you have insufficient permissions.
+//   - InternalServerException
+//     The operation did not succeed because an internal error occurred. Try again
+//     later.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action wasn't found.
+//   - AccessDeniedException
+//     The operation cannot proceed because you have insufficient permissions.
 //
-//   * ThrottlingException
-//   TPS has been limited to protect against intentional or unintentional high
-//   request volumes.
+//   - ResourceNotFoundException
+//     A resource that is required for the action wasn't found.
+//
+//   - ThrottlingException
+//     TPS has been limited to protect against intentional or unintentional high
+//     request volumes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-gateway-2021-01-01/UpdateHypervisor
 func (c *BackupGateway) UpdateHypervisor(input *UpdateHypervisorInput) (*UpdateHypervisorOutput, error) {

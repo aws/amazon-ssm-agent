@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWS App Runner.
-//    func myFunc(svc apprunneriface.AppRunnerAPI) bool {
-//        // Make svc.AssociateCustomDomain request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWS App Runner.
+//	func myFunc(svc apprunneriface.AppRunnerAPI) bool {
+//	    // Make svc.AssociateCustomDomain request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := apprunner.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := apprunner.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockAppRunnerClient struct {
-//        apprunneriface.AppRunnerAPI
-//    }
-//    func (m *mockAppRunnerClient) AssociateCustomDomain(input *apprunner.AssociateCustomDomainInput) (*apprunner.AssociateCustomDomainOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockAppRunnerClient struct {
+//	    apprunneriface.AppRunnerAPI
+//	}
+//	func (m *mockAppRunnerClient) AssociateCustomDomain(input *apprunner.AssociateCustomDomainInput) (*apprunner.AssociateCustomDomainOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockAppRunnerClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockAppRunnerClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -178,6 +178,13 @@ type AppRunnerAPI interface {
 	ListServicesPages(*apprunner.ListServicesInput, func(*apprunner.ListServicesOutput, bool) bool) error
 	ListServicesPagesWithContext(aws.Context, *apprunner.ListServicesInput, func(*apprunner.ListServicesOutput, bool) bool, ...request.Option) error
 
+	ListServicesForAutoScalingConfiguration(*apprunner.ListServicesForAutoScalingConfigurationInput) (*apprunner.ListServicesForAutoScalingConfigurationOutput, error)
+	ListServicesForAutoScalingConfigurationWithContext(aws.Context, *apprunner.ListServicesForAutoScalingConfigurationInput, ...request.Option) (*apprunner.ListServicesForAutoScalingConfigurationOutput, error)
+	ListServicesForAutoScalingConfigurationRequest(*apprunner.ListServicesForAutoScalingConfigurationInput) (*request.Request, *apprunner.ListServicesForAutoScalingConfigurationOutput)
+
+	ListServicesForAutoScalingConfigurationPages(*apprunner.ListServicesForAutoScalingConfigurationInput, func(*apprunner.ListServicesForAutoScalingConfigurationOutput, bool) bool) error
+	ListServicesForAutoScalingConfigurationPagesWithContext(aws.Context, *apprunner.ListServicesForAutoScalingConfigurationInput, func(*apprunner.ListServicesForAutoScalingConfigurationOutput, bool) bool, ...request.Option) error
+
 	ListTagsForResource(*apprunner.ListTagsForResourceInput) (*apprunner.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *apprunner.ListTagsForResourceInput, ...request.Option) (*apprunner.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*apprunner.ListTagsForResourceInput) (*request.Request, *apprunner.ListTagsForResourceOutput)
@@ -215,6 +222,10 @@ type AppRunnerAPI interface {
 	UntagResource(*apprunner.UntagResourceInput) (*apprunner.UntagResourceOutput, error)
 	UntagResourceWithContext(aws.Context, *apprunner.UntagResourceInput, ...request.Option) (*apprunner.UntagResourceOutput, error)
 	UntagResourceRequest(*apprunner.UntagResourceInput) (*request.Request, *apprunner.UntagResourceOutput)
+
+	UpdateDefaultAutoScalingConfiguration(*apprunner.UpdateDefaultAutoScalingConfigurationInput) (*apprunner.UpdateDefaultAutoScalingConfigurationOutput, error)
+	UpdateDefaultAutoScalingConfigurationWithContext(aws.Context, *apprunner.UpdateDefaultAutoScalingConfigurationInput, ...request.Option) (*apprunner.UpdateDefaultAutoScalingConfigurationOutput, error)
+	UpdateDefaultAutoScalingConfigurationRequest(*apprunner.UpdateDefaultAutoScalingConfigurationInput) (*request.Request, *apprunner.UpdateDefaultAutoScalingConfigurationOutput)
 
 	UpdateService(*apprunner.UpdateServiceInput) (*apprunner.UpdateServiceOutput, error)
 	UpdateServiceWithContext(aws.Context, *apprunner.UpdateServiceInput, ...request.Option) (*apprunner.UpdateServiceOutput, error)

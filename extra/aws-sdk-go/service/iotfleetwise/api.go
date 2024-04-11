@@ -29,14 +29,13 @@ const opAssociateVehicleFleet = "AssociateVehicleFleet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AssociateVehicleFleetRequest method.
+//	req, resp := client.AssociateVehicleFleetRequest(params)
 //
-//    // Example sending a request using the AssociateVehicleFleetRequest method.
-//    req, resp := client.AssociateVehicleFleetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/AssociateVehicleFleet
 func (c *IoTFleetWise) AssociateVehicleFleetRequest(input *AssociateVehicleFleetInput) (req *request.Request, output *AssociateVehicleFleetOutput) {
@@ -68,21 +67,25 @@ func (c *IoTFleetWise) AssociateVehicleFleetRequest(input *AssociateVehicleFleet
 // API operation AssociateVehicleFleet for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/AssociateVehicleFleet
 func (c *IoTFleetWise) AssociateVehicleFleet(input *AssociateVehicleFleetInput) (*AssociateVehicleFleetOutput, error) {
@@ -122,14 +125,13 @@ const opBatchCreateVehicle = "BatchCreateVehicle"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchCreateVehicleRequest method.
+//	req, resp := client.BatchCreateVehicleRequest(params)
 //
-//    // Example sending a request using the BatchCreateVehicleRequest method.
-//    req, resp := client.BatchCreateVehicleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/BatchCreateVehicle
 func (c *IoTFleetWise) BatchCreateVehicleRequest(input *BatchCreateVehicleInput) (req *request.Request, output *BatchCreateVehicleOutput) {
@@ -166,21 +168,22 @@ func (c *IoTFleetWise) BatchCreateVehicleRequest(input *BatchCreateVehicleInput)
 // API operation BatchCreateVehicle for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/BatchCreateVehicle
 func (c *IoTFleetWise) BatchCreateVehicle(input *BatchCreateVehicleInput) (*BatchCreateVehicleOutput, error) {
@@ -220,14 +223,13 @@ const opBatchUpdateVehicle = "BatchUpdateVehicle"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchUpdateVehicleRequest method.
+//	req, resp := client.BatchUpdateVehicleRequest(params)
 //
-//    // Example sending a request using the BatchUpdateVehicleRequest method.
-//    req, resp := client.BatchUpdateVehicleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/BatchUpdateVehicle
 func (c *IoTFleetWise) BatchUpdateVehicleRequest(input *BatchUpdateVehicleInput) (req *request.Request, output *BatchUpdateVehicleOutput) {
@@ -264,18 +266,19 @@ func (c *IoTFleetWise) BatchUpdateVehicleRequest(input *BatchUpdateVehicleInput)
 // API operation BatchUpdateVehicle for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/BatchUpdateVehicle
 func (c *IoTFleetWise) BatchUpdateVehicle(input *BatchUpdateVehicleInput) (*BatchUpdateVehicleOutput, error) {
@@ -315,14 +318,13 @@ const opCreateCampaign = "CreateCampaign"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateCampaignRequest method.
+//	req, resp := client.CreateCampaignRequest(params)
 //
-//    // Example sending a request using the CreateCampaignRequest method.
-//    req, resp := client.CreateCampaignRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateCampaign
 func (c *IoTFleetWise) CreateCampaignRequest(input *CreateCampaignInput) (req *request.Request, output *CreateCampaignOutput) {
@@ -360,28 +362,29 @@ func (c *IoTFleetWise) CreateCampaignRequest(input *CreateCampaignInput) (req *r
 // API operation CreateCampaign for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateCampaign
 func (c *IoTFleetWise) CreateCampaign(input *CreateCampaignInput) (*CreateCampaignOutput, error) {
@@ -421,14 +424,13 @@ const opCreateDecoderManifest = "CreateDecoderManifest"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDecoderManifestRequest method.
+//	req, resp := client.CreateDecoderManifestRequest(params)
 //
-//    // Example sending a request using the CreateDecoderManifestRequest method.
-//    req, resp := client.CreateDecoderManifestRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateDecoderManifest
 func (c *IoTFleetWise) CreateDecoderManifestRequest(input *CreateDecoderManifestInput) (req *request.Request, output *CreateDecoderManifestOutput) {
@@ -452,13 +454,13 @@ func (c *IoTFleetWise) CreateDecoderManifestRequest(input *CreateDecoderManifest
 // Creates the decoder manifest associated with a model manifest. To create
 // a decoder manifest, the following must be true:
 //
-//    * Every signal decoder has a unique name.
+//   - Every signal decoder has a unique name.
 //
-//    * Each signal decoder is associated with a network interface.
+//   - Each signal decoder is associated with a network interface.
 //
-//    * Each network interface has a unique ID.
+//   - Each network interface has a unique ID.
 //
-//    * The signal decoders are specified in the model manifest.
+//   - The signal decoders are specified in the model manifest.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -468,32 +470,33 @@ func (c *IoTFleetWise) CreateDecoderManifestRequest(input *CreateDecoderManifest
 // API operation CreateDecoderManifest for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * DecoderManifestValidationException
-//   The request couldn't be completed because it contains signal decoders with
-//   one or more validation errors.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - DecoderManifestValidationException
+//     The request couldn't be completed because it contains signal decoders with
+//     one or more validation errors.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateDecoderManifest
 func (c *IoTFleetWise) CreateDecoderManifest(input *CreateDecoderManifestInput) (*CreateDecoderManifestOutput, error) {
@@ -533,14 +536,13 @@ const opCreateFleet = "CreateFleet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFleetRequest method.
+//	req, resp := client.CreateFleetRequest(params)
 //
-//    // Example sending a request using the CreateFleetRequest method.
-//    req, resp := client.CreateFleetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateFleet
 func (c *IoTFleetWise) CreateFleetRequest(input *CreateFleetInput) (req *request.Request, output *CreateFleetOutput) {
@@ -577,28 +579,29 @@ func (c *IoTFleetWise) CreateFleetRequest(input *CreateFleetInput) (req *request
 // API operation CreateFleet for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateFleet
 func (c *IoTFleetWise) CreateFleet(input *CreateFleetInput) (*CreateFleetOutput, error) {
@@ -638,14 +641,13 @@ const opCreateModelManifest = "CreateModelManifest"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateModelManifestRequest method.
+//	req, resp := client.CreateModelManifestRequest(params)
 //
-//    // Example sending a request using the CreateModelManifestRequest method.
-//    req, resp := client.CreateModelManifestRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateModelManifest
 func (c *IoTFleetWise) CreateModelManifestRequest(input *CreateModelManifestInput) (req *request.Request, output *CreateModelManifestOutput) {
@@ -680,32 +682,33 @@ func (c *IoTFleetWise) CreateModelManifestRequest(input *CreateModelManifestInpu
 // API operation CreateModelManifest for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * InvalidSignalsException
-//   The request couldn't be completed because it contains signals that aren't
-//   valid.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InvalidSignalsException
+//     The request couldn't be completed because it contains signals that aren't
+//     valid.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateModelManifest
 func (c *IoTFleetWise) CreateModelManifest(input *CreateModelManifestInput) (*CreateModelManifestOutput, error) {
@@ -745,14 +748,13 @@ const opCreateSignalCatalog = "CreateSignalCatalog"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSignalCatalogRequest method.
+//	req, resp := client.CreateSignalCatalogRequest(params)
 //
-//    // Example sending a request using the CreateSignalCatalogRequest method.
-//    req, resp := client.CreateSignalCatalogRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateSignalCatalog
 func (c *IoTFleetWise) CreateSignalCatalogRequest(input *CreateSignalCatalogInput) (req *request.Request, output *CreateSignalCatalogOutput) {
@@ -784,33 +786,34 @@ func (c *IoTFleetWise) CreateSignalCatalogRequest(input *CreateSignalCatalogInpu
 // API operation CreateSignalCatalog for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * InvalidNodeException
-//   The specified node type doesn't match the expected node type for a node.
-//   You can specify the node type as branch, sensor, actuator, or attribute.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InvalidNodeException
+//     The specified node type doesn't match the expected node type for a node.
+//     You can specify the node type as branch, sensor, actuator, or attribute.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * InvalidSignalsException
-//   The request couldn't be completed because it contains signals that aren't
-//   valid.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InvalidSignalsException
+//     The request couldn't be completed because it contains signals that aren't
+//     valid.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateSignalCatalog
 func (c *IoTFleetWise) CreateSignalCatalog(input *CreateSignalCatalogInput) (*CreateSignalCatalogOutput, error) {
@@ -850,14 +853,13 @@ const opCreateVehicle = "CreateVehicle"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateVehicleRequest method.
+//	req, resp := client.CreateVehicleRequest(params)
 //
-//    // Example sending a request using the CreateVehicleRequest method.
-//    req, resp := client.CreateVehicleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateVehicle
 func (c *IoTFleetWise) CreateVehicleRequest(input *CreateVehicleInput) (req *request.Request, output *CreateVehicleOutput) {
@@ -882,7 +884,7 @@ func (c *IoTFleetWise) CreateVehicleRequest(input *CreateVehicleInput) (req *req
 // Vehicles created from the same vehicle model consist of the same signals
 // inherited from the vehicle model.
 //
-// If you have an existing Amazon Web Services IoT Thing, you can use Amazon
+// If you have an existing Amazon Web Services IoT thing, you can use Amazon
 // Web Services IoT FleetWise to create a vehicle and collect data from your
 // thing.
 //
@@ -897,28 +899,29 @@ func (c *IoTFleetWise) CreateVehicleRequest(input *CreateVehicleInput) (req *req
 // API operation CreateVehicle for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/CreateVehicle
 func (c *IoTFleetWise) CreateVehicle(input *CreateVehicleInput) (*CreateVehicleOutput, error) {
@@ -958,14 +961,13 @@ const opDeleteCampaign = "DeleteCampaign"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCampaignRequest method.
+//	req, resp := client.DeleteCampaignRequest(params)
 //
-//    // Example sending a request using the DeleteCampaignRequest method.
-//    req, resp := client.DeleteCampaignRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteCampaign
 func (c *IoTFleetWise) DeleteCampaignRequest(input *DeleteCampaignInput) (req *request.Request, output *DeleteCampaignOutput) {
@@ -997,21 +999,22 @@ func (c *IoTFleetWise) DeleteCampaignRequest(input *DeleteCampaignInput) (req *r
 // API operation DeleteCampaign for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteCampaign
 func (c *IoTFleetWise) DeleteCampaign(input *DeleteCampaignInput) (*DeleteCampaignOutput, error) {
@@ -1051,14 +1054,13 @@ const opDeleteDecoderManifest = "DeleteDecoderManifest"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDecoderManifestRequest method.
+//	req, resp := client.DeleteDecoderManifestRequest(params)
 //
-//    // Example sending a request using the DeleteDecoderManifestRequest method.
-//    req, resp := client.DeleteDecoderManifestRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteDecoderManifest
 func (c *IoTFleetWise) DeleteDecoderManifestRequest(input *DeleteDecoderManifestInput) (req *request.Request, output *DeleteDecoderManifestOutput) {
@@ -1093,22 +1095,23 @@ func (c *IoTFleetWise) DeleteDecoderManifestRequest(input *DeleteDecoderManifest
 // API operation DeleteDecoderManifest for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteDecoderManifest
 func (c *IoTFleetWise) DeleteDecoderManifest(input *DeleteDecoderManifestInput) (*DeleteDecoderManifestOutput, error) {
@@ -1148,14 +1151,13 @@ const opDeleteFleet = "DeleteFleet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFleetRequest method.
+//	req, resp := client.DeleteFleetRequest(params)
 //
-//    // Example sending a request using the DeleteFleetRequest method.
-//    req, resp := client.DeleteFleetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteFleet
 func (c *IoTFleetWise) DeleteFleetRequest(input *DeleteFleetInput) (req *request.Request, output *DeleteFleetOutput) {
@@ -1191,18 +1193,19 @@ func (c *IoTFleetWise) DeleteFleetRequest(input *DeleteFleetInput) (req *request
 // API operation DeleteFleet for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteFleet
 func (c *IoTFleetWise) DeleteFleet(input *DeleteFleetInput) (*DeleteFleetOutput, error) {
@@ -1242,14 +1245,13 @@ const opDeleteModelManifest = "DeleteModelManifest"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteModelManifestRequest method.
+//	req, resp := client.DeleteModelManifestRequest(params)
 //
-//    // Example sending a request using the DeleteModelManifestRequest method.
-//    req, resp := client.DeleteModelManifestRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteModelManifest
 func (c *IoTFleetWise) DeleteModelManifestRequest(input *DeleteModelManifestInput) (req *request.Request, output *DeleteModelManifestOutput) {
@@ -1283,22 +1285,23 @@ func (c *IoTFleetWise) DeleteModelManifestRequest(input *DeleteModelManifestInpu
 // API operation DeleteModelManifest for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteModelManifest
 func (c *IoTFleetWise) DeleteModelManifest(input *DeleteModelManifestInput) (*DeleteModelManifestOutput, error) {
@@ -1338,14 +1341,13 @@ const opDeleteSignalCatalog = "DeleteSignalCatalog"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSignalCatalogRequest method.
+//	req, resp := client.DeleteSignalCatalogRequest(params)
 //
-//    // Example sending a request using the DeleteSignalCatalogRequest method.
-//    req, resp := client.DeleteSignalCatalogRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteSignalCatalog
 func (c *IoTFleetWise) DeleteSignalCatalogRequest(input *DeleteSignalCatalogInput) (req *request.Request, output *DeleteSignalCatalogOutput) {
@@ -1379,22 +1381,23 @@ func (c *IoTFleetWise) DeleteSignalCatalogRequest(input *DeleteSignalCatalogInpu
 // API operation DeleteSignalCatalog for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteSignalCatalog
 func (c *IoTFleetWise) DeleteSignalCatalog(input *DeleteSignalCatalogInput) (*DeleteSignalCatalogOutput, error) {
@@ -1434,14 +1437,13 @@ const opDeleteVehicle = "DeleteVehicle"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteVehicleRequest method.
+//	req, resp := client.DeleteVehicleRequest(params)
 //
-//    // Example sending a request using the DeleteVehicleRequest method.
-//    req, resp := client.DeleteVehicleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteVehicle
 func (c *IoTFleetWise) DeleteVehicleRequest(input *DeleteVehicleInput) (req *request.Request, output *DeleteVehicleOutput) {
@@ -1475,18 +1477,19 @@ func (c *IoTFleetWise) DeleteVehicleRequest(input *DeleteVehicleInput) (req *req
 // API operation DeleteVehicle for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DeleteVehicle
 func (c *IoTFleetWise) DeleteVehicle(input *DeleteVehicleInput) (*DeleteVehicleOutput, error) {
@@ -1526,14 +1529,13 @@ const opDisassociateVehicleFleet = "DisassociateVehicleFleet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateVehicleFleetRequest method.
+//	req, resp := client.DisassociateVehicleFleetRequest(params)
 //
-//    // Example sending a request using the DisassociateVehicleFleetRequest method.
-//    req, resp := client.DisassociateVehicleFleetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DisassociateVehicleFleet
 func (c *IoTFleetWise) DisassociateVehicleFleetRequest(input *DisassociateVehicleFleetInput) (req *request.Request, output *DisassociateVehicleFleetOutput) {
@@ -1569,21 +1571,22 @@ func (c *IoTFleetWise) DisassociateVehicleFleetRequest(input *DisassociateVehicl
 // API operation DisassociateVehicleFleet for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/DisassociateVehicleFleet
 func (c *IoTFleetWise) DisassociateVehicleFleet(input *DisassociateVehicleFleetInput) (*DisassociateVehicleFleetOutput, error) {
@@ -1623,14 +1626,13 @@ const opGetCampaign = "GetCampaign"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetCampaignRequest method.
+//	req, resp := client.GetCampaignRequest(params)
 //
-//    // Example sending a request using the GetCampaignRequest method.
-//    req, resp := client.GetCampaignRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetCampaign
 func (c *IoTFleetWise) GetCampaignRequest(input *GetCampaignInput) (req *request.Request, output *GetCampaignOutput) {
@@ -1661,21 +1663,22 @@ func (c *IoTFleetWise) GetCampaignRequest(input *GetCampaignInput) (req *request
 // API operation GetCampaign for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetCampaign
 func (c *IoTFleetWise) GetCampaign(input *GetCampaignInput) (*GetCampaignOutput, error) {
@@ -1715,14 +1718,13 @@ const opGetDecoderManifest = "GetDecoderManifest"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDecoderManifestRequest method.
+//	req, resp := client.GetDecoderManifestRequest(params)
 //
-//    // Example sending a request using the GetDecoderManifestRequest method.
-//    req, resp := client.GetDecoderManifestRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetDecoderManifest
 func (c *IoTFleetWise) GetDecoderManifestRequest(input *GetDecoderManifestInput) (req *request.Request, output *GetDecoderManifestOutput) {
@@ -1753,21 +1755,22 @@ func (c *IoTFleetWise) GetDecoderManifestRequest(input *GetDecoderManifestInput)
 // API operation GetDecoderManifest for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetDecoderManifest
 func (c *IoTFleetWise) GetDecoderManifest(input *GetDecoderManifestInput) (*GetDecoderManifestOutput, error) {
@@ -1791,6 +1794,99 @@ func (c *IoTFleetWise) GetDecoderManifestWithContext(ctx aws.Context, input *Get
 	return out, req.Send()
 }
 
+const opGetEncryptionConfiguration = "GetEncryptionConfiguration"
+
+// GetEncryptionConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the GetEncryptionConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetEncryptionConfiguration for more information on using the GetEncryptionConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetEncryptionConfigurationRequest method.
+//	req, resp := client.GetEncryptionConfigurationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetEncryptionConfiguration
+func (c *IoTFleetWise) GetEncryptionConfigurationRequest(input *GetEncryptionConfigurationInput) (req *request.Request, output *GetEncryptionConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opGetEncryptionConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetEncryptionConfigurationInput{}
+	}
+
+	output = &GetEncryptionConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetEncryptionConfiguration API operation for AWS IoT FleetWise.
+//
+// Retrieves the encryption configuration for resources and data in Amazon Web
+// Services IoT FleetWise.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT FleetWise's
+// API operation GetEncryptionConfiguration for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     The resource wasn't found.
+//
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
+//
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetEncryptionConfiguration
+func (c *IoTFleetWise) GetEncryptionConfiguration(input *GetEncryptionConfigurationInput) (*GetEncryptionConfigurationOutput, error) {
+	req, out := c.GetEncryptionConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// GetEncryptionConfigurationWithContext is the same as GetEncryptionConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetEncryptionConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTFleetWise) GetEncryptionConfigurationWithContext(ctx aws.Context, input *GetEncryptionConfigurationInput, opts ...request.Option) (*GetEncryptionConfigurationOutput, error) {
+	req, out := c.GetEncryptionConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetFleet = "GetFleet"
 
 // GetFleetRequest generates a "aws/request.Request" representing the
@@ -1807,14 +1903,13 @@ const opGetFleet = "GetFleet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFleetRequest method.
+//	req, resp := client.GetFleetRequest(params)
 //
-//    // Example sending a request using the GetFleetRequest method.
-//    req, resp := client.GetFleetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetFleet
 func (c *IoTFleetWise) GetFleetRequest(input *GetFleetInput) (req *request.Request, output *GetFleetOutput) {
@@ -1845,21 +1940,22 @@ func (c *IoTFleetWise) GetFleetRequest(input *GetFleetInput) (req *request.Reque
 // API operation GetFleet for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetFleet
 func (c *IoTFleetWise) GetFleet(input *GetFleetInput) (*GetFleetOutput, error) {
@@ -1899,14 +1995,13 @@ const opGetLoggingOptions = "GetLoggingOptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLoggingOptionsRequest method.
+//	req, resp := client.GetLoggingOptionsRequest(params)
 //
-//    // Example sending a request using the GetLoggingOptionsRequest method.
-//    req, resp := client.GetLoggingOptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetLoggingOptions
 func (c *IoTFleetWise) GetLoggingOptionsRequest(input *GetLoggingOptionsInput) (req *request.Request, output *GetLoggingOptionsOutput) {
@@ -1937,14 +2032,15 @@ func (c *IoTFleetWise) GetLoggingOptionsRequest(input *GetLoggingOptionsInput) (
 // API operation GetLoggingOptions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetLoggingOptions
 func (c *IoTFleetWise) GetLoggingOptions(input *GetLoggingOptionsInput) (*GetLoggingOptionsOutput, error) {
@@ -1984,14 +2080,13 @@ const opGetModelManifest = "GetModelManifest"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetModelManifestRequest method.
+//	req, resp := client.GetModelManifestRequest(params)
 //
-//    // Example sending a request using the GetModelManifestRequest method.
-//    req, resp := client.GetModelManifestRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetModelManifest
 func (c *IoTFleetWise) GetModelManifestRequest(input *GetModelManifestInput) (req *request.Request, output *GetModelManifestOutput) {
@@ -2022,21 +2117,22 @@ func (c *IoTFleetWise) GetModelManifestRequest(input *GetModelManifestInput) (re
 // API operation GetModelManifest for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetModelManifest
 func (c *IoTFleetWise) GetModelManifest(input *GetModelManifestInput) (*GetModelManifestOutput, error) {
@@ -2076,14 +2172,13 @@ const opGetRegisterAccountStatus = "GetRegisterAccountStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRegisterAccountStatusRequest method.
+//	req, resp := client.GetRegisterAccountStatusRequest(params)
 //
-//    // Example sending a request using the GetRegisterAccountStatusRequest method.
-//    req, resp := client.GetRegisterAccountStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetRegisterAccountStatus
 func (c *IoTFleetWise) GetRegisterAccountStatusRequest(input *GetRegisterAccountStatusInput) (req *request.Request, output *GetRegisterAccountStatusOutput) {
@@ -2121,21 +2216,22 @@ func (c *IoTFleetWise) GetRegisterAccountStatusRequest(input *GetRegisterAccount
 // API operation GetRegisterAccountStatus for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetRegisterAccountStatus
 func (c *IoTFleetWise) GetRegisterAccountStatus(input *GetRegisterAccountStatusInput) (*GetRegisterAccountStatusOutput, error) {
@@ -2175,14 +2271,13 @@ const opGetSignalCatalog = "GetSignalCatalog"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSignalCatalogRequest method.
+//	req, resp := client.GetSignalCatalogRequest(params)
 //
-//    // Example sending a request using the GetSignalCatalogRequest method.
-//    req, resp := client.GetSignalCatalogRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetSignalCatalog
 func (c *IoTFleetWise) GetSignalCatalogRequest(input *GetSignalCatalogInput) (req *request.Request, output *GetSignalCatalogOutput) {
@@ -2213,21 +2308,22 @@ func (c *IoTFleetWise) GetSignalCatalogRequest(input *GetSignalCatalogInput) (re
 // API operation GetSignalCatalog for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetSignalCatalog
 func (c *IoTFleetWise) GetSignalCatalog(input *GetSignalCatalogInput) (*GetSignalCatalogOutput, error) {
@@ -2267,14 +2363,13 @@ const opGetVehicle = "GetVehicle"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetVehicleRequest method.
+//	req, resp := client.GetVehicleRequest(params)
 //
-//    // Example sending a request using the GetVehicleRequest method.
-//    req, resp := client.GetVehicleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetVehicle
 func (c *IoTFleetWise) GetVehicleRequest(input *GetVehicleInput) (req *request.Request, output *GetVehicleOutput) {
@@ -2305,21 +2400,22 @@ func (c *IoTFleetWise) GetVehicleRequest(input *GetVehicleInput) (req *request.R
 // API operation GetVehicle for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetVehicle
 func (c *IoTFleetWise) GetVehicle(input *GetVehicleInput) (*GetVehicleOutput, error) {
@@ -2359,14 +2455,13 @@ const opGetVehicleStatus = "GetVehicleStatus"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetVehicleStatusRequest method.
+//	req, resp := client.GetVehicleStatusRequest(params)
 //
-//    // Example sending a request using the GetVehicleStatusRequest method.
-//    req, resp := client.GetVehicleStatusRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetVehicleStatus
 func (c *IoTFleetWise) GetVehicleStatusRequest(input *GetVehicleStatusInput) (req *request.Request, output *GetVehicleStatusOutput) {
@@ -2403,21 +2498,22 @@ func (c *IoTFleetWise) GetVehicleStatusRequest(input *GetVehicleStatusInput) (re
 // API operation GetVehicleStatus for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/GetVehicleStatus
 func (c *IoTFleetWise) GetVehicleStatus(input *GetVehicleStatusInput) (*GetVehicleStatusOutput, error) {
@@ -2449,15 +2545,14 @@ func (c *IoTFleetWise) GetVehicleStatusWithContext(ctx aws.Context, input *GetVe
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetVehicleStatus operation.
-//    pageNum := 0
-//    err := client.GetVehicleStatusPages(params,
-//        func(page *iotfleetwise.GetVehicleStatusOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetVehicleStatus operation.
+//	pageNum := 0
+//	err := client.GetVehicleStatusPages(params,
+//	    func(page *iotfleetwise.GetVehicleStatusOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) GetVehicleStatusPages(input *GetVehicleStatusInput, fn func(*GetVehicleStatusOutput, bool) bool) error {
 	return c.GetVehicleStatusPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2509,14 +2604,13 @@ const opImportDecoderManifest = "ImportDecoderManifest"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ImportDecoderManifestRequest method.
+//	req, resp := client.ImportDecoderManifestRequest(params)
 //
-//    // Example sending a request using the ImportDecoderManifestRequest method.
-//    req, resp := client.ImportDecoderManifestRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ImportDecoderManifest
 func (c *IoTFleetWise) ImportDecoderManifestRequest(input *ImportDecoderManifestInput) (req *request.Request, output *ImportDecoderManifestOutput) {
@@ -2548,33 +2642,34 @@ func (c *IoTFleetWise) ImportDecoderManifestRequest(input *ImportDecoderManifest
 // API operation ImportDecoderManifest for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * DecoderManifestValidationException
-//   The request couldn't be completed because it contains signal decoders with
-//   one or more validation errors.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - DecoderManifestValidationException
+//     The request couldn't be completed because it contains signal decoders with
+//     one or more validation errors.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * InvalidSignalsException
-//   The request couldn't be completed because it contains signals that aren't
-//   valid.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InvalidSignalsException
+//     The request couldn't be completed because it contains signals that aren't
+//     valid.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ImportDecoderManifest
 func (c *IoTFleetWise) ImportDecoderManifest(input *ImportDecoderManifestInput) (*ImportDecoderManifestOutput, error) {
@@ -2614,14 +2709,13 @@ const opImportSignalCatalog = "ImportSignalCatalog"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ImportSignalCatalogRequest method.
+//	req, resp := client.ImportSignalCatalogRequest(params)
 //
-//    // Example sending a request using the ImportSignalCatalogRequest method.
-//    req, resp := client.ImportSignalCatalogRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ImportSignalCatalog
 func (c *IoTFleetWise) ImportSignalCatalogRequest(input *ImportSignalCatalogInput) (req *request.Request, output *ImportSignalCatalogOutput) {
@@ -2653,32 +2747,33 @@ func (c *IoTFleetWise) ImportSignalCatalogRequest(input *ImportSignalCatalogInpu
 // API operation ImportSignalCatalog for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * InvalidSignalsException
-//   The request couldn't be completed because it contains signals that aren't
-//   valid.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InvalidSignalsException
+//     The request couldn't be completed because it contains signals that aren't
+//     valid.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ImportSignalCatalog
 func (c *IoTFleetWise) ImportSignalCatalog(input *ImportSignalCatalogInput) (*ImportSignalCatalogOutput, error) {
@@ -2718,14 +2813,13 @@ const opListCampaigns = "ListCampaigns"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCampaignsRequest method.
+//	req, resp := client.ListCampaignsRequest(params)
 //
-//    // Example sending a request using the ListCampaignsRequest method.
-//    req, resp := client.ListCampaignsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListCampaigns
 func (c *IoTFleetWise) ListCampaignsRequest(input *ListCampaignsInput) (req *request.Request, output *ListCampaignsOutput) {
@@ -2765,18 +2859,19 @@ func (c *IoTFleetWise) ListCampaignsRequest(input *ListCampaignsInput) (req *req
 // API operation ListCampaigns for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListCampaigns
 func (c *IoTFleetWise) ListCampaigns(input *ListCampaignsInput) (*ListCampaignsOutput, error) {
@@ -2808,15 +2903,14 @@ func (c *IoTFleetWise) ListCampaignsWithContext(ctx aws.Context, input *ListCamp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCampaigns operation.
-//    pageNum := 0
-//    err := client.ListCampaignsPages(params,
-//        func(page *iotfleetwise.ListCampaignsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCampaigns operation.
+//	pageNum := 0
+//	err := client.ListCampaignsPages(params,
+//	    func(page *iotfleetwise.ListCampaignsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListCampaignsPages(input *ListCampaignsInput, fn func(*ListCampaignsOutput, bool) bool) error {
 	return c.ListCampaignsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2868,14 +2962,13 @@ const opListDecoderManifestNetworkInterfaces = "ListDecoderManifestNetworkInterf
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDecoderManifestNetworkInterfacesRequest method.
+//	req, resp := client.ListDecoderManifestNetworkInterfacesRequest(params)
 //
-//    // Example sending a request using the ListDecoderManifestNetworkInterfacesRequest method.
-//    req, resp := client.ListDecoderManifestNetworkInterfacesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListDecoderManifestNetworkInterfaces
 func (c *IoTFleetWise) ListDecoderManifestNetworkInterfacesRequest(input *ListDecoderManifestNetworkInterfacesInput) (req *request.Request, output *ListDecoderManifestNetworkInterfacesOutput) {
@@ -2915,21 +3008,22 @@ func (c *IoTFleetWise) ListDecoderManifestNetworkInterfacesRequest(input *ListDe
 // API operation ListDecoderManifestNetworkInterfaces for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListDecoderManifestNetworkInterfaces
 func (c *IoTFleetWise) ListDecoderManifestNetworkInterfaces(input *ListDecoderManifestNetworkInterfacesInput) (*ListDecoderManifestNetworkInterfacesOutput, error) {
@@ -2961,15 +3055,14 @@ func (c *IoTFleetWise) ListDecoderManifestNetworkInterfacesWithContext(ctx aws.C
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDecoderManifestNetworkInterfaces operation.
-//    pageNum := 0
-//    err := client.ListDecoderManifestNetworkInterfacesPages(params,
-//        func(page *iotfleetwise.ListDecoderManifestNetworkInterfacesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDecoderManifestNetworkInterfaces operation.
+//	pageNum := 0
+//	err := client.ListDecoderManifestNetworkInterfacesPages(params,
+//	    func(page *iotfleetwise.ListDecoderManifestNetworkInterfacesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListDecoderManifestNetworkInterfacesPages(input *ListDecoderManifestNetworkInterfacesInput, fn func(*ListDecoderManifestNetworkInterfacesOutput, bool) bool) error {
 	return c.ListDecoderManifestNetworkInterfacesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3021,14 +3114,13 @@ const opListDecoderManifestSignals = "ListDecoderManifestSignals"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDecoderManifestSignalsRequest method.
+//	req, resp := client.ListDecoderManifestSignalsRequest(params)
 //
-//    // Example sending a request using the ListDecoderManifestSignalsRequest method.
-//    req, resp := client.ListDecoderManifestSignalsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListDecoderManifestSignals
 func (c *IoTFleetWise) ListDecoderManifestSignalsRequest(input *ListDecoderManifestSignalsInput) (req *request.Request, output *ListDecoderManifestSignalsOutput) {
@@ -3068,21 +3160,22 @@ func (c *IoTFleetWise) ListDecoderManifestSignalsRequest(input *ListDecoderManif
 // API operation ListDecoderManifestSignals for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListDecoderManifestSignals
 func (c *IoTFleetWise) ListDecoderManifestSignals(input *ListDecoderManifestSignalsInput) (*ListDecoderManifestSignalsOutput, error) {
@@ -3114,15 +3207,14 @@ func (c *IoTFleetWise) ListDecoderManifestSignalsWithContext(ctx aws.Context, in
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDecoderManifestSignals operation.
-//    pageNum := 0
-//    err := client.ListDecoderManifestSignalsPages(params,
-//        func(page *iotfleetwise.ListDecoderManifestSignalsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDecoderManifestSignals operation.
+//	pageNum := 0
+//	err := client.ListDecoderManifestSignalsPages(params,
+//	    func(page *iotfleetwise.ListDecoderManifestSignalsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListDecoderManifestSignalsPages(input *ListDecoderManifestSignalsInput, fn func(*ListDecoderManifestSignalsOutput, bool) bool) error {
 	return c.ListDecoderManifestSignalsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3174,14 +3266,13 @@ const opListDecoderManifests = "ListDecoderManifests"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDecoderManifestsRequest method.
+//	req, resp := client.ListDecoderManifestsRequest(params)
 //
-//    // Example sending a request using the ListDecoderManifestsRequest method.
-//    req, resp := client.ListDecoderManifestsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListDecoderManifests
 func (c *IoTFleetWise) ListDecoderManifestsRequest(input *ListDecoderManifestsInput) (req *request.Request, output *ListDecoderManifestsOutput) {
@@ -3221,18 +3312,19 @@ func (c *IoTFleetWise) ListDecoderManifestsRequest(input *ListDecoderManifestsIn
 // API operation ListDecoderManifests for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListDecoderManifests
 func (c *IoTFleetWise) ListDecoderManifests(input *ListDecoderManifestsInput) (*ListDecoderManifestsOutput, error) {
@@ -3264,15 +3356,14 @@ func (c *IoTFleetWise) ListDecoderManifestsWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDecoderManifests operation.
-//    pageNum := 0
-//    err := client.ListDecoderManifestsPages(params,
-//        func(page *iotfleetwise.ListDecoderManifestsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDecoderManifests operation.
+//	pageNum := 0
+//	err := client.ListDecoderManifestsPages(params,
+//	    func(page *iotfleetwise.ListDecoderManifestsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListDecoderManifestsPages(input *ListDecoderManifestsInput, fn func(*ListDecoderManifestsOutput, bool) bool) error {
 	return c.ListDecoderManifestsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3324,14 +3415,13 @@ const opListFleets = "ListFleets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFleetsRequest method.
+//	req, resp := client.ListFleetsRequest(params)
 //
-//    // Example sending a request using the ListFleetsRequest method.
-//    req, resp := client.ListFleetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListFleets
 func (c *IoTFleetWise) ListFleetsRequest(input *ListFleetsInput) (req *request.Request, output *ListFleetsOutput) {
@@ -3371,21 +3461,22 @@ func (c *IoTFleetWise) ListFleetsRequest(input *ListFleetsInput) (req *request.R
 // API operation ListFleets for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListFleets
 func (c *IoTFleetWise) ListFleets(input *ListFleetsInput) (*ListFleetsOutput, error) {
@@ -3417,15 +3508,14 @@ func (c *IoTFleetWise) ListFleetsWithContext(ctx aws.Context, input *ListFleetsI
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFleets operation.
-//    pageNum := 0
-//    err := client.ListFleetsPages(params,
-//        func(page *iotfleetwise.ListFleetsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFleets operation.
+//	pageNum := 0
+//	err := client.ListFleetsPages(params,
+//	    func(page *iotfleetwise.ListFleetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListFleetsPages(input *ListFleetsInput, fn func(*ListFleetsOutput, bool) bool) error {
 	return c.ListFleetsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3477,14 +3567,13 @@ const opListFleetsForVehicle = "ListFleetsForVehicle"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFleetsForVehicleRequest method.
+//	req, resp := client.ListFleetsForVehicleRequest(params)
 //
-//    // Example sending a request using the ListFleetsForVehicleRequest method.
-//    req, resp := client.ListFleetsForVehicleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListFleetsForVehicle
 func (c *IoTFleetWise) ListFleetsForVehicleRequest(input *ListFleetsForVehicleInput) (req *request.Request, output *ListFleetsForVehicleOutput) {
@@ -3524,21 +3613,22 @@ func (c *IoTFleetWise) ListFleetsForVehicleRequest(input *ListFleetsForVehicleIn
 // API operation ListFleetsForVehicle for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListFleetsForVehicle
 func (c *IoTFleetWise) ListFleetsForVehicle(input *ListFleetsForVehicleInput) (*ListFleetsForVehicleOutput, error) {
@@ -3570,15 +3660,14 @@ func (c *IoTFleetWise) ListFleetsForVehicleWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFleetsForVehicle operation.
-//    pageNum := 0
-//    err := client.ListFleetsForVehiclePages(params,
-//        func(page *iotfleetwise.ListFleetsForVehicleOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFleetsForVehicle operation.
+//	pageNum := 0
+//	err := client.ListFleetsForVehiclePages(params,
+//	    func(page *iotfleetwise.ListFleetsForVehicleOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListFleetsForVehiclePages(input *ListFleetsForVehicleInput, fn func(*ListFleetsForVehicleOutput, bool) bool) error {
 	return c.ListFleetsForVehiclePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3630,14 +3719,13 @@ const opListModelManifestNodes = "ListModelManifestNodes"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListModelManifestNodesRequest method.
+//	req, resp := client.ListModelManifestNodesRequest(params)
 //
-//    // Example sending a request using the ListModelManifestNodesRequest method.
-//    req, resp := client.ListModelManifestNodesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListModelManifestNodes
 func (c *IoTFleetWise) ListModelManifestNodesRequest(input *ListModelManifestNodesInput) (req *request.Request, output *ListModelManifestNodesOutput) {
@@ -3677,24 +3765,25 @@ func (c *IoTFleetWise) ListModelManifestNodesRequest(input *ListModelManifestNod
 // API operation ListModelManifestNodes for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListModelManifestNodes
 func (c *IoTFleetWise) ListModelManifestNodes(input *ListModelManifestNodesInput) (*ListModelManifestNodesOutput, error) {
@@ -3726,15 +3815,14 @@ func (c *IoTFleetWise) ListModelManifestNodesWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListModelManifestNodes operation.
-//    pageNum := 0
-//    err := client.ListModelManifestNodesPages(params,
-//        func(page *iotfleetwise.ListModelManifestNodesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListModelManifestNodes operation.
+//	pageNum := 0
+//	err := client.ListModelManifestNodesPages(params,
+//	    func(page *iotfleetwise.ListModelManifestNodesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListModelManifestNodesPages(input *ListModelManifestNodesInput, fn func(*ListModelManifestNodesOutput, bool) bool) error {
 	return c.ListModelManifestNodesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3786,14 +3874,13 @@ const opListModelManifests = "ListModelManifests"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListModelManifestsRequest method.
+//	req, resp := client.ListModelManifestsRequest(params)
 //
-//    // Example sending a request using the ListModelManifestsRequest method.
-//    req, resp := client.ListModelManifestsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListModelManifests
 func (c *IoTFleetWise) ListModelManifestsRequest(input *ListModelManifestsInput) (req *request.Request, output *ListModelManifestsOutput) {
@@ -3833,18 +3920,19 @@ func (c *IoTFleetWise) ListModelManifestsRequest(input *ListModelManifestsInput)
 // API operation ListModelManifests for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListModelManifests
 func (c *IoTFleetWise) ListModelManifests(input *ListModelManifestsInput) (*ListModelManifestsOutput, error) {
@@ -3876,15 +3964,14 @@ func (c *IoTFleetWise) ListModelManifestsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListModelManifests operation.
-//    pageNum := 0
-//    err := client.ListModelManifestsPages(params,
-//        func(page *iotfleetwise.ListModelManifestsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListModelManifests operation.
+//	pageNum := 0
+//	err := client.ListModelManifestsPages(params,
+//	    func(page *iotfleetwise.ListModelManifestsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListModelManifestsPages(input *ListModelManifestsInput, fn func(*ListModelManifestsOutput, bool) bool) error {
 	return c.ListModelManifestsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3936,14 +4023,13 @@ const opListSignalCatalogNodes = "ListSignalCatalogNodes"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSignalCatalogNodesRequest method.
+//	req, resp := client.ListSignalCatalogNodesRequest(params)
 //
-//    // Example sending a request using the ListSignalCatalogNodesRequest method.
-//    req, resp := client.ListSignalCatalogNodesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListSignalCatalogNodes
 func (c *IoTFleetWise) ListSignalCatalogNodesRequest(input *ListSignalCatalogNodesInput) (req *request.Request, output *ListSignalCatalogNodesOutput) {
@@ -3983,24 +4069,25 @@ func (c *IoTFleetWise) ListSignalCatalogNodesRequest(input *ListSignalCatalogNod
 // API operation ListSignalCatalogNodes for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListSignalCatalogNodes
 func (c *IoTFleetWise) ListSignalCatalogNodes(input *ListSignalCatalogNodesInput) (*ListSignalCatalogNodesOutput, error) {
@@ -4032,15 +4119,14 @@ func (c *IoTFleetWise) ListSignalCatalogNodesWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSignalCatalogNodes operation.
-//    pageNum := 0
-//    err := client.ListSignalCatalogNodesPages(params,
-//        func(page *iotfleetwise.ListSignalCatalogNodesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSignalCatalogNodes operation.
+//	pageNum := 0
+//	err := client.ListSignalCatalogNodesPages(params,
+//	    func(page *iotfleetwise.ListSignalCatalogNodesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListSignalCatalogNodesPages(input *ListSignalCatalogNodesInput, fn func(*ListSignalCatalogNodesOutput, bool) bool) error {
 	return c.ListSignalCatalogNodesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4092,14 +4178,13 @@ const opListSignalCatalogs = "ListSignalCatalogs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSignalCatalogsRequest method.
+//	req, resp := client.ListSignalCatalogsRequest(params)
 //
-//    // Example sending a request using the ListSignalCatalogsRequest method.
-//    req, resp := client.ListSignalCatalogsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListSignalCatalogs
 func (c *IoTFleetWise) ListSignalCatalogsRequest(input *ListSignalCatalogsInput) (req *request.Request, output *ListSignalCatalogsOutput) {
@@ -4142,18 +4227,19 @@ func (c *IoTFleetWise) ListSignalCatalogsRequest(input *ListSignalCatalogsInput)
 // API operation ListSignalCatalogs for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListSignalCatalogs
 func (c *IoTFleetWise) ListSignalCatalogs(input *ListSignalCatalogsInput) (*ListSignalCatalogsOutput, error) {
@@ -4185,15 +4271,14 @@ func (c *IoTFleetWise) ListSignalCatalogsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSignalCatalogs operation.
-//    pageNum := 0
-//    err := client.ListSignalCatalogsPages(params,
-//        func(page *iotfleetwise.ListSignalCatalogsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSignalCatalogs operation.
+//	pageNum := 0
+//	err := client.ListSignalCatalogsPages(params,
+//	    func(page *iotfleetwise.ListSignalCatalogsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListSignalCatalogsPages(input *ListSignalCatalogsInput, fn func(*ListSignalCatalogsOutput, bool) bool) error {
 	return c.ListSignalCatalogsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4245,14 +4330,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListTagsForResource
 func (c *IoTFleetWise) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -4283,21 +4367,22 @@ func (c *IoTFleetWise) ListTagsForResourceRequest(input *ListTagsForResourceInpu
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListTagsForResource
 func (c *IoTFleetWise) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -4337,14 +4422,13 @@ const opListVehicles = "ListVehicles"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListVehiclesRequest method.
+//	req, resp := client.ListVehiclesRequest(params)
 //
-//    // Example sending a request using the ListVehiclesRequest method.
-//    req, resp := client.ListVehiclesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListVehicles
 func (c *IoTFleetWise) ListVehiclesRequest(input *ListVehiclesInput) (req *request.Request, output *ListVehiclesOutput) {
@@ -4384,18 +4468,19 @@ func (c *IoTFleetWise) ListVehiclesRequest(input *ListVehiclesInput) (req *reque
 // API operation ListVehicles for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListVehicles
 func (c *IoTFleetWise) ListVehicles(input *ListVehiclesInput) (*ListVehiclesOutput, error) {
@@ -4427,15 +4512,14 @@ func (c *IoTFleetWise) ListVehiclesWithContext(ctx aws.Context, input *ListVehic
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListVehicles operation.
-//    pageNum := 0
-//    err := client.ListVehiclesPages(params,
-//        func(page *iotfleetwise.ListVehiclesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListVehicles operation.
+//	pageNum := 0
+//	err := client.ListVehiclesPages(params,
+//	    func(page *iotfleetwise.ListVehiclesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListVehiclesPages(input *ListVehiclesInput, fn func(*ListVehiclesOutput, bool) bool) error {
 	return c.ListVehiclesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4487,14 +4571,13 @@ const opListVehiclesInFleet = "ListVehiclesInFleet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListVehiclesInFleetRequest method.
+//	req, resp := client.ListVehiclesInFleetRequest(params)
 //
-//    // Example sending a request using the ListVehiclesInFleetRequest method.
-//    req, resp := client.ListVehiclesInFleetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListVehiclesInFleet
 func (c *IoTFleetWise) ListVehiclesInFleetRequest(input *ListVehiclesInFleetInput) (req *request.Request, output *ListVehiclesInFleetOutput) {
@@ -4534,21 +4617,22 @@ func (c *IoTFleetWise) ListVehiclesInFleetRequest(input *ListVehiclesInFleetInpu
 // API operation ListVehiclesInFleet for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/ListVehiclesInFleet
 func (c *IoTFleetWise) ListVehiclesInFleet(input *ListVehiclesInFleetInput) (*ListVehiclesInFleetOutput, error) {
@@ -4580,15 +4664,14 @@ func (c *IoTFleetWise) ListVehiclesInFleetWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListVehiclesInFleet operation.
-//    pageNum := 0
-//    err := client.ListVehiclesInFleetPages(params,
-//        func(page *iotfleetwise.ListVehiclesInFleetOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListVehiclesInFleet operation.
+//	pageNum := 0
+//	err := client.ListVehiclesInFleetPages(params,
+//	    func(page *iotfleetwise.ListVehiclesInFleetOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *IoTFleetWise) ListVehiclesInFleetPages(input *ListVehiclesInFleetInput, fn func(*ListVehiclesInFleetOutput, bool) bool) error {
 	return c.ListVehiclesInFleetPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4624,6 +4707,106 @@ func (c *IoTFleetWise) ListVehiclesInFleetPagesWithContext(ctx aws.Context, inpu
 	return p.Err()
 }
 
+const opPutEncryptionConfiguration = "PutEncryptionConfiguration"
+
+// PutEncryptionConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the PutEncryptionConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutEncryptionConfiguration for more information on using the PutEncryptionConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the PutEncryptionConfigurationRequest method.
+//	req, resp := client.PutEncryptionConfigurationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/PutEncryptionConfiguration
+func (c *IoTFleetWise) PutEncryptionConfigurationRequest(input *PutEncryptionConfigurationInput) (req *request.Request, output *PutEncryptionConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opPutEncryptionConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutEncryptionConfigurationInput{}
+	}
+
+	output = &PutEncryptionConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutEncryptionConfiguration API operation for AWS IoT FleetWise.
+//
+// Creates or updates the encryption configuration. Amazon Web Services IoT
+// FleetWise can encrypt your data and resources using an Amazon Web Services
+// managed key. Or, you can use a KMS key that you own and manage. For more
+// information, see Data encryption (https://docs.aws.amazon.com/iot-fleetwise/latest/developerguide/data-encryption.html)
+// in the Amazon Web Services IoT FleetWise Developer Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT FleetWise's
+// API operation PutEncryptionConfiguration for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     The resource wasn't found.
+//
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
+//
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
+//
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
+//
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/PutEncryptionConfiguration
+func (c *IoTFleetWise) PutEncryptionConfiguration(input *PutEncryptionConfigurationInput) (*PutEncryptionConfigurationOutput, error) {
+	req, out := c.PutEncryptionConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// PutEncryptionConfigurationWithContext is the same as PutEncryptionConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutEncryptionConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTFleetWise) PutEncryptionConfigurationWithContext(ctx aws.Context, input *PutEncryptionConfigurationInput, opts ...request.Option) (*PutEncryptionConfigurationOutput, error) {
+	req, out := c.PutEncryptionConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opPutLoggingOptions = "PutLoggingOptions"
 
 // PutLoggingOptionsRequest generates a "aws/request.Request" representing the
@@ -4640,14 +4823,13 @@ const opPutLoggingOptions = "PutLoggingOptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutLoggingOptionsRequest method.
+//	req, resp := client.PutLoggingOptionsRequest(params)
 //
-//    // Example sending a request using the PutLoggingOptionsRequest method.
-//    req, resp := client.PutLoggingOptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/PutLoggingOptions
 func (c *IoTFleetWise) PutLoggingOptionsRequest(input *PutLoggingOptionsInput) (req *request.Request, output *PutLoggingOptionsOutput) {
@@ -4679,25 +4861,26 @@ func (c *IoTFleetWise) PutLoggingOptionsRequest(input *PutLoggingOptionsInput) (
 // API operation PutLoggingOptions for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/PutLoggingOptions
 func (c *IoTFleetWise) PutLoggingOptions(input *PutLoggingOptionsInput) (*PutLoggingOptionsOutput, error) {
@@ -4737,14 +4920,13 @@ const opRegisterAccount = "RegisterAccount"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RegisterAccountRequest method.
+//	req, resp := client.RegisterAccountRequest(params)
 //
-//    // Example sending a request using the RegisterAccountRequest method.
-//    req, resp := client.RegisterAccountRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/RegisterAccount
 func (c *IoTFleetWise) RegisterAccountRequest(input *RegisterAccountInput) (req *request.Request, output *RegisterAccountOutput) {
@@ -4765,13 +4947,31 @@ func (c *IoTFleetWise) RegisterAccountRequest(input *RegisterAccountInput) (req 
 
 // RegisterAccount API operation for AWS IoT FleetWise.
 //
+// This API operation contains deprecated parameters. Register your account
+// again without the Timestream resources parameter so that Amazon Web Services
+// IoT FleetWise can remove the Timestream metadata stored. You should then
+// pass the data destination into the CreateCampaign (https://docs.aws.amazon.com/iot-fleetwise/latest/APIReference/API_CreateCampaign.html)
+// API operation.
+//
+// You must delete any existing campaigns that include an empty data destination
+// before you register your account again. For more information, see the DeleteCampaign
+// (https://docs.aws.amazon.com/iot-fleetwise/latest/APIReference/API_DeleteCampaign.html)
+// API operation.
+//
+// If you want to delete the Timestream inline policy from the service-linked
+// role, such as to mitigate an overly permissive policy, you must first delete
+// any existing campaigns. Then delete the service-linked role and register
+// your account again to enable CloudWatch metrics. For more information, see
+// DeleteServiceLinkedRole (https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteServiceLinkedRole.html)
+// in the Identity and Access Management API Reference.
+//
 // Registers your Amazon Web Services account, IAM, and Amazon Timestream resources
 // so Amazon Web Services IoT FleetWise can transfer your vehicle data to the
 // Amazon Web Services Cloud. For more information, including step-by-step procedures,
 // see Setting up Amazon Web Services IoT FleetWise (https://docs.aws.amazon.com/iot-fleetwise/latest/developerguide/setting-up.html).
 //
-// An Amazon Web Services account is not the same thing as a "user account".
-// An Amazon Web Services user (https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_identity-management.html#intro-identity-users)
+// An Amazon Web Services account is not the same thing as a "user." An Amazon
+// Web Services user (https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_identity-management.html#intro-identity-users)
 // is an identity that you create using Identity and Access Management (IAM)
 // and takes the form of either an IAM user (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html)
 // or an IAM role, both with credentials (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html).
@@ -4786,25 +4986,26 @@ func (c *IoTFleetWise) RegisterAccountRequest(input *RegisterAccountInput) (req 
 // API operation RegisterAccount for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/RegisterAccount
 func (c *IoTFleetWise) RegisterAccount(input *RegisterAccountInput) (*RegisterAccountOutput, error) {
@@ -4844,14 +5045,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/TagResource
 func (c *IoTFleetWise) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -4884,21 +5084,22 @@ func (c *IoTFleetWise) TagResourceRequest(input *TagResourceInput) (req *request
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/TagResource
 func (c *IoTFleetWise) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -4938,14 +5139,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UntagResource
 func (c *IoTFleetWise) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -4977,21 +5177,22 @@ func (c *IoTFleetWise) UntagResourceRequest(input *UntagResourceInput) (req *req
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UntagResource
 func (c *IoTFleetWise) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -5031,14 +5232,13 @@ const opUpdateCampaign = "UpdateCampaign"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateCampaignRequest method.
+//	req, resp := client.UpdateCampaignRequest(params)
 //
-//    // Example sending a request using the UpdateCampaignRequest method.
-//    req, resp := client.UpdateCampaignRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateCampaign
 func (c *IoTFleetWise) UpdateCampaignRequest(input *UpdateCampaignInput) (req *request.Request, output *UpdateCampaignOutput) {
@@ -5069,25 +5269,26 @@ func (c *IoTFleetWise) UpdateCampaignRequest(input *UpdateCampaignInput) (req *r
 // API operation UpdateCampaign for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateCampaign
 func (c *IoTFleetWise) UpdateCampaign(input *UpdateCampaignInput) (*UpdateCampaignOutput, error) {
@@ -5127,14 +5328,13 @@ const opUpdateDecoderManifest = "UpdateDecoderManifest"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDecoderManifestRequest method.
+//	req, resp := client.UpdateDecoderManifestRequest(params)
 //
-//    // Example sending a request using the UpdateDecoderManifestRequest method.
-//    req, resp := client.UpdateDecoderManifestRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateDecoderManifest
 func (c *IoTFleetWise) UpdateDecoderManifestRequest(input *UpdateDecoderManifestInput) (req *request.Request, output *UpdateDecoderManifestOutput) {
@@ -5168,32 +5368,33 @@ func (c *IoTFleetWise) UpdateDecoderManifestRequest(input *UpdateDecoderManifest
 // API operation UpdateDecoderManifest for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * DecoderManifestValidationException
-//   The request couldn't be completed because it contains signal decoders with
-//   one or more validation errors.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - DecoderManifestValidationException
+//     The request couldn't be completed because it contains signal decoders with
+//     one or more validation errors.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateDecoderManifest
 func (c *IoTFleetWise) UpdateDecoderManifest(input *UpdateDecoderManifestInput) (*UpdateDecoderManifestOutput, error) {
@@ -5233,14 +5434,13 @@ const opUpdateFleet = "UpdateFleet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFleetRequest method.
+//	req, resp := client.UpdateFleetRequest(params)
 //
-//    // Example sending a request using the UpdateFleetRequest method.
-//    req, resp := client.UpdateFleetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateFleet
 func (c *IoTFleetWise) UpdateFleetRequest(input *UpdateFleetInput) (req *request.Request, output *UpdateFleetOutput) {
@@ -5274,25 +5474,26 @@ func (c *IoTFleetWise) UpdateFleetRequest(input *UpdateFleetInput) (req *request
 // API operation UpdateFleet for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateFleet
 func (c *IoTFleetWise) UpdateFleet(input *UpdateFleetInput) (*UpdateFleetOutput, error) {
@@ -5332,14 +5533,13 @@ const opUpdateModelManifest = "UpdateModelManifest"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateModelManifestRequest method.
+//	req, resp := client.UpdateModelManifestRequest(params)
 //
-//    // Example sending a request using the UpdateModelManifestRequest method.
-//    req, resp := client.UpdateModelManifestRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateModelManifest
 func (c *IoTFleetWise) UpdateModelManifestRequest(input *UpdateModelManifestInput) (req *request.Request, output *UpdateModelManifestOutput) {
@@ -5371,29 +5571,30 @@ func (c *IoTFleetWise) UpdateModelManifestRequest(input *UpdateModelManifestInpu
 // API operation UpdateModelManifest for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * InvalidSignalsException
-//   The request couldn't be completed because it contains signals that aren't
-//   valid.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InvalidSignalsException
+//     The request couldn't be completed because it contains signals that aren't
+//     valid.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateModelManifest
 func (c *IoTFleetWise) UpdateModelManifest(input *UpdateModelManifestInput) (*UpdateModelManifestOutput, error) {
@@ -5433,14 +5634,13 @@ const opUpdateSignalCatalog = "UpdateSignalCatalog"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSignalCatalogRequest method.
+//	req, resp := client.UpdateSignalCatalogRequest(params)
 //
-//    // Example sending a request using the UpdateSignalCatalogRequest method.
-//    req, resp := client.UpdateSignalCatalogRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateSignalCatalog
 func (c *IoTFleetWise) UpdateSignalCatalogRequest(input *UpdateSignalCatalogInput) (req *request.Request, output *UpdateSignalCatalogOutput) {
@@ -5471,36 +5671,37 @@ func (c *IoTFleetWise) UpdateSignalCatalogRequest(input *UpdateSignalCatalogInpu
 // API operation UpdateSignalCatalog for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource wasn't found.
 //
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * LimitExceededException
-//   A service quota was exceeded.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * InvalidNodeException
-//   The specified node type doesn't match the expected node type for a node.
-//   You can specify the node type as branch, sensor, actuator, or attribute.
+//   - LimitExceededException
+//     A service quota was exceeded.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - InvalidNodeException
+//     The specified node type doesn't match the expected node type for a node.
+//     You can specify the node type as branch, sensor, actuator, or attribute.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * InvalidSignalsException
-//   The request couldn't be completed because it contains signals that aren't
-//   valid.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - InvalidSignalsException
+//     The request couldn't be completed because it contains signals that aren't
+//     valid.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateSignalCatalog
 func (c *IoTFleetWise) UpdateSignalCatalog(input *UpdateSignalCatalogInput) (*UpdateSignalCatalogOutput, error) {
@@ -5540,14 +5741,13 @@ const opUpdateVehicle = "UpdateVehicle"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateVehicleRequest method.
+//	req, resp := client.UpdateVehicleRequest(params)
 //
-//    // Example sending a request using the UpdateVehicleRequest method.
-//    req, resp := client.UpdateVehicleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateVehicle
 func (c *IoTFleetWise) UpdateVehicleRequest(input *UpdateVehicleInput) (req *request.Request, output *UpdateVehicleOutput) {
@@ -5578,25 +5778,26 @@ func (c *IoTFleetWise) UpdateVehicleRequest(input *UpdateVehicleInput) (req *req
 // API operation UpdateVehicle for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   The request couldn't be completed because the server temporarily failed.
 //
-//   * ResourceNotFoundException
-//   The resource wasn't found.
+//   - InternalServerException
+//     The request couldn't be completed because the server temporarily failed.
 //
-//   * ConflictException
-//   The request has conflicting operations. This can occur if you're trying to
-//   perform more than one operation on the same resource at the same time.
+//   - ResourceNotFoundException
+//     The resource wasn't found.
 //
-//   * ThrottlingException
-//   The request couldn't be completed due to throttling.
+//   - ConflictException
+//     The request has conflicting operations. This can occur if you're trying to
+//     perform more than one operation on the same resource at the same time.
 //
-//   * ValidationException
-//   The input fails to satisfy the constraints specified by an Amazon Web Services
-//   service.
+//   - ThrottlingException
+//     The request couldn't be completed due to throttling.
 //
-//   * AccessDeniedException
-//   You don't have sufficient permission to perform this action.
+//   - ValidationException
+//     The input fails to satisfy the constraints specified by an Amazon Web Services
+//     service.
+//
+//   - AccessDeniedException
+//     You don't have sufficient permission to perform this action.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotfleetwise-2021-06-17/UpdateVehicle
 func (c *IoTFleetWise) UpdateVehicle(input *UpdateVehicleInput) (*UpdateVehicleOutput, error) {
@@ -5701,10 +5902,16 @@ type Actuator struct {
 	// Deprecated: assignedValue is no longer in use
 	AssignedValue *string `locationName:"assignedValue" deprecated:"true" type:"string"`
 
+	// A comment in addition to the description.
+	Comment *string `locationName:"comment" min:"1" type:"string"`
+
 	// The specified data type of the actuator.
 	//
 	// DataType is a required field
 	DataType *string `locationName:"dataType" type:"string" required:"true" enum:"NodeDataType"`
+
+	// The deprecation message for the node or the branch that was moved or deleted.
+	DeprecationMessage *string `locationName:"deprecationMessage" min:"1" type:"string"`
 
 	// A brief description of the actuator.
 	Description *string `locationName:"description" min:"1" type:"string"`
@@ -5720,6 +5927,11 @@ type Actuator struct {
 
 	// The specified possible minimum value of an actuator.
 	Min *float64 `locationName:"min" type:"double"`
+
+	// The fully qualified name of the struct node for the actuator if the data
+	// type of the actuator is Struct or StructArray. For example, the struct fully
+	// qualified name of an actuator might be Vehicle.Door.LockStruct.
+	StructFullyQualifiedName *string `locationName:"structFullyQualifiedName" min:"1" type:"string"`
 
 	// The scientific unit for the actuator.
 	Unit *string `locationName:"unit" type:"string"`
@@ -5746,14 +5958,23 @@ func (s Actuator) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Actuator) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Actuator"}
+	if s.Comment != nil && len(*s.Comment) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Comment", 1))
+	}
 	if s.DataType == nil {
 		invalidParams.Add(request.NewErrParamRequired("DataType"))
+	}
+	if s.DeprecationMessage != nil && len(*s.DeprecationMessage) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeprecationMessage", 1))
 	}
 	if s.Description != nil && len(*s.Description) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
 	}
 	if s.FullyQualifiedName == nil {
 		invalidParams.Add(request.NewErrParamRequired("FullyQualifiedName"))
+	}
+	if s.StructFullyQualifiedName != nil && len(*s.StructFullyQualifiedName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StructFullyQualifiedName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5774,9 +5995,21 @@ func (s *Actuator) SetAssignedValue(v string) *Actuator {
 	return s
 }
 
+// SetComment sets the Comment field's value.
+func (s *Actuator) SetComment(v string) *Actuator {
+	s.Comment = &v
+	return s
+}
+
 // SetDataType sets the DataType field's value.
 func (s *Actuator) SetDataType(v string) *Actuator {
 	s.DataType = &v
+	return s
+}
+
+// SetDeprecationMessage sets the DeprecationMessage field's value.
+func (s *Actuator) SetDeprecationMessage(v string) *Actuator {
+	s.DeprecationMessage = &v
 	return s
 }
 
@@ -5801,6 +6034,12 @@ func (s *Actuator) SetMax(v float64) *Actuator {
 // SetMin sets the Min field's value.
 func (s *Actuator) SetMin(v float64) *Actuator {
 	s.Min = &v
+	return s
+}
+
+// SetStructFullyQualifiedName sets the StructFullyQualifiedName field's value.
+func (s *Actuator) SetStructFullyQualifiedName(v string) *Actuator {
+	s.StructFullyQualifiedName = &v
 	return s
 }
 
@@ -5911,6 +6150,9 @@ type Attribute struct {
 	// Deprecated: assignedValue is no longer in use
 	AssignedValue *string `locationName:"assignedValue" deprecated:"true" type:"string"`
 
+	// A comment in addition to the description.
+	Comment *string `locationName:"comment" min:"1" type:"string"`
+
 	// The specified data type of the attribute.
 	//
 	// DataType is a required field
@@ -5918,6 +6160,9 @@ type Attribute struct {
 
 	// The default value of the attribute.
 	DefaultValue *string `locationName:"defaultValue" type:"string"`
+
+	// The deprecation message for the node or the branch that was moved or deleted.
+	DeprecationMessage *string `locationName:"deprecationMessage" min:"1" type:"string"`
 
 	// A brief description of the attribute.
 	Description *string `locationName:"description" min:"1" type:"string"`
@@ -5959,8 +6204,14 @@ func (s Attribute) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Attribute) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Attribute"}
+	if s.Comment != nil && len(*s.Comment) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Comment", 1))
+	}
 	if s.DataType == nil {
 		invalidParams.Add(request.NewErrParamRequired("DataType"))
+	}
+	if s.DeprecationMessage != nil && len(*s.DeprecationMessage) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeprecationMessage", 1))
 	}
 	if s.Description != nil && len(*s.Description) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
@@ -5987,6 +6238,12 @@ func (s *Attribute) SetAssignedValue(v string) *Attribute {
 	return s
 }
 
+// SetComment sets the Comment field's value.
+func (s *Attribute) SetComment(v string) *Attribute {
+	s.Comment = &v
+	return s
+}
+
 // SetDataType sets the DataType field's value.
 func (s *Attribute) SetDataType(v string) *Attribute {
 	s.DataType = &v
@@ -5996,6 +6253,12 @@ func (s *Attribute) SetDataType(v string) *Attribute {
 // SetDefaultValue sets the DefaultValue field's value.
 func (s *Attribute) SetDefaultValue(v string) *Attribute {
 	s.DefaultValue = &v
+	return s
+}
+
+// SetDeprecationMessage sets the DeprecationMessage field's value.
+func (s *Attribute) SetDeprecationMessage(v string) *Attribute {
+	s.DeprecationMessage = &v
 	return s
 }
 
@@ -6238,6 +6501,12 @@ func (s *BatchUpdateVehicleOutput) SetVehicles(v []*UpdateVehicleResponseItem) *
 type Branch struct {
 	_ struct{} `type:"structure"`
 
+	// A comment in addition to the description.
+	Comment *string `locationName:"comment" min:"1" type:"string"`
+
+	// The deprecation message for the node or the branch that was moved or deleted.
+	DeprecationMessage *string `locationName:"deprecationMessage" min:"1" type:"string"`
+
 	// A brief description of the branch.
 	Description *string `locationName:"description" min:"1" type:"string"`
 
@@ -6269,6 +6538,12 @@ func (s Branch) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Branch) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Branch"}
+	if s.Comment != nil && len(*s.Comment) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Comment", 1))
+	}
+	if s.DeprecationMessage != nil && len(*s.DeprecationMessage) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeprecationMessage", 1))
+	}
 	if s.Description != nil && len(*s.Description) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
 	}
@@ -6280,6 +6555,18 @@ func (s *Branch) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetComment sets the Comment field's value.
+func (s *Branch) SetComment(v string) *Branch {
+	s.Comment = &v
+	return s
+}
+
+// SetDeprecationMessage sets the DeprecationMessage field's value.
+func (s *Branch) SetDeprecationMessage(v string) *Branch {
+	s.DeprecationMessage = &v
+	return s
 }
 
 // SetDescription sets the Description field's value.
@@ -6413,7 +6700,8 @@ type CanDbcDefinition struct {
 	_ struct{} `type:"structure"`
 
 	// A list of DBC files. You can upload only one DBC file for each network interface
-	// and specify up to five (inclusive) files in the list.
+	// and specify up to five (inclusive) files in the list. The DBC file can be
+	// a maximum size of 200 MB.
 	//
 	// CanDbcFiles is a required field
 	CanDbcFiles [][]byte `locationName:"canDbcFiles" min:"1" type:"list" required:"true"`
@@ -6592,12 +6880,19 @@ type CanSignal struct {
 	// The name of the signal.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
-	// Indicates where data appears in the CAN message.
+	// The offset used to calculate the signal value. Combined with factor, the
+	// calculation is value = raw_value * factor + offset.
 	//
 	// Offset is a required field
 	Offset *float64 `locationName:"offset" type:"double" required:"true"`
 
-	// Indicates the beginning of the CAN message.
+	// Indicates the beginning of the CAN signal. This should always be the least
+	// significant bit (LSB).
+	//
+	// This value might be different from the value in a DBC file. For little endian
+	// signals, startBit is the same value as in the DBC file. For big endian signals
+	// in a DBC file, the start bit is the most significant bit (MSB). You will
+	// have to calculate the LSB instead and pass it as the startBit.
 	//
 	// StartBit is a required field
 	StartBit *int64 `locationName:"startBit" type:"integer" required:"true"`
@@ -6834,7 +7129,7 @@ type ConditionBasedCollectionScheme struct {
 	ConditionLanguageVersion *int64 `locationName:"conditionLanguageVersion" min:"1" type:"integer"`
 
 	// The logical expression used to recognize what data to collect. For example,
-	// $variable.Vehicle.OutsideAirTemperature >= 105.0.
+	// $variable.`Vehicle.OutsideAirTemperature` >= 105.0.
 	//
 	// Expression is a required field
 	Expression *string `locationName:"expression" min:"1" type:"string" required:"true"`
@@ -7005,6 +7300,19 @@ type CreateCampaignInput struct {
 	// Default: SNAPPY
 	Compression *string `locationName:"compression" type:"string" enum:"Compression"`
 
+	// The destination where the campaign sends data. You can choose to send data
+	// to be stored in Amazon S3 or Amazon Timestream.
+	//
+	// Amazon S3 optimizes the cost of data storage and provides additional mechanisms
+	// to use vehicle data, such as data lakes, centralized data storage, data processing
+	// pipelines, and analytics. Amazon Web Services IoT FleetWise supports at-least-once
+	// file delivery to S3. Your vehicle data is stored on multiple Amazon Web Services
+	// IoT FleetWise servers for redundancy and high availability.
+	//
+	// You can use Amazon Timestream to access and analyze time series data, and
+	// Timestream to query vehicle data so that you can identify trends and patterns.
+	DataDestinationConfigs []*DataDestinationConfig `locationName:"dataDestinationConfigs" min:"1" type:"list"`
+
 	// (Optional) A list of vehicle attributes to associate with a campaign.
 	//
 	// Enrich the data with specified vehicle attributes. For example, add make
@@ -7026,8 +7334,8 @@ type CreateCampaignInput struct {
 	DiagnosticsMode *string `locationName:"diagnosticsMode" type:"string" enum:"DiagnosticsMode"`
 
 	// (Optional) The time the campaign expires, in seconds since epoch (January
-	// 1, 1970 at midnight UTC time). Vehicle data won't be collected after the
-	// campaign expires.
+	// 1, 1970 at midnight UTC time). Vehicle data isn't collected after the campaign
+	// expires.
 	//
 	// Default: 253402214400 (December 31, 9999, 00:00:00 UTC)
 	ExpiryTime *time.Time `locationName:"expiryTime" type:"timestamp"`
@@ -7108,6 +7416,9 @@ func (s *CreateCampaignInput) Validate() error {
 	if s.CollectionScheme == nil {
 		invalidParams.Add(request.NewErrParamRequired("CollectionScheme"))
 	}
+	if s.DataDestinationConfigs != nil && len(s.DataDestinationConfigs) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataDestinationConfigs", 1))
+	}
 	if s.Description != nil && len(*s.Description) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
 	}
@@ -7126,6 +7437,16 @@ func (s *CreateCampaignInput) Validate() error {
 	if s.CollectionScheme != nil {
 		if err := s.CollectionScheme.Validate(); err != nil {
 			invalidParams.AddNested("CollectionScheme", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DataDestinationConfigs != nil {
+		for i, v := range s.DataDestinationConfigs {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DataDestinationConfigs", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 	if s.SignalsToCollect != nil {
@@ -7164,6 +7485,12 @@ func (s *CreateCampaignInput) SetCollectionScheme(v *CollectionScheme) *CreateCa
 // SetCompression sets the Compression field's value.
 func (s *CreateCampaignInput) SetCompression(v string) *CreateCampaignInput {
 	s.Compression = &v
+	return s
+}
+
+// SetDataDestinationConfigs sets the DataDestinationConfigs field's value.
+func (s *CreateCampaignInput) SetDataDestinationConfigs(v []*DataDestinationConfig) *CreateCampaignInput {
+	s.DataDestinationConfigs = v
 	return s
 }
 
@@ -7962,6 +8289,9 @@ type CreateVehicleInput struct {
 
 	// Static information about a vehicle in a key-value pair. For example: "engineType"
 	// : "1.3 L R2"
+	//
+	// A campaign must include the keys (attribute names) in dataExtraDimensions
+	// for them to display in Amazon Timestream.
 	Attributes map[string]*string `locationName:"attributes" type:"map"`
 
 	// The ARN of a decoder manifest.
@@ -8286,6 +8616,274 @@ func (s *CreateVehicleResponseItem) SetVehicleName(v string) *CreateVehicleRespo
 	return s
 }
 
+// Represents a member of the complex data structure. The data type of the property
+// can be either primitive or another struct.
+type CustomProperty struct {
+	_ struct{} `type:"structure"`
+
+	// A comment in addition to the description.
+	Comment *string `locationName:"comment" min:"1" type:"string"`
+
+	// Indicates whether the property is binary data.
+	DataEncoding *string `locationName:"dataEncoding" type:"string" enum:"NodeDataEncoding"`
+
+	// The data type for the custom property.
+	//
+	// DataType is a required field
+	DataType *string `locationName:"dataType" type:"string" required:"true" enum:"NodeDataType"`
+
+	// The deprecation message for the node or the branch that was moved or deleted.
+	DeprecationMessage *string `locationName:"deprecationMessage" min:"1" type:"string"`
+
+	// A brief description of the custom property.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The fully qualified name of the custom property. For example, the fully qualified
+	// name of a custom property might be ComplexDataTypes.VehicleDataTypes.SVMCamera.FPS.
+	//
+	// FullyQualifiedName is a required field
+	FullyQualifiedName *string `locationName:"fullyQualifiedName" type:"string" required:"true"`
+
+	// The fully qualified name of the struct node for the custom property if the
+	// data type of the custom property is Struct or StructArray.
+	StructFullyQualifiedName *string `locationName:"structFullyQualifiedName" min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomProperty) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomProperty) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomProperty) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomProperty"}
+	if s.Comment != nil && len(*s.Comment) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Comment", 1))
+	}
+	if s.DataType == nil {
+		invalidParams.Add(request.NewErrParamRequired("DataType"))
+	}
+	if s.DeprecationMessage != nil && len(*s.DeprecationMessage) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeprecationMessage", 1))
+	}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.FullyQualifiedName == nil {
+		invalidParams.Add(request.NewErrParamRequired("FullyQualifiedName"))
+	}
+	if s.StructFullyQualifiedName != nil && len(*s.StructFullyQualifiedName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StructFullyQualifiedName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetComment sets the Comment field's value.
+func (s *CustomProperty) SetComment(v string) *CustomProperty {
+	s.Comment = &v
+	return s
+}
+
+// SetDataEncoding sets the DataEncoding field's value.
+func (s *CustomProperty) SetDataEncoding(v string) *CustomProperty {
+	s.DataEncoding = &v
+	return s
+}
+
+// SetDataType sets the DataType field's value.
+func (s *CustomProperty) SetDataType(v string) *CustomProperty {
+	s.DataType = &v
+	return s
+}
+
+// SetDeprecationMessage sets the DeprecationMessage field's value.
+func (s *CustomProperty) SetDeprecationMessage(v string) *CustomProperty {
+	s.DeprecationMessage = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CustomProperty) SetDescription(v string) *CustomProperty {
+	s.Description = &v
+	return s
+}
+
+// SetFullyQualifiedName sets the FullyQualifiedName field's value.
+func (s *CustomProperty) SetFullyQualifiedName(v string) *CustomProperty {
+	s.FullyQualifiedName = &v
+	return s
+}
+
+// SetStructFullyQualifiedName sets the StructFullyQualifiedName field's value.
+func (s *CustomProperty) SetStructFullyQualifiedName(v string) *CustomProperty {
+	s.StructFullyQualifiedName = &v
+	return s
+}
+
+// The custom structure represents a complex or higher-order data structure.
+type CustomStruct struct {
+	_ struct{} `type:"structure"`
+
+	// A comment in addition to the description.
+	Comment *string `locationName:"comment" min:"1" type:"string"`
+
+	// The deprecation message for the node or the branch that was moved or deleted.
+	DeprecationMessage *string `locationName:"deprecationMessage" min:"1" type:"string"`
+
+	// A brief description of the custom structure.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The fully qualified name of the custom structure. For example, the fully
+	// qualified name of a custom structure might be ComplexDataTypes.VehicleDataTypes.SVMCamera.
+	//
+	// FullyQualifiedName is a required field
+	FullyQualifiedName *string `locationName:"fullyQualifiedName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomStruct) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CustomStruct) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomStruct) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomStruct"}
+	if s.Comment != nil && len(*s.Comment) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Comment", 1))
+	}
+	if s.DeprecationMessage != nil && len(*s.DeprecationMessage) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeprecationMessage", 1))
+	}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.FullyQualifiedName == nil {
+		invalidParams.Add(request.NewErrParamRequired("FullyQualifiedName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetComment sets the Comment field's value.
+func (s *CustomStruct) SetComment(v string) *CustomStruct {
+	s.Comment = &v
+	return s
+}
+
+// SetDeprecationMessage sets the DeprecationMessage field's value.
+func (s *CustomStruct) SetDeprecationMessage(v string) *CustomStruct {
+	s.DeprecationMessage = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CustomStruct) SetDescription(v string) *CustomStruct {
+	s.Description = &v
+	return s
+}
+
+// SetFullyQualifiedName sets the FullyQualifiedName field's value.
+func (s *CustomStruct) SetFullyQualifiedName(v string) *CustomStruct {
+	s.FullyQualifiedName = &v
+	return s
+}
+
+// The destination where the Amazon Web Services IoT FleetWise campaign sends
+// data. You can send data to be stored in Amazon S3 or Amazon Timestream.
+type DataDestinationConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon S3 bucket where the Amazon Web Services IoT FleetWise campaign
+	// sends data.
+	S3Config *S3Config `locationName:"s3Config" type:"structure"`
+
+	// The Amazon Timestream table where the campaign sends data.
+	TimestreamConfig *TimestreamConfig `locationName:"timestreamConfig" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataDestinationConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataDestinationConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DataDestinationConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DataDestinationConfig"}
+	if s.S3Config != nil {
+		if err := s.S3Config.Validate(); err != nil {
+			invalidParams.AddNested("S3Config", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.TimestreamConfig != nil {
+		if err := s.TimestreamConfig.Validate(); err != nil {
+			invalidParams.AddNested("TimestreamConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3Config sets the S3Config field's value.
+func (s *DataDestinationConfig) SetS3Config(v *S3Config) *DataDestinationConfig {
+	s.S3Config = v
+	return s
+}
+
+// SetTimestreamConfig sets the TimestreamConfig field's value.
+func (s *DataDestinationConfig) SetTimestreamConfig(v *TimestreamConfig) *DataDestinationConfig {
+	s.TimestreamConfig = v
+	return s
+}
+
 // Information about a created decoder manifest. You can use the API operation
 // to return this information about multiple decoder manifests.
 type DecoderManifestSummary struct {
@@ -8308,6 +8906,10 @@ type DecoderManifestSummary struct {
 	//
 	// LastModificationTime is a required field
 	LastModificationTime *time.Time `locationName:"lastModificationTime" type:"timestamp" required:"true"`
+
+	// The detailed message for the decoder manifest. When a decoder manifest is
+	// in an INVALID status, the message contains detailed reason and help information.
+	Message *string `locationName:"message" min:"1" type:"string"`
 
 	// The ARN of a vehicle model (model manifest) associated with the decoder manifest.
 	ModelManifestArn *string `locationName:"modelManifestArn" type:"string"`
@@ -8360,6 +8962,12 @@ func (s *DecoderManifestSummary) SetDescription(v string) *DecoderManifestSummar
 // SetLastModificationTime sets the LastModificationTime field's value.
 func (s *DecoderManifestSummary) SetLastModificationTime(v time.Time) *DecoderManifestSummary {
 	s.LastModificationTime = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *DecoderManifestSummary) SetMessage(v string) *DecoderManifestSummary {
+	s.Message = &v
 	return s
 }
 
@@ -9182,9 +9790,9 @@ func (s *FleetSummary) SetSignalCatalogArn(v string) *FleetSummary {
 	return s
 }
 
-// Vehicle Signal Specification (VSS) is a precise language used to describe
-// and model signals in vehicle networks. The JSON file collects signal specificiations
-// in a VSS format.
+// Vehicle Signal Specification (VSS) (https://www.w3.org/auto/wg/wiki/Vehicle_Signal_Specification_(VSS)/Vehicle_Data_Spec)
+// is a precise language used to describe and model signals in vehicle networks.
+// The JSON file collects signal specificiations in a VSS format.
 type FormattedVss struct {
 	_ struct{} `type:"structure"`
 
@@ -9283,6 +9891,17 @@ type GetCampaignOutput struct {
 	// at midnight UTC time).
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp"`
 
+	// The destination where the campaign sends data. You can choose to send data
+	// to be stored in Amazon S3 or Amazon Timestream.
+	//
+	// Amazon S3 optimizes the cost of data storage and provides additional mechanisms
+	// to use vehicle data, such as data lakes, centralized data storage, data processing
+	// pipelines, and analytics.
+	//
+	// You can use Amazon Timestream to access and analyze time series data, and
+	// Timestream to query vehicle data so that you can identify trends and patterns.
+	DataDestinationConfigs []*DataDestinationConfig `locationName:"dataDestinationConfigs" min:"1" type:"list"`
+
 	// A list of vehicle attributes associated with the campaign.
 	DataExtraDimensions []*string `locationName:"dataExtraDimensions" type:"list"`
 
@@ -9373,6 +9992,12 @@ func (s *GetCampaignOutput) SetCompression(v string) *GetCampaignOutput {
 // SetCreationTime sets the CreationTime field's value.
 func (s *GetCampaignOutput) SetCreationTime(v time.Time) *GetCampaignOutput {
 	s.CreationTime = &v
+	return s
+}
+
+// SetDataDestinationConfigs sets the DataDestinationConfigs field's value.
+func (s *GetCampaignOutput) SetDataDestinationConfigs(v []*DataDestinationConfig) *GetCampaignOutput {
+	s.DataDestinationConfigs = v
 	return s
 }
 
@@ -9532,6 +10157,10 @@ type GetDecoderManifestOutput struct {
 	// LastModificationTime is a required field
 	LastModificationTime *time.Time `locationName:"lastModificationTime" type:"timestamp" required:"true"`
 
+	// The detailed message for the decoder manifest. When a decoder manifest is
+	// in an INVALID status, the message contains detailed reason and help information.
+	Message *string `locationName:"message" min:"1" type:"string"`
+
 	// The ARN of a vehicle model (model manifest) associated with the decoder manifest.
 	ModelManifestArn *string `locationName:"modelManifestArn" type:"string"`
 
@@ -9588,6 +10217,12 @@ func (s *GetDecoderManifestOutput) SetLastModificationTime(v time.Time) *GetDeco
 	return s
 }
 
+// SetMessage sets the Message field's value.
+func (s *GetDecoderManifestOutput) SetMessage(v string) *GetDecoderManifestOutput {
+	s.Message = &v
+	return s
+}
+
 // SetModelManifestArn sets the ModelManifestArn field's value.
 func (s *GetDecoderManifestOutput) SetModelManifestArn(v string) *GetDecoderManifestOutput {
 	s.ModelManifestArn = &v
@@ -9603,6 +10238,114 @@ func (s *GetDecoderManifestOutput) SetName(v string) *GetDecoderManifestOutput {
 // SetStatus sets the Status field's value.
 func (s *GetDecoderManifestOutput) SetStatus(v string) *GetDecoderManifestOutput {
 	s.Status = &v
+	return s
+}
+
+type GetEncryptionConfigurationInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEncryptionConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEncryptionConfigurationInput) GoString() string {
+	return s.String()
+}
+
+type GetEncryptionConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The time when encryption was configured in seconds since epoch (January 1,
+	// 1970 at midnight UTC time).
+	CreationTime *time.Time `locationName:"creationTime" type:"timestamp"`
+
+	// The encryption status.
+	//
+	// EncryptionStatus is a required field
+	EncryptionStatus *string `locationName:"encryptionStatus" type:"string" required:"true" enum:"EncryptionStatus"`
+
+	// The type of encryption. Set to KMS_BASED_ENCRYPTION to use a KMS key that
+	// you own and manage. Set to FLEETWISE_DEFAULT_ENCRYPTION to use an Amazon
+	// Web Services managed key that is owned by the Amazon Web Services IoT FleetWise
+	// service account.
+	//
+	// EncryptionType is a required field
+	EncryptionType *string `locationName:"encryptionType" type:"string" required:"true" enum:"EncryptionType"`
+
+	// The error message that describes why encryption settings couldn't be configured,
+	// if applicable.
+	ErrorMessage *string `locationName:"errorMessage" type:"string"`
+
+	// The ID of the KMS key that is used for encryption.
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+
+	// The time when encryption was last updated in seconds since epoch (January
+	// 1, 1970 at midnight UTC time).
+	LastModificationTime *time.Time `locationName:"lastModificationTime" type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEncryptionConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetEncryptionConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *GetEncryptionConfigurationOutput) SetCreationTime(v time.Time) *GetEncryptionConfigurationOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetEncryptionStatus sets the EncryptionStatus field's value.
+func (s *GetEncryptionConfigurationOutput) SetEncryptionStatus(v string) *GetEncryptionConfigurationOutput {
+	s.EncryptionStatus = &v
+	return s
+}
+
+// SetEncryptionType sets the EncryptionType field's value.
+func (s *GetEncryptionConfigurationOutput) SetEncryptionType(v string) *GetEncryptionConfigurationOutput {
+	s.EncryptionType = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *GetEncryptionConfigurationOutput) SetErrorMessage(v string) *GetEncryptionConfigurationOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *GetEncryptionConfigurationOutput) SetKmsKeyId(v string) *GetEncryptionConfigurationOutput {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetLastModificationTime sets the LastModificationTime field's value.
+func (s *GetEncryptionConfigurationOutput) SetLastModificationTime(v time.Time) *GetEncryptionConfigurationOutput {
+	s.LastModificationTime = &v
 	return s
 }
 
@@ -10007,9 +10750,7 @@ type GetRegisterAccountStatusOutput struct {
 
 	// Information about the registered Amazon Timestream resources or errors, if
 	// any.
-	//
-	// TimestreamRegistrationResponse is a required field
-	TimestreamRegistrationResponse *TimestreamRegistrationResponse `locationName:"timestreamRegistrationResponse" type:"structure" required:"true"`
+	TimestreamRegistrationResponse *TimestreamRegistrationResponse `locationName:"timestreamRegistrationResponse" type:"structure"`
 }
 
 // String returns the string representation.
@@ -11045,6 +11786,9 @@ func (s *InvalidSignal) SetReason(v string) *InvalidSignal {
 type InvalidSignalDecoder struct {
 	_ struct{} `type:"structure"`
 
+	// The possible cause for the invalid signal decoder.
+	Hint *string `locationName:"hint" min:"1" type:"string"`
+
 	// The name of a signal decoder that isn't valid.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
@@ -11068,6 +11812,12 @@ func (s InvalidSignalDecoder) String() string {
 // value will be replaced with "sensitive".
 func (s InvalidSignalDecoder) GoString() string {
 	return s.String()
+}
+
+// SetHint sets the Hint field's value.
+func (s *InvalidSignalDecoder) SetHint(v string) *InvalidSignalDecoder {
+	s.Hint = &v
+	return s
 }
 
 // SetName sets the Name field's value.
@@ -12166,6 +12916,9 @@ type ListSignalCatalogNodesInput struct {
 	// token. When all results have been returned, the response does not contain
 	// a pagination token value.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// The type of node in the signal catalog.
+	SignalNodeType *string `locationName:"signalNodeType" type:"string" enum:"SignalNodeType"`
 }
 
 // String returns the string representation.
@@ -12223,6 +12976,12 @@ func (s *ListSignalCatalogNodesInput) SetName(v string) *ListSignalCatalogNodesI
 // SetNextToken sets the NextToken field's value.
 func (s *ListSignalCatalogNodesInput) SetNextToken(v string) *ListSignalCatalogNodesInput {
 	s.NextToken = &v
+	return s
+}
+
+// SetSignalNodeType sets the SignalNodeType field's value.
+func (s *ListSignalCatalogNodesInput) SetSignalNodeType(v string) *ListSignalCatalogNodesInput {
+	s.SignalNodeType = &v
 	return s
 }
 
@@ -12684,6 +13443,78 @@ func (s *ListVehiclesOutput) SetVehicleSummaries(v []*VehicleSummary) *ListVehic
 	return s
 }
 
+// The decoding information for a specific message which support higher order
+// data types.
+type MessageSignal struct {
+	_ struct{} `type:"structure"`
+
+	// The structured message for the message signal. It can be defined with either
+	// a primitiveMessageDefinition, structuredMessageListDefinition, or structuredMessageDefinition
+	// recursively.
+	//
+	// StructuredMessage is a required field
+	StructuredMessage *StructuredMessage `locationName:"structuredMessage" type:"structure" required:"true"`
+
+	// The topic name for the message signal. It corresponds to topics in ROS 2.
+	//
+	// TopicName is a required field
+	TopicName *string `locationName:"topicName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MessageSignal) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MessageSignal) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MessageSignal) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MessageSignal"}
+	if s.StructuredMessage == nil {
+		invalidParams.Add(request.NewErrParamRequired("StructuredMessage"))
+	}
+	if s.TopicName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TopicName"))
+	}
+	if s.TopicName != nil && len(*s.TopicName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TopicName", 1))
+	}
+	if s.StructuredMessage != nil {
+		if err := s.StructuredMessage.Validate(); err != nil {
+			invalidParams.AddNested("StructuredMessage", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetStructuredMessage sets the StructuredMessage field's value.
+func (s *MessageSignal) SetStructuredMessage(v *StructuredMessage) *MessageSignal {
+	s.StructuredMessage = v
+	return s
+}
+
+// SetTopicName sets the TopicName field's value.
+func (s *MessageSignal) SetTopicName(v string) *MessageSignal {
+	s.TopicName = &v
+	return s
+}
+
 // Information about a vehicle model (model manifest). You can use the API operation
 // to return this information about multiple vehicle models.
 type ModelManifestSummary struct {
@@ -12854,6 +13685,10 @@ type NetworkInterface struct {
 	//
 	// Type is a required field
 	Type *string `locationName:"type" type:"string" required:"true" enum:"NetworkInterfaceType"`
+
+	// The vehicle middleware defined as a type of network interface. Examples of
+	// vehicle middleware include ROS2 and SOME/IP.
+	VehicleMiddleware *VehicleMiddleware `locationName:"vehicleMiddleware" type:"structure"`
 }
 
 // String returns the string representation.
@@ -12896,6 +13731,11 @@ func (s *NetworkInterface) Validate() error {
 			invalidParams.AddNested("ObdInterface", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.VehicleMiddleware != nil {
+		if err := s.VehicleMiddleware.Validate(); err != nil {
+			invalidParams.AddNested("VehicleMiddleware", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -12927,6 +13767,12 @@ func (s *NetworkInterface) SetType(v string) *NetworkInterface {
 	return s
 }
 
+// SetVehicleMiddleware sets the VehicleMiddleware field's value.
+func (s *NetworkInterface) SetVehicleMiddleware(v *VehicleMiddleware) *NetworkInterface {
+	s.VehicleMiddleware = v
+	return s
+}
+
 // A general abstraction of a signal. A node can be specified as an actuator,
 // attribute, branch, or sensor.
 type Node struct {
@@ -12947,11 +13793,18 @@ type Node struct {
 	// A group of signals that are defined in a hierarchical structure.
 	Branch *Branch `locationName:"branch" type:"structure"`
 
+	// Represents a member of the complex data structure. The datatype of the property
+	// can be either primitive or another struct.
+	Property *CustomProperty `locationName:"property" type:"structure"`
+
 	// An input component that reports the environmental condition of a vehicle.
 	//
 	// You can collect data about fluid levels, temperatures, vibrations, or battery
 	// voltage from sensors.
 	Sensor *Sensor `locationName:"sensor" type:"structure"`
+
+	// Represents a complex or higher-order data structure.
+	Struct *CustomStruct `locationName:"struct" type:"structure"`
 }
 
 // String returns the string representation.
@@ -12990,9 +13843,19 @@ func (s *Node) Validate() error {
 			invalidParams.AddNested("Branch", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.Property != nil {
+		if err := s.Property.Validate(); err != nil {
+			invalidParams.AddNested("Property", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Sensor != nil {
 		if err := s.Sensor.Validate(); err != nil {
 			invalidParams.AddNested("Sensor", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Struct != nil {
+		if err := s.Struct.Validate(); err != nil {
+			invalidParams.AddNested("Struct", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -13020,9 +13883,21 @@ func (s *Node) SetBranch(v *Branch) *Node {
 	return s
 }
 
+// SetProperty sets the Property field's value.
+func (s *Node) SetProperty(v *CustomProperty) *Node {
+	s.Property = v
+	return s
+}
+
 // SetSensor sets the Sensor field's value.
 func (s *Node) SetSensor(v *Sensor) *Node {
 	s.Sensor = v
+	return s
+}
+
+// SetStruct sets the Struct field's value.
+func (s *Node) SetStruct(v *CustomStruct) *Node {
+	s.Struct = v
 	return s
 }
 
@@ -13042,8 +13917,14 @@ type NodeCounts struct {
 	// The total number of nodes in a vehicle network.
 	TotalNodes *int64 `locationName:"totalNodes" type:"integer"`
 
+	// The total properties for the node.
+	TotalProperties *int64 `locationName:"totalProperties" type:"integer"`
+
 	// The total number of nodes in a vehicle network that represent sensors.
 	TotalSensors *int64 `locationName:"totalSensors" type:"integer"`
+
+	// The total structure for the node.
+	TotalStructs *int64 `locationName:"totalStructs" type:"integer"`
 }
 
 // String returns the string representation.
@@ -13088,9 +13969,21 @@ func (s *NodeCounts) SetTotalNodes(v int64) *NodeCounts {
 	return s
 }
 
+// SetTotalProperties sets the TotalProperties field's value.
+func (s *NodeCounts) SetTotalProperties(v int64) *NodeCounts {
+	s.TotalProperties = &v
+	return s
+}
+
 // SetTotalSensors sets the TotalSensors field's value.
 func (s *NodeCounts) SetTotalSensors(v int64) *NodeCounts {
 	s.TotalSensors = &v
+	return s
+}
+
+// SetTotalStructs sets the TotalStructs field's value.
+func (s *NodeCounts) SetTotalStructs(v int64) *NodeCounts {
+	s.TotalStructs = &v
 	return s
 }
 
@@ -13223,7 +14116,8 @@ type ObdSignal struct {
 	// ByteLength is a required field
 	ByteLength *int64 `locationName:"byteLength" min:"1" type:"integer" required:"true"`
 
-	// Indicates where data appears in the message.
+	// The offset used to calculate the signal value. Combined with scaling, the
+	// calculation is value = raw_value * scaling + offset.
 	//
 	// Offset is a required field
 	Offset *float64 `locationName:"offset" type:"double" required:"true"`
@@ -13366,6 +14260,166 @@ func (s *ObdSignal) SetStartByte(v int64) *ObdSignal {
 	return s
 }
 
+// Represents a primitive type node of the complex data structure.
+type PrimitiveMessageDefinition struct {
+	_ struct{} `type:"structure"`
+
+	// Information about a PrimitiveMessage using a ROS 2 compliant primitive type
+	// message of the complex data structure.
+	Ros2PrimitiveMessageDefinition *ROS2PrimitiveMessageDefinition `locationName:"ros2PrimitiveMessageDefinition" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrimitiveMessageDefinition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrimitiveMessageDefinition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PrimitiveMessageDefinition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PrimitiveMessageDefinition"}
+	if s.Ros2PrimitiveMessageDefinition != nil {
+		if err := s.Ros2PrimitiveMessageDefinition.Validate(); err != nil {
+			invalidParams.AddNested("Ros2PrimitiveMessageDefinition", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRos2PrimitiveMessageDefinition sets the Ros2PrimitiveMessageDefinition field's value.
+func (s *PrimitiveMessageDefinition) SetRos2PrimitiveMessageDefinition(v *ROS2PrimitiveMessageDefinition) *PrimitiveMessageDefinition {
+	s.Ros2PrimitiveMessageDefinition = v
+	return s
+}
+
+type PutEncryptionConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The type of encryption. Choose KMS_BASED_ENCRYPTION to use a KMS key or FLEETWISE_DEFAULT_ENCRYPTION
+	// to use an Amazon Web Services managed key.
+	//
+	// EncryptionType is a required field
+	EncryptionType *string `locationName:"encryptionType" type:"string" required:"true" enum:"EncryptionType"`
+
+	// The ID of the KMS key that is used for encryption.
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutEncryptionConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutEncryptionConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutEncryptionConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutEncryptionConfigurationInput"}
+	if s.EncryptionType == nil {
+		invalidParams.Add(request.NewErrParamRequired("EncryptionType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEncryptionType sets the EncryptionType field's value.
+func (s *PutEncryptionConfigurationInput) SetEncryptionType(v string) *PutEncryptionConfigurationInput {
+	s.EncryptionType = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *PutEncryptionConfigurationInput) SetKmsKeyId(v string) *PutEncryptionConfigurationInput {
+	s.KmsKeyId = &v
+	return s
+}
+
+type PutEncryptionConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The encryption status.
+	//
+	// EncryptionStatus is a required field
+	EncryptionStatus *string `locationName:"encryptionStatus" type:"string" required:"true" enum:"EncryptionStatus"`
+
+	// The type of encryption. Set to KMS_BASED_ENCRYPTION to use an KMS key that
+	// you own and manage. Set to FLEETWISE_DEFAULT_ENCRYPTION to use an Amazon
+	// Web Services managed key that is owned by the Amazon Web Services IoT FleetWise
+	// service account.
+	//
+	// EncryptionType is a required field
+	EncryptionType *string `locationName:"encryptionType" type:"string" required:"true" enum:"EncryptionType"`
+
+	// The ID of the KMS key that is used for encryption.
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutEncryptionConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutEncryptionConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetEncryptionStatus sets the EncryptionStatus field's value.
+func (s *PutEncryptionConfigurationOutput) SetEncryptionStatus(v string) *PutEncryptionConfigurationOutput {
+	s.EncryptionStatus = &v
+	return s
+}
+
+// SetEncryptionType sets the EncryptionType field's value.
+func (s *PutEncryptionConfigurationOutput) SetEncryptionType(v string) *PutEncryptionConfigurationOutput {
+	s.EncryptionType = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *PutEncryptionConfigurationOutput) SetKmsKeyId(v string) *PutEncryptionConfigurationOutput {
+	s.KmsKeyId = &v
+	return s
+}
+
 type PutLoggingOptionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13439,6 +14493,82 @@ func (s PutLoggingOptionsOutput) GoString() string {
 	return s.String()
 }
 
+// Represents a ROS 2 compliant primitive type message of the complex data structure.
+type ROS2PrimitiveMessageDefinition struct {
+	_ struct{} `type:"structure"`
+
+	// The offset used to calculate the signal value. Combined with scaling, the
+	// calculation is value = raw_value * scaling + offset.
+	Offset *float64 `locationName:"offset" type:"double"`
+
+	// The primitive type (integer, floating point, boolean, etc.) for the ROS 2
+	// primitive message definition.
+	//
+	// PrimitiveType is a required field
+	PrimitiveType *string `locationName:"primitiveType" type:"string" required:"true" enum:"ROS2PrimitiveType"`
+
+	// A multiplier used to decode the message.
+	Scaling *float64 `locationName:"scaling" type:"double"`
+
+	// An optional attribute specifying the upper bound for STRING and WSTRING.
+	UpperBound *int64 `locationName:"upperBound" type:"long"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ROS2PrimitiveMessageDefinition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ROS2PrimitiveMessageDefinition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ROS2PrimitiveMessageDefinition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ROS2PrimitiveMessageDefinition"}
+	if s.PrimitiveType == nil {
+		invalidParams.Add(request.NewErrParamRequired("PrimitiveType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOffset sets the Offset field's value.
+func (s *ROS2PrimitiveMessageDefinition) SetOffset(v float64) *ROS2PrimitiveMessageDefinition {
+	s.Offset = &v
+	return s
+}
+
+// SetPrimitiveType sets the PrimitiveType field's value.
+func (s *ROS2PrimitiveMessageDefinition) SetPrimitiveType(v string) *ROS2PrimitiveMessageDefinition {
+	s.PrimitiveType = &v
+	return s
+}
+
+// SetScaling sets the Scaling field's value.
+func (s *ROS2PrimitiveMessageDefinition) SetScaling(v float64) *ROS2PrimitiveMessageDefinition {
+	s.Scaling = &v
+	return s
+}
+
+// SetUpperBound sets the UpperBound field's value.
+func (s *ROS2PrimitiveMessageDefinition) SetUpperBound(v int64) *ROS2PrimitiveMessageDefinition {
+	s.UpperBound = &v
+	return s
+}
+
 type RegisterAccountInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13451,8 +14581,8 @@ type RegisterAccountInput struct {
 	// The registered Amazon Timestream resources that Amazon Web Services IoT FleetWise
 	// edge agent software can transfer your vehicle data to.
 	//
-	// TimestreamResources is a required field
-	TimestreamResources *TimestreamResources `locationName:"timestreamResources" type:"structure" required:"true"`
+	// Deprecated: Amazon Timestream metadata is now passed in the CreateCampaign API.
+	TimestreamResources *TimestreamResources `locationName:"timestreamResources" deprecated:"true" type:"structure"`
 }
 
 // String returns the string representation.
@@ -13476,9 +14606,6 @@ func (s RegisterAccountInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *RegisterAccountInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "RegisterAccountInput"}
-	if s.TimestreamResources == nil {
-		invalidParams.Add(request.NewErrParamRequired("TimestreamResources"))
-	}
 	if s.IamResources != nil {
 		if err := s.IamResources.Validate(); err != nil {
 			invalidParams.AddNested("IamResources", err.(request.ErrInvalidParams))
@@ -13537,9 +14664,7 @@ type RegisterAccountOutput struct {
 
 	// The registered Amazon Timestream resources that Amazon Web Services IoT FleetWise
 	// edge agent software can transfer your vehicle data to.
-	//
-	// TimestreamResources is a required field
-	TimestreamResources *TimestreamResources `locationName:"timestreamResources" type:"structure" required:"true"`
+	TimestreamResources *TimestreamResources `locationName:"timestreamResources" type:"structure"`
 }
 
 // String returns the string representation.
@@ -13664,6 +14789,107 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The Amazon S3 bucket where the Amazon Web Services IoT FleetWise campaign
+// sends data. Amazon S3 is an object storage service that stores data as objects
+// within buckets. For more information, see Creating, configuring, and working
+// with Amazon S3 buckets (https://docs.aws.amazon.com/AmazonS3/latest/userguide/creating-buckets-s3.html)
+// in the Amazon Simple Storage Service User Guide.
+type S3Config struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the Amazon S3 bucket.
+	//
+	// BucketArn is a required field
+	BucketArn *string `locationName:"bucketArn" min:"16" type:"string" required:"true"`
+
+	// Specify the format that files are saved in the Amazon S3 bucket. You can
+	// save files in an Apache Parquet or JSON format.
+	//
+	//    * Parquet - Store data in a columnar storage file format. Parquet is optimal
+	//    for fast data retrieval and can reduce costs. This option is selected
+	//    by default.
+	//
+	//    * JSON - Store data in a standard text-based JSON file format.
+	DataFormat *string `locationName:"dataFormat" type:"string" enum:"DataFormat"`
+
+	// (Optional) Enter an S3 bucket prefix. The prefix is the string of characters
+	// after the bucket name and before the object name. You can use the prefix
+	// to organize data stored in Amazon S3 buckets. For more information, see Organizing
+	// objects using prefixes (https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html)
+	// in the Amazon Simple Storage Service User Guide.
+	//
+	// By default, Amazon Web Services IoT FleetWise sets the prefix processed-data/year=YY/month=MM/date=DD/hour=HH/
+	// (in UTC) to data it delivers to Amazon S3. You can enter a prefix to append
+	// it to this default prefix. For example, if you enter the prefix vehicles,
+	// the prefix will be vehicles/processed-data/year=YY/month=MM/date=DD/hour=HH/.
+	Prefix *string `locationName:"prefix" min:"1" type:"string"`
+
+	// By default, stored data is compressed as a .gzip file. Compressed files have
+	// a reduced file size, which can optimize the cost of data storage.
+	StorageCompressionFormat *string `locationName:"storageCompressionFormat" type:"string" enum:"StorageCompressionFormat"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3Config) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3Config) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3Config) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3Config"}
+	if s.BucketArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("BucketArn"))
+	}
+	if s.BucketArn != nil && len(*s.BucketArn) < 16 {
+		invalidParams.Add(request.NewErrParamMinLen("BucketArn", 16))
+	}
+	if s.Prefix != nil && len(*s.Prefix) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Prefix", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucketArn sets the BucketArn field's value.
+func (s *S3Config) SetBucketArn(v string) *S3Config {
+	s.BucketArn = &v
+	return s
+}
+
+// SetDataFormat sets the DataFormat field's value.
+func (s *S3Config) SetDataFormat(v string) *S3Config {
+	s.DataFormat = &v
+	return s
+}
+
+// SetPrefix sets the Prefix field's value.
+func (s *S3Config) SetPrefix(v string) *S3Config {
+	s.Prefix = &v
+	return s
+}
+
+// SetStorageCompressionFormat sets the StorageCompressionFormat field's value.
+func (s *S3Config) SetStorageCompressionFormat(v string) *S3Config {
+	s.StorageCompressionFormat = &v
+	return s
+}
+
 // An input component that reports the environmental condition of a vehicle.
 //
 // You can collect data about fluid levels, temperatures, vibrations, or battery
@@ -13674,10 +14900,16 @@ type Sensor struct {
 	// A list of possible values a sensor can take.
 	AllowedValues []*string `locationName:"allowedValues" type:"list"`
 
+	// A comment in addition to the description.
+	Comment *string `locationName:"comment" min:"1" type:"string"`
+
 	// The specified data type of the sensor.
 	//
 	// DataType is a required field
 	DataType *string `locationName:"dataType" type:"string" required:"true" enum:"NodeDataType"`
+
+	// The deprecation message for the node or the branch that was moved or deleted.
+	DeprecationMessage *string `locationName:"deprecationMessage" min:"1" type:"string"`
 
 	// A brief description of a sensor.
 	Description *string `locationName:"description" min:"1" type:"string"`
@@ -13693,6 +14925,11 @@ type Sensor struct {
 
 	// The specified possible minimum value of the sensor.
 	Min *float64 `locationName:"min" type:"double"`
+
+	// The fully qualified name of the struct node for a sensor if the data type
+	// of the actuator is Struct or StructArray. For example, the struct fully qualified
+	// name of a sensor might be Vehicle.ADAS.CameraStruct.
+	StructFullyQualifiedName *string `locationName:"structFullyQualifiedName" min:"1" type:"string"`
 
 	// The scientific unit of measurement for data collected by the sensor.
 	Unit *string `locationName:"unit" type:"string"`
@@ -13719,14 +14956,23 @@ func (s Sensor) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Sensor) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Sensor"}
+	if s.Comment != nil && len(*s.Comment) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Comment", 1))
+	}
 	if s.DataType == nil {
 		invalidParams.Add(request.NewErrParamRequired("DataType"))
+	}
+	if s.DeprecationMessage != nil && len(*s.DeprecationMessage) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeprecationMessage", 1))
 	}
 	if s.Description != nil && len(*s.Description) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
 	}
 	if s.FullyQualifiedName == nil {
 		invalidParams.Add(request.NewErrParamRequired("FullyQualifiedName"))
+	}
+	if s.StructFullyQualifiedName != nil && len(*s.StructFullyQualifiedName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StructFullyQualifiedName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -13741,9 +14987,21 @@ func (s *Sensor) SetAllowedValues(v []*string) *Sensor {
 	return s
 }
 
+// SetComment sets the Comment field's value.
+func (s *Sensor) SetComment(v string) *Sensor {
+	s.Comment = &v
+	return s
+}
+
 // SetDataType sets the DataType field's value.
 func (s *Sensor) SetDataType(v string) *Sensor {
 	s.DataType = &v
+	return s
+}
+
+// SetDeprecationMessage sets the DeprecationMessage field's value.
+func (s *Sensor) SetDeprecationMessage(v string) *Sensor {
+	s.DeprecationMessage = &v
 	return s
 }
 
@@ -13768,6 +15026,12 @@ func (s *Sensor) SetMax(v float64) *Sensor {
 // SetMin sets the Min field's value.
 func (s *Sensor) SetMin(v float64) *Sensor {
 	s.Min = &v
+	return s
+}
+
+// SetStructFullyQualifiedName sets the StructFullyQualifiedName field's value.
+func (s *Sensor) SetStructFullyQualifiedName(v string) *Sensor {
+	s.StructFullyQualifiedName = &v
 	return s
 }
 
@@ -13858,6 +15122,10 @@ type SignalDecoder struct {
 	// InterfaceId is a required field
 	InterfaceId *string `locationName:"interfaceId" min:"1" type:"string" required:"true"`
 
+	// The decoding information for a specific message which supports higher order
+	// data types.
+	MessageSignal *MessageSignal `locationName:"messageSignal" type:"structure"`
+
 	// Information about signal decoder using the On-board diagnostic (OBD) II protocol.
 	ObdSignal *ObdSignal `locationName:"obdSignal" type:"structure"`
 
@@ -13911,6 +15179,11 @@ func (s *SignalDecoder) Validate() error {
 			invalidParams.AddNested("CanSignal", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.MessageSignal != nil {
+		if err := s.MessageSignal.Validate(); err != nil {
+			invalidParams.AddNested("MessageSignal", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.ObdSignal != nil {
 		if err := s.ObdSignal.Validate(); err != nil {
 			invalidParams.AddNested("ObdSignal", err.(request.ErrInvalidParams))
@@ -13938,6 +15211,12 @@ func (s *SignalDecoder) SetFullyQualifiedName(v string) *SignalDecoder {
 // SetInterfaceId sets the InterfaceId field's value.
 func (s *SignalDecoder) SetInterfaceId(v string) *SignalDecoder {
 	s.InterfaceId = &v
+	return s
+}
+
+// SetMessageSignal sets the MessageSignal field's value.
+func (s *SignalDecoder) SetMessageSignal(v *MessageSignal) *SignalDecoder {
+	s.MessageSignal = v
 	return s
 }
 
@@ -14023,6 +15302,254 @@ func (s *SignalInformation) SetMinimumSamplingIntervalMs(v int64) *SignalInforma
 
 // SetName sets the Name field's value.
 func (s *SignalInformation) SetName(v string) *SignalInformation {
+	s.Name = &v
+	return s
+}
+
+// The structured message for the message signal. It can be defined with either
+// a primitiveMessageDefinition, structuredMessageListDefinition, or structuredMessageDefinition
+// recursively.
+type StructuredMessage struct {
+	_ struct{} `type:"structure"`
+
+	// Represents a primitive type node of the complex data structure.
+	PrimitiveMessageDefinition *PrimitiveMessageDefinition `locationName:"primitiveMessageDefinition" type:"structure"`
+
+	// Represents a struct type node of the complex data structure.
+	StructuredMessageDefinition []*StructuredMessageFieldNameAndDataTypePair `locationName:"structuredMessageDefinition" min:"1" type:"list"`
+
+	// Represents a list type node of the complex data structure.
+	StructuredMessageListDefinition *StructuredMessageListDefinition `locationName:"structuredMessageListDefinition" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StructuredMessage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StructuredMessage) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StructuredMessage) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StructuredMessage"}
+	if s.StructuredMessageDefinition != nil && len(s.StructuredMessageDefinition) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StructuredMessageDefinition", 1))
+	}
+	if s.PrimitiveMessageDefinition != nil {
+		if err := s.PrimitiveMessageDefinition.Validate(); err != nil {
+			invalidParams.AddNested("PrimitiveMessageDefinition", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.StructuredMessageDefinition != nil {
+		for i, v := range s.StructuredMessageDefinition {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "StructuredMessageDefinition", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.StructuredMessageListDefinition != nil {
+		if err := s.StructuredMessageListDefinition.Validate(); err != nil {
+			invalidParams.AddNested("StructuredMessageListDefinition", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPrimitiveMessageDefinition sets the PrimitiveMessageDefinition field's value.
+func (s *StructuredMessage) SetPrimitiveMessageDefinition(v *PrimitiveMessageDefinition) *StructuredMessage {
+	s.PrimitiveMessageDefinition = v
+	return s
+}
+
+// SetStructuredMessageDefinition sets the StructuredMessageDefinition field's value.
+func (s *StructuredMessage) SetStructuredMessageDefinition(v []*StructuredMessageFieldNameAndDataTypePair) *StructuredMessage {
+	s.StructuredMessageDefinition = v
+	return s
+}
+
+// SetStructuredMessageListDefinition sets the StructuredMessageListDefinition field's value.
+func (s *StructuredMessage) SetStructuredMessageListDefinition(v *StructuredMessageListDefinition) *StructuredMessage {
+	s.StructuredMessageListDefinition = v
+	return s
+}
+
+// Represents a StructureMessageName to DataType map element.
+type StructuredMessageFieldNameAndDataTypePair struct {
+	_ struct{} `type:"structure"`
+
+	// The data type.
+	//
+	// DataType is a required field
+	DataType *StructuredMessage `locationName:"dataType" type:"structure" required:"true"`
+
+	// The field name of the structured message. It determines how a data value
+	// is referenced in the target language.
+	//
+	// FieldName is a required field
+	FieldName *string `locationName:"fieldName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StructuredMessageFieldNameAndDataTypePair) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StructuredMessageFieldNameAndDataTypePair) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StructuredMessageFieldNameAndDataTypePair) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StructuredMessageFieldNameAndDataTypePair"}
+	if s.DataType == nil {
+		invalidParams.Add(request.NewErrParamRequired("DataType"))
+	}
+	if s.FieldName == nil {
+		invalidParams.Add(request.NewErrParamRequired("FieldName"))
+	}
+	if s.FieldName != nil && len(*s.FieldName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FieldName", 1))
+	}
+	if s.DataType != nil {
+		if err := s.DataType.Validate(); err != nil {
+			invalidParams.AddNested("DataType", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataType sets the DataType field's value.
+func (s *StructuredMessageFieldNameAndDataTypePair) SetDataType(v *StructuredMessage) *StructuredMessageFieldNameAndDataTypePair {
+	s.DataType = v
+	return s
+}
+
+// SetFieldName sets the FieldName field's value.
+func (s *StructuredMessageFieldNameAndDataTypePair) SetFieldName(v string) *StructuredMessageFieldNameAndDataTypePair {
+	s.FieldName = &v
+	return s
+}
+
+// Represents a list type node of the complex data structure.
+type StructuredMessageListDefinition struct {
+	_ struct{} `type:"structure"`
+
+	// The capacity of the structured message list definition when the list type
+	// is FIXED_CAPACITY or DYNAMIC_BOUNDED_CAPACITY.
+	Capacity *int64 `locationName:"capacity" type:"integer"`
+
+	// The type of list of the structured message list definition.
+	//
+	// ListType is a required field
+	ListType *string `locationName:"listType" type:"string" required:"true" enum:"StructuredMessageListType"`
+
+	// The member type of the structured message list definition.
+	//
+	// MemberType is a required field
+	MemberType *StructuredMessage `locationName:"memberType" type:"structure" required:"true"`
+
+	// The name of the structured message list definition.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StructuredMessageListDefinition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s StructuredMessageListDefinition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StructuredMessageListDefinition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StructuredMessageListDefinition"}
+	if s.ListType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ListType"))
+	}
+	if s.MemberType == nil {
+		invalidParams.Add(request.NewErrParamRequired("MemberType"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.MemberType != nil {
+		if err := s.MemberType.Validate(); err != nil {
+			invalidParams.AddNested("MemberType", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCapacity sets the Capacity field's value.
+func (s *StructuredMessageListDefinition) SetCapacity(v int64) *StructuredMessageListDefinition {
+	s.Capacity = &v
+	return s
+}
+
+// SetListType sets the ListType field's value.
+func (s *StructuredMessageListDefinition) SetListType(v string) *StructuredMessageListDefinition {
+	s.ListType = &v
+	return s
+}
+
+// SetMemberType sets the MemberType field's value.
+func (s *StructuredMessageListDefinition) SetMemberType(v *StructuredMessage) *StructuredMessageListDefinition {
+	s.MemberType = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *StructuredMessageListDefinition) SetName(v string) *StructuredMessageListDefinition {
 	s.Name = &v
 	return s
 }
@@ -14312,6 +15839,79 @@ func (s *TimeBasedCollectionScheme) SetPeriodMs(v int64) *TimeBasedCollectionSch
 	return s
 }
 
+// The Amazon Timestream table where the Amazon Web Services IoT FleetWise campaign
+// sends data. Timestream stores and organizes data to optimize query processing
+// time and to reduce storage costs. For more information, see Data modeling
+// (https://docs.aws.amazon.com/timestream/latest/developerguide/data-modeling.html)
+// in the Amazon Timestream Developer Guide.
+type TimestreamConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the task execution role that grants Amazon
+	// Web Services IoT FleetWise permission to deliver data to the Amazon Timestream
+	// table.
+	//
+	// ExecutionRoleArn is a required field
+	ExecutionRoleArn *string `locationName:"executionRoleArn" min:"20" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the Amazon Timestream table.
+	//
+	// TimestreamTableArn is a required field
+	TimestreamTableArn *string `locationName:"timestreamTableArn" min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TimestreamConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TimestreamConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TimestreamConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TimestreamConfig"}
+	if s.ExecutionRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExecutionRoleArn"))
+	}
+	if s.ExecutionRoleArn != nil && len(*s.ExecutionRoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("ExecutionRoleArn", 20))
+	}
+	if s.TimestreamTableArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TimestreamTableArn"))
+	}
+	if s.TimestreamTableArn != nil && len(*s.TimestreamTableArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("TimestreamTableArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExecutionRoleArn sets the ExecutionRoleArn field's value.
+func (s *TimestreamConfig) SetExecutionRoleArn(v string) *TimestreamConfig {
+	s.ExecutionRoleArn = &v
+	return s
+}
+
+// SetTimestreamTableArn sets the TimestreamTableArn field's value.
+func (s *TimestreamConfig) SetTimestreamTableArn(v string) *TimestreamConfig {
+	s.TimestreamTableArn = &v
+	return s
+}
+
 // Information about the registered Amazon Timestream resources or errors, if
 // any.
 type TimestreamRegistrationResponse struct {
@@ -14557,9 +16157,12 @@ type UpdateCampaignInput struct {
 	//
 	//    * APPROVE - To approve delivering a data collection scheme to vehicles.
 	//
-	//    * SUSPEND - To suspend collecting signal data.
+	//    * SUSPEND - To suspend collecting signal data. The campaign is deleted
+	//    from vehicles and all vehicles in the suspended campaign will stop sending
+	//    data.
 	//
-	//    * RESUME - To resume collecting signal data.
+	//    * RESUME - To reactivate the SUSPEND campaign. The campaign is redeployed
+	//    to all vehicles and the vehicles will resume sending data.
 	//
 	//    * UPDATE - To update a campaign.
 	//
@@ -15767,6 +17370,71 @@ func (s *ValidationExceptionField) SetName(v string) *ValidationExceptionField {
 	return s
 }
 
+// The vehicle middleware defined as a type of network interface. Examples of
+// vehicle middleware include ROS2 and SOME/IP.
+type VehicleMiddleware struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the vehicle middleware.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The protocol name of the vehicle middleware.
+	//
+	// ProtocolName is a required field
+	ProtocolName *string `locationName:"protocolName" type:"string" required:"true" enum:"VehicleMiddlewareProtocol"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VehicleMiddleware) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VehicleMiddleware) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VehicleMiddleware) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VehicleMiddleware"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.ProtocolName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProtocolName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *VehicleMiddleware) SetName(v string) *VehicleMiddleware {
+	s.Name = &v
+	return s
+}
+
+// SetProtocolName sets the ProtocolName field's value.
+func (s *VehicleMiddleware) SetProtocolName(v string) *VehicleMiddleware {
+	s.ProtocolName = &v
+	return s
+}
+
 // Information about the state of a vehicle and how it relates to the status
 // of a campaign.
 type VehicleStatus struct {
@@ -15843,6 +17511,11 @@ type VehicleSummary struct {
 	// Arn is a required field
 	Arn *string `locationName:"arn" type:"string" required:"true"`
 
+	// Static information about a vehicle in a key-value pair. For example:
+	//
+	// "engineType" : "1.3 L R2"
+	Attributes map[string]*string `locationName:"attributes" type:"map"`
+
 	// The time the vehicle was created in seconds since epoch (January 1, 1970
 	// at midnight UTC time).
 	//
@@ -15892,6 +17565,12 @@ func (s VehicleSummary) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *VehicleSummary) SetArn(v string) *VehicleSummary {
 	s.Arn = &v
+	return s
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *VehicleSummary) SetAttributes(v map[string]*string) *VehicleSummary {
+	s.Attributes = v
 	return s
 }
 
@@ -15966,6 +17645,22 @@ func Compression_Values() []string {
 }
 
 const (
+	// DataFormatJson is a DataFormat enum value
+	DataFormatJson = "JSON"
+
+	// DataFormatParquet is a DataFormat enum value
+	DataFormatParquet = "PARQUET"
+)
+
+// DataFormat_Values returns all elements of the DataFormat enum
+func DataFormat_Values() []string {
+	return []string{
+		DataFormatJson,
+		DataFormatParquet,
+	}
+}
+
+const (
 	// DiagnosticsModeOff is a DiagnosticsMode enum value
 	DiagnosticsModeOff = "OFF"
 
@@ -15978,6 +17673,42 @@ func DiagnosticsMode_Values() []string {
 	return []string{
 		DiagnosticsModeOff,
 		DiagnosticsModeSendActiveDtcs,
+	}
+}
+
+const (
+	// EncryptionStatusPending is a EncryptionStatus enum value
+	EncryptionStatusPending = "PENDING"
+
+	// EncryptionStatusSuccess is a EncryptionStatus enum value
+	EncryptionStatusSuccess = "SUCCESS"
+
+	// EncryptionStatusFailure is a EncryptionStatus enum value
+	EncryptionStatusFailure = "FAILURE"
+)
+
+// EncryptionStatus_Values returns all elements of the EncryptionStatus enum
+func EncryptionStatus_Values() []string {
+	return []string{
+		EncryptionStatusPending,
+		EncryptionStatusSuccess,
+		EncryptionStatusFailure,
+	}
+}
+
+const (
+	// EncryptionTypeKmsBasedEncryption is a EncryptionType enum value
+	EncryptionTypeKmsBasedEncryption = "KMS_BASED_ENCRYPTION"
+
+	// EncryptionTypeFleetwiseDefaultEncryption is a EncryptionType enum value
+	EncryptionTypeFleetwiseDefaultEncryption = "FLEETWISE_DEFAULT_ENCRYPTION"
+)
+
+// EncryptionType_Values returns all elements of the EncryptionType enum
+func EncryptionType_Values() []string {
+	return []string{
+		EncryptionTypeKmsBasedEncryption,
+		EncryptionTypeFleetwiseDefaultEncryption,
 	}
 }
 
@@ -16003,6 +17734,12 @@ const (
 
 	// ManifestStatusDraft is a ManifestStatus enum value
 	ManifestStatusDraft = "DRAFT"
+
+	// ManifestStatusInvalid is a ManifestStatus enum value
+	ManifestStatusInvalid = "INVALID"
+
+	// ManifestStatusValidating is a ManifestStatus enum value
+	ManifestStatusValidating = "VALIDATING"
 )
 
 // ManifestStatus_Values returns all elements of the ManifestStatus enum
@@ -16010,6 +17747,8 @@ func ManifestStatus_Values() []string {
 	return []string{
 		ManifestStatusActive,
 		ManifestStatusDraft,
+		ManifestStatusInvalid,
+		ManifestStatusValidating,
 	}
 }
 
@@ -16031,6 +17770,9 @@ const (
 
 	// NetworkInterfaceFailureReasonNetworkInterfaceToRemoveAssociatedWithSignals is a NetworkInterfaceFailureReason enum value
 	NetworkInterfaceFailureReasonNetworkInterfaceToRemoveAssociatedWithSignals = "NETWORK_INTERFACE_TO_REMOVE_ASSOCIATED_WITH_SIGNALS"
+
+	// NetworkInterfaceFailureReasonVehicleMiddlewareNetworkInterfaceInfoIsNull is a NetworkInterfaceFailureReason enum value
+	NetworkInterfaceFailureReasonVehicleMiddlewareNetworkInterfaceInfoIsNull = "VEHICLE_MIDDLEWARE_NETWORK_INTERFACE_INFO_IS_NULL"
 )
 
 // NetworkInterfaceFailureReason_Values returns all elements of the NetworkInterfaceFailureReason enum
@@ -16042,6 +17784,7 @@ func NetworkInterfaceFailureReason_Values() []string {
 		NetworkInterfaceFailureReasonCanNetworkInterfaceInfoIsNull,
 		NetworkInterfaceFailureReasonObdNetworkInterfaceInfoIsNull,
 		NetworkInterfaceFailureReasonNetworkInterfaceToRemoveAssociatedWithSignals,
+		NetworkInterfaceFailureReasonVehicleMiddlewareNetworkInterfaceInfoIsNull,
 	}
 }
 
@@ -16051,6 +17794,9 @@ const (
 
 	// NetworkInterfaceTypeObdInterface is a NetworkInterfaceType enum value
 	NetworkInterfaceTypeObdInterface = "OBD_INTERFACE"
+
+	// NetworkInterfaceTypeVehicleMiddleware is a NetworkInterfaceType enum value
+	NetworkInterfaceTypeVehicleMiddleware = "VEHICLE_MIDDLEWARE"
 )
 
 // NetworkInterfaceType_Values returns all elements of the NetworkInterfaceType enum
@@ -16058,6 +17804,23 @@ func NetworkInterfaceType_Values() []string {
 	return []string{
 		NetworkInterfaceTypeCanInterface,
 		NetworkInterfaceTypeObdInterface,
+		NetworkInterfaceTypeVehicleMiddleware,
+	}
+}
+
+const (
+	// NodeDataEncodingBinary is a NodeDataEncoding enum value
+	NodeDataEncodingBinary = "BINARY"
+
+	// NodeDataEncodingTyped is a NodeDataEncoding enum value
+	NodeDataEncodingTyped = "TYPED"
+)
+
+// NodeDataEncoding_Values returns all elements of the NodeDataEncoding enum
+func NodeDataEncoding_Values() []string {
+	return []string{
+		NodeDataEncodingBinary,
+		NodeDataEncodingTyped,
 	}
 }
 
@@ -16142,6 +17905,12 @@ const (
 
 	// NodeDataTypeUnknown is a NodeDataType enum value
 	NodeDataTypeUnknown = "UNKNOWN"
+
+	// NodeDataTypeStruct is a NodeDataType enum value
+	NodeDataTypeStruct = "STRUCT"
+
+	// NodeDataTypeStructArray is a NodeDataType enum value
+	NodeDataTypeStructArray = "STRUCT_ARRAY"
 )
 
 // NodeDataType_Values returns all elements of the NodeDataType enum
@@ -16174,6 +17943,76 @@ func NodeDataType_Values() []string {
 		NodeDataTypeStringArray,
 		NodeDataTypeUnixTimestampArray,
 		NodeDataTypeUnknown,
+		NodeDataTypeStruct,
+		NodeDataTypeStructArray,
+	}
+}
+
+const (
+	// ROS2PrimitiveTypeBool is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeBool = "BOOL"
+
+	// ROS2PrimitiveTypeByte is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeByte = "BYTE"
+
+	// ROS2PrimitiveTypeChar is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeChar = "CHAR"
+
+	// ROS2PrimitiveTypeFloat32 is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeFloat32 = "FLOAT32"
+
+	// ROS2PrimitiveTypeFloat64 is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeFloat64 = "FLOAT64"
+
+	// ROS2PrimitiveTypeInt8 is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeInt8 = "INT8"
+
+	// ROS2PrimitiveTypeUint8 is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeUint8 = "UINT8"
+
+	// ROS2PrimitiveTypeInt16 is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeInt16 = "INT16"
+
+	// ROS2PrimitiveTypeUint16 is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeUint16 = "UINT16"
+
+	// ROS2PrimitiveTypeInt32 is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeInt32 = "INT32"
+
+	// ROS2PrimitiveTypeUint32 is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeUint32 = "UINT32"
+
+	// ROS2PrimitiveTypeInt64 is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeInt64 = "INT64"
+
+	// ROS2PrimitiveTypeUint64 is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeUint64 = "UINT64"
+
+	// ROS2PrimitiveTypeString is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeString = "STRING"
+
+	// ROS2PrimitiveTypeWstring is a ROS2PrimitiveType enum value
+	ROS2PrimitiveTypeWstring = "WSTRING"
+)
+
+// ROS2PrimitiveType_Values returns all elements of the ROS2PrimitiveType enum
+func ROS2PrimitiveType_Values() []string {
+	return []string{
+		ROS2PrimitiveTypeBool,
+		ROS2PrimitiveTypeByte,
+		ROS2PrimitiveTypeChar,
+		ROS2PrimitiveTypeFloat32,
+		ROS2PrimitiveTypeFloat64,
+		ROS2PrimitiveTypeInt8,
+		ROS2PrimitiveTypeUint8,
+		ROS2PrimitiveTypeInt16,
+		ROS2PrimitiveTypeUint16,
+		ROS2PrimitiveTypeInt32,
+		ROS2PrimitiveTypeUint32,
+		ROS2PrimitiveTypeInt64,
+		ROS2PrimitiveTypeUint64,
+		ROS2PrimitiveTypeString,
+		ROS2PrimitiveTypeWstring,
 	}
 }
 
@@ -16224,6 +18063,24 @@ const (
 
 	// SignalDecoderFailureReasonNoDecoderInfoForSignalInModel is a SignalDecoderFailureReason enum value
 	SignalDecoderFailureReasonNoDecoderInfoForSignalInModel = "NO_DECODER_INFO_FOR_SIGNAL_IN_MODEL"
+
+	// SignalDecoderFailureReasonMessageSignalInfoIsNull is a SignalDecoderFailureReason enum value
+	SignalDecoderFailureReasonMessageSignalInfoIsNull = "MESSAGE_SIGNAL_INFO_IS_NULL"
+
+	// SignalDecoderFailureReasonSignalDecoderTypeIncompatibleWithMessageSignalType is a SignalDecoderFailureReason enum value
+	SignalDecoderFailureReasonSignalDecoderTypeIncompatibleWithMessageSignalType = "SIGNAL_DECODER_TYPE_INCOMPATIBLE_WITH_MESSAGE_SIGNAL_TYPE"
+
+	// SignalDecoderFailureReasonStructSizeMismatch is a SignalDecoderFailureReason enum value
+	SignalDecoderFailureReasonStructSizeMismatch = "STRUCT_SIZE_MISMATCH"
+
+	// SignalDecoderFailureReasonNoSignalInCatalogForDecoderSignal is a SignalDecoderFailureReason enum value
+	SignalDecoderFailureReasonNoSignalInCatalogForDecoderSignal = "NO_SIGNAL_IN_CATALOG_FOR_DECODER_SIGNAL"
+
+	// SignalDecoderFailureReasonSignalDecoderIncompatibleWithSignalCatalog is a SignalDecoderFailureReason enum value
+	SignalDecoderFailureReasonSignalDecoderIncompatibleWithSignalCatalog = "SIGNAL_DECODER_INCOMPATIBLE_WITH_SIGNAL_CATALOG"
+
+	// SignalDecoderFailureReasonEmptyMessageSignal is a SignalDecoderFailureReason enum value
+	SignalDecoderFailureReasonEmptyMessageSignal = "EMPTY_MESSAGE_SIGNAL"
 )
 
 // SignalDecoderFailureReason_Values returns all elements of the SignalDecoderFailureReason enum
@@ -16238,6 +18095,12 @@ func SignalDecoderFailureReason_Values() []string {
 		SignalDecoderFailureReasonCanSignalInfoIsNull,
 		SignalDecoderFailureReasonObdSignalInfoIsNull,
 		SignalDecoderFailureReasonNoDecoderInfoForSignalInModel,
+		SignalDecoderFailureReasonMessageSignalInfoIsNull,
+		SignalDecoderFailureReasonSignalDecoderTypeIncompatibleWithMessageSignalType,
+		SignalDecoderFailureReasonStructSizeMismatch,
+		SignalDecoderFailureReasonNoSignalInCatalogForDecoderSignal,
+		SignalDecoderFailureReasonSignalDecoderIncompatibleWithSignalCatalog,
+		SignalDecoderFailureReasonEmptyMessageSignal,
 	}
 }
 
@@ -16247,6 +18110,9 @@ const (
 
 	// SignalDecoderTypeObdSignal is a SignalDecoderType enum value
 	SignalDecoderTypeObdSignal = "OBD_SIGNAL"
+
+	// SignalDecoderTypeMessageSignal is a SignalDecoderType enum value
+	SignalDecoderTypeMessageSignal = "MESSAGE_SIGNAL"
 )
 
 // SignalDecoderType_Values returns all elements of the SignalDecoderType enum
@@ -16254,6 +18120,39 @@ func SignalDecoderType_Values() []string {
 	return []string{
 		SignalDecoderTypeCanSignal,
 		SignalDecoderTypeObdSignal,
+		SignalDecoderTypeMessageSignal,
+	}
+}
+
+const (
+	// SignalNodeTypeSensor is a SignalNodeType enum value
+	SignalNodeTypeSensor = "SENSOR"
+
+	// SignalNodeTypeActuator is a SignalNodeType enum value
+	SignalNodeTypeActuator = "ACTUATOR"
+
+	// SignalNodeTypeAttribute is a SignalNodeType enum value
+	SignalNodeTypeAttribute = "ATTRIBUTE"
+
+	// SignalNodeTypeBranch is a SignalNodeType enum value
+	SignalNodeTypeBranch = "BRANCH"
+
+	// SignalNodeTypeCustomStruct is a SignalNodeType enum value
+	SignalNodeTypeCustomStruct = "CUSTOM_STRUCT"
+
+	// SignalNodeTypeCustomProperty is a SignalNodeType enum value
+	SignalNodeTypeCustomProperty = "CUSTOM_PROPERTY"
+)
+
+// SignalNodeType_Values returns all elements of the SignalNodeType enum
+func SignalNodeType_Values() []string {
+	return []string{
+		SignalNodeTypeSensor,
+		SignalNodeTypeActuator,
+		SignalNodeTypeAttribute,
+		SignalNodeTypeBranch,
+		SignalNodeTypeCustomStruct,
+		SignalNodeTypeCustomProperty,
 	}
 }
 
@@ -16270,6 +18169,42 @@ func SpoolingMode_Values() []string {
 	return []string{
 		SpoolingModeOff,
 		SpoolingModeToDisk,
+	}
+}
+
+const (
+	// StorageCompressionFormatNone is a StorageCompressionFormat enum value
+	StorageCompressionFormatNone = "NONE"
+
+	// StorageCompressionFormatGzip is a StorageCompressionFormat enum value
+	StorageCompressionFormatGzip = "GZIP"
+)
+
+// StorageCompressionFormat_Values returns all elements of the StorageCompressionFormat enum
+func StorageCompressionFormat_Values() []string {
+	return []string{
+		StorageCompressionFormatNone,
+		StorageCompressionFormatGzip,
+	}
+}
+
+const (
+	// StructuredMessageListTypeFixedCapacity is a StructuredMessageListType enum value
+	StructuredMessageListTypeFixedCapacity = "FIXED_CAPACITY"
+
+	// StructuredMessageListTypeDynamicUnboundedCapacity is a StructuredMessageListType enum value
+	StructuredMessageListTypeDynamicUnboundedCapacity = "DYNAMIC_UNBOUNDED_CAPACITY"
+
+	// StructuredMessageListTypeDynamicBoundedCapacity is a StructuredMessageListType enum value
+	StructuredMessageListTypeDynamicBoundedCapacity = "DYNAMIC_BOUNDED_CAPACITY"
+)
+
+// StructuredMessageListType_Values returns all elements of the StructuredMessageListType enum
+func StructuredMessageListType_Values() []string {
+	return []string{
+		StructuredMessageListTypeFixedCapacity,
+		StructuredMessageListTypeDynamicUnboundedCapacity,
+		StructuredMessageListTypeDynamicBoundedCapacity,
 	}
 }
 
@@ -16366,6 +18301,18 @@ func VehicleAssociationBehavior_Values() []string {
 	return []string{
 		VehicleAssociationBehaviorCreateIotThing,
 		VehicleAssociationBehaviorValidateIotThingExists,
+	}
+}
+
+const (
+	// VehicleMiddlewareProtocolRos2 is a VehicleMiddlewareProtocol enum value
+	VehicleMiddlewareProtocolRos2 = "ROS_2"
+)
+
+// VehicleMiddlewareProtocol_Values returns all elements of the VehicleMiddlewareProtocol enum
+func VehicleMiddlewareProtocol_Values() []string {
+	return []string{
+		VehicleMiddlewareProtocolRos2,
 	}
 }
 

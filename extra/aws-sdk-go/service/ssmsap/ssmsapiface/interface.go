@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWS Systems Manager for SAP.
-//    func myFunc(svc ssmsapiface.SsmSapAPI) bool {
-//        // Make svc.DeleteResourcePermission request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWS Systems Manager for SAP.
+//	func myFunc(svc ssmsapiface.SsmSapAPI) bool {
+//	    // Make svc.DeleteResourcePermission request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := ssmsap.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := ssmsap.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockSsmSapClient struct {
-//        ssmsapiface.SsmSapAPI
-//    }
-//    func (m *mockSsmSapClient) DeleteResourcePermission(input *ssmsap.DeleteResourcePermissionInput) (*ssmsap.DeleteResourcePermissionOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockSsmSapClient struct {
+//	    ssmsapiface.SsmSapAPI
+//	}
+//	func (m *mockSsmSapClient) DeleteResourcePermission(input *ssmsap.DeleteResourcePermissionInput) (*ssmsap.DeleteResourcePermissionOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockSsmSapClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockSsmSapClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -127,6 +127,10 @@ type SsmSapAPI interface {
 	RegisterApplication(*ssmsap.RegisterApplicationInput) (*ssmsap.RegisterApplicationOutput, error)
 	RegisterApplicationWithContext(aws.Context, *ssmsap.RegisterApplicationInput, ...request.Option) (*ssmsap.RegisterApplicationOutput, error)
 	RegisterApplicationRequest(*ssmsap.RegisterApplicationInput) (*request.Request, *ssmsap.RegisterApplicationOutput)
+
+	StartApplicationRefresh(*ssmsap.StartApplicationRefreshInput) (*ssmsap.StartApplicationRefreshOutput, error)
+	StartApplicationRefreshWithContext(aws.Context, *ssmsap.StartApplicationRefreshInput, ...request.Option) (*ssmsap.StartApplicationRefreshOutput, error)
+	StartApplicationRefreshRequest(*ssmsap.StartApplicationRefreshInput) (*request.Request, *ssmsap.StartApplicationRefreshOutput)
 
 	TagResource(*ssmsap.TagResourceInput) (*ssmsap.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *ssmsap.TagResourceInput, ...request.Option) (*ssmsap.TagResourceOutput, error)

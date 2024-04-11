@@ -29,14 +29,13 @@ const opBatchDeleteBuilds = "BatchDeleteBuilds"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchDeleteBuildsRequest method.
+//	req, resp := client.BatchDeleteBuildsRequest(params)
 //
-//    // Example sending a request using the BatchDeleteBuildsRequest method.
-//    req, resp := client.BatchDeleteBuildsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchDeleteBuilds
 func (c *CodeBuild) BatchDeleteBuildsRequest(input *BatchDeleteBuildsInput) (req *request.Request, output *BatchDeleteBuildsOutput) {
@@ -67,8 +66,8 @@ func (c *CodeBuild) BatchDeleteBuildsRequest(input *BatchDeleteBuildsInput) (req
 // API operation BatchDeleteBuilds for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchDeleteBuilds
 func (c *CodeBuild) BatchDeleteBuilds(input *BatchDeleteBuildsInput) (*BatchDeleteBuildsOutput, error) {
@@ -108,14 +107,13 @@ const opBatchGetBuildBatches = "BatchGetBuildBatches"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetBuildBatchesRequest method.
+//	req, resp := client.BatchGetBuildBatchesRequest(params)
 //
-//    // Example sending a request using the BatchGetBuildBatchesRequest method.
-//    req, resp := client.BatchGetBuildBatchesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetBuildBatches
 func (c *CodeBuild) BatchGetBuildBatchesRequest(input *BatchGetBuildBatchesInput) (req *request.Request, output *BatchGetBuildBatchesOutput) {
@@ -146,8 +144,8 @@ func (c *CodeBuild) BatchGetBuildBatchesRequest(input *BatchGetBuildBatchesInput
 // API operation BatchGetBuildBatches for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetBuildBatches
 func (c *CodeBuild) BatchGetBuildBatches(input *BatchGetBuildBatchesInput) (*BatchGetBuildBatchesOutput, error) {
@@ -187,14 +185,13 @@ const opBatchGetBuilds = "BatchGetBuilds"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetBuildsRequest method.
+//	req, resp := client.BatchGetBuildsRequest(params)
 //
-//    // Example sending a request using the BatchGetBuildsRequest method.
-//    req, resp := client.BatchGetBuildsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetBuilds
 func (c *CodeBuild) BatchGetBuildsRequest(input *BatchGetBuildsInput) (req *request.Request, output *BatchGetBuildsOutput) {
@@ -225,8 +222,8 @@ func (c *CodeBuild) BatchGetBuildsRequest(input *BatchGetBuildsInput) (req *requ
 // API operation BatchGetBuilds for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetBuilds
 func (c *CodeBuild) BatchGetBuilds(input *BatchGetBuildsInput) (*BatchGetBuildsOutput, error) {
@@ -250,6 +247,84 @@ func (c *CodeBuild) BatchGetBuildsWithContext(ctx aws.Context, input *BatchGetBu
 	return out, req.Send()
 }
 
+const opBatchGetFleets = "BatchGetFleets"
+
+// BatchGetFleetsRequest generates a "aws/request.Request" representing the
+// client's request for the BatchGetFleets operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchGetFleets for more information on using the BatchGetFleets
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the BatchGetFleetsRequest method.
+//	req, resp := client.BatchGetFleetsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetFleets
+func (c *CodeBuild) BatchGetFleetsRequest(input *BatchGetFleetsInput) (req *request.Request, output *BatchGetFleetsOutput) {
+	op := &request.Operation{
+		Name:       opBatchGetFleets,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &BatchGetFleetsInput{}
+	}
+
+	output = &BatchGetFleetsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchGetFleets API operation for AWS CodeBuild.
+//
+// Gets information about one or more compute fleets.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CodeBuild's
+// API operation BatchGetFleets for usage and error information.
+//
+// Returned Error Types:
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetFleets
+func (c *CodeBuild) BatchGetFleets(input *BatchGetFleetsInput) (*BatchGetFleetsOutput, error) {
+	req, out := c.BatchGetFleetsRequest(input)
+	return out, req.Send()
+}
+
+// BatchGetFleetsWithContext is the same as BatchGetFleets with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchGetFleets for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeBuild) BatchGetFleetsWithContext(ctx aws.Context, input *BatchGetFleetsInput, opts ...request.Option) (*BatchGetFleetsOutput, error) {
+	req, out := c.BatchGetFleetsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opBatchGetProjects = "BatchGetProjects"
 
 // BatchGetProjectsRequest generates a "aws/request.Request" representing the
@@ -266,14 +341,13 @@ const opBatchGetProjects = "BatchGetProjects"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetProjectsRequest method.
+//	req, resp := client.BatchGetProjectsRequest(params)
 //
-//    // Example sending a request using the BatchGetProjectsRequest method.
-//    req, resp := client.BatchGetProjectsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetProjects
 func (c *CodeBuild) BatchGetProjectsRequest(input *BatchGetProjectsInput) (req *request.Request, output *BatchGetProjectsOutput) {
@@ -304,8 +378,8 @@ func (c *CodeBuild) BatchGetProjectsRequest(input *BatchGetProjectsInput) (req *
 // API operation BatchGetProjects for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetProjects
 func (c *CodeBuild) BatchGetProjects(input *BatchGetProjectsInput) (*BatchGetProjectsOutput, error) {
@@ -345,14 +419,13 @@ const opBatchGetReportGroups = "BatchGetReportGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetReportGroupsRequest method.
+//	req, resp := client.BatchGetReportGroupsRequest(params)
 //
-//    // Example sending a request using the BatchGetReportGroupsRequest method.
-//    req, resp := client.BatchGetReportGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetReportGroups
 func (c *CodeBuild) BatchGetReportGroupsRequest(input *BatchGetReportGroupsInput) (req *request.Request, output *BatchGetReportGroupsOutput) {
@@ -383,8 +456,8 @@ func (c *CodeBuild) BatchGetReportGroupsRequest(input *BatchGetReportGroupsInput
 // API operation BatchGetReportGroups for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetReportGroups
 func (c *CodeBuild) BatchGetReportGroups(input *BatchGetReportGroupsInput) (*BatchGetReportGroupsOutput, error) {
@@ -424,14 +497,13 @@ const opBatchGetReports = "BatchGetReports"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchGetReportsRequest method.
+//	req, resp := client.BatchGetReportsRequest(params)
 //
-//    // Example sending a request using the BatchGetReportsRequest method.
-//    req, resp := client.BatchGetReportsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetReports
 func (c *CodeBuild) BatchGetReportsRequest(input *BatchGetReportsInput) (req *request.Request, output *BatchGetReportsOutput) {
@@ -462,8 +534,8 @@ func (c *CodeBuild) BatchGetReportsRequest(input *BatchGetReportsInput) (req *re
 // API operation BatchGetReports for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/BatchGetReports
 func (c *CodeBuild) BatchGetReports(input *BatchGetReportsInput) (*BatchGetReportsOutput, error) {
@@ -487,6 +559,93 @@ func (c *CodeBuild) BatchGetReportsWithContext(ctx aws.Context, input *BatchGetR
 	return out, req.Send()
 }
 
+const opCreateFleet = "CreateFleet"
+
+// CreateFleetRequest generates a "aws/request.Request" representing the
+// client's request for the CreateFleet operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateFleet for more information on using the CreateFleet
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateFleetRequest method.
+//	req, resp := client.CreateFleetRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/CreateFleet
+func (c *CodeBuild) CreateFleetRequest(input *CreateFleetInput) (req *request.Request, output *CreateFleetOutput) {
+	op := &request.Operation{
+		Name:       opCreateFleet,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateFleetInput{}
+	}
+
+	output = &CreateFleetOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateFleet API operation for AWS CodeBuild.
+//
+// Creates a compute fleet.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CodeBuild's
+// API operation CreateFleet for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceAlreadyExistsException
+//     The specified Amazon Web Services resource cannot be created, because an
+//     Amazon Web Services resource with the same settings already exists.
+//
+//   - AccountLimitExceededException
+//     An Amazon Web Services service limit was exceeded for the calling Amazon
+//     Web Services account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/CreateFleet
+func (c *CodeBuild) CreateFleet(input *CreateFleetInput) (*CreateFleetOutput, error) {
+	req, out := c.CreateFleetRequest(input)
+	return out, req.Send()
+}
+
+// CreateFleetWithContext is the same as CreateFleet with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateFleet for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeBuild) CreateFleetWithContext(ctx aws.Context, input *CreateFleetInput, opts ...request.Option) (*CreateFleetOutput, error) {
+	req, out := c.CreateFleetRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateProject = "CreateProject"
 
 // CreateProjectRequest generates a "aws/request.Request" representing the
@@ -503,14 +662,13 @@ const opCreateProject = "CreateProject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProjectRequest method.
+//	req, resp := client.CreateProjectRequest(params)
 //
-//    // Example sending a request using the CreateProjectRequest method.
-//    req, resp := client.CreateProjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/CreateProject
 func (c *CodeBuild) CreateProjectRequest(input *CreateProjectInput) (req *request.Request, output *CreateProjectOutput) {
@@ -541,16 +699,17 @@ func (c *CodeBuild) CreateProjectRequest(input *CreateProjectInput) (req *reques
 // API operation CreateProject for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The specified Amazon Web Services resource cannot be created, because an
-//   Amazon Web Services resource with the same settings already exists.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
-//   * AccountLimitExceededException
-//   An Amazon Web Services service limit was exceeded for the calling Amazon
-//   Web Services account.
+//   - ResourceAlreadyExistsException
+//     The specified Amazon Web Services resource cannot be created, because an
+//     Amazon Web Services resource with the same settings already exists.
+//
+//   - AccountLimitExceededException
+//     An Amazon Web Services service limit was exceeded for the calling Amazon
+//     Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/CreateProject
 func (c *CodeBuild) CreateProject(input *CreateProjectInput) (*CreateProjectOutput, error) {
@@ -590,14 +749,13 @@ const opCreateReportGroup = "CreateReportGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateReportGroupRequest method.
+//	req, resp := client.CreateReportGroupRequest(params)
 //
-//    // Example sending a request using the CreateReportGroupRequest method.
-//    req, resp := client.CreateReportGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/CreateReportGroup
 func (c *CodeBuild) CreateReportGroupRequest(input *CreateReportGroupInput) (req *request.Request, output *CreateReportGroupOutput) {
@@ -628,16 +786,17 @@ func (c *CodeBuild) CreateReportGroupRequest(input *CreateReportGroupInput) (req
 // API operation CreateReportGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The specified Amazon Web Services resource cannot be created, because an
-//   Amazon Web Services resource with the same settings already exists.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
-//   * AccountLimitExceededException
-//   An Amazon Web Services service limit was exceeded for the calling Amazon
-//   Web Services account.
+//   - ResourceAlreadyExistsException
+//     The specified Amazon Web Services resource cannot be created, because an
+//     Amazon Web Services resource with the same settings already exists.
+//
+//   - AccountLimitExceededException
+//     An Amazon Web Services service limit was exceeded for the calling Amazon
+//     Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/CreateReportGroup
 func (c *CodeBuild) CreateReportGroup(input *CreateReportGroupInput) (*CreateReportGroupOutput, error) {
@@ -677,14 +836,13 @@ const opCreateWebhook = "CreateWebhook"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateWebhookRequest method.
+//	req, resp := client.CreateWebhookRequest(params)
 //
-//    // Example sending a request using the CreateWebhookRequest method.
-//    req, resp := client.CreateWebhookRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/CreateWebhook
 func (c *CodeBuild) CreateWebhookRequest(input *CreateWebhookInput) (req *request.Request, output *CreateWebhookOutput) {
@@ -725,18 +883,19 @@ func (c *CodeBuild) CreateWebhookRequest(input *CreateWebhookInput) (req *reques
 // API operation CreateWebhook for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * OAuthProviderException
-//   There was a problem with the underlying OAuth provider.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The specified Amazon Web Services resource cannot be created, because an
-//   Amazon Web Services resource with the same settings already exists.
+//   - OAuthProviderException
+//     There was a problem with the underlying OAuth provider.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - ResourceAlreadyExistsException
+//     The specified Amazon Web Services resource cannot be created, because an
+//     Amazon Web Services resource with the same settings already exists.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/CreateWebhook
 func (c *CodeBuild) CreateWebhook(input *CreateWebhookInput) (*CreateWebhookOutput, error) {
@@ -776,14 +935,13 @@ const opDeleteBuildBatch = "DeleteBuildBatch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteBuildBatchRequest method.
+//	req, resp := client.DeleteBuildBatchRequest(params)
 //
-//    // Example sending a request using the DeleteBuildBatchRequest method.
-//    req, resp := client.DeleteBuildBatchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteBuildBatch
 func (c *CodeBuild) DeleteBuildBatchRequest(input *DeleteBuildBatchInput) (req *request.Request, output *DeleteBuildBatchOutput) {
@@ -814,8 +972,8 @@ func (c *CodeBuild) DeleteBuildBatchRequest(input *DeleteBuildBatchInput) (req *
 // API operation DeleteBuildBatch for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteBuildBatch
 func (c *CodeBuild) DeleteBuildBatch(input *DeleteBuildBatchInput) (*DeleteBuildBatchOutput, error) {
@@ -839,6 +997,86 @@ func (c *CodeBuild) DeleteBuildBatchWithContext(ctx aws.Context, input *DeleteBu
 	return out, req.Send()
 }
 
+const opDeleteFleet = "DeleteFleet"
+
+// DeleteFleetRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteFleet operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteFleet for more information on using the DeleteFleet
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteFleetRequest method.
+//	req, resp := client.DeleteFleetRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteFleet
+func (c *CodeBuild) DeleteFleetRequest(input *DeleteFleetInput) (req *request.Request, output *DeleteFleetOutput) {
+	op := &request.Operation{
+		Name:       opDeleteFleet,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteFleetInput{}
+	}
+
+	output = &DeleteFleetOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteFleet API operation for AWS CodeBuild.
+//
+// Deletes a compute fleet. When you delete a compute fleet, its builds are
+// not deleted.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CodeBuild's
+// API operation DeleteFleet for usage and error information.
+//
+// Returned Error Types:
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteFleet
+func (c *CodeBuild) DeleteFleet(input *DeleteFleetInput) (*DeleteFleetOutput, error) {
+	req, out := c.DeleteFleetRequest(input)
+	return out, req.Send()
+}
+
+// DeleteFleetWithContext is the same as DeleteFleet with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteFleet for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeBuild) DeleteFleetWithContext(ctx aws.Context, input *DeleteFleetInput, opts ...request.Option) (*DeleteFleetOutput, error) {
+	req, out := c.DeleteFleetRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteProject = "DeleteProject"
 
 // DeleteProjectRequest generates a "aws/request.Request" representing the
@@ -855,14 +1093,13 @@ const opDeleteProject = "DeleteProject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProjectRequest method.
+//	req, resp := client.DeleteProjectRequest(params)
 //
-//    // Example sending a request using the DeleteProjectRequest method.
-//    req, resp := client.DeleteProjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteProject
 func (c *CodeBuild) DeleteProjectRequest(input *DeleteProjectInput) (req *request.Request, output *DeleteProjectOutput) {
@@ -894,8 +1131,8 @@ func (c *CodeBuild) DeleteProjectRequest(input *DeleteProjectInput) (req *reques
 // API operation DeleteProject for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteProject
 func (c *CodeBuild) DeleteProject(input *DeleteProjectInput) (*DeleteProjectOutput, error) {
@@ -935,14 +1172,13 @@ const opDeleteReport = "DeleteReport"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteReportRequest method.
+//	req, resp := client.DeleteReportRequest(params)
 //
-//    // Example sending a request using the DeleteReportRequest method.
-//    req, resp := client.DeleteReportRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteReport
 func (c *CodeBuild) DeleteReportRequest(input *DeleteReportInput) (req *request.Request, output *DeleteReportOutput) {
@@ -974,8 +1210,8 @@ func (c *CodeBuild) DeleteReportRequest(input *DeleteReportInput) (req *request.
 // API operation DeleteReport for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteReport
 func (c *CodeBuild) DeleteReport(input *DeleteReportInput) (*DeleteReportOutput, error) {
@@ -1015,14 +1251,13 @@ const opDeleteReportGroup = "DeleteReportGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteReportGroupRequest method.
+//	req, resp := client.DeleteReportGroupRequest(params)
 //
-//    // Example sending a request using the DeleteReportGroupRequest method.
-//    req, resp := client.DeleteReportGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteReportGroup
 func (c *CodeBuild) DeleteReportGroupRequest(input *DeleteReportGroupInput) (req *request.Request, output *DeleteReportGroupOutput) {
@@ -1055,8 +1290,8 @@ func (c *CodeBuild) DeleteReportGroupRequest(input *DeleteReportGroupInput) (req
 // API operation DeleteReportGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteReportGroup
 func (c *CodeBuild) DeleteReportGroup(input *DeleteReportGroupInput) (*DeleteReportGroupOutput, error) {
@@ -1096,14 +1331,13 @@ const opDeleteResourcePolicy = "DeleteResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteResourcePolicyRequest method.
+//	req, resp := client.DeleteResourcePolicyRequest(params)
 //
-//    // Example sending a request using the DeleteResourcePolicyRequest method.
-//    req, resp := client.DeleteResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteResourcePolicy
 func (c *CodeBuild) DeleteResourcePolicyRequest(input *DeleteResourcePolicyInput) (req *request.Request, output *DeleteResourcePolicyOutput) {
@@ -1135,8 +1369,8 @@ func (c *CodeBuild) DeleteResourcePolicyRequest(input *DeleteResourcePolicyInput
 // API operation DeleteResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteResourcePolicy
 func (c *CodeBuild) DeleteResourcePolicy(input *DeleteResourcePolicyInput) (*DeleteResourcePolicyOutput, error) {
@@ -1176,14 +1410,13 @@ const opDeleteSourceCredentials = "DeleteSourceCredentials"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSourceCredentialsRequest method.
+//	req, resp := client.DeleteSourceCredentialsRequest(params)
 //
-//    // Example sending a request using the DeleteSourceCredentialsRequest method.
-//    req, resp := client.DeleteSourceCredentialsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteSourceCredentials
 func (c *CodeBuild) DeleteSourceCredentialsRequest(input *DeleteSourceCredentialsInput) (req *request.Request, output *DeleteSourceCredentialsOutput) {
@@ -1214,11 +1447,12 @@ func (c *CodeBuild) DeleteSourceCredentialsRequest(input *DeleteSourceCredential
 // API operation DeleteSourceCredentials for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteSourceCredentials
 func (c *CodeBuild) DeleteSourceCredentials(input *DeleteSourceCredentialsInput) (*DeleteSourceCredentialsOutput, error) {
@@ -1258,14 +1492,13 @@ const opDeleteWebhook = "DeleteWebhook"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteWebhookRequest method.
+//	req, resp := client.DeleteWebhookRequest(params)
 //
-//    // Example sending a request using the DeleteWebhookRequest method.
-//    req, resp := client.DeleteWebhookRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteWebhook
 func (c *CodeBuild) DeleteWebhookRequest(input *DeleteWebhookInput) (req *request.Request, output *DeleteWebhookOutput) {
@@ -1299,14 +1532,15 @@ func (c *CodeBuild) DeleteWebhookRequest(input *DeleteWebhookInput) (req *reques
 // API operation DeleteWebhook for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
-//   * OAuthProviderException
-//   There was a problem with the underlying OAuth provider.
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
+//
+//   - OAuthProviderException
+//     There was a problem with the underlying OAuth provider.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DeleteWebhook
 func (c *CodeBuild) DeleteWebhook(input *DeleteWebhookInput) (*DeleteWebhookOutput, error) {
@@ -1346,14 +1580,13 @@ const opDescribeCodeCoverages = "DescribeCodeCoverages"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeCodeCoveragesRequest method.
+//	req, resp := client.DescribeCodeCoveragesRequest(params)
 //
-//    // Example sending a request using the DescribeCodeCoveragesRequest method.
-//    req, resp := client.DescribeCodeCoveragesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DescribeCodeCoverages
 func (c *CodeBuild) DescribeCodeCoveragesRequest(input *DescribeCodeCoveragesInput) (req *request.Request, output *DescribeCodeCoveragesOutput) {
@@ -1390,8 +1623,8 @@ func (c *CodeBuild) DescribeCodeCoveragesRequest(input *DescribeCodeCoveragesInp
 // API operation DescribeCodeCoverages for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DescribeCodeCoverages
 func (c *CodeBuild) DescribeCodeCoverages(input *DescribeCodeCoveragesInput) (*DescribeCodeCoveragesOutput, error) {
@@ -1423,15 +1656,14 @@ func (c *CodeBuild) DescribeCodeCoveragesWithContext(ctx aws.Context, input *Des
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeCodeCoverages operation.
-//    pageNum := 0
-//    err := client.DescribeCodeCoveragesPages(params,
-//        func(page *codebuild.DescribeCodeCoveragesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeCodeCoverages operation.
+//	pageNum := 0
+//	err := client.DescribeCodeCoveragesPages(params,
+//	    func(page *codebuild.DescribeCodeCoveragesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) DescribeCodeCoveragesPages(input *DescribeCodeCoveragesInput, fn func(*DescribeCodeCoveragesOutput, bool) bool) error {
 	return c.DescribeCodeCoveragesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1483,14 +1715,13 @@ const opDescribeTestCases = "DescribeTestCases"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeTestCasesRequest method.
+//	req, resp := client.DescribeTestCasesRequest(params)
 //
-//    // Example sending a request using the DescribeTestCasesRequest method.
-//    req, resp := client.DescribeTestCasesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DescribeTestCases
 func (c *CodeBuild) DescribeTestCasesRequest(input *DescribeTestCasesInput) (req *request.Request, output *DescribeTestCasesOutput) {
@@ -1527,11 +1758,12 @@ func (c *CodeBuild) DescribeTestCasesRequest(input *DescribeTestCasesInput) (req
 // API operation DescribeTestCases for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/DescribeTestCases
 func (c *CodeBuild) DescribeTestCases(input *DescribeTestCasesInput) (*DescribeTestCasesOutput, error) {
@@ -1563,15 +1795,14 @@ func (c *CodeBuild) DescribeTestCasesWithContext(ctx aws.Context, input *Describ
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeTestCases operation.
-//    pageNum := 0
-//    err := client.DescribeTestCasesPages(params,
-//        func(page *codebuild.DescribeTestCasesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeTestCases operation.
+//	pageNum := 0
+//	err := client.DescribeTestCasesPages(params,
+//	    func(page *codebuild.DescribeTestCasesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) DescribeTestCasesPages(input *DescribeTestCasesInput, fn func(*DescribeTestCasesOutput, bool) bool) error {
 	return c.DescribeTestCasesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1623,14 +1854,13 @@ const opGetReportGroupTrend = "GetReportGroupTrend"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetReportGroupTrendRequest method.
+//	req, resp := client.GetReportGroupTrendRequest(params)
 //
-//    // Example sending a request using the GetReportGroupTrendRequest method.
-//    req, resp := client.GetReportGroupTrendRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/GetReportGroupTrend
 func (c *CodeBuild) GetReportGroupTrendRequest(input *GetReportGroupTrendInput) (req *request.Request, output *GetReportGroupTrendOutput) {
@@ -1661,11 +1891,12 @@ func (c *CodeBuild) GetReportGroupTrendRequest(input *GetReportGroupTrendInput) 
 // API operation GetReportGroupTrend for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/GetReportGroupTrend
 func (c *CodeBuild) GetReportGroupTrend(input *GetReportGroupTrendInput) (*GetReportGroupTrendOutput, error) {
@@ -1705,14 +1936,13 @@ const opGetResourcePolicy = "GetResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResourcePolicyRequest method.
+//	req, resp := client.GetResourcePolicyRequest(params)
 //
-//    // Example sending a request using the GetResourcePolicyRequest method.
-//    req, resp := client.GetResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/GetResourcePolicy
 func (c *CodeBuild) GetResourcePolicyRequest(input *GetResourcePolicyInput) (req *request.Request, output *GetResourcePolicyOutput) {
@@ -1743,11 +1973,12 @@ func (c *CodeBuild) GetResourcePolicyRequest(input *GetResourcePolicyInput) (req
 // API operation GetResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
 //
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
+//
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/GetResourcePolicy
 func (c *CodeBuild) GetResourcePolicy(input *GetResourcePolicyInput) (*GetResourcePolicyOutput, error) {
@@ -1787,14 +2018,13 @@ const opImportSourceCredentials = "ImportSourceCredentials"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ImportSourceCredentialsRequest method.
+//	req, resp := client.ImportSourceCredentialsRequest(params)
 //
-//    // Example sending a request using the ImportSourceCredentialsRequest method.
-//    req, resp := client.ImportSourceCredentialsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ImportSourceCredentials
 func (c *CodeBuild) ImportSourceCredentialsRequest(input *ImportSourceCredentialsInput) (req *request.Request, output *ImportSourceCredentialsOutput) {
@@ -1826,16 +2056,17 @@ func (c *CodeBuild) ImportSourceCredentialsRequest(input *ImportSourceCredential
 // API operation ImportSourceCredentials for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * AccountLimitExceededException
-//   An Amazon Web Services service limit was exceeded for the calling Amazon
-//   Web Services account.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
-//   * ResourceAlreadyExistsException
-//   The specified Amazon Web Services resource cannot be created, because an
-//   Amazon Web Services resource with the same settings already exists.
+//   - AccountLimitExceededException
+//     An Amazon Web Services service limit was exceeded for the calling Amazon
+//     Web Services account.
+//
+//   - ResourceAlreadyExistsException
+//     The specified Amazon Web Services resource cannot be created, because an
+//     Amazon Web Services resource with the same settings already exists.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ImportSourceCredentials
 func (c *CodeBuild) ImportSourceCredentials(input *ImportSourceCredentialsInput) (*ImportSourceCredentialsOutput, error) {
@@ -1875,14 +2106,13 @@ const opInvalidateProjectCache = "InvalidateProjectCache"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the InvalidateProjectCacheRequest method.
+//	req, resp := client.InvalidateProjectCacheRequest(params)
 //
-//    // Example sending a request using the InvalidateProjectCacheRequest method.
-//    req, resp := client.InvalidateProjectCacheRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/InvalidateProjectCache
 func (c *CodeBuild) InvalidateProjectCacheRequest(input *InvalidateProjectCacheInput) (req *request.Request, output *InvalidateProjectCacheOutput) {
@@ -1914,11 +2144,12 @@ func (c *CodeBuild) InvalidateProjectCacheRequest(input *InvalidateProjectCacheI
 // API operation InvalidateProjectCache for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/InvalidateProjectCache
 func (c *CodeBuild) InvalidateProjectCache(input *InvalidateProjectCacheInput) (*InvalidateProjectCacheOutput, error) {
@@ -1958,14 +2189,13 @@ const opListBuildBatches = "ListBuildBatches"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBuildBatchesRequest method.
+//	req, resp := client.ListBuildBatchesRequest(params)
 //
-//    // Example sending a request using the ListBuildBatchesRequest method.
-//    req, resp := client.ListBuildBatchesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListBuildBatches
 func (c *CodeBuild) ListBuildBatchesRequest(input *ListBuildBatchesInput) (req *request.Request, output *ListBuildBatchesOutput) {
@@ -2002,8 +2232,8 @@ func (c *CodeBuild) ListBuildBatchesRequest(input *ListBuildBatchesInput) (req *
 // API operation ListBuildBatches for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListBuildBatches
 func (c *CodeBuild) ListBuildBatches(input *ListBuildBatchesInput) (*ListBuildBatchesOutput, error) {
@@ -2035,15 +2265,14 @@ func (c *CodeBuild) ListBuildBatchesWithContext(ctx aws.Context, input *ListBuil
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBuildBatches operation.
-//    pageNum := 0
-//    err := client.ListBuildBatchesPages(params,
-//        func(page *codebuild.ListBuildBatchesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBuildBatches operation.
+//	pageNum := 0
+//	err := client.ListBuildBatchesPages(params,
+//	    func(page *codebuild.ListBuildBatchesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) ListBuildBatchesPages(input *ListBuildBatchesInput, fn func(*ListBuildBatchesOutput, bool) bool) error {
 	return c.ListBuildBatchesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2095,14 +2324,13 @@ const opListBuildBatchesForProject = "ListBuildBatchesForProject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBuildBatchesForProjectRequest method.
+//	req, resp := client.ListBuildBatchesForProjectRequest(params)
 //
-//    // Example sending a request using the ListBuildBatchesForProjectRequest method.
-//    req, resp := client.ListBuildBatchesForProjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListBuildBatchesForProject
 func (c *CodeBuild) ListBuildBatchesForProjectRequest(input *ListBuildBatchesForProjectInput) (req *request.Request, output *ListBuildBatchesForProjectOutput) {
@@ -2139,11 +2367,12 @@ func (c *CodeBuild) ListBuildBatchesForProjectRequest(input *ListBuildBatchesFor
 // API operation ListBuildBatchesForProject for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListBuildBatchesForProject
 func (c *CodeBuild) ListBuildBatchesForProject(input *ListBuildBatchesForProjectInput) (*ListBuildBatchesForProjectOutput, error) {
@@ -2175,15 +2404,14 @@ func (c *CodeBuild) ListBuildBatchesForProjectWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBuildBatchesForProject operation.
-//    pageNum := 0
-//    err := client.ListBuildBatchesForProjectPages(params,
-//        func(page *codebuild.ListBuildBatchesForProjectOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBuildBatchesForProject operation.
+//	pageNum := 0
+//	err := client.ListBuildBatchesForProjectPages(params,
+//	    func(page *codebuild.ListBuildBatchesForProjectOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) ListBuildBatchesForProjectPages(input *ListBuildBatchesForProjectInput, fn func(*ListBuildBatchesForProjectOutput, bool) bool) error {
 	return c.ListBuildBatchesForProjectPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2235,14 +2463,13 @@ const opListBuilds = "ListBuilds"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBuildsRequest method.
+//	req, resp := client.ListBuildsRequest(params)
 //
-//    // Example sending a request using the ListBuildsRequest method.
-//    req, resp := client.ListBuildsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListBuilds
 func (c *CodeBuild) ListBuildsRequest(input *ListBuildsInput) (req *request.Request, output *ListBuildsOutput) {
@@ -2279,8 +2506,8 @@ func (c *CodeBuild) ListBuildsRequest(input *ListBuildsInput) (req *request.Requ
 // API operation ListBuilds for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListBuilds
 func (c *CodeBuild) ListBuilds(input *ListBuildsInput) (*ListBuildsOutput, error) {
@@ -2312,15 +2539,14 @@ func (c *CodeBuild) ListBuildsWithContext(ctx aws.Context, input *ListBuildsInpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBuilds operation.
-//    pageNum := 0
-//    err := client.ListBuildsPages(params,
-//        func(page *codebuild.ListBuildsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBuilds operation.
+//	pageNum := 0
+//	err := client.ListBuildsPages(params,
+//	    func(page *codebuild.ListBuildsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) ListBuildsPages(input *ListBuildsInput, fn func(*ListBuildsOutput, bool) bool) error {
 	return c.ListBuildsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2372,14 +2598,13 @@ const opListBuildsForProject = "ListBuildsForProject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBuildsForProjectRequest method.
+//	req, resp := client.ListBuildsForProjectRequest(params)
 //
-//    // Example sending a request using the ListBuildsForProjectRequest method.
-//    req, resp := client.ListBuildsForProjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListBuildsForProject
 func (c *CodeBuild) ListBuildsForProjectRequest(input *ListBuildsForProjectInput) (req *request.Request, output *ListBuildsForProjectOutput) {
@@ -2417,11 +2642,12 @@ func (c *CodeBuild) ListBuildsForProjectRequest(input *ListBuildsForProjectInput
 // API operation ListBuildsForProject for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListBuildsForProject
 func (c *CodeBuild) ListBuildsForProject(input *ListBuildsForProjectInput) (*ListBuildsForProjectOutput, error) {
@@ -2453,15 +2679,14 @@ func (c *CodeBuild) ListBuildsForProjectWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBuildsForProject operation.
-//    pageNum := 0
-//    err := client.ListBuildsForProjectPages(params,
-//        func(page *codebuild.ListBuildsForProjectOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBuildsForProject operation.
+//	pageNum := 0
+//	err := client.ListBuildsForProjectPages(params,
+//	    func(page *codebuild.ListBuildsForProjectOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) ListBuildsForProjectPages(input *ListBuildsForProjectInput, fn func(*ListBuildsForProjectOutput, bool) bool) error {
 	return c.ListBuildsForProjectPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2513,14 +2738,13 @@ const opListCuratedEnvironmentImages = "ListCuratedEnvironmentImages"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCuratedEnvironmentImagesRequest method.
+//	req, resp := client.ListCuratedEnvironmentImagesRequest(params)
 //
-//    // Example sending a request using the ListCuratedEnvironmentImagesRequest method.
-//    req, resp := client.ListCuratedEnvironmentImagesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListCuratedEnvironmentImages
 func (c *CodeBuild) ListCuratedEnvironmentImagesRequest(input *ListCuratedEnvironmentImagesInput) (req *request.Request, output *ListCuratedEnvironmentImagesOutput) {
@@ -2571,6 +2795,142 @@ func (c *CodeBuild) ListCuratedEnvironmentImagesWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
+const opListFleets = "ListFleets"
+
+// ListFleetsRequest generates a "aws/request.Request" representing the
+// client's request for the ListFleets operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListFleets for more information on using the ListFleets
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListFleetsRequest method.
+//	req, resp := client.ListFleetsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListFleets
+func (c *CodeBuild) ListFleetsRequest(input *ListFleetsInput) (req *request.Request, output *ListFleetsOutput) {
+	op := &request.Operation{
+		Name:       opListFleets,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListFleetsInput{}
+	}
+
+	output = &ListFleetsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListFleets API operation for AWS CodeBuild.
+//
+// Gets a list of compute fleet names with each compute fleet name representing
+// a single compute fleet.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CodeBuild's
+// API operation ListFleets for usage and error information.
+//
+// Returned Error Types:
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListFleets
+func (c *CodeBuild) ListFleets(input *ListFleetsInput) (*ListFleetsOutput, error) {
+	req, out := c.ListFleetsRequest(input)
+	return out, req.Send()
+}
+
+// ListFleetsWithContext is the same as ListFleets with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListFleets for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeBuild) ListFleetsWithContext(ctx aws.Context, input *ListFleetsInput, opts ...request.Option) (*ListFleetsOutput, error) {
+	req, out := c.ListFleetsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListFleetsPages iterates over the pages of a ListFleets operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListFleets method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListFleets operation.
+//	pageNum := 0
+//	err := client.ListFleetsPages(params,
+//	    func(page *codebuild.ListFleetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *CodeBuild) ListFleetsPages(input *ListFleetsInput, fn func(*ListFleetsOutput, bool) bool) error {
+	return c.ListFleetsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListFleetsPagesWithContext same as ListFleetsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeBuild) ListFleetsPagesWithContext(ctx aws.Context, input *ListFleetsInput, fn func(*ListFleetsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListFleetsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListFleetsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListFleetsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListProjects = "ListProjects"
 
 // ListProjectsRequest generates a "aws/request.Request" representing the
@@ -2587,14 +2947,13 @@ const opListProjects = "ListProjects"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProjectsRequest method.
+//	req, resp := client.ListProjectsRequest(params)
 //
-//    // Example sending a request using the ListProjectsRequest method.
-//    req, resp := client.ListProjectsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListProjects
 func (c *CodeBuild) ListProjectsRequest(input *ListProjectsInput) (req *request.Request, output *ListProjectsOutput) {
@@ -2632,8 +2991,8 @@ func (c *CodeBuild) ListProjectsRequest(input *ListProjectsInput) (req *request.
 // API operation ListProjects for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListProjects
 func (c *CodeBuild) ListProjects(input *ListProjectsInput) (*ListProjectsOutput, error) {
@@ -2665,15 +3024,14 @@ func (c *CodeBuild) ListProjectsWithContext(ctx aws.Context, input *ListProjects
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListProjects operation.
-//    pageNum := 0
-//    err := client.ListProjectsPages(params,
-//        func(page *codebuild.ListProjectsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListProjects operation.
+//	pageNum := 0
+//	err := client.ListProjectsPages(params,
+//	    func(page *codebuild.ListProjectsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) ListProjectsPages(input *ListProjectsInput, fn func(*ListProjectsOutput, bool) bool) error {
 	return c.ListProjectsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2725,14 +3083,13 @@ const opListReportGroups = "ListReportGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReportGroupsRequest method.
+//	req, resp := client.ListReportGroupsRequest(params)
 //
-//    // Example sending a request using the ListReportGroupsRequest method.
-//    req, resp := client.ListReportGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListReportGroups
 func (c *CodeBuild) ListReportGroupsRequest(input *ListReportGroupsInput) (req *request.Request, output *ListReportGroupsOutput) {
@@ -2770,8 +3127,8 @@ func (c *CodeBuild) ListReportGroupsRequest(input *ListReportGroupsInput) (req *
 // API operation ListReportGroups for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListReportGroups
 func (c *CodeBuild) ListReportGroups(input *ListReportGroupsInput) (*ListReportGroupsOutput, error) {
@@ -2803,15 +3160,14 @@ func (c *CodeBuild) ListReportGroupsWithContext(ctx aws.Context, input *ListRepo
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReportGroups operation.
-//    pageNum := 0
-//    err := client.ListReportGroupsPages(params,
-//        func(page *codebuild.ListReportGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReportGroups operation.
+//	pageNum := 0
+//	err := client.ListReportGroupsPages(params,
+//	    func(page *codebuild.ListReportGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) ListReportGroupsPages(input *ListReportGroupsInput, fn func(*ListReportGroupsOutput, bool) bool) error {
 	return c.ListReportGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2863,14 +3219,13 @@ const opListReports = "ListReports"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReportsRequest method.
+//	req, resp := client.ListReportsRequest(params)
 //
-//    // Example sending a request using the ListReportsRequest method.
-//    req, resp := client.ListReportsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListReports
 func (c *CodeBuild) ListReportsRequest(input *ListReportsInput) (req *request.Request, output *ListReportsOutput) {
@@ -2908,8 +3263,8 @@ func (c *CodeBuild) ListReportsRequest(input *ListReportsInput) (req *request.Re
 // API operation ListReports for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListReports
 func (c *CodeBuild) ListReports(input *ListReportsInput) (*ListReportsOutput, error) {
@@ -2941,15 +3296,14 @@ func (c *CodeBuild) ListReportsWithContext(ctx aws.Context, input *ListReportsIn
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReports operation.
-//    pageNum := 0
-//    err := client.ListReportsPages(params,
-//        func(page *codebuild.ListReportsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReports operation.
+//	pageNum := 0
+//	err := client.ListReportsPages(params,
+//	    func(page *codebuild.ListReportsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) ListReportsPages(input *ListReportsInput, fn func(*ListReportsOutput, bool) bool) error {
 	return c.ListReportsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3001,14 +3355,13 @@ const opListReportsForReportGroup = "ListReportsForReportGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReportsForReportGroupRequest method.
+//	req, resp := client.ListReportsForReportGroupRequest(params)
 //
-//    // Example sending a request using the ListReportsForReportGroupRequest method.
-//    req, resp := client.ListReportsForReportGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListReportsForReportGroup
 func (c *CodeBuild) ListReportsForReportGroupRequest(input *ListReportsForReportGroupInput) (req *request.Request, output *ListReportsForReportGroupOutput) {
@@ -3045,11 +3398,12 @@ func (c *CodeBuild) ListReportsForReportGroupRequest(input *ListReportsForReport
 // API operation ListReportsForReportGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListReportsForReportGroup
 func (c *CodeBuild) ListReportsForReportGroup(input *ListReportsForReportGroupInput) (*ListReportsForReportGroupOutput, error) {
@@ -3081,15 +3435,14 @@ func (c *CodeBuild) ListReportsForReportGroupWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReportsForReportGroup operation.
-//    pageNum := 0
-//    err := client.ListReportsForReportGroupPages(params,
-//        func(page *codebuild.ListReportsForReportGroupOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReportsForReportGroup operation.
+//	pageNum := 0
+//	err := client.ListReportsForReportGroupPages(params,
+//	    func(page *codebuild.ListReportsForReportGroupOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) ListReportsForReportGroupPages(input *ListReportsForReportGroupInput, fn func(*ListReportsForReportGroupOutput, bool) bool) error {
 	return c.ListReportsForReportGroupPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3141,14 +3494,13 @@ const opListSharedProjects = "ListSharedProjects"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSharedProjectsRequest method.
+//	req, resp := client.ListSharedProjectsRequest(params)
 //
-//    // Example sending a request using the ListSharedProjectsRequest method.
-//    req, resp := client.ListSharedProjectsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListSharedProjects
 func (c *CodeBuild) ListSharedProjectsRequest(input *ListSharedProjectsInput) (req *request.Request, output *ListSharedProjectsOutput) {
@@ -3186,8 +3538,8 @@ func (c *CodeBuild) ListSharedProjectsRequest(input *ListSharedProjectsInput) (r
 // API operation ListSharedProjects for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListSharedProjects
 func (c *CodeBuild) ListSharedProjects(input *ListSharedProjectsInput) (*ListSharedProjectsOutput, error) {
@@ -3219,15 +3571,14 @@ func (c *CodeBuild) ListSharedProjectsWithContext(ctx aws.Context, input *ListSh
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSharedProjects operation.
-//    pageNum := 0
-//    err := client.ListSharedProjectsPages(params,
-//        func(page *codebuild.ListSharedProjectsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSharedProjects operation.
+//	pageNum := 0
+//	err := client.ListSharedProjectsPages(params,
+//	    func(page *codebuild.ListSharedProjectsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) ListSharedProjectsPages(input *ListSharedProjectsInput, fn func(*ListSharedProjectsOutput, bool) bool) error {
 	return c.ListSharedProjectsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3279,14 +3630,13 @@ const opListSharedReportGroups = "ListSharedReportGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSharedReportGroupsRequest method.
+//	req, resp := client.ListSharedReportGroupsRequest(params)
 //
-//    // Example sending a request using the ListSharedReportGroupsRequest method.
-//    req, resp := client.ListSharedReportGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListSharedReportGroups
 func (c *CodeBuild) ListSharedReportGroupsRequest(input *ListSharedReportGroupsInput) (req *request.Request, output *ListSharedReportGroupsOutput) {
@@ -3324,8 +3674,8 @@ func (c *CodeBuild) ListSharedReportGroupsRequest(input *ListSharedReportGroupsI
 // API operation ListSharedReportGroups for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListSharedReportGroups
 func (c *CodeBuild) ListSharedReportGroups(input *ListSharedReportGroupsInput) (*ListSharedReportGroupsOutput, error) {
@@ -3357,15 +3707,14 @@ func (c *CodeBuild) ListSharedReportGroupsWithContext(ctx aws.Context, input *Li
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSharedReportGroups operation.
-//    pageNum := 0
-//    err := client.ListSharedReportGroupsPages(params,
-//        func(page *codebuild.ListSharedReportGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSharedReportGroups operation.
+//	pageNum := 0
+//	err := client.ListSharedReportGroupsPages(params,
+//	    func(page *codebuild.ListSharedReportGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *CodeBuild) ListSharedReportGroupsPages(input *ListSharedReportGroupsInput, fn func(*ListSharedReportGroupsOutput, bool) bool) error {
 	return c.ListSharedReportGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3417,14 +3766,13 @@ const opListSourceCredentials = "ListSourceCredentials"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSourceCredentialsRequest method.
+//	req, resp := client.ListSourceCredentialsRequest(params)
 //
-//    // Example sending a request using the ListSourceCredentialsRequest method.
-//    req, resp := client.ListSourceCredentialsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListSourceCredentials
 func (c *CodeBuild) ListSourceCredentialsRequest(input *ListSourceCredentialsInput) (req *request.Request, output *ListSourceCredentialsOutput) {
@@ -3455,8 +3803,8 @@ func (c *CodeBuild) ListSourceCredentialsRequest(input *ListSourceCredentialsInp
 // API operation ListSourceCredentials for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/ListSourceCredentials
 func (c *CodeBuild) ListSourceCredentials(input *ListSourceCredentialsInput) (*ListSourceCredentialsOutput, error) {
@@ -3496,14 +3844,13 @@ const opPutResourcePolicy = "PutResourcePolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutResourcePolicyRequest method.
+//	req, resp := client.PutResourcePolicyRequest(params)
 //
-//    // Example sending a request using the PutResourcePolicyRequest method.
-//    req, resp := client.PutResourcePolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/PutResourcePolicy
 func (c *CodeBuild) PutResourcePolicyRequest(input *PutResourcePolicyInput) (req *request.Request, output *PutResourcePolicyOutput) {
@@ -3534,11 +3881,12 @@ func (c *CodeBuild) PutResourcePolicyRequest(input *PutResourcePolicyInput) (req
 // API operation PutResourcePolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
 //
-//   * InvalidInputException
-//   The input value that was provided is not valid.
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
+//
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/PutResourcePolicy
 func (c *CodeBuild) PutResourcePolicy(input *PutResourcePolicyInput) (*PutResourcePolicyOutput, error) {
@@ -3578,14 +3926,13 @@ const opRetryBuild = "RetryBuild"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RetryBuildRequest method.
+//	req, resp := client.RetryBuildRequest(params)
 //
-//    // Example sending a request using the RetryBuildRequest method.
-//    req, resp := client.RetryBuildRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/RetryBuild
 func (c *CodeBuild) RetryBuildRequest(input *RetryBuildInput) (req *request.Request, output *RetryBuildOutput) {
@@ -3616,15 +3963,16 @@ func (c *CodeBuild) RetryBuildRequest(input *RetryBuildInput) (req *request.Requ
 // API operation RetryBuild for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
-//   * AccountLimitExceededException
-//   An Amazon Web Services service limit was exceeded for the calling Amazon
-//   Web Services account.
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
+//
+//   - AccountLimitExceededException
+//     An Amazon Web Services service limit was exceeded for the calling Amazon
+//     Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/RetryBuild
 func (c *CodeBuild) RetryBuild(input *RetryBuildInput) (*RetryBuildOutput, error) {
@@ -3664,14 +4012,13 @@ const opRetryBuildBatch = "RetryBuildBatch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RetryBuildBatchRequest method.
+//	req, resp := client.RetryBuildBatchRequest(params)
 //
-//    // Example sending a request using the RetryBuildBatchRequest method.
-//    req, resp := client.RetryBuildBatchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/RetryBuildBatch
 func (c *CodeBuild) RetryBuildBatchRequest(input *RetryBuildBatchInput) (req *request.Request, output *RetryBuildBatchOutput) {
@@ -3703,11 +4050,12 @@ func (c *CodeBuild) RetryBuildBatchRequest(input *RetryBuildBatchInput) (req *re
 // API operation RetryBuildBatch for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/RetryBuildBatch
 func (c *CodeBuild) RetryBuildBatch(input *RetryBuildBatchInput) (*RetryBuildBatchOutput, error) {
@@ -3747,14 +4095,13 @@ const opStartBuild = "StartBuild"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartBuildRequest method.
+//	req, resp := client.StartBuildRequest(params)
 //
-//    // Example sending a request using the StartBuildRequest method.
-//    req, resp := client.StartBuildRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/StartBuild
 func (c *CodeBuild) StartBuildRequest(input *StartBuildInput) (req *request.Request, output *StartBuildOutput) {
@@ -3775,7 +4122,13 @@ func (c *CodeBuild) StartBuildRequest(input *StartBuildInput) (req *request.Requ
 
 // StartBuild API operation for AWS CodeBuild.
 //
-// Starts running a build.
+// Starts running a build with the settings defined in the project. These setting
+// include: how to run a build, where to get the source code, which build environment
+// to use, which build commands to run, and where to store the build output.
+//
+// You can also start a build run by overriding some of the build settings in
+// the project. The overrides only apply for that specific start build request.
+// The settings in the project are unaltered.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3785,15 +4138,16 @@ func (c *CodeBuild) StartBuildRequest(input *StartBuildInput) (req *request.Requ
 // API operation StartBuild for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
-//   * AccountLimitExceededException
-//   An Amazon Web Services service limit was exceeded for the calling Amazon
-//   Web Services account.
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
+//
+//   - AccountLimitExceededException
+//     An Amazon Web Services service limit was exceeded for the calling Amazon
+//     Web Services account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/StartBuild
 func (c *CodeBuild) StartBuild(input *StartBuildInput) (*StartBuildOutput, error) {
@@ -3833,14 +4187,13 @@ const opStartBuildBatch = "StartBuildBatch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartBuildBatchRequest method.
+//	req, resp := client.StartBuildBatchRequest(params)
 //
-//    // Example sending a request using the StartBuildBatchRequest method.
-//    req, resp := client.StartBuildBatchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/StartBuildBatch
 func (c *CodeBuild) StartBuildBatchRequest(input *StartBuildBatchInput) (req *request.Request, output *StartBuildBatchOutput) {
@@ -3871,11 +4224,12 @@ func (c *CodeBuild) StartBuildBatchRequest(input *StartBuildBatchInput) (req *re
 // API operation StartBuildBatch for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/StartBuildBatch
 func (c *CodeBuild) StartBuildBatch(input *StartBuildBatchInput) (*StartBuildBatchOutput, error) {
@@ -3915,14 +4269,13 @@ const opStopBuild = "StopBuild"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopBuildRequest method.
+//	req, resp := client.StopBuildRequest(params)
 //
-//    // Example sending a request using the StopBuildRequest method.
-//    req, resp := client.StopBuildRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/StopBuild
 func (c *CodeBuild) StopBuildRequest(input *StopBuildInput) (req *request.Request, output *StopBuildOutput) {
@@ -3953,11 +4306,12 @@ func (c *CodeBuild) StopBuildRequest(input *StopBuildInput) (req *request.Reques
 // API operation StopBuild for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/StopBuild
 func (c *CodeBuild) StopBuild(input *StopBuildInput) (*StopBuildOutput, error) {
@@ -3997,14 +4351,13 @@ const opStopBuildBatch = "StopBuildBatch"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopBuildBatchRequest method.
+//	req, resp := client.StopBuildBatchRequest(params)
 //
-//    // Example sending a request using the StopBuildBatchRequest method.
-//    req, resp := client.StopBuildBatchRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/StopBuildBatch
 func (c *CodeBuild) StopBuildBatchRequest(input *StopBuildBatchInput) (req *request.Request, output *StopBuildBatchOutput) {
@@ -4035,11 +4388,12 @@ func (c *CodeBuild) StopBuildBatchRequest(input *StopBuildBatchInput) (req *requ
 // API operation StopBuildBatch for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/StopBuildBatch
 func (c *CodeBuild) StopBuildBatch(input *StopBuildBatchInput) (*StopBuildBatchOutput, error) {
@@ -4063,6 +4417,92 @@ func (c *CodeBuild) StopBuildBatchWithContext(ctx aws.Context, input *StopBuildB
 	return out, req.Send()
 }
 
+const opUpdateFleet = "UpdateFleet"
+
+// UpdateFleetRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateFleet operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateFleet for more information on using the UpdateFleet
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateFleetRequest method.
+//	req, resp := client.UpdateFleetRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/UpdateFleet
+func (c *CodeBuild) UpdateFleetRequest(input *UpdateFleetInput) (req *request.Request, output *UpdateFleetOutput) {
+	op := &request.Operation{
+		Name:       opUpdateFleet,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateFleetInput{}
+	}
+
+	output = &UpdateFleetOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateFleet API operation for AWS CodeBuild.
+//
+// Updates a compute fleet.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CodeBuild's
+// API operation UpdateFleet for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
+//
+//   - AccountLimitExceededException
+//     An Amazon Web Services service limit was exceeded for the calling Amazon
+//     Web Services account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/UpdateFleet
+func (c *CodeBuild) UpdateFleet(input *UpdateFleetInput) (*UpdateFleetOutput, error) {
+	req, out := c.UpdateFleetRequest(input)
+	return out, req.Send()
+}
+
+// UpdateFleetWithContext is the same as UpdateFleet with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateFleet for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeBuild) UpdateFleetWithContext(ctx aws.Context, input *UpdateFleetInput, opts ...request.Option) (*UpdateFleetOutput, error) {
+	req, out := c.UpdateFleetRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateProject = "UpdateProject"
 
 // UpdateProjectRequest generates a "aws/request.Request" representing the
@@ -4079,14 +4519,13 @@ const opUpdateProject = "UpdateProject"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProjectRequest method.
+//	req, resp := client.UpdateProjectRequest(params)
 //
-//    // Example sending a request using the UpdateProjectRequest method.
-//    req, resp := client.UpdateProjectRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/UpdateProject
 func (c *CodeBuild) UpdateProjectRequest(input *UpdateProjectInput) (req *request.Request, output *UpdateProjectOutput) {
@@ -4117,11 +4556,12 @@ func (c *CodeBuild) UpdateProjectRequest(input *UpdateProjectInput) (req *reques
 // API operation UpdateProject for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/UpdateProject
 func (c *CodeBuild) UpdateProject(input *UpdateProjectInput) (*UpdateProjectOutput, error) {
@@ -4161,14 +4601,13 @@ const opUpdateProjectVisibility = "UpdateProjectVisibility"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProjectVisibilityRequest method.
+//	req, resp := client.UpdateProjectVisibilityRequest(params)
 //
-//    // Example sending a request using the UpdateProjectVisibilityRequest method.
-//    req, resp := client.UpdateProjectVisibilityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/UpdateProjectVisibility
 func (c *CodeBuild) UpdateProjectVisibilityRequest(input *UpdateProjectVisibilityInput) (req *request.Request, output *UpdateProjectVisibilityOutput) {
@@ -4196,27 +4635,26 @@ func (c *CodeBuild) UpdateProjectVisibilityRequest(input *UpdateProjectVisibilit
 //
 // The following should be kept in mind when making your projects public:
 //
-//    * All of a project's build results, logs, and artifacts, including builds
-//    that were run when the project was private, are available to the general
-//    public.
+//   - All of a project's build results, logs, and artifacts, including builds
+//     that were run when the project was private, are available to the general
+//     public.
 //
-//    * All build logs and artifacts are available to the public. Environment
-//    variables, source code, and other sensitive information may have been
-//    output to the build logs and artifacts. You must be careful about what
-//    information is output to the build logs. Some best practice are: Do not
-//    store sensitive values, especially Amazon Web Services access key IDs
-//    and secret access keys, in environment variables. We recommend that you
-//    use an Amazon EC2 Systems Manager Parameter Store or Secrets Manager to
-//    store sensitive values. Follow Best practices for using webhooks (https://docs.aws.amazon.com/codebuild/latest/userguide/webhooks.html#webhook-best-practices)
-//    in the CodeBuild User Guide to limit which entities can trigger a build,
-//    and do not store the buildspec in the project itself, to ensure that your
-//    webhooks are as secure as possible.
+//   - All build logs and artifacts are available to the public. Environment
+//     variables, source code, and other sensitive information may have been
+//     output to the build logs and artifacts. You must be careful about what
+//     information is output to the build logs. Some best practice are: Do not
+//     store sensitive values in environment variables. We recommend that you
+//     use an Amazon EC2 Systems Manager Parameter Store or Secrets Manager to
+//     store sensitive values. Follow Best practices for using webhooks (https://docs.aws.amazon.com/codebuild/latest/userguide/webhooks.html#webhook-best-practices)
+//     in the CodeBuild User Guide to limit which entities can trigger a build,
+//     and do not store the buildspec in the project itself, to ensure that your
+//     webhooks are as secure as possible.
 //
-//    * A malicious user can use public builds to distribute malicious artifacts.
-//    We recommend that you review all pull requests to verify that the pull
-//    request is a legitimate change. We also recommend that you validate any
-//    artifacts with their checksums to make sure that the correct artifacts
-//    are being downloaded.
+//   - A malicious user can use public builds to distribute malicious artifacts.
+//     We recommend that you review all pull requests to verify that the pull
+//     request is a legitimate change. We also recommend that you validate any
+//     artifacts with their checksums to make sure that the correct artifacts
+//     are being downloaded.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4226,11 +4664,12 @@ func (c *CodeBuild) UpdateProjectVisibilityRequest(input *UpdateProjectVisibilit
 // API operation UpdateProjectVisibility for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/UpdateProjectVisibility
 func (c *CodeBuild) UpdateProjectVisibility(input *UpdateProjectVisibilityInput) (*UpdateProjectVisibilityOutput, error) {
@@ -4270,14 +4709,13 @@ const opUpdateReportGroup = "UpdateReportGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateReportGroupRequest method.
+//	req, resp := client.UpdateReportGroupRequest(params)
 //
-//    // Example sending a request using the UpdateReportGroupRequest method.
-//    req, resp := client.UpdateReportGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/UpdateReportGroup
 func (c *CodeBuild) UpdateReportGroupRequest(input *UpdateReportGroupInput) (req *request.Request, output *UpdateReportGroupOutput) {
@@ -4308,11 +4746,12 @@ func (c *CodeBuild) UpdateReportGroupRequest(input *UpdateReportGroupInput) (req
 // API operation UpdateReportGroup for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
+//
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/UpdateReportGroup
 func (c *CodeBuild) UpdateReportGroup(input *UpdateReportGroupInput) (*UpdateReportGroupOutput, error) {
@@ -4352,14 +4791,13 @@ const opUpdateWebhook = "UpdateWebhook"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateWebhookRequest method.
+//	req, resp := client.UpdateWebhookRequest(params)
 //
-//    // Example sending a request using the UpdateWebhookRequest method.
-//    req, resp := client.UpdateWebhookRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/UpdateWebhook
 func (c *CodeBuild) UpdateWebhookRequest(input *UpdateWebhookInput) (req *request.Request, output *UpdateWebhookOutput) {
@@ -4392,14 +4830,15 @@ func (c *CodeBuild) UpdateWebhookRequest(input *UpdateWebhookInput) (req *reques
 // API operation UpdateWebhook for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidInputException
-//   The input value that was provided is not valid.
 //
-//   * ResourceNotFoundException
-//   The specified Amazon Web Services resource cannot be found.
+//   - InvalidInputException
+//     The input value that was provided is not valid.
 //
-//   * OAuthProviderException
-//   There was a problem with the underlying OAuth provider.
+//   - ResourceNotFoundException
+//     The specified Amazon Web Services resource cannot be found.
+//
+//   - OAuthProviderException
+//     There was a problem with the underlying OAuth provider.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/UpdateWebhook
 func (c *CodeBuild) UpdateWebhook(input *UpdateWebhookInput) (*UpdateWebhookOutput, error) {
@@ -4749,6 +5188,95 @@ func (s *BatchGetBuildsOutput) SetBuilds(v []*Build) *BatchGetBuildsOutput {
 // SetBuildsNotFound sets the BuildsNotFound field's value.
 func (s *BatchGetBuildsOutput) SetBuildsNotFound(v []*string) *BatchGetBuildsOutput {
 	s.BuildsNotFound = v
+	return s
+}
+
+type BatchGetFleetsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The names or ARNs of the compute fleets.
+	//
+	// Names is a required field
+	Names []*string `locationName:"names" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetFleetsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetFleetsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchGetFleetsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchGetFleetsInput"}
+	if s.Names == nil {
+		invalidParams.Add(request.NewErrParamRequired("Names"))
+	}
+	if s.Names != nil && len(s.Names) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Names", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNames sets the Names field's value.
+func (s *BatchGetFleetsInput) SetNames(v []*string) *BatchGetFleetsInput {
+	s.Names = v
+	return s
+}
+
+type BatchGetFleetsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the requested compute fleets.
+	Fleets []*Fleet `locationName:"fleets" min:"1" type:"list"`
+
+	// The names of compute fleets for which information could not be found.
+	FleetsNotFound []*string `locationName:"fleetsNotFound" min:"1" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetFleetsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BatchGetFleetsOutput) GoString() string {
+	return s.String()
+}
+
+// SetFleets sets the Fleets field's value.
+func (s *BatchGetFleetsOutput) SetFleets(v []*Fleet) *BatchGetFleetsOutput {
+	s.Fleets = v
+	return s
+}
+
+// SetFleetsNotFound sets the FleetsNotFound field's value.
+func (s *BatchGetFleetsOutput) SetFleetsNotFound(v []*string) *BatchGetFleetsOutput {
+	s.FleetsNotFound = v
 	return s
 }
 
@@ -5149,7 +5677,7 @@ type Build struct {
 	//    * If CodePipeline started the build, the pipeline's name (for example,
 	//    codepipeline/my-demo-pipeline).
 	//
-	//    * If an IAM user started the build, the user's name (for example, MyUserName).
+	//    * If a user started the build, the user's name (for example, MyUserName).
 	//
 	//    * If the Jenkins plugin for CodeBuild started the build, the string CodeBuild-Jenkins-Plugin.
 	Initiator *string `locationName:"initiator" type:"string"`
@@ -5655,7 +6183,7 @@ type BuildBatch struct {
 	//    * If CodePipeline started the build, the pipeline's name (for example,
 	//    codepipeline/my-demo-pipeline).
 	//
-	//    * If an IAM user started the build, the user's name.
+	//    * If a user started the build, the user's name.
 	//
 	//    * If the Jenkins plugin for CodeBuild started the build, the string CodeBuild-Jenkins-Plugin.
 	Initiator *string `locationName:"initiator" type:"string"`
@@ -6786,6 +7314,249 @@ func (s *CodeCoverageReportSummary) SetLinesMissed(v int64) *CodeCoverageReportS
 	return s
 }
 
+type CreateFleetInput struct {
+	_ struct{} `type:"structure"`
+
+	// The initial number of machines allocated to the ﬂeet, which deﬁnes the
+	// number of builds that can run in parallel.
+	//
+	// BaseCapacity is a required field
+	BaseCapacity *int64 `locationName:"baseCapacity" min:"1" type:"integer" required:"true"`
+
+	// Information about the compute resources the compute fleet uses. Available
+	// values include:
+	//
+	//    * BUILD_GENERAL1_SMALL: Use up to 3 GB memory and 2 vCPUs for builds.
+	//
+	//    * BUILD_GENERAL1_MEDIUM: Use up to 7 GB memory and 4 vCPUs for builds.
+	//
+	//    * BUILD_GENERAL1_LARGE: Use up to 16 GB memory and 8 vCPUs for builds,
+	//    depending on your environment type.
+	//
+	//    * BUILD_GENERAL1_XLARGE: Use up to 70 GB memory and 36 vCPUs for builds,
+	//    depending on your environment type.
+	//
+	//    * BUILD_GENERAL1_2XLARGE: Use up to 145 GB memory, 72 vCPUs, and 824 GB
+	//    of SSD storage for builds. This compute type supports Docker images up
+	//    to 100 GB uncompressed.
+	//
+	// If you use BUILD_GENERAL1_SMALL:
+	//
+	//    * For environment type LINUX_CONTAINER, you can use up to 3 GB memory
+	//    and 2 vCPUs for builds.
+	//
+	//    * For environment type LINUX_GPU_CONTAINER, you can use up to 16 GB memory,
+	//    4 vCPUs, and 1 NVIDIA A10G Tensor Core GPU for builds.
+	//
+	//    * For environment type ARM_CONTAINER, you can use up to 4 GB memory and
+	//    2 vCPUs on ARM-based processors for builds.
+	//
+	// If you use BUILD_GENERAL1_LARGE:
+	//
+	//    * For environment type LINUX_CONTAINER, you can use up to 15 GB memory
+	//    and 8 vCPUs for builds.
+	//
+	//    * For environment type LINUX_GPU_CONTAINER, you can use up to 255 GB memory,
+	//    32 vCPUs, and 4 NVIDIA Tesla V100 GPUs for builds.
+	//
+	//    * For environment type ARM_CONTAINER, you can use up to 16 GB memory and
+	//    8 vCPUs on ARM-based processors for builds.
+	//
+	// For more information, see Build environment compute types (https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html)
+	// in the CodeBuild User Guide.
+	//
+	// ComputeType is a required field
+	ComputeType *string `locationName:"computeType" type:"string" required:"true" enum:"ComputeType"`
+
+	// The environment type of the compute fleet.
+	//
+	//    * The environment type ARM_CONTAINER is available only in regions US East
+	//    (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland), Asia Pacific
+	//    (Mumbai), Asia Pacific (Tokyo), Asia Pacific (Singapore), Asia Pacific
+	//    (Sydney), EU (Frankfurt), and South America (São Paulo).
+	//
+	//    * The environment type LINUX_CONTAINER is available only in regions US
+	//    East (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland), EU
+	//    (Frankfurt), Asia Pacific (Tokyo), Asia Pacific (Singapore), Asia Pacific
+	//    (Sydney), South America (São Paulo), and Asia Pacific (Mumbai).
+	//
+	//    * The environment type LINUX_GPU_CONTAINER is available only in regions
+	//    US East (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland),
+	//    EU (Frankfurt), Asia Pacific (Tokyo), and Asia Pacific (Sydney).
+	//
+	//    * The environment type WINDOWS_SERVER_2019_CONTAINER is available only
+	//    in regions US East (N. Virginia), US East (Ohio), US West (Oregon), Asia
+	//    Pacific (Sydney), Asia Pacific (Tokyo), Asia Pacific (Mumbai) and EU (Ireland).
+	//
+	//    * The environment type WINDOWS_SERVER_2022_CONTAINER is available only
+	//    in regions US East (N. Virginia), US East (Ohio), US West (Oregon), EU
+	//    (Ireland), EU (Frankfurt), Asia Pacific (Sydney), Asia Pacific (Singapore),
+	//    Asia Pacific (Tokyo), South America (São Paulo) and Asia Pacific (Mumbai).
+	//
+	// For more information, see Build environment compute types (https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html)
+	// in the CodeBuild user guide.
+	//
+	// EnvironmentType is a required field
+	EnvironmentType *string `locationName:"environmentType" type:"string" required:"true" enum:"EnvironmentType"`
+
+	// The name of the compute fleet.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"2" type:"string" required:"true"`
+
+	// The compute fleet overflow behavior.
+	//
+	//    * For overflow behavior QUEUE, your overflow builds need to wait on the
+	//    existing fleet instance to become available.
+	//
+	//    * For overflow behavior ON_DEMAND, your overflow builds run on CodeBuild
+	//    on-demand.
+	OverflowBehavior *string `locationName:"overflowBehavior" type:"string" enum:"FleetOverflowBehavior"`
+
+	// The scaling configuration of the compute fleet.
+	ScalingConfiguration *ScalingConfigurationInput_ `locationName:"scalingConfiguration" type:"structure"`
+
+	// A list of tag key and value pairs associated with this compute fleet.
+	//
+	// These tags are available for use by Amazon Web Services services that support
+	// CodeBuild build project tags.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFleetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFleetInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateFleetInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateFleetInput"}
+	if s.BaseCapacity == nil {
+		invalidParams.Add(request.NewErrParamRequired("BaseCapacity"))
+	}
+	if s.BaseCapacity != nil && *s.BaseCapacity < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("BaseCapacity", 1))
+	}
+	if s.ComputeType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ComputeType"))
+	}
+	if s.EnvironmentType == nil {
+		invalidParams.Add(request.NewErrParamRequired("EnvironmentType"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 2 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 2))
+	}
+	if s.ScalingConfiguration != nil {
+		if err := s.ScalingConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ScalingConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBaseCapacity sets the BaseCapacity field's value.
+func (s *CreateFleetInput) SetBaseCapacity(v int64) *CreateFleetInput {
+	s.BaseCapacity = &v
+	return s
+}
+
+// SetComputeType sets the ComputeType field's value.
+func (s *CreateFleetInput) SetComputeType(v string) *CreateFleetInput {
+	s.ComputeType = &v
+	return s
+}
+
+// SetEnvironmentType sets the EnvironmentType field's value.
+func (s *CreateFleetInput) SetEnvironmentType(v string) *CreateFleetInput {
+	s.EnvironmentType = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateFleetInput) SetName(v string) *CreateFleetInput {
+	s.Name = &v
+	return s
+}
+
+// SetOverflowBehavior sets the OverflowBehavior field's value.
+func (s *CreateFleetInput) SetOverflowBehavior(v string) *CreateFleetInput {
+	s.OverflowBehavior = &v
+	return s
+}
+
+// SetScalingConfiguration sets the ScalingConfiguration field's value.
+func (s *CreateFleetInput) SetScalingConfiguration(v *ScalingConfigurationInput_) *CreateFleetInput {
+	s.ScalingConfiguration = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateFleetInput) SetTags(v []*Tag) *CreateFleetInput {
+	s.Tags = v
+	return s
+}
+
+type CreateFleetOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the compute fleet
+	Fleet *Fleet `locationName:"fleet" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFleetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateFleetOutput) GoString() string {
+	return s.String()
+}
+
+// SetFleet sets the Fleet field's value.
+func (s *CreateFleetOutput) SetFleet(v *Fleet) *CreateFleetOutput {
+	s.Fleet = v
+	return s
+}
+
 type CreateProjectInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7598,6 +8369,77 @@ func (s *DeleteBuildBatchOutput) SetBuildsNotDeleted(v []*BuildNotDeleted) *Dele
 func (s *DeleteBuildBatchOutput) SetStatusCode(v string) *DeleteBuildBatchOutput {
 	s.StatusCode = &v
 	return s
+}
+
+type DeleteFleetInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the compute fleet.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteFleetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteFleetInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteFleetInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteFleetInput"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Arn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *DeleteFleetInput) SetArn(v string) *DeleteFleetInput {
+	s.Arn = &v
+	return s
+}
+
+type DeleteFleetOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteFleetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteFleetOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteProjectInput struct {
@@ -8483,15 +9325,21 @@ type EnvironmentVariable struct {
 	// The type of environment variable. Valid values include:
 	//
 	//    * PARAMETER_STORE: An environment variable stored in Systems Manager Parameter
-	//    Store. To learn how to specify a parameter store environment variable,
-	//    see env/parameter-store (https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec.env.parameter-store)
+	//    Store. For environment variables of this type, specify the name of the
+	//    parameter as the value of the EnvironmentVariable. The parameter value
+	//    will be substituted for the name at runtime. You can also define Parameter
+	//    Store environment variables in the buildspec. To learn how to do so, see
+	//    env/parameter-store (https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec.env.parameter-store)
 	//    in the CodeBuild User Guide.
 	//
 	//    * PLAINTEXT: An environment variable in plain text format. This is the
 	//    default value.
 	//
 	//    * SECRETS_MANAGER: An environment variable stored in Secrets Manager.
-	//    To learn how to specify a secrets manager environment variable, see env/secrets-manager
+	//    For environment variables of this type, specify the name of the secret
+	//    as the value of the EnvironmentVariable. The secret value will be substituted
+	//    for the name at runtime. You can also define Secrets Manager environment
+	//    variables in the buildspec. To learn how to do so, see env/secrets-manager
 	//    (https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec.env.secrets-manager)
 	//    in the CodeBuild User Guide.
 	Type *string `locationName:"type" type:"string" enum:"EnvironmentVariableType"`
@@ -8499,10 +9347,10 @@ type EnvironmentVariable struct {
 	// The value of the environment variable.
 	//
 	// We strongly discourage the use of PLAINTEXT environment variables to store
-	// sensitive values, especially Amazon Web Services secret key IDs and secret
-	// access keys. PLAINTEXT environment variables can be displayed in plain text
-	// using the CodeBuild console and the CLI. For sensitive values, we recommend
-	// you use an environment variable of type PARAMETER_STORE or SECRETS_MANAGER.
+	// sensitive values, especially Amazon Web Services secret key IDs. PLAINTEXT
+	// environment variables can be displayed in plain text using the CodeBuild
+	// console and the CLI. For sensitive values, we recommend you use an environment
+	// variable of type PARAMETER_STORE or SECRETS_MANAGER.
 	//
 	// Value is a required field
 	Value *string `locationName:"value" type:"string" required:"true"`
@@ -8612,6 +9460,284 @@ func (s *ExportedEnvironmentVariable) SetName(v string) *ExportedEnvironmentVari
 // SetValue sets the Value field's value.
 func (s *ExportedEnvironmentVariable) SetValue(v string) *ExportedEnvironmentVariable {
 	s.Value = &v
+	return s
+}
+
+// A set of dedicated instances for your build environment.
+type Fleet struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the compute fleet.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The initial number of machines allocated to the compute ﬂeet, which deﬁnes
+	// the number of builds that can run in parallel.
+	BaseCapacity *int64 `locationName:"baseCapacity" min:"1" type:"integer"`
+
+	// Information about the compute resources the compute fleet uses. Available
+	// values include:
+	//
+	//    * BUILD_GENERAL1_SMALL: Use up to 3 GB memory and 2 vCPUs for builds.
+	//
+	//    * BUILD_GENERAL1_MEDIUM: Use up to 7 GB memory and 4 vCPUs for builds.
+	//
+	//    * BUILD_GENERAL1_LARGE: Use up to 16 GB memory and 8 vCPUs for builds,
+	//    depending on your environment type.
+	//
+	//    * BUILD_GENERAL1_XLARGE: Use up to 70 GB memory and 36 vCPUs for builds,
+	//    depending on your environment type.
+	//
+	//    * BUILD_GENERAL1_2XLARGE: Use up to 145 GB memory, 72 vCPUs, and 824 GB
+	//    of SSD storage for builds. This compute type supports Docker images up
+	//    to 100 GB uncompressed.
+	//
+	// If you use BUILD_GENERAL1_SMALL:
+	//
+	//    * For environment type LINUX_CONTAINER, you can use up to 3 GB memory
+	//    and 2 vCPUs for builds.
+	//
+	//    * For environment type LINUX_GPU_CONTAINER, you can use up to 16 GB memory,
+	//    4 vCPUs, and 1 NVIDIA A10G Tensor Core GPU for builds.
+	//
+	//    * For environment type ARM_CONTAINER, you can use up to 4 GB memory and
+	//    2 vCPUs on ARM-based processors for builds.
+	//
+	// If you use BUILD_GENERAL1_LARGE:
+	//
+	//    * For environment type LINUX_CONTAINER, you can use up to 15 GB memory
+	//    and 8 vCPUs for builds.
+	//
+	//    * For environment type LINUX_GPU_CONTAINER, you can use up to 255 GB memory,
+	//    32 vCPUs, and 4 NVIDIA Tesla V100 GPUs for builds.
+	//
+	//    * For environment type ARM_CONTAINER, you can use up to 16 GB memory and
+	//    8 vCPUs on ARM-based processors for builds.
+	//
+	// For more information, see Build environment compute types (https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html)
+	// in the CodeBuild User Guide.
+	ComputeType *string `locationName:"computeType" type:"string" enum:"ComputeType"`
+
+	// The time at which the compute fleet was created.
+	Created *time.Time `locationName:"created" type:"timestamp"`
+
+	// The environment type of the compute fleet.
+	//
+	//    * The environment type ARM_CONTAINER is available only in regions US East
+	//    (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland), Asia Pacific
+	//    (Mumbai), Asia Pacific (Tokyo), Asia Pacific (Singapore), Asia Pacific
+	//    (Sydney), EU (Frankfurt), and South America (São Paulo).
+	//
+	//    * The environment type LINUX_CONTAINER is available only in regions US
+	//    East (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland), EU
+	//    (Frankfurt), Asia Pacific (Tokyo), Asia Pacific (Singapore), Asia Pacific
+	//    (Sydney), South America (São Paulo), and Asia Pacific (Mumbai).
+	//
+	//    * The environment type LINUX_GPU_CONTAINER is available only in regions
+	//    US East (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland),
+	//    EU (Frankfurt), Asia Pacific (Tokyo), and Asia Pacific (Sydney).
+	//
+	//    * The environment type WINDOWS_SERVER_2019_CONTAINER is available only
+	//    in regions US East (N. Virginia), US East (Ohio), US West (Oregon), Asia
+	//    Pacific (Sydney), Asia Pacific (Tokyo), Asia Pacific (Mumbai) and EU (Ireland).
+	//
+	//    * The environment type WINDOWS_SERVER_2022_CONTAINER is available only
+	//    in regions US East (N. Virginia), US East (Ohio), US West (Oregon), EU
+	//    (Ireland), EU (Frankfurt), Asia Pacific (Sydney), Asia Pacific (Singapore),
+	//    Asia Pacific (Tokyo), South America (São Paulo) and Asia Pacific (Mumbai).
+	//
+	// For more information, see Build environment compute types (https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html)
+	// in the CodeBuild user guide.
+	EnvironmentType *string `locationName:"environmentType" type:"string" enum:"EnvironmentType"`
+
+	// The ID of the compute fleet.
+	Id *string `locationName:"id" min:"1" type:"string"`
+
+	// The time at which the compute fleet was last modified.
+	LastModified *time.Time `locationName:"lastModified" type:"timestamp"`
+
+	// The name of the compute fleet.
+	Name *string `locationName:"name" min:"2" type:"string"`
+
+	// The compute fleet overflow behavior.
+	//
+	//    * For overflow behavior QUEUE, your overflow builds need to wait on the
+	//    existing fleet instance to become available.
+	//
+	//    * For overflow behavior ON_DEMAND, your overflow builds run on CodeBuild
+	//    on-demand.
+	OverflowBehavior *string `locationName:"overflowBehavior" type:"string" enum:"FleetOverflowBehavior"`
+
+	// The scaling configuration of the compute fleet.
+	ScalingConfiguration *ScalingConfigurationOutput_ `locationName:"scalingConfiguration" type:"structure"`
+
+	// The status of the compute fleet.
+	Status *FleetStatus `locationName:"status" type:"structure"`
+
+	// A list of tag key and value pairs associated with this compute fleet.
+	//
+	// These tags are available for use by Amazon Web Services services that support
+	// CodeBuild build project tags.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Fleet) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Fleet) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *Fleet) SetArn(v string) *Fleet {
+	s.Arn = &v
+	return s
+}
+
+// SetBaseCapacity sets the BaseCapacity field's value.
+func (s *Fleet) SetBaseCapacity(v int64) *Fleet {
+	s.BaseCapacity = &v
+	return s
+}
+
+// SetComputeType sets the ComputeType field's value.
+func (s *Fleet) SetComputeType(v string) *Fleet {
+	s.ComputeType = &v
+	return s
+}
+
+// SetCreated sets the Created field's value.
+func (s *Fleet) SetCreated(v time.Time) *Fleet {
+	s.Created = &v
+	return s
+}
+
+// SetEnvironmentType sets the EnvironmentType field's value.
+func (s *Fleet) SetEnvironmentType(v string) *Fleet {
+	s.EnvironmentType = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *Fleet) SetId(v string) *Fleet {
+	s.Id = &v
+	return s
+}
+
+// SetLastModified sets the LastModified field's value.
+func (s *Fleet) SetLastModified(v time.Time) *Fleet {
+	s.LastModified = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Fleet) SetName(v string) *Fleet {
+	s.Name = &v
+	return s
+}
+
+// SetOverflowBehavior sets the OverflowBehavior field's value.
+func (s *Fleet) SetOverflowBehavior(v string) *Fleet {
+	s.OverflowBehavior = &v
+	return s
+}
+
+// SetScalingConfiguration sets the ScalingConfiguration field's value.
+func (s *Fleet) SetScalingConfiguration(v *ScalingConfigurationOutput_) *Fleet {
+	s.ScalingConfiguration = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *Fleet) SetStatus(v *FleetStatus) *Fleet {
+	s.Status = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Fleet) SetTags(v []*Tag) *Fleet {
+	s.Tags = v
+	return s
+}
+
+// The status of the compute fleet.
+type FleetStatus struct {
+	_ struct{} `type:"structure"`
+
+	// Additional information about a compute fleet. Valid values include:
+	//
+	//    * CREATE_FAILED: The compute fleet has failed to create.
+	//
+	//    * UPDATE_FAILED: The compute fleet has failed to update.
+	Context *string `locationName:"context" type:"string" enum:"FleetContextCode"`
+
+	// A message associated with the status of a compute fleet.
+	Message *string `locationName:"message" type:"string"`
+
+	// The status code of the compute fleet. Valid values include:
+	//
+	//    * CREATING: The compute fleet is being created.
+	//
+	//    * UPDATING: The compute fleet is being updated.
+	//
+	//    * ROTATING: The compute fleet is being rotated.
+	//
+	//    * PENDING_DELETION: The compute fleet is pending deletion.
+	//
+	//    * DELETING: The compute fleet is being deleted.
+	//
+	//    * CREATE_FAILED: The compute fleet has failed to create.
+	//
+	//    * UPDATE_ROLLBACK_FAILED: The compute fleet has failed to update and could
+	//    not rollback to previous state.
+	//
+	//    * ACTIVE: The compute fleet has succeeded and is active.
+	StatusCode *string `locationName:"statusCode" type:"string" enum:"FleetStatusCode"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FleetStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FleetStatus) GoString() string {
+	return s.String()
+}
+
+// SetContext sets the Context field's value.
+func (s *FleetStatus) SetContext(v string) *FleetStatus {
+	s.Context = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *FleetStatus) SetMessage(v string) *FleetStatus {
+	s.Message = &v
+	return s
+}
+
+// SetStatusCode sets the StatusCode field's value.
+func (s *FleetStatus) SetStatusCode(v string) *FleetStatus {
+	s.StatusCode = &v
 	return s
 }
 
@@ -8922,7 +10048,7 @@ type ImportSourceCredentialsInput struct {
 	ShouldOverwrite *bool `locationName:"shouldOverwrite" type:"boolean"`
 
 	// For GitHub or GitHub Enterprise, this is the personal access token. For Bitbucket,
-	// this is the app password.
+	// this is either the access token or the app password.
 	//
 	// Token is a sensitive parameter and its value will be
 	// replaced with "sensitive" in string returned by ImportSourceCredentialsInput's
@@ -9697,6 +10823,146 @@ func (s ListCuratedEnvironmentImagesOutput) GoString() string {
 // SetPlatforms sets the Platforms field's value.
 func (s *ListCuratedEnvironmentImagesOutput) SetPlatforms(v []*EnvironmentPlatform) *ListCuratedEnvironmentImagesOutput {
 	s.Platforms = v
+	return s
+}
+
+type ListFleetsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of paginated compute fleets returned per response. Use
+	// nextToken to iterate pages in the list of returned compute fleets.
+	MaxResults *int64 `locationName:"maxResults" min:"1" type:"integer"`
+
+	// During a previous call, if there are more than 100 items in the list, only
+	// the first 100 items are returned, along with a unique string called a nextToken.
+	// To get the next batch of items in the list, call this operation again, adding
+	// the next token to the call. To get all of the items in the list, keep calling
+	// this operation with each subsequent next token that is returned, until no
+	// more next tokens are returned.
+	//
+	// NextToken is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by ListFleetsInput's
+	// String and GoString methods.
+	NextToken *string `locationName:"nextToken" type:"string" sensitive:"true"`
+
+	// The criterion to be used to list compute fleet names. Valid values include:
+	//
+	//    * CREATED_TIME: List based on when each compute fleet was created.
+	//
+	//    * LAST_MODIFIED_TIME: List based on when information about each compute
+	//    fleet was last changed.
+	//
+	//    * NAME: List based on each compute fleet's name.
+	//
+	// Use sortOrder to specify in what order to list the compute fleet names based
+	// on the preceding criteria.
+	SortBy *string `locationName:"sortBy" type:"string" enum:"FleetSortByType"`
+
+	// The order in which to list compute fleets. Valid values include:
+	//
+	//    * ASCENDING: List in ascending order.
+	//
+	//    * DESCENDING: List in descending order.
+	//
+	// Use sortBy to specify the criterion to be used to list compute fleet names.
+	SortOrder *string `locationName:"sortOrder" type:"string" enum:"SortOrderType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListFleetsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListFleetsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListFleetsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListFleetsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListFleetsInput) SetMaxResults(v int64) *ListFleetsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListFleetsInput) SetNextToken(v string) *ListFleetsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSortBy sets the SortBy field's value.
+func (s *ListFleetsInput) SetSortBy(v string) *ListFleetsInput {
+	s.SortBy = &v
+	return s
+}
+
+// SetSortOrder sets the SortOrder field's value.
+func (s *ListFleetsInput) SetSortOrder(v string) *ListFleetsInput {
+	s.SortOrder = &v
+	return s
+}
+
+type ListFleetsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of compute fleet names.
+	Fleets []*string `locationName:"fleets" min:"1" type:"list"`
+
+	// If there are more than 100 items in the list, only the first 100 items are
+	// returned, along with a unique string called a nextToken. To get the next
+	// batch of items in the list, call this operation again, adding the next token
+	// to the call.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListFleetsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListFleetsOutput) GoString() string {
+	return s.String()
+}
+
+// SetFleets sets the Fleets field's value.
+func (s *ListFleetsOutput) SetFleets(v []*string) *ListFleetsOutput {
+	s.Fleets = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListFleetsOutput) SetNextToken(v string) *ListFleetsOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -10633,11 +11899,16 @@ type LogsLocation struct {
 	// Information about CloudWatch Logs for a build project.
 	CloudWatchLogs *CloudWatchLogsConfig `locationName:"cloudWatchLogs" type:"structure"`
 
-	// The ARN of CloudWatch Logs for a build project. Its format is arn:${Partition}:logs:${Region}:${Account}:log-group:${LogGroupName}:log-stream:${LogStreamName}.
-	// For more information, see Resources Defined by CloudWatch Logs (https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazoncloudwatchlogs.html#amazoncloudwatchlogs-resources-for-iam-policies).
+	// The ARN of the CloudWatch Logs stream for a build execution. Its format is
+	// arn:${Partition}:logs:${Region}:${Account}:log-group:${LogGroupName}:log-stream:${LogStreamName}.
+	// The CloudWatch Logs stream is created during the PROVISIONING phase of a
+	// build and the ARN will not be valid until it is created. For more information,
+	// see Resources Defined by CloudWatch Logs (https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazoncloudwatchlogs.html#amazoncloudwatchlogs-resources-for-iam-policies).
 	CloudWatchLogsArn *string `locationName:"cloudWatchLogsArn" type:"string"`
 
-	// The URL to an individual build log in CloudWatch Logs.
+	// The URL to an individual build log in CloudWatch Logs. The log stream is
+	// created during the PROVISIONING phase of a build and the deeplink will not
+	// be valid until it is created.
 	DeepLink *string `locationName:"deepLink" type:"string"`
 
 	// The name of the CloudWatch Logs group for the build logs.
@@ -11730,9 +13001,38 @@ type ProjectEnvironment struct {
 	//    * BUILD_GENERAL1_LARGE: Use up to 16 GB memory and 8 vCPUs for builds,
 	//    depending on your environment type.
 	//
+	//    * BUILD_GENERAL1_XLARGE: Use up to 70 GB memory and 36 vCPUs for builds,
+	//    depending on your environment type.
+	//
 	//    * BUILD_GENERAL1_2XLARGE: Use up to 145 GB memory, 72 vCPUs, and 824 GB
 	//    of SSD storage for builds. This compute type supports Docker images up
 	//    to 100 GB uncompressed.
+	//
+	//    * BUILD_LAMBDA_1GB: Use up to 1 GB memory for builds. Only available for
+	//    environment type LINUX_LAMBDA_CONTAINER and ARM_LAMBDA_CONTAINER.
+	//
+	//    * BUILD_LAMBDA_2GB: Use up to 2 GB memory for builds. Only available for
+	//    environment type LINUX_LAMBDA_CONTAINER and ARM_LAMBDA_CONTAINER.
+	//
+	//    * BUILD_LAMBDA_4GB: Use up to 4 GB memory for builds. Only available for
+	//    environment type LINUX_LAMBDA_CONTAINER and ARM_LAMBDA_CONTAINER.
+	//
+	//    * BUILD_LAMBDA_8GB: Use up to 8 GB memory for builds. Only available for
+	//    environment type LINUX_LAMBDA_CONTAINER and ARM_LAMBDA_CONTAINER.
+	//
+	//    * BUILD_LAMBDA_10GB: Use up to 10 GB memory for builds. Only available
+	//    for environment type LINUX_LAMBDA_CONTAINER and ARM_LAMBDA_CONTAINER.
+	//
+	// If you use BUILD_GENERAL1_SMALL:
+	//
+	//    * For environment type LINUX_CONTAINER, you can use up to 3 GB memory
+	//    and 2 vCPUs for builds.
+	//
+	//    * For environment type LINUX_GPU_CONTAINER, you can use up to 16 GB memory,
+	//    4 vCPUs, and 1 NVIDIA A10G Tensor Core GPU for builds.
+	//
+	//    * For environment type ARM_CONTAINER, you can use up to 4 GB memory and
+	//    2 vCPUs on ARM-based processors for builds.
 	//
 	// If you use BUILD_GENERAL1_LARGE:
 	//
@@ -11745,6 +13045,9 @@ type ProjectEnvironment struct {
 	//    * For environment type ARM_CONTAINER, you can use up to 16 GB memory and
 	//    8 vCPUs on ARM-based processors for builds.
 	//
+	// If you're using compute fleets during project creation, computeType will
+	// be ignored.
+	//
 	// For more information, see Build Environment Compute Types (https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html)
 	// in the CodeBuild User Guide.
 	//
@@ -11754,6 +13057,9 @@ type ProjectEnvironment struct {
 	// A set of environment variables to make available to builds for this build
 	// project.
 	EnvironmentVariables []*EnvironmentVariable `locationName:"environmentVariables" type:"list"`
+
+	// A ProjectFleet object to use for this build project.
+	Fleet *ProjectFleet `locationName:"fleet" type:"structure"`
 
 	// The image tag or image digest that identifies the Docker image to use for
 	// this build project. Use the following formats:
@@ -11821,11 +13127,11 @@ type ProjectEnvironment struct {
 	//    (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland), Asia Pacific
 	//    (Mumbai), Asia Pacific (Tokyo), Asia Pacific (Sydney), and EU (Frankfurt).
 	//
-	//    * The environment type LINUX_CONTAINER with compute type build.general1.2xlarge
-	//    is available only in regions US East (N. Virginia), US East (Ohio), US
-	//    West (Oregon), Canada (Central), EU (Ireland), EU (London), EU (Frankfurt),
-	//    Asia Pacific (Tokyo), Asia Pacific (Seoul), Asia Pacific (Singapore),
-	//    Asia Pacific (Sydney), China (Beijing), and China (Ningxia).
+	//    * The environment type LINUX_CONTAINER is available only in regions US
+	//    East (N. Virginia), US East (Ohio), US West (Oregon), Canada (Central),
+	//    EU (Ireland), EU (London), EU (Frankfurt), Asia Pacific (Tokyo), Asia
+	//    Pacific (Seoul), Asia Pacific (Singapore), Asia Pacific (Sydney), China
+	//    (Beijing), and China (Ningxia).
 	//
 	//    * The environment type LINUX_GPU_CONTAINER is available only in regions
 	//    US East (N. Virginia), US East (Ohio), US West (Oregon), Canada (Central),
@@ -11833,9 +13139,17 @@ type ProjectEnvironment struct {
 	//    Pacific (Seoul), Asia Pacific (Singapore), Asia Pacific (Sydney) , China
 	//    (Beijing), and China (Ningxia).
 	//
+	//    * The environment types ARM_LAMBDA_CONTAINER and LINUX_LAMBDA_CONTAINER
+	//    are available only in regions US East (N. Virginia), US East (Ohio), US
+	//    West (Oregon), Asia Pacific (Mumbai), Asia Pacific (Singapore), Asia Pacific
+	//    (Sydney), Asia Pacific (Tokyo), EU (Frankfurt), EU (Ireland), and South
+	//    America (São Paulo).
+	//
 	//    * The environment types WINDOWS_CONTAINER and WINDOWS_SERVER_2019_CONTAINER
 	//    are available only in regions US East (N. Virginia), US East (Ohio), US
 	//    West (Oregon), and EU (Ireland).
+	//
+	// If you're using compute fleets during project creation, type will be ignored.
 	//
 	// For more information, see Build environment compute types (https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html)
 	// in the CodeBuild user guide.
@@ -11914,6 +13228,12 @@ func (s *ProjectEnvironment) SetComputeType(v string) *ProjectEnvironment {
 // SetEnvironmentVariables sets the EnvironmentVariables field's value.
 func (s *ProjectEnvironment) SetEnvironmentVariables(v []*EnvironmentVariable) *ProjectEnvironment {
 	s.EnvironmentVariables = v
+	return s
+}
+
+// SetFleet sets the Fleet field's value.
+func (s *ProjectEnvironment) SetFleet(v *ProjectFleet) *ProjectEnvironment {
+	s.Fleet = v
 	return s
 }
 
@@ -12032,6 +13352,39 @@ func (s *ProjectFileSystemLocation) SetType(v string) *ProjectFileSystemLocation
 	return s
 }
 
+// Information about the compute fleet of the build project. For more information,
+// see Working with reserved capacity in CodeBuild (https://docs.aws.amazon.com/codebuild/latest/userguide/fleets.html).
+type ProjectFleet struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the compute fleet ARN for the build project.
+	FleetArn *string `locationName:"fleetArn" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProjectFleet) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProjectFleet) GoString() string {
+	return s.String()
+}
+
+// SetFleetArn sets the FleetArn field's value.
+func (s *ProjectFleet) SetFleetArn(v string) *ProjectFleet {
+	s.FleetArn = &v
+	return s
+}
+
 // Information about the build input source code for the build project.
 type ProjectSource struct {
 	_ struct{} `type:"structure"`
@@ -12098,6 +13451,18 @@ type ProjectSource struct {
 	//    console.) To instruct CodeBuild to use this connection, in the source
 	//    object, set the auth object's type value to OAUTH.
 	//
+	//    * For source code in an GitLab or self-managed GitLab repository, the
+	//    HTTPS clone URL to the repository that contains the source and the buildspec
+	//    file. You must connect your Amazon Web Services account to your GitLab
+	//    account. Use the CodeBuild console to start creating a build project.
+	//    When you use the console to connect (or reconnect) with GitLab, on the
+	//    Connections Authorize application page, choose Authorize. Then on the
+	//    CodeConnections Create GitLab connection page, choose Connect to GitLab.
+	//    (After you have connected to your GitLab account, you do not need to finish
+	//    creating the build project. You can leave the CodeBuild console.) To instruct
+	//    CodeBuild to override the default connection and use this connection instead,
+	//    set the auth object's type value to CODECONNECTIONS in the source object.
+	//
 	//    * For source code in a Bitbucket repository, the HTTPS clone URL to the
 	//    repository that contains the source and the buildspec file. You must connect
 	//    your Amazon Web Services account to your Bitbucket account. Use the CodeBuild
@@ -12115,8 +13480,9 @@ type ProjectSource struct {
 
 	// Set to true to report the status of a build's start and finish to your source
 	// provider. This option is valid only when your source provider is GitHub,
-	// GitHub Enterprise, or Bitbucket. If this is set and you use a different source
-	// provider, an invalidInputException is thrown.
+	// GitHub Enterprise, GitLab, GitLab Self Managed, or Bitbucket. If this is
+	// set and you use a different source provider, an invalidInputException is
+	// thrown.
 	//
 	// To be able to report the build status to the source provider, the user associated
 	// with the source provider must have write access to the repo. If the user
@@ -12145,10 +13511,14 @@ type ProjectSource struct {
 	//    * CODEPIPELINE: The source code settings are specified in the source action
 	//    of a pipeline in CodePipeline.
 	//
-	//    * GITHUB: The source code is in a GitHub or GitHub Enterprise Cloud repository.
+	//    * GITHUB: The source code is in a GitHub repository.
 	//
 	//    * GITHUB_ENTERPRISE: The source code is in a GitHub Enterprise Server
 	//    repository.
+	//
+	//    * GITLAB: The source code is in a GitLab repository.
+	//
+	//    * GITLAB_SELF_MANAGED: The source code is in a self-managed GitLab repository.
 	//
 	//    * NO_SOURCE: The project does not have input source code.
 	//
@@ -12275,9 +13645,9 @@ type ProjectSourceVersion struct {
 	//
 	//    * For CodeCommit: the commit ID, branch, or Git tag to use.
 	//
-	//    * For GitHub: the commit ID, pull request ID, branch name, or tag name
-	//    that corresponds to the version of the source code you want to build.
-	//    If a pull request ID is specified, it must use the format pr/pull-request-ID
+	//    * For GitHub or GitLab: the commit ID, pull request ID, branch name, or
+	//    tag name that corresponds to the version of the source code you want to
+	//    build. If a pull request ID is specified, it must use the format pr/pull-request-ID
 	//    (for example, pr/25). If a branch name is specified, the branch's HEAD
 	//    commit ID is used. If not specified, the default branch's HEAD commit
 	//    ID is used.
@@ -12448,9 +13818,9 @@ func (s *PutResourcePolicyOutput) SetResourceArn(v string) *PutResourcePolicyOut
 // Information about credentials that provide access to a private Docker registry.
 // When this is set:
 //
-//    * imagePullCredentialsType must be set to SERVICE_ROLE.
+//   - imagePullCredentialsType must be set to SERVICE_ROLE.
 //
-//    * images cannot be curated or an Amazon ECR image.
+//   - images cannot be curated or an Amazon ECR image.
 //
 // For more information, see Private Registry with Secrets Manager Sample for
 // CodeBuild (https://docs.aws.amazon.com/codebuild/latest/userguide/sample-private-registry.html).
@@ -13553,6 +14923,128 @@ func (s *S3ReportExportConfig) SetPath(v string) *S3ReportExportConfig {
 	return s
 }
 
+// The scaling configuration input of a compute fleet.
+type ScalingConfigurationInput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of instances in the ﬂeet when auto-scaling.
+	MaxCapacity *int64 `locationName:"maxCapacity" min:"1" type:"integer"`
+
+	// The scaling type for a compute fleet.
+	ScalingType *string `locationName:"scalingType" type:"string" enum:"FleetScalingType"`
+
+	// A list of TargetTrackingScalingConfiguration objects.
+	TargetTrackingScalingConfigs []*TargetTrackingScalingConfiguration `locationName:"targetTrackingScalingConfigs" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScalingConfigurationInput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScalingConfigurationInput_) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScalingConfigurationInput_) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ScalingConfigurationInput_"}
+	if s.MaxCapacity != nil && *s.MaxCapacity < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxCapacity", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxCapacity sets the MaxCapacity field's value.
+func (s *ScalingConfigurationInput_) SetMaxCapacity(v int64) *ScalingConfigurationInput_ {
+	s.MaxCapacity = &v
+	return s
+}
+
+// SetScalingType sets the ScalingType field's value.
+func (s *ScalingConfigurationInput_) SetScalingType(v string) *ScalingConfigurationInput_ {
+	s.ScalingType = &v
+	return s
+}
+
+// SetTargetTrackingScalingConfigs sets the TargetTrackingScalingConfigs field's value.
+func (s *ScalingConfigurationInput_) SetTargetTrackingScalingConfigs(v []*TargetTrackingScalingConfiguration) *ScalingConfigurationInput_ {
+	s.TargetTrackingScalingConfigs = v
+	return s
+}
+
+// The scaling configuration output of a compute fleet.
+type ScalingConfigurationOutput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The desired number of instances in the ﬂeet when auto-scaling.
+	DesiredCapacity *int64 `locationName:"desiredCapacity" min:"1" type:"integer"`
+
+	// The maximum number of instances in the ﬂeet when auto-scaling.
+	MaxCapacity *int64 `locationName:"maxCapacity" min:"1" type:"integer"`
+
+	// The scaling type for a compute fleet.
+	ScalingType *string `locationName:"scalingType" type:"string" enum:"FleetScalingType"`
+
+	// A list of TargetTrackingScalingConfiguration objects.
+	TargetTrackingScalingConfigs []*TargetTrackingScalingConfiguration `locationName:"targetTrackingScalingConfigs" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScalingConfigurationOutput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScalingConfigurationOutput_) GoString() string {
+	return s.String()
+}
+
+// SetDesiredCapacity sets the DesiredCapacity field's value.
+func (s *ScalingConfigurationOutput_) SetDesiredCapacity(v int64) *ScalingConfigurationOutput_ {
+	s.DesiredCapacity = &v
+	return s
+}
+
+// SetMaxCapacity sets the MaxCapacity field's value.
+func (s *ScalingConfigurationOutput_) SetMaxCapacity(v int64) *ScalingConfigurationOutput_ {
+	s.MaxCapacity = &v
+	return s
+}
+
+// SetScalingType sets the ScalingType field's value.
+func (s *ScalingConfigurationOutput_) SetScalingType(v string) *ScalingConfigurationOutput_ {
+	s.ScalingType = &v
+	return s
+}
+
+// SetTargetTrackingScalingConfigs sets the TargetTrackingScalingConfigs field's value.
+func (s *ScalingConfigurationOutput_) SetTargetTrackingScalingConfigs(v []*TargetTrackingScalingConfiguration) *ScalingConfigurationOutput_ {
+	s.TargetTrackingScalingConfigs = v
+	return s
+}
+
 // Information about the authorization settings for CodeBuild to access the
 // source code to be built.
 //
@@ -13564,11 +15056,7 @@ type SourceAuth struct {
 	// The resource value that applies to the specified authorization type.
 	Resource *string `locationName:"resource" type:"string"`
 
-	//
-	// This data type is deprecated and is no longer accurate or used.
-	//
-	// The authorization type to use. The only valid value is OAUTH, which represents
-	// the OAuth authorization type.
+	// The authorization type to use. Valid options are OAUTH or CODECONNECTIONS.
 	//
 	// Type is a required field
 	Type *string `locationName:"type" type:"string" required:"true" enum:"SourceAuthType"`
@@ -13617,8 +15105,8 @@ func (s *SourceAuth) SetType(v string) *SourceAuth {
 	return s
 }
 
-// Information about the credentials for a GitHub, GitHub Enterprise, or Bitbucket
-// repository.
+// Information about the credentials for a GitHub, GitHub Enterprise, GitLab,
+// GitLab Self Managed, or Bitbucket repository.
 type SourceCredentialsInfo struct {
 	_ struct{} `type:"structure"`
 
@@ -13626,11 +15114,15 @@ type SourceCredentialsInfo struct {
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// The type of authentication used by the credentials. Valid options are OAUTH,
-	// BASIC_AUTH, or PERSONAL_ACCESS_TOKEN.
+	// BASIC_AUTH, PERSONAL_ACCESS_TOKEN, or CODECONNECTIONS.
 	AuthType *string `locationName:"authType" type:"string" enum:"AuthType"`
 
+	// The connection ARN if your serverType type is GITLAB or GITLAB_SELF_MANAGED
+	// and your authType is CODECONNECTIONS.
+	Resource *string `locationName:"resource" type:"string"`
+
 	// The type of source provider. The valid options are GITHUB, GITHUB_ENTERPRISE,
-	// or BITBUCKET.
+	// GITLAB, GITLAB_SELF_MANAGED, or BITBUCKET.
 	ServerType *string `locationName:"serverType" type:"string" enum:"ServerType"`
 }
 
@@ -13661,6 +15153,12 @@ func (s *SourceCredentialsInfo) SetArn(v string) *SourceCredentialsInfo {
 // SetAuthType sets the AuthType field's value.
 func (s *SourceCredentialsInfo) SetAuthType(v string) *SourceCredentialsInfo {
 	s.AuthType = &v
+	return s
+}
+
+// SetResource sets the Resource field's value.
+func (s *SourceCredentialsInfo) SetResource(v string) *SourceCredentialsInfo {
+	s.Resource = &v
 	return s
 }
 
@@ -14222,8 +15720,9 @@ type StartBuildInput struct {
 	// is GITHUB, GITHUB_ENTERPRISE, or BITBUCKET.
 	BuildStatusConfigOverride *BuildStatusConfig `locationName:"buildStatusConfigOverride" type:"structure"`
 
-	// A buildspec file declaration that overrides, for this build only, the latest
-	// one already defined in the build project.
+	// A buildspec file declaration that overrides the latest one defined in the
+	// build project, for this build only. The buildspec defined on the project
+	// is not changed.
 	//
 	// If this value is set, it can be either an inline buildspec definition, the
 	// path to an alternate buildspec file relative to the value of the built-in
@@ -14233,6 +15732,12 @@ type StartBuildInput struct {
 	// If this value is not provided or is set to an empty string, the source code
 	// must contain a buildspec file in its root directory. For more information,
 	// see Buildspec File Name and Storage Location (https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec-ref-name-storage).
+	//
+	// Since this property allows you to change the build commands that will run
+	// in the container, you should note that an IAM principal with the ability
+	// to call this API and set this parameter can override the default settings.
+	// Moreover, we encourage that you use a trustworthy buildspec location like
+	// a file in your source repository or a Amazon S3 bucket.
 	BuildspecOverride *string `locationName:"buildspecOverride" type:"string"`
 
 	// A ProjectCache object specified for this build that overrides the one defined
@@ -14268,6 +15773,10 @@ type StartBuildInput struct {
 	// A set of environment variables that overrides, for this build only, the latest
 	// ones already defined in the build project.
 	EnvironmentVariablesOverride []*EnvironmentVariable `locationName:"environmentVariablesOverride" type:"list"`
+
+	// A ProjectFleet object specified for this build that overrides the one defined
+	// in the build project.
+	FleetOverride *ProjectFleet `locationName:"fleetOverride" type:"structure"`
 
 	// The user-defined depth of history, with a minimum value of 0, that overrides,
 	// for this build only, any previous depth of history defined in the build project.
@@ -14586,6 +16095,12 @@ func (s *StartBuildInput) SetEnvironmentTypeOverride(v string) *StartBuildInput 
 // SetEnvironmentVariablesOverride sets the EnvironmentVariablesOverride field's value.
 func (s *StartBuildInput) SetEnvironmentVariablesOverride(v []*EnvironmentVariable) *StartBuildInput {
 	s.EnvironmentVariablesOverride = v
+	return s
+}
+
+// SetFleetOverride sets the FleetOverride field's value.
+func (s *StartBuildInput) SetFleetOverride(v *ProjectFleet) *StartBuildInput {
+	s.FleetOverride = v
 	return s
 }
 
@@ -14963,6 +16478,47 @@ func (s *Tag) SetValue(v string) *Tag {
 	return s
 }
 
+// Defines when a new instance is auto-scaled into the compute fleet.
+type TargetTrackingScalingConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The metric type to determine auto-scaling.
+	MetricType *string `locationName:"metricType" type:"string" enum:"FleetScalingMetricType"`
+
+	// The value of metricType when to start scaling.
+	TargetValue *float64 `locationName:"targetValue" type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TargetTrackingScalingConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TargetTrackingScalingConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetMetricType sets the MetricType field's value.
+func (s *TargetTrackingScalingConfiguration) SetMetricType(v string) *TargetTrackingScalingConfiguration {
+	s.MetricType = &v
+	return s
+}
+
+// SetTargetValue sets the TargetValue field's value.
+func (s *TargetTrackingScalingConfiguration) SetTargetValue(v float64) *TargetTrackingScalingConfiguration {
+	s.TargetValue = &v
+	return s
+}
+
 // Information about a test case created using a framework such as NUnit or
 // Cucumber. A test case might be a unit test or a configuration test.
 type TestCase struct {
@@ -15173,6 +16729,234 @@ func (s *TestReportSummary) SetStatusCounts(v map[string]*int64) *TestReportSumm
 // SetTotal sets the Total field's value.
 func (s *TestReportSummary) SetTotal(v int64) *TestReportSummary {
 	s.Total = &v
+	return s
+}
+
+type UpdateFleetInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the compute fleet.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+
+	// The initial number of machines allocated to the compute ﬂeet, which deﬁnes
+	// the number of builds that can run in parallel.
+	BaseCapacity *int64 `locationName:"baseCapacity" min:"1" type:"integer"`
+
+	// Information about the compute resources the compute fleet uses. Available
+	// values include:
+	//
+	//    * BUILD_GENERAL1_SMALL: Use up to 3 GB memory and 2 vCPUs for builds.
+	//
+	//    * BUILD_GENERAL1_MEDIUM: Use up to 7 GB memory and 4 vCPUs for builds.
+	//
+	//    * BUILD_GENERAL1_LARGE: Use up to 16 GB memory and 8 vCPUs for builds,
+	//    depending on your environment type.
+	//
+	//    * BUILD_GENERAL1_XLARGE: Use up to 70 GB memory and 36 vCPUs for builds,
+	//    depending on your environment type.
+	//
+	//    * BUILD_GENERAL1_2XLARGE: Use up to 145 GB memory, 72 vCPUs, and 824 GB
+	//    of SSD storage for builds. This compute type supports Docker images up
+	//    to 100 GB uncompressed.
+	//
+	// If you use BUILD_GENERAL1_SMALL:
+	//
+	//    * For environment type LINUX_CONTAINER, you can use up to 3 GB memory
+	//    and 2 vCPUs for builds.
+	//
+	//    * For environment type LINUX_GPU_CONTAINER, you can use up to 16 GB memory,
+	//    4 vCPUs, and 1 NVIDIA A10G Tensor Core GPU for builds.
+	//
+	//    * For environment type ARM_CONTAINER, you can use up to 4 GB memory and
+	//    2 vCPUs on ARM-based processors for builds.
+	//
+	// If you use BUILD_GENERAL1_LARGE:
+	//
+	//    * For environment type LINUX_CONTAINER, you can use up to 15 GB memory
+	//    and 8 vCPUs for builds.
+	//
+	//    * For environment type LINUX_GPU_CONTAINER, you can use up to 255 GB memory,
+	//    32 vCPUs, and 4 NVIDIA Tesla V100 GPUs for builds.
+	//
+	//    * For environment type ARM_CONTAINER, you can use up to 16 GB memory and
+	//    8 vCPUs on ARM-based processors for builds.
+	//
+	// For more information, see Build environment compute types (https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html)
+	// in the CodeBuild User Guide.
+	ComputeType *string `locationName:"computeType" type:"string" enum:"ComputeType"`
+
+	// The environment type of the compute fleet.
+	//
+	//    * The environment type ARM_CONTAINER is available only in regions US East
+	//    (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland), Asia Pacific
+	//    (Mumbai), Asia Pacific (Tokyo), Asia Pacific (Singapore), Asia Pacific
+	//    (Sydney), EU (Frankfurt), and South America (São Paulo).
+	//
+	//    * The environment type LINUX_CONTAINER is available only in regions US
+	//    East (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland), EU
+	//    (Frankfurt), Asia Pacific (Tokyo), Asia Pacific (Singapore), Asia Pacific
+	//    (Sydney), South America (São Paulo), and Asia Pacific (Mumbai).
+	//
+	//    * The environment type LINUX_GPU_CONTAINER is available only in regions
+	//    US East (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland),
+	//    EU (Frankfurt), Asia Pacific (Tokyo), and Asia Pacific (Sydney).
+	//
+	//    * The environment type WINDOWS_SERVER_2019_CONTAINER is available only
+	//    in regions US East (N. Virginia), US East (Ohio), US West (Oregon), Asia
+	//    Pacific (Sydney), Asia Pacific (Tokyo), Asia Pacific (Mumbai) and EU (Ireland).
+	//
+	//    * The environment type WINDOWS_SERVER_2022_CONTAINER is available only
+	//    in regions US East (N. Virginia), US East (Ohio), US West (Oregon), EU
+	//    (Ireland), EU (Frankfurt), Asia Pacific (Sydney), Asia Pacific (Singapore),
+	//    Asia Pacific (Tokyo), South America (São Paulo) and Asia Pacific (Mumbai).
+	//
+	// For more information, see Build environment compute types (https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html)
+	// in the CodeBuild user guide.
+	EnvironmentType *string `locationName:"environmentType" type:"string" enum:"EnvironmentType"`
+
+	// The compute fleet overflow behavior.
+	//
+	//    * For overflow behavior QUEUE, your overflow builds need to wait on the
+	//    existing fleet instance to become available.
+	//
+	//    * For overflow behavior ON_DEMAND, your overflow builds run on CodeBuild
+	//    on-demand.
+	OverflowBehavior *string `locationName:"overflowBehavior" type:"string" enum:"FleetOverflowBehavior"`
+
+	// The scaling configuration of the compute fleet.
+	ScalingConfiguration *ScalingConfigurationInput_ `locationName:"scalingConfiguration" type:"structure"`
+
+	// A list of tag key and value pairs associated with this compute fleet.
+	//
+	// These tags are available for use by Amazon Web Services services that support
+	// CodeBuild build project tags.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFleetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFleetInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateFleetInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateFleetInput"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Arn", 1))
+	}
+	if s.BaseCapacity != nil && *s.BaseCapacity < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("BaseCapacity", 1))
+	}
+	if s.ScalingConfiguration != nil {
+		if err := s.ScalingConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ScalingConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateFleetInput) SetArn(v string) *UpdateFleetInput {
+	s.Arn = &v
+	return s
+}
+
+// SetBaseCapacity sets the BaseCapacity field's value.
+func (s *UpdateFleetInput) SetBaseCapacity(v int64) *UpdateFleetInput {
+	s.BaseCapacity = &v
+	return s
+}
+
+// SetComputeType sets the ComputeType field's value.
+func (s *UpdateFleetInput) SetComputeType(v string) *UpdateFleetInput {
+	s.ComputeType = &v
+	return s
+}
+
+// SetEnvironmentType sets the EnvironmentType field's value.
+func (s *UpdateFleetInput) SetEnvironmentType(v string) *UpdateFleetInput {
+	s.EnvironmentType = &v
+	return s
+}
+
+// SetOverflowBehavior sets the OverflowBehavior field's value.
+func (s *UpdateFleetInput) SetOverflowBehavior(v string) *UpdateFleetInput {
+	s.OverflowBehavior = &v
+	return s
+}
+
+// SetScalingConfiguration sets the ScalingConfiguration field's value.
+func (s *UpdateFleetInput) SetScalingConfiguration(v *ScalingConfigurationInput_) *UpdateFleetInput {
+	s.ScalingConfiguration = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateFleetInput) SetTags(v []*Tag) *UpdateFleetInput {
+	s.Tags = v
+	return s
+}
+
+type UpdateFleetOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A Fleet object.
+	Fleet *Fleet `locationName:"fleet" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFleetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateFleetOutput) GoString() string {
+	return s.String()
+}
+
+// SetFleet sets the Fleet field's value.
+func (s *UpdateFleetOutput) SetFleet(v *Fleet) *UpdateFleetOutput {
+	s.Fleet = v
 	return s
 }
 
@@ -16150,56 +17934,54 @@ type WebhookFilter struct {
 	// Pattern is a required field
 	Pattern *string `locationName:"pattern" type:"string" required:"true"`
 
-	// The type of webhook filter. There are six webhook filter types: EVENT, ACTOR_ACCOUNT_ID,
-	// HEAD_REF, BASE_REF, FILE_PATH, and COMMIT_MESSAGE.
+	// The type of webhook filter. There are nine webhook filter types: EVENT, ACTOR_ACCOUNT_ID,
+	// HEAD_REF, BASE_REF, FILE_PATH, COMMIT_MESSAGE, TAG_NAME, RELEASE_NAME, and
+	// WORKFLOW_NAME.
 	//
-	// EVENT
+	//    * EVENT A webhook event triggers a build when the provided pattern matches
+	//    one of nine event types: PUSH, PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED,
+	//    PULL_REQUEST_CLOSED, PULL_REQUEST_REOPENED, PULL_REQUEST_MERGED, RELEASED,
+	//    PRERELEASED, and WORKFLOW_JOB_QUEUED. The EVENT patterns are specified
+	//    as a comma-separated string. For example, PUSH, PULL_REQUEST_CREATED,
+	//    PULL_REQUEST_UPDATED filters all push, pull request created, and pull
+	//    request updated events. The PULL_REQUEST_REOPENED works with GitHub and
+	//    GitHub Enterprise only. The RELEASED, PRERELEASED, and WORKFLOW_JOB_QUEUED
+	//    work with GitHub only.
 	//
-	// A webhook event triggers a build when the provided pattern matches one of
-	// five event types: PUSH, PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED, PULL_REQUEST_REOPENED,
-	// and PULL_REQUEST_MERGED. The EVENT patterns are specified as a comma-separated
-	// string. For example, PUSH, PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED filters
-	// all push, pull request created, and pull request updated events.
+	//    * ACTOR_ACCOUNT_ID A webhook event triggers a build when a GitHub, GitHub
+	//    Enterprise, or Bitbucket account ID matches the regular expression pattern.
 	//
-	// The PULL_REQUEST_REOPENED works with GitHub and GitHub Enterprise only.
+	//    * HEAD_REF A webhook event triggers a build when the head reference matches
+	//    the regular expression pattern. For example, refs/heads/branch-name and
+	//    refs/tags/tag-name. Works with GitHub and GitHub Enterprise push, GitHub
+	//    and GitHub Enterprise pull request, Bitbucket push, and Bitbucket pull
+	//    request events.
 	//
-	// ACTOR_ACCOUNT_ID
+	//    * BASE_REF A webhook event triggers a build when the base reference matches
+	//    the regular expression pattern. For example, refs/heads/branch-name. Works
+	//    with pull request events only.
 	//
-	// A webhook event triggers a build when a GitHub, GitHub Enterprise, or Bitbucket
-	// account ID matches the regular expression pattern.
+	//    * FILE_PATH A webhook triggers a build when the path of a changed file
+	//    matches the regular expression pattern. Works with GitHub and Bitbucket
+	//    events push and pull requests events. Also works with GitHub Enterprise
+	//    push events, but does not work with GitHub Enterprise pull request events.
 	//
-	// HEAD_REF
+	//    * COMMIT_MESSAGE A webhook triggers a build when the head commit message
+	//    matches the regular expression pattern. Works with GitHub and Bitbucket
+	//    events push and pull requests events. Also works with GitHub Enterprise
+	//    push events, but does not work with GitHub Enterprise pull request events.
 	//
-	// A webhook event triggers a build when the head reference matches the regular
-	// expression pattern. For example, refs/heads/branch-name and refs/tags/tag-name.
+	//    * TAG_NAME A webhook triggers a build when the tag name of the release
+	//    matches the regular expression pattern. Works with RELEASED and PRERELEASED
+	//    events only.
 	//
-	// Works with GitHub and GitHub Enterprise push, GitHub and GitHub Enterprise
-	// pull request, Bitbucket push, and Bitbucket pull request events.
+	//    * RELEASE_NAME A webhook triggers a build when the release name matches
+	//    the regular expression pattern. Works with RELEASED and PRERELEASED events
+	//    only.
 	//
-	// BASE_REF
-	//
-	// A webhook event triggers a build when the base reference matches the regular
-	// expression pattern. For example, refs/heads/branch-name.
-	//
-	// Works with pull request events only.
-	//
-	// FILE_PATH
-	//
-	// A webhook triggers a build when the path of a changed file matches the regular
-	// expression pattern.
-	//
-	// Works with GitHub and Bitbucket events push and pull requests events. Also
-	// works with GitHub Enterprise push events, but does not work with GitHub Enterprise
-	// pull request events.
-	//
-	// COMMIT_MESSAGE
-	//
-	// A webhook triggers a build when the head commit message matches the regular
-	// expression pattern.
-	//
-	// Works with GitHub and Bitbucket events push and pull requests events. Also
-	// works with GitHub Enterprise push events, but does not work with GitHub Enterprise
-	// pull request events.
+	//    * WORKFLOW_NAME A webhook triggers a build when the workflow name matches
+	//    the regular expression pattern. Works with WORKFLOW_JOB_QUEUED events
+	//    only.
 	//
 	// Type is a required field
 	Type *string `locationName:"type" type:"string" required:"true" enum:"WebhookFilterType"`
@@ -16302,6 +18084,9 @@ const (
 
 	// AuthTypePersonalAccessToken is a AuthType enum value
 	AuthTypePersonalAccessToken = "PERSONAL_ACCESS_TOKEN"
+
+	// AuthTypeCodeconnections is a AuthType enum value
+	AuthTypeCodeconnections = "CODECONNECTIONS"
 )
 
 // AuthType_Values returns all elements of the AuthType enum
@@ -16310,6 +18095,7 @@ func AuthType_Values() []string {
 		AuthTypeOauth,
 		AuthTypeBasicAuth,
 		AuthTypePersonalAccessToken,
+		AuthTypeCodeconnections,
 	}
 }
 
@@ -16340,7 +18126,7 @@ func BatchReportModeType_Values() []string {
 //
 // This property can be one of the following values:
 //
-// NONE
+// # NONE
 //
 // The bucket owner does not have access to the objects. This is the default.
 //
@@ -16349,16 +18135,16 @@ func BatchReportModeType_Values() []string {
 // The bucket owner has read-only access to the objects. The uploading account
 // retains ownership of the objects.
 //
-// FULL
+// # FULL
 //
 // The bucket owner has full access to the objects. Object ownership is determined
 // by the following criteria:
 //
-//    * If the bucket is configured with the Bucket owner preferred setting,
-//    the bucket owner owns the objects. The uploading account will have object
-//    access as specified by the bucket's policy.
+//   - If the bucket is configured with the Bucket owner preferred setting,
+//     the bucket owner owns the objects. The uploading account will have object
+//     access as specified by the bucket's policy.
 //
-//    * Otherwise, the uploading account retains ownership of the objects.
+//   - Otherwise, the uploading account retains ownership of the objects.
 //
 // For more information about Amazon S3 object ownership, see Controlling ownership
 // of uploaded objects using S3 Object Ownership (https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html)
@@ -16521,8 +18307,26 @@ const (
 	// ComputeTypeBuildGeneral1Large is a ComputeType enum value
 	ComputeTypeBuildGeneral1Large = "BUILD_GENERAL1_LARGE"
 
+	// ComputeTypeBuildGeneral1Xlarge is a ComputeType enum value
+	ComputeTypeBuildGeneral1Xlarge = "BUILD_GENERAL1_XLARGE"
+
 	// ComputeTypeBuildGeneral12xlarge is a ComputeType enum value
 	ComputeTypeBuildGeneral12xlarge = "BUILD_GENERAL1_2XLARGE"
+
+	// ComputeTypeBuildLambda1gb is a ComputeType enum value
+	ComputeTypeBuildLambda1gb = "BUILD_LAMBDA_1GB"
+
+	// ComputeTypeBuildLambda2gb is a ComputeType enum value
+	ComputeTypeBuildLambda2gb = "BUILD_LAMBDA_2GB"
+
+	// ComputeTypeBuildLambda4gb is a ComputeType enum value
+	ComputeTypeBuildLambda4gb = "BUILD_LAMBDA_4GB"
+
+	// ComputeTypeBuildLambda8gb is a ComputeType enum value
+	ComputeTypeBuildLambda8gb = "BUILD_LAMBDA_8GB"
+
+	// ComputeTypeBuildLambda10gb is a ComputeType enum value
+	ComputeTypeBuildLambda10gb = "BUILD_LAMBDA_10GB"
 )
 
 // ComputeType_Values returns all elements of the ComputeType enum
@@ -16531,7 +18335,13 @@ func ComputeType_Values() []string {
 		ComputeTypeBuildGeneral1Small,
 		ComputeTypeBuildGeneral1Medium,
 		ComputeTypeBuildGeneral1Large,
+		ComputeTypeBuildGeneral1Xlarge,
 		ComputeTypeBuildGeneral12xlarge,
+		ComputeTypeBuildLambda1gb,
+		ComputeTypeBuildLambda2gb,
+		ComputeTypeBuildLambda4gb,
+		ComputeTypeBuildLambda8gb,
+		ComputeTypeBuildLambda10gb,
 	}
 }
 
@@ -16562,6 +18372,12 @@ const (
 
 	// EnvironmentTypeWindowsServer2019Container is a EnvironmentType enum value
 	EnvironmentTypeWindowsServer2019Container = "WINDOWS_SERVER_2019_CONTAINER"
+
+	// EnvironmentTypeLinuxLambdaContainer is a EnvironmentType enum value
+	EnvironmentTypeLinuxLambdaContainer = "LINUX_LAMBDA_CONTAINER"
+
+	// EnvironmentTypeArmLambdaContainer is a EnvironmentType enum value
+	EnvironmentTypeArmLambdaContainer = "ARM_LAMBDA_CONTAINER"
 )
 
 // EnvironmentType_Values returns all elements of the EnvironmentType enum
@@ -16572,6 +18388,8 @@ func EnvironmentType_Values() []string {
 		EnvironmentTypeLinuxGpuContainer,
 		EnvironmentTypeArmContainer,
 		EnvironmentTypeWindowsServer2019Container,
+		EnvironmentTypeLinuxLambdaContainer,
+		EnvironmentTypeArmLambdaContainer,
 	}
 }
 
@@ -16604,6 +18422,122 @@ const (
 func FileSystemType_Values() []string {
 	return []string{
 		FileSystemTypeEfs,
+	}
+}
+
+const (
+	// FleetContextCodeCreateFailed is a FleetContextCode enum value
+	FleetContextCodeCreateFailed = "CREATE_FAILED"
+
+	// FleetContextCodeUpdateFailed is a FleetContextCode enum value
+	FleetContextCodeUpdateFailed = "UPDATE_FAILED"
+)
+
+// FleetContextCode_Values returns all elements of the FleetContextCode enum
+func FleetContextCode_Values() []string {
+	return []string{
+		FleetContextCodeCreateFailed,
+		FleetContextCodeUpdateFailed,
+	}
+}
+
+const (
+	// FleetOverflowBehaviorQueue is a FleetOverflowBehavior enum value
+	FleetOverflowBehaviorQueue = "QUEUE"
+
+	// FleetOverflowBehaviorOnDemand is a FleetOverflowBehavior enum value
+	FleetOverflowBehaviorOnDemand = "ON_DEMAND"
+)
+
+// FleetOverflowBehavior_Values returns all elements of the FleetOverflowBehavior enum
+func FleetOverflowBehavior_Values() []string {
+	return []string{
+		FleetOverflowBehaviorQueue,
+		FleetOverflowBehaviorOnDemand,
+	}
+}
+
+const (
+	// FleetScalingMetricTypeFleetUtilizationRate is a FleetScalingMetricType enum value
+	FleetScalingMetricTypeFleetUtilizationRate = "FLEET_UTILIZATION_RATE"
+)
+
+// FleetScalingMetricType_Values returns all elements of the FleetScalingMetricType enum
+func FleetScalingMetricType_Values() []string {
+	return []string{
+		FleetScalingMetricTypeFleetUtilizationRate,
+	}
+}
+
+const (
+	// FleetScalingTypeTargetTrackingScaling is a FleetScalingType enum value
+	FleetScalingTypeTargetTrackingScaling = "TARGET_TRACKING_SCALING"
+)
+
+// FleetScalingType_Values returns all elements of the FleetScalingType enum
+func FleetScalingType_Values() []string {
+	return []string{
+		FleetScalingTypeTargetTrackingScaling,
+	}
+}
+
+const (
+	// FleetSortByTypeName is a FleetSortByType enum value
+	FleetSortByTypeName = "NAME"
+
+	// FleetSortByTypeCreatedTime is a FleetSortByType enum value
+	FleetSortByTypeCreatedTime = "CREATED_TIME"
+
+	// FleetSortByTypeLastModifiedTime is a FleetSortByType enum value
+	FleetSortByTypeLastModifiedTime = "LAST_MODIFIED_TIME"
+)
+
+// FleetSortByType_Values returns all elements of the FleetSortByType enum
+func FleetSortByType_Values() []string {
+	return []string{
+		FleetSortByTypeName,
+		FleetSortByTypeCreatedTime,
+		FleetSortByTypeLastModifiedTime,
+	}
+}
+
+const (
+	// FleetStatusCodeCreating is a FleetStatusCode enum value
+	FleetStatusCodeCreating = "CREATING"
+
+	// FleetStatusCodeUpdating is a FleetStatusCode enum value
+	FleetStatusCodeUpdating = "UPDATING"
+
+	// FleetStatusCodeRotating is a FleetStatusCode enum value
+	FleetStatusCodeRotating = "ROTATING"
+
+	// FleetStatusCodePendingDeletion is a FleetStatusCode enum value
+	FleetStatusCodePendingDeletion = "PENDING_DELETION"
+
+	// FleetStatusCodeDeleting is a FleetStatusCode enum value
+	FleetStatusCodeDeleting = "DELETING"
+
+	// FleetStatusCodeCreateFailed is a FleetStatusCode enum value
+	FleetStatusCodeCreateFailed = "CREATE_FAILED"
+
+	// FleetStatusCodeUpdateRollbackFailed is a FleetStatusCode enum value
+	FleetStatusCodeUpdateRollbackFailed = "UPDATE_ROLLBACK_FAILED"
+
+	// FleetStatusCodeActive is a FleetStatusCode enum value
+	FleetStatusCodeActive = "ACTIVE"
+)
+
+// FleetStatusCode_Values returns all elements of the FleetStatusCode enum
+func FleetStatusCode_Values() []string {
+	return []string{
+		FleetStatusCodeCreating,
+		FleetStatusCodeUpdating,
+		FleetStatusCodeRotating,
+		FleetStatusCodePendingDeletion,
+		FleetStatusCodeDeleting,
+		FleetStatusCodeCreateFailed,
+		FleetStatusCodeUpdateRollbackFailed,
+		FleetStatusCodeActive,
 	}
 }
 
@@ -16737,7 +18671,7 @@ func ProjectSortByType_Values() []string {
 //
 // The project builds are visible to the public.
 //
-// PRIVATE
+// # PRIVATE
 //
 // The project builds are not visible to the public.
 const (
@@ -16953,6 +18887,12 @@ const (
 
 	// ServerTypeGithubEnterprise is a ServerType enum value
 	ServerTypeGithubEnterprise = "GITHUB_ENTERPRISE"
+
+	// ServerTypeGitlab is a ServerType enum value
+	ServerTypeGitlab = "GITLAB"
+
+	// ServerTypeGitlabSelfManaged is a ServerType enum value
+	ServerTypeGitlabSelfManaged = "GITLAB_SELF_MANAGED"
 )
 
 // ServerType_Values returns all elements of the ServerType enum
@@ -16961,6 +18901,8 @@ func ServerType_Values() []string {
 		ServerTypeGithub,
 		ServerTypeBitbucket,
 		ServerTypeGithubEnterprise,
+		ServerTypeGitlab,
+		ServerTypeGitlabSelfManaged,
 	}
 }
 
@@ -16999,12 +18941,16 @@ func SortOrderType_Values() []string {
 const (
 	// SourceAuthTypeOauth is a SourceAuthType enum value
 	SourceAuthTypeOauth = "OAUTH"
+
+	// SourceAuthTypeCodeconnections is a SourceAuthType enum value
+	SourceAuthTypeCodeconnections = "CODECONNECTIONS"
 )
 
 // SourceAuthType_Values returns all elements of the SourceAuthType enum
 func SourceAuthType_Values() []string {
 	return []string{
 		SourceAuthTypeOauth,
+		SourceAuthTypeCodeconnections,
 	}
 }
 
@@ -17017,6 +18963,12 @@ const (
 
 	// SourceTypeGithub is a SourceType enum value
 	SourceTypeGithub = "GITHUB"
+
+	// SourceTypeGitlab is a SourceType enum value
+	SourceTypeGitlab = "GITLAB"
+
+	// SourceTypeGitlabSelfManaged is a SourceType enum value
+	SourceTypeGitlabSelfManaged = "GITLAB_SELF_MANAGED"
 
 	// SourceTypeS3 is a SourceType enum value
 	SourceTypeS3 = "S3"
@@ -17037,6 +18989,8 @@ func SourceType_Values() []string {
 		SourceTypeCodecommit,
 		SourceTypeCodepipeline,
 		SourceTypeGithub,
+		SourceTypeGitlab,
+		SourceTypeGitlabSelfManaged,
 		SourceTypeS3,
 		SourceTypeBitbucket,
 		SourceTypeGithubEnterprise,
@@ -17110,6 +19064,15 @@ const (
 
 	// WebhookFilterTypeCommitMessage is a WebhookFilterType enum value
 	WebhookFilterTypeCommitMessage = "COMMIT_MESSAGE"
+
+	// WebhookFilterTypeWorkflowName is a WebhookFilterType enum value
+	WebhookFilterTypeWorkflowName = "WORKFLOW_NAME"
+
+	// WebhookFilterTypeTagName is a WebhookFilterType enum value
+	WebhookFilterTypeTagName = "TAG_NAME"
+
+	// WebhookFilterTypeReleaseName is a WebhookFilterType enum value
+	WebhookFilterTypeReleaseName = "RELEASE_NAME"
 )
 
 // WebhookFilterType_Values returns all elements of the WebhookFilterType enum
@@ -17121,5 +19084,8 @@ func WebhookFilterType_Values() []string {
 		WebhookFilterTypeActorAccountId,
 		WebhookFilterTypeFilePath,
 		WebhookFilterTypeCommitMessage,
+		WebhookFilterTypeWorkflowName,
+		WebhookFilterTypeTagName,
+		WebhookFilterTypeReleaseName,
 	}
 }

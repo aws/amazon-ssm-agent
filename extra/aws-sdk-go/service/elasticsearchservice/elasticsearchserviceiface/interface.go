@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Amazon Elasticsearch Service.
-//    func myFunc(svc elasticsearchserviceiface.ElasticsearchServiceAPI) bool {
-//        // Make svc.AcceptInboundCrossClusterSearchConnection request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Amazon Elasticsearch Service.
+//	func myFunc(svc elasticsearchserviceiface.ElasticsearchServiceAPI) bool {
+//	    // Make svc.AcceptInboundCrossClusterSearchConnection request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := elasticsearchservice.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := elasticsearchservice.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockElasticsearchServiceClient struct {
-//        elasticsearchserviceiface.ElasticsearchServiceAPI
-//    }
-//    func (m *mockElasticsearchServiceClient) AcceptInboundCrossClusterSearchConnection(input *elasticsearchservice.AcceptInboundCrossClusterSearchConnectionInput) (*elasticsearchservice.AcceptInboundCrossClusterSearchConnectionOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockElasticsearchServiceClient struct {
+//	    elasticsearchserviceiface.ElasticsearchServiceAPI
+//	}
+//	func (m *mockElasticsearchServiceClient) AcceptInboundCrossClusterSearchConnection(input *elasticsearchservice.AcceptInboundCrossClusterSearchConnectionInput) (*elasticsearchservice.AcceptInboundCrossClusterSearchConnectionOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockElasticsearchServiceClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockElasticsearchServiceClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -75,6 +75,10 @@ type ElasticsearchServiceAPI interface {
 	AuthorizeVpcEndpointAccess(*elasticsearchservice.AuthorizeVpcEndpointAccessInput) (*elasticsearchservice.AuthorizeVpcEndpointAccessOutput, error)
 	AuthorizeVpcEndpointAccessWithContext(aws.Context, *elasticsearchservice.AuthorizeVpcEndpointAccessInput, ...request.Option) (*elasticsearchservice.AuthorizeVpcEndpointAccessOutput, error)
 	AuthorizeVpcEndpointAccessRequest(*elasticsearchservice.AuthorizeVpcEndpointAccessInput) (*request.Request, *elasticsearchservice.AuthorizeVpcEndpointAccessOutput)
+
+	CancelDomainConfigChange(*elasticsearchservice.CancelDomainConfigChangeInput) (*elasticsearchservice.CancelDomainConfigChangeOutput, error)
+	CancelDomainConfigChangeWithContext(aws.Context, *elasticsearchservice.CancelDomainConfigChangeInput, ...request.Option) (*elasticsearchservice.CancelDomainConfigChangeOutput, error)
+	CancelDomainConfigChangeRequest(*elasticsearchservice.CancelDomainConfigChangeInput) (*request.Request, *elasticsearchservice.CancelDomainConfigChangeOutput)
 
 	CancelElasticsearchServiceSoftwareUpdate(*elasticsearchservice.CancelElasticsearchServiceSoftwareUpdateInput) (*elasticsearchservice.CancelElasticsearchServiceSoftwareUpdateOutput, error)
 	CancelElasticsearchServiceSoftwareUpdateWithContext(aws.Context, *elasticsearchservice.CancelElasticsearchServiceSoftwareUpdateInput, ...request.Option) (*elasticsearchservice.CancelElasticsearchServiceSoftwareUpdateOutput, error)

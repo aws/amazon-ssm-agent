@@ -27,14 +27,13 @@ const opQueryForecast = "QueryForecast"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the QueryForecastRequest method.
+//	req, resp := client.QueryForecastRequest(params)
 //
-//    // Example sending a request using the QueryForecastRequest method.
-//    req, resp := client.QueryForecastRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecastquery-2018-06-26/QueryForecast
 func (c *ForecastQueryService) QueryForecastRequest(input *QueryForecastInput) (req *request.Request, output *QueryForecastOutput) {
@@ -79,21 +78,22 @@ func (c *ForecastQueryService) QueryForecastRequest(input *QueryForecastInput) (
 // API operation QueryForecast for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   We can't find that resource. Check the information that you've provided and
-//   try again.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find that resource. Check the information that you've provided and
+//     try again.
 //
-//   * InvalidInputException
-//   The value is invalid or is too long.
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
-//   * LimitExceededException
-//   The limit on the number of requests per second has been exceeded.
+//   - InvalidInputException
+//     The value is invalid or is too long.
 //
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
+//   - LimitExceededException
+//     The limit on the number of requests per second has been exceeded.
+//
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecastquery-2018-06-26/QueryForecast
 func (c *ForecastQueryService) QueryForecast(input *QueryForecastInput) (*QueryForecastOutput, error) {
@@ -133,14 +133,13 @@ const opQueryWhatIfForecast = "QueryWhatIfForecast"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the QueryWhatIfForecastRequest method.
+//	req, resp := client.QueryWhatIfForecastRequest(params)
 //
-//    // Example sending a request using the QueryWhatIfForecastRequest method.
-//    req, resp := client.QueryWhatIfForecastRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecastquery-2018-06-26/QueryWhatIfForecast
 func (c *ForecastQueryService) QueryWhatIfForecastRequest(input *QueryWhatIfForecastInput) (req *request.Request, output *QueryWhatIfForecastOutput) {
@@ -171,21 +170,22 @@ func (c *ForecastQueryService) QueryWhatIfForecastRequest(input *QueryWhatIfFore
 // API operation QueryWhatIfForecast for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   We can't find that resource. Check the information that you've provided and
-//   try again.
 //
-//   * ResourceInUseException
-//   The specified resource is in use.
+//   - ResourceNotFoundException
+//     We can't find that resource. Check the information that you've provided and
+//     try again.
 //
-//   * InvalidInputException
-//   The value is invalid or is too long.
+//   - ResourceInUseException
+//     The specified resource is in use.
 //
-//   * LimitExceededException
-//   The limit on the number of requests per second has been exceeded.
+//   - InvalidInputException
+//     The value is invalid or is too long.
 //
-//   * InvalidNextTokenException
-//   The token is not valid. Tokens expire after 24 hours.
+//   - LimitExceededException
+//     The limit on the number of requests per second has been exceeded.
+//
+//   - InvalidNextTokenException
+//     The token is not valid. Tokens expire after 24 hours.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/forecastquery-2018-06-26/QueryWhatIfForecast
 func (c *ForecastQueryService) QueryWhatIfForecast(input *QueryWhatIfForecastInput) (*QueryWhatIfForecastOutput, error) {

@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Inspector2.
-//    func myFunc(svc inspector2iface.Inspector2API) bool {
-//        // Make svc.AssociateMember request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Inspector2.
+//	func myFunc(svc inspector2iface.Inspector2API) bool {
+//	    // Make svc.AssociateMember request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := inspector2.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := inspector2.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockInspector2Client struct {
-//        inspector2iface.Inspector2API
-//    }
-//    func (m *mockInspector2Client) AssociateMember(input *inspector2.AssociateMemberInput) (*inspector2.AssociateMemberOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockInspector2Client struct {
+//	    inspector2iface.Inspector2API
+//	}
+//	func (m *mockInspector2Client) AssociateMember(input *inspector2.AssociateMemberInput) (*inspector2.AssociateMemberOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockInspector2Client{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockInspector2Client{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -67,6 +67,14 @@ type Inspector2API interface {
 	BatchGetAccountStatus(*inspector2.BatchGetAccountStatusInput) (*inspector2.BatchGetAccountStatusOutput, error)
 	BatchGetAccountStatusWithContext(aws.Context, *inspector2.BatchGetAccountStatusInput, ...request.Option) (*inspector2.BatchGetAccountStatusOutput, error)
 	BatchGetAccountStatusRequest(*inspector2.BatchGetAccountStatusInput) (*request.Request, *inspector2.BatchGetAccountStatusOutput)
+
+	BatchGetCodeSnippet(*inspector2.BatchGetCodeSnippetInput) (*inspector2.BatchGetCodeSnippetOutput, error)
+	BatchGetCodeSnippetWithContext(aws.Context, *inspector2.BatchGetCodeSnippetInput, ...request.Option) (*inspector2.BatchGetCodeSnippetOutput, error)
+	BatchGetCodeSnippetRequest(*inspector2.BatchGetCodeSnippetInput) (*request.Request, *inspector2.BatchGetCodeSnippetOutput)
+
+	BatchGetFindingDetails(*inspector2.BatchGetFindingDetailsInput) (*inspector2.BatchGetFindingDetailsOutput, error)
+	BatchGetFindingDetailsWithContext(aws.Context, *inspector2.BatchGetFindingDetailsInput, ...request.Option) (*inspector2.BatchGetFindingDetailsOutput, error)
+	BatchGetFindingDetailsRequest(*inspector2.BatchGetFindingDetailsInput) (*request.Request, *inspector2.BatchGetFindingDetailsOutput)
 
 	BatchGetFreeTrialInfo(*inspector2.BatchGetFreeTrialInfoInput) (*inspector2.BatchGetFreeTrialInfoOutput, error)
 	BatchGetFreeTrialInfoWithContext(aws.Context, *inspector2.BatchGetFreeTrialInfoInput, ...request.Option) (*inspector2.BatchGetFreeTrialInfoOutput, error)
@@ -84,6 +92,14 @@ type Inspector2API interface {
 	CancelFindingsReportWithContext(aws.Context, *inspector2.CancelFindingsReportInput, ...request.Option) (*inspector2.CancelFindingsReportOutput, error)
 	CancelFindingsReportRequest(*inspector2.CancelFindingsReportInput) (*request.Request, *inspector2.CancelFindingsReportOutput)
 
+	CancelSbomExport(*inspector2.CancelSbomExportInput) (*inspector2.CancelSbomExportOutput, error)
+	CancelSbomExportWithContext(aws.Context, *inspector2.CancelSbomExportInput, ...request.Option) (*inspector2.CancelSbomExportOutput, error)
+	CancelSbomExportRequest(*inspector2.CancelSbomExportInput) (*request.Request, *inspector2.CancelSbomExportOutput)
+
+	CreateCisScanConfiguration(*inspector2.CreateCisScanConfigurationInput) (*inspector2.CreateCisScanConfigurationOutput, error)
+	CreateCisScanConfigurationWithContext(aws.Context, *inspector2.CreateCisScanConfigurationInput, ...request.Option) (*inspector2.CreateCisScanConfigurationOutput, error)
+	CreateCisScanConfigurationRequest(*inspector2.CreateCisScanConfigurationInput) (*request.Request, *inspector2.CreateCisScanConfigurationOutput)
+
 	CreateFilter(*inspector2.CreateFilterInput) (*inspector2.CreateFilterOutput, error)
 	CreateFilterWithContext(aws.Context, *inspector2.CreateFilterInput, ...request.Option) (*inspector2.CreateFilterOutput, error)
 	CreateFilterRequest(*inspector2.CreateFilterInput) (*request.Request, *inspector2.CreateFilterOutput)
@@ -91,6 +107,14 @@ type Inspector2API interface {
 	CreateFindingsReport(*inspector2.CreateFindingsReportInput) (*inspector2.CreateFindingsReportOutput, error)
 	CreateFindingsReportWithContext(aws.Context, *inspector2.CreateFindingsReportInput, ...request.Option) (*inspector2.CreateFindingsReportOutput, error)
 	CreateFindingsReportRequest(*inspector2.CreateFindingsReportInput) (*request.Request, *inspector2.CreateFindingsReportOutput)
+
+	CreateSbomExport(*inspector2.CreateSbomExportInput) (*inspector2.CreateSbomExportOutput, error)
+	CreateSbomExportWithContext(aws.Context, *inspector2.CreateSbomExportInput, ...request.Option) (*inspector2.CreateSbomExportOutput, error)
+	CreateSbomExportRequest(*inspector2.CreateSbomExportInput) (*request.Request, *inspector2.CreateSbomExportOutput)
+
+	DeleteCisScanConfiguration(*inspector2.DeleteCisScanConfigurationInput) (*inspector2.DeleteCisScanConfigurationOutput, error)
+	DeleteCisScanConfigurationWithContext(aws.Context, *inspector2.DeleteCisScanConfigurationInput, ...request.Option) (*inspector2.DeleteCisScanConfigurationOutput, error)
+	DeleteCisScanConfigurationRequest(*inspector2.DeleteCisScanConfigurationInput) (*request.Request, *inspector2.DeleteCisScanConfigurationOutput)
 
 	DeleteFilter(*inspector2.DeleteFilterInput) (*inspector2.DeleteFilterOutput, error)
 	DeleteFilterWithContext(aws.Context, *inspector2.DeleteFilterInput, ...request.Option) (*inspector2.DeleteFilterOutput, error)
@@ -120,6 +144,17 @@ type Inspector2API interface {
 	EnableDelegatedAdminAccountWithContext(aws.Context, *inspector2.EnableDelegatedAdminAccountInput, ...request.Option) (*inspector2.EnableDelegatedAdminAccountOutput, error)
 	EnableDelegatedAdminAccountRequest(*inspector2.EnableDelegatedAdminAccountInput) (*request.Request, *inspector2.EnableDelegatedAdminAccountOutput)
 
+	GetCisScanReport(*inspector2.GetCisScanReportInput) (*inspector2.GetCisScanReportOutput, error)
+	GetCisScanReportWithContext(aws.Context, *inspector2.GetCisScanReportInput, ...request.Option) (*inspector2.GetCisScanReportOutput, error)
+	GetCisScanReportRequest(*inspector2.GetCisScanReportInput) (*request.Request, *inspector2.GetCisScanReportOutput)
+
+	GetCisScanResultDetails(*inspector2.GetCisScanResultDetailsInput) (*inspector2.GetCisScanResultDetailsOutput, error)
+	GetCisScanResultDetailsWithContext(aws.Context, *inspector2.GetCisScanResultDetailsInput, ...request.Option) (*inspector2.GetCisScanResultDetailsOutput, error)
+	GetCisScanResultDetailsRequest(*inspector2.GetCisScanResultDetailsInput) (*request.Request, *inspector2.GetCisScanResultDetailsOutput)
+
+	GetCisScanResultDetailsPages(*inspector2.GetCisScanResultDetailsInput, func(*inspector2.GetCisScanResultDetailsOutput, bool) bool) error
+	GetCisScanResultDetailsPagesWithContext(aws.Context, *inspector2.GetCisScanResultDetailsInput, func(*inspector2.GetCisScanResultDetailsOutput, bool) bool, ...request.Option) error
+
 	GetConfiguration(*inspector2.GetConfigurationInput) (*inspector2.GetConfigurationOutput, error)
 	GetConfigurationWithContext(aws.Context, *inspector2.GetConfigurationInput, ...request.Option) (*inspector2.GetConfigurationOutput, error)
 	GetConfigurationRequest(*inspector2.GetConfigurationInput) (*request.Request, *inspector2.GetConfigurationOutput)
@@ -132,6 +167,10 @@ type Inspector2API interface {
 	GetEc2DeepInspectionConfigurationWithContext(aws.Context, *inspector2.GetEc2DeepInspectionConfigurationInput, ...request.Option) (*inspector2.GetEc2DeepInspectionConfigurationOutput, error)
 	GetEc2DeepInspectionConfigurationRequest(*inspector2.GetEc2DeepInspectionConfigurationInput) (*request.Request, *inspector2.GetEc2DeepInspectionConfigurationOutput)
 
+	GetEncryptionKey(*inspector2.GetEncryptionKeyInput) (*inspector2.GetEncryptionKeyOutput, error)
+	GetEncryptionKeyWithContext(aws.Context, *inspector2.GetEncryptionKeyInput, ...request.Option) (*inspector2.GetEncryptionKeyOutput, error)
+	GetEncryptionKeyRequest(*inspector2.GetEncryptionKeyInput) (*request.Request, *inspector2.GetEncryptionKeyOutput)
+
 	GetFindingsReportStatus(*inspector2.GetFindingsReportStatusInput) (*inspector2.GetFindingsReportStatusOutput, error)
 	GetFindingsReportStatusWithContext(aws.Context, *inspector2.GetFindingsReportStatusInput, ...request.Option) (*inspector2.GetFindingsReportStatusOutput, error)
 	GetFindingsReportStatusRequest(*inspector2.GetFindingsReportStatusInput) (*request.Request, *inspector2.GetFindingsReportStatusOutput)
@@ -140,12 +179,44 @@ type Inspector2API interface {
 	GetMemberWithContext(aws.Context, *inspector2.GetMemberInput, ...request.Option) (*inspector2.GetMemberOutput, error)
 	GetMemberRequest(*inspector2.GetMemberInput) (*request.Request, *inspector2.GetMemberOutput)
 
+	GetSbomExport(*inspector2.GetSbomExportInput) (*inspector2.GetSbomExportOutput, error)
+	GetSbomExportWithContext(aws.Context, *inspector2.GetSbomExportInput, ...request.Option) (*inspector2.GetSbomExportOutput, error)
+	GetSbomExportRequest(*inspector2.GetSbomExportInput) (*request.Request, *inspector2.GetSbomExportOutput)
+
 	ListAccountPermissions(*inspector2.ListAccountPermissionsInput) (*inspector2.ListAccountPermissionsOutput, error)
 	ListAccountPermissionsWithContext(aws.Context, *inspector2.ListAccountPermissionsInput, ...request.Option) (*inspector2.ListAccountPermissionsOutput, error)
 	ListAccountPermissionsRequest(*inspector2.ListAccountPermissionsInput) (*request.Request, *inspector2.ListAccountPermissionsOutput)
 
 	ListAccountPermissionsPages(*inspector2.ListAccountPermissionsInput, func(*inspector2.ListAccountPermissionsOutput, bool) bool) error
 	ListAccountPermissionsPagesWithContext(aws.Context, *inspector2.ListAccountPermissionsInput, func(*inspector2.ListAccountPermissionsOutput, bool) bool, ...request.Option) error
+
+	ListCisScanConfigurations(*inspector2.ListCisScanConfigurationsInput) (*inspector2.ListCisScanConfigurationsOutput, error)
+	ListCisScanConfigurationsWithContext(aws.Context, *inspector2.ListCisScanConfigurationsInput, ...request.Option) (*inspector2.ListCisScanConfigurationsOutput, error)
+	ListCisScanConfigurationsRequest(*inspector2.ListCisScanConfigurationsInput) (*request.Request, *inspector2.ListCisScanConfigurationsOutput)
+
+	ListCisScanConfigurationsPages(*inspector2.ListCisScanConfigurationsInput, func(*inspector2.ListCisScanConfigurationsOutput, bool) bool) error
+	ListCisScanConfigurationsPagesWithContext(aws.Context, *inspector2.ListCisScanConfigurationsInput, func(*inspector2.ListCisScanConfigurationsOutput, bool) bool, ...request.Option) error
+
+	ListCisScanResultsAggregatedByChecks(*inspector2.ListCisScanResultsAggregatedByChecksInput) (*inspector2.ListCisScanResultsAggregatedByChecksOutput, error)
+	ListCisScanResultsAggregatedByChecksWithContext(aws.Context, *inspector2.ListCisScanResultsAggregatedByChecksInput, ...request.Option) (*inspector2.ListCisScanResultsAggregatedByChecksOutput, error)
+	ListCisScanResultsAggregatedByChecksRequest(*inspector2.ListCisScanResultsAggregatedByChecksInput) (*request.Request, *inspector2.ListCisScanResultsAggregatedByChecksOutput)
+
+	ListCisScanResultsAggregatedByChecksPages(*inspector2.ListCisScanResultsAggregatedByChecksInput, func(*inspector2.ListCisScanResultsAggregatedByChecksOutput, bool) bool) error
+	ListCisScanResultsAggregatedByChecksPagesWithContext(aws.Context, *inspector2.ListCisScanResultsAggregatedByChecksInput, func(*inspector2.ListCisScanResultsAggregatedByChecksOutput, bool) bool, ...request.Option) error
+
+	ListCisScanResultsAggregatedByTargetResource(*inspector2.ListCisScanResultsAggregatedByTargetResourceInput) (*inspector2.ListCisScanResultsAggregatedByTargetResourceOutput, error)
+	ListCisScanResultsAggregatedByTargetResourceWithContext(aws.Context, *inspector2.ListCisScanResultsAggregatedByTargetResourceInput, ...request.Option) (*inspector2.ListCisScanResultsAggregatedByTargetResourceOutput, error)
+	ListCisScanResultsAggregatedByTargetResourceRequest(*inspector2.ListCisScanResultsAggregatedByTargetResourceInput) (*request.Request, *inspector2.ListCisScanResultsAggregatedByTargetResourceOutput)
+
+	ListCisScanResultsAggregatedByTargetResourcePages(*inspector2.ListCisScanResultsAggregatedByTargetResourceInput, func(*inspector2.ListCisScanResultsAggregatedByTargetResourceOutput, bool) bool) error
+	ListCisScanResultsAggregatedByTargetResourcePagesWithContext(aws.Context, *inspector2.ListCisScanResultsAggregatedByTargetResourceInput, func(*inspector2.ListCisScanResultsAggregatedByTargetResourceOutput, bool) bool, ...request.Option) error
+
+	ListCisScans(*inspector2.ListCisScansInput) (*inspector2.ListCisScansOutput, error)
+	ListCisScansWithContext(aws.Context, *inspector2.ListCisScansInput, ...request.Option) (*inspector2.ListCisScansOutput, error)
+	ListCisScansRequest(*inspector2.ListCisScansInput) (*request.Request, *inspector2.ListCisScansOutput)
+
+	ListCisScansPages(*inspector2.ListCisScansInput, func(*inspector2.ListCisScansOutput, bool) bool) error
+	ListCisScansPagesWithContext(aws.Context, *inspector2.ListCisScansInput, func(*inspector2.ListCisScansOutput, bool) bool, ...request.Option) error
 
 	ListCoverage(*inspector2.ListCoverageInput) (*inspector2.ListCoverageOutput, error)
 	ListCoverageWithContext(aws.Context, *inspector2.ListCoverageInput, ...request.Option) (*inspector2.ListCoverageOutput, error)
@@ -207,12 +278,32 @@ type Inspector2API interface {
 	ListUsageTotalsPages(*inspector2.ListUsageTotalsInput, func(*inspector2.ListUsageTotalsOutput, bool) bool) error
 	ListUsageTotalsPagesWithContext(aws.Context, *inspector2.ListUsageTotalsInput, func(*inspector2.ListUsageTotalsOutput, bool) bool, ...request.Option) error
 
+	ResetEncryptionKey(*inspector2.ResetEncryptionKeyInput) (*inspector2.ResetEncryptionKeyOutput, error)
+	ResetEncryptionKeyWithContext(aws.Context, *inspector2.ResetEncryptionKeyInput, ...request.Option) (*inspector2.ResetEncryptionKeyOutput, error)
+	ResetEncryptionKeyRequest(*inspector2.ResetEncryptionKeyInput) (*request.Request, *inspector2.ResetEncryptionKeyOutput)
+
 	SearchVulnerabilities(*inspector2.SearchVulnerabilitiesInput) (*inspector2.SearchVulnerabilitiesOutput, error)
 	SearchVulnerabilitiesWithContext(aws.Context, *inspector2.SearchVulnerabilitiesInput, ...request.Option) (*inspector2.SearchVulnerabilitiesOutput, error)
 	SearchVulnerabilitiesRequest(*inspector2.SearchVulnerabilitiesInput) (*request.Request, *inspector2.SearchVulnerabilitiesOutput)
 
 	SearchVulnerabilitiesPages(*inspector2.SearchVulnerabilitiesInput, func(*inspector2.SearchVulnerabilitiesOutput, bool) bool) error
 	SearchVulnerabilitiesPagesWithContext(aws.Context, *inspector2.SearchVulnerabilitiesInput, func(*inspector2.SearchVulnerabilitiesOutput, bool) bool, ...request.Option) error
+
+	SendCisSessionHealth(*inspector2.SendCisSessionHealthInput) (*inspector2.SendCisSessionHealthOutput, error)
+	SendCisSessionHealthWithContext(aws.Context, *inspector2.SendCisSessionHealthInput, ...request.Option) (*inspector2.SendCisSessionHealthOutput, error)
+	SendCisSessionHealthRequest(*inspector2.SendCisSessionHealthInput) (*request.Request, *inspector2.SendCisSessionHealthOutput)
+
+	SendCisSessionTelemetry(*inspector2.SendCisSessionTelemetryInput) (*inspector2.SendCisSessionTelemetryOutput, error)
+	SendCisSessionTelemetryWithContext(aws.Context, *inspector2.SendCisSessionTelemetryInput, ...request.Option) (*inspector2.SendCisSessionTelemetryOutput, error)
+	SendCisSessionTelemetryRequest(*inspector2.SendCisSessionTelemetryInput) (*request.Request, *inspector2.SendCisSessionTelemetryOutput)
+
+	StartCisSession(*inspector2.StartCisSessionInput) (*inspector2.StartCisSessionOutput, error)
+	StartCisSessionWithContext(aws.Context, *inspector2.StartCisSessionInput, ...request.Option) (*inspector2.StartCisSessionOutput, error)
+	StartCisSessionRequest(*inspector2.StartCisSessionInput) (*request.Request, *inspector2.StartCisSessionOutput)
+
+	StopCisSession(*inspector2.StopCisSessionInput) (*inspector2.StopCisSessionOutput, error)
+	StopCisSessionWithContext(aws.Context, *inspector2.StopCisSessionInput, ...request.Option) (*inspector2.StopCisSessionOutput, error)
+	StopCisSessionRequest(*inspector2.StopCisSessionInput) (*request.Request, *inspector2.StopCisSessionOutput)
 
 	TagResource(*inspector2.TagResourceInput) (*inspector2.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *inspector2.TagResourceInput, ...request.Option) (*inspector2.TagResourceOutput, error)
@@ -222,6 +313,10 @@ type Inspector2API interface {
 	UntagResourceWithContext(aws.Context, *inspector2.UntagResourceInput, ...request.Option) (*inspector2.UntagResourceOutput, error)
 	UntagResourceRequest(*inspector2.UntagResourceInput) (*request.Request, *inspector2.UntagResourceOutput)
 
+	UpdateCisScanConfiguration(*inspector2.UpdateCisScanConfigurationInput) (*inspector2.UpdateCisScanConfigurationOutput, error)
+	UpdateCisScanConfigurationWithContext(aws.Context, *inspector2.UpdateCisScanConfigurationInput, ...request.Option) (*inspector2.UpdateCisScanConfigurationOutput, error)
+	UpdateCisScanConfigurationRequest(*inspector2.UpdateCisScanConfigurationInput) (*request.Request, *inspector2.UpdateCisScanConfigurationOutput)
+
 	UpdateConfiguration(*inspector2.UpdateConfigurationInput) (*inspector2.UpdateConfigurationOutput, error)
 	UpdateConfigurationWithContext(aws.Context, *inspector2.UpdateConfigurationInput, ...request.Option) (*inspector2.UpdateConfigurationOutput, error)
 	UpdateConfigurationRequest(*inspector2.UpdateConfigurationInput) (*request.Request, *inspector2.UpdateConfigurationOutput)
@@ -229,6 +324,10 @@ type Inspector2API interface {
 	UpdateEc2DeepInspectionConfiguration(*inspector2.UpdateEc2DeepInspectionConfigurationInput) (*inspector2.UpdateEc2DeepInspectionConfigurationOutput, error)
 	UpdateEc2DeepInspectionConfigurationWithContext(aws.Context, *inspector2.UpdateEc2DeepInspectionConfigurationInput, ...request.Option) (*inspector2.UpdateEc2DeepInspectionConfigurationOutput, error)
 	UpdateEc2DeepInspectionConfigurationRequest(*inspector2.UpdateEc2DeepInspectionConfigurationInput) (*request.Request, *inspector2.UpdateEc2DeepInspectionConfigurationOutput)
+
+	UpdateEncryptionKey(*inspector2.UpdateEncryptionKeyInput) (*inspector2.UpdateEncryptionKeyOutput, error)
+	UpdateEncryptionKeyWithContext(aws.Context, *inspector2.UpdateEncryptionKeyInput, ...request.Option) (*inspector2.UpdateEncryptionKeyOutput, error)
+	UpdateEncryptionKeyRequest(*inspector2.UpdateEncryptionKeyInput) (*request.Request, *inspector2.UpdateEncryptionKeyOutput)
 
 	UpdateFilter(*inspector2.UpdateFilterInput) (*inspector2.UpdateFilterOutput, error)
 	UpdateFilterWithContext(aws.Context, *inspector2.UpdateFilterInput, ...request.Option) (*inspector2.UpdateFilterOutput, error)

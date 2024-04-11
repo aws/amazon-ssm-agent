@@ -39,13 +39,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a SageMakerMetrics client from just a session.
-//     svc := sagemakermetrics.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a SageMakerMetrics client with additional configuration
-//     svc := sagemakermetrics.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a SageMakerMetrics client from just a session.
+//	svc := sagemakermetrics.New(mySession)
+//
+//	// Create a SageMakerMetrics client with additional configuration
+//	svc := sagemakermetrics.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *SageMakerMetrics {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

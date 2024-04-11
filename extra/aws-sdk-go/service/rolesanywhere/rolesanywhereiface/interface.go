@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // IAM Roles Anywhere.
-//    func myFunc(svc rolesanywhereiface.RolesAnywhereAPI) bool {
-//        // Make svc.CreateProfile request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// IAM Roles Anywhere.
+//	func myFunc(svc rolesanywhereiface.RolesAnywhereAPI) bool {
+//	    // Make svc.CreateProfile request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := rolesanywhere.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := rolesanywhere.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockRolesAnywhereClient struct {
-//        rolesanywhereiface.RolesAnywhereAPI
-//    }
-//    func (m *mockRolesAnywhereClient) CreateProfile(input *rolesanywhere.CreateProfileInput) (*rolesanywhere.CreateProfileOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockRolesAnywhereClient struct {
+//	    rolesanywhereiface.RolesAnywhereAPI
+//	}
+//	func (m *mockRolesAnywhereClient) CreateProfile(input *rolesanywhere.CreateProfileInput) (*rolesanywhere.CreateProfileOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockRolesAnywhereClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockRolesAnywhereClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -155,6 +155,14 @@ type RolesAnywhereAPI interface {
 
 	ListTrustAnchorsPages(*rolesanywhere.ListTrustAnchorsInput, func(*rolesanywhere.ListTrustAnchorsOutput, bool) bool) error
 	ListTrustAnchorsPagesWithContext(aws.Context, *rolesanywhere.ListTrustAnchorsInput, func(*rolesanywhere.ListTrustAnchorsOutput, bool) bool, ...request.Option) error
+
+	PutNotificationSettings(*rolesanywhere.PutNotificationSettingsInput) (*rolesanywhere.PutNotificationSettingsOutput, error)
+	PutNotificationSettingsWithContext(aws.Context, *rolesanywhere.PutNotificationSettingsInput, ...request.Option) (*rolesanywhere.PutNotificationSettingsOutput, error)
+	PutNotificationSettingsRequest(*rolesanywhere.PutNotificationSettingsInput) (*request.Request, *rolesanywhere.PutNotificationSettingsOutput)
+
+	ResetNotificationSettings(*rolesanywhere.ResetNotificationSettingsInput) (*rolesanywhere.ResetNotificationSettingsOutput, error)
+	ResetNotificationSettingsWithContext(aws.Context, *rolesanywhere.ResetNotificationSettingsInput, ...request.Option) (*rolesanywhere.ResetNotificationSettingsOutput, error)
+	ResetNotificationSettingsRequest(*rolesanywhere.ResetNotificationSettingsInput) (*request.Request, *rolesanywhere.ResetNotificationSettingsOutput)
 
 	TagResource(*rolesanywhere.TagResourceInput) (*rolesanywhere.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *rolesanywhere.TagResourceInput, ...request.Option) (*rolesanywhere.TagResourceOutput, error)

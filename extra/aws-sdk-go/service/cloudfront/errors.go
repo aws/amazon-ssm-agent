@@ -42,6 +42,12 @@ const (
 	// You can't change the value of a public key.
 	ErrCodeCannotChangeImmutablePublicKeyFields = "CannotChangeImmutablePublicKeyFields"
 
+	// ErrCodeCannotDeleteEntityWhileInUse for service response error code
+	// "CannotDeleteEntityWhileInUse".
+	//
+	// The key value store entity cannot be deleted while it is in use.
+	ErrCodeCannotDeleteEntityWhileInUse = "CannotDeleteEntityWhileInUse"
+
 	// ErrCodeContinuousDeploymentPolicyAlreadyExists for service response error code
 	// "ContinuousDeploymentPolicyAlreadyExists".
 	//
@@ -68,6 +74,31 @@ const (
 	// The specified CloudFront distribution is not disabled. You must disable the
 	// distribution before you can delete it.
 	ErrCodeDistributionNotDisabled = "DistributionNotDisabled"
+
+	// ErrCodeEntityAlreadyExists for service response error code
+	// "EntityAlreadyExists".
+	//
+	// The key value store entity already exists. You must provide a unique key
+	// value store entity.
+	ErrCodeEntityAlreadyExists = "EntityAlreadyExists"
+
+	// ErrCodeEntityLimitExceeded for service response error code
+	// "EntityLimitExceeded".
+	//
+	// The key value store entity limit has been exceeded.
+	ErrCodeEntityLimitExceeded = "EntityLimitExceeded"
+
+	// ErrCodeEntityNotFound for service response error code
+	// "EntityNotFound".
+	//
+	// The key value store entity was not found.
+	ErrCodeEntityNotFound = "EntityNotFound"
+
+	// ErrCodeEntitySizeLimitExceeded for service response error code
+	// "EntitySizeLimitExceeded".
+	//
+	// The key value store entity size limit was exceeded.
+	ErrCodeEntitySizeLimitExceeded = "EntitySizeLimitExceeded"
 
 	// ErrCodeFieldLevelEncryptionConfigAlreadyExists for service response error code
 	// "FieldLevelEncryptionConfigAlreadyExists".

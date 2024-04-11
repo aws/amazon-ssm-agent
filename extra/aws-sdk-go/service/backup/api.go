@@ -29,14 +29,13 @@ const opCancelLegalHold = "CancelLegalHold"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelLegalHoldRequest method.
+//	req, resp := client.CancelLegalHoldRequest(params)
 //
-//    // Example sending a request using the CancelLegalHoldRequest method.
-//    req, resp := client.CancelLegalHoldRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CancelLegalHold
 func (c *Backup) CancelLegalHoldRequest(input *CancelLegalHoldInput) (req *request.Request, output *CancelLegalHoldOutput) {
@@ -69,22 +68,23 @@ func (c *Backup) CancelLegalHoldRequest(input *CancelLegalHoldInput) (req *reque
 // API operation CancelLegalHold for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * InvalidResourceStateException
-//   Backup is already performing an action on this recovery point. It can't perform
-//   the action you requested until the first action finishes. Try again later.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidResourceStateException
+//     Backup is already performing an action on this recovery point. It can't perform
+//     the action you requested until the first action finishes. Try again later.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CancelLegalHold
 func (c *Backup) CancelLegalHold(input *CancelLegalHoldInput) (*CancelLegalHoldOutput, error) {
@@ -124,14 +124,13 @@ const opCreateBackupPlan = "CreateBackupPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateBackupPlanRequest method.
+//	req, resp := client.CreateBackupPlanRequest(params)
 //
-//    // Example sending a request using the CreateBackupPlanRequest method.
-//    req, resp := client.CreateBackupPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateBackupPlan
 func (c *Backup) CreateBackupPlanRequest(input *CreateBackupPlanInput) (req *request.Request, output *CreateBackupPlanOutput) {
@@ -167,22 +166,23 @@ func (c *Backup) CreateBackupPlanRequest(input *CreateBackupPlanInput) (req *req
 // API operation CreateBackupPlan for usage and error information.
 //
 // Returned Error Types:
-//   * LimitExceededException
-//   A limit in the request has been exceeded; for example, a maximum number of
-//   items allowed in a request.
 //
-//   * AlreadyExistsException
-//   The required resource already exists.
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - AlreadyExistsException
+//     The required resource already exists.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateBackupPlan
 func (c *Backup) CreateBackupPlan(input *CreateBackupPlanInput) (*CreateBackupPlanOutput, error) {
@@ -222,14 +222,13 @@ const opCreateBackupSelection = "CreateBackupSelection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateBackupSelectionRequest method.
+//	req, resp := client.CreateBackupSelectionRequest(params)
 //
-//    // Example sending a request using the CreateBackupSelectionRequest method.
-//    req, resp := client.CreateBackupSelectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateBackupSelection
 func (c *Backup) CreateBackupSelectionRequest(input *CreateBackupSelectionInput) (req *request.Request, output *CreateBackupSelectionOutput) {
@@ -261,22 +260,23 @@ func (c *Backup) CreateBackupSelectionRequest(input *CreateBackupSelectionInput)
 // API operation CreateBackupSelection for usage and error information.
 //
 // Returned Error Types:
-//   * LimitExceededException
-//   A limit in the request has been exceeded; for example, a maximum number of
-//   items allowed in a request.
 //
-//   * AlreadyExistsException
-//   The required resource already exists.
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - AlreadyExistsException
+//     The required resource already exists.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateBackupSelection
 func (c *Backup) CreateBackupSelection(input *CreateBackupSelectionInput) (*CreateBackupSelectionOutput, error) {
@@ -316,14 +316,13 @@ const opCreateBackupVault = "CreateBackupVault"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateBackupVaultRequest method.
+//	req, resp := client.CreateBackupVaultRequest(params)
 //
-//    // Example sending a request using the CreateBackupVaultRequest method.
-//    req, resp := client.CreateBackupVaultRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateBackupVault
 func (c *Backup) CreateBackupVaultRequest(input *CreateBackupVaultInput) (req *request.Request, output *CreateBackupVaultOutput) {
@@ -359,22 +358,23 @@ func (c *Backup) CreateBackupVaultRequest(input *CreateBackupVaultInput) (req *r
 // API operation CreateBackupVault for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * LimitExceededException
-//   A limit in the request has been exceeded; for example, a maximum number of
-//   items allowed in a request.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
-//   * AlreadyExistsException
-//   The required resource already exists.
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
+//
+//   - AlreadyExistsException
+//     The required resource already exists.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateBackupVault
 func (c *Backup) CreateBackupVault(input *CreateBackupVaultInput) (*CreateBackupVaultOutput, error) {
@@ -414,14 +414,13 @@ const opCreateFramework = "CreateFramework"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFrameworkRequest method.
+//	req, resp := client.CreateFrameworkRequest(params)
 //
-//    // Example sending a request using the CreateFrameworkRequest method.
-//    req, resp := client.CreateFrameworkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateFramework
 func (c *Backup) CreateFrameworkRequest(input *CreateFrameworkInput) (req *request.Request, output *CreateFrameworkOutput) {
@@ -456,22 +455,23 @@ func (c *Backup) CreateFrameworkRequest(input *CreateFrameworkInput) (req *reque
 // API operation CreateFramework for usage and error information.
 //
 // Returned Error Types:
-//   * AlreadyExistsException
-//   The required resource already exists.
 //
-//   * LimitExceededException
-//   A limit in the request has been exceeded; for example, a maximum number of
-//   items allowed in a request.
+//   - AlreadyExistsException
+//     The required resource already exists.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateFramework
 func (c *Backup) CreateFramework(input *CreateFrameworkInput) (*CreateFrameworkOutput, error) {
@@ -511,14 +511,13 @@ const opCreateLegalHold = "CreateLegalHold"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateLegalHoldRequest method.
+//	req, resp := client.CreateLegalHoldRequest(params)
 //
-//    // Example sending a request using the CreateLegalHoldRequest method.
-//    req, resp := client.CreateLegalHoldRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateLegalHold
 func (c *Backup) CreateLegalHoldRequest(input *CreateLegalHoldInput) (req *request.Request, output *CreateLegalHoldOutput) {
@@ -553,19 +552,20 @@ func (c *Backup) CreateLegalHoldRequest(input *CreateLegalHoldInput) (req *reque
 // API operation CreateLegalHold for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * LimitExceededException
-//   A limit in the request has been exceeded; for example, a maximum number of
-//   items allowed in a request.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateLegalHold
 func (c *Backup) CreateLegalHold(input *CreateLegalHoldInput) (*CreateLegalHoldOutput, error) {
@@ -589,6 +589,110 @@ func (c *Backup) CreateLegalHoldWithContext(ctx aws.Context, input *CreateLegalH
 	return out, req.Send()
 }
 
+const opCreateLogicallyAirGappedBackupVault = "CreateLogicallyAirGappedBackupVault"
+
+// CreateLogicallyAirGappedBackupVaultRequest generates a "aws/request.Request" representing the
+// client's request for the CreateLogicallyAirGappedBackupVault operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateLogicallyAirGappedBackupVault for more information on using the CreateLogicallyAirGappedBackupVault
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateLogicallyAirGappedBackupVaultRequest method.
+//	req, resp := client.CreateLogicallyAirGappedBackupVaultRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateLogicallyAirGappedBackupVault
+func (c *Backup) CreateLogicallyAirGappedBackupVaultRequest(input *CreateLogicallyAirGappedBackupVaultInput) (req *request.Request, output *CreateLogicallyAirGappedBackupVaultOutput) {
+	op := &request.Operation{
+		Name:       opCreateLogicallyAirGappedBackupVault,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/logically-air-gapped-backup-vaults/{backupVaultName}",
+	}
+
+	if input == nil {
+		input = &CreateLogicallyAirGappedBackupVaultInput{}
+	}
+
+	output = &CreateLogicallyAirGappedBackupVaultOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateLogicallyAirGappedBackupVault API operation for AWS Backup.
+//
+// This request creates a logical container to where backups may be copied.
+//
+// This request includes a name, the Region, the maximum number of retention
+// days, the minimum number of retention days, and optionally can include tags
+// and a creator request ID.
+//
+// Do not include sensitive data, such as passport numbers, in the name of a
+// backup vault.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation CreateLogicallyAirGappedBackupVault for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AlreadyExistsException
+//     The required resource already exists.
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
+//
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateLogicallyAirGappedBackupVault
+func (c *Backup) CreateLogicallyAirGappedBackupVault(input *CreateLogicallyAirGappedBackupVaultInput) (*CreateLogicallyAirGappedBackupVaultOutput, error) {
+	req, out := c.CreateLogicallyAirGappedBackupVaultRequest(input)
+	return out, req.Send()
+}
+
+// CreateLogicallyAirGappedBackupVaultWithContext is the same as CreateLogicallyAirGappedBackupVault with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateLogicallyAirGappedBackupVault for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) CreateLogicallyAirGappedBackupVaultWithContext(ctx aws.Context, input *CreateLogicallyAirGappedBackupVaultInput, opts ...request.Option) (*CreateLogicallyAirGappedBackupVaultOutput, error) {
+	req, out := c.CreateLogicallyAirGappedBackupVaultRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateReportPlan = "CreateReportPlan"
 
 // CreateReportPlanRequest generates a "aws/request.Request" representing the
@@ -605,14 +709,13 @@ const opCreateReportPlan = "CreateReportPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateReportPlanRequest method.
+//	req, resp := client.CreateReportPlanRequest(params)
 //
-//    // Example sending a request using the CreateReportPlanRequest method.
-//    req, resp := client.CreateReportPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateReportPlan
 func (c *Backup) CreateReportPlanRequest(input *CreateReportPlanInput) (req *request.Request, output *CreateReportPlanOutput) {
@@ -647,22 +750,23 @@ func (c *Backup) CreateReportPlanRequest(input *CreateReportPlanInput) (req *req
 // API operation CreateReportPlan for usage and error information.
 //
 // Returned Error Types:
-//   * AlreadyExistsException
-//   The required resource already exists.
 //
-//   * LimitExceededException
-//   A limit in the request has been exceeded; for example, a maximum number of
-//   items allowed in a request.
+//   - AlreadyExistsException
+//     The required resource already exists.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateReportPlan
 func (c *Backup) CreateReportPlan(input *CreateReportPlanInput) (*CreateReportPlanOutput, error) {
@@ -686,6 +790,221 @@ func (c *Backup) CreateReportPlanWithContext(ctx aws.Context, input *CreateRepor
 	return out, req.Send()
 }
 
+const opCreateRestoreTestingPlan = "CreateRestoreTestingPlan"
+
+// CreateRestoreTestingPlanRequest generates a "aws/request.Request" representing the
+// client's request for the CreateRestoreTestingPlan operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateRestoreTestingPlan for more information on using the CreateRestoreTestingPlan
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateRestoreTestingPlanRequest method.
+//	req, resp := client.CreateRestoreTestingPlanRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateRestoreTestingPlan
+func (c *Backup) CreateRestoreTestingPlanRequest(input *CreateRestoreTestingPlanInput) (req *request.Request, output *CreateRestoreTestingPlanOutput) {
+	op := &request.Operation{
+		Name:       opCreateRestoreTestingPlan,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/restore-testing/plans",
+	}
+
+	if input == nil {
+		input = &CreateRestoreTestingPlanInput{}
+	}
+
+	output = &CreateRestoreTestingPlanOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateRestoreTestingPlan API operation for AWS Backup.
+//
+// This is the first of two steps to create a restore testing plan; once this
+// request is successful, finish the procedure with request CreateRestoreTestingSelection.
+//
+// You must include the parameter RestoreTestingPlan. You may optionally include
+// CreatorRequestId and Tags.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation CreateRestoreTestingPlan for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AlreadyExistsException
+//     The required resource already exists.
+//
+//   - ConflictException
+//     Backup can't perform the action that you requested until it finishes performing
+//     a previous action. Try again later.
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
+//
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateRestoreTestingPlan
+func (c *Backup) CreateRestoreTestingPlan(input *CreateRestoreTestingPlanInput) (*CreateRestoreTestingPlanOutput, error) {
+	req, out := c.CreateRestoreTestingPlanRequest(input)
+	return out, req.Send()
+}
+
+// CreateRestoreTestingPlanWithContext is the same as CreateRestoreTestingPlan with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateRestoreTestingPlan for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) CreateRestoreTestingPlanWithContext(ctx aws.Context, input *CreateRestoreTestingPlanInput, opts ...request.Option) (*CreateRestoreTestingPlanOutput, error) {
+	req, out := c.CreateRestoreTestingPlanRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateRestoreTestingSelection = "CreateRestoreTestingSelection"
+
+// CreateRestoreTestingSelectionRequest generates a "aws/request.Request" representing the
+// client's request for the CreateRestoreTestingSelection operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateRestoreTestingSelection for more information on using the CreateRestoreTestingSelection
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateRestoreTestingSelectionRequest method.
+//	req, resp := client.CreateRestoreTestingSelectionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateRestoreTestingSelection
+func (c *Backup) CreateRestoreTestingSelectionRequest(input *CreateRestoreTestingSelectionInput) (req *request.Request, output *CreateRestoreTestingSelectionOutput) {
+	op := &request.Operation{
+		Name:       opCreateRestoreTestingSelection,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/restore-testing/plans/{RestoreTestingPlanName}/selections",
+	}
+
+	if input == nil {
+		input = &CreateRestoreTestingSelectionInput{}
+	}
+
+	output = &CreateRestoreTestingSelectionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateRestoreTestingSelection API operation for AWS Backup.
+//
+// This request can be sent after CreateRestoreTestingPlan request returns successfully.
+// This is the second part of creating a resource testing plan, and it must
+// be completed sequentially.
+//
+// This consists of RestoreTestingSelectionName, ProtectedResourceType, and
+// one of the following:
+//
+//   - ProtectedResourceArns
+//
+//   - ProtectedResourceConditions
+//
+// Each protected resource type can have one single value.
+//
+// A restore testing selection can include a wildcard value ("*") for ProtectedResourceArns
+// along with ProtectedResourceConditions. Alternatively, you can include up
+// to 30 specific protected resource ARNs in ProtectedResourceArns.
+//
+// Cannot select by both protected resource types AND specific ARNs. Request
+// will fail if both are included.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation CreateRestoreTestingSelection for usage and error information.
+//
+// Returned Error Types:
+//
+//   - AlreadyExistsException
+//     The required resource already exists.
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
+//
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/CreateRestoreTestingSelection
+func (c *Backup) CreateRestoreTestingSelection(input *CreateRestoreTestingSelectionInput) (*CreateRestoreTestingSelectionOutput, error) {
+	req, out := c.CreateRestoreTestingSelectionRequest(input)
+	return out, req.Send()
+}
+
+// CreateRestoreTestingSelectionWithContext is the same as CreateRestoreTestingSelection with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateRestoreTestingSelection for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) CreateRestoreTestingSelectionWithContext(ctx aws.Context, input *CreateRestoreTestingSelectionInput, opts ...request.Option) (*CreateRestoreTestingSelectionOutput, error) {
+	req, out := c.CreateRestoreTestingSelectionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteBackupPlan = "DeleteBackupPlan"
 
 // DeleteBackupPlanRequest generates a "aws/request.Request" representing the
@@ -702,14 +1021,13 @@ const opDeleteBackupPlan = "DeleteBackupPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteBackupPlanRequest method.
+//	req, resp := client.DeleteBackupPlanRequest(params)
 //
-//    // Example sending a request using the DeleteBackupPlanRequest method.
-//    req, resp := client.DeleteBackupPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupPlan
 func (c *Backup) DeleteBackupPlanRequest(input *DeleteBackupPlanInput) (req *request.Request, output *DeleteBackupPlanOutput) {
@@ -743,22 +1061,23 @@ func (c *Backup) DeleteBackupPlanRequest(input *DeleteBackupPlanInput) (req *req
 // API operation DeleteBackupPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupPlan
 func (c *Backup) DeleteBackupPlan(input *DeleteBackupPlanInput) (*DeleteBackupPlanOutput, error) {
@@ -798,14 +1117,13 @@ const opDeleteBackupSelection = "DeleteBackupSelection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteBackupSelectionRequest method.
+//	req, resp := client.DeleteBackupSelectionRequest(params)
 //
-//    // Example sending a request using the DeleteBackupSelectionRequest method.
-//    req, resp := client.DeleteBackupSelectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupSelection
 func (c *Backup) DeleteBackupSelectionRequest(input *DeleteBackupSelectionInput) (req *request.Request, output *DeleteBackupSelectionOutput) {
@@ -838,18 +1156,19 @@ func (c *Backup) DeleteBackupSelectionRequest(input *DeleteBackupSelectionInput)
 // API operation DeleteBackupSelection for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupSelection
 func (c *Backup) DeleteBackupSelection(input *DeleteBackupSelectionInput) (*DeleteBackupSelectionOutput, error) {
@@ -889,14 +1208,13 @@ const opDeleteBackupVault = "DeleteBackupVault"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteBackupVaultRequest method.
+//	req, resp := client.DeleteBackupVaultRequest(params)
 //
-//    // Example sending a request using the DeleteBackupVaultRequest method.
-//    req, resp := client.DeleteBackupVaultRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupVault
 func (c *Backup) DeleteBackupVaultRequest(input *DeleteBackupVaultInput) (req *request.Request, output *DeleteBackupVaultOutput) {
@@ -929,22 +1247,23 @@ func (c *Backup) DeleteBackupVaultRequest(input *DeleteBackupVaultInput) (req *r
 // API operation DeleteBackupVault for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupVault
 func (c *Backup) DeleteBackupVault(input *DeleteBackupVaultInput) (*DeleteBackupVaultOutput, error) {
@@ -984,14 +1303,13 @@ const opDeleteBackupVaultAccessPolicy = "DeleteBackupVaultAccessPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteBackupVaultAccessPolicyRequest method.
+//	req, resp := client.DeleteBackupVaultAccessPolicyRequest(params)
 //
-//    // Example sending a request using the DeleteBackupVaultAccessPolicyRequest method.
-//    req, resp := client.DeleteBackupVaultAccessPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupVaultAccessPolicy
 func (c *Backup) DeleteBackupVaultAccessPolicyRequest(input *DeleteBackupVaultAccessPolicyInput) (req *request.Request, output *DeleteBackupVaultAccessPolicyOutput) {
@@ -1023,18 +1341,19 @@ func (c *Backup) DeleteBackupVaultAccessPolicyRequest(input *DeleteBackupVaultAc
 // API operation DeleteBackupVaultAccessPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupVaultAccessPolicy
 func (c *Backup) DeleteBackupVaultAccessPolicy(input *DeleteBackupVaultAccessPolicyInput) (*DeleteBackupVaultAccessPolicyOutput, error) {
@@ -1074,14 +1393,13 @@ const opDeleteBackupVaultLockConfiguration = "DeleteBackupVaultLockConfiguration
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteBackupVaultLockConfigurationRequest method.
+//	req, resp := client.DeleteBackupVaultLockConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteBackupVaultLockConfigurationRequest method.
-//    req, resp := client.DeleteBackupVaultLockConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupVaultLockConfiguration
 func (c *Backup) DeleteBackupVaultLockConfigurationRequest(input *DeleteBackupVaultLockConfigurationInput) (req *request.Request, output *DeleteBackupVaultLockConfigurationOutput) {
@@ -1119,22 +1437,23 @@ func (c *Backup) DeleteBackupVaultLockConfigurationRequest(input *DeleteBackupVa
 // API operation DeleteBackupVaultLockConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupVaultLockConfiguration
 func (c *Backup) DeleteBackupVaultLockConfiguration(input *DeleteBackupVaultLockConfigurationInput) (*DeleteBackupVaultLockConfigurationOutput, error) {
@@ -1174,14 +1493,13 @@ const opDeleteBackupVaultNotifications = "DeleteBackupVaultNotifications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteBackupVaultNotificationsRequest method.
+//	req, resp := client.DeleteBackupVaultNotificationsRequest(params)
 //
-//    // Example sending a request using the DeleteBackupVaultNotificationsRequest method.
-//    req, resp := client.DeleteBackupVaultNotificationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupVaultNotifications
 func (c *Backup) DeleteBackupVaultNotificationsRequest(input *DeleteBackupVaultNotificationsInput) (req *request.Request, output *DeleteBackupVaultNotificationsOutput) {
@@ -1213,18 +1531,19 @@ func (c *Backup) DeleteBackupVaultNotificationsRequest(input *DeleteBackupVaultN
 // API operation DeleteBackupVaultNotifications for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteBackupVaultNotifications
 func (c *Backup) DeleteBackupVaultNotifications(input *DeleteBackupVaultNotificationsInput) (*DeleteBackupVaultNotificationsOutput, error) {
@@ -1264,14 +1583,13 @@ const opDeleteFramework = "DeleteFramework"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFrameworkRequest method.
+//	req, resp := client.DeleteFrameworkRequest(params)
 //
-//    // Example sending a request using the DeleteFrameworkRequest method.
-//    req, resp := client.DeleteFrameworkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteFramework
 func (c *Backup) DeleteFrameworkRequest(input *DeleteFrameworkInput) (req *request.Request, output *DeleteFrameworkOutput) {
@@ -1303,22 +1621,23 @@ func (c *Backup) DeleteFrameworkRequest(input *DeleteFrameworkInput) (req *reque
 // API operation DeleteFramework for usage and error information.
 //
 // Returned Error Types:
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ConflictException
-//   Backup can't perform the action that you requested until it finishes performing
-//   a previous action. Try again later.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - ConflictException
+//     Backup can't perform the action that you requested until it finishes performing
+//     a previous action. Try again later.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteFramework
 func (c *Backup) DeleteFramework(input *DeleteFrameworkInput) (*DeleteFrameworkOutput, error) {
@@ -1358,14 +1677,13 @@ const opDeleteRecoveryPoint = "DeleteRecoveryPoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRecoveryPointRequest method.
+//	req, resp := client.DeleteRecoveryPointRequest(params)
 //
-//    // Example sending a request using the DeleteRecoveryPointRequest method.
-//    req, resp := client.DeleteRecoveryPointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteRecoveryPoint
 func (c *Backup) DeleteRecoveryPointRequest(input *DeleteRecoveryPointInput) (req *request.Request, output *DeleteRecoveryPointOutput) {
@@ -1411,26 +1729,27 @@ func (c *Backup) DeleteRecoveryPointRequest(input *DeleteRecoveryPointInput) (re
 // API operation DeleteRecoveryPoint for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * InvalidResourceStateException
-//   Backup is already performing an action on this recovery point. It can't perform
-//   the action you requested until the first action finishes. Try again later.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidResourceStateException
+//     Backup is already performing an action on this recovery point. It can't perform
+//     the action you requested until the first action finishes. Try again later.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteRecoveryPoint
 func (c *Backup) DeleteRecoveryPoint(input *DeleteRecoveryPointInput) (*DeleteRecoveryPointOutput, error) {
@@ -1470,14 +1789,13 @@ const opDeleteReportPlan = "DeleteReportPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteReportPlanRequest method.
+//	req, resp := client.DeleteReportPlanRequest(params)
 //
-//    // Example sending a request using the DeleteReportPlanRequest method.
-//    req, resp := client.DeleteReportPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteReportPlan
 func (c *Backup) DeleteReportPlanRequest(input *DeleteReportPlanInput) (req *request.Request, output *DeleteReportPlanOutput) {
@@ -1509,22 +1827,23 @@ func (c *Backup) DeleteReportPlanRequest(input *DeleteReportPlanInput) (req *req
 // API operation DeleteReportPlan for usage and error information.
 //
 // Returned Error Types:
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ConflictException
-//   Backup can't perform the action that you requested until it finishes performing
-//   a previous action. Try again later.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - ConflictException
+//     Backup can't perform the action that you requested until it finishes performing
+//     a previous action. Try again later.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteReportPlan
 func (c *Backup) DeleteReportPlan(input *DeleteReportPlanInput) (*DeleteReportPlanOutput, error) {
@@ -1548,6 +1867,179 @@ func (c *Backup) DeleteReportPlanWithContext(ctx aws.Context, input *DeleteRepor
 	return out, req.Send()
 }
 
+const opDeleteRestoreTestingPlan = "DeleteRestoreTestingPlan"
+
+// DeleteRestoreTestingPlanRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteRestoreTestingPlan operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteRestoreTestingPlan for more information on using the DeleteRestoreTestingPlan
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteRestoreTestingPlanRequest method.
+//	req, resp := client.DeleteRestoreTestingPlanRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteRestoreTestingPlan
+func (c *Backup) DeleteRestoreTestingPlanRequest(input *DeleteRestoreTestingPlanInput) (req *request.Request, output *DeleteRestoreTestingPlanOutput) {
+	op := &request.Operation{
+		Name:       opDeleteRestoreTestingPlan,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/restore-testing/plans/{RestoreTestingPlanName}",
+	}
+
+	if input == nil {
+		input = &DeleteRestoreTestingPlanInput{}
+	}
+
+	output = &DeleteRestoreTestingPlanOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteRestoreTestingPlan API operation for AWS Backup.
+//
+// This request deletes the specified restore testing plan.
+//
+// Deletion can only successfully occur if all associated restore testing selections
+// are deleted first.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation DeleteRestoreTestingPlan for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteRestoreTestingPlan
+func (c *Backup) DeleteRestoreTestingPlan(input *DeleteRestoreTestingPlanInput) (*DeleteRestoreTestingPlanOutput, error) {
+	req, out := c.DeleteRestoreTestingPlanRequest(input)
+	return out, req.Send()
+}
+
+// DeleteRestoreTestingPlanWithContext is the same as DeleteRestoreTestingPlan with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteRestoreTestingPlan for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) DeleteRestoreTestingPlanWithContext(ctx aws.Context, input *DeleteRestoreTestingPlanInput, opts ...request.Option) (*DeleteRestoreTestingPlanOutput, error) {
+	req, out := c.DeleteRestoreTestingPlanRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteRestoreTestingSelection = "DeleteRestoreTestingSelection"
+
+// DeleteRestoreTestingSelectionRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteRestoreTestingSelection operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteRestoreTestingSelection for more information on using the DeleteRestoreTestingSelection
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteRestoreTestingSelectionRequest method.
+//	req, resp := client.DeleteRestoreTestingSelectionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteRestoreTestingSelection
+func (c *Backup) DeleteRestoreTestingSelectionRequest(input *DeleteRestoreTestingSelectionInput) (req *request.Request, output *DeleteRestoreTestingSelectionOutput) {
+	op := &request.Operation{
+		Name:       opDeleteRestoreTestingSelection,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/restore-testing/plans/{RestoreTestingPlanName}/selections/{RestoreTestingSelectionName}",
+	}
+
+	if input == nil {
+		input = &DeleteRestoreTestingSelectionInput{}
+	}
+
+	output = &DeleteRestoreTestingSelectionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteRestoreTestingSelection API operation for AWS Backup.
+//
+// Input the Restore Testing Plan name and Restore Testing Selection name.
+//
+// All testing selections associated with a restore testing plan must be deleted
+// before the restore testing plan can be deleted.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation DeleteRestoreTestingSelection for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DeleteRestoreTestingSelection
+func (c *Backup) DeleteRestoreTestingSelection(input *DeleteRestoreTestingSelectionInput) (*DeleteRestoreTestingSelectionOutput, error) {
+	req, out := c.DeleteRestoreTestingSelectionRequest(input)
+	return out, req.Send()
+}
+
+// DeleteRestoreTestingSelectionWithContext is the same as DeleteRestoreTestingSelection with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteRestoreTestingSelection for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) DeleteRestoreTestingSelectionWithContext(ctx aws.Context, input *DeleteRestoreTestingSelectionInput, opts ...request.Option) (*DeleteRestoreTestingSelectionOutput, error) {
+	req, out := c.DeleteRestoreTestingSelectionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeBackupJob = "DescribeBackupJob"
 
 // DescribeBackupJobRequest generates a "aws/request.Request" representing the
@@ -1564,14 +2056,13 @@ const opDescribeBackupJob = "DescribeBackupJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeBackupJobRequest method.
+//	req, resp := client.DescribeBackupJobRequest(params)
 //
-//    // Example sending a request using the DescribeBackupJobRequest method.
-//    req, resp := client.DescribeBackupJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeBackupJob
 func (c *Backup) DescribeBackupJobRequest(input *DescribeBackupJobInput) (req *request.Request, output *DescribeBackupJobOutput) {
@@ -1602,22 +2093,23 @@ func (c *Backup) DescribeBackupJobRequest(input *DescribeBackupJobInput) (req *r
 // API operation DescribeBackupJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * DependencyFailureException
-//   A dependent Amazon Web Services service or resource returned an error to
-//   the Backup service, and the action cannot be completed.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - DependencyFailureException
+//     A dependent Amazon Web Services service or resource returned an error to
+//     the Backup service, and the action cannot be completed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeBackupJob
 func (c *Backup) DescribeBackupJob(input *DescribeBackupJobInput) (*DescribeBackupJobOutput, error) {
@@ -1657,14 +2149,13 @@ const opDescribeBackupVault = "DescribeBackupVault"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeBackupVaultRequest method.
+//	req, resp := client.DescribeBackupVaultRequest(params)
 //
-//    // Example sending a request using the DescribeBackupVaultRequest method.
-//    req, resp := client.DescribeBackupVaultRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeBackupVault
 func (c *Backup) DescribeBackupVaultRequest(input *DescribeBackupVaultInput) (req *request.Request, output *DescribeBackupVaultOutput) {
@@ -1695,18 +2186,19 @@ func (c *Backup) DescribeBackupVaultRequest(input *DescribeBackupVaultInput) (re
 // API operation DescribeBackupVault for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeBackupVault
 func (c *Backup) DescribeBackupVault(input *DescribeBackupVaultInput) (*DescribeBackupVaultOutput, error) {
@@ -1746,14 +2238,13 @@ const opDescribeCopyJob = "DescribeCopyJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeCopyJobRequest method.
+//	req, resp := client.DescribeCopyJobRequest(params)
 //
-//    // Example sending a request using the DescribeCopyJobRequest method.
-//    req, resp := client.DescribeCopyJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeCopyJob
 func (c *Backup) DescribeCopyJobRequest(input *DescribeCopyJobInput) (req *request.Request, output *DescribeCopyJobOutput) {
@@ -1784,18 +2275,19 @@ func (c *Backup) DescribeCopyJobRequest(input *DescribeCopyJobInput) (req *reque
 // API operation DescribeCopyJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeCopyJob
 func (c *Backup) DescribeCopyJob(input *DescribeCopyJobInput) (*DescribeCopyJobOutput, error) {
@@ -1835,14 +2327,13 @@ const opDescribeFramework = "DescribeFramework"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeFrameworkRequest method.
+//	req, resp := client.DescribeFrameworkRequest(params)
 //
-//    // Example sending a request using the DescribeFrameworkRequest method.
-//    req, resp := client.DescribeFrameworkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeFramework
 func (c *Backup) DescribeFrameworkRequest(input *DescribeFrameworkInput) (req *request.Request, output *DescribeFrameworkOutput) {
@@ -1873,18 +2364,19 @@ func (c *Backup) DescribeFrameworkRequest(input *DescribeFrameworkInput) (req *r
 // API operation DescribeFramework for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeFramework
 func (c *Backup) DescribeFramework(input *DescribeFrameworkInput) (*DescribeFrameworkOutput, error) {
@@ -1924,14 +2416,13 @@ const opDescribeGlobalSettings = "DescribeGlobalSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeGlobalSettingsRequest method.
+//	req, resp := client.DescribeGlobalSettingsRequest(params)
 //
-//    // Example sending a request using the DescribeGlobalSettingsRequest method.
-//    req, resp := client.DescribeGlobalSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeGlobalSettings
 func (c *Backup) DescribeGlobalSettingsRequest(input *DescribeGlobalSettingsInput) (req *request.Request, output *DescribeGlobalSettingsOutput) {
@@ -1964,12 +2455,13 @@ func (c *Backup) DescribeGlobalSettingsRequest(input *DescribeGlobalSettingsInpu
 // API operation DescribeGlobalSettings for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeGlobalSettings
 func (c *Backup) DescribeGlobalSettings(input *DescribeGlobalSettingsInput) (*DescribeGlobalSettingsOutput, error) {
@@ -2009,14 +2501,13 @@ const opDescribeProtectedResource = "DescribeProtectedResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProtectedResourceRequest method.
+//	req, resp := client.DescribeProtectedResourceRequest(params)
 //
-//    // Example sending a request using the DescribeProtectedResourceRequest method.
-//    req, resp := client.DescribeProtectedResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeProtectedResource
 func (c *Backup) DescribeProtectedResourceRequest(input *DescribeProtectedResourceInput) (req *request.Request, output *DescribeProtectedResourceOutput) {
@@ -2049,18 +2540,19 @@ func (c *Backup) DescribeProtectedResourceRequest(input *DescribeProtectedResour
 // API operation DescribeProtectedResource for usage and error information.
 //
 // Returned Error Types:
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeProtectedResource
 func (c *Backup) DescribeProtectedResource(input *DescribeProtectedResourceInput) (*DescribeProtectedResourceOutput, error) {
@@ -2100,14 +2592,13 @@ const opDescribeRecoveryPoint = "DescribeRecoveryPoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeRecoveryPointRequest method.
+//	req, resp := client.DescribeRecoveryPointRequest(params)
 //
-//    // Example sending a request using the DescribeRecoveryPointRequest method.
-//    req, resp := client.DescribeRecoveryPointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeRecoveryPoint
 func (c *Backup) DescribeRecoveryPointRequest(input *DescribeRecoveryPointInput) (req *request.Request, output *DescribeRecoveryPointOutput) {
@@ -2139,18 +2630,19 @@ func (c *Backup) DescribeRecoveryPointRequest(input *DescribeRecoveryPointInput)
 // API operation DescribeRecoveryPoint for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeRecoveryPoint
 func (c *Backup) DescribeRecoveryPoint(input *DescribeRecoveryPointInput) (*DescribeRecoveryPointOutput, error) {
@@ -2190,14 +2682,13 @@ const opDescribeRegionSettings = "DescribeRegionSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeRegionSettingsRequest method.
+//	req, resp := client.DescribeRegionSettingsRequest(params)
 //
-//    // Example sending a request using the DescribeRegionSettingsRequest method.
-//    req, resp := client.DescribeRegionSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeRegionSettings
 func (c *Backup) DescribeRegionSettingsRequest(input *DescribeRegionSettingsInput) (req *request.Request, output *DescribeRegionSettingsOutput) {
@@ -2232,8 +2723,8 @@ func (c *Backup) DescribeRegionSettingsRequest(input *DescribeRegionSettingsInpu
 // API operation DescribeRegionSettings for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeRegionSettings
 func (c *Backup) DescribeRegionSettings(input *DescribeRegionSettingsInput) (*DescribeRegionSettingsOutput, error) {
@@ -2273,14 +2764,13 @@ const opDescribeReportJob = "DescribeReportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeReportJobRequest method.
+//	req, resp := client.DescribeReportJobRequest(params)
 //
-//    // Example sending a request using the DescribeReportJobRequest method.
-//    req, resp := client.DescribeReportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeReportJob
 func (c *Backup) DescribeReportJobRequest(input *DescribeReportJobInput) (req *request.Request, output *DescribeReportJobOutput) {
@@ -2312,14 +2802,15 @@ func (c *Backup) DescribeReportJobRequest(input *DescribeReportJobInput) (req *r
 // API operation DescribeReportJob for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeReportJob
 func (c *Backup) DescribeReportJob(input *DescribeReportJobInput) (*DescribeReportJobOutput, error) {
@@ -2359,14 +2850,13 @@ const opDescribeReportPlan = "DescribeReportPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeReportPlanRequest method.
+//	req, resp := client.DescribeReportPlanRequest(params)
 //
-//    // Example sending a request using the DescribeReportPlanRequest method.
-//    req, resp := client.DescribeReportPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeReportPlan
 func (c *Backup) DescribeReportPlanRequest(input *DescribeReportPlanInput) (req *request.Request, output *DescribeReportPlanOutput) {
@@ -2398,18 +2888,19 @@ func (c *Backup) DescribeReportPlanRequest(input *DescribeReportPlanInput) (req 
 // API operation DescribeReportPlan for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeReportPlan
 func (c *Backup) DescribeReportPlan(input *DescribeReportPlanInput) (*DescribeReportPlanOutput, error) {
@@ -2449,14 +2940,13 @@ const opDescribeRestoreJob = "DescribeRestoreJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeRestoreJobRequest method.
+//	req, resp := client.DescribeRestoreJobRequest(params)
 //
-//    // Example sending a request using the DescribeRestoreJobRequest method.
-//    req, resp := client.DescribeRestoreJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeRestoreJob
 func (c *Backup) DescribeRestoreJobRequest(input *DescribeRestoreJobInput) (req *request.Request, output *DescribeRestoreJobOutput) {
@@ -2488,22 +2978,23 @@ func (c *Backup) DescribeRestoreJobRequest(input *DescribeRestoreJobInput) (req 
 // API operation DescribeRestoreJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * DependencyFailureException
-//   A dependent Amazon Web Services service or resource returned an error to
-//   the Backup service, and the action cannot be completed.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - DependencyFailureException
+//     A dependent Amazon Web Services service or resource returned an error to
+//     the Backup service, and the action cannot be completed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DescribeRestoreJob
 func (c *Backup) DescribeRestoreJob(input *DescribeRestoreJobInput) (*DescribeRestoreJobOutput, error) {
@@ -2543,14 +3034,13 @@ const opDisassociateRecoveryPoint = "DisassociateRecoveryPoint"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateRecoveryPointRequest method.
+//	req, resp := client.DisassociateRecoveryPointRequest(params)
 //
-//    // Example sending a request using the DisassociateRecoveryPointRequest method.
-//    req, resp := client.DisassociateRecoveryPointRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DisassociateRecoveryPoint
 func (c *Backup) DisassociateRecoveryPointRequest(input *DisassociateRecoveryPointInput) (req *request.Request, output *DisassociateRecoveryPointOutput) {
@@ -2587,26 +3077,27 @@ func (c *Backup) DisassociateRecoveryPointRequest(input *DisassociateRecoveryPoi
 // API operation DisassociateRecoveryPoint for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * InvalidResourceStateException
-//   Backup is already performing an action on this recovery point. It can't perform
-//   the action you requested until the first action finishes. Try again later.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidResourceStateException
+//     Backup is already performing an action on this recovery point. It can't perform
+//     the action you requested until the first action finishes. Try again later.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DisassociateRecoveryPoint
 func (c *Backup) DisassociateRecoveryPoint(input *DisassociateRecoveryPointInput) (*DisassociateRecoveryPointOutput, error) {
@@ -2646,14 +3137,13 @@ const opDisassociateRecoveryPointFromParent = "DisassociateRecoveryPointFromPare
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DisassociateRecoveryPointFromParentRequest method.
+//	req, resp := client.DisassociateRecoveryPointFromParentRequest(params)
 //
-//    // Example sending a request using the DisassociateRecoveryPointFromParentRequest method.
-//    req, resp := client.DisassociateRecoveryPointFromParentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DisassociateRecoveryPointFromParent
 func (c *Backup) DisassociateRecoveryPointFromParentRequest(input *DisassociateRecoveryPointFromParentInput) (req *request.Request, output *DisassociateRecoveryPointFromParentOutput) {
@@ -2687,22 +3177,23 @@ func (c *Backup) DisassociateRecoveryPointFromParentRequest(input *DisassociateR
 // API operation DisassociateRecoveryPointFromParent for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/DisassociateRecoveryPointFromParent
 func (c *Backup) DisassociateRecoveryPointFromParent(input *DisassociateRecoveryPointFromParentInput) (*DisassociateRecoveryPointFromParentOutput, error) {
@@ -2742,14 +3233,13 @@ const opExportBackupPlanTemplate = "ExportBackupPlanTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ExportBackupPlanTemplateRequest method.
+//	req, resp := client.ExportBackupPlanTemplateRequest(params)
 //
-//    // Example sending a request using the ExportBackupPlanTemplateRequest method.
-//    req, resp := client.ExportBackupPlanTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ExportBackupPlanTemplate
 func (c *Backup) ExportBackupPlanTemplateRequest(input *ExportBackupPlanTemplateInput) (req *request.Request, output *ExportBackupPlanTemplateOutput) {
@@ -2780,18 +3270,19 @@ func (c *Backup) ExportBackupPlanTemplateRequest(input *ExportBackupPlanTemplate
 // API operation ExportBackupPlanTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ExportBackupPlanTemplate
 func (c *Backup) ExportBackupPlanTemplate(input *ExportBackupPlanTemplateInput) (*ExportBackupPlanTemplateOutput, error) {
@@ -2831,14 +3322,13 @@ const opGetBackupPlan = "GetBackupPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetBackupPlanRequest method.
+//	req, resp := client.GetBackupPlanRequest(params)
 //
-//    // Example sending a request using the GetBackupPlanRequest method.
-//    req, resp := client.GetBackupPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupPlan
 func (c *Backup) GetBackupPlanRequest(input *GetBackupPlanInput) (req *request.Request, output *GetBackupPlanOutput) {
@@ -2870,18 +3360,19 @@ func (c *Backup) GetBackupPlanRequest(input *GetBackupPlanInput) (req *request.R
 // API operation GetBackupPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupPlan
 func (c *Backup) GetBackupPlan(input *GetBackupPlanInput) (*GetBackupPlanOutput, error) {
@@ -2921,14 +3412,13 @@ const opGetBackupPlanFromJSON = "GetBackupPlanFromJSON"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetBackupPlanFromJSONRequest method.
+//	req, resp := client.GetBackupPlanFromJSONRequest(params)
 //
-//    // Example sending a request using the GetBackupPlanFromJSONRequest method.
-//    req, resp := client.GetBackupPlanFromJSONRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupPlanFromJSON
 func (c *Backup) GetBackupPlanFromJSONRequest(input *GetBackupPlanFromJSONInput) (req *request.Request, output *GetBackupPlanFromJSONOutput) {
@@ -2959,23 +3449,24 @@ func (c *Backup) GetBackupPlanFromJSONRequest(input *GetBackupPlanFromJSONInput)
 // API operation GetBackupPlanFromJSON for usage and error information.
 //
 // Returned Error Types:
-//   * LimitExceededException
-//   A limit in the request has been exceeded; for example, a maximum number of
-//   items allowed in a request.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupPlanFromJSON
 func (c *Backup) GetBackupPlanFromJSON(input *GetBackupPlanFromJSONInput) (*GetBackupPlanFromJSONOutput, error) {
@@ -3015,14 +3506,13 @@ const opGetBackupPlanFromTemplate = "GetBackupPlanFromTemplate"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetBackupPlanFromTemplateRequest method.
+//	req, resp := client.GetBackupPlanFromTemplateRequest(params)
 //
-//    // Example sending a request using the GetBackupPlanFromTemplateRequest method.
-//    req, resp := client.GetBackupPlanFromTemplateRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupPlanFromTemplate
 func (c *Backup) GetBackupPlanFromTemplateRequest(input *GetBackupPlanFromTemplateInput) (req *request.Request, output *GetBackupPlanFromTemplateOutput) {
@@ -3053,18 +3543,19 @@ func (c *Backup) GetBackupPlanFromTemplateRequest(input *GetBackupPlanFromTempla
 // API operation GetBackupPlanFromTemplate for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupPlanFromTemplate
 func (c *Backup) GetBackupPlanFromTemplate(input *GetBackupPlanFromTemplateInput) (*GetBackupPlanFromTemplateOutput, error) {
@@ -3104,14 +3595,13 @@ const opGetBackupSelection = "GetBackupSelection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetBackupSelectionRequest method.
+//	req, resp := client.GetBackupSelectionRequest(params)
 //
-//    // Example sending a request using the GetBackupSelectionRequest method.
-//    req, resp := client.GetBackupSelectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupSelection
 func (c *Backup) GetBackupSelectionRequest(input *GetBackupSelectionInput) (req *request.Request, output *GetBackupSelectionOutput) {
@@ -3143,18 +3633,19 @@ func (c *Backup) GetBackupSelectionRequest(input *GetBackupSelectionInput) (req 
 // API operation GetBackupSelection for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupSelection
 func (c *Backup) GetBackupSelection(input *GetBackupSelectionInput) (*GetBackupSelectionOutput, error) {
@@ -3194,14 +3685,13 @@ const opGetBackupVaultAccessPolicy = "GetBackupVaultAccessPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetBackupVaultAccessPolicyRequest method.
+//	req, resp := client.GetBackupVaultAccessPolicyRequest(params)
 //
-//    // Example sending a request using the GetBackupVaultAccessPolicyRequest method.
-//    req, resp := client.GetBackupVaultAccessPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupVaultAccessPolicy
 func (c *Backup) GetBackupVaultAccessPolicyRequest(input *GetBackupVaultAccessPolicyInput) (req *request.Request, output *GetBackupVaultAccessPolicyOutput) {
@@ -3233,18 +3723,19 @@ func (c *Backup) GetBackupVaultAccessPolicyRequest(input *GetBackupVaultAccessPo
 // API operation GetBackupVaultAccessPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupVaultAccessPolicy
 func (c *Backup) GetBackupVaultAccessPolicy(input *GetBackupVaultAccessPolicyInput) (*GetBackupVaultAccessPolicyOutput, error) {
@@ -3284,14 +3775,13 @@ const opGetBackupVaultNotifications = "GetBackupVaultNotifications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetBackupVaultNotificationsRequest method.
+//	req, resp := client.GetBackupVaultNotificationsRequest(params)
 //
-//    // Example sending a request using the GetBackupVaultNotificationsRequest method.
-//    req, resp := client.GetBackupVaultNotificationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupVaultNotifications
 func (c *Backup) GetBackupVaultNotificationsRequest(input *GetBackupVaultNotificationsInput) (req *request.Request, output *GetBackupVaultNotificationsOutput) {
@@ -3322,18 +3812,19 @@ func (c *Backup) GetBackupVaultNotificationsRequest(input *GetBackupVaultNotific
 // API operation GetBackupVaultNotifications for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetBackupVaultNotifications
 func (c *Backup) GetBackupVaultNotifications(input *GetBackupVaultNotificationsInput) (*GetBackupVaultNotificationsOutput, error) {
@@ -3373,14 +3864,13 @@ const opGetLegalHold = "GetLegalHold"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLegalHoldRequest method.
+//	req, resp := client.GetLegalHoldRequest(params)
 //
-//    // Example sending a request using the GetLegalHoldRequest method.
-//    req, resp := client.GetLegalHoldRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetLegalHold
 func (c *Backup) GetLegalHoldRequest(input *GetLegalHoldInput) (req *request.Request, output *GetLegalHoldOutput) {
@@ -3412,18 +3902,19 @@ func (c *Backup) GetLegalHoldRequest(input *GetLegalHoldInput) (req *request.Req
 // API operation GetLegalHold for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetLegalHold
 func (c *Backup) GetLegalHold(input *GetLegalHoldInput) (*GetLegalHoldOutput, error) {
@@ -3463,14 +3954,13 @@ const opGetRecoveryPointRestoreMetadata = "GetRecoveryPointRestoreMetadata"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRecoveryPointRestoreMetadataRequest method.
+//	req, resp := client.GetRecoveryPointRestoreMetadataRequest(params)
 //
-//    // Example sending a request using the GetRecoveryPointRestoreMetadataRequest method.
-//    req, resp := client.GetRecoveryPointRestoreMetadataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetRecoveryPointRestoreMetadata
 func (c *Backup) GetRecoveryPointRestoreMetadataRequest(input *GetRecoveryPointRestoreMetadataInput) (req *request.Request, output *GetRecoveryPointRestoreMetadataOutput) {
@@ -3501,18 +3991,19 @@ func (c *Backup) GetRecoveryPointRestoreMetadataRequest(input *GetRecoveryPointR
 // API operation GetRecoveryPointRestoreMetadata for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetRecoveryPointRestoreMetadata
 func (c *Backup) GetRecoveryPointRestoreMetadata(input *GetRecoveryPointRestoreMetadataInput) (*GetRecoveryPointRestoreMetadataOutput, error) {
@@ -3536,6 +4027,353 @@ func (c *Backup) GetRecoveryPointRestoreMetadataWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
+const opGetRestoreJobMetadata = "GetRestoreJobMetadata"
+
+// GetRestoreJobMetadataRequest generates a "aws/request.Request" representing the
+// client's request for the GetRestoreJobMetadata operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetRestoreJobMetadata for more information on using the GetRestoreJobMetadata
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetRestoreJobMetadataRequest method.
+//	req, resp := client.GetRestoreJobMetadataRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetRestoreJobMetadata
+func (c *Backup) GetRestoreJobMetadataRequest(input *GetRestoreJobMetadataInput) (req *request.Request, output *GetRestoreJobMetadataOutput) {
+	op := &request.Operation{
+		Name:       opGetRestoreJobMetadata,
+		HTTPMethod: "GET",
+		HTTPPath:   "/restore-jobs/{restoreJobId}/metadata",
+	}
+
+	if input == nil {
+		input = &GetRestoreJobMetadataInput{}
+	}
+
+	output = &GetRestoreJobMetadataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetRestoreJobMetadata API operation for AWS Backup.
+//
+// This request returns the metadata for the specified restore job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation GetRestoreJobMetadata for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetRestoreJobMetadata
+func (c *Backup) GetRestoreJobMetadata(input *GetRestoreJobMetadataInput) (*GetRestoreJobMetadataOutput, error) {
+	req, out := c.GetRestoreJobMetadataRequest(input)
+	return out, req.Send()
+}
+
+// GetRestoreJobMetadataWithContext is the same as GetRestoreJobMetadata with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetRestoreJobMetadata for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) GetRestoreJobMetadataWithContext(ctx aws.Context, input *GetRestoreJobMetadataInput, opts ...request.Option) (*GetRestoreJobMetadataOutput, error) {
+	req, out := c.GetRestoreJobMetadataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetRestoreTestingInferredMetadata = "GetRestoreTestingInferredMetadata"
+
+// GetRestoreTestingInferredMetadataRequest generates a "aws/request.Request" representing the
+// client's request for the GetRestoreTestingInferredMetadata operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetRestoreTestingInferredMetadata for more information on using the GetRestoreTestingInferredMetadata
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetRestoreTestingInferredMetadataRequest method.
+//	req, resp := client.GetRestoreTestingInferredMetadataRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetRestoreTestingInferredMetadata
+func (c *Backup) GetRestoreTestingInferredMetadataRequest(input *GetRestoreTestingInferredMetadataInput) (req *request.Request, output *GetRestoreTestingInferredMetadataOutput) {
+	op := &request.Operation{
+		Name:       opGetRestoreTestingInferredMetadata,
+		HTTPMethod: "GET",
+		HTTPPath:   "/restore-testing/inferred-metadata",
+	}
+
+	if input == nil {
+		input = &GetRestoreTestingInferredMetadataInput{}
+	}
+
+	output = &GetRestoreTestingInferredMetadataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetRestoreTestingInferredMetadata API operation for AWS Backup.
+//
+// This request returns the minimal required set of metadata needed to start
+// a restore job with secure default settings. BackupVaultName and RecoveryPointArn
+// are required parameters. BackupVaultAccountId is an optional parameter.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation GetRestoreTestingInferredMetadata for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetRestoreTestingInferredMetadata
+func (c *Backup) GetRestoreTestingInferredMetadata(input *GetRestoreTestingInferredMetadataInput) (*GetRestoreTestingInferredMetadataOutput, error) {
+	req, out := c.GetRestoreTestingInferredMetadataRequest(input)
+	return out, req.Send()
+}
+
+// GetRestoreTestingInferredMetadataWithContext is the same as GetRestoreTestingInferredMetadata with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetRestoreTestingInferredMetadata for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) GetRestoreTestingInferredMetadataWithContext(ctx aws.Context, input *GetRestoreTestingInferredMetadataInput, opts ...request.Option) (*GetRestoreTestingInferredMetadataOutput, error) {
+	req, out := c.GetRestoreTestingInferredMetadataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetRestoreTestingPlan = "GetRestoreTestingPlan"
+
+// GetRestoreTestingPlanRequest generates a "aws/request.Request" representing the
+// client's request for the GetRestoreTestingPlan operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetRestoreTestingPlan for more information on using the GetRestoreTestingPlan
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetRestoreTestingPlanRequest method.
+//	req, resp := client.GetRestoreTestingPlanRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetRestoreTestingPlan
+func (c *Backup) GetRestoreTestingPlanRequest(input *GetRestoreTestingPlanInput) (req *request.Request, output *GetRestoreTestingPlanOutput) {
+	op := &request.Operation{
+		Name:       opGetRestoreTestingPlan,
+		HTTPMethod: "GET",
+		HTTPPath:   "/restore-testing/plans/{RestoreTestingPlanName}",
+	}
+
+	if input == nil {
+		input = &GetRestoreTestingPlanInput{}
+	}
+
+	output = &GetRestoreTestingPlanOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetRestoreTestingPlan API operation for AWS Backup.
+//
+// Returns RestoreTestingPlan details for the specified RestoreTestingPlanName.
+// The details are the body of a restore testing plan in JSON format, in addition
+// to plan metadata.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation GetRestoreTestingPlan for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetRestoreTestingPlan
+func (c *Backup) GetRestoreTestingPlan(input *GetRestoreTestingPlanInput) (*GetRestoreTestingPlanOutput, error) {
+	req, out := c.GetRestoreTestingPlanRequest(input)
+	return out, req.Send()
+}
+
+// GetRestoreTestingPlanWithContext is the same as GetRestoreTestingPlan with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetRestoreTestingPlan for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) GetRestoreTestingPlanWithContext(ctx aws.Context, input *GetRestoreTestingPlanInput, opts ...request.Option) (*GetRestoreTestingPlanOutput, error) {
+	req, out := c.GetRestoreTestingPlanRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetRestoreTestingSelection = "GetRestoreTestingSelection"
+
+// GetRestoreTestingSelectionRequest generates a "aws/request.Request" representing the
+// client's request for the GetRestoreTestingSelection operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetRestoreTestingSelection for more information on using the GetRestoreTestingSelection
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetRestoreTestingSelectionRequest method.
+//	req, resp := client.GetRestoreTestingSelectionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetRestoreTestingSelection
+func (c *Backup) GetRestoreTestingSelectionRequest(input *GetRestoreTestingSelectionInput) (req *request.Request, output *GetRestoreTestingSelectionOutput) {
+	op := &request.Operation{
+		Name:       opGetRestoreTestingSelection,
+		HTTPMethod: "GET",
+		HTTPPath:   "/restore-testing/plans/{RestoreTestingPlanName}/selections/{RestoreTestingSelectionName}",
+	}
+
+	if input == nil {
+		input = &GetRestoreTestingSelectionInput{}
+	}
+
+	output = &GetRestoreTestingSelectionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetRestoreTestingSelection API operation for AWS Backup.
+//
+// Returns RestoreTestingSelection, which displays resources and elements of
+// the restore testing plan.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation GetRestoreTestingSelection for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetRestoreTestingSelection
+func (c *Backup) GetRestoreTestingSelection(input *GetRestoreTestingSelectionInput) (*GetRestoreTestingSelectionOutput, error) {
+	req, out := c.GetRestoreTestingSelectionRequest(input)
+	return out, req.Send()
+}
+
+// GetRestoreTestingSelectionWithContext is the same as GetRestoreTestingSelection with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetRestoreTestingSelection for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) GetRestoreTestingSelectionWithContext(ctx aws.Context, input *GetRestoreTestingSelectionInput, opts ...request.Option) (*GetRestoreTestingSelectionOutput, error) {
+	req, out := c.GetRestoreTestingSelectionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetSupportedResourceTypes = "GetSupportedResourceTypes"
 
 // GetSupportedResourceTypesRequest generates a "aws/request.Request" representing the
@@ -3552,14 +4390,13 @@ const opGetSupportedResourceTypes = "GetSupportedResourceTypes"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSupportedResourceTypesRequest method.
+//	req, resp := client.GetSupportedResourceTypesRequest(params)
 //
-//    // Example sending a request using the GetSupportedResourceTypesRequest method.
-//    req, resp := client.GetSupportedResourceTypesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetSupportedResourceTypes
 func (c *Backup) GetSupportedResourceTypesRequest(input *GetSupportedResourceTypesInput) (req *request.Request, output *GetSupportedResourceTypesOutput) {
@@ -3590,8 +4427,8 @@ func (c *Backup) GetSupportedResourceTypesRequest(input *GetSupportedResourceTyp
 // API operation GetSupportedResourceTypes for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/GetSupportedResourceTypes
 func (c *Backup) GetSupportedResourceTypes(input *GetSupportedResourceTypesInput) (*GetSupportedResourceTypesOutput, error) {
@@ -3615,6 +4452,151 @@ func (c *Backup) GetSupportedResourceTypesWithContext(ctx aws.Context, input *Ge
 	return out, req.Send()
 }
 
+const opListBackupJobSummaries = "ListBackupJobSummaries"
+
+// ListBackupJobSummariesRequest generates a "aws/request.Request" representing the
+// client's request for the ListBackupJobSummaries operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListBackupJobSummaries for more information on using the ListBackupJobSummaries
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListBackupJobSummariesRequest method.
+//	req, resp := client.ListBackupJobSummariesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupJobSummaries
+func (c *Backup) ListBackupJobSummariesRequest(input *ListBackupJobSummariesInput) (req *request.Request, output *ListBackupJobSummariesOutput) {
+	op := &request.Operation{
+		Name:       opListBackupJobSummaries,
+		HTTPMethod: "GET",
+		HTTPPath:   "/audit/backup-job-summaries",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListBackupJobSummariesInput{}
+	}
+
+	output = &ListBackupJobSummariesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListBackupJobSummaries API operation for AWS Backup.
+//
+// This is a request for a summary of backup jobs created or running within
+// the most recent 30 days. You can include parameters AccountID, State, ResourceType,
+// MessageCategory, AggregationPeriod, MaxResults, or NextToken to filter results.
+//
+// This request returns a summary that contains Region, Account, State, ResourceType,
+// MessageCategory, StartTime, EndTime, and Count of included jobs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation ListBackupJobSummaries for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupJobSummaries
+func (c *Backup) ListBackupJobSummaries(input *ListBackupJobSummariesInput) (*ListBackupJobSummariesOutput, error) {
+	req, out := c.ListBackupJobSummariesRequest(input)
+	return out, req.Send()
+}
+
+// ListBackupJobSummariesWithContext is the same as ListBackupJobSummaries with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListBackupJobSummaries for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListBackupJobSummariesWithContext(ctx aws.Context, input *ListBackupJobSummariesInput, opts ...request.Option) (*ListBackupJobSummariesOutput, error) {
+	req, out := c.ListBackupJobSummariesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListBackupJobSummariesPages iterates over the pages of a ListBackupJobSummaries operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListBackupJobSummaries method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListBackupJobSummaries operation.
+//	pageNum := 0
+//	err := client.ListBackupJobSummariesPages(params,
+//	    func(page *backup.ListBackupJobSummariesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Backup) ListBackupJobSummariesPages(input *ListBackupJobSummariesInput, fn func(*ListBackupJobSummariesOutput, bool) bool) error {
+	return c.ListBackupJobSummariesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListBackupJobSummariesPagesWithContext same as ListBackupJobSummariesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListBackupJobSummariesPagesWithContext(ctx aws.Context, input *ListBackupJobSummariesInput, fn func(*ListBackupJobSummariesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListBackupJobSummariesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListBackupJobSummariesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListBackupJobSummariesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListBackupJobs = "ListBackupJobs"
 
 // ListBackupJobsRequest generates a "aws/request.Request" representing the
@@ -3631,14 +4613,13 @@ const opListBackupJobs = "ListBackupJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBackupJobsRequest method.
+//	req, resp := client.ListBackupJobsRequest(params)
 //
-//    // Example sending a request using the ListBackupJobsRequest method.
-//    req, resp := client.ListBackupJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupJobs
 func (c *Backup) ListBackupJobsRequest(input *ListBackupJobsInput) (req *request.Request, output *ListBackupJobsOutput) {
@@ -3677,12 +4658,13 @@ func (c *Backup) ListBackupJobsRequest(input *ListBackupJobsInput) (req *request
 // API operation ListBackupJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupJobs
 func (c *Backup) ListBackupJobs(input *ListBackupJobsInput) (*ListBackupJobsOutput, error) {
@@ -3714,15 +4696,14 @@ func (c *Backup) ListBackupJobsWithContext(ctx aws.Context, input *ListBackupJob
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBackupJobs operation.
-//    pageNum := 0
-//    err := client.ListBackupJobsPages(params,
-//        func(page *backup.ListBackupJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBackupJobs operation.
+//	pageNum := 0
+//	err := client.ListBackupJobsPages(params,
+//	    func(page *backup.ListBackupJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListBackupJobsPages(input *ListBackupJobsInput, fn func(*ListBackupJobsOutput, bool) bool) error {
 	return c.ListBackupJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3774,14 +4755,13 @@ const opListBackupPlanTemplates = "ListBackupPlanTemplates"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBackupPlanTemplatesRequest method.
+//	req, resp := client.ListBackupPlanTemplatesRequest(params)
 //
-//    // Example sending a request using the ListBackupPlanTemplatesRequest method.
-//    req, resp := client.ListBackupPlanTemplatesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupPlanTemplates
 func (c *Backup) ListBackupPlanTemplatesRequest(input *ListBackupPlanTemplatesInput) (req *request.Request, output *ListBackupPlanTemplatesOutput) {
@@ -3819,18 +4799,19 @@ func (c *Backup) ListBackupPlanTemplatesRequest(input *ListBackupPlanTemplatesIn
 // API operation ListBackupPlanTemplates for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupPlanTemplates
 func (c *Backup) ListBackupPlanTemplates(input *ListBackupPlanTemplatesInput) (*ListBackupPlanTemplatesOutput, error) {
@@ -3862,15 +4843,14 @@ func (c *Backup) ListBackupPlanTemplatesWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBackupPlanTemplates operation.
-//    pageNum := 0
-//    err := client.ListBackupPlanTemplatesPages(params,
-//        func(page *backup.ListBackupPlanTemplatesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBackupPlanTemplates operation.
+//	pageNum := 0
+//	err := client.ListBackupPlanTemplatesPages(params,
+//	    func(page *backup.ListBackupPlanTemplatesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListBackupPlanTemplatesPages(input *ListBackupPlanTemplatesInput, fn func(*ListBackupPlanTemplatesOutput, bool) bool) error {
 	return c.ListBackupPlanTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3922,14 +4902,13 @@ const opListBackupPlanVersions = "ListBackupPlanVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBackupPlanVersionsRequest method.
+//	req, resp := client.ListBackupPlanVersionsRequest(params)
 //
-//    // Example sending a request using the ListBackupPlanVersionsRequest method.
-//    req, resp := client.ListBackupPlanVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupPlanVersions
 func (c *Backup) ListBackupPlanVersionsRequest(input *ListBackupPlanVersionsInput) (req *request.Request, output *ListBackupPlanVersionsOutput) {
@@ -3968,18 +4947,19 @@ func (c *Backup) ListBackupPlanVersionsRequest(input *ListBackupPlanVersionsInpu
 // API operation ListBackupPlanVersions for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupPlanVersions
 func (c *Backup) ListBackupPlanVersions(input *ListBackupPlanVersionsInput) (*ListBackupPlanVersionsOutput, error) {
@@ -4011,15 +4991,14 @@ func (c *Backup) ListBackupPlanVersionsWithContext(ctx aws.Context, input *ListB
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBackupPlanVersions operation.
-//    pageNum := 0
-//    err := client.ListBackupPlanVersionsPages(params,
-//        func(page *backup.ListBackupPlanVersionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBackupPlanVersions operation.
+//	pageNum := 0
+//	err := client.ListBackupPlanVersionsPages(params,
+//	    func(page *backup.ListBackupPlanVersionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListBackupPlanVersionsPages(input *ListBackupPlanVersionsInput, fn func(*ListBackupPlanVersionsOutput, bool) bool) error {
 	return c.ListBackupPlanVersionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4071,14 +5050,13 @@ const opListBackupPlans = "ListBackupPlans"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBackupPlansRequest method.
+//	req, resp := client.ListBackupPlansRequest(params)
 //
-//    // Example sending a request using the ListBackupPlansRequest method.
-//    req, resp := client.ListBackupPlansRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupPlans
 func (c *Backup) ListBackupPlansRequest(input *ListBackupPlansInput) (req *request.Request, output *ListBackupPlansOutput) {
@@ -4118,18 +5096,19 @@ func (c *Backup) ListBackupPlansRequest(input *ListBackupPlansInput) (req *reque
 // API operation ListBackupPlans for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupPlans
 func (c *Backup) ListBackupPlans(input *ListBackupPlansInput) (*ListBackupPlansOutput, error) {
@@ -4161,15 +5140,14 @@ func (c *Backup) ListBackupPlansWithContext(ctx aws.Context, input *ListBackupPl
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBackupPlans operation.
-//    pageNum := 0
-//    err := client.ListBackupPlansPages(params,
-//        func(page *backup.ListBackupPlansOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBackupPlans operation.
+//	pageNum := 0
+//	err := client.ListBackupPlansPages(params,
+//	    func(page *backup.ListBackupPlansOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListBackupPlansPages(input *ListBackupPlansInput, fn func(*ListBackupPlansOutput, bool) bool) error {
 	return c.ListBackupPlansPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4221,14 +5199,13 @@ const opListBackupSelections = "ListBackupSelections"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBackupSelectionsRequest method.
+//	req, resp := client.ListBackupSelectionsRequest(params)
 //
-//    // Example sending a request using the ListBackupSelectionsRequest method.
-//    req, resp := client.ListBackupSelectionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupSelections
 func (c *Backup) ListBackupSelectionsRequest(input *ListBackupSelectionsInput) (req *request.Request, output *ListBackupSelectionsOutput) {
@@ -4266,18 +5243,19 @@ func (c *Backup) ListBackupSelectionsRequest(input *ListBackupSelectionsInput) (
 // API operation ListBackupSelections for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupSelections
 func (c *Backup) ListBackupSelections(input *ListBackupSelectionsInput) (*ListBackupSelectionsOutput, error) {
@@ -4309,15 +5287,14 @@ func (c *Backup) ListBackupSelectionsWithContext(ctx aws.Context, input *ListBac
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBackupSelections operation.
-//    pageNum := 0
-//    err := client.ListBackupSelectionsPages(params,
-//        func(page *backup.ListBackupSelectionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBackupSelections operation.
+//	pageNum := 0
+//	err := client.ListBackupSelectionsPages(params,
+//	    func(page *backup.ListBackupSelectionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListBackupSelectionsPages(input *ListBackupSelectionsInput, fn func(*ListBackupSelectionsOutput, bool) bool) error {
 	return c.ListBackupSelectionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4369,14 +5346,13 @@ const opListBackupVaults = "ListBackupVaults"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBackupVaultsRequest method.
+//	req, resp := client.ListBackupVaultsRequest(params)
 //
-//    // Example sending a request using the ListBackupVaultsRequest method.
-//    req, resp := client.ListBackupVaultsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupVaults
 func (c *Backup) ListBackupVaultsRequest(input *ListBackupVaultsInput) (req *request.Request, output *ListBackupVaultsOutput) {
@@ -4414,18 +5390,19 @@ func (c *Backup) ListBackupVaultsRequest(input *ListBackupVaultsInput) (req *req
 // API operation ListBackupVaults for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListBackupVaults
 func (c *Backup) ListBackupVaults(input *ListBackupVaultsInput) (*ListBackupVaultsOutput, error) {
@@ -4457,15 +5434,14 @@ func (c *Backup) ListBackupVaultsWithContext(ctx aws.Context, input *ListBackupV
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBackupVaults operation.
-//    pageNum := 0
-//    err := client.ListBackupVaultsPages(params,
-//        func(page *backup.ListBackupVaultsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBackupVaults operation.
+//	pageNum := 0
+//	err := client.ListBackupVaultsPages(params,
+//	    func(page *backup.ListBackupVaultsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListBackupVaultsPages(input *ListBackupVaultsInput, fn func(*ListBackupVaultsOutput, bool) bool) error {
 	return c.ListBackupVaultsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4501,6 +5477,151 @@ func (c *Backup) ListBackupVaultsPagesWithContext(ctx aws.Context, input *ListBa
 	return p.Err()
 }
 
+const opListCopyJobSummaries = "ListCopyJobSummaries"
+
+// ListCopyJobSummariesRequest generates a "aws/request.Request" representing the
+// client's request for the ListCopyJobSummaries operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCopyJobSummaries for more information on using the ListCopyJobSummaries
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListCopyJobSummariesRequest method.
+//	req, resp := client.ListCopyJobSummariesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListCopyJobSummaries
+func (c *Backup) ListCopyJobSummariesRequest(input *ListCopyJobSummariesInput) (req *request.Request, output *ListCopyJobSummariesOutput) {
+	op := &request.Operation{
+		Name:       opListCopyJobSummaries,
+		HTTPMethod: "GET",
+		HTTPPath:   "/audit/copy-job-summaries",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCopyJobSummariesInput{}
+	}
+
+	output = &ListCopyJobSummariesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCopyJobSummaries API operation for AWS Backup.
+//
+// This request obtains a list of copy jobs created or running within the the
+// most recent 30 days. You can include parameters AccountID, State, ResourceType,
+// MessageCategory, AggregationPeriod, MaxResults, or NextToken to filter results.
+//
+// This request returns a summary that contains Region, Account, State, RestourceType,
+// MessageCategory, StartTime, EndTime, and Count of included jobs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation ListCopyJobSummaries for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListCopyJobSummaries
+func (c *Backup) ListCopyJobSummaries(input *ListCopyJobSummariesInput) (*ListCopyJobSummariesOutput, error) {
+	req, out := c.ListCopyJobSummariesRequest(input)
+	return out, req.Send()
+}
+
+// ListCopyJobSummariesWithContext is the same as ListCopyJobSummaries with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCopyJobSummaries for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListCopyJobSummariesWithContext(ctx aws.Context, input *ListCopyJobSummariesInput, opts ...request.Option) (*ListCopyJobSummariesOutput, error) {
+	req, out := c.ListCopyJobSummariesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCopyJobSummariesPages iterates over the pages of a ListCopyJobSummaries operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCopyJobSummaries method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListCopyJobSummaries operation.
+//	pageNum := 0
+//	err := client.ListCopyJobSummariesPages(params,
+//	    func(page *backup.ListCopyJobSummariesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Backup) ListCopyJobSummariesPages(input *ListCopyJobSummariesInput, fn func(*ListCopyJobSummariesOutput, bool) bool) error {
+	return c.ListCopyJobSummariesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCopyJobSummariesPagesWithContext same as ListCopyJobSummariesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListCopyJobSummariesPagesWithContext(ctx aws.Context, input *ListCopyJobSummariesInput, fn func(*ListCopyJobSummariesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCopyJobSummariesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCopyJobSummariesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCopyJobSummariesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListCopyJobs = "ListCopyJobs"
 
 // ListCopyJobsRequest generates a "aws/request.Request" representing the
@@ -4517,14 +5638,13 @@ const opListCopyJobs = "ListCopyJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListCopyJobsRequest method.
+//	req, resp := client.ListCopyJobsRequest(params)
 //
-//    // Example sending a request using the ListCopyJobsRequest method.
-//    req, resp := client.ListCopyJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListCopyJobs
 func (c *Backup) ListCopyJobsRequest(input *ListCopyJobsInput) (req *request.Request, output *ListCopyJobsOutput) {
@@ -4561,12 +5681,13 @@ func (c *Backup) ListCopyJobsRequest(input *ListCopyJobsInput) (req *request.Req
 // API operation ListCopyJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListCopyJobs
 func (c *Backup) ListCopyJobs(input *ListCopyJobsInput) (*ListCopyJobsOutput, error) {
@@ -4598,15 +5719,14 @@ func (c *Backup) ListCopyJobsWithContext(ctx aws.Context, input *ListCopyJobsInp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListCopyJobs operation.
-//    pageNum := 0
-//    err := client.ListCopyJobsPages(params,
-//        func(page *backup.ListCopyJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListCopyJobs operation.
+//	pageNum := 0
+//	err := client.ListCopyJobsPages(params,
+//	    func(page *backup.ListCopyJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListCopyJobsPages(input *ListCopyJobsInput, fn func(*ListCopyJobsOutput, bool) bool) error {
 	return c.ListCopyJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4658,14 +5778,13 @@ const opListFrameworks = "ListFrameworks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListFrameworksRequest method.
+//	req, resp := client.ListFrameworksRequest(params)
 //
-//    // Example sending a request using the ListFrameworksRequest method.
-//    req, resp := client.ListFrameworksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListFrameworks
 func (c *Backup) ListFrameworksRequest(input *ListFrameworksInput) (req *request.Request, output *ListFrameworksOutput) {
@@ -4703,12 +5822,13 @@ func (c *Backup) ListFrameworksRequest(input *ListFrameworksInput) (req *request
 // API operation ListFrameworks for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListFrameworks
 func (c *Backup) ListFrameworks(input *ListFrameworksInput) (*ListFrameworksOutput, error) {
@@ -4740,15 +5860,14 @@ func (c *Backup) ListFrameworksWithContext(ctx aws.Context, input *ListFramework
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListFrameworks operation.
-//    pageNum := 0
-//    err := client.ListFrameworksPages(params,
-//        func(page *backup.ListFrameworksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListFrameworks operation.
+//	pageNum := 0
+//	err := client.ListFrameworksPages(params,
+//	    func(page *backup.ListFrameworksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListFrameworksPages(input *ListFrameworksInput, fn func(*ListFrameworksOutput, bool) bool) error {
 	return c.ListFrameworksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4800,14 +5919,13 @@ const opListLegalHolds = "ListLegalHolds"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLegalHoldsRequest method.
+//	req, resp := client.ListLegalHoldsRequest(params)
 //
-//    // Example sending a request using the ListLegalHoldsRequest method.
-//    req, resp := client.ListLegalHoldsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListLegalHolds
 func (c *Backup) ListLegalHoldsRequest(input *ListLegalHoldsInput) (req *request.Request, output *ListLegalHoldsOutput) {
@@ -4844,12 +5962,13 @@ func (c *Backup) ListLegalHoldsRequest(input *ListLegalHoldsInput) (req *request
 // API operation ListLegalHolds for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListLegalHolds
 func (c *Backup) ListLegalHolds(input *ListLegalHoldsInput) (*ListLegalHoldsOutput, error) {
@@ -4881,15 +6000,14 @@ func (c *Backup) ListLegalHoldsWithContext(ctx aws.Context, input *ListLegalHold
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLegalHolds operation.
-//    pageNum := 0
-//    err := client.ListLegalHoldsPages(params,
-//        func(page *backup.ListLegalHoldsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLegalHolds operation.
+//	pageNum := 0
+//	err := client.ListLegalHoldsPages(params,
+//	    func(page *backup.ListLegalHoldsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListLegalHoldsPages(input *ListLegalHoldsInput, fn func(*ListLegalHoldsOutput, bool) bool) error {
 	return c.ListLegalHoldsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4941,14 +6059,13 @@ const opListProtectedResources = "ListProtectedResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListProtectedResourcesRequest method.
+//	req, resp := client.ListProtectedResourcesRequest(params)
 //
-//    // Example sending a request using the ListProtectedResourcesRequest method.
-//    req, resp := client.ListProtectedResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListProtectedResources
 func (c *Backup) ListProtectedResourcesRequest(input *ListProtectedResourcesInput) (req *request.Request, output *ListProtectedResourcesOutput) {
@@ -4987,12 +6104,13 @@ func (c *Backup) ListProtectedResourcesRequest(input *ListProtectedResourcesInpu
 // API operation ListProtectedResources for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListProtectedResources
 func (c *Backup) ListProtectedResources(input *ListProtectedResourcesInput) (*ListProtectedResourcesOutput, error) {
@@ -5024,15 +6142,14 @@ func (c *Backup) ListProtectedResourcesWithContext(ctx aws.Context, input *ListP
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListProtectedResources operation.
-//    pageNum := 0
-//    err := client.ListProtectedResourcesPages(params,
-//        func(page *backup.ListProtectedResourcesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListProtectedResources operation.
+//	pageNum := 0
+//	err := client.ListProtectedResourcesPages(params,
+//	    func(page *backup.ListProtectedResourcesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListProtectedResourcesPages(input *ListProtectedResourcesInput, fn func(*ListProtectedResourcesOutput, bool) bool) error {
 	return c.ListProtectedResourcesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5068,6 +6185,149 @@ func (c *Backup) ListProtectedResourcesPagesWithContext(ctx aws.Context, input *
 	return p.Err()
 }
 
+const opListProtectedResourcesByBackupVault = "ListProtectedResourcesByBackupVault"
+
+// ListProtectedResourcesByBackupVaultRequest generates a "aws/request.Request" representing the
+// client's request for the ListProtectedResourcesByBackupVault operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListProtectedResourcesByBackupVault for more information on using the ListProtectedResourcesByBackupVault
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListProtectedResourcesByBackupVaultRequest method.
+//	req, resp := client.ListProtectedResourcesByBackupVaultRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListProtectedResourcesByBackupVault
+func (c *Backup) ListProtectedResourcesByBackupVaultRequest(input *ListProtectedResourcesByBackupVaultInput) (req *request.Request, output *ListProtectedResourcesByBackupVaultOutput) {
+	op := &request.Operation{
+		Name:       opListProtectedResourcesByBackupVault,
+		HTTPMethod: "GET",
+		HTTPPath:   "/backup-vaults/{backupVaultName}/resources/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListProtectedResourcesByBackupVaultInput{}
+	}
+
+	output = &ListProtectedResourcesByBackupVaultOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListProtectedResourcesByBackupVault API operation for AWS Backup.
+//
+// This request lists the protected resources corresponding to each backup vault.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation ListProtectedResourcesByBackupVault for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListProtectedResourcesByBackupVault
+func (c *Backup) ListProtectedResourcesByBackupVault(input *ListProtectedResourcesByBackupVaultInput) (*ListProtectedResourcesByBackupVaultOutput, error) {
+	req, out := c.ListProtectedResourcesByBackupVaultRequest(input)
+	return out, req.Send()
+}
+
+// ListProtectedResourcesByBackupVaultWithContext is the same as ListProtectedResourcesByBackupVault with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListProtectedResourcesByBackupVault for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListProtectedResourcesByBackupVaultWithContext(ctx aws.Context, input *ListProtectedResourcesByBackupVaultInput, opts ...request.Option) (*ListProtectedResourcesByBackupVaultOutput, error) {
+	req, out := c.ListProtectedResourcesByBackupVaultRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListProtectedResourcesByBackupVaultPages iterates over the pages of a ListProtectedResourcesByBackupVault operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListProtectedResourcesByBackupVault method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListProtectedResourcesByBackupVault operation.
+//	pageNum := 0
+//	err := client.ListProtectedResourcesByBackupVaultPages(params,
+//	    func(page *backup.ListProtectedResourcesByBackupVaultOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Backup) ListProtectedResourcesByBackupVaultPages(input *ListProtectedResourcesByBackupVaultInput, fn func(*ListProtectedResourcesByBackupVaultOutput, bool) bool) error {
+	return c.ListProtectedResourcesByBackupVaultPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListProtectedResourcesByBackupVaultPagesWithContext same as ListProtectedResourcesByBackupVaultPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListProtectedResourcesByBackupVaultPagesWithContext(ctx aws.Context, input *ListProtectedResourcesByBackupVaultInput, fn func(*ListProtectedResourcesByBackupVaultOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListProtectedResourcesByBackupVaultInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListProtectedResourcesByBackupVaultRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListProtectedResourcesByBackupVaultOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListRecoveryPointsByBackupVault = "ListRecoveryPointsByBackupVault"
 
 // ListRecoveryPointsByBackupVaultRequest generates a "aws/request.Request" representing the
@@ -5084,14 +6344,13 @@ const opListRecoveryPointsByBackupVault = "ListRecoveryPointsByBackupVault"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRecoveryPointsByBackupVaultRequest method.
+//	req, resp := client.ListRecoveryPointsByBackupVaultRequest(params)
 //
-//    // Example sending a request using the ListRecoveryPointsByBackupVaultRequest method.
-//    req, resp := client.ListRecoveryPointsByBackupVaultRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRecoveryPointsByBackupVault
 func (c *Backup) ListRecoveryPointsByBackupVaultRequest(input *ListRecoveryPointsByBackupVaultInput) (req *request.Request, output *ListRecoveryPointsByBackupVaultOutput) {
@@ -5129,18 +6388,19 @@ func (c *Backup) ListRecoveryPointsByBackupVaultRequest(input *ListRecoveryPoint
 // API operation ListRecoveryPointsByBackupVault for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRecoveryPointsByBackupVault
 func (c *Backup) ListRecoveryPointsByBackupVault(input *ListRecoveryPointsByBackupVaultInput) (*ListRecoveryPointsByBackupVaultOutput, error) {
@@ -5172,15 +6432,14 @@ func (c *Backup) ListRecoveryPointsByBackupVaultWithContext(ctx aws.Context, inp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRecoveryPointsByBackupVault operation.
-//    pageNum := 0
-//    err := client.ListRecoveryPointsByBackupVaultPages(params,
-//        func(page *backup.ListRecoveryPointsByBackupVaultOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRecoveryPointsByBackupVault operation.
+//	pageNum := 0
+//	err := client.ListRecoveryPointsByBackupVaultPages(params,
+//	    func(page *backup.ListRecoveryPointsByBackupVaultOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListRecoveryPointsByBackupVaultPages(input *ListRecoveryPointsByBackupVaultInput, fn func(*ListRecoveryPointsByBackupVaultOutput, bool) bool) error {
 	return c.ListRecoveryPointsByBackupVaultPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5232,14 +6491,13 @@ const opListRecoveryPointsByLegalHold = "ListRecoveryPointsByLegalHold"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRecoveryPointsByLegalHoldRequest method.
+//	req, resp := client.ListRecoveryPointsByLegalHoldRequest(params)
 //
-//    // Example sending a request using the ListRecoveryPointsByLegalHoldRequest method.
-//    req, resp := client.ListRecoveryPointsByLegalHoldRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRecoveryPointsByLegalHold
 func (c *Backup) ListRecoveryPointsByLegalHoldRequest(input *ListRecoveryPointsByLegalHoldInput) (req *request.Request, output *ListRecoveryPointsByLegalHoldOutput) {
@@ -5277,15 +6535,16 @@ func (c *Backup) ListRecoveryPointsByLegalHoldRequest(input *ListRecoveryPointsB
 // API operation ListRecoveryPointsByLegalHold for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRecoveryPointsByLegalHold
 func (c *Backup) ListRecoveryPointsByLegalHold(input *ListRecoveryPointsByLegalHoldInput) (*ListRecoveryPointsByLegalHoldOutput, error) {
@@ -5317,15 +6576,14 @@ func (c *Backup) ListRecoveryPointsByLegalHoldWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRecoveryPointsByLegalHold operation.
-//    pageNum := 0
-//    err := client.ListRecoveryPointsByLegalHoldPages(params,
-//        func(page *backup.ListRecoveryPointsByLegalHoldOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRecoveryPointsByLegalHold operation.
+//	pageNum := 0
+//	err := client.ListRecoveryPointsByLegalHoldPages(params,
+//	    func(page *backup.ListRecoveryPointsByLegalHoldOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListRecoveryPointsByLegalHoldPages(input *ListRecoveryPointsByLegalHoldInput, fn func(*ListRecoveryPointsByLegalHoldOutput, bool) bool) error {
 	return c.ListRecoveryPointsByLegalHoldPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5377,14 +6635,13 @@ const opListRecoveryPointsByResource = "ListRecoveryPointsByResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRecoveryPointsByResourceRequest method.
+//	req, resp := client.ListRecoveryPointsByResourceRequest(params)
 //
-//    // Example sending a request using the ListRecoveryPointsByResourceRequest method.
-//    req, resp := client.ListRecoveryPointsByResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRecoveryPointsByResource
 func (c *Backup) ListRecoveryPointsByResourceRequest(input *ListRecoveryPointsByResourceInput) (req *request.Request, output *ListRecoveryPointsByResourceOutput) {
@@ -5425,18 +6682,19 @@ func (c *Backup) ListRecoveryPointsByResourceRequest(input *ListRecoveryPointsBy
 // API operation ListRecoveryPointsByResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRecoveryPointsByResource
 func (c *Backup) ListRecoveryPointsByResource(input *ListRecoveryPointsByResourceInput) (*ListRecoveryPointsByResourceOutput, error) {
@@ -5468,15 +6726,14 @@ func (c *Backup) ListRecoveryPointsByResourceWithContext(ctx aws.Context, input 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRecoveryPointsByResource operation.
-//    pageNum := 0
-//    err := client.ListRecoveryPointsByResourcePages(params,
-//        func(page *backup.ListRecoveryPointsByResourceOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRecoveryPointsByResource operation.
+//	pageNum := 0
+//	err := client.ListRecoveryPointsByResourcePages(params,
+//	    func(page *backup.ListRecoveryPointsByResourceOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListRecoveryPointsByResourcePages(input *ListRecoveryPointsByResourceInput, fn func(*ListRecoveryPointsByResourceOutput, bool) bool) error {
 	return c.ListRecoveryPointsByResourcePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5528,14 +6785,13 @@ const opListReportJobs = "ListReportJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReportJobsRequest method.
+//	req, resp := client.ListReportJobsRequest(params)
 //
-//    // Example sending a request using the ListReportJobsRequest method.
-//    req, resp := client.ListReportJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListReportJobs
 func (c *Backup) ListReportJobsRequest(input *ListReportJobsInput) (req *request.Request, output *ListReportJobsOutput) {
@@ -5572,15 +6828,16 @@ func (c *Backup) ListReportJobsRequest(input *ListReportJobsInput) (req *request
 // API operation ListReportJobs for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListReportJobs
 func (c *Backup) ListReportJobs(input *ListReportJobsInput) (*ListReportJobsOutput, error) {
@@ -5612,15 +6869,14 @@ func (c *Backup) ListReportJobsWithContext(ctx aws.Context, input *ListReportJob
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReportJobs operation.
-//    pageNum := 0
-//    err := client.ListReportJobsPages(params,
-//        func(page *backup.ListReportJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReportJobs operation.
+//	pageNum := 0
+//	err := client.ListReportJobsPages(params,
+//	    func(page *backup.ListReportJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListReportJobsPages(input *ListReportJobsInput, fn func(*ListReportJobsOutput, bool) bool) error {
 	return c.ListReportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5672,14 +6928,13 @@ const opListReportPlans = "ListReportPlans"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReportPlansRequest method.
+//	req, resp := client.ListReportPlansRequest(params)
 //
-//    // Example sending a request using the ListReportPlansRequest method.
-//    req, resp := client.ListReportPlansRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListReportPlans
 func (c *Backup) ListReportPlansRequest(input *ListReportPlansInput) (req *request.Request, output *ListReportPlansOutput) {
@@ -5717,12 +6972,13 @@ func (c *Backup) ListReportPlansRequest(input *ListReportPlansInput) (req *reque
 // API operation ListReportPlans for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListReportPlans
 func (c *Backup) ListReportPlans(input *ListReportPlansInput) (*ListReportPlansOutput, error) {
@@ -5754,15 +7010,14 @@ func (c *Backup) ListReportPlansWithContext(ctx aws.Context, input *ListReportPl
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReportPlans operation.
-//    pageNum := 0
-//    err := client.ListReportPlansPages(params,
-//        func(page *backup.ListReportPlansOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReportPlans operation.
+//	pageNum := 0
+//	err := client.ListReportPlansPages(params,
+//	    func(page *backup.ListReportPlansOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListReportPlansPages(input *ListReportPlansInput, fn func(*ListReportPlansOutput, bool) bool) error {
 	return c.ListReportPlansPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5798,6 +7053,151 @@ func (c *Backup) ListReportPlansPagesWithContext(ctx aws.Context, input *ListRep
 	return p.Err()
 }
 
+const opListRestoreJobSummaries = "ListRestoreJobSummaries"
+
+// ListRestoreJobSummariesRequest generates a "aws/request.Request" representing the
+// client's request for the ListRestoreJobSummaries operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListRestoreJobSummaries for more information on using the ListRestoreJobSummaries
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListRestoreJobSummariesRequest method.
+//	req, resp := client.ListRestoreJobSummariesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRestoreJobSummaries
+func (c *Backup) ListRestoreJobSummariesRequest(input *ListRestoreJobSummariesInput) (req *request.Request, output *ListRestoreJobSummariesOutput) {
+	op := &request.Operation{
+		Name:       opListRestoreJobSummaries,
+		HTTPMethod: "GET",
+		HTTPPath:   "/audit/restore-job-summaries",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListRestoreJobSummariesInput{}
+	}
+
+	output = &ListRestoreJobSummariesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListRestoreJobSummaries API operation for AWS Backup.
+//
+// This request obtains a summary of restore jobs created or running within
+// the the most recent 30 days. You can include parameters AccountID, State,
+// ResourceType, AggregationPeriod, MaxResults, or NextToken to filter results.
+//
+// This request returns a summary that contains Region, Account, State, RestourceType,
+// MessageCategory, StartTime, EndTime, and Count of included jobs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation ListRestoreJobSummaries for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRestoreJobSummaries
+func (c *Backup) ListRestoreJobSummaries(input *ListRestoreJobSummariesInput) (*ListRestoreJobSummariesOutput, error) {
+	req, out := c.ListRestoreJobSummariesRequest(input)
+	return out, req.Send()
+}
+
+// ListRestoreJobSummariesWithContext is the same as ListRestoreJobSummaries with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListRestoreJobSummaries for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListRestoreJobSummariesWithContext(ctx aws.Context, input *ListRestoreJobSummariesInput, opts ...request.Option) (*ListRestoreJobSummariesOutput, error) {
+	req, out := c.ListRestoreJobSummariesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListRestoreJobSummariesPages iterates over the pages of a ListRestoreJobSummaries operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListRestoreJobSummaries method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListRestoreJobSummaries operation.
+//	pageNum := 0
+//	err := client.ListRestoreJobSummariesPages(params,
+//	    func(page *backup.ListRestoreJobSummariesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Backup) ListRestoreJobSummariesPages(input *ListRestoreJobSummariesInput, fn func(*ListRestoreJobSummariesOutput, bool) bool) error {
+	return c.ListRestoreJobSummariesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListRestoreJobSummariesPagesWithContext same as ListRestoreJobSummariesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListRestoreJobSummariesPagesWithContext(ctx aws.Context, input *ListRestoreJobSummariesInput, fn func(*ListRestoreJobSummariesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListRestoreJobSummariesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListRestoreJobSummariesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListRestoreJobSummariesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListRestoreJobs = "ListRestoreJobs"
 
 // ListRestoreJobsRequest generates a "aws/request.Request" representing the
@@ -5814,14 +7214,13 @@ const opListRestoreJobs = "ListRestoreJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRestoreJobsRequest method.
+//	req, resp := client.ListRestoreJobsRequest(params)
 //
-//    // Example sending a request using the ListRestoreJobsRequest method.
-//    req, resp := client.ListRestoreJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRestoreJobs
 func (c *Backup) ListRestoreJobsRequest(input *ListRestoreJobsInput) (req *request.Request, output *ListRestoreJobsOutput) {
@@ -5859,18 +7258,19 @@ func (c *Backup) ListRestoreJobsRequest(input *ListRestoreJobsInput) (req *reque
 // API operation ListRestoreJobs for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRestoreJobs
 func (c *Backup) ListRestoreJobs(input *ListRestoreJobsInput) (*ListRestoreJobsOutput, error) {
@@ -5902,15 +7302,14 @@ func (c *Backup) ListRestoreJobsWithContext(ctx aws.Context, input *ListRestoreJ
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRestoreJobs operation.
-//    pageNum := 0
-//    err := client.ListRestoreJobsPages(params,
-//        func(page *backup.ListRestoreJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRestoreJobs operation.
+//	pageNum := 0
+//	err := client.ListRestoreJobsPages(params,
+//	    func(page *backup.ListRestoreJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListRestoreJobsPages(input *ListRestoreJobsInput, fn func(*ListRestoreJobsOutput, bool) bool) error {
 	return c.ListRestoreJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -5946,6 +7345,439 @@ func (c *Backup) ListRestoreJobsPagesWithContext(ctx aws.Context, input *ListRes
 	return p.Err()
 }
 
+const opListRestoreJobsByProtectedResource = "ListRestoreJobsByProtectedResource"
+
+// ListRestoreJobsByProtectedResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListRestoreJobsByProtectedResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListRestoreJobsByProtectedResource for more information on using the ListRestoreJobsByProtectedResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListRestoreJobsByProtectedResourceRequest method.
+//	req, resp := client.ListRestoreJobsByProtectedResourceRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRestoreJobsByProtectedResource
+func (c *Backup) ListRestoreJobsByProtectedResourceRequest(input *ListRestoreJobsByProtectedResourceInput) (req *request.Request, output *ListRestoreJobsByProtectedResourceOutput) {
+	op := &request.Operation{
+		Name:       opListRestoreJobsByProtectedResource,
+		HTTPMethod: "GET",
+		HTTPPath:   "/resources/{resourceArn}/restore-jobs/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListRestoreJobsByProtectedResourceInput{}
+	}
+
+	output = &ListRestoreJobsByProtectedResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListRestoreJobsByProtectedResource API operation for AWS Backup.
+//
+// This returns restore jobs that contain the specified protected resource.
+//
+// You must include ResourceArn. You can optionally include NextToken, ByStatus,
+// MaxResults, ByRecoveryPointCreationDateAfter , and ByRecoveryPointCreationDateBefore.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation ListRestoreJobsByProtectedResource for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRestoreJobsByProtectedResource
+func (c *Backup) ListRestoreJobsByProtectedResource(input *ListRestoreJobsByProtectedResourceInput) (*ListRestoreJobsByProtectedResourceOutput, error) {
+	req, out := c.ListRestoreJobsByProtectedResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListRestoreJobsByProtectedResourceWithContext is the same as ListRestoreJobsByProtectedResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListRestoreJobsByProtectedResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListRestoreJobsByProtectedResourceWithContext(ctx aws.Context, input *ListRestoreJobsByProtectedResourceInput, opts ...request.Option) (*ListRestoreJobsByProtectedResourceOutput, error) {
+	req, out := c.ListRestoreJobsByProtectedResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListRestoreJobsByProtectedResourcePages iterates over the pages of a ListRestoreJobsByProtectedResource operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListRestoreJobsByProtectedResource method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListRestoreJobsByProtectedResource operation.
+//	pageNum := 0
+//	err := client.ListRestoreJobsByProtectedResourcePages(params,
+//	    func(page *backup.ListRestoreJobsByProtectedResourceOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Backup) ListRestoreJobsByProtectedResourcePages(input *ListRestoreJobsByProtectedResourceInput, fn func(*ListRestoreJobsByProtectedResourceOutput, bool) bool) error {
+	return c.ListRestoreJobsByProtectedResourcePagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListRestoreJobsByProtectedResourcePagesWithContext same as ListRestoreJobsByProtectedResourcePages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListRestoreJobsByProtectedResourcePagesWithContext(ctx aws.Context, input *ListRestoreJobsByProtectedResourceInput, fn func(*ListRestoreJobsByProtectedResourceOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListRestoreJobsByProtectedResourceInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListRestoreJobsByProtectedResourceRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListRestoreJobsByProtectedResourceOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListRestoreTestingPlans = "ListRestoreTestingPlans"
+
+// ListRestoreTestingPlansRequest generates a "aws/request.Request" representing the
+// client's request for the ListRestoreTestingPlans operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListRestoreTestingPlans for more information on using the ListRestoreTestingPlans
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListRestoreTestingPlansRequest method.
+//	req, resp := client.ListRestoreTestingPlansRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRestoreTestingPlans
+func (c *Backup) ListRestoreTestingPlansRequest(input *ListRestoreTestingPlansInput) (req *request.Request, output *ListRestoreTestingPlansOutput) {
+	op := &request.Operation{
+		Name:       opListRestoreTestingPlans,
+		HTTPMethod: "GET",
+		HTTPPath:   "/restore-testing/plans",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListRestoreTestingPlansInput{}
+	}
+
+	output = &ListRestoreTestingPlansOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListRestoreTestingPlans API operation for AWS Backup.
+//
+// Returns a list of restore testing plans.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation ListRestoreTestingPlans for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRestoreTestingPlans
+func (c *Backup) ListRestoreTestingPlans(input *ListRestoreTestingPlansInput) (*ListRestoreTestingPlansOutput, error) {
+	req, out := c.ListRestoreTestingPlansRequest(input)
+	return out, req.Send()
+}
+
+// ListRestoreTestingPlansWithContext is the same as ListRestoreTestingPlans with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListRestoreTestingPlans for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListRestoreTestingPlansWithContext(ctx aws.Context, input *ListRestoreTestingPlansInput, opts ...request.Option) (*ListRestoreTestingPlansOutput, error) {
+	req, out := c.ListRestoreTestingPlansRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListRestoreTestingPlansPages iterates over the pages of a ListRestoreTestingPlans operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListRestoreTestingPlans method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListRestoreTestingPlans operation.
+//	pageNum := 0
+//	err := client.ListRestoreTestingPlansPages(params,
+//	    func(page *backup.ListRestoreTestingPlansOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Backup) ListRestoreTestingPlansPages(input *ListRestoreTestingPlansInput, fn func(*ListRestoreTestingPlansOutput, bool) bool) error {
+	return c.ListRestoreTestingPlansPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListRestoreTestingPlansPagesWithContext same as ListRestoreTestingPlansPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListRestoreTestingPlansPagesWithContext(ctx aws.Context, input *ListRestoreTestingPlansInput, fn func(*ListRestoreTestingPlansOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListRestoreTestingPlansInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListRestoreTestingPlansRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListRestoreTestingPlansOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListRestoreTestingSelections = "ListRestoreTestingSelections"
+
+// ListRestoreTestingSelectionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListRestoreTestingSelections operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListRestoreTestingSelections for more information on using the ListRestoreTestingSelections
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListRestoreTestingSelectionsRequest method.
+//	req, resp := client.ListRestoreTestingSelectionsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRestoreTestingSelections
+func (c *Backup) ListRestoreTestingSelectionsRequest(input *ListRestoreTestingSelectionsInput) (req *request.Request, output *ListRestoreTestingSelectionsOutput) {
+	op := &request.Operation{
+		Name:       opListRestoreTestingSelections,
+		HTTPMethod: "GET",
+		HTTPPath:   "/restore-testing/plans/{RestoreTestingPlanName}/selections",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListRestoreTestingSelectionsInput{}
+	}
+
+	output = &ListRestoreTestingSelectionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListRestoreTestingSelections API operation for AWS Backup.
+//
+// Returns a list of restore testing selections. Can be filtered by MaxResults
+// and RestoreTestingPlanName.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation ListRestoreTestingSelections for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListRestoreTestingSelections
+func (c *Backup) ListRestoreTestingSelections(input *ListRestoreTestingSelectionsInput) (*ListRestoreTestingSelectionsOutput, error) {
+	req, out := c.ListRestoreTestingSelectionsRequest(input)
+	return out, req.Send()
+}
+
+// ListRestoreTestingSelectionsWithContext is the same as ListRestoreTestingSelections with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListRestoreTestingSelections for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListRestoreTestingSelectionsWithContext(ctx aws.Context, input *ListRestoreTestingSelectionsInput, opts ...request.Option) (*ListRestoreTestingSelectionsOutput, error) {
+	req, out := c.ListRestoreTestingSelectionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListRestoreTestingSelectionsPages iterates over the pages of a ListRestoreTestingSelections operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListRestoreTestingSelections method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListRestoreTestingSelections operation.
+//	pageNum := 0
+//	err := client.ListRestoreTestingSelectionsPages(params,
+//	    func(page *backup.ListRestoreTestingSelectionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *Backup) ListRestoreTestingSelectionsPages(input *ListRestoreTestingSelectionsInput, fn func(*ListRestoreTestingSelectionsOutput, bool) bool) error {
+	return c.ListRestoreTestingSelectionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListRestoreTestingSelectionsPagesWithContext same as ListRestoreTestingSelectionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) ListRestoreTestingSelectionsPagesWithContext(ctx aws.Context, input *ListRestoreTestingSelectionsInput, fn func(*ListRestoreTestingSelectionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListRestoreTestingSelectionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListRestoreTestingSelectionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListRestoreTestingSelectionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListTags = "ListTags"
 
 // ListTagsRequest generates a "aws/request.Request" representing the
@@ -5962,14 +7794,13 @@ const opListTags = "ListTags"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsRequest method.
+//	req, resp := client.ListTagsRequest(params)
 //
-//    // Example sending a request using the ListTagsRequest method.
-//    req, resp := client.ListTagsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListTags
 func (c *Backup) ListTagsRequest(input *ListTagsInput) (req *request.Request, output *ListTagsOutput) {
@@ -6012,18 +7843,19 @@ func (c *Backup) ListTagsRequest(input *ListTagsInput) (req *request.Request, ou
 // API operation ListTags for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/ListTags
 func (c *Backup) ListTags(input *ListTagsInput) (*ListTagsOutput, error) {
@@ -6055,15 +7887,14 @@ func (c *Backup) ListTagsWithContext(ctx aws.Context, input *ListTagsInput, opts
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListTags operation.
-//    pageNum := 0
-//    err := client.ListTagsPages(params,
-//        func(page *backup.ListTagsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListTags operation.
+//	pageNum := 0
+//	err := client.ListTagsPages(params,
+//	    func(page *backup.ListTagsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *Backup) ListTagsPages(input *ListTagsInput, fn func(*ListTagsOutput, bool) bool) error {
 	return c.ListTagsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -6115,14 +7946,13 @@ const opPutBackupVaultAccessPolicy = "PutBackupVaultAccessPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutBackupVaultAccessPolicyRequest method.
+//	req, resp := client.PutBackupVaultAccessPolicyRequest(params)
 //
-//    // Example sending a request using the PutBackupVaultAccessPolicyRequest method.
-//    req, resp := client.PutBackupVaultAccessPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/PutBackupVaultAccessPolicy
 func (c *Backup) PutBackupVaultAccessPolicyRequest(input *PutBackupVaultAccessPolicyInput) (req *request.Request, output *PutBackupVaultAccessPolicyOutput) {
@@ -6156,18 +7986,19 @@ func (c *Backup) PutBackupVaultAccessPolicyRequest(input *PutBackupVaultAccessPo
 // API operation PutBackupVaultAccessPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/PutBackupVaultAccessPolicy
 func (c *Backup) PutBackupVaultAccessPolicy(input *PutBackupVaultAccessPolicyInput) (*PutBackupVaultAccessPolicyOutput, error) {
@@ -6207,14 +8038,13 @@ const opPutBackupVaultLockConfiguration = "PutBackupVaultLockConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutBackupVaultLockConfigurationRequest method.
+//	req, resp := client.PutBackupVaultLockConfigurationRequest(params)
 //
-//    // Example sending a request using the PutBackupVaultLockConfigurationRequest method.
-//    req, resp := client.PutBackupVaultLockConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/PutBackupVaultLockConfiguration
 func (c *Backup) PutBackupVaultLockConfigurationRequest(input *PutBackupVaultLockConfigurationInput) (req *request.Request, output *PutBackupVaultLockConfigurationOutput) {
@@ -6256,22 +8086,23 @@ func (c *Backup) PutBackupVaultLockConfigurationRequest(input *PutBackupVaultLoc
 // API operation PutBackupVaultLockConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/PutBackupVaultLockConfiguration
 func (c *Backup) PutBackupVaultLockConfiguration(input *PutBackupVaultLockConfigurationInput) (*PutBackupVaultLockConfigurationOutput, error) {
@@ -6311,14 +8142,13 @@ const opPutBackupVaultNotifications = "PutBackupVaultNotifications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutBackupVaultNotificationsRequest method.
+//	req, resp := client.PutBackupVaultNotificationsRequest(params)
 //
-//    // Example sending a request using the PutBackupVaultNotificationsRequest method.
-//    req, resp := client.PutBackupVaultNotificationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/PutBackupVaultNotifications
 func (c *Backup) PutBackupVaultNotificationsRequest(input *PutBackupVaultNotificationsInput) (req *request.Request, output *PutBackupVaultNotificationsOutput) {
@@ -6350,18 +8180,19 @@ func (c *Backup) PutBackupVaultNotificationsRequest(input *PutBackupVaultNotific
 // API operation PutBackupVaultNotifications for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/PutBackupVaultNotifications
 func (c *Backup) PutBackupVaultNotifications(input *PutBackupVaultNotificationsInput) (*PutBackupVaultNotificationsOutput, error) {
@@ -6385,6 +8216,102 @@ func (c *Backup) PutBackupVaultNotificationsWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
+const opPutRestoreValidationResult = "PutRestoreValidationResult"
+
+// PutRestoreValidationResultRequest generates a "aws/request.Request" representing the
+// client's request for the PutRestoreValidationResult operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutRestoreValidationResult for more information on using the PutRestoreValidationResult
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the PutRestoreValidationResultRequest method.
+//	req, resp := client.PutRestoreValidationResultRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/PutRestoreValidationResult
+func (c *Backup) PutRestoreValidationResultRequest(input *PutRestoreValidationResultInput) (req *request.Request, output *PutRestoreValidationResultOutput) {
+	op := &request.Operation{
+		Name:       opPutRestoreValidationResult,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/restore-jobs/{restoreJobId}/validations",
+	}
+
+	if input == nil {
+		input = &PutRestoreValidationResultInput{}
+	}
+
+	output = &PutRestoreValidationResultOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutRestoreValidationResult API operation for AWS Backup.
+//
+// This request allows you to send your independent self-run restore test validation
+// results. RestoreJobId and ValidationStatus are required. Optionally, you
+// can input a ValidationStatusMessage.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation PutRestoreValidationResult for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
+//
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/PutRestoreValidationResult
+func (c *Backup) PutRestoreValidationResult(input *PutRestoreValidationResultInput) (*PutRestoreValidationResultOutput, error) {
+	req, out := c.PutRestoreValidationResultRequest(input)
+	return out, req.Send()
+}
+
+// PutRestoreValidationResultWithContext is the same as PutRestoreValidationResult with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutRestoreValidationResult for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) PutRestoreValidationResultWithContext(ctx aws.Context, input *PutRestoreValidationResultInput, opts ...request.Option) (*PutRestoreValidationResultOutput, error) {
+	req, out := c.PutRestoreValidationResultRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartBackupJob = "StartBackupJob"
 
 // StartBackupJobRequest generates a "aws/request.Request" representing the
@@ -6401,14 +8328,13 @@ const opStartBackupJob = "StartBackupJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartBackupJobRequest method.
+//	req, resp := client.StartBackupJobRequest(params)
 //
-//    // Example sending a request using the StartBackupJobRequest method.
-//    req, resp := client.StartBackupJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/StartBackupJob
 func (c *Backup) StartBackupJobRequest(input *StartBackupJobInput) (req *request.Request, output *StartBackupJobOutput) {
@@ -6439,26 +8365,27 @@ func (c *Backup) StartBackupJobRequest(input *StartBackupJobInput) (req *request
 // API operation StartBackupJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
 //
-//   * LimitExceededException
-//   A limit in the request has been exceeded; for example, a maximum number of
-//   items allowed in a request.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/StartBackupJob
 func (c *Backup) StartBackupJob(input *StartBackupJobInput) (*StartBackupJobOutput, error) {
@@ -6498,14 +8425,13 @@ const opStartCopyJob = "StartCopyJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartCopyJobRequest method.
+//	req, resp := client.StartCopyJobRequest(params)
 //
-//    // Example sending a request using the StartCopyJobRequest method.
-//    req, resp := client.StartCopyJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/StartCopyJob
 func (c *Backup) StartCopyJobRequest(input *StartCopyJobInput) (req *request.Request, output *StartCopyJobOutput) {
@@ -6538,26 +8464,27 @@ func (c *Backup) StartCopyJobRequest(input *StartCopyJobInput) (req *request.Req
 // API operation StartCopyJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * LimitExceededException
-//   A limit in the request has been exceeded; for example, a maximum number of
-//   items allowed in a request.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/StartCopyJob
 func (c *Backup) StartCopyJob(input *StartCopyJobInput) (*StartCopyJobOutput, error) {
@@ -6597,14 +8524,13 @@ const opStartReportJob = "StartReportJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartReportJobRequest method.
+//	req, resp := client.StartReportJobRequest(params)
 //
-//    // Example sending a request using the StartReportJobRequest method.
-//    req, resp := client.StartReportJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/StartReportJob
 func (c *Backup) StartReportJobRequest(input *StartReportJobInput) (req *request.Request, output *StartReportJobOutput) {
@@ -6635,18 +8561,19 @@ func (c *Backup) StartReportJobRequest(input *StartReportJobInput) (req *request
 // API operation StartReportJob for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/StartReportJob
 func (c *Backup) StartReportJob(input *StartReportJobInput) (*StartReportJobOutput, error) {
@@ -6686,14 +8613,13 @@ const opStartRestoreJob = "StartRestoreJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartRestoreJobRequest method.
+//	req, resp := client.StartRestoreJobRequest(params)
 //
-//    // Example sending a request using the StartRestoreJobRequest method.
-//    req, resp := client.StartRestoreJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/StartRestoreJob
 func (c *Backup) StartRestoreJobRequest(input *StartRestoreJobInput) (req *request.Request, output *StartRestoreJobOutput) {
@@ -6724,18 +8650,23 @@ func (c *Backup) StartRestoreJobRequest(input *StartRestoreJobInput) (req *reque
 // API operation StartRestoreJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/StartRestoreJob
 func (c *Backup) StartRestoreJob(input *StartRestoreJobInput) (*StartRestoreJobOutput, error) {
@@ -6775,14 +8706,13 @@ const opStopBackupJob = "StopBackupJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopBackupJobRequest method.
+//	req, resp := client.StopBackupJobRequest(params)
 //
-//    // Example sending a request using the StopBackupJobRequest method.
-//    req, resp := client.StopBackupJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/StopBackupJob
 func (c *Backup) StopBackupJobRequest(input *StopBackupJobInput) (req *request.Request, output *StopBackupJobOutput) {
@@ -6807,9 +8737,9 @@ func (c *Backup) StopBackupJobRequest(input *StopBackupJobInput) (req *request.R
 // Attempts to cancel a job to create a one-time backup of a resource.
 //
 // This action is not supported for the following services: Amazon FSx for Windows
-// File Server, Amazon FSx for Lustre, FSx for ONTAP , Amazon FSx for OpenZFS,
-// Amazon DocumentDB (with MongoDB compatibility), Amazon RDS, Amazon Aurora,
-// and Amazon Neptune.
+// File Server, Amazon FSx for Lustre, Amazon FSx for NetApp ONTAP , Amazon
+// FSx for OpenZFS, Amazon DocumentDB (with MongoDB compatibility), Amazon RDS,
+// Amazon Aurora, and Amazon Neptune.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6819,22 +8749,23 @@ func (c *Backup) StopBackupJobRequest(input *StopBackupJobInput) (req *request.R
 // API operation StopBackupJob for usage and error information.
 //
 // Returned Error Types:
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/StopBackupJob
 func (c *Backup) StopBackupJob(input *StopBackupJobInput) (*StopBackupJobOutput, error) {
@@ -6874,14 +8805,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/TagResource
 func (c *Backup) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -6914,22 +8844,23 @@ func (c *Backup) TagResourceRequest(input *TagResourceInput) (req *request.Reque
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * LimitExceededException
-//   A limit in the request has been exceeded; for example, a maximum number of
-//   items allowed in a request.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/TagResource
 func (c *Backup) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -6969,14 +8900,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UntagResource
 func (c *Backup) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -7009,18 +8939,19 @@ func (c *Backup) UntagResourceRequest(input *UntagResourceInput) (req *request.R
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UntagResource
 func (c *Backup) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -7060,14 +8991,13 @@ const opUpdateBackupPlan = "UpdateBackupPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateBackupPlanRequest method.
+//	req, resp := client.UpdateBackupPlanRequest(params)
 //
-//    // Example sending a request using the UpdateBackupPlanRequest method.
-//    req, resp := client.UpdateBackupPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateBackupPlan
 func (c *Backup) UpdateBackupPlanRequest(input *UpdateBackupPlanInput) (req *request.Request, output *UpdateBackupPlanOutput) {
@@ -7099,18 +9029,19 @@ func (c *Backup) UpdateBackupPlanRequest(input *UpdateBackupPlanInput) (req *req
 // API operation UpdateBackupPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateBackupPlan
 func (c *Backup) UpdateBackupPlan(input *UpdateBackupPlanInput) (*UpdateBackupPlanOutput, error) {
@@ -7150,14 +9081,13 @@ const opUpdateFramework = "UpdateFramework"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFrameworkRequest method.
+//	req, resp := client.UpdateFrameworkRequest(params)
 //
-//    // Example sending a request using the UpdateFrameworkRequest method.
-//    req, resp := client.UpdateFrameworkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateFramework
 func (c *Backup) UpdateFrameworkRequest(input *UpdateFrameworkInput) (req *request.Request, output *UpdateFrameworkOutput) {
@@ -7189,29 +9119,30 @@ func (c *Backup) UpdateFrameworkRequest(input *UpdateFrameworkInput) (req *reque
 // API operation UpdateFramework for usage and error information.
 //
 // Returned Error Types:
-//   * AlreadyExistsException
-//   The required resource already exists.
 //
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
+//   - AlreadyExistsException
+//     The required resource already exists.
 //
-//   * LimitExceededException
-//   A limit in the request has been exceeded; for example, a maximum number of
-//   items allowed in a request.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - LimitExceededException
+//     A limit in the request has been exceeded; for example, a maximum number of
+//     items allowed in a request.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * ConflictException
-//   Backup can't perform the action that you requested until it finishes performing
-//   a previous action. Try again later.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - ConflictException
+//     Backup can't perform the action that you requested until it finishes performing
+//     a previous action. Try again later.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateFramework
 func (c *Backup) UpdateFramework(input *UpdateFrameworkInput) (*UpdateFrameworkOutput, error) {
@@ -7251,14 +9182,13 @@ const opUpdateGlobalSettings = "UpdateGlobalSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateGlobalSettingsRequest method.
+//	req, resp := client.UpdateGlobalSettingsRequest(params)
 //
-//    // Example sending a request using the UpdateGlobalSettingsRequest method.
-//    req, resp := client.UpdateGlobalSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateGlobalSettings
 func (c *Backup) UpdateGlobalSettingsRequest(input *UpdateGlobalSettingsInput) (req *request.Request, output *UpdateGlobalSettingsOutput) {
@@ -7292,19 +9222,20 @@ func (c *Backup) UpdateGlobalSettingsRequest(input *UpdateGlobalSettingsInput) (
 // API operation UpdateGlobalSettings for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateGlobalSettings
 func (c *Backup) UpdateGlobalSettings(input *UpdateGlobalSettingsInput) (*UpdateGlobalSettingsOutput, error) {
@@ -7344,14 +9275,13 @@ const opUpdateRecoveryPointLifecycle = "UpdateRecoveryPointLifecycle"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRecoveryPointLifecycleRequest method.
+//	req, resp := client.UpdateRecoveryPointLifecycleRequest(params)
 //
-//    // Example sending a request using the UpdateRecoveryPointLifecycleRequest method.
-//    req, resp := client.UpdateRecoveryPointLifecycleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateRecoveryPointLifecycle
 func (c *Backup) UpdateRecoveryPointLifecycleRequest(input *UpdateRecoveryPointLifecycleInput) (req *request.Request, output *UpdateRecoveryPointLifecycleOutput) {
@@ -7399,22 +9329,23 @@ func (c *Backup) UpdateRecoveryPointLifecycleRequest(input *UpdateRecoveryPointL
 // API operation UpdateRecoveryPointLifecycle for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * InvalidRequestException
-//   Indicates that something is wrong with the input to the request. For example,
-//   a parameter is of the wrong type.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - InvalidRequestException
+//     Indicates that something is wrong with the input to the request. For example,
+//     a parameter is of the wrong type.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateRecoveryPointLifecycle
 func (c *Backup) UpdateRecoveryPointLifecycle(input *UpdateRecoveryPointLifecycleInput) (*UpdateRecoveryPointLifecycleOutput, error) {
@@ -7454,14 +9385,13 @@ const opUpdateRegionSettings = "UpdateRegionSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRegionSettingsRequest method.
+//	req, resp := client.UpdateRegionSettingsRequest(params)
 //
-//    // Example sending a request using the UpdateRegionSettingsRequest method.
-//    req, resp := client.UpdateRegionSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateRegionSettings
 func (c *Backup) UpdateRegionSettingsRequest(input *UpdateRegionSettingsInput) (req *request.Request, output *UpdateRegionSettingsOutput) {
@@ -7483,12 +9413,10 @@ func (c *Backup) UpdateRegionSettingsRequest(input *UpdateRegionSettingsInput) (
 
 // UpdateRegionSettings API operation for AWS Backup.
 //
-// Updates the current service opt-in settings for the Region. If service-opt-in
-// is enabled for a service, Backup tries to protect that service's resources
-// in this Region, when the resource is included in an on-demand backup or scheduled
-// backup plan. Otherwise, Backup does not try to protect that service's resources
-// in this Region. Use the DescribeRegionSettings API to determine the resource
-// types that are supported.
+// Updates the current service opt-in settings for the Region.
+//
+// Use the DescribeRegionSettings API to determine the resource types that are
+// supported.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7498,15 +9426,16 @@ func (c *Backup) UpdateRegionSettingsRequest(input *UpdateRegionSettingsInput) (
 // API operation UpdateRegionSettings for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateRegionSettings
 func (c *Backup) UpdateRegionSettings(input *UpdateRegionSettingsInput) (*UpdateRegionSettingsOutput, error) {
@@ -7546,14 +9475,13 @@ const opUpdateReportPlan = "UpdateReportPlan"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateReportPlanRequest method.
+//	req, resp := client.UpdateReportPlanRequest(params)
 //
-//    // Example sending a request using the UpdateReportPlanRequest method.
-//    req, resp := client.UpdateReportPlanRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateReportPlan
 func (c *Backup) UpdateReportPlanRequest(input *UpdateReportPlanInput) (req *request.Request, output *UpdateReportPlanOutput) {
@@ -7585,22 +9513,23 @@ func (c *Backup) UpdateReportPlanRequest(input *UpdateReportPlanInput) (req *req
 // API operation UpdateReportPlan for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   A resource that is required for the action doesn't exist.
 //
-//   * InvalidParameterValueException
-//   Indicates that something is wrong with a parameter's value. For example,
-//   the value is out of range.
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
 //
-//   * ServiceUnavailableException
-//   The request failed due to a temporary failure of the server.
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
 //
-//   * MissingParameterValueException
-//   Indicates that a required parameter is missing.
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
 //
-//   * ConflictException
-//   Backup can't perform the action that you requested until it finishes performing
-//   a previous action. Try again later.
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ConflictException
+//     Backup can't perform the action that you requested until it finishes performing
+//     a previous action. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateReportPlan
 func (c *Backup) UpdateReportPlan(input *UpdateReportPlanInput) (*UpdateReportPlanOutput, error) {
@@ -7619,6 +9548,210 @@ func (c *Backup) UpdateReportPlan(input *UpdateReportPlanInput) (*UpdateReportPl
 // for more information on using Contexts.
 func (c *Backup) UpdateReportPlanWithContext(ctx aws.Context, input *UpdateReportPlanInput, opts ...request.Option) (*UpdateReportPlanOutput, error) {
 	req, out := c.UpdateReportPlanRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateRestoreTestingPlan = "UpdateRestoreTestingPlan"
+
+// UpdateRestoreTestingPlanRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateRestoreTestingPlan operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateRestoreTestingPlan for more information on using the UpdateRestoreTestingPlan
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateRestoreTestingPlanRequest method.
+//	req, resp := client.UpdateRestoreTestingPlanRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateRestoreTestingPlan
+func (c *Backup) UpdateRestoreTestingPlanRequest(input *UpdateRestoreTestingPlanInput) (req *request.Request, output *UpdateRestoreTestingPlanOutput) {
+	op := &request.Operation{
+		Name:       opUpdateRestoreTestingPlan,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/restore-testing/plans/{RestoreTestingPlanName}",
+	}
+
+	if input == nil {
+		input = &UpdateRestoreTestingPlanInput{}
+	}
+
+	output = &UpdateRestoreTestingPlanOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateRestoreTestingPlan API operation for AWS Backup.
+//
+// This request will send changes to your specified restore testing plan. RestoreTestingPlanName
+// cannot be updated after it is created.
+//
+// RecoveryPointSelection can contain:
+//
+//   - Algorithm
+//
+//   - ExcludeVaults
+//
+//   - IncludeVaults
+//
+//   - RecoveryPointTypes
+//
+//   - SelectionWindowDays
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation UpdateRestoreTestingPlan for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ConflictException
+//     Backup can't perform the action that you requested until it finishes performing
+//     a previous action. Try again later.
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateRestoreTestingPlan
+func (c *Backup) UpdateRestoreTestingPlan(input *UpdateRestoreTestingPlanInput) (*UpdateRestoreTestingPlanOutput, error) {
+	req, out := c.UpdateRestoreTestingPlanRequest(input)
+	return out, req.Send()
+}
+
+// UpdateRestoreTestingPlanWithContext is the same as UpdateRestoreTestingPlan with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateRestoreTestingPlan for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) UpdateRestoreTestingPlanWithContext(ctx aws.Context, input *UpdateRestoreTestingPlanInput, opts ...request.Option) (*UpdateRestoreTestingPlanOutput, error) {
+	req, out := c.UpdateRestoreTestingPlanRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateRestoreTestingSelection = "UpdateRestoreTestingSelection"
+
+// UpdateRestoreTestingSelectionRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateRestoreTestingSelection operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateRestoreTestingSelection for more information on using the UpdateRestoreTestingSelection
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the UpdateRestoreTestingSelectionRequest method.
+//	req, resp := client.UpdateRestoreTestingSelectionRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateRestoreTestingSelection
+func (c *Backup) UpdateRestoreTestingSelectionRequest(input *UpdateRestoreTestingSelectionInput) (req *request.Request, output *UpdateRestoreTestingSelectionOutput) {
+	op := &request.Operation{
+		Name:       opUpdateRestoreTestingSelection,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/restore-testing/plans/{RestoreTestingPlanName}/selections/{RestoreTestingSelectionName}",
+	}
+
+	if input == nil {
+		input = &UpdateRestoreTestingSelectionInput{}
+	}
+
+	output = &UpdateRestoreTestingSelectionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateRestoreTestingSelection API operation for AWS Backup.
+//
+// Most elements except the RestoreTestingSelectionName can be updated with
+// this request.
+//
+// RestoreTestingSelection can use either protected resource ARNs or conditions,
+// but not both. That is, if your selection has ProtectedResourceArns, requesting
+// an update with the parameter ProtectedResourceConditions will be unsuccessful.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Backup's
+// API operation UpdateRestoreTestingSelection for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ConflictException
+//     Backup can't perform the action that you requested until it finishes performing
+//     a previous action. Try again later.
+//
+//   - InvalidParameterValueException
+//     Indicates that something is wrong with a parameter's value. For example,
+//     the value is out of range.
+//
+//   - MissingParameterValueException
+//     Indicates that a required parameter is missing.
+//
+//   - ResourceNotFoundException
+//     A resource that is required for the action doesn't exist.
+//
+//   - ServiceUnavailableException
+//     The request failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/backup-2018-11-15/UpdateRestoreTestingSelection
+func (c *Backup) UpdateRestoreTestingSelection(input *UpdateRestoreTestingSelectionInput) (*UpdateRestoreTestingSelectionOutput, error) {
+	req, out := c.UpdateRestoreTestingSelectionRequest(input)
+	return out, req.Send()
+}
+
+// UpdateRestoreTestingSelectionWithContext is the same as UpdateRestoreTestingSelection with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateRestoreTestingSelection for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Backup) UpdateRestoreTestingSelectionWithContext(ctx aws.Context, input *UpdateRestoreTestingSelectionInput, opts ...request.Option) (*UpdateRestoreTestingSelectionOutput, error) {
+	req, out := c.UpdateRestoreTestingSelectionRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -7758,6 +9891,122 @@ func (s *AlreadyExistsException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *AlreadyExistsException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// This is a summary of jobs created or running within the most recent 30 days.
+//
+// The returned summary may contain the following: Region, Account, State, RestourceType,
+// MessageCategory, StartTime, EndTime, and Count of included jobs.
+type BackupJobSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The account ID that owns the jobs within the summary.
+	AccountId *string `type:"string"`
+
+	// The value as a number of jobs in a job summary.
+	Count *int64 `type:"integer"`
+
+	// The value of time in number format of a job end time.
+	//
+	// This value is the time in Unix format, Coordinated Universal Time (UTC),
+	// and accurate to milliseconds. For example, the value 1516925490.087 represents
+	// Friday, January 26, 2018 12:11:30.087 AM.
+	EndTime *time.Time `type:"timestamp"`
+
+	// This parameter is the job count for the specified message category.
+	//
+	// Example strings include AccessDenied, Success, and InvalidParameters. See
+	// Monitoring (https://docs.aws.amazon.com/aws-backup/latest/devguide/monitoring.html)
+	// for a list of MessageCategory strings.
+	//
+	// The the value ANY returns count of all message categories.
+	//
+	// AGGREGATE_ALL aggregates job counts for all message categories and returns
+	// the sum.
+	MessageCategory *string `type:"string"`
+
+	// The Amazon Web Services Regions within the job summary.
+	Region *string `type:"string"`
+
+	// This value is the job count for the specified resource type. The request
+	// GetSupportedResourceTypes returns strings for supported resource types.
+	ResourceType *string `type:"string"`
+
+	// The value of time in number format of a job start time.
+	//
+	// This value is the time in Unix format, Coordinated Universal Time (UTC),
+	// and accurate to milliseconds. For example, the value 1516925490.087 represents
+	// Friday, January 26, 2018 12:11:30.087 AM.
+	StartTime *time.Time `type:"timestamp"`
+
+	// This value is job count for jobs with the specified state.
+	State *string `type:"string" enum:"BackupJobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BackupJobSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BackupJobSummary) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *BackupJobSummary) SetAccountId(v string) *BackupJobSummary {
+	s.AccountId = &v
+	return s
+}
+
+// SetCount sets the Count field's value.
+func (s *BackupJobSummary) SetCount(v int64) *BackupJobSummary {
+	s.Count = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *BackupJobSummary) SetEndTime(v time.Time) *BackupJobSummary {
+	s.EndTime = &v
+	return s
+}
+
+// SetMessageCategory sets the MessageCategory field's value.
+func (s *BackupJobSummary) SetMessageCategory(v string) *BackupJobSummary {
+	s.MessageCategory = &v
+	return s
+}
+
+// SetRegion sets the Region field's value.
+func (s *BackupJobSummary) SetRegion(v string) *BackupJobSummary {
+	s.Region = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *BackupJobSummary) SetResourceType(v string) *BackupJobSummary {
+	s.ResourceType = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *BackupJobSummary) SetStartTime(v time.Time) *BackupJobSummary {
+	s.StartTime = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *BackupJobSummary) SetState(v string) *BackupJobSummary {
+	s.State = &v
+	return s
 }
 
 // Contains DeleteAt and MoveToColdStorageAt timestamps, which are used to specify
@@ -8416,6 +10665,18 @@ type CopyJob struct {
 	// This is a boolean value indicating this is a parent (composite) copy job.
 	IsParent *bool `type:"boolean"`
 
+	// This parameter is the job count for the specified message category.
+	//
+	// Example strings may include AccessDenied, SUCCESS, AGGREGATE_ALL, and InvalidParameters.
+	// See Monitoring (https://docs.aws.amazon.com/aws-backup/latest/devguide/monitoring.html)
+	// for a list of MessageCategory strings.
+	//
+	// The the value ANY returns count of all message categories.
+	//
+	// AGGREGATE_ALL aggregates job counts for all message categories and returns
+	// the sum
+	MessageCategory *string `type:"string"`
+
 	// This is the number of child (nested) copy jobs.
 	NumberOfChildJobs *int64 `type:"long"`
 
@@ -8541,6 +10802,12 @@ func (s *CopyJob) SetIsParent(v bool) *CopyJob {
 	return s
 }
 
+// SetMessageCategory sets the MessageCategory field's value.
+func (s *CopyJob) SetMessageCategory(v string) *CopyJob {
+	s.MessageCategory = &v
+	return s
+}
+
 // SetNumberOfChildJobs sets the NumberOfChildJobs field's value.
 func (s *CopyJob) SetNumberOfChildJobs(v int64) *CopyJob {
 	s.NumberOfChildJobs = &v
@@ -8592,6 +10859,123 @@ func (s *CopyJob) SetState(v string) *CopyJob {
 // SetStatusMessage sets the StatusMessage field's value.
 func (s *CopyJob) SetStatusMessage(v string) *CopyJob {
 	s.StatusMessage = &v
+	return s
+}
+
+// This is a summary of copy jobs created or running within the most recent
+// 30 days.
+//
+// The returned summary may contain the following: Region, Account, State, RestourceType,
+// MessageCategory, StartTime, EndTime, and Count of included jobs.
+type CopyJobSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The account ID that owns the jobs within the summary.
+	AccountId *string `type:"string"`
+
+	// The value as a number of jobs in a job summary.
+	Count *int64 `type:"integer"`
+
+	// The value of time in number format of a job end time.
+	//
+	// This value is the time in Unix format, Coordinated Universal Time (UTC),
+	// and accurate to milliseconds. For example, the value 1516925490.087 represents
+	// Friday, January 26, 2018 12:11:30.087 AM.
+	EndTime *time.Time `type:"timestamp"`
+
+	// This parameter is the job count for the specified message category.
+	//
+	// Example strings include AccessDenied, Success, and InvalidParameters. See
+	// Monitoring (https://docs.aws.amazon.com/aws-backup/latest/devguide/monitoring.html)
+	// for a list of MessageCategory strings.
+	//
+	// The the value ANY returns count of all message categories.
+	//
+	// AGGREGATE_ALL aggregates job counts for all message categories and returns
+	// the sum.
+	MessageCategory *string `type:"string"`
+
+	// This is the Amazon Web Services Regions within the job summary.
+	Region *string `type:"string"`
+
+	// This value is the job count for the specified resource type. The request
+	// GetSupportedResourceTypes returns strings for supported resource types
+	ResourceType *string `type:"string"`
+
+	// The value of time in number format of a job start time.
+	//
+	// This value is the time in Unix format, Coordinated Universal Time (UTC),
+	// and accurate to milliseconds. For example, the value 1516925490.087 represents
+	// Friday, January 26, 2018 12:11:30.087 AM.
+	StartTime *time.Time `type:"timestamp"`
+
+	// This value is job count for jobs with the specified state.
+	State *string `type:"string" enum:"CopyJobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CopyJobSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CopyJobSummary) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *CopyJobSummary) SetAccountId(v string) *CopyJobSummary {
+	s.AccountId = &v
+	return s
+}
+
+// SetCount sets the Count field's value.
+func (s *CopyJobSummary) SetCount(v int64) *CopyJobSummary {
+	s.Count = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *CopyJobSummary) SetEndTime(v time.Time) *CopyJobSummary {
+	s.EndTime = &v
+	return s
+}
+
+// SetMessageCategory sets the MessageCategory field's value.
+func (s *CopyJobSummary) SetMessageCategory(v string) *CopyJobSummary {
+	s.MessageCategory = &v
+	return s
+}
+
+// SetRegion sets the Region field's value.
+func (s *CopyJobSummary) SetRegion(v string) *CopyJobSummary {
+	s.Region = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *CopyJobSummary) SetResourceType(v string) *CopyJobSummary {
+	s.ResourceType = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *CopyJobSummary) SetStartTime(v time.Time) *CopyJobSummary {
+	s.StartTime = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *CopyJobSummary) SetState(v string) *CopyJobSummary {
+	s.State = &v
 	return s
 }
 
@@ -9368,6 +11752,190 @@ func (s *CreateLegalHoldOutput) SetTitle(v string) *CreateLegalHoldOutput {
 	return s
 }
 
+type CreateLogicallyAirGappedBackupVaultInput struct {
+	_ struct{} `type:"structure"`
+
+	// This is the name of the vault that is being created.
+	//
+	// BackupVaultName is a required field
+	BackupVaultName *string `location:"uri" locationName:"backupVaultName" type:"string" required:"true"`
+
+	// These are the tags that will be included in the newly-created vault.
+	//
+	// BackupVaultTags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateLogicallyAirGappedBackupVaultInput's
+	// String and GoString methods.
+	BackupVaultTags map[string]*string `type:"map" sensitive:"true"`
+
+	// This is the ID of the creation request.
+	//
+	// This parameter is optional. If used, this parameter must contain 1 to 50
+	// alphanumeric or '-_.' characters.
+	CreatorRequestId *string `type:"string"`
+
+	// This is the setting that specifies the maximum retention period that the
+	// vault retains its recovery points. If this parameter is not specified, Backup
+	// does not enforce a maximum retention period on the recovery points in the
+	// vault (allowing indefinite storage).
+	//
+	// If specified, any backup or copy job to the vault must have a lifecycle policy
+	// with a retention period equal to or shorter than the maximum retention period.
+	// If the job retention period is longer than that maximum retention period,
+	// then the vault fails the backup or copy job, and you should either modify
+	// your lifecycle settings or use a different vault.
+	//
+	// MaxRetentionDays is a required field
+	MaxRetentionDays *int64 `type:"long" required:"true"`
+
+	// This setting specifies the minimum retention period that the vault retains
+	// its recovery points. If this parameter is not specified, no minimum retention
+	// period is enforced.
+	//
+	// If specified, any backup or copy job to the vault must have a lifecycle policy
+	// with a retention period equal to or longer than the minimum retention period.
+	// If a job retention period is shorter than that minimum retention period,
+	// then the vault fails the backup or copy job, and you should either modify
+	// your lifecycle settings or use a different vault.
+	//
+	// MinRetentionDays is a required field
+	MinRetentionDays *int64 `type:"long" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLogicallyAirGappedBackupVaultInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLogicallyAirGappedBackupVaultInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateLogicallyAirGappedBackupVaultInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateLogicallyAirGappedBackupVaultInput"}
+	if s.BackupVaultName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BackupVaultName"))
+	}
+	if s.BackupVaultName != nil && len(*s.BackupVaultName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BackupVaultName", 1))
+	}
+	if s.MaxRetentionDays == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxRetentionDays"))
+	}
+	if s.MinRetentionDays == nil {
+		invalidParams.Add(request.NewErrParamRequired("MinRetentionDays"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBackupVaultName sets the BackupVaultName field's value.
+func (s *CreateLogicallyAirGappedBackupVaultInput) SetBackupVaultName(v string) *CreateLogicallyAirGappedBackupVaultInput {
+	s.BackupVaultName = &v
+	return s
+}
+
+// SetBackupVaultTags sets the BackupVaultTags field's value.
+func (s *CreateLogicallyAirGappedBackupVaultInput) SetBackupVaultTags(v map[string]*string) *CreateLogicallyAirGappedBackupVaultInput {
+	s.BackupVaultTags = v
+	return s
+}
+
+// SetCreatorRequestId sets the CreatorRequestId field's value.
+func (s *CreateLogicallyAirGappedBackupVaultInput) SetCreatorRequestId(v string) *CreateLogicallyAirGappedBackupVaultInput {
+	s.CreatorRequestId = &v
+	return s
+}
+
+// SetMaxRetentionDays sets the MaxRetentionDays field's value.
+func (s *CreateLogicallyAirGappedBackupVaultInput) SetMaxRetentionDays(v int64) *CreateLogicallyAirGappedBackupVaultInput {
+	s.MaxRetentionDays = &v
+	return s
+}
+
+// SetMinRetentionDays sets the MinRetentionDays field's value.
+func (s *CreateLogicallyAirGappedBackupVaultInput) SetMinRetentionDays(v int64) *CreateLogicallyAirGappedBackupVaultInput {
+	s.MinRetentionDays = &v
+	return s
+}
+
+type CreateLogicallyAirGappedBackupVaultOutput struct {
+	_ struct{} `type:"structure"`
+
+	// This is the ARN (Amazon Resource Name) of the vault being created.
+	BackupVaultArn *string `type:"string"`
+
+	// The name of a logical container where backups are stored. Logically air-gapped
+	// backup vaults are identified by names that are unique to the account used
+	// to create them and the Region where they are created. They consist of lowercase
+	// letters, numbers, and hyphens.
+	BackupVaultName *string `type:"string"`
+
+	// The date and time when the vault was created.
+	//
+	// This value is in Unix format, Coordinated Universal Time (UTC), and accurate
+	// to milliseconds. For example, the value 1516925490.087 represents Friday,
+	// January 26, 2018 12:11:30.087 AM.
+	CreationDate *time.Time `type:"timestamp"`
+
+	// This is the current state of the vault.
+	VaultState *string `type:"string" enum:"VaultState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLogicallyAirGappedBackupVaultOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateLogicallyAirGappedBackupVaultOutput) GoString() string {
+	return s.String()
+}
+
+// SetBackupVaultArn sets the BackupVaultArn field's value.
+func (s *CreateLogicallyAirGappedBackupVaultOutput) SetBackupVaultArn(v string) *CreateLogicallyAirGappedBackupVaultOutput {
+	s.BackupVaultArn = &v
+	return s
+}
+
+// SetBackupVaultName sets the BackupVaultName field's value.
+func (s *CreateLogicallyAirGappedBackupVaultOutput) SetBackupVaultName(v string) *CreateLogicallyAirGappedBackupVaultOutput {
+	s.BackupVaultName = &v
+	return s
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *CreateLogicallyAirGappedBackupVaultOutput) SetCreationDate(v time.Time) *CreateLogicallyAirGappedBackupVaultOutput {
+	s.CreationDate = &v
+	return s
+}
+
+// SetVaultState sets the VaultState field's value.
+func (s *CreateLogicallyAirGappedBackupVaultOutput) SetVaultState(v string) *CreateLogicallyAirGappedBackupVaultOutput {
+	s.VaultState = &v
+	return s
+}
+
 type CreateReportPlanInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9547,6 +12115,314 @@ func (s *CreateReportPlanOutput) SetReportPlanArn(v string) *CreateReportPlanOut
 // SetReportPlanName sets the ReportPlanName field's value.
 func (s *CreateReportPlanOutput) SetReportPlanName(v string) *CreateReportPlanOutput {
 	s.ReportPlanName = &v
+	return s
+}
+
+type CreateRestoreTestingPlanInput struct {
+	_ struct{} `type:"structure"`
+
+	// This is a unique string that identifies the request and allows failed requests
+	// to be retriedwithout the risk of running the operation twice. This parameter
+	// is optional. If used, this parameter must contain 1 to 50 alphanumeric or
+	// '-_.' characters.
+	CreatorRequestId *string `type:"string"`
+
+	// A restore testing plan must contain a unique RestoreTestingPlanName string
+	// you create and must contain a ScheduleExpression cron. You may optionally
+	// include a StartWindowHours integer and a CreatorRequestId string.
+	//
+	// The RestoreTestingPlanName is a unique string that is the name of the restore
+	// testing plan. This cannot be changed after creation, and it must consist
+	// of only alphanumeric characters and underscores.
+	//
+	// RestoreTestingPlan is a required field
+	RestoreTestingPlan *RestoreTestingPlanForCreate `type:"structure" required:"true"`
+
+	// Optional tags to include. A tag is a key-value pair you can use to manage,
+	// filter, and search for your resources. Allowed characters include UTF-8 letters,numbers,
+	// spaces, and the following characters: + - = . _ : /.
+	//
+	// Tags is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by CreateRestoreTestingPlanInput's
+	// String and GoString methods.
+	Tags map[string]*string `type:"map" sensitive:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateRestoreTestingPlanInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateRestoreTestingPlanInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateRestoreTestingPlanInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateRestoreTestingPlanInput"}
+	if s.RestoreTestingPlan == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingPlan"))
+	}
+	if s.RestoreTestingPlan != nil {
+		if err := s.RestoreTestingPlan.Validate(); err != nil {
+			invalidParams.AddNested("RestoreTestingPlan", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCreatorRequestId sets the CreatorRequestId field's value.
+func (s *CreateRestoreTestingPlanInput) SetCreatorRequestId(v string) *CreateRestoreTestingPlanInput {
+	s.CreatorRequestId = &v
+	return s
+}
+
+// SetRestoreTestingPlan sets the RestoreTestingPlan field's value.
+func (s *CreateRestoreTestingPlanInput) SetRestoreTestingPlan(v *RestoreTestingPlanForCreate) *CreateRestoreTestingPlanInput {
+	s.RestoreTestingPlan = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateRestoreTestingPlanInput) SetTags(v map[string]*string) *CreateRestoreTestingPlanInput {
+	s.Tags = v
+	return s
+}
+
+type CreateRestoreTestingPlanOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time a restore testing plan was created, in Unix format and
+	// Coordinated Universal Time (UTC). The value of CreationTime is accurate to
+	// milliseconds. For example, the value 1516925490.087 represents Friday, January
+	// 26, 2018 12:11:30.087AM.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `type:"timestamp" required:"true"`
+
+	// An Amazon Resource Name (ARN) that uniquely identifies the created restore
+	// testing plan.
+	//
+	// RestoreTestingPlanArn is a required field
+	RestoreTestingPlanArn *string `type:"string" required:"true"`
+
+	// This unique string is the name of the restore testing plan.
+	//
+	// The name cannot be changed after creation. The name consists of only alphanumeric
+	// characters and underscores. Maximum length is 50.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateRestoreTestingPlanOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateRestoreTestingPlanOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *CreateRestoreTestingPlanOutput) SetCreationTime(v time.Time) *CreateRestoreTestingPlanOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetRestoreTestingPlanArn sets the RestoreTestingPlanArn field's value.
+func (s *CreateRestoreTestingPlanOutput) SetRestoreTestingPlanArn(v string) *CreateRestoreTestingPlanOutput {
+	s.RestoreTestingPlanArn = &v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *CreateRestoreTestingPlanOutput) SetRestoreTestingPlanName(v string) *CreateRestoreTestingPlanOutput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+type CreateRestoreTestingSelectionInput struct {
+	_ struct{} `type:"structure"`
+
+	// This is an optional unique string that identifies the request and allows
+	// failed requests to be retried without the risk of running the operation twice.
+	// If used, this parameter must contain 1 to 50 alphanumeric or '-_.' characters.
+	CreatorRequestId *string `type:"string"`
+
+	// Input the restore testing plan name that was returned from the related CreateRestoreTestingPlan
+	// request.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `location:"uri" locationName:"RestoreTestingPlanName" type:"string" required:"true"`
+
+	// This consists of RestoreTestingSelectionName, ProtectedResourceType, and
+	// one of the following:
+	//
+	//    * ProtectedResourceArns
+	//
+	//    * ProtectedResourceConditions
+	//
+	// Each protected resource type can have one single value.
+	//
+	// A restore testing selection can include a wildcard value ("*") for ProtectedResourceArns
+	// along with ProtectedResourceConditions. Alternatively, you can include up
+	// to 30 specific protected resource ARNs in ProtectedResourceArns.
+	//
+	// RestoreTestingSelection is a required field
+	RestoreTestingSelection *RestoreTestingSelectionForCreate `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateRestoreTestingSelectionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateRestoreTestingSelectionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateRestoreTestingSelectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateRestoreTestingSelectionInput"}
+	if s.RestoreTestingPlanName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingPlanName"))
+	}
+	if s.RestoreTestingPlanName != nil && len(*s.RestoreTestingPlanName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreTestingPlanName", 1))
+	}
+	if s.RestoreTestingSelection == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingSelection"))
+	}
+	if s.RestoreTestingSelection != nil {
+		if err := s.RestoreTestingSelection.Validate(); err != nil {
+			invalidParams.AddNested("RestoreTestingSelection", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCreatorRequestId sets the CreatorRequestId field's value.
+func (s *CreateRestoreTestingSelectionInput) SetCreatorRequestId(v string) *CreateRestoreTestingSelectionInput {
+	s.CreatorRequestId = &v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *CreateRestoreTestingSelectionInput) SetRestoreTestingPlanName(v string) *CreateRestoreTestingSelectionInput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetRestoreTestingSelection sets the RestoreTestingSelection field's value.
+func (s *CreateRestoreTestingSelectionInput) SetRestoreTestingSelection(v *RestoreTestingSelectionForCreate) *CreateRestoreTestingSelectionInput {
+	s.RestoreTestingSelection = v
+	return s
+}
+
+type CreateRestoreTestingSelectionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// This is the time the resource testing selection was created successfully.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `type:"timestamp" required:"true"`
+
+	// This is the ARN of the restore testing plan with which the restore testing
+	// selection is associated.
+	//
+	// RestoreTestingPlanArn is a required field
+	RestoreTestingPlanArn *string `type:"string" required:"true"`
+
+	// Unique string that is the name of the restore testing plan.
+	//
+	// The name cannot be changed after creation. The name consists of only alphanumeric
+	// characters and underscores. Maximum length is 50.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `type:"string" required:"true"`
+
+	// This is the unique name of the restore testing selection that belongs to
+	// the related restore testing plan.
+	//
+	// RestoreTestingSelectionName is a required field
+	RestoreTestingSelectionName *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateRestoreTestingSelectionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateRestoreTestingSelectionOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *CreateRestoreTestingSelectionOutput) SetCreationTime(v time.Time) *CreateRestoreTestingSelectionOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetRestoreTestingPlanArn sets the RestoreTestingPlanArn field's value.
+func (s *CreateRestoreTestingSelectionOutput) SetRestoreTestingPlanArn(v string) *CreateRestoreTestingSelectionOutput {
+	s.RestoreTestingPlanArn = &v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *CreateRestoreTestingSelectionOutput) SetRestoreTestingPlanName(v string) *CreateRestoreTestingSelectionOutput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetRestoreTestingSelectionName sets the RestoreTestingSelectionName field's value.
+func (s *CreateRestoreTestingSelectionOutput) SetRestoreTestingSelectionName(v string) *CreateRestoreTestingSelectionOutput {
+	s.RestoreTestingSelectionName = &v
 	return s
 }
 
@@ -10351,6 +13227,166 @@ func (s DeleteReportPlanOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteRestoreTestingPlanInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Required unique name of the restore testing plan you wish to delete.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `location:"uri" locationName:"RestoreTestingPlanName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteRestoreTestingPlanInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteRestoreTestingPlanInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteRestoreTestingPlanInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteRestoreTestingPlanInput"}
+	if s.RestoreTestingPlanName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingPlanName"))
+	}
+	if s.RestoreTestingPlanName != nil && len(*s.RestoreTestingPlanName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreTestingPlanName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *DeleteRestoreTestingPlanInput) SetRestoreTestingPlanName(v string) *DeleteRestoreTestingPlanInput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+type DeleteRestoreTestingPlanOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteRestoreTestingPlanOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteRestoreTestingPlanOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteRestoreTestingSelectionInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Required unique name of the restore testing plan that contains the restore
+	// testing selection you wish to delete.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `location:"uri" locationName:"RestoreTestingPlanName" type:"string" required:"true"`
+
+	// Required unique name of the restore testing selection you wish to delete.
+	//
+	// RestoreTestingSelectionName is a required field
+	RestoreTestingSelectionName *string `location:"uri" locationName:"RestoreTestingSelectionName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteRestoreTestingSelectionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteRestoreTestingSelectionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteRestoreTestingSelectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteRestoreTestingSelectionInput"}
+	if s.RestoreTestingPlanName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingPlanName"))
+	}
+	if s.RestoreTestingPlanName != nil && len(*s.RestoreTestingPlanName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreTestingPlanName", 1))
+	}
+	if s.RestoreTestingSelectionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingSelectionName"))
+	}
+	if s.RestoreTestingSelectionName != nil && len(*s.RestoreTestingSelectionName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreTestingSelectionName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *DeleteRestoreTestingSelectionInput) SetRestoreTestingPlanName(v string) *DeleteRestoreTestingSelectionInput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetRestoreTestingSelectionName sets the RestoreTestingSelectionName field's value.
+func (s *DeleteRestoreTestingSelectionInput) SetRestoreTestingSelectionName(v string) *DeleteRestoreTestingSelectionInput {
+	s.RestoreTestingSelectionName = &v
+	return s
+}
+
+type DeleteRestoreTestingSelectionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteRestoreTestingSelectionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteRestoreTestingSelectionOutput) GoString() string {
+	return s.String()
+}
+
 // A dependent Amazon Web Services service or resource returned an error to
 // the Backup service, and the action cannot be completed.
 type DependencyFailureException struct {
@@ -10537,9 +13573,19 @@ type DescribeBackupJobOutput struct {
 	// example, arn:aws:iam::123456789012:role/S3Access.
 	IamRoleArn *string `type:"string"`
 
+	// This is the date a backup job was initiated.
+	InitiationDate *time.Time `type:"timestamp"`
+
 	// This returns the boolean value that a backup job is a parent (composite)
 	// job.
 	IsParent *bool `type:"boolean"`
+
+	// This is the job count for the specified message category.
+	//
+	// Example strings may include AccessDenied, SUCCESS, AGGREGATE_ALL, and INVALIDPARAMETERS.
+	// View Monitoring (https://docs.aws.amazon.com/aws-backup/latest/devguide/monitoring.html)
+	// for a list of accepted MessageCategory strings.
+	MessageCategory *string `type:"string"`
 
 	// This returns the number of child (nested) backup jobs.
 	NumberOfChildJobs *int64 `type:"long"`
@@ -10576,7 +13622,7 @@ type DescribeBackupJobOutput struct {
 	// 12:11:30.087 AM.
 	StartBy *time.Time `type:"timestamp"`
 
-	// The current state of a resource recovery point.
+	// The current state of a backup job.
 	State *string `type:"string" enum:"JobState"`
 
 	// A detailed message explaining the status of the job to back up a resource.
@@ -10685,9 +13731,21 @@ func (s *DescribeBackupJobOutput) SetIamRoleArn(v string) *DescribeBackupJobOutp
 	return s
 }
 
+// SetInitiationDate sets the InitiationDate field's value.
+func (s *DescribeBackupJobOutput) SetInitiationDate(v time.Time) *DescribeBackupJobOutput {
+	s.InitiationDate = &v
+	return s
+}
+
 // SetIsParent sets the IsParent field's value.
 func (s *DescribeBackupJobOutput) SetIsParent(v bool) *DescribeBackupJobOutput {
 	s.IsParent = &v
+	return s
+}
+
+// SetMessageCategory sets the MessageCategory field's value.
+func (s *DescribeBackupJobOutput) SetMessageCategory(v string) *DescribeBackupJobOutput {
+	s.MessageCategory = &v
 	return s
 }
 
@@ -10754,6 +13812,9 @@ func (s *DescribeBackupJobOutput) SetStatusMessage(v string) *DescribeBackupJobO
 type DescribeBackupVaultInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
+	// This is the account ID of the specified backup vault.
+	BackupVaultAccountId *string `location:"querystring" locationName:"backupVaultAccountId" type:"string"`
+
 	// The name of a logical container where backups are stored. Backup vaults are
 	// identified by names that are unique to the account used to create them and
 	// the Amazon Web Services Region where they are created. They consist of lowercase
@@ -10797,6 +13858,12 @@ func (s *DescribeBackupVaultInput) Validate() error {
 	return nil
 }
 
+// SetBackupVaultAccountId sets the BackupVaultAccountId field's value.
+func (s *DescribeBackupVaultInput) SetBackupVaultAccountId(v string) *DescribeBackupVaultInput {
+	s.BackupVaultAccountId = &v
+	return s
+}
+
 // SetBackupVaultName sets the BackupVaultName field's value.
 func (s *DescribeBackupVaultInput) SetBackupVaultName(v string) *DescribeBackupVaultInput {
 	s.BackupVaultName = &v
@@ -10823,7 +13890,9 @@ type DescribeBackupVaultOutput struct {
 	CreationDate *time.Time `type:"timestamp"`
 
 	// A unique string that identifies the request and allows failed requests to
-	// be retried without the risk of running the operation twice.
+	// be retried without the risk of running the operation twice. This parameter
+	// is optional. If used, this parameter must contain 1 to 50 alphanumeric or
+	// '-_.' characters.
 	CreatorRequestId *string `type:"string"`
 
 	// The server-side encryption key that is used to protect your backups; for
@@ -10874,6 +13943,9 @@ type DescribeBackupVaultOutput struct {
 
 	// The number of recovery points that are stored in a backup vault.
 	NumberOfRecoveryPoints *int64 `type:"long"`
+
+	// This is the type of vault described.
+	VaultType *string `type:"string" enum:"VaultType"`
 }
 
 // String returns the string representation.
@@ -10951,6 +14023,12 @@ func (s *DescribeBackupVaultOutput) SetMinRetentionDays(v int64) *DescribeBackup
 // SetNumberOfRecoveryPoints sets the NumberOfRecoveryPoints field's value.
 func (s *DescribeBackupVaultOutput) SetNumberOfRecoveryPoints(v int64) *DescribeBackupVaultOutput {
 	s.NumberOfRecoveryPoints = &v
+	return s
+}
+
+// SetVaultType sets the VaultType field's value.
+func (s *DescribeBackupVaultOutput) SetVaultType(v string) *DescribeBackupVaultOutput {
+	s.VaultType = &v
 	return s
 }
 
@@ -11326,6 +14404,22 @@ type DescribeProtectedResourceOutput struct {
 	// January 26, 2018 12:11:30.087 AM.
 	LastBackupTime *time.Time `type:"timestamp"`
 
+	// This is the ARN (Amazon Resource Name) of the backup vault that contains
+	// the most recent backup recovery point.
+	LastBackupVaultArn *string `type:"string"`
+
+	// This is the ARN (Amazon Resource Name) of the most recent recovery point.
+	LastRecoveryPointArn *string `type:"string"`
+
+	// This is the time in minutes the most recent restore job took to complete.
+	LatestRestoreExecutionTimeMinutes *int64 `type:"long"`
+
+	// This is the creation date of the most recent restore job.
+	LatestRestoreJobCreationDate *time.Time `type:"timestamp"`
+
+	// This is the date the most recent recovery point was created.
+	LatestRestoreRecoveryPointCreationDate *time.Time `type:"timestamp"`
+
 	// An ARN that uniquely identifies a resource. The format of the ARN depends
 	// on the resource type.
 	ResourceArn *string `type:"string"`
@@ -11363,6 +14457,36 @@ func (s *DescribeProtectedResourceOutput) SetLastBackupTime(v time.Time) *Descri
 	return s
 }
 
+// SetLastBackupVaultArn sets the LastBackupVaultArn field's value.
+func (s *DescribeProtectedResourceOutput) SetLastBackupVaultArn(v string) *DescribeProtectedResourceOutput {
+	s.LastBackupVaultArn = &v
+	return s
+}
+
+// SetLastRecoveryPointArn sets the LastRecoveryPointArn field's value.
+func (s *DescribeProtectedResourceOutput) SetLastRecoveryPointArn(v string) *DescribeProtectedResourceOutput {
+	s.LastRecoveryPointArn = &v
+	return s
+}
+
+// SetLatestRestoreExecutionTimeMinutes sets the LatestRestoreExecutionTimeMinutes field's value.
+func (s *DescribeProtectedResourceOutput) SetLatestRestoreExecutionTimeMinutes(v int64) *DescribeProtectedResourceOutput {
+	s.LatestRestoreExecutionTimeMinutes = &v
+	return s
+}
+
+// SetLatestRestoreJobCreationDate sets the LatestRestoreJobCreationDate field's value.
+func (s *DescribeProtectedResourceOutput) SetLatestRestoreJobCreationDate(v time.Time) *DescribeProtectedResourceOutput {
+	s.LatestRestoreJobCreationDate = &v
+	return s
+}
+
+// SetLatestRestoreRecoveryPointCreationDate sets the LatestRestoreRecoveryPointCreationDate field's value.
+func (s *DescribeProtectedResourceOutput) SetLatestRestoreRecoveryPointCreationDate(v time.Time) *DescribeProtectedResourceOutput {
+	s.LatestRestoreRecoveryPointCreationDate = &v
+	return s
+}
+
 // SetResourceArn sets the ResourceArn field's value.
 func (s *DescribeProtectedResourceOutput) SetResourceArn(v string) *DescribeProtectedResourceOutput {
 	s.ResourceArn = &v
@@ -11383,6 +14507,9 @@ func (s *DescribeProtectedResourceOutput) SetResourceType(v string) *DescribePro
 
 type DescribeRecoveryPointInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
+
+	// This is the account ID of the specified backup vault.
+	BackupVaultAccountId *string `location:"querystring" locationName:"backupVaultAccountId" type:"string"`
 
 	// The name of a logical container where backups are stored. Backup vaults are
 	// identified by names that are unique to the account used to create them and
@@ -11437,6 +14564,12 @@ func (s *DescribeRecoveryPointInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetBackupVaultAccountId sets the BackupVaultAccountId field's value.
+func (s *DescribeRecoveryPointInput) SetBackupVaultAccountId(v string) *DescribeRecoveryPointInput {
+	s.BackupVaultAccountId = &v
+	return s
 }
 
 // SetBackupVaultName sets the BackupVaultName field's value.
@@ -11582,14 +14715,21 @@ type DescribeRecoveryPointOutput struct {
 	// met, the next instance of a backup rule running will result in a new continuous
 	// recovery point being created. The recovery points with STOPPED status do
 	// not need to be deleted.
+	//
+	// For SAP HANA on Amazon EC2 STOPPED status occurs due to user action, application
+	// misconfiguration, or backup failure. To ensure that future continuous backups
+	// succeed, refer to the recovery point status and check SAP HANA for details.
 	Status *string `type:"string" enum:"RecoveryPointStatus"`
 
-	// A status message explaining the reason for the recovery point deletion failure.
+	// A status message explaining the status of the recovery point.
 	StatusMessage *string `type:"string"`
 
 	// Specifies the storage class of the recovery point. Valid values are WARM
 	// or COLD.
 	StorageClass *string `type:"string" enum:"StorageClass"`
+
+	// This is the type of vault in which the described recovery point is stored.
+	VaultType *string `type:"string" enum:"VaultType"`
 }
 
 // String returns the string representation.
@@ -11745,6 +14885,12 @@ func (s *DescribeRecoveryPointOutput) SetStatusMessage(v string) *DescribeRecove
 // SetStorageClass sets the StorageClass field's value.
 func (s *DescribeRecoveryPointOutput) SetStorageClass(v string) *DescribeRecoveryPointOutput {
 	s.StorageClass = &v
+	return s
+}
+
+// SetVaultType sets the VaultType field's value.
+func (s *DescribeRecoveryPointOutput) SetVaultType(v string) *DescribeRecoveryPointOutput {
+	s.VaultType = &v
 	return s
 }
 
@@ -12050,6 +15196,9 @@ type DescribeRestoreJobOutput struct {
 	// Friday, January 26, 2018 12:11:30.087 AM.
 	CompletionDate *time.Time `type:"timestamp"`
 
+	// Contains identifying information about the creation of a restore job.
+	CreatedBy *RestoreJobCreator `type:"structure"`
+
 	// An Amazon Resource Name (ARN) that uniquely identifies a resource whose recovery
 	// point is being restored. The format of the ARN depends on the resource type
 	// of the backed-up resource.
@@ -12060,6 +15209,13 @@ type DescribeRestoreJobOutput struct {
 	// For example, the value 1516925490.087 represents Friday, January 26, 2018
 	// 12:11:30.087 AM.
 	CreationDate *time.Time `type:"timestamp"`
+
+	// This notes the status of the data generated by the restore test. The status
+	// may be Deleting, Failed, or Successful.
+	DeletionStatus *string `type:"string" enum:"RestoreDeletionStatus"`
+
+	// This describes the restore job deletion status.
+	DeletionStatusMessage *string `type:"string"`
 
 	// The amount of time in minutes that a job restoring a recovery point is expected
 	// to take.
@@ -12076,6 +15232,10 @@ type DescribeRestoreJobOutput struct {
 	// An ARN that uniquely identifies a recovery point; for example, arn:aws:backup:us-east-1:123456789012:recovery-point:1EB3B5E7-9EB0-435A-A80B-108B488B0D45.
 	RecoveryPointArn *string `type:"string"`
 
+	// This is the creation date of the recovery point made by the specifed restore
+	// job.
+	RecoveryPointCreationDate *time.Time `type:"timestamp"`
+
 	// Returns metadata associated with a restore job listed by resource type.
 	ResourceType *string `type:"string"`
 
@@ -12088,6 +15248,12 @@ type DescribeRestoreJobOutput struct {
 
 	// A message showing the status of a job to restore a recovery point.
 	StatusMessage *string `type:"string"`
+
+	// This is the status of validation run on the indicated restore job.
+	ValidationStatus *string `type:"string" enum:"RestoreValidationStatus"`
+
+	// This describes the status of validation run on the indicated restore job.
+	ValidationStatusMessage *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -12126,6 +15292,12 @@ func (s *DescribeRestoreJobOutput) SetCompletionDate(v time.Time) *DescribeResto
 	return s
 }
 
+// SetCreatedBy sets the CreatedBy field's value.
+func (s *DescribeRestoreJobOutput) SetCreatedBy(v *RestoreJobCreator) *DescribeRestoreJobOutput {
+	s.CreatedBy = v
+	return s
+}
+
 // SetCreatedResourceArn sets the CreatedResourceArn field's value.
 func (s *DescribeRestoreJobOutput) SetCreatedResourceArn(v string) *DescribeRestoreJobOutput {
 	s.CreatedResourceArn = &v
@@ -12135,6 +15307,18 @@ func (s *DescribeRestoreJobOutput) SetCreatedResourceArn(v string) *DescribeRest
 // SetCreationDate sets the CreationDate field's value.
 func (s *DescribeRestoreJobOutput) SetCreationDate(v time.Time) *DescribeRestoreJobOutput {
 	s.CreationDate = &v
+	return s
+}
+
+// SetDeletionStatus sets the DeletionStatus field's value.
+func (s *DescribeRestoreJobOutput) SetDeletionStatus(v string) *DescribeRestoreJobOutput {
+	s.DeletionStatus = &v
+	return s
+}
+
+// SetDeletionStatusMessage sets the DeletionStatusMessage field's value.
+func (s *DescribeRestoreJobOutput) SetDeletionStatusMessage(v string) *DescribeRestoreJobOutput {
+	s.DeletionStatusMessage = &v
 	return s
 }
 
@@ -12162,6 +15346,12 @@ func (s *DescribeRestoreJobOutput) SetRecoveryPointArn(v string) *DescribeRestor
 	return s
 }
 
+// SetRecoveryPointCreationDate sets the RecoveryPointCreationDate field's value.
+func (s *DescribeRestoreJobOutput) SetRecoveryPointCreationDate(v time.Time) *DescribeRestoreJobOutput {
+	s.RecoveryPointCreationDate = &v
+	return s
+}
+
 // SetResourceType sets the ResourceType field's value.
 func (s *DescribeRestoreJobOutput) SetResourceType(v string) *DescribeRestoreJobOutput {
 	s.ResourceType = &v
@@ -12183,6 +15373,18 @@ func (s *DescribeRestoreJobOutput) SetStatus(v string) *DescribeRestoreJobOutput
 // SetStatusMessage sets the StatusMessage field's value.
 func (s *DescribeRestoreJobOutput) SetStatusMessage(v string) *DescribeRestoreJobOutput {
 	s.StatusMessage = &v
+	return s
+}
+
+// SetValidationStatus sets the ValidationStatus field's value.
+func (s *DescribeRestoreJobOutput) SetValidationStatus(v string) *DescribeRestoreJobOutput {
+	s.ValidationStatus = &v
+	return s
+}
+
+// SetValidationStatusMessage sets the ValidationStatusMessage field's value.
+func (s *DescribeRestoreJobOutput) SetValidationStatusMessage(v string) *DescribeRestoreJobOutput {
+	s.ValidationStatusMessage = &v
 	return s
 }
 
@@ -12552,8 +15754,9 @@ type FrameworkControl struct {
 
 	// The scope of a control. The control scope defines what the control will evaluate.
 	// Three examples of control scopes are: a specific backup plan, all backup
-	// plans with a specific tag, or all backup plans. For more information, see
-	// ControlScope. (aws-backup/latest/devguide/API_ControlScope.html)
+	// plans with a specific tag, or all backup plans.
+	//
+	// For more information, see ControlScope. (https://docs.aws.amazon.com/aws-backup/latest/devguide/API_ControlScope.html)
 	ControlScope *ControlScope `type:"structure"`
 }
 
@@ -13476,6 +16679,9 @@ func (s *GetLegalHoldOutput) SetTitle(v string) *GetLegalHoldOutput {
 type GetRecoveryPointRestoreMetadataInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
+	// This is the account ID of the specified backup vault.
+	BackupVaultAccountId *string `location:"querystring" locationName:"backupVaultAccountId" type:"string"`
+
 	// The name of a logical container where backups are stored. Backup vaults are
 	// identified by names that are unique to the account used to create them and
 	// the Amazon Web Services Region where they are created. They consist of lowercase
@@ -13531,6 +16737,12 @@ func (s *GetRecoveryPointRestoreMetadataInput) Validate() error {
 	return nil
 }
 
+// SetBackupVaultAccountId sets the BackupVaultAccountId field's value.
+func (s *GetRecoveryPointRestoreMetadataInput) SetBackupVaultAccountId(v string) *GetRecoveryPointRestoreMetadataInput {
+	s.BackupVaultAccountId = &v
+	return s
+}
+
 // SetBackupVaultName sets the BackupVaultName field's value.
 func (s *GetRecoveryPointRestoreMetadataInput) SetBackupVaultName(v string) *GetRecoveryPointRestoreMetadataInput {
 	s.BackupVaultName = &v
@@ -13551,6 +16763,9 @@ type GetRecoveryPointRestoreMetadataOutput struct {
 
 	// An ARN that uniquely identifies a recovery point; for example, arn:aws:backup:us-east-1:123456789012:recovery-point:1EB3B5E7-9EB0-435A-A80B-108B488B0D45.
 	RecoveryPointArn *string `type:"string"`
+
+	// This is the resource type associated with the recovery point.
+	ResourceType *string `type:"string"`
 
 	// The set of metadata key-value pairs that describe the original configuration
 	// of the backed-up resource. These values vary depending on the service that
@@ -13592,9 +16807,395 @@ func (s *GetRecoveryPointRestoreMetadataOutput) SetRecoveryPointArn(v string) *G
 	return s
 }
 
+// SetResourceType sets the ResourceType field's value.
+func (s *GetRecoveryPointRestoreMetadataOutput) SetResourceType(v string) *GetRecoveryPointRestoreMetadataOutput {
+	s.ResourceType = &v
+	return s
+}
+
 // SetRestoreMetadata sets the RestoreMetadata field's value.
 func (s *GetRecoveryPointRestoreMetadataOutput) SetRestoreMetadata(v map[string]*string) *GetRecoveryPointRestoreMetadataOutput {
 	s.RestoreMetadata = v
+	return s
+}
+
+type GetRestoreJobMetadataInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// This is a unique identifier of a restore job within Backup.
+	//
+	// RestoreJobId is a required field
+	RestoreJobId *string `location:"uri" locationName:"restoreJobId" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreJobMetadataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreJobMetadataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetRestoreJobMetadataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetRestoreJobMetadataInput"}
+	if s.RestoreJobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreJobId"))
+	}
+	if s.RestoreJobId != nil && len(*s.RestoreJobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreJobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRestoreJobId sets the RestoreJobId field's value.
+func (s *GetRestoreJobMetadataInput) SetRestoreJobId(v string) *GetRestoreJobMetadataInput {
+	s.RestoreJobId = &v
+	return s
+}
+
+type GetRestoreJobMetadataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// This contains the metadata of the specified backup job.
+	//
+	// Metadata is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by GetRestoreJobMetadataOutput's
+	// String and GoString methods.
+	Metadata map[string]*string `type:"map" sensitive:"true"`
+
+	// This is a unique identifier of a restore job within Backup.
+	RestoreJobId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreJobMetadataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreJobMetadataOutput) GoString() string {
+	return s.String()
+}
+
+// SetMetadata sets the Metadata field's value.
+func (s *GetRestoreJobMetadataOutput) SetMetadata(v map[string]*string) *GetRestoreJobMetadataOutput {
+	s.Metadata = v
+	return s
+}
+
+// SetRestoreJobId sets the RestoreJobId field's value.
+func (s *GetRestoreJobMetadataOutput) SetRestoreJobId(v string) *GetRestoreJobMetadataOutput {
+	s.RestoreJobId = &v
+	return s
+}
+
+type GetRestoreTestingInferredMetadataInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// This is the account ID of the specified backup vault.
+	BackupVaultAccountId *string `location:"querystring" locationName:"BackupVaultAccountId" type:"string"`
+
+	// The name of a logical container where backups are stored. Backup vaults are
+	// identified by names that are unique to the account used to create them and
+	// the Amazon Web ServicesRegion where they are created. They consist of letters,
+	// numbers, and hyphens.
+	//
+	// BackupVaultName is a required field
+	BackupVaultName *string `location:"querystring" locationName:"BackupVaultName" type:"string" required:"true"`
+
+	// An Amazon Resource Name (ARN) that uniquely identifies a recovery point;
+	// for example, arn:aws:backup:us-east-1:123456789012:recovery-point:1EB3B5E7-9EB0-435A-A80B-108B488B0D45.
+	//
+	// RecoveryPointArn is a required field
+	RecoveryPointArn *string `location:"querystring" locationName:"RecoveryPointArn" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingInferredMetadataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingInferredMetadataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetRestoreTestingInferredMetadataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetRestoreTestingInferredMetadataInput"}
+	if s.BackupVaultName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BackupVaultName"))
+	}
+	if s.RecoveryPointArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RecoveryPointArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBackupVaultAccountId sets the BackupVaultAccountId field's value.
+func (s *GetRestoreTestingInferredMetadataInput) SetBackupVaultAccountId(v string) *GetRestoreTestingInferredMetadataInput {
+	s.BackupVaultAccountId = &v
+	return s
+}
+
+// SetBackupVaultName sets the BackupVaultName field's value.
+func (s *GetRestoreTestingInferredMetadataInput) SetBackupVaultName(v string) *GetRestoreTestingInferredMetadataInput {
+	s.BackupVaultName = &v
+	return s
+}
+
+// SetRecoveryPointArn sets the RecoveryPointArn field's value.
+func (s *GetRestoreTestingInferredMetadataInput) SetRecoveryPointArn(v string) *GetRestoreTestingInferredMetadataInput {
+	s.RecoveryPointArn = &v
+	return s
+}
+
+type GetRestoreTestingInferredMetadataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// This is a string map of the metadata inferred from the request.
+	//
+	// InferredMetadata is a required field
+	InferredMetadata map[string]*string `type:"map" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingInferredMetadataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingInferredMetadataOutput) GoString() string {
+	return s.String()
+}
+
+// SetInferredMetadata sets the InferredMetadata field's value.
+func (s *GetRestoreTestingInferredMetadataOutput) SetInferredMetadata(v map[string]*string) *GetRestoreTestingInferredMetadataOutput {
+	s.InferredMetadata = v
+	return s
+}
+
+type GetRestoreTestingPlanInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Required unique name of the restore testing plan.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `location:"uri" locationName:"RestoreTestingPlanName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingPlanInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingPlanInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetRestoreTestingPlanInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetRestoreTestingPlanInput"}
+	if s.RestoreTestingPlanName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingPlanName"))
+	}
+	if s.RestoreTestingPlanName != nil && len(*s.RestoreTestingPlanName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreTestingPlanName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *GetRestoreTestingPlanInput) SetRestoreTestingPlanName(v string) *GetRestoreTestingPlanInput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+type GetRestoreTestingPlanOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the body of a restore testing plan. Includes RestoreTestingPlanName.
+	//
+	// RestoreTestingPlan is a required field
+	RestoreTestingPlan *RestoreTestingPlanForGet `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingPlanOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingPlanOutput) GoString() string {
+	return s.String()
+}
+
+// SetRestoreTestingPlan sets the RestoreTestingPlan field's value.
+func (s *GetRestoreTestingPlanOutput) SetRestoreTestingPlan(v *RestoreTestingPlanForGet) *GetRestoreTestingPlanOutput {
+	s.RestoreTestingPlan = v
+	return s
+}
+
+type GetRestoreTestingSelectionInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Required unique name of the restore testing plan.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `location:"uri" locationName:"RestoreTestingPlanName" type:"string" required:"true"`
+
+	// Required unique name of the restore testing selection.
+	//
+	// RestoreTestingSelectionName is a required field
+	RestoreTestingSelectionName *string `location:"uri" locationName:"RestoreTestingSelectionName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingSelectionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingSelectionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetRestoreTestingSelectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetRestoreTestingSelectionInput"}
+	if s.RestoreTestingPlanName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingPlanName"))
+	}
+	if s.RestoreTestingPlanName != nil && len(*s.RestoreTestingPlanName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreTestingPlanName", 1))
+	}
+	if s.RestoreTestingSelectionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingSelectionName"))
+	}
+	if s.RestoreTestingSelectionName != nil && len(*s.RestoreTestingSelectionName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreTestingSelectionName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *GetRestoreTestingSelectionInput) SetRestoreTestingPlanName(v string) *GetRestoreTestingSelectionInput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetRestoreTestingSelectionName sets the RestoreTestingSelectionName field's value.
+func (s *GetRestoreTestingSelectionInput) SetRestoreTestingSelectionName(v string) *GetRestoreTestingSelectionInput {
+	s.RestoreTestingSelectionName = &v
+	return s
+}
+
+type GetRestoreTestingSelectionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique name of the restore testing selection.
+	//
+	// RestoreTestingSelection is a required field
+	RestoreTestingSelection *RestoreTestingSelectionForGet `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingSelectionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetRestoreTestingSelectionOutput) GoString() string {
+	return s.String()
+}
+
+// SetRestoreTestingSelection sets the RestoreTestingSelection field's value.
+func (s *GetRestoreTestingSelectionOutput) SetRestoreTestingSelection(v *RestoreTestingSelectionForGet) *GetRestoreTestingSelectionOutput {
+	s.RestoreTestingSelection = v
 	return s
 }
 
@@ -13952,8 +17553,23 @@ type Job struct {
 	// Role names without those strings lack permissions to perform backup jobs.
 	IamRoleArn *string `type:"string"`
 
+	// This is the date on which the backup job was initiated.
+	InitiationDate *time.Time `type:"timestamp"`
+
 	// This is a boolean value indicating this is a parent (composite) backup job.
 	IsParent *bool `type:"boolean"`
+
+	// This parameter is the job count for the specified message category.
+	//
+	// Example strings may include AccessDenied, SUCCESS, AGGREGATE_ALL, and INVALIDPARAMETERS.
+	// See Monitoring (https://docs.aws.amazon.com/aws-backup/latest/devguide/monitoring.html)
+	// for a list of MessageCategory strings.
+	//
+	// The the value ANY returns count of all message categories.
+	//
+	// AGGREGATE_ALL aggregates job counts for all message categories and returns
+	// the sum.
+	MessageCategory *string `type:"string"`
 
 	// This uniquely identifies a request to Backup to back up a resource. The return
 	// will be the parent (composite) job ID.
@@ -13989,7 +17605,7 @@ type Job struct {
 	// 12:11:30.087 AM.
 	StartBy *time.Time `type:"timestamp"`
 
-	// The current state of a resource recovery point.
+	// The current state of a backup job.
 	State *string `type:"string" enum:"JobState"`
 
 	// A detailed message explaining the status of the job to back up a resource.
@@ -14092,9 +17708,21 @@ func (s *Job) SetIamRoleArn(v string) *Job {
 	return s
 }
 
+// SetInitiationDate sets the InitiationDate field's value.
+func (s *Job) SetInitiationDate(v time.Time) *Job {
+	s.InitiationDate = &v
+	return s
+}
+
 // SetIsParent sets the IsParent field's value.
 func (s *Job) SetIsParent(v bool) *Job {
 	s.IsParent = &v
+	return s
+}
+
+// SetMessageCategory sets the MessageCategory field's value.
+func (s *Job) SetMessageCategory(v string) *Job {
+	s.MessageCategory = &v
 	return s
 }
 
@@ -14149,6 +17777,77 @@ func (s *Job) SetState(v string) *Job {
 // SetStatusMessage sets the StatusMessage field's value.
 func (s *Job) SetStatusMessage(v string) *Job {
 	s.StatusMessage = &v
+	return s
+}
+
+// Pair of two related strings. Allowed characters are letters, white space,
+// and numbers that can be represented in UTF-8 and the following characters:
+// + - = . _ : /
+type KeyValue struct {
+	_ struct{} `type:"structure"`
+
+	// The tag key (String). The key can't start with aws:.
+	//
+	// Length Constraints: Minimum length of 1. Maximum length of 128.
+	//
+	// Pattern: ^(?![aA]{1}[wW]{1}[sS]{1}:)([\p{L}\p{Z}\p{N}_.:/=+\-@]+)$
+	//
+	// Key is a required field
+	Key *string `type:"string" required:"true"`
+
+	// The value of the key.
+	//
+	// Length Constraints: Maximum length of 256.
+	//
+	// Pattern: ^([\p{L}\p{Z}\p{N}_.:/=+\-@]*)$
+	//
+	// Value is a required field
+	Value *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KeyValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KeyValue) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *KeyValue) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "KeyValue"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *KeyValue) SetKey(v string) *KeyValue {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *KeyValue) SetValue(v string) *KeyValue {
+	s.Value = &v
 	return s
 }
 
@@ -14269,6 +17968,11 @@ type Lifecycle struct {
 	// Specifies the number of days after creation that a recovery point is moved
 	// to cold storage.
 	MoveToColdStorageAfterDays *int64 `type:"long"`
+
+	// Optional Boolean. If this is true, this setting will instruct your backup
+	// plan to transition supported resources to archive (cold) storage tier in
+	// accordance with your lifecycle settings.
+	OptInToArchiveForSupportedResources *bool `type:"boolean"`
 }
 
 // String returns the string representation.
@@ -14298,6 +18002,12 @@ func (s *Lifecycle) SetDeleteAfterDays(v int64) *Lifecycle {
 // SetMoveToColdStorageAfterDays sets the MoveToColdStorageAfterDays field's value.
 func (s *Lifecycle) SetMoveToColdStorageAfterDays(v int64) *Lifecycle {
 	s.MoveToColdStorageAfterDays = &v
+	return s
+}
+
+// SetOptInToArchiveForSupportedResources sets the OptInToArchiveForSupportedResources field's value.
+func (s *Lifecycle) SetOptInToArchiveForSupportedResources(v bool) *Lifecycle {
+	s.OptInToArchiveForSupportedResources = &v
 	return s
 }
 
@@ -14372,6 +18082,218 @@ func (s *LimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type ListBackupJobSummariesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Returns the job count for the specified account.
+	//
+	// If the request is sent from a member account or an account not part of Amazon
+	// Web Services Organizations, jobs within requestor's account will be returned.
+	//
+	// Root, admin, and delegated administrator accounts can use the value ANY to
+	// return job counts from every account in the organization.
+	//
+	// AGGREGATE_ALL aggregates job counts from all accounts within the authenticated
+	// organization, then returns the sum.
+	AccountId *string `location:"querystring" locationName:"AccountId" type:"string"`
+
+	// This is the period that sets the boundaries for returned results.
+	//
+	// Acceptable values include
+	//
+	//    * ONE_DAY for daily job count for the prior 14 days.
+	//
+	//    * SEVEN_DAYS for the aggregated job count for the prior 7 days.
+	//
+	//    * FOURTEEN_DAYS for aggregated job count for prior 14 days.
+	AggregationPeriod *string `location:"querystring" locationName:"AggregationPeriod" type:"string" enum:"AggregationPeriod"`
+
+	// This parameter sets the maximum number of items to be returned.
+	//
+	// The value is an integer. Range of accepted values is from 1 to 500.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// This parameter returns the job count for the specified message category.
+	//
+	// Example accepted strings include AccessDenied, Success, and InvalidParameters.
+	// See Monitoring (https://docs.aws.amazon.com/aws-backup/latest/devguide/monitoring.html)
+	// for a list of accepted MessageCategory strings.
+	//
+	// The the value ANY returns count of all message categories.
+	//
+	// AGGREGATE_ALL aggregates job counts for all message categories and returns
+	// the sum.
+	MessageCategory *string `location:"querystring" locationName:"MessageCategory" type:"string"`
+
+	// The next item following a partial list of returned resources. For example,
+	// if a request is made to return MaxResults number of resources, NextToken
+	// allows you to return more items in your list starting at the location pointed
+	// to by the next token.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// Returns the job count for the specified resource type. Use request GetSupportedResourceTypes
+	// to obtain strings for supported resource types.
+	//
+	// The the value ANY returns count of all resource types.
+	//
+	// AGGREGATE_ALL aggregates job counts for all resource types and returns the
+	// sum.
+	//
+	// The type of Amazon Web Services resource to be backed up; for example, an
+	// Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database
+	// Service (Amazon RDS) database.
+	ResourceType *string `location:"querystring" locationName:"ResourceType" type:"string"`
+
+	// This parameter returns the job count for jobs with the specified state.
+	//
+	// The the value ANY returns count of all states.
+	//
+	// AGGREGATE_ALL aggregates job counts for all states and returns the sum.
+	//
+	// Completed with issues is a status found only in the Backup console. For API,
+	// this status refers to jobs with a state of COMPLETED and a MessageCategory
+	// with a value other than SUCCESS; that is, the status is completed but comes
+	// with a status message. To obtain the job count for Completed with issues,
+	// run two GET requests, and subtract the second, smaller number:
+	//
+	// GET /audit/backup-job-summaries?AggregationPeriod=FOURTEEN_DAYS&State=COMPLETED
+	//
+	// GET /audit/backup-job-summaries?AggregationPeriod=FOURTEEN_DAYS&MessageCategory=SUCCESS&State=COMPLETED
+	State *string `location:"querystring" locationName:"State" type:"string" enum:"BackupJobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListBackupJobSummariesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListBackupJobSummariesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListBackupJobSummariesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListBackupJobSummariesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *ListBackupJobSummariesInput) SetAccountId(v string) *ListBackupJobSummariesInput {
+	s.AccountId = &v
+	return s
+}
+
+// SetAggregationPeriod sets the AggregationPeriod field's value.
+func (s *ListBackupJobSummariesInput) SetAggregationPeriod(v string) *ListBackupJobSummariesInput {
+	s.AggregationPeriod = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListBackupJobSummariesInput) SetMaxResults(v int64) *ListBackupJobSummariesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetMessageCategory sets the MessageCategory field's value.
+func (s *ListBackupJobSummariesInput) SetMessageCategory(v string) *ListBackupJobSummariesInput {
+	s.MessageCategory = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListBackupJobSummariesInput) SetNextToken(v string) *ListBackupJobSummariesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *ListBackupJobSummariesInput) SetResourceType(v string) *ListBackupJobSummariesInput {
+	s.ResourceType = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ListBackupJobSummariesInput) SetState(v string) *ListBackupJobSummariesInput {
+	s.State = &v
+	return s
+}
+
+type ListBackupJobSummariesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// This is the period that sets the boundaries for returned results.
+	//
+	//    * ONE_DAY for daily job count for the prior 14 days.
+	//
+	//    * SEVEN_DAYS for the aggregated job count for the prior 7 days.
+	//
+	//    * FOURTEEN_DAYS for aggregated job count for prior 14 days.
+	AggregationPeriod *string `type:"string"`
+
+	// This request returns a summary that contains Region, Account, State, ResourceType,
+	// MessageCategory, StartTime, EndTime, and Count of included jobs.
+	BackupJobSummaries []*BackupJobSummary `type:"list"`
+
+	// The next item following a partial list of returned resources. For example,
+	// if a request is made to return MaxResults number of resources, NextToken
+	// allows you to return more items in your list starting at the location pointed
+	// to by the next token.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListBackupJobSummariesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListBackupJobSummariesOutput) GoString() string {
+	return s.String()
+}
+
+// SetAggregationPeriod sets the AggregationPeriod field's value.
+func (s *ListBackupJobSummariesOutput) SetAggregationPeriod(v string) *ListBackupJobSummariesOutput {
+	s.AggregationPeriod = &v
+	return s
+}
+
+// SetBackupJobSummaries sets the BackupJobSummaries field's value.
+func (s *ListBackupJobSummariesOutput) SetBackupJobSummaries(v []*BackupJobSummary) *ListBackupJobSummariesOutput {
+	s.BackupJobSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListBackupJobSummariesOutput) SetNextToken(v string) *ListBackupJobSummariesOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListBackupJobsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -14402,6 +18324,19 @@ type ListBackupJobsInput struct {
 	// Returns only backup jobs that were created before the specified date.
 	ByCreatedBefore *time.Time `location:"querystring" locationName:"createdBefore" type:"timestamp"`
 
+	// This is an optional parameter that can be used to filter out jobs with a
+	// MessageCategory which matches the value you input.
+	//
+	// Example strings may include AccessDenied, SUCCESS, AGGREGATE_ALL, and InvalidParameters.
+	//
+	// View Monitoring (https://docs.aws.amazon.com/aws-backup/latest/devguide/monitoring.html)
+	//
+	// The wildcard () returns count of all message categories.
+	//
+	// AGGREGATE_ALL aggregates job counts for all message categories and returns
+	// the sum.
+	ByMessageCategory *string `location:"querystring" locationName:"messageCategory" type:"string"`
+
 	// This is a filter to list child (nested) jobs based on parent job ID.
 	ByParentJobId *string `location:"querystring" locationName:"parentJobId" type:"string"`
 
@@ -14412,6 +18347,8 @@ type ListBackupJobsInput struct {
 	// Returns only backup jobs for the specified resources:
 	//
 	//    * Aurora for Amazon Aurora
+	//
+	//    * CloudFormation for CloudFormation
 	//
 	//    * DocumentDB for Amazon DocumentDB (with MongoDB compatibility)
 	//
@@ -14427,23 +18364,41 @@ type ListBackupJobsInput struct {
 	//
 	//    * Neptune for Amazon Neptune
 	//
+	//    * Redshift for Amazon Redshift
+	//
 	//    * RDS for Amazon Relational Database Service
+	//
+	//    * SAP HANA on Amazon EC2 for SAP HANA databases
 	//
 	//    * Storage Gateway for Storage Gateway
 	//
 	//    * S3 for Amazon S3
 	//
+	//    * Timestream for Amazon Timestream
+	//
 	//    * VirtualMachine for virtual machines
 	ByResourceType *string `location:"querystring" locationName:"resourceType" type:"string"`
 
 	// Returns only backup jobs that are in the specified state.
+	//
+	// Completed with issues is a status found only in the Backup console. For API,
+	// this status refers to jobs with a state of COMPLETED and a MessageCategory
+	// with a value other than SUCCESS; that is, the status is completed but comes
+	// with a status message.
+	//
+	// To obtain the job count for Completed with issues, run two GET requests,
+	// and subtract the second, smaller number:
+	//
+	// GET /backup-jobs/?state=COMPLETED
+	//
+	// GET /backup-jobs/?messageCategory=SUCCESS&state=COMPLETED
 	ByState *string `location:"querystring" locationName:"state" type:"string" enum:"JobState"`
 
 	// The maximum number of items to be returned.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -14516,6 +18471,12 @@ func (s *ListBackupJobsInput) SetByCreatedBefore(v time.Time) *ListBackupJobsInp
 	return s
 }
 
+// SetByMessageCategory sets the ByMessageCategory field's value.
+func (s *ListBackupJobsInput) SetByMessageCategory(v string) *ListBackupJobsInput {
+	s.ByMessageCategory = &v
+	return s
+}
+
 // SetByParentJobId sets the ByParentJobId field's value.
 func (s *ListBackupJobsInput) SetByParentJobId(v string) *ListBackupJobsInput {
 	s.ByParentJobId = &v
@@ -14560,7 +18521,7 @@ type ListBackupJobsOutput struct {
 	BackupJobs []*Job `type:"list"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -14603,7 +18564,7 @@ type ListBackupPlanTemplatesInput struct {
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -14659,7 +18620,7 @@ type ListBackupPlanTemplatesOutput struct {
 	BackupPlanTemplatesList []*PlanTemplatesListMember `type:"list"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -14707,7 +18668,7 @@ type ListBackupPlanVersionsInput struct {
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -14775,7 +18736,7 @@ type ListBackupPlanVersionsOutput struct {
 	BackupPlanVersionsList []*PlansListMember `type:"list"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -14822,7 +18783,7 @@ type ListBackupPlansInput struct {
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -14885,7 +18846,7 @@ type ListBackupPlansOutput struct {
 	BackupPlansList []*PlansListMember `type:"list"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -14933,7 +18894,7 @@ type ListBackupSelectionsInput struct {
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -15002,7 +18963,7 @@ type ListBackupSelectionsOutput struct {
 	BackupSelectionsList []*SelectionsListMember `type:"list"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -15041,11 +19002,17 @@ func (s *ListBackupSelectionsOutput) SetNextToken(v string) *ListBackupSelection
 type ListBackupVaultsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
+	// This parameter will sort the list of vaults by shared vaults.
+	ByShared *bool `location:"querystring" locationName:"shared" type:"boolean"`
+
+	// This parameter will sort the list of vaults by vault type.
+	ByVaultType *string `location:"querystring" locationName:"vaultType" type:"string" enum:"VaultType"`
+
 	// The maximum number of items to be returned.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -15082,6 +19049,18 @@ func (s *ListBackupVaultsInput) Validate() error {
 	return nil
 }
 
+// SetByShared sets the ByShared field's value.
+func (s *ListBackupVaultsInput) SetByShared(v bool) *ListBackupVaultsInput {
+	s.ByShared = &v
+	return s
+}
+
+// SetByVaultType sets the ByVaultType field's value.
+func (s *ListBackupVaultsInput) SetByVaultType(v string) *ListBackupVaultsInput {
+	s.ByVaultType = &v
+	return s
+}
+
 // SetMaxResults sets the MaxResults field's value.
 func (s *ListBackupVaultsInput) SetMaxResults(v int64) *ListBackupVaultsInput {
 	s.MaxResults = &v
@@ -15104,7 +19083,7 @@ type ListBackupVaultsOutput struct {
 	BackupVaultList []*VaultListMember `type:"list"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -15140,6 +19119,206 @@ func (s *ListBackupVaultsOutput) SetNextToken(v string) *ListBackupVaultsOutput 
 	return s
 }
 
+type ListCopyJobSummariesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Returns the job count for the specified account.
+	//
+	// If the request is sent from a member account or an account not part of Amazon
+	// Web Services Organizations, jobs within requestor's account will be returned.
+	//
+	// Root, admin, and delegated administrator accounts can use the value ANY to
+	// return job counts from every account in the organization.
+	//
+	// AGGREGATE_ALL aggregates job counts from all accounts within the authenticated
+	// organization, then returns the sum.
+	AccountId *string `location:"querystring" locationName:"AccountId" type:"string"`
+
+	// This is the period that sets the boundaries for returned results.
+	//
+	//    * ONE_DAY for daily job count for the prior 14 days.
+	//
+	//    * SEVEN_DAYS for the aggregated job count for the prior 7 days.
+	//
+	//    * FOURTEEN_DAYS for aggregated job count for prior 14 days.
+	AggregationPeriod *string `location:"querystring" locationName:"AggregationPeriod" type:"string" enum:"AggregationPeriod"`
+
+	// This parameter sets the maximum number of items to be returned.
+	//
+	// The value is an integer. Range of accepted values is from 1 to 500.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// This parameter returns the job count for the specified message category.
+	//
+	// Example accepted strings include AccessDenied, Success, and InvalidParameters.
+	// See Monitoring (https://docs.aws.amazon.com/aws-backup/latest/devguide/monitoring.html)
+	// for a list of accepted MessageCategory strings.
+	//
+	// The the value ANY returns count of all message categories.
+	//
+	// AGGREGATE_ALL aggregates job counts for all message categories and returns
+	// the sum.
+	MessageCategory *string `location:"querystring" locationName:"MessageCategory" type:"string"`
+
+	// The next item following a partial list of returned resources. For example,
+	// if a request is made to return MaxResults number of resources, NextToken
+	// allows you to return more items in your list starting at the location pointed
+	// to by the next token.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// Returns the job count for the specified resource type. Use request GetSupportedResourceTypes
+	// to obtain strings for supported resource types.
+	//
+	// The the value ANY returns count of all resource types.
+	//
+	// AGGREGATE_ALL aggregates job counts for all resource types and returns the
+	// sum.
+	//
+	// The type of Amazon Web Services resource to be backed up; for example, an
+	// Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database
+	// Service (Amazon RDS) database.
+	ResourceType *string `location:"querystring" locationName:"ResourceType" type:"string"`
+
+	// This parameter returns the job count for jobs with the specified state.
+	//
+	// The the value ANY returns count of all states.
+	//
+	// AGGREGATE_ALL aggregates job counts for all states and returns the sum.
+	State *string `location:"querystring" locationName:"State" type:"string" enum:"CopyJobStatus"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCopyJobSummariesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCopyJobSummariesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListCopyJobSummariesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListCopyJobSummariesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *ListCopyJobSummariesInput) SetAccountId(v string) *ListCopyJobSummariesInput {
+	s.AccountId = &v
+	return s
+}
+
+// SetAggregationPeriod sets the AggregationPeriod field's value.
+func (s *ListCopyJobSummariesInput) SetAggregationPeriod(v string) *ListCopyJobSummariesInput {
+	s.AggregationPeriod = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListCopyJobSummariesInput) SetMaxResults(v int64) *ListCopyJobSummariesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetMessageCategory sets the MessageCategory field's value.
+func (s *ListCopyJobSummariesInput) SetMessageCategory(v string) *ListCopyJobSummariesInput {
+	s.MessageCategory = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCopyJobSummariesInput) SetNextToken(v string) *ListCopyJobSummariesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *ListCopyJobSummariesInput) SetResourceType(v string) *ListCopyJobSummariesInput {
+	s.ResourceType = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ListCopyJobSummariesInput) SetState(v string) *ListCopyJobSummariesInput {
+	s.State = &v
+	return s
+}
+
+type ListCopyJobSummariesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// This is the period that sets the boundaries for returned results.
+	//
+	//    * ONE_DAY for daily job count for the prior 14 days.
+	//
+	//    * SEVEN_DAYS for the aggregated job count for the prior 7 days.
+	//
+	//    * FOURTEEN_DAYS for aggregated job count for prior 14 days.
+	AggregationPeriod *string `type:"string"`
+
+	// This return shows a summary that contains Region, Account, State, ResourceType,
+	// MessageCategory, StartTime, EndTime, and Count of included jobs.
+	CopyJobSummaries []*CopyJobSummary `type:"list"`
+
+	// The next item following a partial list of returned resources. For example,
+	// if a request is made to return MaxResults number of resources, NextToken
+	// allows you to return more items in your list starting at the location pointed
+	// to by the next token.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCopyJobSummariesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListCopyJobSummariesOutput) GoString() string {
+	return s.String()
+}
+
+// SetAggregationPeriod sets the AggregationPeriod field's value.
+func (s *ListCopyJobSummariesOutput) SetAggregationPeriod(v string) *ListCopyJobSummariesOutput {
+	s.AggregationPeriod = &v
+	return s
+}
+
+// SetCopyJobSummaries sets the CopyJobSummaries field's value.
+func (s *ListCopyJobSummariesOutput) SetCopyJobSummaries(v []*CopyJobSummary) *ListCopyJobSummariesOutput {
+	s.CopyJobSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCopyJobSummariesOutput) SetNextToken(v string) *ListCopyJobSummariesOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListCopyJobsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -15165,6 +19344,20 @@ type ListCopyJobsInput struct {
 	// to copy from; for example, arn:aws:backup:us-east-1:123456789012:vault:aBackupVault.
 	ByDestinationVaultArn *string `location:"querystring" locationName:"destinationVaultArn" type:"string"`
 
+	// This is an optional parameter that can be used to filter out jobs with a
+	// MessageCategory which matches the value you input.
+	//
+	// Example strings may include AccessDenied, SUCCESS, AGGREGATE_ALL, and INVALIDPARAMETERS.
+	//
+	// View Monitoring (https://docs.aws.amazon.com/aws-backup/latest/devguide/monitoring.html)
+	// for a list of accepted strings.
+	//
+	// The the value ANY returns count of all message categories.
+	//
+	// AGGREGATE_ALL aggregates job counts for all message categories and returns
+	// the sum.
+	ByMessageCategory *string `location:"querystring" locationName:"messageCategory" type:"string"`
+
 	// This is a filter to list child (nested) jobs based on parent job ID.
 	ByParentJobId *string `location:"querystring" locationName:"parentJobId" type:"string"`
 
@@ -15175,6 +19368,8 @@ type ListCopyJobsInput struct {
 	// Returns only backup jobs for the specified resources:
 	//
 	//    * Aurora for Amazon Aurora
+	//
+	//    * CloudFormation for CloudFormation
 	//
 	//    * DocumentDB for Amazon DocumentDB (with MongoDB compatibility)
 	//
@@ -15190,11 +19385,17 @@ type ListCopyJobsInput struct {
 	//
 	//    * Neptune for Amazon Neptune
 	//
+	//    * Redshift for Amazon Redshift
+	//
 	//    * RDS for Amazon Relational Database Service
+	//
+	//    * SAP HANA on Amazon EC2 for SAP HANA databases
 	//
 	//    * Storage Gateway for Storage Gateway
 	//
 	//    * S3 for Amazon S3
+	//
+	//    * Timestream for Amazon Timestream
 	//
 	//    * VirtualMachine for virtual machines
 	ByResourceType *string `location:"querystring" locationName:"resourceType" type:"string"`
@@ -15206,7 +19407,7 @@ type ListCopyJobsInput struct {
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -15279,6 +19480,12 @@ func (s *ListCopyJobsInput) SetByDestinationVaultArn(v string) *ListCopyJobsInpu
 	return s
 }
 
+// SetByMessageCategory sets the ByMessageCategory field's value.
+func (s *ListCopyJobsInput) SetByMessageCategory(v string) *ListCopyJobsInput {
+	s.ByMessageCategory = &v
+	return s
+}
+
 // SetByParentJobId sets the ByParentJobId field's value.
 func (s *ListCopyJobsInput) SetByParentJobId(v string) *ListCopyJobsInput {
 	s.ByParentJobId = &v
@@ -15323,7 +19530,7 @@ type ListCopyJobsOutput struct {
 	CopyJobs []*CopyJob `type:"list"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -15464,7 +19671,7 @@ type ListLegalHoldsInput struct {
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned resources. For example,
-	// if a request is made to return maxResults number of resources, NextToken
+	// if a request is made to return MaxResults number of resources, NextToken
 	// allows you to return more items in your list starting at the location pointed
 	// to by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -15520,7 +19727,7 @@ type ListLegalHoldsOutput struct {
 	LegalHolds []*LegalHold `type:"list"`
 
 	// The next item following a partial list of returned resources. For example,
-	// if a request is made to return maxResults number of resources, NextToken
+	// if a request is made to return MaxResults number of resources, NextToken
 	// allows you to return more items in your list starting at the location pointed
 	// to by the next token.
 	NextToken *string `type:"string"`
@@ -15556,6 +19763,133 @@ func (s *ListLegalHoldsOutput) SetNextToken(v string) *ListLegalHoldsOutput {
 	return s
 }
 
+type ListProtectedResourcesByBackupVaultInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// This is the list of protected resources by backup vault within the vault(s)
+	// you specify by account ID.
+	BackupVaultAccountId *string `location:"querystring" locationName:"backupVaultAccountId" type:"string"`
+
+	// This is the list of protected resources by backup vault within the vault(s)
+	// you specify by name.
+	//
+	// BackupVaultName is a required field
+	BackupVaultName *string `location:"uri" locationName:"backupVaultName" type:"string" required:"true"`
+
+	// The maximum number of items to be returned.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The next item following a partial list of returned items. For example, if
+	// a request is made to return MaxResults number of items, NextToken allows
+	// you to return more items in your list starting at the location pointed to
+	// by the next token.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProtectedResourcesByBackupVaultInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProtectedResourcesByBackupVaultInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListProtectedResourcesByBackupVaultInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListProtectedResourcesByBackupVaultInput"}
+	if s.BackupVaultName == nil {
+		invalidParams.Add(request.NewErrParamRequired("BackupVaultName"))
+	}
+	if s.BackupVaultName != nil && len(*s.BackupVaultName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BackupVaultName", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBackupVaultAccountId sets the BackupVaultAccountId field's value.
+func (s *ListProtectedResourcesByBackupVaultInput) SetBackupVaultAccountId(v string) *ListProtectedResourcesByBackupVaultInput {
+	s.BackupVaultAccountId = &v
+	return s
+}
+
+// SetBackupVaultName sets the BackupVaultName field's value.
+func (s *ListProtectedResourcesByBackupVaultInput) SetBackupVaultName(v string) *ListProtectedResourcesByBackupVaultInput {
+	s.BackupVaultName = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListProtectedResourcesByBackupVaultInput) SetMaxResults(v int64) *ListProtectedResourcesByBackupVaultInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListProtectedResourcesByBackupVaultInput) SetNextToken(v string) *ListProtectedResourcesByBackupVaultInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListProtectedResourcesByBackupVaultOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The next item following a partial list of returned items. For example, if
+	// a request is made to return MaxResults number of items, NextToken allows
+	// you to return more items in your list starting at the location pointed to
+	// by the next token.
+	NextToken *string `type:"string"`
+
+	// These are the results returned for the request ListProtectedResourcesByBackupVault.
+	Results []*ProtectedResource `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProtectedResourcesByBackupVaultOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListProtectedResourcesByBackupVaultOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListProtectedResourcesByBackupVaultOutput) SetNextToken(v string) *ListProtectedResourcesByBackupVaultOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResults sets the Results field's value.
+func (s *ListProtectedResourcesByBackupVaultOutput) SetResults(v []*ProtectedResource) *ListProtectedResourcesByBackupVaultOutput {
+	s.Results = v
+	return s
+}
+
 type ListProtectedResourcesInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -15563,7 +19897,7 @@ type ListProtectedResourcesInput struct {
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -15616,7 +19950,7 @@ type ListProtectedResourcesOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -15660,6 +19994,9 @@ func (s *ListProtectedResourcesOutput) SetResults(v []*ProtectedResource) *ListP
 type ListRecoveryPointsByBackupVaultInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
+	// This parameter will sort the list of recovery points by account ID.
+	BackupVaultAccountId *string `location:"querystring" locationName:"backupVaultAccountId" type:"string"`
+
 	// The name of a logical container where backups are stored. Backup vaults are
 	// identified by names that are unique to the account used to create them and
 	// the Amazon Web Services Region where they are created. They consist of lowercase
@@ -15688,14 +20025,46 @@ type ListRecoveryPointsByBackupVaultInput struct {
 	// Name (ARN).
 	ByResourceArn *string `location:"querystring" locationName:"resourceArn" type:"string"`
 
-	// Returns only recovery points that match the specified resource type.
+	// Returns only recovery points that match the specified resource type(s):
+	//
+	//    * Aurora for Amazon Aurora
+	//
+	//    * CloudFormation for CloudFormation
+	//
+	//    * DocumentDB for Amazon DocumentDB (with MongoDB compatibility)
+	//
+	//    * DynamoDB for Amazon DynamoDB
+	//
+	//    * EBS for Amazon Elastic Block Store
+	//
+	//    * EC2 for Amazon Elastic Compute Cloud
+	//
+	//    * EFS for Amazon Elastic File System
+	//
+	//    * FSx for Amazon FSx
+	//
+	//    * Neptune for Amazon Neptune
+	//
+	//    * Redshift for Amazon Redshift
+	//
+	//    * RDS for Amazon Relational Database Service
+	//
+	//    * SAP HANA on Amazon EC2 for SAP HANA databases
+	//
+	//    * Storage Gateway for Storage Gateway
+	//
+	//    * S3 for Amazon S3
+	//
+	//    * Timestream for Amazon Timestream
+	//
+	//    * VirtualMachine for virtual machines
 	ByResourceType *string `location:"querystring" locationName:"resourceType" type:"string"`
 
 	// The maximum number of items to be returned.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -15736,6 +20105,12 @@ func (s *ListRecoveryPointsByBackupVaultInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetBackupVaultAccountId sets the BackupVaultAccountId field's value.
+func (s *ListRecoveryPointsByBackupVaultInput) SetBackupVaultAccountId(v string) *ListRecoveryPointsByBackupVaultInput {
+	s.BackupVaultAccountId = &v
+	return s
 }
 
 // SetBackupVaultName sets the BackupVaultName field's value.
@@ -15796,7 +20171,7 @@ type ListRecoveryPointsByBackupVaultOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -15848,7 +20223,7 @@ type ListRecoveryPointsByLegalHoldInput struct {
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// This is the next item following a partial list of returned resources. For
-	// example, if a request is made to return maxResults number of resources, NextToken
+	// example, if a request is made to return MaxResults number of resources, NextToken
 	// allows you to return more items in your list starting at the location pointed
 	// to by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -15952,13 +20327,24 @@ func (s *ListRecoveryPointsByLegalHoldOutput) SetRecoveryPoints(v []*RecoveryPoi
 type ListRecoveryPointsByResourceInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
+	// This attribute filters recovery points based on ownership.
+	//
+	// If this is set to TRUE, the response will contain recovery points associated
+	// with the selected resources that are managed by Backup.
+	//
+	// If this is set to FALSE, the response will contain all recovery points associated
+	// with the selected resource.
+	//
+	// Type: Boolean
+	ManagedByAWSBackupOnly *bool `location:"querystring" locationName:"managedByAWSBackupOnly" type:"boolean"`
+
 	// The maximum number of items to be returned.
 	//
 	// Amazon RDS requires a value of at least 20.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -16007,6 +20393,12 @@ func (s *ListRecoveryPointsByResourceInput) Validate() error {
 	return nil
 }
 
+// SetManagedByAWSBackupOnly sets the ManagedByAWSBackupOnly field's value.
+func (s *ListRecoveryPointsByResourceInput) SetManagedByAWSBackupOnly(v bool) *ListRecoveryPointsByResourceInput {
+	s.ManagedByAWSBackupOnly = &v
+	return s
+}
+
 // SetMaxResults sets the MaxResults field's value.
 func (s *ListRecoveryPointsByResourceInput) SetMaxResults(v int64) *ListRecoveryPointsByResourceInput {
 	s.MaxResults = &v
@@ -16029,7 +20421,7 @@ type ListRecoveryPointsByResourceOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -16311,6 +20703,337 @@ func (s *ListReportPlansOutput) SetReportPlans(v []*ReportPlan) *ListReportPlans
 	return s
 }
 
+type ListRestoreJobSummariesInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Returns the job count for the specified account.
+	//
+	// If the request is sent from a member account or an account not part of Amazon
+	// Web Services Organizations, jobs within requestor's account will be returned.
+	//
+	// Root, admin, and delegated administrator accounts can use the value ANY to
+	// return job counts from every account in the organization.
+	//
+	// AGGREGATE_ALL aggregates job counts from all accounts within the authenticated
+	// organization, then returns the sum.
+	AccountId *string `location:"querystring" locationName:"AccountId" type:"string"`
+
+	// This is the period that sets the boundaries for returned results.
+	//
+	// Acceptable values include
+	//
+	//    * ONE_DAY for daily job count for the prior 14 days.
+	//
+	//    * SEVEN_DAYS for the aggregated job count for the prior 7 days.
+	//
+	//    * FOURTEEN_DAYS for aggregated job count for prior 14 days.
+	AggregationPeriod *string `location:"querystring" locationName:"AggregationPeriod" type:"string" enum:"AggregationPeriod"`
+
+	// This parameter sets the maximum number of items to be returned.
+	//
+	// The value is an integer. Range of accepted values is from 1 to 500.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The next item following a partial list of returned resources. For example,
+	// if a request is made to return MaxResults number of resources, NextToken
+	// allows you to return more items in your list starting at the location pointed
+	// to by the next token.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// Returns the job count for the specified resource type. Use request GetSupportedResourceTypes
+	// to obtain strings for supported resource types.
+	//
+	// The the value ANY returns count of all resource types.
+	//
+	// AGGREGATE_ALL aggregates job counts for all resource types and returns the
+	// sum.
+	//
+	// The type of Amazon Web Services resource to be backed up; for example, an
+	// Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database
+	// Service (Amazon RDS) database.
+	ResourceType *string `location:"querystring" locationName:"ResourceType" type:"string"`
+
+	// This parameter returns the job count for jobs with the specified state.
+	//
+	// The the value ANY returns count of all states.
+	//
+	// AGGREGATE_ALL aggregates job counts for all states and returns the sum.
+	State *string `location:"querystring" locationName:"State" type:"string" enum:"RestoreJobState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreJobSummariesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreJobSummariesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListRestoreJobSummariesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListRestoreJobSummariesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *ListRestoreJobSummariesInput) SetAccountId(v string) *ListRestoreJobSummariesInput {
+	s.AccountId = &v
+	return s
+}
+
+// SetAggregationPeriod sets the AggregationPeriod field's value.
+func (s *ListRestoreJobSummariesInput) SetAggregationPeriod(v string) *ListRestoreJobSummariesInput {
+	s.AggregationPeriod = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListRestoreJobSummariesInput) SetMaxResults(v int64) *ListRestoreJobSummariesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRestoreJobSummariesInput) SetNextToken(v string) *ListRestoreJobSummariesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *ListRestoreJobSummariesInput) SetResourceType(v string) *ListRestoreJobSummariesInput {
+	s.ResourceType = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ListRestoreJobSummariesInput) SetState(v string) *ListRestoreJobSummariesInput {
+	s.State = &v
+	return s
+}
+
+type ListRestoreJobSummariesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// This is the period that sets the boundaries for returned results.
+	//
+	//    * ONE_DAY for daily job count for the prior 14 days.
+	//
+	//    * SEVEN_DAYS for the aggregated job count for the prior 7 days.
+	//
+	//    * FOURTEEN_DAYS for aggregated job count for prior 14 days.
+	AggregationPeriod *string `type:"string"`
+
+	// The next item following a partial list of returned resources. For example,
+	// if a request is made to return MaxResults number of resources, NextToken
+	// allows you to return more items in your list starting at the location pointed
+	// to by the next token.
+	NextToken *string `type:"string"`
+
+	// This return contains a summary that contains Region, Account, State, ResourceType,
+	// MessageCategory, StartTime, EndTime, and Count of included jobs.
+	RestoreJobSummaries []*RestoreJobSummary `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreJobSummariesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreJobSummariesOutput) GoString() string {
+	return s.String()
+}
+
+// SetAggregationPeriod sets the AggregationPeriod field's value.
+func (s *ListRestoreJobSummariesOutput) SetAggregationPeriod(v string) *ListRestoreJobSummariesOutput {
+	s.AggregationPeriod = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRestoreJobSummariesOutput) SetNextToken(v string) *ListRestoreJobSummariesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRestoreJobSummaries sets the RestoreJobSummaries field's value.
+func (s *ListRestoreJobSummariesOutput) SetRestoreJobSummaries(v []*RestoreJobSummary) *ListRestoreJobSummariesOutput {
+	s.RestoreJobSummaries = v
+	return s
+}
+
+type ListRestoreJobsByProtectedResourceInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// Returns only restore jobs of recovery points that were created after the
+	// specified date.
+	ByRecoveryPointCreationDateAfter *time.Time `location:"querystring" locationName:"recoveryPointCreationDateAfter" type:"timestamp"`
+
+	// Returns only restore jobs of recovery points that were created before the
+	// specified date.
+	ByRecoveryPointCreationDateBefore *time.Time `location:"querystring" locationName:"recoveryPointCreationDateBefore" type:"timestamp"`
+
+	// Returns only restore jobs associated with the specified job status.
+	ByStatus *string `location:"querystring" locationName:"status" type:"string" enum:"RestoreJobStatus"`
+
+	// The maximum number of items to be returned.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The next item following a partial list of returned items. For example, if
+	// a request ismade to return MaxResults number of items, NextToken allows you
+	// to return more items in your list starting at the location pointed to by
+	// the next token.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// Returns only restore jobs that match the specified resource Amazon Resource
+	// Name (ARN).
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resourceArn" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreJobsByProtectedResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreJobsByProtectedResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListRestoreJobsByProtectedResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListRestoreJobsByProtectedResourceInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetByRecoveryPointCreationDateAfter sets the ByRecoveryPointCreationDateAfter field's value.
+func (s *ListRestoreJobsByProtectedResourceInput) SetByRecoveryPointCreationDateAfter(v time.Time) *ListRestoreJobsByProtectedResourceInput {
+	s.ByRecoveryPointCreationDateAfter = &v
+	return s
+}
+
+// SetByRecoveryPointCreationDateBefore sets the ByRecoveryPointCreationDateBefore field's value.
+func (s *ListRestoreJobsByProtectedResourceInput) SetByRecoveryPointCreationDateBefore(v time.Time) *ListRestoreJobsByProtectedResourceInput {
+	s.ByRecoveryPointCreationDateBefore = &v
+	return s
+}
+
+// SetByStatus sets the ByStatus field's value.
+func (s *ListRestoreJobsByProtectedResourceInput) SetByStatus(v string) *ListRestoreJobsByProtectedResourceInput {
+	s.ByStatus = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListRestoreJobsByProtectedResourceInput) SetMaxResults(v int64) *ListRestoreJobsByProtectedResourceInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRestoreJobsByProtectedResourceInput) SetNextToken(v string) *ListRestoreJobsByProtectedResourceInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *ListRestoreJobsByProtectedResourceInput) SetResourceArn(v string) *ListRestoreJobsByProtectedResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+type ListRestoreJobsByProtectedResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The next item following a partial list of returned items. For example, if
+	// a request is made to return MaxResults number of items, NextToken allows
+	// youto return more items in your list starting at the location pointed to
+	// by the next token
+	NextToken *string `type:"string"`
+
+	// An array of objects that contain detailed information about jobs to restore
+	// saved resources.>
+	RestoreJobs []*RestoreJobsListMember `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreJobsByProtectedResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreJobsByProtectedResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRestoreJobsByProtectedResourceOutput) SetNextToken(v string) *ListRestoreJobsByProtectedResourceOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRestoreJobs sets the RestoreJobs field's value.
+func (s *ListRestoreJobsByProtectedResourceOutput) SetRestoreJobs(v []*RestoreJobsListMember) *ListRestoreJobsByProtectedResourceOutput {
+	s.RestoreJobs = v
+	return s
+}
+
 type ListRestoreJobsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -16332,6 +21055,45 @@ type ListRestoreJobsInput struct {
 	// Returns only restore jobs that were created before the specified date.
 	ByCreatedBefore *time.Time `location:"querystring" locationName:"createdBefore" type:"timestamp"`
 
+	// Include this parameter to return only restore jobs for the specified resources:
+	//
+	//    * Aurora for Amazon Aurora
+	//
+	//    * CloudFormation for CloudFormation
+	//
+	//    * DocumentDB for Amazon DocumentDB (with MongoDB compatibility)
+	//
+	//    * DynamoDB for Amazon DynamoDB
+	//
+	//    * EBS for Amazon Elastic Block Store
+	//
+	//    * EC2 for Amazon Elastic Compute Cloud
+	//
+	//    * EFS for Amazon Elastic File System
+	//
+	//    * FSx for Amazon FSx
+	//
+	//    * Neptune for Amazon Neptune
+	//
+	//    * Redshift for Amazon Redshift
+	//
+	//    * RDS for Amazon Relational Database Service
+	//
+	//    * SAP HANA on Amazon EC2 for SAP HANA databases
+	//
+	//    * Storage Gateway for Storage Gateway
+	//
+	//    * S3 for Amazon S3
+	//
+	//    * Timestream for Amazon Timestream
+	//
+	//    * VirtualMachine for virtual machines
+	ByResourceType *string `location:"querystring" locationName:"resourceType" type:"string"`
+
+	// This returns only restore testing jobs that match the specified resource
+	// Amazon Resource Name (ARN).
+	ByRestoreTestingPlanArn *string `location:"querystring" locationName:"restoreTestingPlanArn" type:"string"`
+
 	// Returns only restore jobs associated with the specified job status.
 	ByStatus *string `location:"querystring" locationName:"status" type:"string" enum:"RestoreJobStatus"`
 
@@ -16339,7 +21101,7 @@ type ListRestoreJobsInput struct {
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -16406,6 +21168,18 @@ func (s *ListRestoreJobsInput) SetByCreatedBefore(v time.Time) *ListRestoreJobsI
 	return s
 }
 
+// SetByResourceType sets the ByResourceType field's value.
+func (s *ListRestoreJobsInput) SetByResourceType(v string) *ListRestoreJobsInput {
+	s.ByResourceType = &v
+	return s
+}
+
+// SetByRestoreTestingPlanArn sets the ByRestoreTestingPlanArn field's value.
+func (s *ListRestoreJobsInput) SetByRestoreTestingPlanArn(v string) *ListRestoreJobsInput {
+	s.ByRestoreTestingPlanArn = &v
+	return s
+}
+
 // SetByStatus sets the ByStatus field's value.
 func (s *ListRestoreJobsInput) SetByStatus(v string) *ListRestoreJobsInput {
 	s.ByStatus = &v
@@ -16428,7 +21202,7 @@ type ListRestoreJobsOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -16468,6 +21242,227 @@ func (s *ListRestoreJobsOutput) SetRestoreJobs(v []*RestoreJobsListMember) *List
 	return s
 }
 
+type ListRestoreTestingPlansInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of items to be returned.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The next item following a partial list of returned items. For example, if
+	// a request is made to return MaxResults number of items, NextToken allows
+	// you to return more items in your list starting at the location pointed to
+	// by the nexttoken.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreTestingPlansInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreTestingPlansInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListRestoreTestingPlansInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListRestoreTestingPlansInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListRestoreTestingPlansInput) SetMaxResults(v int64) *ListRestoreTestingPlansInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRestoreTestingPlansInput) SetNextToken(v string) *ListRestoreTestingPlansInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListRestoreTestingPlansOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The next item following a partial list of returned items. For example, if
+	// a request is made to return MaxResults number of items, NextToken allows
+	// you to return more items in your list starting at the location pointed to
+	// by the nexttoken.
+	NextToken *string `type:"string"`
+
+	// This is a returned list of restore testing plans.
+	//
+	// RestoreTestingPlans is a required field
+	RestoreTestingPlans []*RestoreTestingPlanForList `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreTestingPlansOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreTestingPlansOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRestoreTestingPlansOutput) SetNextToken(v string) *ListRestoreTestingPlansOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRestoreTestingPlans sets the RestoreTestingPlans field's value.
+func (s *ListRestoreTestingPlansOutput) SetRestoreTestingPlans(v []*RestoreTestingPlanForList) *ListRestoreTestingPlansOutput {
+	s.RestoreTestingPlans = v
+	return s
+}
+
+type ListRestoreTestingSelectionsInput struct {
+	_ struct{} `type:"structure" nopayload:"true"`
+
+	// The maximum number of items to be returned.
+	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
+
+	// The next item following a partial list of returned items. For example, if
+	// a request is made to return MaxResults number of items, NextToken allows
+	// you to return more items in your list starting at the location pointed to
+	// by the nexttoken.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// Returns restore testing selections by the specified restore testing plan
+	// name.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `location:"uri" locationName:"RestoreTestingPlanName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreTestingSelectionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreTestingSelectionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListRestoreTestingSelectionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListRestoreTestingSelectionsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.RestoreTestingPlanName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingPlanName"))
+	}
+	if s.RestoreTestingPlanName != nil && len(*s.RestoreTestingPlanName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreTestingPlanName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListRestoreTestingSelectionsInput) SetMaxResults(v int64) *ListRestoreTestingSelectionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRestoreTestingSelectionsInput) SetNextToken(v string) *ListRestoreTestingSelectionsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *ListRestoreTestingSelectionsInput) SetRestoreTestingPlanName(v string) *ListRestoreTestingSelectionsInput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+type ListRestoreTestingSelectionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The next item following a partial list of returned items. For example, if
+	// a request is made to return MaxResults number of items, NextToken allows
+	// you to return more items in your list starting at the location pointed to
+	// by the nexttoken.
+	NextToken *string `type:"string"`
+
+	// The returned restore testing selections associated with the restore testing
+	// plan.
+	//
+	// RestoreTestingSelections is a required field
+	RestoreTestingSelections []*RestoreTestingSelectionForList `type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreTestingSelectionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListRestoreTestingSelectionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListRestoreTestingSelectionsOutput) SetNextToken(v string) *ListRestoreTestingSelectionsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRestoreTestingSelections sets the RestoreTestingSelections field's value.
+func (s *ListRestoreTestingSelectionsOutput) SetRestoreTestingSelections(v []*RestoreTestingSelectionForList) *ListRestoreTestingSelectionsOutput {
+	s.RestoreTestingSelections = v
+	return s
+}
+
 type ListTagsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -16475,7 +21470,7 @@ type ListTagsInput struct {
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
@@ -16547,7 +21542,7 @@ type ListTagsOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The next item following a partial list of returned items. For example, if
-	// a request is made to return maxResults number of items, NextToken allows
+	// a request is made to return MaxResults number of items, NextToken allows
 	// you to return more items in your list starting at the location pointed to
 	// by the next token.
 	NextToken *string `type:"string"`
@@ -16975,6 +21970,13 @@ type ProtectedResource struct {
 	// 12:11:30.087 AM.
 	LastBackupTime *time.Time `type:"timestamp"`
 
+	// This is the ARN (Amazon Resource Name) of the backup vault that contains
+	// the most recent backup recovery point.
+	LastBackupVaultArn *string `type:"string"`
+
+	// This is the ARN (Amazon Resource Name) of the most recent recovery point.
+	LastRecoveryPointArn *string `type:"string"`
+
 	// An Amazon Resource Name (ARN) that uniquely identifies a resource. The format
 	// of the ARN depends on the resource type.
 	ResourceArn *string `type:"string"`
@@ -17014,6 +22016,18 @@ func (s *ProtectedResource) SetLastBackupTime(v time.Time) *ProtectedResource {
 	return s
 }
 
+// SetLastBackupVaultArn sets the LastBackupVaultArn field's value.
+func (s *ProtectedResource) SetLastBackupVaultArn(v string) *ProtectedResource {
+	s.LastBackupVaultArn = &v
+	return s
+}
+
+// SetLastRecoveryPointArn sets the LastRecoveryPointArn field's value.
+func (s *ProtectedResource) SetLastRecoveryPointArn(v string) *ProtectedResource {
+	s.LastRecoveryPointArn = &v
+	return s
+}
+
 // SetResourceArn sets the ResourceArn field's value.
 func (s *ProtectedResource) SetResourceArn(v string) *ProtectedResource {
 	s.ResourceArn = &v
@@ -17029,6 +22043,83 @@ func (s *ProtectedResource) SetResourceName(v string) *ProtectedResource {
 // SetResourceType sets the ResourceType field's value.
 func (s *ProtectedResource) SetResourceType(v string) *ProtectedResource {
 	s.ResourceType = &v
+	return s
+}
+
+// A list of conditions that you define for resources in your restore testing
+// plan using tags.
+//
+// For example, "StringEquals": { "Key": "aws:ResourceTag/CreatedByCryo", "Value":
+// "true" },. Condition operators are case sensitive.
+type ProtectedResourceConditions struct {
+	_ struct{} `type:"structure"`
+
+	// Filters the values of your tagged resources for only those resources that
+	// you tagged with the same value. Also called "exact matching."
+	StringEquals []*KeyValue `type:"list"`
+
+	// Filters the values of your tagged resources for only those resources that
+	// you tagged that do not have the same value. Also called "negated matching."
+	StringNotEquals []*KeyValue `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProtectedResourceConditions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ProtectedResourceConditions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ProtectedResourceConditions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ProtectedResourceConditions"}
+	if s.StringEquals != nil {
+		for i, v := range s.StringEquals {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "StringEquals", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.StringNotEquals != nil {
+		for i, v := range s.StringNotEquals {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "StringNotEquals", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetStringEquals sets the StringEquals field's value.
+func (s *ProtectedResourceConditions) SetStringEquals(v []*KeyValue) *ProtectedResourceConditions {
+	s.StringEquals = v
+	return s
+}
+
+// SetStringNotEquals sets the StringNotEquals field's value.
+func (s *ProtectedResourceConditions) SetStringNotEquals(v []*KeyValue) *ProtectedResourceConditions {
+	s.StringNotEquals = v
 	return s
 }
 
@@ -17381,6 +22472,101 @@ func (s PutBackupVaultNotificationsOutput) GoString() string {
 	return s.String()
 }
 
+type PutRestoreValidationResultInput struct {
+	_ struct{} `type:"structure"`
+
+	// This is a unique identifier of a restore job within Backup.
+	//
+	// RestoreJobId is a required field
+	RestoreJobId *string `location:"uri" locationName:"restoreJobId" type:"string" required:"true"`
+
+	// This is the status of your restore validation.
+	//
+	// ValidationStatus is a required field
+	ValidationStatus *string `type:"string" required:"true" enum:"RestoreValidationStatus"`
+
+	// This is an optional message string you can input to describe the validation
+	// status for the restore test validation.
+	ValidationStatusMessage *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutRestoreValidationResultInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutRestoreValidationResultInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutRestoreValidationResultInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutRestoreValidationResultInput"}
+	if s.RestoreJobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreJobId"))
+	}
+	if s.RestoreJobId != nil && len(*s.RestoreJobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreJobId", 1))
+	}
+	if s.ValidationStatus == nil {
+		invalidParams.Add(request.NewErrParamRequired("ValidationStatus"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRestoreJobId sets the RestoreJobId field's value.
+func (s *PutRestoreValidationResultInput) SetRestoreJobId(v string) *PutRestoreValidationResultInput {
+	s.RestoreJobId = &v
+	return s
+}
+
+// SetValidationStatus sets the ValidationStatus field's value.
+func (s *PutRestoreValidationResultInput) SetValidationStatus(v string) *PutRestoreValidationResultInput {
+	s.ValidationStatus = &v
+	return s
+}
+
+// SetValidationStatusMessage sets the ValidationStatusMessage field's value.
+func (s *PutRestoreValidationResultInput) SetValidationStatusMessage(v string) *PutRestoreValidationResultInput {
+	s.ValidationStatusMessage = &v
+	return s
+}
+
+type PutRestoreValidationResultOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutRestoreValidationResultOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PutRestoreValidationResultOutput) GoString() string {
+	return s.String()
+}
+
 // Contains detailed information about the recovery points stored in a backup
 // vault.
 type RecoveryPointByBackupVault struct {
@@ -17494,6 +22680,9 @@ type RecoveryPointByBackupVault struct {
 
 	// A message explaining the reason of the recovery point deletion failure.
 	StatusMessage *string `type:"string"`
+
+	// This is the type of vault in which the described recovery point is stored.
+	VaultType *string `type:"string" enum:"VaultType"`
 }
 
 // String returns the string representation.
@@ -17646,6 +22835,12 @@ func (s *RecoveryPointByBackupVault) SetStatusMessage(v string) *RecoveryPointBy
 	return s
 }
 
+// SetVaultType sets the VaultType field's value.
+func (s *RecoveryPointByBackupVault) SetVaultType(v string) *RecoveryPointByBackupVault {
+	s.VaultType = &v
+	return s
+}
+
 // Contains detailed information about a saved recovery point.
 type RecoveryPointByResource struct {
 	_ struct{} `type:"structure"`
@@ -17690,6 +22885,9 @@ type RecoveryPointByResource struct {
 
 	// A message explaining the reason of the recovery point deletion failure.
 	StatusMessage *string `type:"string"`
+
+	// This is the type of vault in which the described recovery point is stored.
+	VaultType *string `type:"string" enum:"VaultType"`
 }
 
 // String returns the string representation.
@@ -17770,6 +22968,12 @@ func (s *RecoveryPointByResource) SetStatusMessage(v string) *RecoveryPointByRes
 	return s
 }
 
+// SetVaultType sets the VaultType field's value.
+func (s *RecoveryPointByResource) SetVaultType(v string) *RecoveryPointByResource {
+	s.VaultType = &v
+	return s
+}
+
 // Contains information about the backup plan and rule that Backup used to initiate
 // the recovery point backup.
 type RecoveryPointCreator struct {
@@ -17840,9 +23044,20 @@ func (s *RecoveryPointCreator) SetBackupRuleId(v string) *RecoveryPointCreator {
 type RecoveryPointMember struct {
 	_ struct{} `type:"structure"`
 
+	// This is the name of the backup vault (the logical container in which backups
+	// are stored).
+	BackupVaultName *string `type:"string"`
+
 	// This is the Amazon Resource Name (ARN) of the parent (composite) recovery
 	// point.
 	RecoveryPointArn *string `type:"string"`
+
+	// This is the Amazon Resource Name (ARN) that uniquely identifies a saved resource.
+	ResourceArn *string `type:"string"`
+
+	// This is the Amazon Web Services resource type that is saved as a recovery
+	// point.
+	ResourceType *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -17863,9 +23078,27 @@ func (s RecoveryPointMember) GoString() string {
 	return s.String()
 }
 
+// SetBackupVaultName sets the BackupVaultName field's value.
+func (s *RecoveryPointMember) SetBackupVaultName(v string) *RecoveryPointMember {
+	s.BackupVaultName = &v
+	return s
+}
+
 // SetRecoveryPointArn sets the RecoveryPointArn field's value.
 func (s *RecoveryPointMember) SetRecoveryPointArn(v string) *RecoveryPointMember {
 	s.RecoveryPointArn = &v
+	return s
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *RecoveryPointMember) SetResourceArn(v string) *RecoveryPointMember {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *RecoveryPointMember) SetResourceType(v string) *RecoveryPointMember {
+	s.ResourceType = &v
 	return s
 }
 
@@ -18464,6 +23697,139 @@ func (s *ResourceNotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Contains information about the restore testing plan that Backup used to initiate
+// the restore job.
+type RestoreJobCreator struct {
+	_ struct{} `type:"structure"`
+
+	// An Amazon Resource Name (ARN) that uniquely identifies a restore testing
+	// plan.
+	RestoreTestingPlanArn *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreJobCreator) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreJobCreator) GoString() string {
+	return s.String()
+}
+
+// SetRestoreTestingPlanArn sets the RestoreTestingPlanArn field's value.
+func (s *RestoreJobCreator) SetRestoreTestingPlanArn(v string) *RestoreJobCreator {
+	s.RestoreTestingPlanArn = &v
+	return s
+}
+
+// This is a summary of restore jobs created or running within the most recent
+// 30 days.
+//
+// The returned summary may contain the following: Region, Account, State, ResourceType,
+// MessageCategory, StartTime, EndTime, and Count of included jobs.
+type RestoreJobSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The account ID that owns the jobs within the summary.
+	AccountId *string `type:"string"`
+
+	// The value as a number of jobs in a job summary.
+	Count *int64 `type:"integer"`
+
+	// The value of time in number format of a job end time.
+	//
+	// This value is the time in Unix format, Coordinated Universal Time (UTC),
+	// and accurate to milliseconds. For example, the value 1516925490.087 represents
+	// Friday, January 26, 2018 12:11:30.087 AM.
+	EndTime *time.Time `type:"timestamp"`
+
+	// The Amazon Web Services Regions within the job summary.
+	Region *string `type:"string"`
+
+	// This value is the job count for the specified resource type. The request
+	// GetSupportedResourceTypes returns strings for supported resource types.
+	ResourceType *string `type:"string"`
+
+	// The value of time in number format of a job start time.
+	//
+	// This value is the time in Unix format, Coordinated Universal Time (UTC),
+	// and accurate to milliseconds. For example, the value 1516925490.087 represents
+	// Friday, January 26, 2018 12:11:30.087 AM.
+	StartTime *time.Time `type:"timestamp"`
+
+	// This value is job count for jobs with the specified state.
+	State *string `type:"string" enum:"RestoreJobState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreJobSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreJobSummary) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *RestoreJobSummary) SetAccountId(v string) *RestoreJobSummary {
+	s.AccountId = &v
+	return s
+}
+
+// SetCount sets the Count field's value.
+func (s *RestoreJobSummary) SetCount(v int64) *RestoreJobSummary {
+	s.Count = &v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *RestoreJobSummary) SetEndTime(v time.Time) *RestoreJobSummary {
+	s.EndTime = &v
+	return s
+}
+
+// SetRegion sets the Region field's value.
+func (s *RestoreJobSummary) SetRegion(v string) *RestoreJobSummary {
+	s.Region = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *RestoreJobSummary) SetResourceType(v string) *RestoreJobSummary {
+	s.ResourceType = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *RestoreJobSummary) SetStartTime(v time.Time) *RestoreJobSummary {
+	s.StartTime = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *RestoreJobSummary) SetState(v string) *RestoreJobSummary {
+	s.State = &v
+	return s
+}
+
 // Contains metadata about a restore job.
 type RestoreJobsListMember struct {
 	_ struct{} `type:"structure"`
@@ -18480,6 +23846,9 @@ type RestoreJobsListMember struct {
 	// Friday, January 26, 2018 12:11:30.087 AM.
 	CompletionDate *time.Time `type:"timestamp"`
 
+	// Contains identifying information about the creation of a restore job.
+	CreatedBy *RestoreJobCreator `type:"structure"`
+
 	// An Amazon Resource Name (ARN) that uniquely identifies a resource. The format
 	// of the ARN depends on the resource type.
 	CreatedResourceArn *string `type:"string"`
@@ -18489,6 +23858,13 @@ type RestoreJobsListMember struct {
 	// For example, the value 1516925490.087 represents Friday, January 26, 2018
 	// 12:11:30.087 AM.
 	CreationDate *time.Time `type:"timestamp"`
+
+	// This notes the status of the data generated by the restore test. The status
+	// may be Deleting, Failed, or Successful.
+	DeletionStatus *string `type:"string" enum:"RestoreDeletionStatus"`
+
+	// This describes the restore job deletion status.
+	DeletionStatusMessage *string `type:"string"`
 
 	// The amount of time in minutes that a job restoring a recovery point is expected
 	// to take.
@@ -18504,6 +23880,9 @@ type RestoreJobsListMember struct {
 
 	// An ARN that uniquely identifies a recovery point; for example, arn:aws:backup:us-east-1:123456789012:recovery-point:1EB3B5E7-9EB0-435A-A80B-108B488B0D45.
 	RecoveryPointArn *string `type:"string"`
+
+	// The date on which a recovery point was created.
+	RecoveryPointCreationDate *time.Time `type:"timestamp"`
 
 	// The resource type of the listed restore jobs; for example, an Amazon Elastic
 	// Block Store (Amazon EBS) volume or an Amazon Relational Database Service
@@ -18521,6 +23900,12 @@ type RestoreJobsListMember struct {
 	// A detailed message explaining the status of the job to restore a recovery
 	// point.
 	StatusMessage *string `type:"string"`
+
+	// This is the status of validation run on the indicated restore job.
+	ValidationStatus *string `type:"string" enum:"RestoreValidationStatus"`
+
+	// This describes the status of validation run on the indicated restore job.
+	ValidationStatusMessage *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -18559,6 +23944,12 @@ func (s *RestoreJobsListMember) SetCompletionDate(v time.Time) *RestoreJobsListM
 	return s
 }
 
+// SetCreatedBy sets the CreatedBy field's value.
+func (s *RestoreJobsListMember) SetCreatedBy(v *RestoreJobCreator) *RestoreJobsListMember {
+	s.CreatedBy = v
+	return s
+}
+
 // SetCreatedResourceArn sets the CreatedResourceArn field's value.
 func (s *RestoreJobsListMember) SetCreatedResourceArn(v string) *RestoreJobsListMember {
 	s.CreatedResourceArn = &v
@@ -18568,6 +23959,18 @@ func (s *RestoreJobsListMember) SetCreatedResourceArn(v string) *RestoreJobsList
 // SetCreationDate sets the CreationDate field's value.
 func (s *RestoreJobsListMember) SetCreationDate(v time.Time) *RestoreJobsListMember {
 	s.CreationDate = &v
+	return s
+}
+
+// SetDeletionStatus sets the DeletionStatus field's value.
+func (s *RestoreJobsListMember) SetDeletionStatus(v string) *RestoreJobsListMember {
+	s.DeletionStatus = &v
+	return s
+}
+
+// SetDeletionStatusMessage sets the DeletionStatusMessage field's value.
+func (s *RestoreJobsListMember) SetDeletionStatusMessage(v string) *RestoreJobsListMember {
+	s.DeletionStatusMessage = &v
 	return s
 }
 
@@ -18595,6 +23998,12 @@ func (s *RestoreJobsListMember) SetRecoveryPointArn(v string) *RestoreJobsListMe
 	return s
 }
 
+// SetRecoveryPointCreationDate sets the RecoveryPointCreationDate field's value.
+func (s *RestoreJobsListMember) SetRecoveryPointCreationDate(v time.Time) *RestoreJobsListMember {
+	s.RecoveryPointCreationDate = &v
+	return s
+}
+
 // SetResourceType sets the ResourceType field's value.
 func (s *RestoreJobsListMember) SetResourceType(v string) *RestoreJobsListMember {
 	s.ResourceType = &v
@@ -18616,6 +24025,1046 @@ func (s *RestoreJobsListMember) SetStatus(v string) *RestoreJobsListMember {
 // SetStatusMessage sets the StatusMessage field's value.
 func (s *RestoreJobsListMember) SetStatusMessage(v string) *RestoreJobsListMember {
 	s.StatusMessage = &v
+	return s
+}
+
+// SetValidationStatus sets the ValidationStatus field's value.
+func (s *RestoreJobsListMember) SetValidationStatus(v string) *RestoreJobsListMember {
+	s.ValidationStatus = &v
+	return s
+}
+
+// SetValidationStatusMessage sets the ValidationStatusMessage field's value.
+func (s *RestoreJobsListMember) SetValidationStatusMessage(v string) *RestoreJobsListMember {
+	s.ValidationStatusMessage = &v
+	return s
+}
+
+// This contains metadata about a restore testing plan.
+type RestoreTestingPlanForCreate struct {
+	_ struct{} `type:"structure"`
+
+	// Required: Algorithm; Required: Recovery point types; IncludeVaults (one or
+	// more). Optional: SelectionWindowDays ('30' if not specified); ExcludeVaults
+	// (list of selectors), defaults to empty list if not listed.
+	//
+	// RecoveryPointSelection is a required field
+	RecoveryPointSelection *RestoreTestingRecoveryPointSelection `type:"structure" required:"true"`
+
+	// The RestoreTestingPlanName is a unique string that is the name of the restore
+	// testing plan. This cannot be changed after creation, and it must consist
+	// of only alphanumeric characters and underscores.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `type:"string" required:"true"`
+
+	// A CRON expression in specified timezone when a restore testing plan is executed.
+	//
+	// ScheduleExpression is a required field
+	ScheduleExpression *string `type:"string" required:"true"`
+
+	// Optional. This is the timezone in which the schedule expression is set. By
+	// default, ScheduleExpressions are in UTC. You can modify this to a specified
+	// timezone.
+	ScheduleExpressionTimezone *string `type:"string"`
+
+	// Defaults to 24 hours.
+	//
+	// A value in hours after a restore test is scheduled before a job will be canceled
+	// if it doesn't start successfully. This value is optional. If this value is
+	// included, this parameter has a maximum value of 168 hours (one week).
+	StartWindowHours *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingPlanForCreate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingPlanForCreate) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RestoreTestingPlanForCreate) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RestoreTestingPlanForCreate"}
+	if s.RecoveryPointSelection == nil {
+		invalidParams.Add(request.NewErrParamRequired("RecoveryPointSelection"))
+	}
+	if s.RestoreTestingPlanName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingPlanName"))
+	}
+	if s.ScheduleExpression == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScheduleExpression"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRecoveryPointSelection sets the RecoveryPointSelection field's value.
+func (s *RestoreTestingPlanForCreate) SetRecoveryPointSelection(v *RestoreTestingRecoveryPointSelection) *RestoreTestingPlanForCreate {
+	s.RecoveryPointSelection = v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *RestoreTestingPlanForCreate) SetRestoreTestingPlanName(v string) *RestoreTestingPlanForCreate {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetScheduleExpression sets the ScheduleExpression field's value.
+func (s *RestoreTestingPlanForCreate) SetScheduleExpression(v string) *RestoreTestingPlanForCreate {
+	s.ScheduleExpression = &v
+	return s
+}
+
+// SetScheduleExpressionTimezone sets the ScheduleExpressionTimezone field's value.
+func (s *RestoreTestingPlanForCreate) SetScheduleExpressionTimezone(v string) *RestoreTestingPlanForCreate {
+	s.ScheduleExpressionTimezone = &v
+	return s
+}
+
+// SetStartWindowHours sets the StartWindowHours field's value.
+func (s *RestoreTestingPlanForCreate) SetStartWindowHours(v int64) *RestoreTestingPlanForCreate {
+	s.StartWindowHours = &v
+	return s
+}
+
+// This contains metadata about a restore testing plan.
+type RestoreTestingPlanForGet struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time that a restore testing plan was created, in Unix format
+	// and Coordinated Universal Time (UTC). The value of CreationTime is accurate
+	// to milliseconds. For example, the value 1516925490.087 represents Friday,
+	// January 26, 2018 12:11:30.087 AM.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `type:"timestamp" required:"true"`
+
+	// This identifies the request and allows failed requests to be retried without
+	// the risk of running the operation twice. If the request includes a CreatorRequestId
+	// that matches an existing backup plan, that plan is returned. This parameter
+	// is optional.
+	//
+	// If used, this parameter must contain 1 to 50 alphanumeric or '-_.' characters.
+	CreatorRequestId *string `type:"string"`
+
+	// The last time a restore test was run with the specified restore testing plan.
+	// A date and time, in Unix format and Coordinated Universal Time (UTC). The
+	// value of LastExecutionDate is accurate to milliseconds. For example, the
+	// value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.
+	LastExecutionTime *time.Time `type:"timestamp"`
+
+	// The date and time that the restore testing plan was updated. This update
+	// is in Unix format and Coordinated Universal Time (UTC). The value of LastUpdateTime
+	// is accurate to milliseconds. For example, the value 1516925490.087 represents
+	// Friday, January 26, 2018 12:11:30.087 AM.
+	LastUpdateTime *time.Time `type:"timestamp"`
+
+	// The specified criteria to assign a set of resources, such as recovery point
+	// types or backup vaults.
+	//
+	// RecoveryPointSelection is a required field
+	RecoveryPointSelection *RestoreTestingRecoveryPointSelection `type:"structure" required:"true"`
+
+	// An Amazon Resource Name (ARN) that uniquely identifies a restore testing
+	// plan.
+	//
+	// RestoreTestingPlanArn is a required field
+	RestoreTestingPlanArn *string `type:"string" required:"true"`
+
+	// This is the restore testing plan name.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `type:"string" required:"true"`
+
+	// A CRON expression in specified timezone when a restore testing plan is executed.
+	//
+	// ScheduleExpression is a required field
+	ScheduleExpression *string `type:"string" required:"true"`
+
+	// Optional. This is the timezone in which the schedule expression is set. By
+	// default, ScheduleExpressions are in UTC. You can modify this to a specified
+	// timezone.
+	ScheduleExpressionTimezone *string `type:"string"`
+
+	// Defaults to 24 hours.
+	//
+	// A value in hours after a restore test is scheduled before a job will be canceled
+	// if it doesn't start successfully. This value is optional. If this value is
+	// included, this parameter has a maximum value of 168 hours (one week).
+	StartWindowHours *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingPlanForGet) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingPlanForGet) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *RestoreTestingPlanForGet) SetCreationTime(v time.Time) *RestoreTestingPlanForGet {
+	s.CreationTime = &v
+	return s
+}
+
+// SetCreatorRequestId sets the CreatorRequestId field's value.
+func (s *RestoreTestingPlanForGet) SetCreatorRequestId(v string) *RestoreTestingPlanForGet {
+	s.CreatorRequestId = &v
+	return s
+}
+
+// SetLastExecutionTime sets the LastExecutionTime field's value.
+func (s *RestoreTestingPlanForGet) SetLastExecutionTime(v time.Time) *RestoreTestingPlanForGet {
+	s.LastExecutionTime = &v
+	return s
+}
+
+// SetLastUpdateTime sets the LastUpdateTime field's value.
+func (s *RestoreTestingPlanForGet) SetLastUpdateTime(v time.Time) *RestoreTestingPlanForGet {
+	s.LastUpdateTime = &v
+	return s
+}
+
+// SetRecoveryPointSelection sets the RecoveryPointSelection field's value.
+func (s *RestoreTestingPlanForGet) SetRecoveryPointSelection(v *RestoreTestingRecoveryPointSelection) *RestoreTestingPlanForGet {
+	s.RecoveryPointSelection = v
+	return s
+}
+
+// SetRestoreTestingPlanArn sets the RestoreTestingPlanArn field's value.
+func (s *RestoreTestingPlanForGet) SetRestoreTestingPlanArn(v string) *RestoreTestingPlanForGet {
+	s.RestoreTestingPlanArn = &v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *RestoreTestingPlanForGet) SetRestoreTestingPlanName(v string) *RestoreTestingPlanForGet {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetScheduleExpression sets the ScheduleExpression field's value.
+func (s *RestoreTestingPlanForGet) SetScheduleExpression(v string) *RestoreTestingPlanForGet {
+	s.ScheduleExpression = &v
+	return s
+}
+
+// SetScheduleExpressionTimezone sets the ScheduleExpressionTimezone field's value.
+func (s *RestoreTestingPlanForGet) SetScheduleExpressionTimezone(v string) *RestoreTestingPlanForGet {
+	s.ScheduleExpressionTimezone = &v
+	return s
+}
+
+// SetStartWindowHours sets the StartWindowHours field's value.
+func (s *RestoreTestingPlanForGet) SetStartWindowHours(v int64) *RestoreTestingPlanForGet {
+	s.StartWindowHours = &v
+	return s
+}
+
+// This contains metadata about a restore testing plan.
+type RestoreTestingPlanForList struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time that a restore testing plan was created, in Unix format
+	// and Coordinated Universal Time (UTC). The value of CreationTime is accurate
+	// to milliseconds. For example, the value 1516925490.087 represents Friday,
+	// January 26, 2018 12:11:30.087 AM.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `type:"timestamp" required:"true"`
+
+	// The last time a restore test was run with the specified restore testing plan.
+	// A date and time, in Unix format and Coordinated Universal Time (UTC). The
+	// value of LastExecutionDate is accurate to milliseconds. For example, the
+	// value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.
+	LastExecutionTime *time.Time `type:"timestamp"`
+
+	// The date and time that the restore testing plan was updated. This update
+	// is in Unix format and Coordinated Universal Time (UTC). The value of LastUpdateTime
+	// is accurate to milliseconds. For example, the value 1516925490.087 represents
+	// Friday, January 26, 2018 12:11:30.087 AM.
+	LastUpdateTime *time.Time `type:"timestamp"`
+
+	// An Amazon Resource Name (ARN) that uniquely identifiesa restore testing plan.
+	//
+	// RestoreTestingPlanArn is a required field
+	RestoreTestingPlanArn *string `type:"string" required:"true"`
+
+	// This is the restore testing plan name.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `type:"string" required:"true"`
+
+	// A CRON expression in specified timezone when a restore testing plan is executed.
+	//
+	// ScheduleExpression is a required field
+	ScheduleExpression *string `type:"string" required:"true"`
+
+	// Optional. This is the timezone in which the schedule expression is set. By
+	// default, ScheduleExpressions are in UTC. You can modify this to a specified
+	// timezone.
+	ScheduleExpressionTimezone *string `type:"string"`
+
+	// Defaults to 24 hours.
+	//
+	// A value in hours after a restore test is scheduled before a job will be canceled
+	// if it doesn't start successfully. This value is optional. If this value is
+	// included, this parameter has a maximum value of 168 hours (one week).
+	StartWindowHours *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingPlanForList) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingPlanForList) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *RestoreTestingPlanForList) SetCreationTime(v time.Time) *RestoreTestingPlanForList {
+	s.CreationTime = &v
+	return s
+}
+
+// SetLastExecutionTime sets the LastExecutionTime field's value.
+func (s *RestoreTestingPlanForList) SetLastExecutionTime(v time.Time) *RestoreTestingPlanForList {
+	s.LastExecutionTime = &v
+	return s
+}
+
+// SetLastUpdateTime sets the LastUpdateTime field's value.
+func (s *RestoreTestingPlanForList) SetLastUpdateTime(v time.Time) *RestoreTestingPlanForList {
+	s.LastUpdateTime = &v
+	return s
+}
+
+// SetRestoreTestingPlanArn sets the RestoreTestingPlanArn field's value.
+func (s *RestoreTestingPlanForList) SetRestoreTestingPlanArn(v string) *RestoreTestingPlanForList {
+	s.RestoreTestingPlanArn = &v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *RestoreTestingPlanForList) SetRestoreTestingPlanName(v string) *RestoreTestingPlanForList {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetScheduleExpression sets the ScheduleExpression field's value.
+func (s *RestoreTestingPlanForList) SetScheduleExpression(v string) *RestoreTestingPlanForList {
+	s.ScheduleExpression = &v
+	return s
+}
+
+// SetScheduleExpressionTimezone sets the ScheduleExpressionTimezone field's value.
+func (s *RestoreTestingPlanForList) SetScheduleExpressionTimezone(v string) *RestoreTestingPlanForList {
+	s.ScheduleExpressionTimezone = &v
+	return s
+}
+
+// SetStartWindowHours sets the StartWindowHours field's value.
+func (s *RestoreTestingPlanForList) SetStartWindowHours(v int64) *RestoreTestingPlanForList {
+	s.StartWindowHours = &v
+	return s
+}
+
+// This contains metadata about a restore testing plan.
+type RestoreTestingPlanForUpdate struct {
+	_ struct{} `type:"structure"`
+
+	// Required: Algorithm; RecoveryPointTypes; IncludeVaults (one or more).
+	//
+	// Optional: SelectionWindowDays ('30' if not specified); ExcludeVaults (defaults
+	// to empty list if not listed).
+	RecoveryPointSelection *RestoreTestingRecoveryPointSelection `type:"structure"`
+
+	// A CRON expression in specified timezone when a restore testing plan is executed.
+	ScheduleExpression *string `type:"string"`
+
+	// Optional. This is the timezone in which the schedule expression is set. By
+	// default, ScheduleExpressions are in UTC. You can modify this to a specified
+	// timezone.
+	ScheduleExpressionTimezone *string `type:"string"`
+
+	// Defaults to 24 hours.
+	//
+	// A value in hours after a restore test is scheduled before a job will be canceled
+	// if it doesn't start successfully. This value is optional. If this value is
+	// included, this parameter has a maximum value of 168 hours (one week).
+	StartWindowHours *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingPlanForUpdate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingPlanForUpdate) GoString() string {
+	return s.String()
+}
+
+// SetRecoveryPointSelection sets the RecoveryPointSelection field's value.
+func (s *RestoreTestingPlanForUpdate) SetRecoveryPointSelection(v *RestoreTestingRecoveryPointSelection) *RestoreTestingPlanForUpdate {
+	s.RecoveryPointSelection = v
+	return s
+}
+
+// SetScheduleExpression sets the ScheduleExpression field's value.
+func (s *RestoreTestingPlanForUpdate) SetScheduleExpression(v string) *RestoreTestingPlanForUpdate {
+	s.ScheduleExpression = &v
+	return s
+}
+
+// SetScheduleExpressionTimezone sets the ScheduleExpressionTimezone field's value.
+func (s *RestoreTestingPlanForUpdate) SetScheduleExpressionTimezone(v string) *RestoreTestingPlanForUpdate {
+	s.ScheduleExpressionTimezone = &v
+	return s
+}
+
+// SetStartWindowHours sets the StartWindowHours field's value.
+func (s *RestoreTestingPlanForUpdate) SetStartWindowHours(v int64) *RestoreTestingPlanForUpdate {
+	s.StartWindowHours = &v
+	return s
+}
+
+// Required: Algorithm; Required: Recovery point types; IncludeVaults(one or
+// more). Optional: SelectionWindowDays ('30' if not specified);ExcludeVaults
+// (list of selectors), defaults to empty list if not listed.
+type RestoreTestingRecoveryPointSelection struct {
+	_ struct{} `type:"structure"`
+
+	// Acceptable values include "LATEST_WITHIN_WINDOW" or "RANDOM_WITHIN_WINDOW"
+	Algorithm *string `type:"string" enum:"RestoreTestingRecoveryPointSelectionAlgorithm"`
+
+	// Accepted values include specific ARNs or list of selectors. Defaults to empty
+	// list if not listed.
+	ExcludeVaults []*string `type:"list"`
+
+	// Accepted values include wildcard ["*"] or by specific ARNs or ARN wilcard
+	// replacement ["arn:aws:backup:us-west-2:123456789012:backup-vault:asdf", ...]
+	// ["arn:aws:backup:*:*:backup-vault:asdf-*", ...]
+	IncludeVaults []*string `type:"list"`
+
+	// These are the types of recovery points.
+	RecoveryPointTypes []*string `type:"list" enum:"RestoreTestingRecoveryPointType"`
+
+	// Accepted values are integers from 1 to 365.
+	SelectionWindowDays *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingRecoveryPointSelection) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingRecoveryPointSelection) GoString() string {
+	return s.String()
+}
+
+// SetAlgorithm sets the Algorithm field's value.
+func (s *RestoreTestingRecoveryPointSelection) SetAlgorithm(v string) *RestoreTestingRecoveryPointSelection {
+	s.Algorithm = &v
+	return s
+}
+
+// SetExcludeVaults sets the ExcludeVaults field's value.
+func (s *RestoreTestingRecoveryPointSelection) SetExcludeVaults(v []*string) *RestoreTestingRecoveryPointSelection {
+	s.ExcludeVaults = v
+	return s
+}
+
+// SetIncludeVaults sets the IncludeVaults field's value.
+func (s *RestoreTestingRecoveryPointSelection) SetIncludeVaults(v []*string) *RestoreTestingRecoveryPointSelection {
+	s.IncludeVaults = v
+	return s
+}
+
+// SetRecoveryPointTypes sets the RecoveryPointTypes field's value.
+func (s *RestoreTestingRecoveryPointSelection) SetRecoveryPointTypes(v []*string) *RestoreTestingRecoveryPointSelection {
+	s.RecoveryPointTypes = v
+	return s
+}
+
+// SetSelectionWindowDays sets the SelectionWindowDays field's value.
+func (s *RestoreTestingRecoveryPointSelection) SetSelectionWindowDays(v int64) *RestoreTestingRecoveryPointSelection {
+	s.SelectionWindowDays = &v
+	return s
+}
+
+// This contains metadata about a specific restore testing selection.
+//
+// ProtectedResourceType is required, such as Amazon EBS or Amazon EC2.
+//
+// This consists of RestoreTestingSelectionName, ProtectedResourceType, and
+// one of the following:
+//
+//   - ProtectedResourceArns
+//
+//   - ProtectedResourceConditions
+//
+// Each protected resource type can have one single value.
+//
+// A restore testing selection can include a wildcard value ("*") for ProtectedResourceArns
+// along with ProtectedResourceConditions. Alternatively, you can include up
+// to 30 specific protected resource ARNs in ProtectedResourceArns.
+//
+// ProtectedResourceConditions examples include as StringEquals and StringNotEquals.
+type RestoreTestingSelectionForCreate struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the IAM role that Backup uses to create
+	// the target resource; for example: arn:aws:iam::123456789012:role/S3Access.
+	//
+	// IamRoleArn is a required field
+	IamRoleArn *string `type:"string" required:"true"`
+
+	// Each protected resource can be filtered by its specific ARNs, such as ProtectedResourceArns:
+	// ["arn:aws:...", "arn:aws:..."] or by a wildcard: ProtectedResourceArns: ["*"],
+	// but not both.
+	ProtectedResourceArns []*string `type:"list"`
+
+	// If you have included the wildcard in ProtectedResourceArns, you can include
+	// resource conditions, such as ProtectedResourceConditions: { StringEquals:
+	// [{ key: "XXXX", value: "YYYY" }].
+	ProtectedResourceConditions *ProtectedResourceConditions `type:"structure"`
+
+	// The type of Amazon Web Services resource included in a restore testing selection;
+	// for example, an Amazon EBS volume or an Amazon RDS database.
+	//
+	// Supported resource types accepted include:
+	//
+	//    * Aurora for Amazon Aurora
+	//
+	//    * DocumentDB for Amazon DocumentDB (with MongoDB compatibility)
+	//
+	//    * DynamoDB for Amazon DynamoDB
+	//
+	//    * EBS for Amazon Elastic Block Store
+	//
+	//    * EC2 for Amazon Elastic Compute Cloud
+	//
+	//    * EFS for Amazon Elastic File System
+	//
+	//    * FSx for Amazon FSx
+	//
+	//    * Neptune for Amazon Neptune
+	//
+	//    * RDS for Amazon Relational Database Service
+	//
+	//    * S3 for Amazon S3
+	//
+	// ProtectedResourceType is a required field
+	ProtectedResourceType *string `type:"string" required:"true"`
+
+	// You can override certain restore metadata keys by including the parameter
+	// RestoreMetadataOverrides in the body of RestoreTestingSelection. Key values
+	// are not case sensitive.
+	//
+	// See the complete list of restore testing inferred metadata (https://docs.aws.amazon.com/aws-backup/latest/devguide/restore-testing-inferred-metadata.html).
+	//
+	// RestoreMetadataOverrides is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by RestoreTestingSelectionForCreate's
+	// String and GoString methods.
+	RestoreMetadataOverrides map[string]*string `type:"map" sensitive:"true"`
+
+	// This is the unique name of the restore testing selection that belongs to
+	// the related restore testing plan.
+	//
+	// RestoreTestingSelectionName is a required field
+	RestoreTestingSelectionName *string `type:"string" required:"true"`
+
+	// This is amount of hours (1 to 168) available to run a validation script on
+	// the data. The data will be deleted upon the completion of the validation
+	// script or the end of the specified retention period, whichever comes first.
+	ValidationWindowHours *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingSelectionForCreate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingSelectionForCreate) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RestoreTestingSelectionForCreate) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RestoreTestingSelectionForCreate"}
+	if s.IamRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("IamRoleArn"))
+	}
+	if s.ProtectedResourceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProtectedResourceType"))
+	}
+	if s.RestoreTestingSelectionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingSelectionName"))
+	}
+	if s.ProtectedResourceConditions != nil {
+		if err := s.ProtectedResourceConditions.Validate(); err != nil {
+			invalidParams.AddNested("ProtectedResourceConditions", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIamRoleArn sets the IamRoleArn field's value.
+func (s *RestoreTestingSelectionForCreate) SetIamRoleArn(v string) *RestoreTestingSelectionForCreate {
+	s.IamRoleArn = &v
+	return s
+}
+
+// SetProtectedResourceArns sets the ProtectedResourceArns field's value.
+func (s *RestoreTestingSelectionForCreate) SetProtectedResourceArns(v []*string) *RestoreTestingSelectionForCreate {
+	s.ProtectedResourceArns = v
+	return s
+}
+
+// SetProtectedResourceConditions sets the ProtectedResourceConditions field's value.
+func (s *RestoreTestingSelectionForCreate) SetProtectedResourceConditions(v *ProtectedResourceConditions) *RestoreTestingSelectionForCreate {
+	s.ProtectedResourceConditions = v
+	return s
+}
+
+// SetProtectedResourceType sets the ProtectedResourceType field's value.
+func (s *RestoreTestingSelectionForCreate) SetProtectedResourceType(v string) *RestoreTestingSelectionForCreate {
+	s.ProtectedResourceType = &v
+	return s
+}
+
+// SetRestoreMetadataOverrides sets the RestoreMetadataOverrides field's value.
+func (s *RestoreTestingSelectionForCreate) SetRestoreMetadataOverrides(v map[string]*string) *RestoreTestingSelectionForCreate {
+	s.RestoreMetadataOverrides = v
+	return s
+}
+
+// SetRestoreTestingSelectionName sets the RestoreTestingSelectionName field's value.
+func (s *RestoreTestingSelectionForCreate) SetRestoreTestingSelectionName(v string) *RestoreTestingSelectionForCreate {
+	s.RestoreTestingSelectionName = &v
+	return s
+}
+
+// SetValidationWindowHours sets the ValidationWindowHours field's value.
+func (s *RestoreTestingSelectionForCreate) SetValidationWindowHours(v int64) *RestoreTestingSelectionForCreate {
+	s.ValidationWindowHours = &v
+	return s
+}
+
+// This contains metadata about a restore testing selection.
+type RestoreTestingSelectionForGet struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time that a restore testing selection was created, in Unix format
+	// and Coordinated Universal Time (UTC). The value of CreationTime is accurate
+	// to milliseconds. For example, the value 1516925490.087 represents Friday,
+	// January 26, 201812:11:30.087 AM.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `type:"timestamp" required:"true"`
+
+	// This identifies the request and allows failed requests to be retried without
+	// the risk of running the operation twice. If the request includes a CreatorRequestId
+	// that matches an existing backup plan, that plan is returned. This parameter
+	// is optional.
+	//
+	// If used, this parameter must contain 1 to 50 alphanumeric or '-_.' characters.
+	CreatorRequestId *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the IAM role that Backup uses to create
+	// the target resource; for example:arn:aws:iam::123456789012:role/S3Access.
+	//
+	// IamRoleArn is a required field
+	IamRoleArn *string `type:"string" required:"true"`
+
+	// You can include specific ARNs, such as ProtectedResourceArns: ["arn:aws:...",
+	// "arn:aws:..."] or you can include a wildcard: ProtectedResourceArns: ["*"],
+	// but not both.
+	ProtectedResourceArns []*string `type:"list"`
+
+	// In a resource testing selection, this parameter filters by specific conditions
+	// such as StringEquals or StringNotEquals.
+	ProtectedResourceConditions *ProtectedResourceConditions `type:"structure"`
+
+	// The type of Amazon Web Services resource included in a resource testing selection;
+	// for example, an Amazon EBS volume or an Amazon RDS database.
+	//
+	// ProtectedResourceType is a required field
+	ProtectedResourceType *string `type:"string" required:"true"`
+
+	// You can override certain restore metadata keys by including the parameter
+	// RestoreMetadataOverrides in the body of RestoreTestingSelection. Key values
+	// are not case sensitive.
+	//
+	// See the complete list of restore testing inferred metadata (https://docs.aws.amazon.com/aws-backup/latest/devguide/restore-testing-inferred-metadata.html).
+	//
+	// RestoreMetadataOverrides is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by RestoreTestingSelectionForGet's
+	// String and GoString methods.
+	RestoreMetadataOverrides map[string]*string `type:"map" sensitive:"true"`
+
+	// The RestoreTestingPlanName is a unique string that is the name of the restore
+	// testing plan.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `type:"string" required:"true"`
+
+	// This is the unique name of the restore testing selection that belongs to
+	// the related restore testing plan.
+	//
+	// RestoreTestingSelectionName is a required field
+	RestoreTestingSelectionName *string `type:"string" required:"true"`
+
+	// This is amount of hours (1 to 168) available to run a validation script on
+	// the data. The data will be deleted upon the completion of the validation
+	// script or the end of the specified retention period, whichever comes first.
+	ValidationWindowHours *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingSelectionForGet) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingSelectionForGet) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *RestoreTestingSelectionForGet) SetCreationTime(v time.Time) *RestoreTestingSelectionForGet {
+	s.CreationTime = &v
+	return s
+}
+
+// SetCreatorRequestId sets the CreatorRequestId field's value.
+func (s *RestoreTestingSelectionForGet) SetCreatorRequestId(v string) *RestoreTestingSelectionForGet {
+	s.CreatorRequestId = &v
+	return s
+}
+
+// SetIamRoleArn sets the IamRoleArn field's value.
+func (s *RestoreTestingSelectionForGet) SetIamRoleArn(v string) *RestoreTestingSelectionForGet {
+	s.IamRoleArn = &v
+	return s
+}
+
+// SetProtectedResourceArns sets the ProtectedResourceArns field's value.
+func (s *RestoreTestingSelectionForGet) SetProtectedResourceArns(v []*string) *RestoreTestingSelectionForGet {
+	s.ProtectedResourceArns = v
+	return s
+}
+
+// SetProtectedResourceConditions sets the ProtectedResourceConditions field's value.
+func (s *RestoreTestingSelectionForGet) SetProtectedResourceConditions(v *ProtectedResourceConditions) *RestoreTestingSelectionForGet {
+	s.ProtectedResourceConditions = v
+	return s
+}
+
+// SetProtectedResourceType sets the ProtectedResourceType field's value.
+func (s *RestoreTestingSelectionForGet) SetProtectedResourceType(v string) *RestoreTestingSelectionForGet {
+	s.ProtectedResourceType = &v
+	return s
+}
+
+// SetRestoreMetadataOverrides sets the RestoreMetadataOverrides field's value.
+func (s *RestoreTestingSelectionForGet) SetRestoreMetadataOverrides(v map[string]*string) *RestoreTestingSelectionForGet {
+	s.RestoreMetadataOverrides = v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *RestoreTestingSelectionForGet) SetRestoreTestingPlanName(v string) *RestoreTestingSelectionForGet {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetRestoreTestingSelectionName sets the RestoreTestingSelectionName field's value.
+func (s *RestoreTestingSelectionForGet) SetRestoreTestingSelectionName(v string) *RestoreTestingSelectionForGet {
+	s.RestoreTestingSelectionName = &v
+	return s
+}
+
+// SetValidationWindowHours sets the ValidationWindowHours field's value.
+func (s *RestoreTestingSelectionForGet) SetValidationWindowHours(v int64) *RestoreTestingSelectionForGet {
+	s.ValidationWindowHours = &v
+	return s
+}
+
+// This contains metadata about a restore testing selection.
+type RestoreTestingSelectionForList struct {
+	_ struct{} `type:"structure"`
+
+	// This is the date and time that a restore testing selection was created, in
+	// Unix format and Coordinated Universal Time (UTC). The value of CreationTime
+	// is accurate to milliseconds. For example, the value 1516925490.087 represents
+	// Friday, January 26,2018 12:11:30.087 AM.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `type:"timestamp" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the IAM role that Backup uses to create
+	// the target resource; for example: arn:aws:iam::123456789012:role/S3Access.
+	//
+	// IamRoleArn is a required field
+	IamRoleArn *string `type:"string" required:"true"`
+
+	// The type of Amazon Web Services resource included in a restore testing selection;
+	// for example, an Amazon EBS volume or an Amazon RDS database.
+	//
+	// ProtectedResourceType is a required field
+	ProtectedResourceType *string `type:"string" required:"true"`
+
+	// Unique string that is the name of the restore testing plan.
+	//
+	// The name cannot be changed after creation. The name must consist of only
+	// alphanumeric characters and underscores. Maximum length is 50.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `type:"string" required:"true"`
+
+	// Unique name of a restore testing selection.
+	//
+	// RestoreTestingSelectionName is a required field
+	RestoreTestingSelectionName *string `type:"string" required:"true"`
+
+	// This value represents the time, in hours, data is retained after a restore
+	// test so that optional validation can be completed.
+	//
+	// Accepted value is an integer between 0 and 168 (the hourly equivalent of
+	// seven days).
+	ValidationWindowHours *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingSelectionForList) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingSelectionForList) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *RestoreTestingSelectionForList) SetCreationTime(v time.Time) *RestoreTestingSelectionForList {
+	s.CreationTime = &v
+	return s
+}
+
+// SetIamRoleArn sets the IamRoleArn field's value.
+func (s *RestoreTestingSelectionForList) SetIamRoleArn(v string) *RestoreTestingSelectionForList {
+	s.IamRoleArn = &v
+	return s
+}
+
+// SetProtectedResourceType sets the ProtectedResourceType field's value.
+func (s *RestoreTestingSelectionForList) SetProtectedResourceType(v string) *RestoreTestingSelectionForList {
+	s.ProtectedResourceType = &v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *RestoreTestingSelectionForList) SetRestoreTestingPlanName(v string) *RestoreTestingSelectionForList {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetRestoreTestingSelectionName sets the RestoreTestingSelectionName field's value.
+func (s *RestoreTestingSelectionForList) SetRestoreTestingSelectionName(v string) *RestoreTestingSelectionForList {
+	s.RestoreTestingSelectionName = &v
+	return s
+}
+
+// SetValidationWindowHours sets the ValidationWindowHours field's value.
+func (s *RestoreTestingSelectionForList) SetValidationWindowHours(v int64) *RestoreTestingSelectionForList {
+	s.ValidationWindowHours = &v
+	return s
+}
+
+// This contains metadata about a restore testing selection.
+type RestoreTestingSelectionForUpdate struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the IAM role that Backup uses to create
+	// the target resource; for example: arn:aws:iam::123456789012:role/S3Access.
+	IamRoleArn *string `type:"string"`
+
+	// You can include a list of specific ARNs, such as ProtectedResourceArns: ["arn:aws:...",
+	// "arn:aws:..."] or you can include a wildcard: ProtectedResourceArns: ["*"],
+	// but not both.
+	ProtectedResourceArns []*string `type:"list"`
+
+	// A list of conditions that you define for resources in your restore testing
+	// plan using tags.
+	//
+	// For example, "StringEquals": { "Key": "aws:ResourceTag/CreatedByCryo", "Value":
+	// "true" },. Condition operators are case sensitive.
+	ProtectedResourceConditions *ProtectedResourceConditions `type:"structure"`
+
+	// You can override certain restore metadata keys by including the parameter
+	// RestoreMetadataOverrides in the body of RestoreTestingSelection. Key values
+	// are not case sensitive.
+	//
+	// See the complete list of restore testing inferred metadata (https://docs.aws.amazon.com/aws-backup/latest/devguide/restore-testing-inferred-metadata.html).
+	//
+	// RestoreMetadataOverrides is a sensitive parameter and its value will be
+	// replaced with "sensitive" in string returned by RestoreTestingSelectionForUpdate's
+	// String and GoString methods.
+	RestoreMetadataOverrides map[string]*string `type:"map" sensitive:"true"`
+
+	// This value represents the time, in hours, data is retained after a restore
+	// test so that optional validation can be completed.
+	//
+	// Accepted value is an integer between 0 and 168 (the hourly equivalent of
+	// seven days).
+	ValidationWindowHours *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingSelectionForUpdate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreTestingSelectionForUpdate) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RestoreTestingSelectionForUpdate) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RestoreTestingSelectionForUpdate"}
+	if s.ProtectedResourceConditions != nil {
+		if err := s.ProtectedResourceConditions.Validate(); err != nil {
+			invalidParams.AddNested("ProtectedResourceConditions", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIamRoleArn sets the IamRoleArn field's value.
+func (s *RestoreTestingSelectionForUpdate) SetIamRoleArn(v string) *RestoreTestingSelectionForUpdate {
+	s.IamRoleArn = &v
+	return s
+}
+
+// SetProtectedResourceArns sets the ProtectedResourceArns field's value.
+func (s *RestoreTestingSelectionForUpdate) SetProtectedResourceArns(v []*string) *RestoreTestingSelectionForUpdate {
+	s.ProtectedResourceArns = v
+	return s
+}
+
+// SetProtectedResourceConditions sets the ProtectedResourceConditions field's value.
+func (s *RestoreTestingSelectionForUpdate) SetProtectedResourceConditions(v *ProtectedResourceConditions) *RestoreTestingSelectionForUpdate {
+	s.ProtectedResourceConditions = v
+	return s
+}
+
+// SetRestoreMetadataOverrides sets the RestoreMetadataOverrides field's value.
+func (s *RestoreTestingSelectionForUpdate) SetRestoreMetadataOverrides(v map[string]*string) *RestoreTestingSelectionForUpdate {
+	s.RestoreMetadataOverrides = v
+	return s
+}
+
+// SetValidationWindowHours sets the ValidationWindowHours field's value.
+func (s *RestoreTestingSelectionForUpdate) SetValidationWindowHours(v int64) *RestoreTestingSelectionForUpdate {
+	s.ValidationWindowHours = &v
 	return s
 }
 
@@ -18678,9 +25127,21 @@ type Rule struct {
 	// For a table of examples, click the preceding link and scroll down the page.
 	ScheduleExpression *string `type:"string"`
 
+	// This is the timezone in which the schedule expression is set. By default,
+	// ScheduleExpressions are in UTC. You can modify this to a specified timezone.
+	ScheduleExpressionTimezone *string `type:"string"`
+
 	// A value in minutes after a backup is scheduled before a job will be canceled
 	// if it doesn't start successfully. This value is optional. If this value is
 	// included, it must be at least 60 minutes to avoid errors.
+	//
+	// During the start window, the backup job status remains in CREATED status
+	// until it has successfully begun or until the start window time has run out.
+	// If within the start window time Backup receives an error that allows the
+	// job to be retried, Backup will automatically retry to begin the job at least
+	// every 10 minutes until the backup successfully begins (the job status changes
+	// to RUNNING) or until the job status changes to EXPIRED (which is expected
+	// to occur when the start window time is over).
 	StartWindowMinutes *int64 `type:"long"`
 
 	// The name of a logical container where backups are stored. Backup vaults are
@@ -18758,6 +25219,12 @@ func (s *Rule) SetScheduleExpression(v string) *Rule {
 	return s
 }
 
+// SetScheduleExpressionTimezone sets the ScheduleExpressionTimezone field's value.
+func (s *Rule) SetScheduleExpressionTimezone(v string) *Rule {
+	s.ScheduleExpressionTimezone = &v
+	return s
+}
+
 // SetStartWindowMinutes sets the StartWindowMinutes field's value.
 func (s *Rule) SetStartWindowMinutes(v int64) *Rule {
 	s.StartWindowMinutes = &v
@@ -18800,6 +25267,8 @@ type RuleInput struct {
 	// in the "Lifecycle to cold storage" section of the Feature availability by
 	// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
 	// table. Backup ignores this expression for other resource types.
+	//
+	// This parameter has a maximum value of 100 years (36,500 days).
 	Lifecycle *Lifecycle `type:"structure"`
 
 	// To help organize your resources, you can assign your own metadata to the
@@ -18819,9 +25288,23 @@ type RuleInput struct {
 	// A CRON expression in UTC specifying when Backup initiates a backup job.
 	ScheduleExpression *string `type:"string"`
 
+	// This is the timezone in which the schedule expression is set. By default,
+	// ScheduleExpressions are in UTC. You can modify this to a specified timezone.
+	ScheduleExpressionTimezone *string `type:"string"`
+
 	// A value in minutes after a backup is scheduled before a job will be canceled
 	// if it doesn't start successfully. This value is optional. If this value is
 	// included, it must be at least 60 minutes to avoid errors.
+	//
+	// This parameter has a maximum value of 100 years (52,560,000 minutes).
+	//
+	// During the start window, the backup job status remains in CREATED status
+	// until it has successfully begun or until the start window time has run out.
+	// If within the start window time Backup receives an error that allows the
+	// job to be retried, Backup will automatically retry to begin the job at least
+	// every 10 minutes until the backup successfully begins (the job status changes
+	// to RUNNING) or until the job status changes to EXPIRED (which is expected
+	// to occur when the start window time is over).
 	StartWindowMinutes *int64 `type:"long"`
 
 	// The name of a logical container where backups are stored. Backup vaults are
@@ -18919,6 +25402,12 @@ func (s *RuleInput) SetScheduleExpression(v string) *RuleInput {
 	return s
 }
 
+// SetScheduleExpressionTimezone sets the ScheduleExpressionTimezone field's value.
+func (s *RuleInput) SetScheduleExpressionTimezone(v string) *RuleInput {
+	s.ScheduleExpressionTimezone = &v
+	return s
+}
+
 // SetStartWindowMinutes sets the StartWindowMinutes field's value.
 func (s *RuleInput) SetStartWindowMinutes(v int64) *RuleInput {
 	s.StartWindowMinutes = &v
@@ -18941,8 +25430,8 @@ type Selection struct {
 	_ struct{} `type:"structure"`
 
 	// A list of conditions that you define to assign resources to your backup plans
-	// using tags. For example, "StringEquals": { "ConditionKey": "aws:ResourceTag/CreatedByCryo",
-	// "ConditionValue": "true" },. Condition operators are case sensitive.
+	// using tags. For example, "StringEquals": { "Key": "aws:ResourceTag/CreatedByCryo",
+	// "Value": "true" },. Condition operators are case sensitive.
 	//
 	// Conditions differs from ListOfTags as follows:
 	//
@@ -18960,8 +25449,8 @@ type Selection struct {
 	IamRoleArn *string `type:"string" required:"true"`
 
 	// A list of conditions that you define to assign resources to your backup plans
-	// using tags. For example, "StringEquals": { "ConditionKey": "aws:ResourceTag/CreatedByCryo",
-	// "ConditionValue": "true" },. Condition operators are case sensitive.
+	// using tags. For example, "StringEquals": { "Key": "aws:ResourceTag/CreatedByCryo",
+	// "Value": "true" },. Condition operators are case sensitive.
 	//
 	// ListOfTags differs from Conditions as follows:
 	//
@@ -19253,6 +25742,9 @@ type StartBackupJobInput struct {
 	// or else Backup will cancel the job. This value is optional. This value begins
 	// counting down from when the backup was scheduled. It does not add additional
 	// time for StartWindowMinutes, or if the backup started later than scheduled.
+	//
+	// Like StartWindowMinutes, this parameter has a maximum value of 100 years
+	// (52,560,000 minutes).
 	CompleteWindowMinutes *int64 `type:"long"`
 
 	// Specifies the IAM role ARN used to create the target recovery point; for
@@ -19280,6 +25772,8 @@ type StartBackupJobInput struct {
 	// in the "Lifecycle to cold storage" section of the Feature availability by
 	// resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html#features-by-resource)
 	// table. Backup ignores this expression for other resource types.
+	//
+	// This parameter has a maximum value of 100 years (36,500 days).
 	Lifecycle *Lifecycle `type:"structure"`
 
 	// To help organize your resources, you can assign your own metadata to the
@@ -19300,6 +25794,16 @@ type StartBackupJobInput struct {
 	// if it doesn't start successfully. This value is optional, and the default
 	// is 8 hours. If this value is included, it must be at least 60 minutes to
 	// avoid errors.
+	//
+	// This parameter has a maximum value of 100 years (52,560,000 minutes).
+	//
+	// During the start window, the backup job status remains in CREATED status
+	// until it has successfully begun or until the start window time has run out.
+	// If within the start window time Backup receives an error that allows the
+	// job to be retried, Backup will automatically retry to begin the job at least
+	// every 10 minutes until the backup successfully begins (the job status changes
+	// to RUNNING) or until the job status changes to EXPIRED (which is expected
+	// to occur when the start window time is over).
 	StartWindowMinutes *int64 `type:"long"`
 }
 
@@ -19733,6 +26237,12 @@ func (s *StartReportJobOutput) SetReportJobId(v string) *StartReportJobOutput {
 type StartRestoreJobInput struct {
 	_ struct{} `type:"structure"`
 
+	// This is an optional parameter. If this equals True, tags included in the
+	// backup will be copied to the restored resource.
+	//
+	// This can only be applied to backups created through Backup.
+	CopySourceTagsToRestoredResource *bool `type:"boolean"`
+
 	// The Amazon Resource Name (ARN) of the IAM role that Backup uses to create
 	// the target resource; for example: arn:aws:iam::123456789012:role/S3Access.
 	IamRoleArn *string `type:"string"`
@@ -19796,6 +26306,8 @@ type StartRestoreJobInput struct {
 	//
 	//    * DocumentDB for Amazon DocumentDB (with MongoDB compatibility)
 	//
+	//    * CloudFormation for CloudFormation
+	//
 	//    * DynamoDB for Amazon DynamoDB
 	//
 	//    * EBS for Amazon Elastic Block Store
@@ -19810,9 +26322,13 @@ type StartRestoreJobInput struct {
 	//
 	//    * RDS for Amazon Relational Database Service
 	//
+	//    * Redshift for Amazon Redshift
+	//
 	//    * Storage Gateway for Storage Gateway
 	//
 	//    * S3 for Amazon S3
+	//
+	//    * Timestream for Amazon Timestream
 	//
 	//    * VirtualMachine for virtual machines
 	ResourceType *string `type:"string"`
@@ -19850,6 +26366,12 @@ func (s *StartRestoreJobInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCopySourceTagsToRestoredResource sets the CopySourceTagsToRestoredResource field's value.
+func (s *StartRestoreJobInput) SetCopySourceTagsToRestoredResource(v bool) *StartRestoreJobInput {
+	s.CopySourceTagsToRestoredResource = &v
+	return s
 }
 
 // SetIamRoleArn sets the IamRoleArn field's value.
@@ -20677,6 +27199,14 @@ type UpdateRegionSettingsInput struct {
 	ResourceTypeManagementPreference map[string]*bool `type:"map"`
 
 	// Updates the list of services along with the opt-in preferences for the Region.
+	//
+	// If resource assignments are only based on tags, then service opt-in settings
+	// are applied. If a resource type is explicitly assigned to a backup plan,
+	// such as Amazon S3, Amazon EC2, or Amazon RDS, it will be included in the
+	// backup even if the opt-in is not enabled for that particular service. If
+	// both a resource type and tags are specified in a resource assignment, the
+	// resource type specified in the backup plan takes priority over the tag condition.
+	// Service opt-in settings are disregarded in this situation.
 	ResourceTypeOptInPreference map[string]*bool `type:"map"`
 }
 
@@ -20894,6 +27424,304 @@ func (s *UpdateReportPlanOutput) SetReportPlanName(v string) *UpdateReportPlanOu
 	return s
 }
 
+type UpdateRestoreTestingPlanInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the body of a restore testing plan.
+	//
+	// RestoreTestingPlan is a required field
+	RestoreTestingPlan *RestoreTestingPlanForUpdate `type:"structure" required:"true"`
+
+	// This is the restore testing plan name you wish to update.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `location:"uri" locationName:"RestoreTestingPlanName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRestoreTestingPlanInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRestoreTestingPlanInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateRestoreTestingPlanInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateRestoreTestingPlanInput"}
+	if s.RestoreTestingPlan == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingPlan"))
+	}
+	if s.RestoreTestingPlanName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingPlanName"))
+	}
+	if s.RestoreTestingPlanName != nil && len(*s.RestoreTestingPlanName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreTestingPlanName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRestoreTestingPlan sets the RestoreTestingPlan field's value.
+func (s *UpdateRestoreTestingPlanInput) SetRestoreTestingPlan(v *RestoreTestingPlanForUpdate) *UpdateRestoreTestingPlanInput {
+	s.RestoreTestingPlan = v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *UpdateRestoreTestingPlanInput) SetRestoreTestingPlanName(v string) *UpdateRestoreTestingPlanInput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+type UpdateRestoreTestingPlanOutput struct {
+	_ struct{} `type:"structure"`
+
+	// This is the time the resource testing plan was created.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `type:"timestamp" required:"true"`
+
+	// Unique ARN (Amazon Resource Name) of the restore testing plan.
+	//
+	// RestoreTestingPlanArn is a required field
+	RestoreTestingPlanArn *string `type:"string" required:"true"`
+
+	// The name cannot be changed after creation. The name consists of only alphanumeric
+	// characters and underscores. Maximum length is 50.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `type:"string" required:"true"`
+
+	// This is the time the update completed for the restore testing plan.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRestoreTestingPlanOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRestoreTestingPlanOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *UpdateRestoreTestingPlanOutput) SetCreationTime(v time.Time) *UpdateRestoreTestingPlanOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetRestoreTestingPlanArn sets the RestoreTestingPlanArn field's value.
+func (s *UpdateRestoreTestingPlanOutput) SetRestoreTestingPlanArn(v string) *UpdateRestoreTestingPlanOutput {
+	s.RestoreTestingPlanArn = &v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *UpdateRestoreTestingPlanOutput) SetRestoreTestingPlanName(v string) *UpdateRestoreTestingPlanOutput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *UpdateRestoreTestingPlanOutput) SetUpdateTime(v time.Time) *UpdateRestoreTestingPlanOutput {
+	s.UpdateTime = &v
+	return s
+}
+
+type UpdateRestoreTestingSelectionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The restore testing plan name is required to update the indicated testing
+	// plan.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `location:"uri" locationName:"RestoreTestingPlanName" type:"string" required:"true"`
+
+	// To update your restore testing selection, you can use either protected resource
+	// ARNs or conditions, but not both. That is, if your selection has ProtectedResourceArns,
+	// requesting an update with the parameter ProtectedResourceConditions will
+	// be unsuccessful.
+	//
+	// RestoreTestingSelection is a required field
+	RestoreTestingSelection *RestoreTestingSelectionForUpdate `type:"structure" required:"true"`
+
+	// This is the required restore testing selection name of the restore testing
+	// selection you wish to update.
+	//
+	// RestoreTestingSelectionName is a required field
+	RestoreTestingSelectionName *string `location:"uri" locationName:"RestoreTestingSelectionName" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRestoreTestingSelectionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRestoreTestingSelectionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateRestoreTestingSelectionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateRestoreTestingSelectionInput"}
+	if s.RestoreTestingPlanName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingPlanName"))
+	}
+	if s.RestoreTestingPlanName != nil && len(*s.RestoreTestingPlanName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreTestingPlanName", 1))
+	}
+	if s.RestoreTestingSelection == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingSelection"))
+	}
+	if s.RestoreTestingSelectionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RestoreTestingSelectionName"))
+	}
+	if s.RestoreTestingSelectionName != nil && len(*s.RestoreTestingSelectionName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RestoreTestingSelectionName", 1))
+	}
+	if s.RestoreTestingSelection != nil {
+		if err := s.RestoreTestingSelection.Validate(); err != nil {
+			invalidParams.AddNested("RestoreTestingSelection", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *UpdateRestoreTestingSelectionInput) SetRestoreTestingPlanName(v string) *UpdateRestoreTestingSelectionInput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetRestoreTestingSelection sets the RestoreTestingSelection field's value.
+func (s *UpdateRestoreTestingSelectionInput) SetRestoreTestingSelection(v *RestoreTestingSelectionForUpdate) *UpdateRestoreTestingSelectionInput {
+	s.RestoreTestingSelection = v
+	return s
+}
+
+// SetRestoreTestingSelectionName sets the RestoreTestingSelectionName field's value.
+func (s *UpdateRestoreTestingSelectionInput) SetRestoreTestingSelectionName(v string) *UpdateRestoreTestingSelectionInput {
+	s.RestoreTestingSelectionName = &v
+	return s
+}
+
+type UpdateRestoreTestingSelectionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// This is the time the resource testing selection was updated successfully.
+	//
+	// CreationTime is a required field
+	CreationTime *time.Time `type:"timestamp" required:"true"`
+
+	// Unique string that is the name of the restore testing plan.
+	//
+	// RestoreTestingPlanArn is a required field
+	RestoreTestingPlanArn *string `type:"string" required:"true"`
+
+	// This is the restore testing plan with which the updated restore testing selection
+	// is associated.
+	//
+	// RestoreTestingPlanName is a required field
+	RestoreTestingPlanName *string `type:"string" required:"true"`
+
+	// This is the returned restore testing selection name.
+	//
+	// RestoreTestingSelectionName is a required field
+	RestoreTestingSelectionName *string `type:"string" required:"true"`
+
+	// This is the time the update completed for the restore testing selection.
+	//
+	// UpdateTime is a required field
+	UpdateTime *time.Time `type:"timestamp" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRestoreTestingSelectionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s UpdateRestoreTestingSelectionOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *UpdateRestoreTestingSelectionOutput) SetCreationTime(v time.Time) *UpdateRestoreTestingSelectionOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetRestoreTestingPlanArn sets the RestoreTestingPlanArn field's value.
+func (s *UpdateRestoreTestingSelectionOutput) SetRestoreTestingPlanArn(v string) *UpdateRestoreTestingSelectionOutput {
+	s.RestoreTestingPlanArn = &v
+	return s
+}
+
+// SetRestoreTestingPlanName sets the RestoreTestingPlanName field's value.
+func (s *UpdateRestoreTestingSelectionOutput) SetRestoreTestingPlanName(v string) *UpdateRestoreTestingSelectionOutput {
+	s.RestoreTestingPlanName = &v
+	return s
+}
+
+// SetRestoreTestingSelectionName sets the RestoreTestingSelectionName field's value.
+func (s *UpdateRestoreTestingSelectionOutput) SetRestoreTestingSelectionName(v string) *UpdateRestoreTestingSelectionOutput {
+	s.RestoreTestingSelectionName = &v
+	return s
+}
+
+// SetUpdateTime sets the UpdateTime field's value.
+func (s *UpdateRestoreTestingSelectionOutput) SetUpdateTime(v time.Time) *UpdateRestoreTestingSelectionOutput {
+	s.UpdateTime = &v
+	return s
+}
+
 // Contains metadata about a backup vault.
 type VaultListMember struct {
 	_ struct{} `type:"structure"`
@@ -21056,6 +27884,78 @@ func (s *VaultListMember) SetNumberOfRecoveryPoints(v int64) *VaultListMember {
 }
 
 const (
+	// AggregationPeriodOneDay is a AggregationPeriod enum value
+	AggregationPeriodOneDay = "ONE_DAY"
+
+	// AggregationPeriodSevenDays is a AggregationPeriod enum value
+	AggregationPeriodSevenDays = "SEVEN_DAYS"
+
+	// AggregationPeriodFourteenDays is a AggregationPeriod enum value
+	AggregationPeriodFourteenDays = "FOURTEEN_DAYS"
+)
+
+// AggregationPeriod_Values returns all elements of the AggregationPeriod enum
+func AggregationPeriod_Values() []string {
+	return []string{
+		AggregationPeriodOneDay,
+		AggregationPeriodSevenDays,
+		AggregationPeriodFourteenDays,
+	}
+}
+
+const (
+	// BackupJobStatusCreated is a BackupJobStatus enum value
+	BackupJobStatusCreated = "CREATED"
+
+	// BackupJobStatusPending is a BackupJobStatus enum value
+	BackupJobStatusPending = "PENDING"
+
+	// BackupJobStatusRunning is a BackupJobStatus enum value
+	BackupJobStatusRunning = "RUNNING"
+
+	// BackupJobStatusAborting is a BackupJobStatus enum value
+	BackupJobStatusAborting = "ABORTING"
+
+	// BackupJobStatusAborted is a BackupJobStatus enum value
+	BackupJobStatusAborted = "ABORTED"
+
+	// BackupJobStatusCompleted is a BackupJobStatus enum value
+	BackupJobStatusCompleted = "COMPLETED"
+
+	// BackupJobStatusFailed is a BackupJobStatus enum value
+	BackupJobStatusFailed = "FAILED"
+
+	// BackupJobStatusExpired is a BackupJobStatus enum value
+	BackupJobStatusExpired = "EXPIRED"
+
+	// BackupJobStatusPartial is a BackupJobStatus enum value
+	BackupJobStatusPartial = "PARTIAL"
+
+	// BackupJobStatusAggregateAll is a BackupJobStatus enum value
+	BackupJobStatusAggregateAll = "AGGREGATE_ALL"
+
+	// BackupJobStatusAny is a BackupJobStatus enum value
+	BackupJobStatusAny = "ANY"
+)
+
+// BackupJobStatus_Values returns all elements of the BackupJobStatus enum
+func BackupJobStatus_Values() []string {
+	return []string{
+		BackupJobStatusCreated,
+		BackupJobStatusPending,
+		BackupJobStatusRunning,
+		BackupJobStatusAborting,
+		BackupJobStatusAborted,
+		BackupJobStatusCompleted,
+		BackupJobStatusFailed,
+		BackupJobStatusExpired,
+		BackupJobStatusPartial,
+		BackupJobStatusAggregateAll,
+		BackupJobStatusAny,
+	}
+}
+
+const (
 	// ConditionTypeStringequals is a ConditionType enum value
 	ConditionTypeStringequals = "STRINGEQUALS"
 )
@@ -21092,6 +27992,58 @@ func CopyJobState_Values() []string {
 		CopyJobStateCompleted,
 		CopyJobStateFailed,
 		CopyJobStatePartial,
+	}
+}
+
+const (
+	// CopyJobStatusCreated is a CopyJobStatus enum value
+	CopyJobStatusCreated = "CREATED"
+
+	// CopyJobStatusRunning is a CopyJobStatus enum value
+	CopyJobStatusRunning = "RUNNING"
+
+	// CopyJobStatusAborting is a CopyJobStatus enum value
+	CopyJobStatusAborting = "ABORTING"
+
+	// CopyJobStatusAborted is a CopyJobStatus enum value
+	CopyJobStatusAborted = "ABORTED"
+
+	// CopyJobStatusCompleting is a CopyJobStatus enum value
+	CopyJobStatusCompleting = "COMPLETING"
+
+	// CopyJobStatusCompleted is a CopyJobStatus enum value
+	CopyJobStatusCompleted = "COMPLETED"
+
+	// CopyJobStatusFailing is a CopyJobStatus enum value
+	CopyJobStatusFailing = "FAILING"
+
+	// CopyJobStatusFailed is a CopyJobStatus enum value
+	CopyJobStatusFailed = "FAILED"
+
+	// CopyJobStatusPartial is a CopyJobStatus enum value
+	CopyJobStatusPartial = "PARTIAL"
+
+	// CopyJobStatusAggregateAll is a CopyJobStatus enum value
+	CopyJobStatusAggregateAll = "AGGREGATE_ALL"
+
+	// CopyJobStatusAny is a CopyJobStatus enum value
+	CopyJobStatusAny = "ANY"
+)
+
+// CopyJobStatus_Values returns all elements of the CopyJobStatus enum
+func CopyJobStatus_Values() []string {
+	return []string{
+		CopyJobStatusCreated,
+		CopyJobStatusRunning,
+		CopyJobStatusAborting,
+		CopyJobStatusAborted,
+		CopyJobStatusCompleting,
+		CopyJobStatusCompleted,
+		CopyJobStatusFailing,
+		CopyJobStatusFailed,
+		CopyJobStatusPartial,
+		CopyJobStatusAggregateAll,
+		CopyJobStatusAny,
 	}
 }
 
@@ -21188,6 +28140,66 @@ func RecoveryPointStatus_Values() []string {
 }
 
 const (
+	// RestoreDeletionStatusDeleting is a RestoreDeletionStatus enum value
+	RestoreDeletionStatusDeleting = "DELETING"
+
+	// RestoreDeletionStatusFailed is a RestoreDeletionStatus enum value
+	RestoreDeletionStatusFailed = "FAILED"
+
+	// RestoreDeletionStatusSuccessful is a RestoreDeletionStatus enum value
+	RestoreDeletionStatusSuccessful = "SUCCESSFUL"
+)
+
+// RestoreDeletionStatus_Values returns all elements of the RestoreDeletionStatus enum
+func RestoreDeletionStatus_Values() []string {
+	return []string{
+		RestoreDeletionStatusDeleting,
+		RestoreDeletionStatusFailed,
+		RestoreDeletionStatusSuccessful,
+	}
+}
+
+const (
+	// RestoreJobStateCreated is a RestoreJobState enum value
+	RestoreJobStateCreated = "CREATED"
+
+	// RestoreJobStatePending is a RestoreJobState enum value
+	RestoreJobStatePending = "PENDING"
+
+	// RestoreJobStateRunning is a RestoreJobState enum value
+	RestoreJobStateRunning = "RUNNING"
+
+	// RestoreJobStateAborted is a RestoreJobState enum value
+	RestoreJobStateAborted = "ABORTED"
+
+	// RestoreJobStateCompleted is a RestoreJobState enum value
+	RestoreJobStateCompleted = "COMPLETED"
+
+	// RestoreJobStateFailed is a RestoreJobState enum value
+	RestoreJobStateFailed = "FAILED"
+
+	// RestoreJobStateAggregateAll is a RestoreJobState enum value
+	RestoreJobStateAggregateAll = "AGGREGATE_ALL"
+
+	// RestoreJobStateAny is a RestoreJobState enum value
+	RestoreJobStateAny = "ANY"
+)
+
+// RestoreJobState_Values returns all elements of the RestoreJobState enum
+func RestoreJobState_Values() []string {
+	return []string{
+		RestoreJobStateCreated,
+		RestoreJobStatePending,
+		RestoreJobStateRunning,
+		RestoreJobStateAborted,
+		RestoreJobStateCompleted,
+		RestoreJobStateFailed,
+		RestoreJobStateAggregateAll,
+		RestoreJobStateAny,
+	}
+}
+
+const (
 	// RestoreJobStatusPending is a RestoreJobStatus enum value
 	RestoreJobStatusPending = "PENDING"
 
@@ -21212,6 +28224,62 @@ func RestoreJobStatus_Values() []string {
 		RestoreJobStatusCompleted,
 		RestoreJobStatusAborted,
 		RestoreJobStatusFailed,
+	}
+}
+
+const (
+	// RestoreTestingRecoveryPointSelectionAlgorithmLatestWithinWindow is a RestoreTestingRecoveryPointSelectionAlgorithm enum value
+	RestoreTestingRecoveryPointSelectionAlgorithmLatestWithinWindow = "LATEST_WITHIN_WINDOW"
+
+	// RestoreTestingRecoveryPointSelectionAlgorithmRandomWithinWindow is a RestoreTestingRecoveryPointSelectionAlgorithm enum value
+	RestoreTestingRecoveryPointSelectionAlgorithmRandomWithinWindow = "RANDOM_WITHIN_WINDOW"
+)
+
+// RestoreTestingRecoveryPointSelectionAlgorithm_Values returns all elements of the RestoreTestingRecoveryPointSelectionAlgorithm enum
+func RestoreTestingRecoveryPointSelectionAlgorithm_Values() []string {
+	return []string{
+		RestoreTestingRecoveryPointSelectionAlgorithmLatestWithinWindow,
+		RestoreTestingRecoveryPointSelectionAlgorithmRandomWithinWindow,
+	}
+}
+
+const (
+	// RestoreTestingRecoveryPointTypeContinuous is a RestoreTestingRecoveryPointType enum value
+	RestoreTestingRecoveryPointTypeContinuous = "CONTINUOUS"
+
+	// RestoreTestingRecoveryPointTypeSnapshot is a RestoreTestingRecoveryPointType enum value
+	RestoreTestingRecoveryPointTypeSnapshot = "SNAPSHOT"
+)
+
+// RestoreTestingRecoveryPointType_Values returns all elements of the RestoreTestingRecoveryPointType enum
+func RestoreTestingRecoveryPointType_Values() []string {
+	return []string{
+		RestoreTestingRecoveryPointTypeContinuous,
+		RestoreTestingRecoveryPointTypeSnapshot,
+	}
+}
+
+const (
+	// RestoreValidationStatusFailed is a RestoreValidationStatus enum value
+	RestoreValidationStatusFailed = "FAILED"
+
+	// RestoreValidationStatusSuccessful is a RestoreValidationStatus enum value
+	RestoreValidationStatusSuccessful = "SUCCESSFUL"
+
+	// RestoreValidationStatusTimedOut is a RestoreValidationStatus enum value
+	RestoreValidationStatusTimedOut = "TIMED_OUT"
+
+	// RestoreValidationStatusValidating is a RestoreValidationStatus enum value
+	RestoreValidationStatusValidating = "VALIDATING"
+)
+
+// RestoreValidationStatus_Values returns all elements of the RestoreValidationStatus enum
+func RestoreValidationStatus_Values() []string {
+	return []string{
+		RestoreValidationStatusFailed,
+		RestoreValidationStatusSuccessful,
+		RestoreValidationStatusTimedOut,
+		RestoreValidationStatusValidating,
 	}
 }
 
@@ -21308,5 +28376,41 @@ func VaultEvent_Values() []string {
 		VaultEventBackupPlanModified,
 		VaultEventS3BackupObjectFailed,
 		VaultEventS3RestoreObjectFailed,
+	}
+}
+
+const (
+	// VaultStateCreating is a VaultState enum value
+	VaultStateCreating = "CREATING"
+
+	// VaultStateAvailable is a VaultState enum value
+	VaultStateAvailable = "AVAILABLE"
+
+	// VaultStateFailed is a VaultState enum value
+	VaultStateFailed = "FAILED"
+)
+
+// VaultState_Values returns all elements of the VaultState enum
+func VaultState_Values() []string {
+	return []string{
+		VaultStateCreating,
+		VaultStateAvailable,
+		VaultStateFailed,
+	}
+}
+
+const (
+	// VaultTypeBackupVault is a VaultType enum value
+	VaultTypeBackupVault = "BACKUP_VAULT"
+
+	// VaultTypeLogicallyAirGappedBackupVault is a VaultType enum value
+	VaultTypeLogicallyAirGappedBackupVault = "LOGICALLY_AIR_GAPPED_BACKUP_VAULT"
+)
+
+// VaultType_Values returns all elements of the VaultType enum
+func VaultType_Values() []string {
+	return []string{
+		VaultTypeBackupVault,
+		VaultTypeLogicallyAirGappedBackupVault,
 	}
 }

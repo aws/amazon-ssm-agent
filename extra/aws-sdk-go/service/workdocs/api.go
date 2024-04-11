@@ -29,14 +29,13 @@ const opAbortDocumentVersionUpload = "AbortDocumentVersionUpload"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AbortDocumentVersionUploadRequest method.
+//	req, resp := client.AbortDocumentVersionUploadRequest(params)
 //
-//    // Example sending a request using the AbortDocumentVersionUploadRequest method.
-//    req, resp := client.AbortDocumentVersionUploadRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/AbortDocumentVersionUpload
 func (c *WorkDocs) AbortDocumentVersionUploadRequest(input *AbortDocumentVersionUploadInput) (req *request.Request, output *AbortDocumentVersionUploadOutput) {
@@ -70,28 +69,29 @@ func (c *WorkDocs) AbortDocumentVersionUploadRequest(input *AbortDocumentVersion
 // API operation AbortDocumentVersionUpload for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * ConcurrentModificationException
-//   The resource hierarchy is changing.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
+//
+//   - ConcurrentModificationException
+//     The resource hierarchy is changing.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/AbortDocumentVersionUpload
 func (c *WorkDocs) AbortDocumentVersionUpload(input *AbortDocumentVersionUploadInput) (*AbortDocumentVersionUploadOutput, error) {
@@ -131,14 +131,13 @@ const opActivateUser = "ActivateUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ActivateUserRequest method.
+//	req, resp := client.ActivateUserRequest(params)
 //
-//    // Example sending a request using the ActivateUserRequest method.
-//    req, resp := client.ActivateUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/ActivateUser
 func (c *WorkDocs) ActivateUserRequest(input *ActivateUserInput) (req *request.Request, output *ActivateUserOutput) {
@@ -169,22 +168,23 @@ func (c *WorkDocs) ActivateUserRequest(input *ActivateUserInput) (req *request.R
 // API operation ActivateUser for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/ActivateUser
 func (c *WorkDocs) ActivateUser(input *ActivateUserInput) (*ActivateUserOutput, error) {
@@ -224,14 +224,13 @@ const opAddResourcePermissions = "AddResourcePermissions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddResourcePermissionsRequest method.
+//	req, resp := client.AddResourcePermissionsRequest(params)
 //
-//    // Example sending a request using the AddResourcePermissionsRequest method.
-//    req, resp := client.AddResourcePermissionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/AddResourcePermissions
 func (c *WorkDocs) AddResourcePermissionsRequest(input *AddResourcePermissionsInput) (req *request.Request, output *AddResourcePermissionsOutput) {
@@ -263,22 +262,23 @@ func (c *WorkDocs) AddResourcePermissionsRequest(input *AddResourcePermissionsIn
 // API operation AddResourcePermissions for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
+//
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/AddResourcePermissions
 func (c *WorkDocs) AddResourcePermissions(input *AddResourcePermissionsInput) (*AddResourcePermissionsOutput, error) {
@@ -318,14 +318,13 @@ const opCreateComment = "CreateComment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateCommentRequest method.
+//	req, resp := client.CreateCommentRequest(params)
 //
-//    // Example sending a request using the CreateCommentRequest method.
-//    req, resp := client.CreateCommentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateComment
 func (c *WorkDocs) CreateCommentRequest(input *CreateCommentInput) (req *request.Request, output *CreateCommentOutput) {
@@ -356,32 +355,33 @@ func (c *WorkDocs) CreateCommentRequest(input *CreateCommentInput) (req *request
 // API operation CreateComment for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * DocumentLockedForCommentsException
-//   This exception is thrown when the document is locked for comments and user
-//   tries to create or delete a comment on that document.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
-//   * InvalidCommentOperationException
-//   The requested operation is not allowed on the specified comment object.
+//   - DocumentLockedForCommentsException
+//     This exception is thrown when the document is locked for comments and user
+//     tries to create or delete a comment on that document.
+//
+//   - InvalidCommentOperationException
+//     The requested operation is not allowed on the specified comment object.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateComment
 func (c *WorkDocs) CreateComment(input *CreateCommentInput) (*CreateCommentOutput, error) {
@@ -421,14 +421,13 @@ const opCreateCustomMetadata = "CreateCustomMetadata"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateCustomMetadataRequest method.
+//	req, resp := client.CreateCustomMetadataRequest(params)
 //
-//    // Example sending a request using the CreateCustomMetadataRequest method.
-//    req, resp := client.CreateCustomMetadataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateCustomMetadata
 func (c *WorkDocs) CreateCustomMetadataRequest(input *CreateCustomMetadataInput) (req *request.Request, output *CreateCustomMetadataOutput) {
@@ -461,29 +460,30 @@ func (c *WorkDocs) CreateCustomMetadataRequest(input *CreateCustomMetadataInput)
 // API operation CreateCustomMetadata for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * CustomMetadataLimitExceededException
-//   The limit has been reached on the number of custom properties for the specified
-//   resource.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - CustomMetadataLimitExceededException
+//     The limit has been reached on the number of custom properties for the specified
+//     resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateCustomMetadata
 func (c *WorkDocs) CreateCustomMetadata(input *CreateCustomMetadataInput) (*CreateCustomMetadataOutput, error) {
@@ -523,14 +523,13 @@ const opCreateFolder = "CreateFolder"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateFolderRequest method.
+//	req, resp := client.CreateFolderRequest(params)
 //
-//    // Example sending a request using the CreateFolderRequest method.
-//    req, resp := client.CreateFolderRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateFolder
 func (c *WorkDocs) CreateFolderRequest(input *CreateFolderInput) (req *request.Request, output *CreateFolderOutput) {
@@ -561,39 +560,40 @@ func (c *WorkDocs) CreateFolderRequest(input *CreateFolderInput) (req *request.R
 // API operation CreateFolder for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * EntityAlreadyExistsException
-//   The resource already exists.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - EntityAlreadyExistsException
+//     The resource already exists.
 //
-//   * ConflictingOperationException
-//   Another operation is in progress on the resource that conflicts with the
-//   current operation.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * ConcurrentModificationException
-//   The resource hierarchy is changing.
+//   - ConflictingOperationException
+//     Another operation is in progress on the resource that conflicts with the
+//     current operation.
 //
-//   * LimitExceededException
-//   The maximum of 100,000 files and folders under the parent folder has been
-//   exceeded.
+//   - ConcurrentModificationException
+//     The resource hierarchy is changing.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - LimitExceededException
+//     The maximum of 100,000 files and folders under the parent folder has been
+//     exceeded.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateFolder
 func (c *WorkDocs) CreateFolder(input *CreateFolderInput) (*CreateFolderOutput, error) {
@@ -633,14 +633,13 @@ const opCreateLabels = "CreateLabels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateLabelsRequest method.
+//	req, resp := client.CreateLabelsRequest(params)
 //
-//    // Example sending a request using the CreateLabelsRequest method.
-//    req, resp := client.CreateLabelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateLabels
 func (c *WorkDocs) CreateLabelsRequest(input *CreateLabelsInput) (req *request.Request, output *CreateLabelsOutput) {
@@ -672,25 +671,26 @@ func (c *WorkDocs) CreateLabelsRequest(input *CreateLabelsInput) (req *request.R
 // API operation CreateLabels for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * TooManyLabelsException
-//   The limit has been reached on the number of labels for the specified resource.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
+//
+//   - TooManyLabelsException
+//     The limit has been reached on the number of labels for the specified resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateLabels
 func (c *WorkDocs) CreateLabels(input *CreateLabelsInput) (*CreateLabelsOutput, error) {
@@ -730,14 +730,13 @@ const opCreateNotificationSubscription = "CreateNotificationSubscription"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateNotificationSubscriptionRequest method.
+//	req, resp := client.CreateNotificationSubscriptionRequest(params)
 //
-//    // Example sending a request using the CreateNotificationSubscriptionRequest method.
-//    req, resp := client.CreateNotificationSubscriptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateNotificationSubscription
 func (c *WorkDocs) CreateNotificationSubscriptionRequest(input *CreateNotificationSubscriptionInput) (req *request.Request, output *CreateNotificationSubscriptionOutput) {
@@ -773,18 +772,19 @@ func (c *WorkDocs) CreateNotificationSubscriptionRequest(input *CreateNotificati
 // API operation CreateNotificationSubscription for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
 //
-//   * TooManySubscriptionsException
-//   You've reached the limit on the number of subscriptions for the WorkDocs
-//   instance.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - TooManySubscriptionsException
+//     You've reached the limit on the number of subscriptions for the WorkDocs
+//     instance.
 //
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
+//
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateNotificationSubscription
 func (c *WorkDocs) CreateNotificationSubscription(input *CreateNotificationSubscriptionInput) (*CreateNotificationSubscriptionOutput, error) {
@@ -824,14 +824,13 @@ const opCreateUser = "CreateUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateUserRequest method.
+//	req, resp := client.CreateUserRequest(params)
 //
-//    // Example sending a request using the CreateUserRequest method.
-//    req, resp := client.CreateUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateUser
 func (c *WorkDocs) CreateUserRequest(input *CreateUserInput) (req *request.Request, output *CreateUserOutput) {
@@ -863,22 +862,23 @@ func (c *WorkDocs) CreateUserRequest(input *CreateUserInput) (req *request.Reque
 // API operation CreateUser for usage and error information.
 //
 // Returned Error Types:
-//   * EntityAlreadyExistsException
-//   The resource already exists.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityAlreadyExistsException
+//     The resource already exists.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/CreateUser
 func (c *WorkDocs) CreateUser(input *CreateUserInput) (*CreateUserOutput, error) {
@@ -918,14 +918,13 @@ const opDeactivateUser = "DeactivateUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeactivateUserRequest method.
+//	req, resp := client.DeactivateUserRequest(params)
 //
-//    // Example sending a request using the DeactivateUserRequest method.
-//    req, resp := client.DeactivateUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeactivateUser
 func (c *WorkDocs) DeactivateUserRequest(input *DeactivateUserInput) (req *request.Request, output *DeactivateUserOutput) {
@@ -958,22 +957,23 @@ func (c *WorkDocs) DeactivateUserRequest(input *DeactivateUserInput) (req *reque
 // API operation DeactivateUser for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeactivateUser
 func (c *WorkDocs) DeactivateUser(input *DeactivateUserInput) (*DeactivateUserOutput, error) {
@@ -1013,14 +1013,13 @@ const opDeleteComment = "DeleteComment"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCommentRequest method.
+//	req, resp := client.DeleteCommentRequest(params)
 //
-//    // Example sending a request using the DeleteCommentRequest method.
-//    req, resp := client.DeleteCommentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteComment
 func (c *WorkDocs) DeleteCommentRequest(input *DeleteCommentInput) (req *request.Request, output *DeleteCommentOutput) {
@@ -1052,29 +1051,30 @@ func (c *WorkDocs) DeleteCommentRequest(input *DeleteCommentInput) (req *request
 // API operation DeleteComment for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * DocumentLockedForCommentsException
-//   This exception is thrown when the document is locked for comments and user
-//   tries to create or delete a comment on that document.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
+//
+//   - DocumentLockedForCommentsException
+//     This exception is thrown when the document is locked for comments and user
+//     tries to create or delete a comment on that document.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteComment
 func (c *WorkDocs) DeleteComment(input *DeleteCommentInput) (*DeleteCommentOutput, error) {
@@ -1114,14 +1114,13 @@ const opDeleteCustomMetadata = "DeleteCustomMetadata"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteCustomMetadataRequest method.
+//	req, resp := client.DeleteCustomMetadataRequest(params)
 //
-//    // Example sending a request using the DeleteCustomMetadataRequest method.
-//    req, resp := client.DeleteCustomMetadataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteCustomMetadata
 func (c *WorkDocs) DeleteCustomMetadataRequest(input *DeleteCustomMetadataInput) (req *request.Request, output *DeleteCustomMetadataOutput) {
@@ -1153,25 +1152,26 @@ func (c *WorkDocs) DeleteCustomMetadataRequest(input *DeleteCustomMetadataInput)
 // API operation DeleteCustomMetadata for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteCustomMetadata
 func (c *WorkDocs) DeleteCustomMetadata(input *DeleteCustomMetadataInput) (*DeleteCustomMetadataOutput, error) {
@@ -1211,14 +1211,13 @@ const opDeleteDocument = "DeleteDocument"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDocumentRequest method.
+//	req, resp := client.DeleteDocumentRequest(params)
 //
-//    // Example sending a request using the DeleteDocumentRequest method.
-//    req, resp := client.DeleteDocumentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteDocument
 func (c *WorkDocs) DeleteDocumentRequest(input *DeleteDocumentInput) (req *request.Request, output *DeleteDocumentOutput) {
@@ -1250,36 +1249,37 @@ func (c *WorkDocs) DeleteDocumentRequest(input *DeleteDocumentInput) (req *reque
 // API operation DeleteDocument for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * LimitExceededException
-//   The maximum of 100,000 files and folders under the parent folder has been
-//   exceeded.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - LimitExceededException
+//     The maximum of 100,000 files and folders under the parent folder has been
+//     exceeded.
 //
-//   * ConflictingOperationException
-//   Another operation is in progress on the resource that conflicts with the
-//   current operation.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * ConcurrentModificationException
-//   The resource hierarchy is changing.
+//   - ConflictingOperationException
+//     Another operation is in progress on the resource that conflicts with the
+//     current operation.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - ConcurrentModificationException
+//     The resource hierarchy is changing.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteDocument
 func (c *WorkDocs) DeleteDocument(input *DeleteDocumentInput) (*DeleteDocumentOutput, error) {
@@ -1319,14 +1319,13 @@ const opDeleteDocumentVersion = "DeleteDocumentVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDocumentVersionRequest method.
+//	req, resp := client.DeleteDocumentVersionRequest(params)
 //
-//    // Example sending a request using the DeleteDocumentVersionRequest method.
-//    req, resp := client.DeleteDocumentVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteDocumentVersion
 func (c *WorkDocs) DeleteDocumentVersionRequest(input *DeleteDocumentVersionInput) (req *request.Request, output *DeleteDocumentVersionOutput) {
@@ -1358,32 +1357,33 @@ func (c *WorkDocs) DeleteDocumentVersionRequest(input *DeleteDocumentVersionInpu
 // API operation DeleteDocumentVersion for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * ConflictingOperationException
-//   Another operation is in progress on the resource that conflicts with the
-//   current operation.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * ConcurrentModificationException
-//   The resource hierarchy is changing.
+//   - ConflictingOperationException
+//     Another operation is in progress on the resource that conflicts with the
+//     current operation.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - ConcurrentModificationException
+//     The resource hierarchy is changing.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * InvalidOperationException
-//   The operation is invalid.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - InvalidOperationException
+//     The operation is invalid.
+//
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteDocumentVersion
 func (c *WorkDocs) DeleteDocumentVersion(input *DeleteDocumentVersionInput) (*DeleteDocumentVersionOutput, error) {
@@ -1423,14 +1423,13 @@ const opDeleteFolder = "DeleteFolder"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFolderRequest method.
+//	req, resp := client.DeleteFolderRequest(params)
 //
-//    // Example sending a request using the DeleteFolderRequest method.
-//    req, resp := client.DeleteFolderRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteFolder
 func (c *WorkDocs) DeleteFolderRequest(input *DeleteFolderInput) (req *request.Request, output *DeleteFolderOutput) {
@@ -1462,36 +1461,37 @@ func (c *WorkDocs) DeleteFolderRequest(input *DeleteFolderInput) (req *request.R
 // API operation DeleteFolder for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * LimitExceededException
-//   The maximum of 100,000 files and folders under the parent folder has been
-//   exceeded.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - LimitExceededException
+//     The maximum of 100,000 files and folders under the parent folder has been
+//     exceeded.
 //
-//   * ConflictingOperationException
-//   Another operation is in progress on the resource that conflicts with the
-//   current operation.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * ConcurrentModificationException
-//   The resource hierarchy is changing.
+//   - ConflictingOperationException
+//     Another operation is in progress on the resource that conflicts with the
+//     current operation.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - ConcurrentModificationException
+//     The resource hierarchy is changing.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteFolder
 func (c *WorkDocs) DeleteFolder(input *DeleteFolderInput) (*DeleteFolderOutput, error) {
@@ -1531,14 +1531,13 @@ const opDeleteFolderContents = "DeleteFolderContents"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteFolderContentsRequest method.
+//	req, resp := client.DeleteFolderContentsRequest(params)
 //
-//    // Example sending a request using the DeleteFolderContentsRequest method.
-//    req, resp := client.DeleteFolderContentsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteFolderContents
 func (c *WorkDocs) DeleteFolderContentsRequest(input *DeleteFolderContentsInput) (req *request.Request, output *DeleteFolderContentsOutput) {
@@ -1570,29 +1569,30 @@ func (c *WorkDocs) DeleteFolderContentsRequest(input *DeleteFolderContentsInput)
 // API operation DeleteFolderContents for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * ConflictingOperationException
-//   Another operation is in progress on the resource that conflicts with the
-//   current operation.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - ConflictingOperationException
+//     Another operation is in progress on the resource that conflicts with the
+//     current operation.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteFolderContents
 func (c *WorkDocs) DeleteFolderContents(input *DeleteFolderContentsInput) (*DeleteFolderContentsOutput, error) {
@@ -1632,14 +1632,13 @@ const opDeleteLabels = "DeleteLabels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteLabelsRequest method.
+//	req, resp := client.DeleteLabelsRequest(params)
 //
-//    // Example sending a request using the DeleteLabelsRequest method.
-//    req, resp := client.DeleteLabelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteLabels
 func (c *WorkDocs) DeleteLabelsRequest(input *DeleteLabelsInput) (req *request.Request, output *DeleteLabelsOutput) {
@@ -1671,25 +1670,26 @@ func (c *WorkDocs) DeleteLabelsRequest(input *DeleteLabelsInput) (req *request.R
 // API operation DeleteLabels for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
+//
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteLabels
 func (c *WorkDocs) DeleteLabels(input *DeleteLabelsInput) (*DeleteLabelsOutput, error) {
@@ -1729,14 +1729,13 @@ const opDeleteNotificationSubscription = "DeleteNotificationSubscription"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteNotificationSubscriptionRequest method.
+//	req, resp := client.DeleteNotificationSubscriptionRequest(params)
 //
-//    // Example sending a request using the DeleteNotificationSubscriptionRequest method.
-//    req, resp := client.DeleteNotificationSubscriptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteNotificationSubscription
 func (c *WorkDocs) DeleteNotificationSubscriptionRequest(input *DeleteNotificationSubscriptionInput) (req *request.Request, output *DeleteNotificationSubscriptionOutput) {
@@ -1768,17 +1767,18 @@ func (c *WorkDocs) DeleteNotificationSubscriptionRequest(input *DeleteNotificati
 // API operation DeleteNotificationSubscription for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
 //
-//   * EntityNotExistsException
-//   The resource does not exist.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
+//
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteNotificationSubscription
 func (c *WorkDocs) DeleteNotificationSubscription(input *DeleteNotificationSubscriptionInput) (*DeleteNotificationSubscriptionOutput, error) {
@@ -1818,14 +1818,13 @@ const opDeleteUser = "DeleteUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteUserRequest method.
+//	req, resp := client.DeleteUserRequest(params)
 //
-//    // Example sending a request using the DeleteUserRequest method.
-//    req, resp := client.DeleteUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteUser
 func (c *WorkDocs) DeleteUserRequest(input *DeleteUserInput) (req *request.Request, output *DeleteUserOutput) {
@@ -1860,22 +1859,23 @@ func (c *WorkDocs) DeleteUserRequest(input *DeleteUserInput) (req *request.Reque
 // API operation DeleteUser for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DeleteUser
 func (c *WorkDocs) DeleteUser(input *DeleteUserInput) (*DeleteUserOutput, error) {
@@ -1915,14 +1915,13 @@ const opDescribeActivities = "DescribeActivities"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeActivitiesRequest method.
+//	req, resp := client.DescribeActivitiesRequest(params)
 //
-//    // Example sending a request using the DescribeActivitiesRequest method.
-//    req, resp := client.DescribeActivitiesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeActivities
 func (c *WorkDocs) DescribeActivitiesRequest(input *DescribeActivitiesInput) (req *request.Request, output *DescribeActivitiesOutput) {
@@ -1959,22 +1958,23 @@ func (c *WorkDocs) DescribeActivitiesRequest(input *DescribeActivitiesInput) (re
 // API operation DescribeActivities for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeActivities
 func (c *WorkDocs) DescribeActivities(input *DescribeActivitiesInput) (*DescribeActivitiesOutput, error) {
@@ -2006,15 +2006,14 @@ func (c *WorkDocs) DescribeActivitiesWithContext(ctx aws.Context, input *Describ
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeActivities operation.
-//    pageNum := 0
-//    err := client.DescribeActivitiesPages(params,
-//        func(page *workdocs.DescribeActivitiesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeActivities operation.
+//	pageNum := 0
+//	err := client.DescribeActivitiesPages(params,
+//	    func(page *workdocs.DescribeActivitiesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkDocs) DescribeActivitiesPages(input *DescribeActivitiesInput, fn func(*DescribeActivitiesOutput, bool) bool) error {
 	return c.DescribeActivitiesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2066,14 +2065,13 @@ const opDescribeComments = "DescribeComments"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeCommentsRequest method.
+//	req, resp := client.DescribeCommentsRequest(params)
 //
-//    // Example sending a request using the DescribeCommentsRequest method.
-//    req, resp := client.DescribeCommentsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeComments
 func (c *WorkDocs) DescribeCommentsRequest(input *DescribeCommentsInput) (req *request.Request, output *DescribeCommentsOutput) {
@@ -2110,25 +2108,26 @@ func (c *WorkDocs) DescribeCommentsRequest(input *DescribeCommentsInput) (req *r
 // API operation DescribeComments for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeComments
 func (c *WorkDocs) DescribeComments(input *DescribeCommentsInput) (*DescribeCommentsOutput, error) {
@@ -2160,15 +2159,14 @@ func (c *WorkDocs) DescribeCommentsWithContext(ctx aws.Context, input *DescribeC
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeComments operation.
-//    pageNum := 0
-//    err := client.DescribeCommentsPages(params,
-//        func(page *workdocs.DescribeCommentsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeComments operation.
+//	pageNum := 0
+//	err := client.DescribeCommentsPages(params,
+//	    func(page *workdocs.DescribeCommentsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkDocs) DescribeCommentsPages(input *DescribeCommentsInput, fn func(*DescribeCommentsOutput, bool) bool) error {
 	return c.DescribeCommentsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2220,14 +2218,13 @@ const opDescribeDocumentVersions = "DescribeDocumentVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeDocumentVersionsRequest method.
+//	req, resp := client.DescribeDocumentVersionsRequest(params)
 //
-//    // Example sending a request using the DescribeDocumentVersionsRequest method.
-//    req, resp := client.DescribeDocumentVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeDocumentVersions
 func (c *WorkDocs) DescribeDocumentVersionsRequest(input *DescribeDocumentVersionsInput) (req *request.Request, output *DescribeDocumentVersionsOutput) {
@@ -2266,31 +2263,32 @@ func (c *WorkDocs) DescribeDocumentVersionsRequest(input *DescribeDocumentVersio
 // API operation DescribeDocumentVersions for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
-//   * InvalidPasswordException
-//   The password is invalid.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
+//
+//   - InvalidPasswordException
+//     The password is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeDocumentVersions
 func (c *WorkDocs) DescribeDocumentVersions(input *DescribeDocumentVersionsInput) (*DescribeDocumentVersionsOutput, error) {
@@ -2322,15 +2320,14 @@ func (c *WorkDocs) DescribeDocumentVersionsWithContext(ctx aws.Context, input *D
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeDocumentVersions operation.
-//    pageNum := 0
-//    err := client.DescribeDocumentVersionsPages(params,
-//        func(page *workdocs.DescribeDocumentVersionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeDocumentVersions operation.
+//	pageNum := 0
+//	err := client.DescribeDocumentVersionsPages(params,
+//	    func(page *workdocs.DescribeDocumentVersionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkDocs) DescribeDocumentVersionsPages(input *DescribeDocumentVersionsInput, fn func(*DescribeDocumentVersionsOutput, bool) bool) error {
 	return c.DescribeDocumentVersionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2382,14 +2379,13 @@ const opDescribeFolderContents = "DescribeFolderContents"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeFolderContentsRequest method.
+//	req, resp := client.DescribeFolderContentsRequest(params)
 //
-//    // Example sending a request using the DescribeFolderContentsRequest method.
-//    req, resp := client.DescribeFolderContentsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeFolderContents
 func (c *WorkDocs) DescribeFolderContentsRequest(input *DescribeFolderContentsInput) (req *request.Request, output *DescribeFolderContentsOutput) {
@@ -2432,25 +2428,26 @@ func (c *WorkDocs) DescribeFolderContentsRequest(input *DescribeFolderContentsIn
 // API operation DescribeFolderContents for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
+//
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeFolderContents
 func (c *WorkDocs) DescribeFolderContents(input *DescribeFolderContentsInput) (*DescribeFolderContentsOutput, error) {
@@ -2482,15 +2479,14 @@ func (c *WorkDocs) DescribeFolderContentsWithContext(ctx aws.Context, input *Des
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeFolderContents operation.
-//    pageNum := 0
-//    err := client.DescribeFolderContentsPages(params,
-//        func(page *workdocs.DescribeFolderContentsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeFolderContents operation.
+//	pageNum := 0
+//	err := client.DescribeFolderContentsPages(params,
+//	    func(page *workdocs.DescribeFolderContentsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkDocs) DescribeFolderContentsPages(input *DescribeFolderContentsInput, fn func(*DescribeFolderContentsOutput, bool) bool) error {
 	return c.DescribeFolderContentsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2542,14 +2538,13 @@ const opDescribeGroups = "DescribeGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeGroupsRequest method.
+//	req, resp := client.DescribeGroupsRequest(params)
 //
-//    // Example sending a request using the DescribeGroupsRequest method.
-//    req, resp := client.DescribeGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeGroups
 func (c *WorkDocs) DescribeGroupsRequest(input *DescribeGroupsInput) (req *request.Request, output *DescribeGroupsOutput) {
@@ -2587,19 +2582,20 @@ func (c *WorkDocs) DescribeGroupsRequest(input *DescribeGroupsInput) (req *reque
 // API operation DescribeGroups for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeGroups
 func (c *WorkDocs) DescribeGroups(input *DescribeGroupsInput) (*DescribeGroupsOutput, error) {
@@ -2631,15 +2627,14 @@ func (c *WorkDocs) DescribeGroupsWithContext(ctx aws.Context, input *DescribeGro
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeGroups operation.
-//    pageNum := 0
-//    err := client.DescribeGroupsPages(params,
-//        func(page *workdocs.DescribeGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeGroups operation.
+//	pageNum := 0
+//	err := client.DescribeGroupsPages(params,
+//	    func(page *workdocs.DescribeGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkDocs) DescribeGroupsPages(input *DescribeGroupsInput, fn func(*DescribeGroupsOutput, bool) bool) error {
 	return c.DescribeGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2691,14 +2686,13 @@ const opDescribeNotificationSubscriptions = "DescribeNotificationSubscriptions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeNotificationSubscriptionsRequest method.
+//	req, resp := client.DescribeNotificationSubscriptionsRequest(params)
 //
-//    // Example sending a request using the DescribeNotificationSubscriptionsRequest method.
-//    req, resp := client.DescribeNotificationSubscriptionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeNotificationSubscriptions
 func (c *WorkDocs) DescribeNotificationSubscriptionsRequest(input *DescribeNotificationSubscriptionsInput) (req *request.Request, output *DescribeNotificationSubscriptionsOutput) {
@@ -2735,14 +2729,15 @@ func (c *WorkDocs) DescribeNotificationSubscriptionsRequest(input *DescribeNotif
 // API operation DescribeNotificationSubscriptions for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
 //
-//   * EntityNotExistsException
-//   The resource does not exist.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - EntityNotExistsException
+//     The resource does not exist.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeNotificationSubscriptions
 func (c *WorkDocs) DescribeNotificationSubscriptions(input *DescribeNotificationSubscriptionsInput) (*DescribeNotificationSubscriptionsOutput, error) {
@@ -2774,15 +2769,14 @@ func (c *WorkDocs) DescribeNotificationSubscriptionsWithContext(ctx aws.Context,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeNotificationSubscriptions operation.
-//    pageNum := 0
-//    err := client.DescribeNotificationSubscriptionsPages(params,
-//        func(page *workdocs.DescribeNotificationSubscriptionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeNotificationSubscriptions operation.
+//	pageNum := 0
+//	err := client.DescribeNotificationSubscriptionsPages(params,
+//	    func(page *workdocs.DescribeNotificationSubscriptionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkDocs) DescribeNotificationSubscriptionsPages(input *DescribeNotificationSubscriptionsInput, fn func(*DescribeNotificationSubscriptionsOutput, bool) bool) error {
 	return c.DescribeNotificationSubscriptionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2834,14 +2828,13 @@ const opDescribeResourcePermissions = "DescribeResourcePermissions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeResourcePermissionsRequest method.
+//	req, resp := client.DescribeResourcePermissionsRequest(params)
 //
-//    // Example sending a request using the DescribeResourcePermissionsRequest method.
-//    req, resp := client.DescribeResourcePermissionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeResourcePermissions
 func (c *WorkDocs) DescribeResourcePermissionsRequest(input *DescribeResourcePermissionsInput) (req *request.Request, output *DescribeResourcePermissionsOutput) {
@@ -2878,22 +2871,23 @@ func (c *WorkDocs) DescribeResourcePermissionsRequest(input *DescribeResourcePer
 // API operation DescribeResourcePermissions for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeResourcePermissions
 func (c *WorkDocs) DescribeResourcePermissions(input *DescribeResourcePermissionsInput) (*DescribeResourcePermissionsOutput, error) {
@@ -2925,15 +2919,14 @@ func (c *WorkDocs) DescribeResourcePermissionsWithContext(ctx aws.Context, input
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeResourcePermissions operation.
-//    pageNum := 0
-//    err := client.DescribeResourcePermissionsPages(params,
-//        func(page *workdocs.DescribeResourcePermissionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeResourcePermissions operation.
+//	pageNum := 0
+//	err := client.DescribeResourcePermissionsPages(params,
+//	    func(page *workdocs.DescribeResourcePermissionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkDocs) DescribeResourcePermissionsPages(input *DescribeResourcePermissionsInput, fn func(*DescribeResourcePermissionsOutput, bool) bool) error {
 	return c.DescribeResourcePermissionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2985,14 +2978,13 @@ const opDescribeRootFolders = "DescribeRootFolders"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeRootFoldersRequest method.
+//	req, resp := client.DescribeRootFoldersRequest(params)
 //
-//    // Example sending a request using the DescribeRootFoldersRequest method.
-//    req, resp := client.DescribeRootFoldersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeRootFolders
 func (c *WorkDocs) DescribeRootFoldersRequest(input *DescribeRootFoldersInput) (req *request.Request, output *DescribeRootFoldersOutput) {
@@ -3037,22 +3029,23 @@ func (c *WorkDocs) DescribeRootFoldersRequest(input *DescribeRootFoldersInput) (
 // API operation DescribeRootFolders for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeRootFolders
 func (c *WorkDocs) DescribeRootFolders(input *DescribeRootFoldersInput) (*DescribeRootFoldersOutput, error) {
@@ -3084,15 +3077,14 @@ func (c *WorkDocs) DescribeRootFoldersWithContext(ctx aws.Context, input *Descri
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeRootFolders operation.
-//    pageNum := 0
-//    err := client.DescribeRootFoldersPages(params,
-//        func(page *workdocs.DescribeRootFoldersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeRootFolders operation.
+//	pageNum := 0
+//	err := client.DescribeRootFoldersPages(params,
+//	    func(page *workdocs.DescribeRootFoldersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkDocs) DescribeRootFoldersPages(input *DescribeRootFoldersInput, fn func(*DescribeRootFoldersOutput, bool) bool) error {
 	return c.DescribeRootFoldersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3144,14 +3136,13 @@ const opDescribeUsers = "DescribeUsers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeUsersRequest method.
+//	req, resp := client.DescribeUsersRequest(params)
 //
-//    // Example sending a request using the DescribeUsersRequest method.
-//    req, resp := client.DescribeUsersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeUsers
 func (c *WorkDocs) DescribeUsersRequest(input *DescribeUsersInput) (req *request.Request, output *DescribeUsersOutput) {
@@ -3193,29 +3184,30 @@ func (c *WorkDocs) DescribeUsersRequest(input *DescribeUsersInput) (req *request
 // API operation DescribeUsers for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
-//   * RequestedEntityTooLargeException
-//   The response is too large to return. The request must include a filter to
-//   reduce the size of the response.
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
+//
+//   - RequestedEntityTooLargeException
+//     The response is too large to return. The request must include a filter to
+//     reduce the size of the response.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/DescribeUsers
 func (c *WorkDocs) DescribeUsers(input *DescribeUsersInput) (*DescribeUsersOutput, error) {
@@ -3247,15 +3239,14 @@ func (c *WorkDocs) DescribeUsersWithContext(ctx aws.Context, input *DescribeUser
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeUsers operation.
-//    pageNum := 0
-//    err := client.DescribeUsersPages(params,
-//        func(page *workdocs.DescribeUsersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeUsers operation.
+//	pageNum := 0
+//	err := client.DescribeUsersPages(params,
+//	    func(page *workdocs.DescribeUsersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkDocs) DescribeUsersPages(input *DescribeUsersInput, fn func(*DescribeUsersOutput, bool) bool) error {
 	return c.DescribeUsersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3307,14 +3298,13 @@ const opGetCurrentUser = "GetCurrentUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetCurrentUserRequest method.
+//	req, resp := client.GetCurrentUserRequest(params)
 //
-//    // Example sending a request using the GetCurrentUserRequest method.
-//    req, resp := client.GetCurrentUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetCurrentUser
 func (c *WorkDocs) GetCurrentUserRequest(input *GetCurrentUserInput) (req *request.Request, output *GetCurrentUserOutput) {
@@ -3351,22 +3341,23 @@ func (c *WorkDocs) GetCurrentUserRequest(input *GetCurrentUserInput) (req *reque
 // API operation GetCurrentUser for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetCurrentUser
 func (c *WorkDocs) GetCurrentUser(input *GetCurrentUserInput) (*GetCurrentUserOutput, error) {
@@ -3406,14 +3397,13 @@ const opGetDocument = "GetDocument"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDocumentRequest method.
+//	req, resp := client.GetDocumentRequest(params)
 //
-//    // Example sending a request using the GetDocumentRequest method.
-//    req, resp := client.GetDocumentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetDocument
 func (c *WorkDocs) GetDocumentRequest(input *GetDocumentInput) (req *request.Request, output *GetDocumentOutput) {
@@ -3444,28 +3434,29 @@ func (c *WorkDocs) GetDocumentRequest(input *GetDocumentInput) (req *request.Req
 // API operation GetDocument for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * InvalidPasswordException
-//   The password is invalid.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
+//
+//   - InvalidPasswordException
+//     The password is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetDocument
 func (c *WorkDocs) GetDocument(input *GetDocumentInput) (*GetDocumentOutput, error) {
@@ -3505,14 +3496,13 @@ const opGetDocumentPath = "GetDocumentPath"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDocumentPathRequest method.
+//	req, resp := client.GetDocumentPathRequest(params)
 //
-//    // Example sending a request using the GetDocumentPathRequest method.
-//    req, resp := client.GetDocumentPathRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetDocumentPath
 func (c *WorkDocs) GetDocumentPathRequest(input *GetDocumentPathInput) (req *request.Request, output *GetDocumentPathOutput) {
@@ -3549,22 +3539,23 @@ func (c *WorkDocs) GetDocumentPathRequest(input *GetDocumentPathInput) (req *req
 // API operation GetDocumentPath for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetDocumentPath
 func (c *WorkDocs) GetDocumentPath(input *GetDocumentPathInput) (*GetDocumentPathOutput, error) {
@@ -3604,14 +3595,13 @@ const opGetDocumentVersion = "GetDocumentVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDocumentVersionRequest method.
+//	req, resp := client.GetDocumentVersionRequest(params)
 //
-//    // Example sending a request using the GetDocumentVersionRequest method.
-//    req, resp := client.GetDocumentVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetDocumentVersion
 func (c *WorkDocs) GetDocumentVersionRequest(input *GetDocumentVersionInput) (req *request.Request, output *GetDocumentVersionOutput) {
@@ -3642,28 +3632,29 @@ func (c *WorkDocs) GetDocumentVersionRequest(input *GetDocumentVersionInput) (re
 // API operation GetDocumentVersion for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
-//   * InvalidPasswordException
-//   The password is invalid.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
+//
+//   - InvalidPasswordException
+//     The password is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetDocumentVersion
 func (c *WorkDocs) GetDocumentVersion(input *GetDocumentVersionInput) (*GetDocumentVersionOutput, error) {
@@ -3703,14 +3694,13 @@ const opGetFolder = "GetFolder"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFolderRequest method.
+//	req, resp := client.GetFolderRequest(params)
 //
-//    // Example sending a request using the GetFolderRequest method.
-//    req, resp := client.GetFolderRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetFolder
 func (c *WorkDocs) GetFolderRequest(input *GetFolderInput) (req *request.Request, output *GetFolderOutput) {
@@ -3741,28 +3731,29 @@ func (c *WorkDocs) GetFolderRequest(input *GetFolderInput) (req *request.Request
 // API operation GetFolder for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
+//
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetFolder
 func (c *WorkDocs) GetFolder(input *GetFolderInput) (*GetFolderOutput, error) {
@@ -3802,14 +3793,13 @@ const opGetFolderPath = "GetFolderPath"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetFolderPathRequest method.
+//	req, resp := client.GetFolderPathRequest(params)
 //
-//    // Example sending a request using the GetFolderPathRequest method.
-//    req, resp := client.GetFolderPathRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetFolderPath
 func (c *WorkDocs) GetFolderPathRequest(input *GetFolderPathInput) (req *request.Request, output *GetFolderPathOutput) {
@@ -3846,22 +3836,23 @@ func (c *WorkDocs) GetFolderPathRequest(input *GetFolderPathInput) (req *request
 // API operation GetFolderPath for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetFolderPath
 func (c *WorkDocs) GetFolderPath(input *GetFolderPathInput) (*GetFolderPathOutput, error) {
@@ -3901,14 +3892,13 @@ const opGetResources = "GetResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetResourcesRequest method.
+//	req, resp := client.GetResourcesRequest(params)
 //
-//    // Example sending a request using the GetResourcesRequest method.
-//    req, resp := client.GetResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetResources
 func (c *WorkDocs) GetResourcesRequest(input *GetResourcesInput) (req *request.Request, output *GetResourcesOutput) {
@@ -3940,22 +3930,23 @@ func (c *WorkDocs) GetResourcesRequest(input *GetResourcesInput) (req *request.R
 // API operation GetResources for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/GetResources
 func (c *WorkDocs) GetResources(input *GetResourcesInput) (*GetResourcesOutput, error) {
@@ -3995,14 +3986,13 @@ const opInitiateDocumentVersionUpload = "InitiateDocumentVersionUpload"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the InitiateDocumentVersionUploadRequest method.
+//	req, resp := client.InitiateDocumentVersionUploadRequest(params)
 //
-//    // Example sending a request using the InitiateDocumentVersionUploadRequest method.
-//    req, resp := client.InitiateDocumentVersionUploadRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/InitiateDocumentVersionUpload
 func (c *WorkDocs) InitiateDocumentVersionUploadRequest(input *InitiateDocumentVersionUploadInput) (req *request.Request, output *InitiateDocumentVersionUploadOutput) {
@@ -4040,51 +4030,52 @@ func (c *WorkDocs) InitiateDocumentVersionUploadRequest(input *InitiateDocumentV
 // API operation InitiateDocumentVersionUpload for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * EntityAlreadyExistsException
-//   The resource already exists.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * StorageLimitExceededException
-//   The storage limit has been exceeded.
+//   - EntityAlreadyExistsException
+//     The resource already exists.
 //
-//   * StorageLimitWillExceedException
-//   The storage limit will be exceeded.
+//   - StorageLimitExceededException
+//     The storage limit has been exceeded.
 //
-//   * LimitExceededException
-//   The maximum of 100,000 files and folders under the parent folder has been
-//   exceeded.
+//   - StorageLimitWillExceedException
+//     The storage limit will be exceeded.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - LimitExceededException
+//     The maximum of 100,000 files and folders under the parent folder has been
+//     exceeded.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * DraftUploadOutOfSyncException
-//   This exception is thrown when a valid checkout ID is not presented on document
-//   version upload calls for a document that has been checked out from Web client.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
-//   * ResourceAlreadyCheckedOutException
-//   The resource is already checked out.
+//   - DraftUploadOutOfSyncException
+//     This exception is thrown when a valid checkout ID is not presented on document
+//     version upload calls for a document that has been checked out from Web client.
 //
-//   * InvalidPasswordException
-//   The password is invalid.
+//   - ResourceAlreadyCheckedOutException
+//     The resource is already checked out.
 //
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
+//   - InvalidPasswordException
+//     The password is invalid.
+//
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/InitiateDocumentVersionUpload
 func (c *WorkDocs) InitiateDocumentVersionUpload(input *InitiateDocumentVersionUploadInput) (*InitiateDocumentVersionUploadOutput, error) {
@@ -4124,14 +4115,13 @@ const opRemoveAllResourcePermissions = "RemoveAllResourcePermissions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveAllResourcePermissionsRequest method.
+//	req, resp := client.RemoveAllResourcePermissionsRequest(params)
 //
-//    // Example sending a request using the RemoveAllResourcePermissionsRequest method.
-//    req, resp := client.RemoveAllResourcePermissionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/RemoveAllResourcePermissions
 func (c *WorkDocs) RemoveAllResourcePermissionsRequest(input *RemoveAllResourcePermissionsInput) (req *request.Request, output *RemoveAllResourcePermissionsOutput) {
@@ -4163,19 +4153,20 @@ func (c *WorkDocs) RemoveAllResourcePermissionsRequest(input *RemoveAllResourceP
 // API operation RemoveAllResourcePermissions for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/RemoveAllResourcePermissions
 func (c *WorkDocs) RemoveAllResourcePermissions(input *RemoveAllResourcePermissionsInput) (*RemoveAllResourcePermissionsOutput, error) {
@@ -4215,14 +4206,13 @@ const opRemoveResourcePermission = "RemoveResourcePermission"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveResourcePermissionRequest method.
+//	req, resp := client.RemoveResourcePermissionRequest(params)
 //
-//    // Example sending a request using the RemoveResourcePermissionRequest method.
-//    req, resp := client.RemoveResourcePermissionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/RemoveResourcePermission
 func (c *WorkDocs) RemoveResourcePermissionRequest(input *RemoveResourcePermissionInput) (req *request.Request, output *RemoveResourcePermissionOutput) {
@@ -4254,19 +4244,20 @@ func (c *WorkDocs) RemoveResourcePermissionRequest(input *RemoveResourcePermissi
 // API operation RemoveResourcePermission for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/RemoveResourcePermission
 func (c *WorkDocs) RemoveResourcePermission(input *RemoveResourcePermissionInput) (*RemoveResourcePermissionOutput, error) {
@@ -4306,14 +4297,13 @@ const opRestoreDocumentVersions = "RestoreDocumentVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RestoreDocumentVersionsRequest method.
+//	req, resp := client.RestoreDocumentVersionsRequest(params)
 //
-//    // Example sending a request using the RestoreDocumentVersionsRequest method.
-//    req, resp := client.RestoreDocumentVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/RestoreDocumentVersions
 func (c *WorkDocs) RestoreDocumentVersionsRequest(input *RestoreDocumentVersionsInput) (req *request.Request, output *RestoreDocumentVersionsOutput) {
@@ -4345,32 +4335,33 @@ func (c *WorkDocs) RestoreDocumentVersionsRequest(input *RestoreDocumentVersions
 // API operation RestoreDocumentVersions for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * ConflictingOperationException
-//   Another operation is in progress on the resource that conflicts with the
-//   current operation.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * ConcurrentModificationException
-//   The resource hierarchy is changing.
+//   - ConflictingOperationException
+//     Another operation is in progress on the resource that conflicts with the
+//     current operation.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - ConcurrentModificationException
+//     The resource hierarchy is changing.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * InvalidOperationException
-//   The operation is invalid.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - InvalidOperationException
+//     The operation is invalid.
+//
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/RestoreDocumentVersions
 func (c *WorkDocs) RestoreDocumentVersions(input *RestoreDocumentVersionsInput) (*RestoreDocumentVersionsOutput, error) {
@@ -4410,14 +4401,13 @@ const opSearchResources = "SearchResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchResourcesRequest method.
+//	req, resp := client.SearchResourcesRequest(params)
 //
-//    // Example sending a request using the SearchResourcesRequest method.
-//    req, resp := client.SearchResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/SearchResources
 func (c *WorkDocs) SearchResourcesRequest(input *SearchResourcesInput) (req *request.Request, output *SearchResourcesOutput) {
@@ -4455,17 +4445,18 @@ func (c *WorkDocs) SearchResourcesRequest(input *SearchResourcesInput) (req *req
 // API operation SearchResources for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/SearchResources
 func (c *WorkDocs) SearchResources(input *SearchResourcesInput) (*SearchResourcesOutput, error) {
@@ -4497,15 +4488,14 @@ func (c *WorkDocs) SearchResourcesWithContext(ctx aws.Context, input *SearchReso
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchResources operation.
-//    pageNum := 0
-//    err := client.SearchResourcesPages(params,
-//        func(page *workdocs.SearchResourcesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchResources operation.
+//	pageNum := 0
+//	err := client.SearchResourcesPages(params,
+//	    func(page *workdocs.SearchResourcesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *WorkDocs) SearchResourcesPages(input *SearchResourcesInput, fn func(*SearchResourcesOutput, bool) bool) error {
 	return c.SearchResourcesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -4557,14 +4547,13 @@ const opUpdateDocument = "UpdateDocument"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDocumentRequest method.
+//	req, resp := client.UpdateDocumentRequest(params)
 //
-//    // Example sending a request using the UpdateDocumentRequest method.
-//    req, resp := client.UpdateDocumentRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/UpdateDocument
 func (c *WorkDocs) UpdateDocumentRequest(input *UpdateDocumentInput) (req *request.Request, output *UpdateDocumentOutput) {
@@ -4597,39 +4586,40 @@ func (c *WorkDocs) UpdateDocumentRequest(input *UpdateDocumentInput) (req *reque
 // API operation UpdateDocument for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * EntityAlreadyExistsException
-//   The resource already exists.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * LimitExceededException
-//   The maximum of 100,000 files and folders under the parent folder has been
-//   exceeded.
+//   - EntityAlreadyExistsException
+//     The resource already exists.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - LimitExceededException
+//     The maximum of 100,000 files and folders under the parent folder has been
+//     exceeded.
 //
-//   * ConflictingOperationException
-//   Another operation is in progress on the resource that conflicts with the
-//   current operation.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * ConcurrentModificationException
-//   The resource hierarchy is changing.
+//   - ConflictingOperationException
+//     Another operation is in progress on the resource that conflicts with the
+//     current operation.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - ConcurrentModificationException
+//     The resource hierarchy is changing.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/UpdateDocument
 func (c *WorkDocs) UpdateDocument(input *UpdateDocumentInput) (*UpdateDocumentOutput, error) {
@@ -4669,14 +4659,13 @@ const opUpdateDocumentVersion = "UpdateDocumentVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDocumentVersionRequest method.
+//	req, resp := client.UpdateDocumentVersionRequest(params)
 //
-//    // Example sending a request using the UpdateDocumentVersionRequest method.
-//    req, resp := client.UpdateDocumentVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/UpdateDocumentVersion
 func (c *WorkDocs) UpdateDocumentVersionRequest(input *UpdateDocumentVersionInput) (req *request.Request, output *UpdateDocumentVersionOutput) {
@@ -4712,31 +4701,32 @@ func (c *WorkDocs) UpdateDocumentVersionRequest(input *UpdateDocumentVersionInpu
 // API operation UpdateDocumentVersion for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * ConcurrentModificationException
-//   The resource hierarchy is changing.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * InvalidOperationException
-//   The operation is invalid.
+//   - ConcurrentModificationException
+//     The resource hierarchy is changing.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - InvalidOperationException
+//     The operation is invalid.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/UpdateDocumentVersion
 func (c *WorkDocs) UpdateDocumentVersion(input *UpdateDocumentVersionInput) (*UpdateDocumentVersionOutput, error) {
@@ -4776,14 +4766,13 @@ const opUpdateFolder = "UpdateFolder"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateFolderRequest method.
+//	req, resp := client.UpdateFolderRequest(params)
 //
-//    // Example sending a request using the UpdateFolderRequest method.
-//    req, resp := client.UpdateFolderRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/UpdateFolder
 func (c *WorkDocs) UpdateFolderRequest(input *UpdateFolderInput) (req *request.Request, output *UpdateFolderOutput) {
@@ -4816,39 +4805,40 @@ func (c *WorkDocs) UpdateFolderRequest(input *UpdateFolderInput) (req *request.R
 // API operation UpdateFolder for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * EntityAlreadyExistsException
-//   The resource already exists.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - EntityAlreadyExistsException
+//     The resource already exists.
 //
-//   * ConflictingOperationException
-//   Another operation is in progress on the resource that conflicts with the
-//   current operation.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * ConcurrentModificationException
-//   The resource hierarchy is changing.
+//   - ConflictingOperationException
+//     Another operation is in progress on the resource that conflicts with the
+//     current operation.
 //
-//   * LimitExceededException
-//   The maximum of 100,000 files and folders under the parent folder has been
-//   exceeded.
+//   - ConcurrentModificationException
+//     The resource hierarchy is changing.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - LimitExceededException
+//     The maximum of 100,000 files and folders under the parent folder has been
+//     exceeded.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
+//
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/UpdateFolder
 func (c *WorkDocs) UpdateFolder(input *UpdateFolderInput) (*UpdateFolderOutput, error) {
@@ -4888,14 +4878,13 @@ const opUpdateUser = "UpdateUser"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateUserRequest method.
+//	req, resp := client.UpdateUserRequest(params)
 //
-//    // Example sending a request using the UpdateUserRequest method.
-//    req, resp := client.UpdateUserRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/UpdateUser
 func (c *WorkDocs) UpdateUserRequest(input *UpdateUserInput) (req *request.Request, output *UpdateUserOutput) {
@@ -4927,34 +4916,35 @@ func (c *WorkDocs) UpdateUserRequest(input *UpdateUserInput) (req *request.Reque
 // API operation UpdateUser for usage and error information.
 //
 // Returned Error Types:
-//   * EntityNotExistsException
-//   The resource does not exist.
 //
-//   * UnauthorizedOperationException
-//   The operation is not permitted.
+//   - EntityNotExistsException
+//     The resource does not exist.
 //
-//   * UnauthorizedResourceAccessException
-//   The caller does not have access to perform the action on the resource.
+//   - UnauthorizedOperationException
+//     The operation is not permitted.
 //
-//   * IllegalUserStateException
-//   The user is undergoing transfer of ownership.
+//   - UnauthorizedResourceAccessException
+//     The caller does not have access to perform the action on the resource.
 //
-//   * ProhibitedStateException
-//   The specified document version is not in the INITIALIZED state.
+//   - IllegalUserStateException
+//     The user is undergoing transfer of ownership.
 //
-//   * FailedDependencyException
-//   The Directory Service cannot reach an on-premises instance. Or a dependency
-//   under the control of the organization is failing, such as a connected Active
-//   Directory.
+//   - ProhibitedStateException
+//     The specified document version is not in the INITIALIZED state.
 //
-//   * ServiceUnavailableException
-//   One or more of the dependencies is unavailable.
+//   - FailedDependencyException
+//     The Directory Service cannot reach an on-premises instance. Or a dependency
+//     under the control of the organization is failing, such as a connected Active
+//     Directory.
 //
-//   * DeactivatingLastSystemUserException
-//   The last user in the organization is being deactivated.
+//   - ServiceUnavailableException
+//     One or more of the dependencies is unavailable.
 //
-//   * InvalidArgumentException
-//   The pagination marker or limit fields are not valid.
+//   - DeactivatingLastSystemUserException
+//     The last user in the organization is being deactivated.
+//
+//   - InvalidArgumentException
+//     The pagination marker or limit fields are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/workdocs-2016-05-01/UpdateUser
 func (c *WorkDocs) UpdateUser(input *UpdateUserInput) (*UpdateUserOutput, error) {

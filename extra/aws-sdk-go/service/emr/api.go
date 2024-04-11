@@ -29,14 +29,13 @@ const opAddInstanceFleet = "AddInstanceFleet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddInstanceFleetRequest method.
+//	req, resp := client.AddInstanceFleetRequest(params)
 //
-//    // Example sending a request using the AddInstanceFleetRequest method.
-//    req, resp := client.AddInstanceFleetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/AddInstanceFleet
 func (c *EMR) AddInstanceFleetRequest(input *AddInstanceFleetInput) (req *request.Request, output *AddInstanceFleetOutput) {
@@ -59,7 +58,7 @@ func (c *EMR) AddInstanceFleetRequest(input *AddInstanceFleetInput) (req *reques
 //
 // Adds an instance fleet to a running cluster.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -70,12 +69,13 @@ func (c *EMR) AddInstanceFleetRequest(input *AddInstanceFleetInput) (req *reques
 // API operation AddInstanceFleet for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/AddInstanceFleet
 func (c *EMR) AddInstanceFleet(input *AddInstanceFleetInput) (*AddInstanceFleetOutput, error) {
@@ -115,14 +115,13 @@ const opAddInstanceGroups = "AddInstanceGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddInstanceGroupsRequest method.
+//	req, resp := client.AddInstanceGroupsRequest(params)
 //
-//    // Example sending a request using the AddInstanceGroupsRequest method.
-//    req, resp := client.AddInstanceGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/AddInstanceGroups
 func (c *EMR) AddInstanceGroupsRequest(input *AddInstanceGroupsInput) (req *request.Request, output *AddInstanceGroupsOutput) {
@@ -153,9 +152,9 @@ func (c *EMR) AddInstanceGroupsRequest(input *AddInstanceGroupsInput) (req *requ
 // API operation AddInstanceGroups for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/AddInstanceGroups
 func (c *EMR) AddInstanceGroups(input *AddInstanceGroupsInput) (*AddInstanceGroupsOutput, error) {
@@ -195,14 +194,13 @@ const opAddJobFlowSteps = "AddJobFlowSteps"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddJobFlowStepsRequest method.
+//	req, resp := client.AddJobFlowStepsRequest(params)
 //
-//    // Example sending a request using the AddJobFlowStepsRequest method.
-//    req, resp := client.AddJobFlowStepsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/AddJobFlowSteps
 func (c *EMR) AddJobFlowStepsRequest(input *AddJobFlowStepsInput) (req *request.Request, output *AddJobFlowStepsOutput) {
@@ -256,9 +254,9 @@ func (c *EMR) AddJobFlowStepsRequest(input *AddJobFlowStepsInput) (req *request.
 // API operation AddJobFlowSteps for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/AddJobFlowSteps
 func (c *EMR) AddJobFlowSteps(input *AddJobFlowStepsInput) (*AddJobFlowStepsOutput, error) {
@@ -298,14 +296,13 @@ const opAddTags = "AddTags"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddTagsRequest method.
+//	req, resp := client.AddTagsRequest(params)
 //
-//    // Example sending a request using the AddTagsRequest method.
-//    req, resp := client.AddTagsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/AddTags
 func (c *EMR) AddTagsRequest(input *AddTagsInput) (req *request.Request, output *AddTagsOutput) {
@@ -340,12 +337,13 @@ func (c *EMR) AddTagsRequest(input *AddTagsInput) (req *request.Request, output 
 // API operation AddTags for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/AddTags
 func (c *EMR) AddTags(input *AddTagsInput) (*AddTagsOutput, error) {
@@ -385,14 +383,13 @@ const opCancelSteps = "CancelSteps"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelStepsRequest method.
+//	req, resp := client.CancelStepsRequest(params)
 //
-//    // Example sending a request using the CancelStepsRequest method.
-//    req, resp := client.CancelStepsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/CancelSteps
 func (c *EMR) CancelStepsRequest(input *CancelStepsInput) (req *request.Request, output *CancelStepsOutput) {
@@ -417,7 +414,7 @@ func (c *EMR) CancelStepsRequest(input *CancelStepsInput) (req *request.Request,
 // EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps
 // are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous;
 // it does not guarantee that a step will be canceled, even if the request is
-// successfully submitted. When you use Amazon EMR versions 5.28.0 and later,
+// successfully submitted. When you use Amazon EMR releases 5.28.0 and later,
 // you can cancel steps that are in a PENDING or RUNNING state. In earlier versions
 // of Amazon EMR, you can only cancel steps that are in a PENDING state.
 //
@@ -429,12 +426,13 @@ func (c *EMR) CancelStepsRequest(input *CancelStepsInput) (req *request.Request,
 // API operation CancelSteps for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/CancelSteps
 func (c *EMR) CancelSteps(input *CancelStepsInput) (*CancelStepsOutput, error) {
@@ -474,14 +472,13 @@ const opCreateSecurityConfiguration = "CreateSecurityConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSecurityConfigurationRequest method.
+//	req, resp := client.CreateSecurityConfigurationRequest(params)
 //
-//    // Example sending a request using the CreateSecurityConfigurationRequest method.
-//    req, resp := client.CreateSecurityConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/CreateSecurityConfiguration
 func (c *EMR) CreateSecurityConfigurationRequest(input *CreateSecurityConfigurationInput) (req *request.Request, output *CreateSecurityConfigurationOutput) {
@@ -513,12 +510,13 @@ func (c *EMR) CreateSecurityConfigurationRequest(input *CreateSecurityConfigurat
 // API operation CreateSecurityConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/CreateSecurityConfiguration
 func (c *EMR) CreateSecurityConfiguration(input *CreateSecurityConfigurationInput) (*CreateSecurityConfigurationOutput, error) {
@@ -558,14 +556,13 @@ const opCreateStudio = "CreateStudio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateStudioRequest method.
+//	req, resp := client.CreateStudioRequest(params)
 //
-//    // Example sending a request using the CreateStudioRequest method.
-//    req, resp := client.CreateStudioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/CreateStudio
 func (c *EMR) CreateStudioRequest(input *CreateStudioInput) (req *request.Request, output *CreateStudioOutput) {
@@ -596,12 +593,13 @@ func (c *EMR) CreateStudioRequest(input *CreateStudioInput) (req *request.Reques
 // API operation CreateStudio for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/CreateStudio
 func (c *EMR) CreateStudio(input *CreateStudioInput) (*CreateStudioOutput, error) {
@@ -641,14 +639,13 @@ const opCreateStudioSessionMapping = "CreateStudioSessionMapping"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateStudioSessionMappingRequest method.
+//	req, resp := client.CreateStudioSessionMappingRequest(params)
 //
-//    // Example sending a request using the CreateStudioSessionMappingRequest method.
-//    req, resp := client.CreateStudioSessionMappingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/CreateStudioSessionMapping
 func (c *EMR) CreateStudioSessionMappingRequest(input *CreateStudioSessionMappingInput) (req *request.Request, output *CreateStudioSessionMappingOutput) {
@@ -685,12 +682,13 @@ func (c *EMR) CreateStudioSessionMappingRequest(input *CreateStudioSessionMappin
 // API operation CreateStudioSessionMapping for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/CreateStudioSessionMapping
 func (c *EMR) CreateStudioSessionMapping(input *CreateStudioSessionMappingInput) (*CreateStudioSessionMappingOutput, error) {
@@ -730,14 +728,13 @@ const opDeleteSecurityConfiguration = "DeleteSecurityConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSecurityConfigurationRequest method.
+//	req, resp := client.DeleteSecurityConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteSecurityConfigurationRequest method.
-//    req, resp := client.DeleteSecurityConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DeleteSecurityConfiguration
 func (c *EMR) DeleteSecurityConfigurationRequest(input *DeleteSecurityConfigurationInput) (req *request.Request, output *DeleteSecurityConfigurationOutput) {
@@ -769,12 +766,13 @@ func (c *EMR) DeleteSecurityConfigurationRequest(input *DeleteSecurityConfigurat
 // API operation DeleteSecurityConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DeleteSecurityConfiguration
 func (c *EMR) DeleteSecurityConfiguration(input *DeleteSecurityConfigurationInput) (*DeleteSecurityConfigurationOutput, error) {
@@ -814,14 +812,13 @@ const opDeleteStudio = "DeleteStudio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteStudioRequest method.
+//	req, resp := client.DeleteStudioRequest(params)
 //
-//    // Example sending a request using the DeleteStudioRequest method.
-//    req, resp := client.DeleteStudioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DeleteStudio
 func (c *EMR) DeleteStudioRequest(input *DeleteStudioInput) (req *request.Request, output *DeleteStudioOutput) {
@@ -853,12 +850,13 @@ func (c *EMR) DeleteStudioRequest(input *DeleteStudioInput) (req *request.Reques
 // API operation DeleteStudio for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DeleteStudio
 func (c *EMR) DeleteStudio(input *DeleteStudioInput) (*DeleteStudioOutput, error) {
@@ -898,14 +896,13 @@ const opDeleteStudioSessionMapping = "DeleteStudioSessionMapping"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteStudioSessionMappingRequest method.
+//	req, resp := client.DeleteStudioSessionMappingRequest(params)
 //
-//    // Example sending a request using the DeleteStudioSessionMappingRequest method.
-//    req, resp := client.DeleteStudioSessionMappingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DeleteStudioSessionMapping
 func (c *EMR) DeleteStudioSessionMappingRequest(input *DeleteStudioSessionMappingInput) (req *request.Request, output *DeleteStudioSessionMappingOutput) {
@@ -937,12 +934,13 @@ func (c *EMR) DeleteStudioSessionMappingRequest(input *DeleteStudioSessionMappin
 // API operation DeleteStudioSessionMapping for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DeleteStudioSessionMapping
 func (c *EMR) DeleteStudioSessionMapping(input *DeleteStudioSessionMappingInput) (*DeleteStudioSessionMappingOutput, error) {
@@ -982,14 +980,13 @@ const opDescribeCluster = "DescribeCluster"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeClusterRequest method.
+//	req, resp := client.DescribeClusterRequest(params)
 //
-//    // Example sending a request using the DescribeClusterRequest method.
-//    req, resp := client.DescribeClusterRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeCluster
 func (c *EMR) DescribeClusterRequest(input *DescribeClusterInput) (req *request.Request, output *DescribeClusterOutput) {
@@ -1021,12 +1018,13 @@ func (c *EMR) DescribeClusterRequest(input *DescribeClusterInput) (req *request.
 // API operation DescribeCluster for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeCluster
 func (c *EMR) DescribeCluster(input *DescribeClusterInput) (*DescribeClusterOutput, error) {
@@ -1066,14 +1064,13 @@ const opDescribeJobFlows = "DescribeJobFlows"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeJobFlowsRequest method.
+//	req, resp := client.DescribeJobFlowsRequest(params)
 //
-//    // Example sending a request using the DescribeJobFlowsRequest method.
-//    req, resp := client.DescribeJobFlowsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeJobFlows
 //
@@ -1113,10 +1110,10 @@ func (c *EMR) DescribeJobFlowsRequest(input *DescribeJobFlowsInput) (req *reques
 // If no parameters are supplied, then job flows matching either of the following
 // criteria are returned:
 //
-//    * Job flows created and completed in the last two weeks
+//   - Job flows created and completed in the last two weeks
 //
-//    * Job flows created within the last two months that are in one of the
-//    following states: RUNNING, WAITING, SHUTTING_DOWN, STARTING
+//   - Job flows created within the last two months that are in one of the
+//     following states: RUNNING, WAITING, SHUTTING_DOWN, STARTING
 //
 // Amazon EMR can return a maximum of 512 job flow descriptions.
 //
@@ -1128,9 +1125,9 @@ func (c *EMR) DescribeJobFlowsRequest(input *DescribeJobFlowsInput) (req *reques
 // API operation DescribeJobFlows for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeJobFlows
 //
@@ -1174,14 +1171,13 @@ const opDescribeNotebookExecution = "DescribeNotebookExecution"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeNotebookExecutionRequest method.
+//	req, resp := client.DescribeNotebookExecutionRequest(params)
 //
-//    // Example sending a request using the DescribeNotebookExecutionRequest method.
-//    req, resp := client.DescribeNotebookExecutionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeNotebookExecution
 func (c *EMR) DescribeNotebookExecutionRequest(input *DescribeNotebookExecutionInput) (req *request.Request, output *DescribeNotebookExecutionOutput) {
@@ -1212,12 +1208,13 @@ func (c *EMR) DescribeNotebookExecutionRequest(input *DescribeNotebookExecutionI
 // API operation DescribeNotebookExecution for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeNotebookExecution
 func (c *EMR) DescribeNotebookExecution(input *DescribeNotebookExecutionInput) (*DescribeNotebookExecutionOutput, error) {
@@ -1257,14 +1254,13 @@ const opDescribeReleaseLabel = "DescribeReleaseLabel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeReleaseLabelRequest method.
+//	req, resp := client.DescribeReleaseLabelRequest(params)
 //
-//    // Example sending a request using the DescribeReleaseLabelRequest method.
-//    req, resp := client.DescribeReleaseLabelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeReleaseLabel
 func (c *EMR) DescribeReleaseLabelRequest(input *DescribeReleaseLabelInput) (req *request.Request, output *DescribeReleaseLabelOutput) {
@@ -1285,10 +1281,10 @@ func (c *EMR) DescribeReleaseLabelRequest(input *DescribeReleaseLabelInput) (req
 
 // DescribeReleaseLabel API operation for Amazon EMR.
 //
-// Provides EMR release label details, such as releases available the region
-// where the API request is run, and the available applications for a specific
-// EMR release label. Can also list EMR release versions that support a specified
-// version of Spark.
+// Provides Amazon EMR release label details, such as the releases available
+// the Region where the API request is run, and the available applications for
+// a specific Amazon EMR release label. Can also list Amazon EMR releases that
+// support a specified version of Spark.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1298,12 +1294,13 @@ func (c *EMR) DescribeReleaseLabelRequest(input *DescribeReleaseLabelInput) (req
 // API operation DescribeReleaseLabel for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeReleaseLabel
 func (c *EMR) DescribeReleaseLabel(input *DescribeReleaseLabelInput) (*DescribeReleaseLabelOutput, error) {
@@ -1343,14 +1340,13 @@ const opDescribeSecurityConfiguration = "DescribeSecurityConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeSecurityConfigurationRequest method.
+//	req, resp := client.DescribeSecurityConfigurationRequest(params)
 //
-//    // Example sending a request using the DescribeSecurityConfigurationRequest method.
-//    req, resp := client.DescribeSecurityConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeSecurityConfiguration
 func (c *EMR) DescribeSecurityConfigurationRequest(input *DescribeSecurityConfigurationInput) (req *request.Request, output *DescribeSecurityConfigurationOutput) {
@@ -1382,12 +1378,13 @@ func (c *EMR) DescribeSecurityConfigurationRequest(input *DescribeSecurityConfig
 // API operation DescribeSecurityConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeSecurityConfiguration
 func (c *EMR) DescribeSecurityConfiguration(input *DescribeSecurityConfigurationInput) (*DescribeSecurityConfigurationOutput, error) {
@@ -1427,14 +1424,13 @@ const opDescribeStep = "DescribeStep"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeStepRequest method.
+//	req, resp := client.DescribeStepRequest(params)
 //
-//    // Example sending a request using the DescribeStepRequest method.
-//    req, resp := client.DescribeStepRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeStep
 func (c *EMR) DescribeStepRequest(input *DescribeStepInput) (req *request.Request, output *DescribeStepOutput) {
@@ -1465,12 +1461,13 @@ func (c *EMR) DescribeStepRequest(input *DescribeStepInput) (req *request.Reques
 // API operation DescribeStep for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeStep
 func (c *EMR) DescribeStep(input *DescribeStepInput) (*DescribeStepOutput, error) {
@@ -1510,14 +1507,13 @@ const opDescribeStudio = "DescribeStudio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeStudioRequest method.
+//	req, resp := client.DescribeStudioRequest(params)
 //
-//    // Example sending a request using the DescribeStudioRequest method.
-//    req, resp := client.DescribeStudioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeStudio
 func (c *EMR) DescribeStudioRequest(input *DescribeStudioInput) (req *request.Request, output *DescribeStudioOutput) {
@@ -1549,12 +1545,13 @@ func (c *EMR) DescribeStudioRequest(input *DescribeStudioInput) (req *request.Re
 // API operation DescribeStudio for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/DescribeStudio
 func (c *EMR) DescribeStudio(input *DescribeStudioInput) (*DescribeStudioOutput, error) {
@@ -1594,14 +1591,13 @@ const opGetAutoTerminationPolicy = "GetAutoTerminationPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAutoTerminationPolicyRequest method.
+//	req, resp := client.GetAutoTerminationPolicyRequest(params)
 //
-//    // Example sending a request using the GetAutoTerminationPolicyRequest method.
-//    req, resp := client.GetAutoTerminationPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/GetAutoTerminationPolicy
 func (c *EMR) GetAutoTerminationPolicyRequest(input *GetAutoTerminationPolicyInput) (req *request.Request, output *GetAutoTerminationPolicyOutput) {
@@ -1668,14 +1664,13 @@ const opGetBlockPublicAccessConfiguration = "GetBlockPublicAccessConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetBlockPublicAccessConfigurationRequest method.
+//	req, resp := client.GetBlockPublicAccessConfigurationRequest(params)
 //
-//    // Example sending a request using the GetBlockPublicAccessConfigurationRequest method.
-//    req, resp := client.GetBlockPublicAccessConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/GetBlockPublicAccessConfiguration
 func (c *EMR) GetBlockPublicAccessConfigurationRequest(input *GetBlockPublicAccessConfigurationInput) (req *request.Request, output *GetBlockPublicAccessConfigurationOutput) {
@@ -1709,12 +1704,13 @@ func (c *EMR) GetBlockPublicAccessConfigurationRequest(input *GetBlockPublicAcce
 // API operation GetBlockPublicAccessConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/GetBlockPublicAccessConfiguration
 func (c *EMR) GetBlockPublicAccessConfiguration(input *GetBlockPublicAccessConfigurationInput) (*GetBlockPublicAccessConfigurationOutput, error) {
@@ -1754,14 +1750,13 @@ const opGetClusterSessionCredentials = "GetClusterSessionCredentials"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetClusterSessionCredentialsRequest method.
+//	req, resp := client.GetClusterSessionCredentialsRequest(params)
 //
-//    // Example sending a request using the GetClusterSessionCredentialsRequest method.
-//    req, resp := client.GetClusterSessionCredentialsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/GetClusterSessionCredentials
 func (c *EMR) GetClusterSessionCredentialsRequest(input *GetClusterSessionCredentialsInput) (req *request.Request, output *GetClusterSessionCredentialsOutput) {
@@ -1795,12 +1790,13 @@ func (c *EMR) GetClusterSessionCredentialsRequest(input *GetClusterSessionCreden
 // API operation GetClusterSessionCredentials for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/GetClusterSessionCredentials
 func (c *EMR) GetClusterSessionCredentials(input *GetClusterSessionCredentialsInput) (*GetClusterSessionCredentialsOutput, error) {
@@ -1840,14 +1836,13 @@ const opGetManagedScalingPolicy = "GetManagedScalingPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetManagedScalingPolicyRequest method.
+//	req, resp := client.GetManagedScalingPolicyRequest(params)
 //
-//    // Example sending a request using the GetManagedScalingPolicyRequest method.
-//    req, resp := client.GetManagedScalingPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/GetManagedScalingPolicy
 func (c *EMR) GetManagedScalingPolicyRequest(input *GetManagedScalingPolicyInput) (req *request.Request, output *GetManagedScalingPolicyOutput) {
@@ -1914,14 +1909,13 @@ const opGetStudioSessionMapping = "GetStudioSessionMapping"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetStudioSessionMappingRequest method.
+//	req, resp := client.GetStudioSessionMappingRequest(params)
 //
-//    // Example sending a request using the GetStudioSessionMappingRequest method.
-//    req, resp := client.GetStudioSessionMappingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/GetStudioSessionMapping
 func (c *EMR) GetStudioSessionMappingRequest(input *GetStudioSessionMappingInput) (req *request.Request, output *GetStudioSessionMappingOutput) {
@@ -1953,12 +1947,13 @@ func (c *EMR) GetStudioSessionMappingRequest(input *GetStudioSessionMappingInput
 // API operation GetStudioSessionMapping for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/GetStudioSessionMapping
 func (c *EMR) GetStudioSessionMapping(input *GetStudioSessionMappingInput) (*GetStudioSessionMappingOutput, error) {
@@ -1998,14 +1993,13 @@ const opListBootstrapActions = "ListBootstrapActions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListBootstrapActionsRequest method.
+//	req, resp := client.ListBootstrapActionsRequest(params)
 //
-//    // Example sending a request using the ListBootstrapActionsRequest method.
-//    req, resp := client.ListBootstrapActionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListBootstrapActions
 func (c *EMR) ListBootstrapActionsRequest(input *ListBootstrapActionsInput) (req *request.Request, output *ListBootstrapActionsOutput) {
@@ -2042,12 +2036,13 @@ func (c *EMR) ListBootstrapActionsRequest(input *ListBootstrapActionsInput) (req
 // API operation ListBootstrapActions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListBootstrapActions
 func (c *EMR) ListBootstrapActions(input *ListBootstrapActionsInput) (*ListBootstrapActionsOutput, error) {
@@ -2079,15 +2074,14 @@ func (c *EMR) ListBootstrapActionsWithContext(ctx aws.Context, input *ListBootst
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListBootstrapActions operation.
-//    pageNum := 0
-//    err := client.ListBootstrapActionsPages(params,
-//        func(page *emr.ListBootstrapActionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListBootstrapActions operation.
+//	pageNum := 0
+//	err := client.ListBootstrapActionsPages(params,
+//	    func(page *emr.ListBootstrapActionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMR) ListBootstrapActionsPages(input *ListBootstrapActionsInput, fn func(*ListBootstrapActionsOutput, bool) bool) error {
 	return c.ListBootstrapActionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2139,14 +2133,13 @@ const opListClusters = "ListClusters"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListClustersRequest method.
+//	req, resp := client.ListClustersRequest(params)
 //
-//    // Example sending a request using the ListClustersRequest method.
-//    req, resp := client.ListClustersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListClusters
 func (c *EMR) ListClustersRequest(input *ListClustersInput) (req *request.Request, output *ListClustersOutput) {
@@ -2188,12 +2181,13 @@ func (c *EMR) ListClustersRequest(input *ListClustersInput) (req *request.Reques
 // API operation ListClusters for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListClusters
 func (c *EMR) ListClusters(input *ListClustersInput) (*ListClustersOutput, error) {
@@ -2225,15 +2219,14 @@ func (c *EMR) ListClustersWithContext(ctx aws.Context, input *ListClustersInput,
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListClusters operation.
-//    pageNum := 0
-//    err := client.ListClustersPages(params,
-//        func(page *emr.ListClustersOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListClusters operation.
+//	pageNum := 0
+//	err := client.ListClustersPages(params,
+//	    func(page *emr.ListClustersOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMR) ListClustersPages(input *ListClustersInput, fn func(*ListClustersOutput, bool) bool) error {
 	return c.ListClustersPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2285,14 +2278,13 @@ const opListInstanceFleets = "ListInstanceFleets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListInstanceFleetsRequest method.
+//	req, resp := client.ListInstanceFleetsRequest(params)
 //
-//    // Example sending a request using the ListInstanceFleetsRequest method.
-//    req, resp := client.ListInstanceFleetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListInstanceFleets
 func (c *EMR) ListInstanceFleetsRequest(input *ListInstanceFleetsInput) (req *request.Request, output *ListInstanceFleetsOutput) {
@@ -2321,7 +2313,7 @@ func (c *EMR) ListInstanceFleetsRequest(input *ListInstanceFleetsInput) (req *re
 //
 // Lists all available details about the instance fleets in a cluster.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2332,12 +2324,13 @@ func (c *EMR) ListInstanceFleetsRequest(input *ListInstanceFleetsInput) (req *re
 // API operation ListInstanceFleets for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListInstanceFleets
 func (c *EMR) ListInstanceFleets(input *ListInstanceFleetsInput) (*ListInstanceFleetsOutput, error) {
@@ -2369,15 +2362,14 @@ func (c *EMR) ListInstanceFleetsWithContext(ctx aws.Context, input *ListInstance
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListInstanceFleets operation.
-//    pageNum := 0
-//    err := client.ListInstanceFleetsPages(params,
-//        func(page *emr.ListInstanceFleetsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListInstanceFleets operation.
+//	pageNum := 0
+//	err := client.ListInstanceFleetsPages(params,
+//	    func(page *emr.ListInstanceFleetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMR) ListInstanceFleetsPages(input *ListInstanceFleetsInput, fn func(*ListInstanceFleetsOutput, bool) bool) error {
 	return c.ListInstanceFleetsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2429,14 +2421,13 @@ const opListInstanceGroups = "ListInstanceGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListInstanceGroupsRequest method.
+//	req, resp := client.ListInstanceGroupsRequest(params)
 //
-//    // Example sending a request using the ListInstanceGroupsRequest method.
-//    req, resp := client.ListInstanceGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListInstanceGroups
 func (c *EMR) ListInstanceGroupsRequest(input *ListInstanceGroupsInput) (req *request.Request, output *ListInstanceGroupsOutput) {
@@ -2473,12 +2464,13 @@ func (c *EMR) ListInstanceGroupsRequest(input *ListInstanceGroupsInput) (req *re
 // API operation ListInstanceGroups for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListInstanceGroups
 func (c *EMR) ListInstanceGroups(input *ListInstanceGroupsInput) (*ListInstanceGroupsOutput, error) {
@@ -2510,15 +2502,14 @@ func (c *EMR) ListInstanceGroupsWithContext(ctx aws.Context, input *ListInstance
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListInstanceGroups operation.
-//    pageNum := 0
-//    err := client.ListInstanceGroupsPages(params,
-//        func(page *emr.ListInstanceGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListInstanceGroups operation.
+//	pageNum := 0
+//	err := client.ListInstanceGroupsPages(params,
+//	    func(page *emr.ListInstanceGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMR) ListInstanceGroupsPages(input *ListInstanceGroupsInput, fn func(*ListInstanceGroupsOutput, bool) bool) error {
 	return c.ListInstanceGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2570,14 +2561,13 @@ const opListInstances = "ListInstances"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListInstancesRequest method.
+//	req, resp := client.ListInstancesRequest(params)
 //
-//    // Example sending a request using the ListInstancesRequest method.
-//    req, resp := client.ListInstancesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListInstances
 func (c *EMR) ListInstancesRequest(input *ListInstancesInput) (req *request.Request, output *ListInstancesOutput) {
@@ -2604,10 +2594,10 @@ func (c *EMR) ListInstancesRequest(input *ListInstancesInput) (req *request.Requ
 
 // ListInstances API operation for Amazon EMR.
 //
-// Provides information for all active EC2 instances and EC2 instances terminated
-// in the last 30 days, up to a maximum of 2,000. EC2 instances in any of the
-// following states are considered active: AWAITING_FULFILLMENT, PROVISIONING,
-// BOOTSTRAPPING, RUNNING.
+// Provides information for all active Amazon EC2 instances and Amazon EC2 instances
+// terminated in the last 30 days, up to a maximum of 2,000. Amazon EC2 instances
+// in any of the following states are considered active: AWAITING_FULFILLMENT,
+// PROVISIONING, BOOTSTRAPPING, RUNNING.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2617,12 +2607,13 @@ func (c *EMR) ListInstancesRequest(input *ListInstancesInput) (req *request.Requ
 // API operation ListInstances for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListInstances
 func (c *EMR) ListInstances(input *ListInstancesInput) (*ListInstancesOutput, error) {
@@ -2654,15 +2645,14 @@ func (c *EMR) ListInstancesWithContext(ctx aws.Context, input *ListInstancesInpu
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListInstances operation.
-//    pageNum := 0
-//    err := client.ListInstancesPages(params,
-//        func(page *emr.ListInstancesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListInstances operation.
+//	pageNum := 0
+//	err := client.ListInstancesPages(params,
+//	    func(page *emr.ListInstancesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMR) ListInstancesPages(input *ListInstancesInput, fn func(*ListInstancesOutput, bool) bool) error {
 	return c.ListInstancesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2714,14 +2704,13 @@ const opListNotebookExecutions = "ListNotebookExecutions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListNotebookExecutionsRequest method.
+//	req, resp := client.ListNotebookExecutionsRequest(params)
 //
-//    // Example sending a request using the ListNotebookExecutionsRequest method.
-//    req, resp := client.ListNotebookExecutionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListNotebookExecutions
 func (c *EMR) ListNotebookExecutionsRequest(input *ListNotebookExecutionsInput) (req *request.Request, output *ListNotebookExecutionsOutput) {
@@ -2751,7 +2740,7 @@ func (c *EMR) ListNotebookExecutionsRequest(input *ListNotebookExecutionsInput) 
 // Provides summaries of all notebook executions. You can filter the list based
 // on multiple criteria such as status, time range, and editor id. Returns a
 // maximum of 50 notebook executions and a marker to track the paging of a longer
-// notebook execution list across multiple ListNotebookExecution calls.
+// notebook execution list across multiple ListNotebookExecutions calls.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2761,12 +2750,13 @@ func (c *EMR) ListNotebookExecutionsRequest(input *ListNotebookExecutionsInput) 
 // API operation ListNotebookExecutions for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListNotebookExecutions
 func (c *EMR) ListNotebookExecutions(input *ListNotebookExecutionsInput) (*ListNotebookExecutionsOutput, error) {
@@ -2798,15 +2788,14 @@ func (c *EMR) ListNotebookExecutionsWithContext(ctx aws.Context, input *ListNote
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListNotebookExecutions operation.
-//    pageNum := 0
-//    err := client.ListNotebookExecutionsPages(params,
-//        func(page *emr.ListNotebookExecutionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListNotebookExecutions operation.
+//	pageNum := 0
+//	err := client.ListNotebookExecutionsPages(params,
+//	    func(page *emr.ListNotebookExecutionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMR) ListNotebookExecutionsPages(input *ListNotebookExecutionsInput, fn func(*ListNotebookExecutionsOutput, bool) bool) error {
 	return c.ListNotebookExecutionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2858,14 +2847,13 @@ const opListReleaseLabels = "ListReleaseLabels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListReleaseLabelsRequest method.
+//	req, resp := client.ListReleaseLabelsRequest(params)
 //
-//    // Example sending a request using the ListReleaseLabelsRequest method.
-//    req, resp := client.ListReleaseLabelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListReleaseLabels
 func (c *EMR) ListReleaseLabelsRequest(input *ListReleaseLabelsInput) (req *request.Request, output *ListReleaseLabelsOutput) {
@@ -2892,7 +2880,8 @@ func (c *EMR) ListReleaseLabelsRequest(input *ListReleaseLabelsInput) (req *requ
 
 // ListReleaseLabels API operation for Amazon EMR.
 //
-// Retrieves release labels of EMR services in the region where the API is called.
+// Retrieves release labels of Amazon EMR services in the Region where the API
+// is called.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2902,12 +2891,13 @@ func (c *EMR) ListReleaseLabelsRequest(input *ListReleaseLabelsInput) (req *requ
 // API operation ListReleaseLabels for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListReleaseLabels
 func (c *EMR) ListReleaseLabels(input *ListReleaseLabelsInput) (*ListReleaseLabelsOutput, error) {
@@ -2939,15 +2929,14 @@ func (c *EMR) ListReleaseLabelsWithContext(ctx aws.Context, input *ListReleaseLa
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListReleaseLabels operation.
-//    pageNum := 0
-//    err := client.ListReleaseLabelsPages(params,
-//        func(page *emr.ListReleaseLabelsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListReleaseLabels operation.
+//	pageNum := 0
+//	err := client.ListReleaseLabelsPages(params,
+//	    func(page *emr.ListReleaseLabelsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMR) ListReleaseLabelsPages(input *ListReleaseLabelsInput, fn func(*ListReleaseLabelsOutput, bool) bool) error {
 	return c.ListReleaseLabelsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2999,14 +2988,13 @@ const opListSecurityConfigurations = "ListSecurityConfigurations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSecurityConfigurationsRequest method.
+//	req, resp := client.ListSecurityConfigurationsRequest(params)
 //
-//    // Example sending a request using the ListSecurityConfigurationsRequest method.
-//    req, resp := client.ListSecurityConfigurationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListSecurityConfigurations
 func (c *EMR) ListSecurityConfigurationsRequest(input *ListSecurityConfigurationsInput) (req *request.Request, output *ListSecurityConfigurationsOutput) {
@@ -3046,12 +3034,13 @@ func (c *EMR) ListSecurityConfigurationsRequest(input *ListSecurityConfiguration
 // API operation ListSecurityConfigurations for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListSecurityConfigurations
 func (c *EMR) ListSecurityConfigurations(input *ListSecurityConfigurationsInput) (*ListSecurityConfigurationsOutput, error) {
@@ -3083,15 +3072,14 @@ func (c *EMR) ListSecurityConfigurationsWithContext(ctx aws.Context, input *List
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSecurityConfigurations operation.
-//    pageNum := 0
-//    err := client.ListSecurityConfigurationsPages(params,
-//        func(page *emr.ListSecurityConfigurationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSecurityConfigurations operation.
+//	pageNum := 0
+//	err := client.ListSecurityConfigurationsPages(params,
+//	    func(page *emr.ListSecurityConfigurationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMR) ListSecurityConfigurationsPages(input *ListSecurityConfigurationsInput, fn func(*ListSecurityConfigurationsOutput, bool) bool) error {
 	return c.ListSecurityConfigurationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3143,14 +3131,13 @@ const opListSteps = "ListSteps"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListStepsRequest method.
+//	req, resp := client.ListStepsRequest(params)
 //
-//    // Example sending a request using the ListStepsRequest method.
-//    req, resp := client.ListStepsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListSteps
 func (c *EMR) ListStepsRequest(input *ListStepsInput) (req *request.Request, output *ListStepsOutput) {
@@ -3191,12 +3178,13 @@ func (c *EMR) ListStepsRequest(input *ListStepsInput) (req *request.Request, out
 // API operation ListSteps for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListSteps
 func (c *EMR) ListSteps(input *ListStepsInput) (*ListStepsOutput, error) {
@@ -3228,15 +3216,14 @@ func (c *EMR) ListStepsWithContext(ctx aws.Context, input *ListStepsInput, opts 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSteps operation.
-//    pageNum := 0
-//    err := client.ListStepsPages(params,
-//        func(page *emr.ListStepsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSteps operation.
+//	pageNum := 0
+//	err := client.ListStepsPages(params,
+//	    func(page *emr.ListStepsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMR) ListStepsPages(input *ListStepsInput, fn func(*ListStepsOutput, bool) bool) error {
 	return c.ListStepsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3288,14 +3275,13 @@ const opListStudioSessionMappings = "ListStudioSessionMappings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListStudioSessionMappingsRequest method.
+//	req, resp := client.ListStudioSessionMappingsRequest(params)
 //
-//    // Example sending a request using the ListStudioSessionMappingsRequest method.
-//    req, resp := client.ListStudioSessionMappingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListStudioSessionMappings
 func (c *EMR) ListStudioSessionMappingsRequest(input *ListStudioSessionMappingsInput) (req *request.Request, output *ListStudioSessionMappingsOutput) {
@@ -3333,12 +3319,13 @@ func (c *EMR) ListStudioSessionMappingsRequest(input *ListStudioSessionMappingsI
 // API operation ListStudioSessionMappings for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListStudioSessionMappings
 func (c *EMR) ListStudioSessionMappings(input *ListStudioSessionMappingsInput) (*ListStudioSessionMappingsOutput, error) {
@@ -3370,15 +3357,14 @@ func (c *EMR) ListStudioSessionMappingsWithContext(ctx aws.Context, input *ListS
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListStudioSessionMappings operation.
-//    pageNum := 0
-//    err := client.ListStudioSessionMappingsPages(params,
-//        func(page *emr.ListStudioSessionMappingsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListStudioSessionMappings operation.
+//	pageNum := 0
+//	err := client.ListStudioSessionMappingsPages(params,
+//	    func(page *emr.ListStudioSessionMappingsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMR) ListStudioSessionMappingsPages(input *ListStudioSessionMappingsInput, fn func(*ListStudioSessionMappingsOutput, bool) bool) error {
 	return c.ListStudioSessionMappingsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3430,14 +3416,13 @@ const opListStudios = "ListStudios"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListStudiosRequest method.
+//	req, resp := client.ListStudiosRequest(params)
 //
-//    // Example sending a request using the ListStudiosRequest method.
-//    req, resp := client.ListStudiosRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListStudios
 func (c *EMR) ListStudiosRequest(input *ListStudiosInput) (req *request.Request, output *ListStudiosOutput) {
@@ -3476,12 +3461,13 @@ func (c *EMR) ListStudiosRequest(input *ListStudiosInput) (req *request.Request,
 // API operation ListStudios for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListStudios
 func (c *EMR) ListStudios(input *ListStudiosInput) (*ListStudiosOutput, error) {
@@ -3513,15 +3499,14 @@ func (c *EMR) ListStudiosWithContext(ctx aws.Context, input *ListStudiosInput, o
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListStudios operation.
-//    pageNum := 0
-//    err := client.ListStudiosPages(params,
-//        func(page *emr.ListStudiosOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListStudios operation.
+//	pageNum := 0
+//	err := client.ListStudiosPages(params,
+//	    func(page *emr.ListStudiosOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *EMR) ListStudiosPages(input *ListStudiosInput, fn func(*ListStudiosOutput, bool) bool) error {
 	return c.ListStudiosPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -3557,6 +3542,147 @@ func (c *EMR) ListStudiosPagesWithContext(ctx aws.Context, input *ListStudiosInp
 	return p.Err()
 }
 
+const opListSupportedInstanceTypes = "ListSupportedInstanceTypes"
+
+// ListSupportedInstanceTypesRequest generates a "aws/request.Request" representing the
+// client's request for the ListSupportedInstanceTypes operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSupportedInstanceTypes for more information on using the ListSupportedInstanceTypes
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ListSupportedInstanceTypesRequest method.
+//	req, resp := client.ListSupportedInstanceTypesRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListSupportedInstanceTypes
+func (c *EMR) ListSupportedInstanceTypesRequest(input *ListSupportedInstanceTypesInput) (req *request.Request, output *ListSupportedInstanceTypesOutput) {
+	op := &request.Operation{
+		Name:       opListSupportedInstanceTypes,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSupportedInstanceTypesInput{}
+	}
+
+	output = &ListSupportedInstanceTypesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSupportedInstanceTypes API operation for Amazon EMR.
+//
+// A list of the instance types that Amazon EMR supports. You can filter the
+// list by Amazon Web Services Region and Amazon EMR release.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon EMR's
+// API operation ListSupportedInstanceTypes for usage and error information.
+//
+// Returned Error Types:
+//
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ListSupportedInstanceTypes
+func (c *EMR) ListSupportedInstanceTypes(input *ListSupportedInstanceTypesInput) (*ListSupportedInstanceTypesOutput, error) {
+	req, out := c.ListSupportedInstanceTypesRequest(input)
+	return out, req.Send()
+}
+
+// ListSupportedInstanceTypesWithContext is the same as ListSupportedInstanceTypes with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSupportedInstanceTypes for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EMR) ListSupportedInstanceTypesWithContext(ctx aws.Context, input *ListSupportedInstanceTypesInput, opts ...request.Option) (*ListSupportedInstanceTypesOutput, error) {
+	req, out := c.ListSupportedInstanceTypesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSupportedInstanceTypesPages iterates over the pages of a ListSupportedInstanceTypes operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSupportedInstanceTypes method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a ListSupportedInstanceTypes operation.
+//	pageNum := 0
+//	err := client.ListSupportedInstanceTypesPages(params,
+//	    func(page *emr.ListSupportedInstanceTypesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *EMR) ListSupportedInstanceTypesPages(input *ListSupportedInstanceTypesInput, fn func(*ListSupportedInstanceTypesOutput, bool) bool) error {
+	return c.ListSupportedInstanceTypesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSupportedInstanceTypesPagesWithContext same as ListSupportedInstanceTypesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EMR) ListSupportedInstanceTypesPagesWithContext(ctx aws.Context, input *ListSupportedInstanceTypesInput, fn func(*ListSupportedInstanceTypesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSupportedInstanceTypesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSupportedInstanceTypesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSupportedInstanceTypesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opModifyCluster = "ModifyCluster"
 
 // ModifyClusterRequest generates a "aws/request.Request" representing the
@@ -3573,14 +3699,13 @@ const opModifyCluster = "ModifyCluster"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ModifyClusterRequest method.
+//	req, resp := client.ModifyClusterRequest(params)
 //
-//    // Example sending a request using the ModifyClusterRequest method.
-//    req, resp := client.ModifyClusterRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ModifyCluster
 func (c *EMR) ModifyClusterRequest(input *ModifyClusterInput) (req *request.Request, output *ModifyClusterOutput) {
@@ -3612,12 +3737,13 @@ func (c *EMR) ModifyClusterRequest(input *ModifyClusterInput) (req *request.Requ
 // API operation ModifyCluster for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ModifyCluster
 func (c *EMR) ModifyCluster(input *ModifyClusterInput) (*ModifyClusterOutput, error) {
@@ -3657,14 +3783,13 @@ const opModifyInstanceFleet = "ModifyInstanceFleet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ModifyInstanceFleetRequest method.
+//	req, resp := client.ModifyInstanceFleetRequest(params)
 //
-//    // Example sending a request using the ModifyInstanceFleetRequest method.
-//    req, resp := client.ModifyInstanceFleetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ModifyInstanceFleet
 func (c *EMR) ModifyInstanceFleetRequest(input *ModifyInstanceFleetInput) (req *request.Request, output *ModifyInstanceFleetOutput) {
@@ -3690,7 +3815,7 @@ func (c *EMR) ModifyInstanceFleetRequest(input *ModifyInstanceFleetInput) (req *
 // fleet with the specified InstanceFleetID within the cluster specified using
 // ClusterID. The call either succeeds or fails atomically.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -3701,12 +3826,13 @@ func (c *EMR) ModifyInstanceFleetRequest(input *ModifyInstanceFleetInput) (req *
 // API operation ModifyInstanceFleet for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ModifyInstanceFleet
 func (c *EMR) ModifyInstanceFleet(input *ModifyInstanceFleetInput) (*ModifyInstanceFleetOutput, error) {
@@ -3746,14 +3872,13 @@ const opModifyInstanceGroups = "ModifyInstanceGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ModifyInstanceGroupsRequest method.
+//	req, resp := client.ModifyInstanceGroupsRequest(params)
 //
-//    // Example sending a request using the ModifyInstanceGroupsRequest method.
-//    req, resp := client.ModifyInstanceGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ModifyInstanceGroups
 func (c *EMR) ModifyInstanceGroupsRequest(input *ModifyInstanceGroupsInput) (req *request.Request, output *ModifyInstanceGroupsOutput) {
@@ -3788,9 +3913,9 @@ func (c *EMR) ModifyInstanceGroupsRequest(input *ModifyInstanceGroupsInput) (req
 // API operation ModifyInstanceGroups for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/ModifyInstanceGroups
 func (c *EMR) ModifyInstanceGroups(input *ModifyInstanceGroupsInput) (*ModifyInstanceGroupsOutput, error) {
@@ -3830,14 +3955,13 @@ const opPutAutoScalingPolicy = "PutAutoScalingPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutAutoScalingPolicyRequest method.
+//	req, resp := client.PutAutoScalingPolicyRequest(params)
 //
-//    // Example sending a request using the PutAutoScalingPolicyRequest method.
-//    req, resp := client.PutAutoScalingPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/PutAutoScalingPolicy
 func (c *EMR) PutAutoScalingPolicyRequest(input *PutAutoScalingPolicyInput) (req *request.Request, output *PutAutoScalingPolicyOutput) {
@@ -3860,8 +3984,8 @@ func (c *EMR) PutAutoScalingPolicyRequest(input *PutAutoScalingPolicyInput) (req
 //
 // Creates or updates an automatic scaling policy for a core instance group
 // or task instance group in an Amazon EMR cluster. The automatic scaling policy
-// defines how an instance group dynamically adds and terminates EC2 instances
-// in response to the value of a CloudWatch metric.
+// defines how an instance group dynamically adds and terminates Amazon EC2
+// instances in response to the value of a CloudWatch metric.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3907,14 +4031,13 @@ const opPutAutoTerminationPolicy = "PutAutoTerminationPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutAutoTerminationPolicyRequest method.
+//	req, resp := client.PutAutoTerminationPolicyRequest(params)
 //
-//    // Example sending a request using the PutAutoTerminationPolicyRequest method.
-//    req, resp := client.PutAutoTerminationPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/PutAutoTerminationPolicy
 func (c *EMR) PutAutoTerminationPolicyRequest(input *PutAutoTerminationPolicyInput) (req *request.Request, output *PutAutoTerminationPolicyOutput) {
@@ -3936,8 +4059,7 @@ func (c *EMR) PutAutoTerminationPolicyRequest(input *PutAutoTerminationPolicyInp
 
 // PutAutoTerminationPolicy API operation for Amazon EMR.
 //
-//
-// Auto-termination is supported in Amazon EMR versions 5.30.0 and 6.1.0 and
+// Auto-termination is supported in Amazon EMR releases 5.30.0 and 6.1.0 and
 // later. For more information, see Using an auto-termination policy (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-auto-termination-policy.html).
 //
 // Creates or updates an auto-termination policy for an Amazon EMR cluster.
@@ -3989,14 +4111,13 @@ const opPutBlockPublicAccessConfiguration = "PutBlockPublicAccessConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutBlockPublicAccessConfigurationRequest method.
+//	req, resp := client.PutBlockPublicAccessConfigurationRequest(params)
 //
-//    // Example sending a request using the PutBlockPublicAccessConfigurationRequest method.
-//    req, resp := client.PutBlockPublicAccessConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/PutBlockPublicAccessConfiguration
 func (c *EMR) PutBlockPublicAccessConfigurationRequest(input *PutBlockPublicAccessConfigurationInput) (req *request.Request, output *PutBlockPublicAccessConfigurationOutput) {
@@ -4031,12 +4152,13 @@ func (c *EMR) PutBlockPublicAccessConfigurationRequest(input *PutBlockPublicAcce
 // API operation PutBlockPublicAccessConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/PutBlockPublicAccessConfiguration
 func (c *EMR) PutBlockPublicAccessConfiguration(input *PutBlockPublicAccessConfigurationInput) (*PutBlockPublicAccessConfigurationOutput, error) {
@@ -4076,14 +4198,13 @@ const opPutManagedScalingPolicy = "PutManagedScalingPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutManagedScalingPolicyRequest method.
+//	req, resp := client.PutManagedScalingPolicyRequest(params)
 //
-//    // Example sending a request using the PutManagedScalingPolicyRequest method.
-//    req, resp := client.PutManagedScalingPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/PutManagedScalingPolicy
 func (c *EMR) PutManagedScalingPolicyRequest(input *PutManagedScalingPolicyInput) (req *request.Request, output *PutManagedScalingPolicyOutput) {
@@ -4106,9 +4227,10 @@ func (c *EMR) PutManagedScalingPolicyRequest(input *PutManagedScalingPolicyInput
 // PutManagedScalingPolicy API operation for Amazon EMR.
 //
 // Creates or updates a managed scaling policy for an Amazon EMR cluster. The
-// managed scaling policy defines the limits for resources, such as EC2 instances
-// that can be added or terminated from a cluster. The policy only applies to
-// the core and task nodes. The master node cannot be scaled after initial configuration.
+// managed scaling policy defines the limits for resources, such as Amazon EC2
+// instances that can be added or terminated from a cluster. The policy only
+// applies to the core and task nodes. The master node cannot be scaled after
+// initial configuration.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4154,14 +4276,13 @@ const opRemoveAutoScalingPolicy = "RemoveAutoScalingPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveAutoScalingPolicyRequest method.
+//	req, resp := client.RemoveAutoScalingPolicyRequest(params)
 //
-//    // Example sending a request using the RemoveAutoScalingPolicyRequest method.
-//    req, resp := client.RemoveAutoScalingPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/RemoveAutoScalingPolicy
 func (c *EMR) RemoveAutoScalingPolicyRequest(input *RemoveAutoScalingPolicyInput) (req *request.Request, output *RemoveAutoScalingPolicyOutput) {
@@ -4184,7 +4305,7 @@ func (c *EMR) RemoveAutoScalingPolicyRequest(input *RemoveAutoScalingPolicyInput
 // RemoveAutoScalingPolicy API operation for Amazon EMR.
 //
 // Removes an automatic scaling policy from a specified instance group within
-// an EMR cluster.
+// an Amazon EMR cluster.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4230,14 +4351,13 @@ const opRemoveAutoTerminationPolicy = "RemoveAutoTerminationPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveAutoTerminationPolicyRequest method.
+//	req, resp := client.RemoveAutoTerminationPolicyRequest(params)
 //
-//    // Example sending a request using the RemoveAutoTerminationPolicyRequest method.
-//    req, resp := client.RemoveAutoTerminationPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/RemoveAutoTerminationPolicy
 func (c *EMR) RemoveAutoTerminationPolicyRequest(input *RemoveAutoTerminationPolicyInput) (req *request.Request, output *RemoveAutoTerminationPolicyOutput) {
@@ -4305,14 +4425,13 @@ const opRemoveManagedScalingPolicy = "RemoveManagedScalingPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveManagedScalingPolicyRequest method.
+//	req, resp := client.RemoveManagedScalingPolicyRequest(params)
 //
-//    // Example sending a request using the RemoveManagedScalingPolicyRequest method.
-//    req, resp := client.RemoveManagedScalingPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/RemoveManagedScalingPolicy
 func (c *EMR) RemoveManagedScalingPolicyRequest(input *RemoveManagedScalingPolicyInput) (req *request.Request, output *RemoveManagedScalingPolicyOutput) {
@@ -4334,7 +4453,7 @@ func (c *EMR) RemoveManagedScalingPolicyRequest(input *RemoveManagedScalingPolic
 
 // RemoveManagedScalingPolicy API operation for Amazon EMR.
 //
-// Removes a managed scaling policy from a specified EMR cluster.
+// Removes a managed scaling policy from a specified Amazon EMR cluster.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4380,14 +4499,13 @@ const opRemoveTags = "RemoveTags"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RemoveTagsRequest method.
+//	req, resp := client.RemoveTagsRequest(params)
 //
-//    // Example sending a request using the RemoveTagsRequest method.
-//    req, resp := client.RemoveTagsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/RemoveTags
 func (c *EMR) RemoveTagsRequest(input *RemoveTagsInput) (req *request.Request, output *RemoveTagsOutput) {
@@ -4424,12 +4542,13 @@ func (c *EMR) RemoveTagsRequest(input *RemoveTagsInput) (req *request.Request, o
 // API operation RemoveTags for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/RemoveTags
 func (c *EMR) RemoveTags(input *RemoveTagsInput) (*RemoveTagsOutput, error) {
@@ -4469,14 +4588,13 @@ const opRunJobFlow = "RunJobFlow"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RunJobFlowRequest method.
+//	req, resp := client.RunJobFlowRequest(params)
 //
-//    // Example sending a request using the RunJobFlowRequest method.
-//    req, resp := client.RunJobFlowRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/RunJobFlow
 func (c *EMR) RunJobFlowRequest(input *RunJobFlowInput) (req *request.Request, output *RunJobFlowOutput) {
@@ -4519,7 +4637,7 @@ func (c *EMR) RunJobFlowRequest(input *RunJobFlowInput) (req *request.Request, o
 // For long-running clusters, we recommend that you periodically store your
 // results.
 //
-// The instance fleets configuration is available only in Amazon EMR versions
+// The instance fleets configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow request can contain
 // InstanceFleets parameters or InstanceGroups parameters, but not both.
 //
@@ -4531,9 +4649,9 @@ func (c *EMR) RunJobFlowRequest(input *RunJobFlowInput) (req *request.Request, o
 // API operation RunJobFlow for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/RunJobFlow
 func (c *EMR) RunJobFlow(input *RunJobFlowInput) (*RunJobFlowOutput, error) {
@@ -4557,6 +4675,94 @@ func (c *EMR) RunJobFlowWithContext(ctx aws.Context, input *RunJobFlowInput, opt
 	return out, req.Send()
 }
 
+const opSetKeepJobFlowAliveWhenNoSteps = "SetKeepJobFlowAliveWhenNoSteps"
+
+// SetKeepJobFlowAliveWhenNoStepsRequest generates a "aws/request.Request" representing the
+// client's request for the SetKeepJobFlowAliveWhenNoSteps operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SetKeepJobFlowAliveWhenNoSteps for more information on using the SetKeepJobFlowAliveWhenNoSteps
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the SetKeepJobFlowAliveWhenNoStepsRequest method.
+//	req, resp := client.SetKeepJobFlowAliveWhenNoStepsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/SetKeepJobFlowAliveWhenNoSteps
+func (c *EMR) SetKeepJobFlowAliveWhenNoStepsRequest(input *SetKeepJobFlowAliveWhenNoStepsInput) (req *request.Request, output *SetKeepJobFlowAliveWhenNoStepsOutput) {
+	op := &request.Operation{
+		Name:       opSetKeepJobFlowAliveWhenNoSteps,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &SetKeepJobFlowAliveWhenNoStepsInput{}
+	}
+
+	output = &SetKeepJobFlowAliveWhenNoStepsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// SetKeepJobFlowAliveWhenNoSteps API operation for Amazon EMR.
+//
+// You can use the SetKeepJobFlowAliveWhenNoSteps to configure a cluster (job
+// flow) to terminate after the step execution, i.e., all your steps are executed.
+// If you want a transient cluster that shuts down after the last of the current
+// executing steps are completed, you can configure SetKeepJobFlowAliveWhenNoSteps
+// to false. If you want a long running cluster, configure SetKeepJobFlowAliveWhenNoSteps
+// to true.
+//
+// For more information, see Managing Cluster Termination (https://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html)
+// in the Amazon EMR Management Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon EMR's
+// API operation SetKeepJobFlowAliveWhenNoSteps for usage and error information.
+//
+// Returned Error Types:
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/SetKeepJobFlowAliveWhenNoSteps
+func (c *EMR) SetKeepJobFlowAliveWhenNoSteps(input *SetKeepJobFlowAliveWhenNoStepsInput) (*SetKeepJobFlowAliveWhenNoStepsOutput, error) {
+	req, out := c.SetKeepJobFlowAliveWhenNoStepsRequest(input)
+	return out, req.Send()
+}
+
+// SetKeepJobFlowAliveWhenNoStepsWithContext is the same as SetKeepJobFlowAliveWhenNoSteps with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SetKeepJobFlowAliveWhenNoSteps for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EMR) SetKeepJobFlowAliveWhenNoStepsWithContext(ctx aws.Context, input *SetKeepJobFlowAliveWhenNoStepsInput, opts ...request.Option) (*SetKeepJobFlowAliveWhenNoStepsOutput, error) {
+	req, out := c.SetKeepJobFlowAliveWhenNoStepsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opSetTerminationProtection = "SetTerminationProtection"
 
 // SetTerminationProtectionRequest generates a "aws/request.Request" representing the
@@ -4573,14 +4779,13 @@ const opSetTerminationProtection = "SetTerminationProtection"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SetTerminationProtectionRequest method.
+//	req, resp := client.SetTerminationProtectionRequest(params)
 //
-//    // Example sending a request using the SetTerminationProtectionRequest method.
-//    req, resp := client.SetTerminationProtectionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/SetTerminationProtection
 func (c *EMR) SetTerminationProtectionRequest(input *SetTerminationProtectionInput) (req *request.Request, output *SetTerminationProtectionOutput) {
@@ -4602,12 +4807,12 @@ func (c *EMR) SetTerminationProtectionRequest(input *SetTerminationProtectionInp
 
 // SetTerminationProtection API operation for Amazon EMR.
 //
-// SetTerminationProtection locks a cluster (job flow) so the EC2 instances
+// SetTerminationProtection locks a cluster (job flow) so the Amazon EC2 instances
 // in the cluster cannot be terminated by user intervention, an API call, or
 // in the event of a job-flow error. The cluster still terminates upon successful
 // completion of the job flow. Calling SetTerminationProtection on a cluster
-// is similar to calling the Amazon EC2 DisableAPITermination API on all EC2
-// instances in a cluster.
+// is similar to calling the Amazon EC2 DisableAPITermination API on all Amazon
+// EC2 instances in a cluster.
 //
 // SetTerminationProtection is used to prevent accidental termination of a cluster
 // and to ensure that in the event of an error, the instances persist so that
@@ -4617,7 +4822,7 @@ func (c *EMR) SetTerminationProtectionRequest(input *SetTerminationProtectionInp
 // to true, you must first unlock the job flow by a subsequent call to SetTerminationProtection
 // in which you set the value to false.
 //
-// For more information, seeManaging Cluster Termination (https://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html)
+// For more information, see Managing Cluster Termination (https://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html)
 // in the Amazon EMR Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -4628,9 +4833,9 @@ func (c *EMR) SetTerminationProtectionRequest(input *SetTerminationProtectionInp
 // API operation SetTerminationProtection for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/SetTerminationProtection
 func (c *EMR) SetTerminationProtection(input *SetTerminationProtectionInput) (*SetTerminationProtectionOutput, error) {
@@ -4654,6 +4859,100 @@ func (c *EMR) SetTerminationProtectionWithContext(ctx aws.Context, input *SetTer
 	return out, req.Send()
 }
 
+const opSetUnhealthyNodeReplacement = "SetUnhealthyNodeReplacement"
+
+// SetUnhealthyNodeReplacementRequest generates a "aws/request.Request" representing the
+// client's request for the SetUnhealthyNodeReplacement operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SetUnhealthyNodeReplacement for more information on using the SetUnhealthyNodeReplacement
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the SetUnhealthyNodeReplacementRequest method.
+//	req, resp := client.SetUnhealthyNodeReplacementRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/SetUnhealthyNodeReplacement
+func (c *EMR) SetUnhealthyNodeReplacementRequest(input *SetUnhealthyNodeReplacementInput) (req *request.Request, output *SetUnhealthyNodeReplacementOutput) {
+	op := &request.Operation{
+		Name:       opSetUnhealthyNodeReplacement,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &SetUnhealthyNodeReplacementInput{}
+	}
+
+	output = &SetUnhealthyNodeReplacementOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// SetUnhealthyNodeReplacement API operation for Amazon EMR.
+//
+// Specify whether to enable unhealthy node replacement, which lets Amazon EMR
+// gracefully replace core nodes on a cluster if any nodes become unhealthy.
+// For example, a node becomes unhealthy if disk usage is above 90%. If unhealthy
+// node replacement is on and TerminationProtected are off, Amazon EMR immediately
+// terminates the unhealthy core nodes. To use unhealthy node replacement and
+// retain unhealthy core nodes, use to turn on termination protection. In such
+// cases, Amazon EMR adds the unhealthy nodes to a denylist, reducing job interruptions
+// and failures.
+//
+// If unhealthy node replacement is on, Amazon EMR notifies YARN and other applications
+// on the cluster to stop scheduling tasks with these nodes, moves the data,
+// and then terminates the nodes.
+//
+// For more information, see graceful node replacement (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-node-replacement.html)
+// in the Amazon EMR Management Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon EMR's
+// API operation SetUnhealthyNodeReplacement for usage and error information.
+//
+// Returned Error Types:
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/SetUnhealthyNodeReplacement
+func (c *EMR) SetUnhealthyNodeReplacement(input *SetUnhealthyNodeReplacementInput) (*SetUnhealthyNodeReplacementOutput, error) {
+	req, out := c.SetUnhealthyNodeReplacementRequest(input)
+	return out, req.Send()
+}
+
+// SetUnhealthyNodeReplacementWithContext is the same as SetUnhealthyNodeReplacement with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SetUnhealthyNodeReplacement for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EMR) SetUnhealthyNodeReplacementWithContext(ctx aws.Context, input *SetUnhealthyNodeReplacementInput, opts ...request.Option) (*SetUnhealthyNodeReplacementOutput, error) {
+	req, out := c.SetUnhealthyNodeReplacementRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opSetVisibleToAllUsers = "SetVisibleToAllUsers"
 
 // SetVisibleToAllUsersRequest generates a "aws/request.Request" representing the
@@ -4670,14 +4969,13 @@ const opSetVisibleToAllUsers = "SetVisibleToAllUsers"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SetVisibleToAllUsersRequest method.
+//	req, resp := client.SetVisibleToAllUsersRequest(params)
 //
-//    // Example sending a request using the SetVisibleToAllUsersRequest method.
-//    req, resp := client.SetVisibleToAllUsersRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/SetVisibleToAllUsers
 func (c *EMR) SetVisibleToAllUsersRequest(input *SetVisibleToAllUsersInput) (req *request.Request, output *SetVisibleToAllUsersOutput) {
@@ -4699,24 +4997,23 @@ func (c *EMR) SetVisibleToAllUsersRequest(input *SetVisibleToAllUsersInput) (req
 
 // SetVisibleToAllUsers API operation for Amazon EMR.
 //
-//
 // The SetVisibleToAllUsers parameter is no longer supported. Your cluster may
 // be visible to all users in your account. To restrict cluster access using
-// an IAM policy, see Identity and Access Management for EMR (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-access-iam.html).
+// an IAM policy, see Identity and Access Management for Amazon EMR (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-access-IAM.html).
 //
-// Sets the Cluster$VisibleToAllUsers value for an EMR cluster. When true, IAM
-// principals in the Amazon Web Services account can perform EMR cluster actions
-// that their IAM policies allow. When false, only the IAM principal that created
-// the cluster and the Amazon Web Services account root user can perform EMR
-// actions on the cluster, regardless of IAM permissions policies attached to
-// other IAM principals.
+// Sets the Cluster$VisibleToAllUsers value for an Amazon EMR cluster. When
+// true, IAM principals in the Amazon Web Services account can perform Amazon
+// EMR cluster actions that their IAM policies allow. When false, only the IAM
+// principal that created the cluster and the Amazon Web Services account root
+// user can perform Amazon EMR actions on the cluster, regardless of IAM permissions
+// policies attached to other IAM principals.
 //
 // This action works on running clusters. When you create a cluster, use the
 // RunJobFlowInput$VisibleToAllUsers parameter.
 //
-// For more information, see Understanding the EMR Cluster VisibleToAllUsers
-// Setting (https://docs.aws.amazon.com/emr/latest/ManagementGuide/security_iam_emr-with-iam.html#security_set_visible_to_all_users)
-// in the Amazon EMRManagement Guide.
+// For more information, see Understanding the Amazon EMR Cluster VisibleToAllUsers
+// Setting (https://docs.aws.amazon.com/emr/latest/ManagementGuide/security_IAM_emr-with-IAM.html#security_set_visible_to_all_users)
+// in the Amazon EMR Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4726,9 +5023,9 @@ func (c *EMR) SetVisibleToAllUsersRequest(input *SetVisibleToAllUsersInput) (req
 // API operation SetVisibleToAllUsers for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/SetVisibleToAllUsers
 func (c *EMR) SetVisibleToAllUsers(input *SetVisibleToAllUsersInput) (*SetVisibleToAllUsersOutput, error) {
@@ -4768,14 +5065,13 @@ const opStartNotebookExecution = "StartNotebookExecution"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartNotebookExecutionRequest method.
+//	req, resp := client.StartNotebookExecutionRequest(params)
 //
-//    // Example sending a request using the StartNotebookExecutionRequest method.
-//    req, resp := client.StartNotebookExecutionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/StartNotebookExecution
 func (c *EMR) StartNotebookExecutionRequest(input *StartNotebookExecutionInput) (req *request.Request, output *StartNotebookExecutionOutput) {
@@ -4806,12 +5102,13 @@ func (c *EMR) StartNotebookExecutionRequest(input *StartNotebookExecutionInput) 
 // API operation StartNotebookExecution for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/StartNotebookExecution
 func (c *EMR) StartNotebookExecution(input *StartNotebookExecutionInput) (*StartNotebookExecutionOutput, error) {
@@ -4851,14 +5148,13 @@ const opStopNotebookExecution = "StopNotebookExecution"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopNotebookExecutionRequest method.
+//	req, resp := client.StopNotebookExecutionRequest(params)
 //
-//    // Example sending a request using the StopNotebookExecutionRequest method.
-//    req, resp := client.StopNotebookExecutionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/StopNotebookExecution
 func (c *EMR) StopNotebookExecutionRequest(input *StopNotebookExecutionInput) (req *request.Request, output *StopNotebookExecutionOutput) {
@@ -4890,12 +5186,13 @@ func (c *EMR) StopNotebookExecutionRequest(input *StopNotebookExecutionInput) (r
 // API operation StopNotebookExecution for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/StopNotebookExecution
 func (c *EMR) StopNotebookExecution(input *StopNotebookExecutionInput) (*StopNotebookExecutionOutput, error) {
@@ -4935,14 +5232,13 @@ const opTerminateJobFlows = "TerminateJobFlows"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TerminateJobFlowsRequest method.
+//	req, resp := client.TerminateJobFlowsRequest(params)
 //
-//    // Example sending a request using the TerminateJobFlowsRequest method.
-//    req, resp := client.TerminateJobFlowsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/TerminateJobFlows
 func (c *EMR) TerminateJobFlowsRequest(input *TerminateJobFlowsInput) (req *request.Request, output *TerminateJobFlowsOutput) {
@@ -4965,7 +5261,7 @@ func (c *EMR) TerminateJobFlowsRequest(input *TerminateJobFlowsInput) (req *requ
 // TerminateJobFlows API operation for Amazon EMR.
 //
 // TerminateJobFlows shuts a list of clusters (job flows) down. When a job flow
-// is shut down, any step not yet completed is canceled and the EC2 instances
+// is shut down, any step not yet completed is canceled and the Amazon EC2 instances
 // on which the cluster is running are stopped. Any log files not already saved
 // are uploaded to Amazon S3 if a LogUri was specified when the cluster was
 // created.
@@ -4983,9 +5279,9 @@ func (c *EMR) TerminateJobFlowsRequest(input *TerminateJobFlowsInput) (req *requ
 // API operation TerminateJobFlows for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/TerminateJobFlows
 func (c *EMR) TerminateJobFlows(input *TerminateJobFlowsInput) (*TerminateJobFlowsOutput, error) {
@@ -5025,14 +5321,13 @@ const opUpdateStudio = "UpdateStudio"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateStudioRequest method.
+//	req, resp := client.UpdateStudioRequest(params)
 //
-//    // Example sending a request using the UpdateStudioRequest method.
-//    req, resp := client.UpdateStudioRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/UpdateStudio
 func (c *EMR) UpdateStudioRequest(input *UpdateStudioInput) (req *request.Request, output *UpdateStudioOutput) {
@@ -5065,12 +5360,13 @@ func (c *EMR) UpdateStudioRequest(input *UpdateStudioInput) (req *request.Reques
 // API operation UpdateStudio for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerException
-//   This exception occurs when there is an internal failure in the Amazon EMR
-//   service.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerException
+//     This exception occurs when there is an internal failure in the Amazon EMR
+//     service.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/UpdateStudio
 func (c *EMR) UpdateStudio(input *UpdateStudioInput) (*UpdateStudioOutput, error) {
@@ -5110,14 +5406,13 @@ const opUpdateStudioSessionMapping = "UpdateStudioSessionMapping"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateStudioSessionMappingRequest method.
+//	req, resp := client.UpdateStudioSessionMappingRequest(params)
 //
-//    // Example sending a request using the UpdateStudioSessionMappingRequest method.
-//    req, resp := client.UpdateStudioSessionMappingRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/UpdateStudioSessionMapping
 func (c *EMR) UpdateStudioSessionMappingRequest(input *UpdateStudioSessionMappingInput) (req *request.Request, output *UpdateStudioSessionMappingOutput) {
@@ -5150,12 +5445,13 @@ func (c *EMR) UpdateStudioSessionMappingRequest(input *UpdateStudioSessionMappin
 // API operation UpdateStudioSessionMapping for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServerError
-//   Indicates that an error occurred while processing the request and that the
-//   request was not completed.
 //
-//   * InvalidRequestException
-//   This exception occurs when there is something wrong with user input.
+//   - InternalServerError
+//     Indicates that an error occurred while processing the request and that the
+//     request was not completed.
+//
+//   - InvalidRequestException
+//     This exception occurs when there is something wrong with user input.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/elasticmapreduce-2009-03-31/UpdateStudioSessionMapping
 func (c *EMR) UpdateStudioSessionMapping(input *UpdateStudioSessionMappingInput) (*UpdateStudioSessionMappingOutput, error) {
@@ -5423,7 +5719,7 @@ type AddJobFlowStepsInput struct {
 	// a combination of account ID, role name, and role type using the following
 	// format: arn:partition:service:region:account:resource.
 	//
-	// For example, arn:aws:iam::1234567890:role/ReadOnly is a correctly formatted
+	// For example, arn:aws:IAM::1234567890:role/ReadOnly is a correctly formatted
 	// runtime role ARN.
 	ExecutionRoleArn *string `min:"20" type:"string"`
 
@@ -5694,12 +5990,12 @@ func (s *Application) SetVersion(v string) *Application {
 
 // An automatic scaling policy for a core instance group or task instance group
 // in an Amazon EMR cluster. An automatic scaling policy defines how an instance
-// group dynamically adds and terminates EC2 instances in response to the value
-// of a CloudWatch metric. See PutAutoScalingPolicy.
+// group dynamically adds and terminates Amazon EC2 instances in response to
+// the value of a CloudWatch metric. See PutAutoScalingPolicy.
 type AutoScalingPolicy struct {
 	_ struct{} `type:"structure"`
 
-	// The upper and lower EC2 instance limits for an automatic scaling policy.
+	// The upper and lower Amazon EC2 instance limits for an automatic scaling policy.
 	// Automatic scaling activity will not cause an instance group to grow above
 	// or below these limits.
 	//
@@ -5775,12 +6071,12 @@ func (s *AutoScalingPolicy) SetRules(v []*ScalingRule) *AutoScalingPolicy {
 
 // An automatic scaling policy for a core instance group or task instance group
 // in an Amazon EMR cluster. The automatic scaling policy defines how an instance
-// group dynamically adds and terminates EC2 instances in response to the value
-// of a CloudWatch metric. See PutAutoScalingPolicy.
+// group dynamically adds and terminates Amazon EC2 instances in response to
+// the value of a CloudWatch metric. See PutAutoScalingPolicy.
 type AutoScalingPolicyDescription struct {
 	_ struct{} `type:"structure"`
 
-	// The upper and lower EC2 instance limits for an automatic scaling policy.
+	// The upper and lower Amazon EC2 instance limits for an automatic scaling policy.
 	// Automatic scaling activity will not cause an instance group to grow above
 	// or below these limits.
 	Constraints *ScalingConstraints `type:"structure"`
@@ -5959,9 +6255,9 @@ type BlockPublicAccessConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// Indicates whether Amazon EMR block public access is enabled (true) or disabled
-	// (false). By default, the value is false for accounts that have created EMR
-	// clusters before July 2019. For accounts created after this, the default is
-	// true.
+	// (false). By default, the value is false for accounts that have created Amazon
+	// EMR clusters before July 2019. For accounts created after this, the default
+	// is true.
 	//
 	// BlockPublicSecurityGroupRules is a required field
 	BlockPublicSecurityGroupRules *bool `type:"boolean" required:"true"`
@@ -5973,8 +6269,8 @@ type BlockPublicAccessConfiguration struct {
 	// cluster has a rule that allows inbound traffic on Port 23 from IPv4 0.0.0.0/0
 	// or IPv6 port ::/0 as the source.
 	//
-	// By default, Port 22, which is used for SSH access to the cluster EC2 instances,
-	// is in the list of PermittedPublicSecurityGroupRuleRanges.
+	// By default, Port 22, which is used for SSH access to the cluster Amazon EC2
+	// instances, is in the list of PermittedPublicSecurityGroupRuleRanges.
 	PermittedPublicSecurityGroupRuleRanges []*PortRange `type:"list"`
 }
 
@@ -6362,9 +6658,9 @@ type CloudWatchAlarmDefinition struct {
 	// The namespace for the CloudWatch metric. The default is AWS/ElasticMapReduce.
 	Namespace *string `type:"string"`
 
-	// The period, in seconds, over which the statistic is applied. EMR CloudWatch
-	// metrics are emitted every five minutes (300 seconds), so if an EMR CloudWatch
-	// metric is specified, specify 300.
+	// The period, in seconds, over which the statistic is applied. CloudWatch metrics
+	// for Amazon EMR are emitted every five minutes (300 seconds), so if you specify
+	// a CloudWatch metric, specify 300.
 	//
 	// Period is a required field
 	Period *int64 `type:"integer" required:"true"`
@@ -6487,7 +6783,7 @@ type Cluster struct {
 
 	// An IAM role for automatic scaling policies. The default role is EMR_AutoScaling_DefaultRole.
 	// The IAM role provides permissions that the automatic scaling feature requires
-	// to launch and terminate EC2 instances in an instance group.
+	// to launch and terminate Amazon EC2 instances in an instance group.
 	AutoScalingRole *string `type:"string"`
 
 	// Specifies whether the cluster should terminate after completing all steps.
@@ -6496,27 +6792,39 @@ type Cluster struct {
 	// The Amazon Resource Name of the cluster.
 	ClusterArn *string `min:"20" type:"string"`
 
-	// Applies only to Amazon EMR releases 4.x and later. The list of Configurations
-	// supplied to the EMR cluster.
+	// Applies only to Amazon EMR releases 4.x and later. The list of configurations
+	// that are supplied to the Amazon EMR cluster.
 	Configurations []*Configuration `type:"list"`
 
-	// Available only in Amazon EMR version 5.7.0 and later. The ID of a custom
+	// Available only in Amazon EMR releases 5.7.0 and later. The ID of a custom
 	// Amazon EBS-backed Linux AMI if the cluster uses a custom AMI.
 	CustomAmiId *string `type:"string"`
 
+	// The IOPS, of the Amazon EBS root device volume of the Linux AMI that is used
+	// for each Amazon EC2 instance. Available in Amazon EMR releases 6.15.0 and
+	// later.
+	EbsRootVolumeIops *int64 `type:"integer"`
+
 	// The size, in GiB, of the Amazon EBS root device volume of the Linux AMI that
-	// is used for each EC2 instance. Available in Amazon EMR version 4.x and later.
+	// is used for each Amazon EC2 instance. Available in Amazon EMR releases 4.x
+	// and later.
 	EbsRootVolumeSize *int64 `type:"integer"`
 
-	// Provides information about the EC2 instances in a cluster grouped by category.
-	// For example, key name, subnet ID, IAM instance profile, and so on.
+	// The throughput, in MiB/s, of the Amazon EBS root device volume of the Linux
+	// AMI that is used for each Amazon EC2 instance. Available in Amazon EMR releases
+	// 6.15.0 and later.
+	EbsRootVolumeThroughput *int64 `type:"integer"`
+
+	// Provides information about the Amazon EC2 instances in a cluster grouped
+	// by category. For example, key name, subnet ID, IAM instance profile, and
+	// so on.
 	Ec2InstanceAttributes *Ec2InstanceAttributes `type:"structure"`
 
 	// The unique identifier for the cluster.
 	Id *string `type:"string"`
 
 	//
-	// The instance fleet configuration is available only in Amazon EMR versions
+	// The instance fleet configuration is available only in Amazon EMR releases
 	// 4.8.0 and later, excluding 5.0.x versions.
 	//
 	// The instance group configuration of the cluster. A value of INSTANCE_GROUP
@@ -6531,7 +6839,7 @@ type Cluster struct {
 	KerberosAttributes *KerberosAttributes `type:"structure"`
 
 	// The KMS key used for encrypting log files. This attribute is only available
-	// with EMR version 5.30.0 and later, excluding EMR 6.0.0.
+	// with Amazon EMR 5.30.0 and later, excluding Amazon EMR 6.0.0.
 	LogEncryptionKmsKeyId *string `type:"string"`
 
 	// The path to the Amazon S3 location where logs for this cluster are stored.
@@ -6541,13 +6849,14 @@ type Cluster struct {
 	// is the private DNS name. On a public subnet, this is the public DNS name.
 	MasterPublicDnsName *string `type:"string"`
 
-	// The name of the cluster.
+	// The name of the cluster. This parameter can't contain the characters <, >,
+	// $, |, or ` (backtick).
 	Name *string `type:"string"`
 
 	// An approximation of the cost of the cluster, represented in m1.small/hours.
 	// This value is incremented one time for every hour an m1.small instance runs.
-	// Larger instances are weighted more, so an EC2 instance that is roughly four
-	// times more expensive would result in the normalized instance hours being
+	// Larger instances are weighted more, so an Amazon EC2 instance that is roughly
+	// four times more expensive would result in the normalized instance hours being
 	// incremented by four. This result is only an approximation and does not reflect
 	// the actual billing rate.
 	NormalizedInstanceHours *int64 `type:"integer"`
@@ -6574,8 +6883,8 @@ type Cluster struct {
 	ReleaseLabel *string `type:"string"`
 
 	// Applies only when CustomAmiID is used. Specifies the type of updates that
-	// are applied from the Amazon Linux AMI package repositories when an instance
-	// boots using the AMI.
+	// the Amazon Linux AMI package repositories apply when an instance boots using
+	// the AMI.
 	RepoUpgradeOnBoot *string `type:"string" enum:"RepoUpgradeOnBoot"`
 
 	// The AMI version requested for this cluster.
@@ -6594,7 +6903,7 @@ type Cluster struct {
 	// terminating the Amazon EC2 instances, regardless of the instance-hour boundary.
 	// With either behavior, Amazon EMR removes the least active nodes first and
 	// blocks instance termination if it could lead to HDFS corruption. TERMINATE_AT_TASK_COMPLETION
-	// is available only in Amazon EMR version 4.1.0 and later, and is the default
+	// is available only in Amazon EMR releases 4.1.0 and later, and is the default
 	// for versions of Amazon EMR earlier than 5.1.0.
 	ScaleDownBehavior *string `type:"string" enum:"ScaleDownBehavior"`
 
@@ -6614,21 +6923,25 @@ type Cluster struct {
 	// A list of tags associated with a cluster.
 	Tags []*Tag `type:"list"`
 
-	// Indicates whether Amazon EMR will lock the cluster to prevent the EC2 instances
-	// from being terminated by an API call or user intervention, or in the event
-	// of a cluster error.
+	// Indicates whether Amazon EMR will lock the cluster to prevent the Amazon
+	// EC2 instances from being terminated by an API call or user intervention,
+	// or in the event of a cluster error.
 	TerminationProtected *bool `type:"boolean"`
+
+	// Indicates whether Amazon EMR should gracefully replace Amazon EC2 core instances
+	// that have degraded within the cluster.
+	UnhealthyNodeReplacement *bool `type:"boolean"`
 
 	// Indicates whether the cluster is visible to IAM principals in the Amazon
 	// Web Services account associated with the cluster. When true, IAM principals
-	// in the Amazon Web Services account can perform EMR cluster actions on the
-	// cluster that their IAM policies allow. When false, only the IAM principal
+	// in the Amazon Web Services account can perform Amazon EMR cluster actions
+	// on the cluster that their IAM policies allow. When false, only the IAM principal
 	// that created the cluster and the Amazon Web Services account root user can
-	// perform EMR actions, regardless of IAM permissions policies attached to other
-	// IAM principals.
+	// perform Amazon EMR actions, regardless of IAM permissions policies attached
+	// to other IAM principals.
 	//
 	// The default value is true if a value is not provided when creating a cluster
-	// using the EMR API RunJobFlow command, the CLI create-cluster (https://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html)
+	// using the Amazon EMR API RunJobFlow command, the CLI create-cluster (https://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html)
 	// command, or the Amazon Web Services Management Console.
 	VisibleToAllUsers *bool `type:"boolean"`
 }
@@ -6687,9 +7000,21 @@ func (s *Cluster) SetCustomAmiId(v string) *Cluster {
 	return s
 }
 
+// SetEbsRootVolumeIops sets the EbsRootVolumeIops field's value.
+func (s *Cluster) SetEbsRootVolumeIops(v int64) *Cluster {
+	s.EbsRootVolumeIops = &v
+	return s
+}
+
 // SetEbsRootVolumeSize sets the EbsRootVolumeSize field's value.
 func (s *Cluster) SetEbsRootVolumeSize(v int64) *Cluster {
 	s.EbsRootVolumeSize = &v
+	return s
+}
+
+// SetEbsRootVolumeThroughput sets the EbsRootVolumeThroughput field's value.
+func (s *Cluster) SetEbsRootVolumeThroughput(v int64) *Cluster {
+	s.EbsRootVolumeThroughput = &v
 	return s
 }
 
@@ -6831,6 +7156,12 @@ func (s *Cluster) SetTerminationProtected(v bool) *Cluster {
 	return s
 }
 
+// SetUnhealthyNodeReplacement sets the UnhealthyNodeReplacement field's value.
+func (s *Cluster) SetUnhealthyNodeReplacement(v bool) *Cluster {
+	s.UnhealthyNodeReplacement = &v
+	return s
+}
+
 // SetVisibleToAllUsers sets the VisibleToAllUsers field's value.
 func (s *Cluster) SetVisibleToAllUsers(v bool) *Cluster {
 	s.VisibleToAllUsers = &v
@@ -6882,8 +7213,8 @@ func (s *ClusterStateChangeReason) SetMessage(v string) *ClusterStateChangeReaso
 type ClusterStatus struct {
 	_ struct{} `type:"structure"`
 
-	// A list of tuples that provide information about the errors that caused a
-	// cluster termination. This structure may have up to 10 different ErrorDetail
+	// A list of tuples that provides information about the errors that caused a
+	// cluster to terminate. This structure can contain up to 10 different ErrorDetail
 	// tuples.
 	ErrorDetails []*ErrorDetail `type:"list"`
 
@@ -6955,8 +7286,8 @@ type ClusterSummary struct {
 
 	// An approximation of the cost of the cluster, represented in m1.small/hours.
 	// This value is incremented one time for every hour an m1.small instance runs.
-	// Larger instances are weighted more, so an EC2 instance that is roughly four
-	// times more expensive would result in the normalized instance hours being
+	// Larger instances are weighted more, so an Amazon EC2 instance that is roughly
+	// four times more expensive would result in the normalized instance hours being
 	// incremented by four. This result is only an approximation and does not reflect
 	// the actual billing rate.
 	NormalizedInstanceHours *int64 `type:"integer"`
@@ -7122,41 +7453,41 @@ func (s *Command) SetScriptPath(v string) *Command {
 	return s
 }
 
-// The EC2 unit limits for a managed scaling policy. The managed scaling activity
-// of a cluster can not be above or below these limits. The limit only applies
-// to the core and task nodes. The master node cannot be scaled after initial
-// configuration.
+// The Amazon EC2 unit limits for a managed scaling policy. The managed scaling
+// activity of a cluster can not be above or below these limits. The limit only
+// applies to the core and task nodes. The master node cannot be scaled after
+// initial configuration.
 type ComputeLimits struct {
 	_ struct{} `type:"structure"`
 
-	// The upper boundary of EC2 units. It is measured through vCPU cores or instances
-	// for instance groups and measured through units for instance fleets. Managed
-	// scaling activities are not allowed beyond this boundary. The limit only applies
-	// to the core and task nodes. The master node cannot be scaled after initial
-	// configuration.
+	// The upper boundary of Amazon EC2 units. It is measured through vCPU cores
+	// or instances for instance groups and measured through units for instance
+	// fleets. Managed scaling activities are not allowed beyond this boundary.
+	// The limit only applies to the core and task nodes. The master node cannot
+	// be scaled after initial configuration.
 	//
 	// MaximumCapacityUnits is a required field
 	MaximumCapacityUnits *int64 `type:"integer" required:"true"`
 
-	// The upper boundary of EC2 units for core node type in a cluster. It is measured
-	// through vCPU cores or instances for instance groups and measured through
-	// units for instance fleets. The core units are not allowed to scale beyond
-	// this boundary. The parameter is used to split capacity allocation between
-	// core and task nodes.
+	// The upper boundary of Amazon EC2 units for core node type in a cluster. It
+	// is measured through vCPU cores or instances for instance groups and measured
+	// through units for instance fleets. The core units are not allowed to scale
+	// beyond this boundary. The parameter is used to split capacity allocation
+	// between core and task nodes.
 	MaximumCoreCapacityUnits *int64 `type:"integer"`
 
-	// The upper boundary of On-Demand EC2 units. It is measured through vCPU cores
-	// or instances for instance groups and measured through units for instance
-	// fleets. The On-Demand units are not allowed to scale beyond this boundary.
-	// The parameter is used to split capacity allocation between On-Demand and
-	// Spot Instances.
+	// The upper boundary of On-Demand Amazon EC2 units. It is measured through
+	// vCPU cores or instances for instance groups and measured through units for
+	// instance fleets. The On-Demand units are not allowed to scale beyond this
+	// boundary. The parameter is used to split capacity allocation between On-Demand
+	// and Spot Instances.
 	MaximumOnDemandCapacityUnits *int64 `type:"integer"`
 
-	// The lower boundary of EC2 units. It is measured through vCPU cores or instances
-	// for instance groups and measured through units for instance fleets. Managed
-	// scaling activities are not allowed beyond this boundary. The limit only applies
-	// to the core and task nodes. The master node cannot be scaled after initial
-	// configuration.
+	// The lower boundary of Amazon EC2 units. It is measured through vCPU cores
+	// or instances for instance groups and measured through units for instance
+	// fleets. Managed scaling activities are not allowed beyond this boundary.
+	// The limit only applies to the core and task nodes. The master node cannot
+	// be scaled after initial configuration.
 	//
 	// MinimumCapacityUnits is a required field
 	MinimumCapacityUnits *int64 `type:"integer" required:"true"`
@@ -7234,7 +7565,6 @@ func (s *ComputeLimits) SetUnitType(v string) *ComputeLimits {
 	return s
 }
 
-//
 // Amazon EMR releases 4.x or later.
 //
 // An optional configuration specification to be used when provisioning cluster
@@ -7416,12 +7746,24 @@ type CreateStudioInput struct {
 	// A detailed description of the Amazon EMR Studio.
 	Description *string `type:"string"`
 
+	// The KMS key identifier (ARN) used to encrypt Amazon EMR Studio workspace
+	// and notebook files when backed up to Amazon S3.
+	EncryptionKeyArn *string `type:"string"`
+
 	// The ID of the Amazon EMR Studio Engine security group. The Engine security
 	// group allows inbound network traffic from the Workspace security group, and
 	// it must be in the same VPC specified by VpcId.
 	//
 	// EngineSecurityGroupId is a required field
 	EngineSecurityGroupId *string `type:"string" required:"true"`
+
+	// The ARN of the IAM Identity Center instance to create the Studio application.
+	IdcInstanceArn *string `min:"20" type:"string"`
+
+	// Specifies whether IAM Identity Center user assignment is REQUIRED or OPTIONAL.
+	// If the value is set to REQUIRED, users must be explicitly assigned to the
+	// Studio application to access the Studio.
+	IdcUserAssignment *string `type:"string" enum:"IdcUserAssignment"`
 
 	// The authentication endpoint of your identity provider (IdP). Specify this
 	// value when you use IAM authentication and want to let federated users log
@@ -7458,6 +7800,10 @@ type CreateStudioInput struct {
 	// key-value pairs that consist of a required key string with a maximum of 128
 	// characters, and an optional value string with a maximum of 256 characters.
 	Tags []*Tag `type:"list"`
+
+	// A Boolean indicating whether to enable Trusted identity propagation for the
+	// Studio. The default value is false.
+	TrustedIdentityPropagationEnabled *bool `type:"boolean"`
 
 	// The IAM user role that users and groups assume when logged in to an Amazon
 	// EMR Studio. Only specify a UserRole when you use IAM Identity Center authentication.
@@ -7509,6 +7855,9 @@ func (s *CreateStudioInput) Validate() error {
 	if s.EngineSecurityGroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("EngineSecurityGroupId"))
 	}
+	if s.IdcInstanceArn != nil && len(*s.IdcInstanceArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("IdcInstanceArn", 20))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
@@ -7549,9 +7898,27 @@ func (s *CreateStudioInput) SetDescription(v string) *CreateStudioInput {
 	return s
 }
 
+// SetEncryptionKeyArn sets the EncryptionKeyArn field's value.
+func (s *CreateStudioInput) SetEncryptionKeyArn(v string) *CreateStudioInput {
+	s.EncryptionKeyArn = &v
+	return s
+}
+
 // SetEngineSecurityGroupId sets the EngineSecurityGroupId field's value.
 func (s *CreateStudioInput) SetEngineSecurityGroupId(v string) *CreateStudioInput {
 	s.EngineSecurityGroupId = &v
+	return s
+}
+
+// SetIdcInstanceArn sets the IdcInstanceArn field's value.
+func (s *CreateStudioInput) SetIdcInstanceArn(v string) *CreateStudioInput {
+	s.IdcInstanceArn = &v
+	return s
+}
+
+// SetIdcUserAssignment sets the IdcUserAssignment field's value.
+func (s *CreateStudioInput) SetIdcUserAssignment(v string) *CreateStudioInput {
+	s.IdcUserAssignment = &v
 	return s
 }
 
@@ -7588,6 +7955,12 @@ func (s *CreateStudioInput) SetSubnetIds(v []*string) *CreateStudioInput {
 // SetTags sets the Tags field's value.
 func (s *CreateStudioInput) SetTags(v []*Tag) *CreateStudioInput {
 	s.Tags = v
+	return s
+}
+
+// SetTrustedIdentityPropagationEnabled sets the TrustedIdentityPropagationEnabled field's value.
+func (s *CreateStudioInput) SetTrustedIdentityPropagationEnabled(v bool) *CreateStudioInput {
+	s.TrustedIdentityPropagationEnabled = &v
 	return s
 }
 
@@ -7674,7 +8047,7 @@ type CreateStudioSessionMappingInput struct {
 	// The Amazon Resource Name (ARN) for the session policy that will be applied
 	// to the user or group. You should specify the ARN for the session policy that
 	// you want to apply, not the ARN of your user role. For more information, see
-	// Create an EMR Studio User Role with Session Policies (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-studio-user-role.html).
+	// Create an Amazon EMR Studio User Role with Session Policies (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-studio-user-role.html).
 	//
 	// SessionPolicyArn is a required field
 	SessionPolicyArn *string `type:"string" required:"true"`
@@ -8701,7 +9074,7 @@ type EbsBlockDevice struct {
 	Device *string `type:"string"`
 
 	// EBS volume specifications such as volume type, IOPS, size (GiB) and throughput
-	// (MiB/s) that are requested for the EBS volume attached to an EC2 instance
+	// (MiB/s) that are requested for the EBS volume attached to an Amazon EC2 instance
 	// in the cluster.
 	VolumeSpecification *VolumeSpecification `type:"structure"`
 }
@@ -8742,7 +9115,7 @@ type EbsBlockDeviceConfig struct {
 	_ struct{} `type:"structure"`
 
 	// EBS volume specifications such as volume type, IOPS, size (GiB) and throughput
-	// (MiB/s) that are requested for the EBS volume attached to an EC2 instance
+	// (MiB/s) that are requested for the EBS volume attached to an Amazon EC2 instance
 	// in the cluster.
 	//
 	// VolumeSpecification is a required field
@@ -8862,7 +9235,7 @@ func (s *EbsConfiguration) SetEbsOptimized(v bool) *EbsConfiguration {
 	return s
 }
 
-// EBS block device that's attached to an EC2 instance.
+// EBS block device that's attached to an Amazon EC2 instance.
 type EbsVolume struct {
 	_ struct{} `type:"structure"`
 
@@ -8903,8 +9276,9 @@ func (s *EbsVolume) SetVolumeId(v string) *EbsVolume {
 	return s
 }
 
-// Provides information about the EC2 instances in a cluster grouped by category.
-// For example, key name, subnet ID, IAM instance profile, and so on.
+// Provides information about the Amazon EC2 instances in a cluster grouped
+// by category. For example, key name, subnet ID, IAM instance profile, and
+// so on.
 type Ec2InstanceAttributes struct {
 	_ struct{} `type:"structure"`
 
@@ -8933,14 +9307,14 @@ type Ec2InstanceAttributes struct {
 	// The identifier of the Amazon EC2 security group for the core and task nodes.
 	EmrManagedSlaveSecurityGroup *string `type:"string"`
 
-	// The IAM role that was specified when the cluster was launched. The EC2 instances
-	// of the cluster assume this role.
+	// The IAM role that was specified when the cluster was launched. The Amazon
+	// EC2 instances of the cluster assume this role.
 	IamInstanceProfile *string `type:"string"`
 
 	// Applies to clusters configured with the instance fleets option. Specifies
-	// one or more Availability Zones in which to launch EC2 cluster instances when
-	// the EC2-Classic network configuration is supported. Amazon EMR chooses the
-	// Availability Zone with the best fit from among the list of RequestedEc2AvailabilityZones,
+	// one or more Availability Zones in which to launch Amazon EC2 cluster instances
+	// when the EC2-Classic network configuration is supported. Amazon EMR chooses
+	// the Availability Zone with the best fit from among the list of RequestedEc2AvailabilityZones,
 	// and then launches all cluster instances within that Availability Zone. If
 	// you do not specify this value, Amazon EMR chooses the Availability Zone for
 	// you. RequestedEc2SubnetIDs and RequestedEc2AvailabilityZones cannot be specified
@@ -8949,14 +9323,15 @@ type Ec2InstanceAttributes struct {
 
 	// Applies to clusters configured with the instance fleets option. Specifies
 	// the unique identifier of one or more Amazon EC2 subnets in which to launch
-	// EC2 cluster instances. Subnets must exist within the same VPC. Amazon EMR
-	// chooses the EC2 subnet with the best fit from among the list of RequestedEc2SubnetIds,
-	// and then launches all cluster instances within that Subnet. If this value
-	// is not specified, and the account and Region support EC2-Classic networks,
-	// the cluster launches instances in the EC2-Classic network and uses RequestedEc2AvailabilityZones
-	// instead of this setting. If EC2-Classic is not supported, and no Subnet is
-	// specified, Amazon EMR chooses the subnet for you. RequestedEc2SubnetIDs and
-	// RequestedEc2AvailabilityZones cannot be specified together.
+	// Amazon EC2 cluster instances. Subnets must exist within the same VPC. Amazon
+	// EMR chooses the Amazon EC2 subnet with the best fit from among the list of
+	// RequestedEc2SubnetIds, and then launches all cluster instances within that
+	// Subnet. If this value is not specified, and the account and Region support
+	// EC2-Classic networks, the cluster launches instances in the EC2-Classic network
+	// and uses RequestedEc2AvailabilityZones instead of this setting. If EC2-Classic
+	// is not supported, and no Subnet is specified, Amazon EMR chooses the subnet
+	// for you. RequestedEc2SubnetIDs and RequestedEc2AvailabilityZones cannot be
+	// specified together.
 	RequestedEc2SubnetIds []*string `type:"list"`
 
 	// The identifier of the Amazon EC2 security group for the Amazon EMR service
@@ -9053,14 +9428,14 @@ func (s *Ec2InstanceAttributes) SetServiceAccessSecurityGroup(v string) *Ec2Inst
 type ErrorDetail struct {
 	_ struct{} `type:"structure"`
 
-	// The name or code that's associated with the error.
+	// The name or code associated with the error.
 	ErrorCode *string `type:"string"`
 
-	// A list of key value pairs that provide contextual information to explain
-	// why the error may have occured.
+	// A list of key value pairs that provides contextual information about why
+	// an error occured.
 	ErrorData []map[string]*string `type:"list"`
 
-	// A message describing the error that occured.
+	// A message that describes the error.
 	ErrorMessage *string `type:"string"`
 }
 
@@ -9101,23 +9476,27 @@ func (s *ErrorDetail) SetErrorMessage(v string) *ErrorDetail {
 }
 
 // Specifies the execution engine (cluster) to run the notebook and perform
-// the notebook execution, for example, an EMR cluster.
+// the notebook execution, for example, an Amazon EMR cluster.
 type ExecutionEngineConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the execution engine. For an EMR cluster, this is
-	// the cluster ID.
+	// The execution role ARN required for the notebook execution.
+	ExecutionRoleArn *string `min:"20" type:"string"`
+
+	// The unique identifier of the execution engine. For an Amazon EMR cluster,
+	// this is the cluster ID.
 	//
 	// Id is a required field
 	Id *string `type:"string" required:"true"`
 
-	// An optional unique ID of an EC2 security group to associate with the master
-	// instance of the EMR cluster for this notebook execution. For more information
-	// see Specifying EC2 Security Groups for EMR Notebooks (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-managed-notebooks-security-groups.html)
+	// An optional unique ID of an Amazon EC2 security group to associate with the
+	// master instance of the Amazon EMR cluster for this notebook execution. For
+	// more information see Specifying Amazon EC2 Security Groups for Amazon EMR
+	// Notebooks (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-managed-notebooks-security-groups.html)
 	// in the EMR Management Guide.
 	MasterInstanceSecurityGroupId *string `type:"string"`
 
-	// The type of execution engine. A value of EMR specifies an EMR cluster.
+	// The type of execution engine. A value of EMR specifies an Amazon EMR cluster.
 	Type *string `type:"string" enum:"ExecutionEngineType"`
 }
 
@@ -9142,6 +9521,9 @@ func (s ExecutionEngineConfig) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ExecutionEngineConfig) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ExecutionEngineConfig"}
+	if s.ExecutionRoleArn != nil && len(*s.ExecutionRoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("ExecutionRoleArn", 20))
+	}
 	if s.Id == nil {
 		invalidParams.Add(request.NewErrParamRequired("Id"))
 	}
@@ -9150,6 +9532,12 @@ func (s *ExecutionEngineConfig) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetExecutionRoleArn sets the ExecutionRoleArn field's value.
+func (s *ExecutionEngineConfig) SetExecutionRoleArn(v string) *ExecutionEngineConfig {
+	s.ExecutionRoleArn = &v
+	return s
 }
 
 // SetId sets the Id field's value.
@@ -9342,8 +9730,8 @@ type GetBlockPublicAccessConfigurationOutput struct {
 	// For accounts that created clusters in a Region before November 25, 2019,
 	// block public access is disabled by default in that Region. To use this feature,
 	// you must manually enable and configure it. For accounts that did not create
-	// an EMR cluster in a Region before this date, block public access is enabled
-	// by default in that Region.
+	// an Amazon EMR cluster in a Region before this date, block public access is
+	// enabled by default in that Region.
 	//
 	// BlockPublicAccessConfiguration is a required field
 	BlockPublicAccessConfiguration *BlockPublicAccessConfiguration `type:"structure" required:"true"`
@@ -9400,9 +9788,7 @@ type GetClusterSessionCredentialsInput struct {
 	// submission on the cluster. The runtime role can be a cross-account IAM role.
 	// The runtime role ARN is a combination of account ID, role name, and role
 	// type using the following format: arn:partition:service:region:account:resource.
-	//
-	// ExecutionRoleArn is a required field
-	ExecutionRoleArn *string `min:"20" type:"string" required:"true"`
+	ExecutionRoleArn *string `min:"20" type:"string"`
 }
 
 // String returns the string representation.
@@ -9428,9 +9814,6 @@ func (s *GetClusterSessionCredentialsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetClusterSessionCredentialsInput"}
 	if s.ClusterId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
-	}
-	if s.ExecutionRoleArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("ExecutionRoleArn"))
 	}
 	if s.ExecutionRoleArn != nil && len(*s.ExecutionRoleArn) < 20 {
 		invalidParams.Add(request.NewErrParamMinLen("ExecutionRoleArn", 20))
@@ -9835,7 +10218,7 @@ func (s *HadoopStepConfig) SetProperties(v map[string]*string) *HadoopStepConfig
 	return s
 }
 
-// Represents an EC2 instance provisioned as part of cluster.
+// Represents an Amazon EC2 instance provisioned as part of cluster.
 type Instance struct {
 	_ struct{} `type:"structure"`
 
@@ -9848,13 +10231,14 @@ type Instance struct {
 	// The unique identifier for the instance in Amazon EMR.
 	Id *string `type:"string"`
 
-	// The unique identifier of the instance fleet to which an EC2 instance belongs.
+	// The unique identifier of the instance fleet to which an Amazon EC2 instance
+	// belongs.
 	InstanceFleetId *string `type:"string"`
 
 	// The identifier of the instance group to which this instance belongs.
 	InstanceGroupId *string `type:"string"`
 
-	// The EC2 instance type, for example m3.xlarge.
+	// The Amazon EC2 instance type, for example m3.xlarge.
 	InstanceType *string `min:"1" type:"string"`
 
 	// The instance purchasing option. Valid values are ON_DEMAND or SPOT.
@@ -9966,12 +10350,12 @@ func (s *Instance) SetStatus(v *InstanceStatus) *Instance {
 	return s
 }
 
-// Describes an instance fleet, which is a group of EC2 instances that host
-// a particular node type (master, core, or task) in an Amazon EMR cluster.
+// Describes an instance fleet, which is a group of Amazon EC2 instances that
+// host a particular node type (master, core, or task) in an Amazon EMR cluster.
 // Instance fleets can consist of a mix of instance types and On-Demand and
 // Spot Instances, which are provisioned to meet a defined target capacity.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions.
 type InstanceFleet struct {
 	_ struct{} `type:"structure"`
@@ -10135,7 +10519,7 @@ func (s *InstanceFleet) SetTargetSpotCapacity(v int64) *InstanceFleet {
 
 // The configuration that defines an instance fleet.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions.
 type InstanceFleetConfig struct {
 	_ struct{} `type:"structure"`
@@ -10146,8 +10530,8 @@ type InstanceFleetConfig struct {
 	// InstanceFleetType is a required field
 	InstanceFleetType *string `type:"string" required:"true" enum:"InstanceFleetType"`
 
-	// The instance type configurations that define the EC2 instances in the instance
-	// fleet.
+	// The instance type configurations that define the Amazon EC2 instances in
+	// the instance fleet.
 	InstanceTypeConfigs []*InstanceTypeConfig `type:"list"`
 
 	// The launch specification for the instance fleet.
@@ -10290,7 +10674,7 @@ func (s *InstanceFleetConfig) SetTargetSpotCapacity(v int64) *InstanceFleetConfi
 
 // Configuration parameters for an instance fleet modification request.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions.
 type InstanceFleetModifyConfig struct {
 	_ struct{} `type:"structure"`
@@ -10375,18 +10759,18 @@ func (s *InstanceFleetModifyConfig) SetTargetSpotCapacity(v int64) *InstanceFlee
 // The launch specification for Spot Instances in the fleet, which determines
 // the defined duration, provisioning timeout behavior, and allocation strategy.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions. On-Demand and Spot instance allocation
-// strategies are available in Amazon EMR version 5.12.1 and later.
+// strategies are available in Amazon EMR releases 5.12.1 and later.
 type InstanceFleetProvisioningSpecifications struct {
 	_ struct{} `type:"structure"`
 
 	// The launch specification for On-Demand Instances in the instance fleet, which
 	// determines the allocation strategy.
 	//
-	// The instance fleet configuration is available only in Amazon EMR versions
+	// The instance fleet configuration is available only in Amazon EMR releases
 	// 4.8.0 and later, excluding 5.0.x versions. On-Demand Instances allocation
-	// strategy is available in Amazon EMR version 5.12.1 and later.
+	// strategy is available in Amazon EMR releases 5.12.1 and later.
 	OnDemandSpecification *OnDemandProvisioningSpecification `type:"structure"`
 
 	// The launch specification for Spot instances in the fleet, which determines
@@ -10509,7 +10893,7 @@ func (s *InstanceFleetResizingSpecifications) SetSpotResizeSpecification(v *Spot
 
 // Provides status change reason details for the instance fleet.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions.
 type InstanceFleetStateChangeReason struct {
 	_ struct{} `type:"structure"`
@@ -10553,32 +10937,32 @@ func (s *InstanceFleetStateChangeReason) SetMessage(v string) *InstanceFleetStat
 
 // The status of the instance fleet.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions.
 type InstanceFleetStatus struct {
 	_ struct{} `type:"structure"`
 
 	// A code representing the instance fleet status.
 	//
-	//    * PROVISIONING—The instance fleet is provisioning EC2 resources and
-	//    is not yet ready to run jobs.
+	//    * PROVISIONING—The instance fleet is provisioning Amazon EC2 resources
+	//    and is not yet ready to run jobs.
 	//
-	//    * BOOTSTRAPPING—EC2 instances and other resources have been provisioned
+	//    * BOOTSTRAPPING—Amazon EC2 instances and other resources have been provisioned
 	//    and the bootstrap actions specified for the instances are underway.
 	//
-	//    * RUNNING—EC2 instances and other resources are running. They are either
-	//    executing jobs or waiting to execute jobs.
+	//    * RUNNING—Amazon EC2 instances and other resources are running. They
+	//    are either executing jobs or waiting to execute jobs.
 	//
-	//    * RESIZING—A resize operation is underway. EC2 instances are either
-	//    being added or removed.
+	//    * RESIZING—A resize operation is underway. Amazon EC2 instances are
+	//    either being added or removed.
 	//
-	//    * SUSPENDED—A resize operation could not complete. Existing EC2 instances
-	//    are running, but instances can't be added or removed.
+	//    * SUSPENDED—A resize operation could not complete. Existing Amazon EC2
+	//    instances are running, but instances can't be added or removed.
 	//
-	//    * TERMINATING—The instance fleet is terminating EC2 instances.
+	//    * TERMINATING—The instance fleet is terminating Amazon EC2 instances.
 	//
-	//    * TERMINATED—The instance fleet is no longer active, and all EC2 instances
-	//    have been terminated.
+	//    * TERMINATED—The instance fleet is no longer active, and all Amazon
+	//    EC2 instances have been terminated.
 	State *string `type:"string" enum:"InstanceFleetState"`
 
 	// Provides status change reason details for the instance fleet.
@@ -10628,7 +11012,7 @@ func (s *InstanceFleetStatus) SetTimeline(v *InstanceFleetTimeline) *InstanceFle
 // Provides historical timestamps for the instance fleet, including the time
 // of creation, the time it became ready to run jobs, and the time of termination.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions.
 type InstanceFleetTimeline struct {
 	_ struct{} `type:"structure"`
@@ -10686,8 +11070,8 @@ type InstanceGroup struct {
 
 	// An automatic scaling policy for a core instance group or task instance group
 	// in an Amazon EMR cluster. The automatic scaling policy defines how an instance
-	// group dynamically adds and terminates EC2 instances in response to the value
-	// of a CloudWatch metric. See PutAutoScalingPolicy.
+	// group dynamically adds and terminates Amazon EC2 instances in response to
+	// the value of a CloudWatch metric. See PutAutoScalingPolicy.
 	AutoScalingPolicy *AutoScalingPolicyDescription `type:"structure"`
 
 	// If specified, indicates that the instance group uses Spot Instances. This
@@ -10724,7 +11108,7 @@ type InstanceGroup struct {
 	// The type of the instance group. Valid values are MASTER, CORE or TASK.
 	InstanceGroupType *string `type:"string" enum:"InstanceGroupType"`
 
-	// The EC2 instance type for all instances in the instance group.
+	// The Amazon EC2 instance type for all instances in the instance group.
 	InstanceType *string `min:"1" type:"string"`
 
 	// A list of configurations that were successfully applied for an instance group
@@ -10887,8 +11271,8 @@ type InstanceGroupConfig struct {
 
 	// An automatic scaling policy for a core instance group or task instance group
 	// in an Amazon EMR cluster. The automatic scaling policy defines how an instance
-	// group dynamically adds and terminates EC2 instances in response to the value
-	// of a CloudWatch metric. See PutAutoScalingPolicy.
+	// group dynamically adds and terminates Amazon EC2 instances in response to
+	// the value of a CloudWatch metric. See PutAutoScalingPolicy.
 	AutoScalingPolicy *AutoScalingPolicy `type:"structure"`
 
 	// If specified, indicates that the instance group uses Spot Instances. This
@@ -10899,16 +11283,16 @@ type InstanceGroupConfig struct {
 	//
 	// Amazon EMR releases 4.x or later.
 	//
-	// The list of configurations supplied for an EMR cluster instance group. You
-	// can specify a separate configuration for each instance group (master, core,
-	// and task).
+	// The list of configurations supplied for an Amazon EMR cluster instance group.
+	// You can specify a separate configuration for each instance group (master,
+	// core, and task).
 	Configurations []*Configuration `type:"list"`
 
 	// The custom AMI ID to use for the provisioned instance group.
 	CustomAmiId *string `type:"string"`
 
-	// EBS configurations that will be attached to each EC2 instance in the instance
-	// group.
+	// EBS configurations that will be attached to each Amazon EC2 instance in the
+	// instance group.
 	EbsConfiguration *EbsConfiguration `type:"structure"`
 
 	// Target number of instances for the instance group.
@@ -10921,12 +11305,12 @@ type InstanceGroupConfig struct {
 	// InstanceRole is a required field
 	InstanceRole *string `type:"string" required:"true" enum:"InstanceRoleType"`
 
-	// The EC2 instance type for all instances in the instance group.
+	// The Amazon EC2 instance type for all instances in the instance group.
 	//
 	// InstanceType is a required field
 	InstanceType *string `min:"1" type:"string" required:"true"`
 
-	// Market type of the EC2 instances used to create a cluster node.
+	// Market type of the Amazon EC2 instances used to create a cluster node.
 	Market *string `type:"string" enum:"MarketType"`
 
 	// Friendly name given to the instance group.
@@ -11081,7 +11465,7 @@ type InstanceGroupDetail struct {
 	// InstanceRunningCount is a required field
 	InstanceRunningCount *int64 `type:"integer" required:"true"`
 
-	// EC2 instance type.
+	// Amazon EC2 instance type.
 	//
 	// InstanceType is a required field
 	InstanceType *string `min:"1" type:"string" required:"true"`
@@ -11089,7 +11473,7 @@ type InstanceGroupDetail struct {
 	// Details regarding the state of the instance group.
 	LastStateChangeReason *string `type:"string"`
 
-	// Market type of the EC2 instances used to create a cluster node.
+	// Market type of the Amazon EC2 instances used to create a cluster node.
 	//
 	// Market is a required field
 	Market *string `type:"string" required:"true" enum:"MarketType"`
@@ -11225,8 +11609,8 @@ type InstanceGroupModifyConfig struct {
 	// A list of new or modified configurations to apply for an instance group.
 	Configurations []*Configuration `type:"list"`
 
-	// The EC2 InstanceIds to terminate. After you terminate the instances, the
-	// instance group will not return to its original requested size.
+	// The Amazon EC2 InstanceIds to terminate. After you terminate the instances,
+	// the instance group will not return to its original requested size.
 	EC2InstanceIdsToTerminate []*string `type:"list"`
 
 	// Target size for the instance group.
@@ -11646,28 +12030,28 @@ func (s *InstanceTimeline) SetReadyDateTime(v time.Time) *InstanceTimeline {
 }
 
 // An instance type configuration for each instance type in an instance fleet,
-// which determines the EC2 instances Amazon EMR attempts to provision to fulfill
-// On-Demand and Spot target capacities. When you use an allocation strategy,
-// you can include a maximum of 30 instance type configurations for a fleet.
-// For more information about how to use an allocation strategy, see Configure
-// Instance Fleets (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-instance-fleet.html).
+// which determines the Amazon EC2 instances Amazon EMR attempts to provision
+// to fulfill On-Demand and Spot target capacities. When you use an allocation
+// strategy, you can include a maximum of 30 instance type configurations for
+// a fleet. For more information about how to use an allocation strategy, see
+// Configure Instance Fleets (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-instance-fleet.html).
 // Without an allocation strategy, you may specify a maximum of five instance
 // type configurations for a fleet.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions.
 type InstanceTypeConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The bid price for each EC2 Spot Instance type as defined by InstanceType.
+	// The bid price for each Amazon EC2 Spot Instance type as defined by InstanceType.
 	// Expressed in USD. If neither BidPrice nor BidPriceAsPercentageOfOnDemandPrice
 	// is provided, BidPriceAsPercentageOfOnDemandPrice defaults to 100%.
 	BidPrice *string `type:"string"`
 
-	// The bid price, as a percentage of On-Demand price, for each EC2 Spot Instance
-	// as defined by InstanceType. Expressed as a number (for example, 20 specifies
-	// 20%). If neither BidPrice nor BidPriceAsPercentageOfOnDemandPrice is provided,
-	// BidPriceAsPercentageOfOnDemandPrice defaults to 100%.
+	// The bid price, as a percentage of On-Demand price, for each Amazon EC2 Spot
+	// Instance as defined by InstanceType. Expressed as a number (for example,
+	// 20 specifies 20%). If neither BidPrice nor BidPriceAsPercentageOfOnDemandPrice
+	// is provided, BidPriceAsPercentageOfOnDemandPrice defaults to 100%.
 	BidPriceAsPercentageOfOnDemandPrice *float64 `type:"double"`
 
 	// A configuration classification that applies when provisioning cluster instances,
@@ -11682,7 +12066,7 @@ type InstanceTypeConfig struct {
 	// each instance as defined by InstanceType.
 	EbsConfiguration *EbsConfiguration `type:"structure"`
 
-	// An EC2 instance type, such as m3.xlarge.
+	// An Amazon EC2 instance type, such as m3.xlarge.
 	//
 	// InstanceType is a required field
 	InstanceType *string `min:"1" type:"string" required:"true"`
@@ -11777,18 +12161,18 @@ func (s *InstanceTypeConfig) SetWeightedCapacity(v int64) *InstanceTypeConfig {
 
 // The configuration specification for each instance type in an instance fleet.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions.
 type InstanceTypeSpecification struct {
 	_ struct{} `type:"structure"`
 
-	// The bid price for each EC2 Spot Instance type as defined by InstanceType.
+	// The bid price for each Amazon EC2 Spot Instance type as defined by InstanceType.
 	// Expressed in USD.
 	BidPrice *string `type:"string"`
 
-	// The bid price, as a percentage of On-Demand price, for each EC2 Spot Instance
-	// as defined by InstanceType. Expressed as a number (for example, 20 specifies
-	// 20%).
+	// The bid price, as a percentage of On-Demand price, for each Amazon EC2 Spot
+	// Instance as defined by InstanceType. Expressed as a number (for example,
+	// 20 specifies 20%).
 	BidPriceAsPercentageOfOnDemandPrice *float64 `type:"double"`
 
 	// A configuration classification that applies when provisioning cluster instances,
@@ -11806,7 +12190,7 @@ type InstanceTypeSpecification struct {
 	// Evaluates to TRUE when the specified InstanceType is EBS-optimized.
 	EbsOptimized *bool `type:"boolean"`
 
-	// The EC2 instance type, for example m3.xlarge.
+	// The Amazon EC2 instance type, for example m3.xlarge.
 	InstanceType *string `min:"1" type:"string"`
 
 	// The number of units that a provisioned instance of this type provides toward
@@ -12091,8 +12475,8 @@ type JobFlowDetail struct {
 
 	// An IAM role for automatic scaling policies. The default role is EMR_AutoScaling_DefaultRole.
 	// The IAM role provides a way for the automatic scaling feature to get the
-	// required permissions it needs to launch and terminate EC2 instances in an
-	// instance group.
+	// required permissions it needs to launch and terminate Amazon EC2 instances
+	// in an instance group.
 	AutoScalingRole *string `type:"string"`
 
 	// A list of the bootstrap actions run by the job flow.
@@ -12113,12 +12497,12 @@ type JobFlowDetail struct {
 	// JobFlowId is a required field
 	JobFlowId *string `type:"string" required:"true"`
 
-	// The IAM role that was specified when the job flow was launched. The EC2 instances
-	// of the job flow assume this role.
+	// The IAM role that was specified when the job flow was launched. The Amazon
+	// EC2 instances of the job flow assume this role.
 	JobFlowRole *string `type:"string"`
 
 	// The KMS key used for encrypting log files. This attribute is only available
-	// with EMR version 5.30.0 and later, excluding EMR 6.0.0.
+	// with Amazon EMR 5.30.0 and later, excluding 6.0.0.
 	LogEncryptionKmsKeyId *string `type:"string"`
 
 	// The location in Amazon S3 where log files for the job are stored.
@@ -12139,8 +12523,8 @@ type JobFlowDetail struct {
 	// terminating the Amazon EC2 instances, regardless of the instance-hour boundary.
 	// With either behavior, Amazon EMR removes the least active nodes first and
 	// blocks instance termination if it could lead to HDFS corruption. TERMINATE_AT_TASK_COMPLETION
-	// available only in Amazon EMR version 4.1.0 and later, and is the default
-	// for versions of Amazon EMR earlier than 5.1.0.
+	// available only in Amazon EMR releases 4.1.0 and later, and is the default
+	// for releases of Amazon EMR earlier than 5.1.0.
 	ScaleDownBehavior *string `type:"string" enum:"ScaleDownBehavior"`
 
 	// The IAM role that is assumed by the Amazon EMR service to access Amazon Web
@@ -12157,13 +12541,14 @@ type JobFlowDetail struct {
 
 	// Indicates whether the cluster is visible to IAM principals in the Amazon
 	// Web Services account associated with the cluster. When true, IAM principals
-	// in the Amazon Web Services account can perform EMR cluster actions that their
-	// IAM policies allow. When false, only the IAM principal that created the cluster
-	// and the Amazon Web Services account root user can perform EMR actions, regardless
-	// of IAM permissions policies attached to other IAM principals.
+	// in the Amazon Web Services account can perform Amazon EMR cluster actions
+	// that their IAM policies allow. When false, only the IAM principal that created
+	// the cluster and the Amazon Web Services account root user can perform Amazon
+	// EMR actions, regardless of IAM permissions policies attached to other IAM
+	// principals.
 	//
 	// The default value is true if a value is not provided when creating a cluster
-	// using the EMR API RunJobFlow command, the CLI create-cluster (https://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html)
+	// using the Amazon EMR API RunJobFlow command, the CLI create-cluster (https://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html)
 	// command, or the Amazon Web Services Management Console.
 	VisibleToAllUsers *bool `type:"boolean"`
 }
@@ -12373,8 +12758,8 @@ type JobFlowInstancesConfig struct {
 	// nodes.
 	AdditionalSlaveSecurityGroups []*string `type:"list"`
 
-	// The name of the EC2 key pair that can be used to connect to the master node
-	// using SSH as the user called "hadoop."
+	// The name of the Amazon EC2 key pair that can be used to connect to the master
+	// node using SSH as the user called "hadoop."
 	Ec2KeyName *string `type:"string"`
 
 	// Applies to clusters that use the uniform instance group configuration. To
@@ -12385,10 +12770,10 @@ type JobFlowInstancesConfig struct {
 	Ec2SubnetId *string `type:"string"`
 
 	// Applies to clusters that use the instance fleet configuration. When multiple
-	// EC2 subnet IDs are specified, Amazon EMR evaluates them and launches instances
-	// in the optimal subnet.
+	// Amazon EC2 subnet IDs are specified, Amazon EMR evaluates them and launches
+	// instances in the optimal subnet.
 	//
-	// The instance fleet configuration is available only in Amazon EMR versions
+	// The instance fleet configuration is available only in Amazon EMR releases
 	// 4.8.0 and later, excluding 5.0.x versions.
 	Ec2SubnetIds []*string `type:"list"`
 
@@ -12408,27 +12793,27 @@ type JobFlowInstancesConfig struct {
 	// case the default version of Hadoop for that AMI version is used.
 	HadoopVersion *string `type:"string"`
 
-	// The number of EC2 instances in the cluster.
+	// The number of Amazon EC2 instances in the cluster.
 	InstanceCount *int64 `type:"integer"`
 
 	//
-	// The instance fleet configuration is available only in Amazon EMR versions
+	// The instance fleet configuration is available only in Amazon EMR releases
 	// 4.8.0 and later, excluding 5.0.x versions.
 	//
-	// Describes the EC2 instances and instance configurations for clusters that
-	// use the instance fleet configuration.
+	// Describes the Amazon EC2 instances and instance configurations for clusters
+	// that use the instance fleet configuration.
 	InstanceFleets []*InstanceFleetConfig `type:"list"`
 
 	// Configuration for the instance groups in a cluster.
 	InstanceGroups []*InstanceGroupConfig `type:"list"`
 
 	// Specifies whether the cluster should remain available after completing all
-	// steps. Defaults to true. For more information about configuring cluster termination,
-	// see Control Cluster Termination (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-termination.html)
+	// steps. Defaults to false. For more information about configuring cluster
+	// termination, see Control Cluster Termination (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-termination.html)
 	// in the EMR Management Guide.
 	KeepJobFlowAliveWhenNoSteps *bool `type:"boolean"`
 
-	// The EC2 instance type of the master node.
+	// The Amazon EC2 instance type of the master node.
 	MasterInstanceType *string `min:"1" type:"string"`
 
 	// The Availability Zone in which the cluster runs.
@@ -12438,13 +12823,17 @@ type JobFlowInstancesConfig struct {
 	// to access clusters in VPC private subnets.
 	ServiceAccessSecurityGroup *string `type:"string"`
 
-	// The EC2 instance type of the core and task nodes.
+	// The Amazon EC2 instance type of the core and task nodes.
 	SlaveInstanceType *string `min:"1" type:"string"`
 
 	// Specifies whether to lock the cluster to prevent the Amazon EC2 instances
 	// from being terminated by API call, user intervention, or in the event of
 	// a job-flow error.
 	TerminationProtected *bool `type:"boolean"`
+
+	// Indicates whether Amazon EMR should gracefully replace core nodes that have
+	// degraded within the cluster.
+	UnhealthyNodeReplacement *bool `type:"boolean"`
 }
 
 // String returns the string representation.
@@ -12603,6 +12992,12 @@ func (s *JobFlowInstancesConfig) SetTerminationProtected(v bool) *JobFlowInstanc
 	return s
 }
 
+// SetUnhealthyNodeReplacement sets the UnhealthyNodeReplacement field's value.
+func (s *JobFlowInstancesConfig) SetUnhealthyNodeReplacement(v bool) *JobFlowInstancesConfig {
+	s.UnhealthyNodeReplacement = &v
+	return s
+}
+
 // Specify the type of Amazon EC2 instances that the cluster (job flow) runs
 // on.
 type JobFlowInstancesDetail struct {
@@ -12666,6 +13061,10 @@ type JobFlowInstancesDetail struct {
 	// termination by API calls, user intervention, or in the event of a job-flow
 	// error.
 	TerminationProtected *bool `type:"boolean"`
+
+	// Indicates whether Amazon EMR should gracefully replace core nodes that have
+	// degraded within the cluster.
+	UnhealthyNodeReplacement *bool `type:"boolean"`
 }
 
 // String returns the string representation.
@@ -12761,6 +13160,12 @@ func (s *JobFlowInstancesDetail) SetSlaveInstanceType(v string) *JobFlowInstance
 // SetTerminationProtected sets the TerminationProtected field's value.
 func (s *JobFlowInstancesDetail) SetTerminationProtected(v bool) *JobFlowInstancesDetail {
 	s.TerminationProtected = &v
+	return s
+}
+
+// SetUnhealthyNodeReplacement sets the UnhealthyNodeReplacement field's value.
+func (s *JobFlowInstancesDetail) SetUnhealthyNodeReplacement(v bool) *JobFlowInstancesDetail {
+	s.UnhealthyNodeReplacement = &v
 	return s
 }
 
@@ -13444,6 +13849,9 @@ type ListNotebookExecutionsInput struct {
 	// The unique ID of the editor associated with the notebook execution.
 	EditorId *string `type:"string"`
 
+	// The unique ID of the execution engine.
+	ExecutionEngineId *string `type:"string"`
+
 	// The beginning of time range filter for listing notebook executions. The default
 	// is the timestamp of 30 days ago.
 	From *time.Time `type:"timestamp"`
@@ -13506,6 +13914,12 @@ func (s ListNotebookExecutionsInput) GoString() string {
 // SetEditorId sets the EditorId field's value.
 func (s *ListNotebookExecutionsInput) SetEditorId(v string) *ListNotebookExecutionsInput {
 	s.EditorId = &v
+	return s
+}
+
+// SetExecutionEngineId sets the ExecutionEngineId field's value.
+func (s *ListNotebookExecutionsInput) SetExecutionEngineId(v string) *ListNotebookExecutionsInput {
+	s.ExecutionEngineId = &v
 	return s
 }
 
@@ -14046,6 +14460,107 @@ func (s *ListStudiosOutput) SetStudios(v []*StudioSummary) *ListStudiosOutput {
 	return s
 }
 
+type ListSupportedInstanceTypesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The pagination token that marks the next set of results to retrieve.
+	Marker *string `type:"string"`
+
+	// The Amazon EMR release label determines the versions of open-source application
+	// packages (https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-release-app-versions-6.x.html)
+	// that Amazon EMR has installed on the cluster. Release labels are in the format
+	// emr-x.x.x, where x.x.x is an Amazon EMR release number such as emr-6.10.0.
+	// For more information about Amazon EMR releases and their included application
+	// versions and features, see the Amazon EMR Release Guide (https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-release-components.html) .
+	//
+	// ReleaseLabel is a required field
+	ReleaseLabel *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSupportedInstanceTypesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSupportedInstanceTypesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSupportedInstanceTypesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSupportedInstanceTypesInput"}
+	if s.ReleaseLabel == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReleaseLabel"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMarker sets the Marker field's value.
+func (s *ListSupportedInstanceTypesInput) SetMarker(v string) *ListSupportedInstanceTypesInput {
+	s.Marker = &v
+	return s
+}
+
+// SetReleaseLabel sets the ReleaseLabel field's value.
+func (s *ListSupportedInstanceTypesInput) SetReleaseLabel(v string) *ListSupportedInstanceTypesInput {
+	s.ReleaseLabel = &v
+	return s
+}
+
+type ListSupportedInstanceTypesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The pagination token that marks the next set of results to retrieve.
+	Marker *string `type:"string"`
+
+	// The list of instance types that the release specified in ListSupportedInstanceTypesInput$ReleaseLabel
+	// supports, filtered by Amazon Web Services Region.
+	SupportedInstanceTypes []*SupportedInstanceType `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSupportedInstanceTypesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSupportedInstanceTypesOutput) GoString() string {
+	return s.String()
+}
+
+// SetMarker sets the Marker field's value.
+func (s *ListSupportedInstanceTypesOutput) SetMarker(v string) *ListSupportedInstanceTypesOutput {
+	s.Marker = &v
+	return s
+}
+
+// SetSupportedInstanceTypes sets the SupportedInstanceTypes field's value.
+func (s *ListSupportedInstanceTypesOutput) SetSupportedInstanceTypes(v []*SupportedInstanceType) *ListSupportedInstanceTypesOutput {
+	s.SupportedInstanceTypes = v
+	return s
+}
+
 // Managed scaling policy for an Amazon EMR cluster. The policy specifies the
 // limits for resources that can be added or terminated from a cluster. The
 // policy only applies to the core and task nodes. The master node cannot be
@@ -14053,10 +14568,10 @@ func (s *ListStudiosOutput) SetStudios(v []*StudioSummary) *ListStudiosOutput {
 type ManagedScalingPolicy struct {
 	_ struct{} `type:"structure"`
 
-	// The EC2 unit limits for a managed scaling policy. The managed scaling activity
-	// of a cluster is not allowed to go above or below these limits. The limit
-	// only applies to the core and task nodes. The master node cannot be scaled
-	// after initial configuration.
+	// The Amazon EC2 unit limits for a managed scaling policy. The managed scaling
+	// activity of a cluster is not allowed to go above or below these limits. The
+	// limit only applies to the core and task nodes. The master node cannot be
+	// scaled after initial configuration.
 	ComputeLimits *ComputeLimits `type:"structure"`
 }
 
@@ -14403,22 +14918,26 @@ func (s ModifyInstanceGroupsOutput) GoString() string {
 	return s.String()
 }
 
-// A notebook execution. An execution is a specific instance that an EMR Notebook
-// is run using the StartNotebookExecution action.
+// A notebook execution. An execution is a specific instance that an Amazon
+// EMR Notebook is run using the StartNotebookExecution action.
 type NotebookExecution struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the notebook execution.
 	Arn *string `type:"string"`
 
-	// The unique identifier of the EMR Notebook that is used for the notebook execution.
+	// The unique identifier of the Amazon EMR Notebook that is used for the notebook
+	// execution.
 	EditorId *string `type:"string"`
 
 	// The timestamp when notebook execution ended.
 	EndTime *time.Time `type:"timestamp"`
 
-	// The execution engine, such as an EMR cluster, used to run the EMR notebook
-	// and perform the notebook execution.
+	// The environment variables associated with the notebook execution.
+	EnvironmentVariables map[string]*string `type:"map"`
+
+	// The execution engine, such as an Amazon EMR cluster, used to run the Amazon
+	// EMR notebook and perform the notebook execution.
 	ExecutionEngine *ExecutionEngineConfig `type:"structure"`
 
 	// The reason for the latest status change of the notebook execution.
@@ -14430,15 +14949,24 @@ type NotebookExecution struct {
 	// A name for the notebook execution.
 	NotebookExecutionName *string `type:"string"`
 
-	// The unique identifier of the EC2 security group associated with the EMR Notebook
-	// instance. For more information see Specifying EC2 Security Groups for EMR
-	// Notebooks (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-managed-notebooks-security-groups.html)
-	// in the EMR Management Guide.
+	// The unique identifier of the Amazon EC2 security group associated with the
+	// Amazon EMR Notebook instance. For more information see Specifying Amazon
+	// EC2 Security Groups for Amazon EMR Notebooks (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-managed-notebooks-security-groups.html)
+	// in the Amazon EMR Management Guide.
 	NotebookInstanceSecurityGroupId *string `type:"string"`
 
-	// Input parameters in JSON format passed to the EMR Notebook at runtime for
-	// execution.
+	// Input parameters in JSON format passed to the Amazon EMR Notebook at runtime
+	// for execution.
 	NotebookParams *string `type:"string"`
+
+	// The Amazon S3 location that stores the notebook execution input.
+	NotebookS3Location *NotebookS3LocationForOutput_ `type:"structure"`
+
+	// The output format for the notebook execution.
+	OutputNotebookFormat *string `type:"string" enum:"OutputNotebookFormat"`
+
+	// The Amazon S3 location for the notebook execution output.
+	OutputNotebookS3Location *OutputNotebookS3LocationForOutput_ `type:"structure"`
 
 	// The location of the notebook execution's output file in Amazon S3.
 	OutputNotebookURI *string `type:"string"`
@@ -14516,6 +15044,12 @@ func (s *NotebookExecution) SetEndTime(v time.Time) *NotebookExecution {
 	return s
 }
 
+// SetEnvironmentVariables sets the EnvironmentVariables field's value.
+func (s *NotebookExecution) SetEnvironmentVariables(v map[string]*string) *NotebookExecution {
+	s.EnvironmentVariables = v
+	return s
+}
+
 // SetExecutionEngine sets the ExecutionEngine field's value.
 func (s *NotebookExecution) SetExecutionEngine(v *ExecutionEngineConfig) *NotebookExecution {
 	s.ExecutionEngine = v
@@ -14549,6 +15083,24 @@ func (s *NotebookExecution) SetNotebookInstanceSecurityGroupId(v string) *Notebo
 // SetNotebookParams sets the NotebookParams field's value.
 func (s *NotebookExecution) SetNotebookParams(v string) *NotebookExecution {
 	s.NotebookParams = &v
+	return s
+}
+
+// SetNotebookS3Location sets the NotebookS3Location field's value.
+func (s *NotebookExecution) SetNotebookS3Location(v *NotebookS3LocationForOutput_) *NotebookExecution {
+	s.NotebookS3Location = v
+	return s
+}
+
+// SetOutputNotebookFormat sets the OutputNotebookFormat field's value.
+func (s *NotebookExecution) SetOutputNotebookFormat(v string) *NotebookExecution {
+	s.OutputNotebookFormat = &v
+	return s
+}
+
+// SetOutputNotebookS3Location sets the OutputNotebookS3Location field's value.
+func (s *NotebookExecution) SetOutputNotebookS3Location(v *OutputNotebookS3LocationForOutput_) *NotebookExecution {
+	s.OutputNotebookS3Location = v
 	return s
 }
 
@@ -14587,11 +15139,17 @@ type NotebookExecutionSummary struct {
 	// The timestamp when notebook execution started.
 	EndTime *time.Time `type:"timestamp"`
 
+	// The unique ID of the execution engine for the notebook execution.
+	ExecutionEngineId *string `type:"string"`
+
 	// The unique identifier of the notebook execution.
 	NotebookExecutionId *string `type:"string"`
 
 	// The name of the notebook execution.
 	NotebookExecutionName *string `type:"string"`
+
+	// The Amazon S3 location that stores the notebook execution input.
+	NotebookS3Location *NotebookS3LocationForOutput_ `type:"structure"`
 
 	// The timestamp when notebook execution started.
 	StartTime *time.Time `type:"timestamp"`
@@ -14655,6 +15213,12 @@ func (s *NotebookExecutionSummary) SetEndTime(v time.Time) *NotebookExecutionSum
 	return s
 }
 
+// SetExecutionEngineId sets the ExecutionEngineId field's value.
+func (s *NotebookExecutionSummary) SetExecutionEngineId(v string) *NotebookExecutionSummary {
+	s.ExecutionEngineId = &v
+	return s
+}
+
 // SetNotebookExecutionId sets the NotebookExecutionId field's value.
 func (s *NotebookExecutionSummary) SetNotebookExecutionId(v string) *NotebookExecutionSummary {
 	s.NotebookExecutionId = &v
@@ -14667,6 +15231,12 @@ func (s *NotebookExecutionSummary) SetNotebookExecutionName(v string) *NotebookE
 	return s
 }
 
+// SetNotebookS3Location sets the NotebookS3Location field's value.
+func (s *NotebookExecutionSummary) SetNotebookS3Location(v *NotebookS3LocationForOutput_) *NotebookExecutionSummary {
+	s.NotebookS3Location = v
+	return s
+}
+
 // SetStartTime sets the StartTime field's value.
 func (s *NotebookExecutionSummary) SetStartTime(v time.Time) *NotebookExecutionSummary {
 	s.StartTime = &v
@@ -14676,6 +15246,101 @@ func (s *NotebookExecutionSummary) SetStartTime(v time.Time) *NotebookExecutionS
 // SetStatus sets the Status field's value.
 func (s *NotebookExecutionSummary) SetStatus(v string) *NotebookExecutionSummary {
 	s.Status = &v
+	return s
+}
+
+// The Amazon S3 location that stores the notebook execution input.
+type NotebookS3LocationForOutput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon S3 bucket that stores the notebook execution input.
+	Bucket *string `type:"string"`
+
+	// The key to the Amazon S3 location that stores the notebook execution input.
+	Key *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotebookS3LocationForOutput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotebookS3LocationForOutput_) GoString() string {
+	return s.String()
+}
+
+// SetBucket sets the Bucket field's value.
+func (s *NotebookS3LocationForOutput_) SetBucket(v string) *NotebookS3LocationForOutput_ {
+	s.Bucket = &v
+	return s
+}
+
+// SetKey sets the Key field's value.
+func (s *NotebookS3LocationForOutput_) SetKey(v string) *NotebookS3LocationForOutput_ {
+	s.Key = &v
+	return s
+}
+
+// The Amazon S3 location that stores the notebook execution input.
+type NotebookS3LocationFromInput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon S3 bucket that stores the notebook execution input.
+	Bucket *string `type:"string"`
+
+	// The key to the Amazon S3 location that stores the notebook execution input.
+	Key *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotebookS3LocationFromInput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotebookS3LocationFromInput_) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NotebookS3LocationFromInput_) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NotebookS3LocationFromInput_"}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucket sets the Bucket field's value.
+func (s *NotebookS3LocationFromInput_) SetBucket(v string) *NotebookS3LocationFromInput_ {
+	s.Bucket = &v
+	return s
+}
+
+// SetKey sets the Key field's value.
+func (s *NotebookS3LocationFromInput_) SetKey(v string) *NotebookS3LocationFromInput_ {
+	s.Key = &v
 	return s
 }
 
@@ -14786,9 +15451,9 @@ func (s *OnDemandCapacityReservationOptions) SetUsageStrategy(v string) *OnDeman
 // The launch specification for On-Demand Instances in the instance fleet, which
 // determines the allocation strategy.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions. On-Demand Instances allocation
-// strategy is available in Amazon EMR version 5.12.1 and later.
+// strategy is available in Amazon EMR releases 5.12.1 and later.
 type OnDemandProvisioningSpecification struct {
 	_ struct{} `type:"structure"`
 
@@ -14901,26 +15566,121 @@ func (s *OnDemandResizingSpecification) SetTimeoutDurationMinutes(v int64) *OnDe
 	return s
 }
 
+// The Amazon S3 location that stores the notebook execution output.
+type OutputNotebookS3LocationForOutput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon S3 bucket that stores the notebook execution output.
+	Bucket *string `type:"string"`
+
+	// The key to the Amazon S3 location that stores the notebook execution output.
+	Key *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OutputNotebookS3LocationForOutput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OutputNotebookS3LocationForOutput_) GoString() string {
+	return s.String()
+}
+
+// SetBucket sets the Bucket field's value.
+func (s *OutputNotebookS3LocationForOutput_) SetBucket(v string) *OutputNotebookS3LocationForOutput_ {
+	s.Bucket = &v
+	return s
+}
+
+// SetKey sets the Key field's value.
+func (s *OutputNotebookS3LocationForOutput_) SetKey(v string) *OutputNotebookS3LocationForOutput_ {
+	s.Key = &v
+	return s
+}
+
+// The Amazon S3 location that stores the notebook execution output.
+type OutputNotebookS3LocationFromInput_ struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon S3 bucket that stores the notebook execution output.
+	Bucket *string `type:"string"`
+
+	// The key to the Amazon S3 location that stores the notebook execution output.
+	Key *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OutputNotebookS3LocationFromInput_) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s OutputNotebookS3LocationFromInput_) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OutputNotebookS3LocationFromInput_) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OutputNotebookS3LocationFromInput_"}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucket sets the Bucket field's value.
+func (s *OutputNotebookS3LocationFromInput_) SetBucket(v string) *OutputNotebookS3LocationFromInput_ {
+	s.Bucket = &v
+	return s
+}
+
+// SetKey sets the Key field's value.
+func (s *OutputNotebookS3LocationFromInput_) SetKey(v string) *OutputNotebookS3LocationFromInput_ {
+	s.Key = &v
+	return s
+}
+
 // Placement group configuration for an Amazon EMR cluster. The configuration
 // specifies the placement strategy that can be applied to instance roles during
 // cluster creation.
 //
 // To use this configuration, consider attaching managed policy AmazonElasticMapReducePlacementGroupPolicy
-// to the EMR role.
+// to the Amazon EMR role.
 type PlacementGroupConfig struct {
 	_ struct{} `type:"structure"`
 
 	// Role of the instance in the cluster.
 	//
-	// Starting with Amazon EMR version 5.23.0, the only supported instance role
+	// Starting with Amazon EMR release 5.23.0, the only supported instance role
 	// is MASTER.
 	//
 	// InstanceRole is a required field
 	InstanceRole *string `type:"string" required:"true" enum:"InstanceRoleType"`
 
-	// EC2 Placement Group strategy associated with instance role.
+	// Amazon EC2 Placement Group strategy associated with instance role.
 	//
-	// Starting with Amazon EMR version 5.23.0, the only supported placement strategy
+	// Starting with Amazon EMR release 5.23.0, the only supported placement strategy
 	// is SPREAD for the MASTER instance role.
 	PlacementStrategy *string `type:"string" enum:"PlacementGroupStrategy"`
 }
@@ -14982,7 +15742,7 @@ type PlacementType struct {
 	// is used for instance fleets, while AvailabilityZone (singular) is used for
 	// uniform instance groups.
 	//
-	// The instance fleet configuration is available only in Amazon EMR versions
+	// The instance fleet configuration is available only in Amazon EMR releases
 	// 4.8.0 and later, excluding 5.0.x versions.
 	AvailabilityZones []*string `type:"list"`
 }
@@ -15315,8 +16075,8 @@ type PutBlockPublicAccessConfigurationInput struct {
 	// For accounts that created clusters in a Region before November 25, 2019,
 	// block public access is disabled by default in that Region. To use this feature,
 	// you must manually enable and configure it. For accounts that did not create
-	// an EMR cluster in a Region before this date, block public access is enabled
-	// by default in that Region.
+	// an Amazon EMR cluster in a Region before this date, block public access is
+	// enabled by default in that Region.
 	//
 	// BlockPublicAccessConfiguration is a required field
 	BlockPublicAccessConfiguration *BlockPublicAccessConfiguration `type:"structure" required:"true"`
@@ -15389,7 +16149,8 @@ func (s PutBlockPublicAccessConfigurationOutput) GoString() string {
 type PutManagedScalingPolicyInput struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the ID of an EMR cluster where the managed scaling policy is attached.
+	// Specifies the ID of an Amazon EMR cluster where the managed scaling policy
+	// is attached.
 	//
 	// ClusterId is a required field
 	ClusterId *string `type:"string" required:"true"`
@@ -15839,7 +16600,7 @@ type RunJobFlowInput struct {
 
 	// An IAM role for automatic scaling policies. The default role is EMR_AutoScaling_DefaultRole.
 	// The IAM role provides permissions that the automatic scaling feature requires
-	// to launch and terminate EC2 instances in an instance group.
+	// to launch and terminate Amazon EC2 instances in an instance group.
 	AutoScalingRole *string `type:"string"`
 
 	// An auto-termination policy for an Amazon EMR cluster. An auto-termination
@@ -15852,15 +16613,15 @@ type RunJobFlowInput struct {
 	BootstrapActions []*BootstrapActionConfig `type:"list"`
 
 	// For Amazon EMR releases 4.0 and later. The list of configurations supplied
-	// for the EMR cluster you are creating.
+	// for the Amazon EMR cluster that you are creating.
 	Configurations []*Configuration `type:"list"`
 
-	// Available only in Amazon EMR version 5.7.0 and later. The ID of a custom
+	// Available only in Amazon EMR releases 5.7.0 and later. The ID of a custom
 	// Amazon EBS-backed Linux AMI. If specified, Amazon EMR uses this AMI when
-	// it launches cluster EC2 instances. For more information about custom AMIs
-	// in Amazon EMR, see Using a Custom AMI (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-custom-ami.html)
+	// it launches cluster Amazon EC2 instances. For more information about custom
+	// AMIs in Amazon EMR, see Using a Custom AMI (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-custom-ami.html)
 	// in the Amazon EMR Management Guide. If omitted, the cluster uses the base
-	// Linux AMI for the ReleaseLabel specified. For Amazon EMR versions 2.x and
+	// Linux AMI for the ReleaseLabel specified. For Amazon EMR releases 2.x and
 	// 3.x, use AmiVersion instead.
 	//
 	// For information about creating a custom AMI, see Creating an Amazon EBS-Backed
@@ -15869,19 +16630,30 @@ type RunJobFlowInput struct {
 	// about finding an AMI ID, see Finding a Linux AMI (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html).
 	CustomAmiId *string `type:"string"`
 
+	// The IOPS, of the Amazon EBS root device volume of the Linux AMI that is used
+	// for each Amazon EC2 instance. Available in Amazon EMR releases 6.15.0 and
+	// later.
+	EbsRootVolumeIops *int64 `type:"integer"`
+
 	// The size, in GiB, of the Amazon EBS root device volume of the Linux AMI that
-	// is used for each EC2 instance. Available in Amazon EMR version 4.x and later.
+	// is used for each Amazon EC2 instance. Available in Amazon EMR releases 4.x
+	// and later.
 	EbsRootVolumeSize *int64 `type:"integer"`
+
+	// The throughput, in MiB/s, of the Amazon EBS root device volume of the Linux
+	// AMI that is used for each Amazon EC2 instance. Available in Amazon EMR releases
+	// 6.15.0 and later.
+	EbsRootVolumeThroughput *int64 `type:"integer"`
 
 	// A specification of the number and type of Amazon EC2 instances.
 	//
 	// Instances is a required field
 	Instances *JobFlowInstancesConfig `type:"structure" required:"true"`
 
-	// Also called instance profile and EC2 role. An IAM role for an EMR cluster.
-	// The EC2 instances of the cluster assume this role. The default role is EMR_EC2_DefaultRole.
-	// In order to use the default role, you must have already created it using
-	// the CLI or console.
+	// Also called instance profile and Amazon EC2 role. An IAM role for an Amazon
+	// EMR cluster. The Amazon EC2 instances of the cluster assume this role. The
+	// default role is EMR_EC2_DefaultRole. In order to use the default role, you
+	// must have already created it using the CLI or console.
 	JobFlowRole *string `type:"string"`
 
 	// Attributes for Kerberos configuration when Kerberos authentication is enabled
@@ -15892,7 +16664,7 @@ type RunJobFlowInput struct {
 
 	// The KMS key used for encrypting log files. If a value is not provided, the
 	// logs remain encrypted by AES-256. This attribute is only available with Amazon
-	// EMR version 5.30.0 and later, excluding Amazon EMR 6.0.0.
+	// EMR releases 5.30.0 and later, excluding Amazon EMR 6.0.0.
 	LogEncryptionKmsKeyId *string `type:"string"`
 
 	// The location in Amazon S3 to write the log files of the job flow. If a value
@@ -15912,10 +16684,10 @@ type RunJobFlowInput struct {
 	// use Applications.
 	//
 	// A list of strings that indicates third-party software to use with the job
-	// flow that accepts a user argument list. EMR accepts and forwards the argument
-	// list to the corresponding installation script as bootstrap action arguments.
-	// For more information, see "Launch a Job Flow on the MapR Distribution for
-	// Hadoop" in the Amazon EMR Developer Guide (https://docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf).
+	// flow that accepts a user argument list. Amazon EMR accepts and forwards the
+	// argument list to the corresponding installation script as bootstrap action
+	// arguments. For more information, see "Launch a Job Flow on the MapR Distribution
+	// for Hadoop" in the Amazon EMR Developer Guide (https://docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf).
 	// Supported values are:
 	//
 	//    * "mapr-m3" - launch the cluster using MapR M3 Edition.
@@ -15971,8 +16743,8 @@ type RunJobFlowInput struct {
 	// terminating the Amazon EC2 instances, regardless of the instance-hour boundary.
 	// With either behavior, Amazon EMR removes the least active nodes first and
 	// blocks instance termination if it could lead to HDFS corruption. TERMINATE_AT_TASK_COMPLETION
-	// available only in Amazon EMR version 4.1.0 and later, and is the default
-	// for versions of Amazon EMR earlier than 5.1.0.
+	// available only in Amazon EMR releases 4.1.0 and later, and is the default
+	// for releases of Amazon EMR earlier than 5.1.0.
 	ScaleDownBehavior *string `type:"string" enum:"ScaleDownBehavior"`
 
 	// The name of a security configuration to apply to the cluster.
@@ -16011,17 +16783,17 @@ type RunJobFlowInput struct {
 	// is set to true. Setting it to false now has no effect.
 	//
 	// Set this value to true so that IAM principals in the Amazon Web Services
-	// account associated with the cluster can perform EMR actions on the cluster
-	// that their IAM policies allow. This value defaults to true for clusters created
-	// using the EMR API or the CLI create-cluster (https://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html)
+	// account associated with the cluster can perform Amazon EMR actions on the
+	// cluster that their IAM policies allow. This value defaults to true for clusters
+	// created using the Amazon EMR API or the CLI create-cluster (https://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html)
 	// command.
 	//
 	// When set to false, only the IAM principal that created the cluster and the
-	// Amazon Web Services account root user can perform EMR actions for the cluster,
-	// regardless of the IAM permissions policies attached to other IAM principals.
-	// For more information, see Understanding the EMR Cluster VisibleToAllUsers
-	// Setting (https://docs.aws.amazon.com/emr/latest/ManagementGuide/security_iam_emr-with-iam.html#security_set_visible_to_all_users)
-	// in the Amazon EMRManagement Guide.
+	// Amazon Web Services account root user can perform Amazon EMR actions for
+	// the cluster, regardless of the IAM permissions policies attached to other
+	// IAM principals. For more information, see Understanding the Amazon EMR cluster
+	// VisibleToAllUsers setting (https://docs.aws.amazon.com/emr/latest/ManagementGuide/security_IAM_emr-with-IAM.html#security_set_visible_to_all_users)
+	// in the Amazon EMR Management Guide.
 	VisibleToAllUsers *bool `type:"boolean"`
 }
 
@@ -16152,9 +16924,21 @@ func (s *RunJobFlowInput) SetCustomAmiId(v string) *RunJobFlowInput {
 	return s
 }
 
+// SetEbsRootVolumeIops sets the EbsRootVolumeIops field's value.
+func (s *RunJobFlowInput) SetEbsRootVolumeIops(v int64) *RunJobFlowInput {
+	s.EbsRootVolumeIops = &v
+	return s
+}
+
 // SetEbsRootVolumeSize sets the EbsRootVolumeSize field's value.
 func (s *RunJobFlowInput) SetEbsRootVolumeSize(v int64) *RunJobFlowInput {
 	s.EbsRootVolumeSize = &v
+	return s
+}
+
+// SetEbsRootVolumeThroughput sets the EbsRootVolumeThroughput field's value.
+func (s *RunJobFlowInput) SetEbsRootVolumeThroughput(v int64) *RunJobFlowInput {
+	s.EbsRootVolumeThroughput = &v
 	return s
 }
 
@@ -16383,22 +17167,22 @@ func (s *ScalingAction) SetSimpleScalingPolicyConfiguration(v *SimpleScalingPoli
 	return s
 }
 
-// The upper and lower EC2 instance limits for an automatic scaling policy.
+// The upper and lower Amazon EC2 instance limits for an automatic scaling policy.
 // Automatic scaling activities triggered by automatic scaling rules will not
 // cause an instance group to grow above or below these limits.
 type ScalingConstraints struct {
 	_ struct{} `type:"structure"`
 
-	// The upper boundary of EC2 instances in an instance group beyond which scaling
-	// activities are not allowed to grow. Scale-out activities will not add instances
-	// beyond this boundary.
+	// The upper boundary of Amazon EC2 instances in an instance group beyond which
+	// scaling activities are not allowed to grow. Scale-out activities will not
+	// add instances beyond this boundary.
 	//
 	// MaxCapacity is a required field
 	MaxCapacity *int64 `type:"integer" required:"true"`
 
-	// The lower boundary of EC2 instances in an instance group below which scaling
-	// activities are not allowed to shrink. Scale-in activities will not terminate
-	// instances below this boundary.
+	// The lower boundary of Amazon EC2 instances in an instance group below which
+	// scaling activities are not allowed to shrink. Scale-in activities will not
+	// terminate instances below this boundary.
 	//
 	// MinCapacity is a required field
 	MinCapacity *int64 `type:"integer" required:"true"`
@@ -16451,9 +17235,9 @@ func (s *ScalingConstraints) SetMinCapacity(v int64) *ScalingConstraints {
 }
 
 // A scale-in or scale-out rule that defines scaling activity, including the
-// CloudWatch metric alarm that triggers activity, how EC2 instances are added
-// or removed, and the periodicity of adjustments. The automatic scaling policy
-// for an instance group can comprise one or more automatic scaling rules.
+// CloudWatch metric alarm that triggers activity, how Amazon EC2 instances
+// are added or removed, and the periodicity of adjustments. The automatic scaling
+// policy for an instance group can comprise one or more automatic scaling rules.
 type ScalingRule struct {
 	_ struct{} `type:"structure"`
 
@@ -16873,6 +17657,91 @@ func (s *SessionMappingSummary) SetStudioId(v string) *SessionMappingSummary {
 	return s
 }
 
+type SetKeepJobFlowAliveWhenNoStepsInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of strings that uniquely identify the clusters to protect. This identifier
+	// is returned by RunJobFlow (https://docs.aws.amazon.com/emr/latest/APIReference/API_RunJobFlow.html)
+	// and can also be obtained from DescribeJobFlows (https://docs.aws.amazon.com/emr/latest/APIReference/API_DescribeJobFlows.html).
+	//
+	// JobFlowIds is a required field
+	JobFlowIds []*string `type:"list" required:"true"`
+
+	// A Boolean that indicates whether to terminate the cluster after all steps
+	// are executed.
+	//
+	// KeepJobFlowAliveWhenNoSteps is a required field
+	KeepJobFlowAliveWhenNoSteps *bool `type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetKeepJobFlowAliveWhenNoStepsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetKeepJobFlowAliveWhenNoStepsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SetKeepJobFlowAliveWhenNoStepsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SetKeepJobFlowAliveWhenNoStepsInput"}
+	if s.JobFlowIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobFlowIds"))
+	}
+	if s.KeepJobFlowAliveWhenNoSteps == nil {
+		invalidParams.Add(request.NewErrParamRequired("KeepJobFlowAliveWhenNoSteps"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobFlowIds sets the JobFlowIds field's value.
+func (s *SetKeepJobFlowAliveWhenNoStepsInput) SetJobFlowIds(v []*string) *SetKeepJobFlowAliveWhenNoStepsInput {
+	s.JobFlowIds = v
+	return s
+}
+
+// SetKeepJobFlowAliveWhenNoSteps sets the KeepJobFlowAliveWhenNoSteps field's value.
+func (s *SetKeepJobFlowAliveWhenNoStepsInput) SetKeepJobFlowAliveWhenNoSteps(v bool) *SetKeepJobFlowAliveWhenNoStepsInput {
+	s.KeepJobFlowAliveWhenNoSteps = &v
+	return s
+}
+
+type SetKeepJobFlowAliveWhenNoStepsOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetKeepJobFlowAliveWhenNoStepsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetKeepJobFlowAliveWhenNoStepsOutput) GoString() string {
+	return s.String()
+}
+
 // The input argument to the TerminationProtection operation.
 type SetTerminationProtectionInput struct {
 	_ struct{} `type:"structure"`
@@ -16959,6 +17828,90 @@ func (s SetTerminationProtectionOutput) GoString() string {
 	return s.String()
 }
 
+type SetUnhealthyNodeReplacementInput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of strings that uniquely identify the clusters for which to turn
+	// on unhealthy node replacement. You can get these identifiers by running the
+	// RunJobFlow or the DescribeJobFlows operations.
+	//
+	// JobFlowIds is a required field
+	JobFlowIds []*string `type:"list" required:"true"`
+
+	// Indicates whether to turn on or turn off graceful unhealthy node replacement.
+	//
+	// UnhealthyNodeReplacement is a required field
+	UnhealthyNodeReplacement *bool `type:"boolean" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetUnhealthyNodeReplacementInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetUnhealthyNodeReplacementInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SetUnhealthyNodeReplacementInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SetUnhealthyNodeReplacementInput"}
+	if s.JobFlowIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobFlowIds"))
+	}
+	if s.UnhealthyNodeReplacement == nil {
+		invalidParams.Add(request.NewErrParamRequired("UnhealthyNodeReplacement"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobFlowIds sets the JobFlowIds field's value.
+func (s *SetUnhealthyNodeReplacementInput) SetJobFlowIds(v []*string) *SetUnhealthyNodeReplacementInput {
+	s.JobFlowIds = v
+	return s
+}
+
+// SetUnhealthyNodeReplacement sets the UnhealthyNodeReplacement field's value.
+func (s *SetUnhealthyNodeReplacementInput) SetUnhealthyNodeReplacement(v bool) *SetUnhealthyNodeReplacementInput {
+	s.UnhealthyNodeReplacement = &v
+	return s
+}
+
+type SetUnhealthyNodeReplacementOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetUnhealthyNodeReplacementOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SetUnhealthyNodeReplacementOutput) GoString() string {
+	return s.String()
+}
+
 // The input to the SetVisibleToAllUsers action.
 type SetVisibleToAllUsersInput struct {
 	_ struct{} `type:"structure"`
@@ -16969,10 +17922,10 @@ type SetVisibleToAllUsersInput struct {
 	JobFlowIds []*string `type:"list" required:"true"`
 
 	// A value of true indicates that an IAM principal in the Amazon Web Services
-	// account can perform EMR actions on the cluster that the IAM policies attached
-	// to the principal allow. A value of false indicates that only the IAM principal
-	// that created the cluster and the Amazon Web Services root user can perform
-	// EMR actions on the cluster.
+	// account can perform Amazon EMR actions on the cluster that the IAM policies
+	// attached to the principal allow. A value of false indicates that only the
+	// IAM principal that created the cluster and the Amazon Web Services root user
+	// can perform Amazon EMR actions on the cluster.
 	//
 	// VisibleToAllUsers is a required field
 	VisibleToAllUsers *bool `type:"boolean" required:"true"`
@@ -17091,22 +18044,22 @@ func (s *ShrinkPolicy) SetInstanceResizePolicy(v *InstanceResizePolicy) *ShrinkP
 }
 
 // An automatic scaling configuration, which describes how the policy adds or
-// removes instances, the cooldown period, and the number of EC2 instances that
-// will be added each time the CloudWatch metric alarm condition is satisfied.
+// removes instances, the cooldown period, and the number of Amazon EC2 instances
+// that will be added each time the CloudWatch metric alarm condition is satisfied.
 type SimpleScalingPolicyConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The way in which EC2 instances are added (if ScalingAdjustment is a positive
-	// number) or terminated (if ScalingAdjustment is a negative number) each time
-	// the scaling activity is triggered. CHANGE_IN_CAPACITY is the default. CHANGE_IN_CAPACITY
-	// indicates that the EC2 instance count increments or decrements by ScalingAdjustment,
-	// which should be expressed as an integer. PERCENT_CHANGE_IN_CAPACITY indicates
-	// the instance count increments or decrements by the percentage specified by
-	// ScalingAdjustment, which should be expressed as an integer. For example,
-	// 20 indicates an increase in 20% increments of cluster capacity. EXACT_CAPACITY
-	// indicates the scaling activity results in an instance group with the number
-	// of EC2 instances specified by ScalingAdjustment, which should be expressed
-	// as a positive integer.
+	// The way in which Amazon EC2 instances are added (if ScalingAdjustment is
+	// a positive number) or terminated (if ScalingAdjustment is a negative number)
+	// each time the scaling activity is triggered. CHANGE_IN_CAPACITY is the default.
+	// CHANGE_IN_CAPACITY indicates that the Amazon EC2 instance count increments
+	// or decrements by ScalingAdjustment, which should be expressed as an integer.
+	// PERCENT_CHANGE_IN_CAPACITY indicates the instance count increments or decrements
+	// by the percentage specified by ScalingAdjustment, which should be expressed
+	// as an integer. For example, 20 indicates an increase in 20% increments of
+	// cluster capacity. EXACT_CAPACITY indicates the scaling activity results in
+	// an instance group with the number of Amazon EC2 instances specified by ScalingAdjustment,
+	// which should be expressed as a positive integer.
 	AdjustmentType *string `type:"string" enum:"AdjustmentType"`
 
 	// The amount of time, in seconds, after a scaling activity completes before
@@ -17115,8 +18068,8 @@ type SimpleScalingPolicyConfiguration struct {
 	CoolDown *int64 `type:"integer"`
 
 	// The amount by which to scale in or scale out, based on the specified AdjustmentType.
-	// A positive value adds to the instance group's EC2 instance count while a
-	// negative number removes instances. If AdjustmentType is set to EXACT_CAPACITY,
+	// A positive value adds to the instance group's Amazon EC2 instance count while
+	// a negative number removes instances. If AdjustmentType is set to EXACT_CAPACITY,
 	// the number should only be a positive integer. If AdjustmentType is set to
 	// PERCENT_CHANGE_IN_CAPACITY, the value should express the percentage as an
 	// integer. For example, -20 indicates a decrease in 20% increments of cluster
@@ -17220,9 +18173,9 @@ func (s *SimplifiedApplication) SetVersion(v string) *SimplifiedApplication {
 // determines the defined duration, provisioning timeout behavior, and allocation
 // strategy.
 //
-// The instance fleet configuration is available only in Amazon EMR versions
+// The instance fleet configuration is available only in Amazon EMR releases
 // 4.8.0 and later, excluding 5.0.x versions. Spot Instance allocation strategy
-// is available in Amazon EMR version 5.12.1 and later.
+// is available in Amazon EMR releases 5.12.1 and later.
 //
 // Spot Instances with a defined duration (also known as Spot blocks) are no
 // longer available to new customers from July 1, 2021. For customers who have
@@ -17231,10 +18184,15 @@ func (s *SimplifiedApplication) SetVersion(v string) *SimplifiedApplication {
 type SpotProvisioningSpecification struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the strategy to use in launching Spot Instance fleets. Currently,
-	// the only option is capacity-optimized (the default), which launches instances
-	// from Spot Instance pools with optimal capacity for the number of instances
-	// that are launching.
+	// Specifies one of the following strategies to launch Spot Instance fleets:
+	// price-capacity-optimized, capacity-optimized, lowest-price, or diversified.
+	// For more information on the provisioning strategies, see Allocation strategies
+	// for Spot Instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-allocation-strategy.html)
+	// in the Amazon EC2 User Guide for Linux Instances.
+	//
+	// When you launch a Spot Instance fleet with the old console, it automatically
+	// launches with the capacity-optimized strategy. You can't change the allocation
+	// strategy from the old console.
 	AllocationStrategy *string `type:"string" enum:"SpotProvisioningAllocationStrategy"`
 
 	// The defined duration for Spot Instances (also known as Spot blocks) in minutes.
@@ -17386,10 +18344,11 @@ func (s *SpotResizingSpecification) SetTimeoutDurationMinutes(v int64) *SpotResi
 type StartNotebookExecutionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier of the EMR Notebook to use for notebook execution.
-	//
-	// EditorId is a required field
-	EditorId *string `type:"string" required:"true"`
+	// The unique identifier of the Amazon EMR Notebook to use for notebook execution.
+	EditorId *string `type:"string"`
+
+	// The environment variables associated with the notebook execution.
+	EnvironmentVariables map[string]*string `type:"map"`
 
 	// Specifies the execution engine (cluster) that runs the notebook execution.
 	//
@@ -17400,25 +18359,32 @@ type StartNotebookExecutionInput struct {
 	NotebookExecutionName *string `type:"string"`
 
 	// The unique identifier of the Amazon EC2 security group to associate with
-	// the EMR Notebook for this notebook execution.
+	// the Amazon EMR Notebook for this notebook execution.
 	NotebookInstanceSecurityGroupId *string `type:"string"`
 
-	// Input parameters in JSON format passed to the EMR Notebook at runtime for
-	// execution.
+	// Input parameters in JSON format passed to the Amazon EMR Notebook at runtime
+	// for execution.
 	NotebookParams *string `type:"string"`
 
+	// The Amazon S3 location for the notebook execution input.
+	NotebookS3Location *NotebookS3LocationFromInput_ `type:"structure"`
+
+	// The output format for the notebook execution.
+	OutputNotebookFormat *string `type:"string" enum:"OutputNotebookFormat"`
+
+	// The Amazon S3 location for the notebook execution output.
+	OutputNotebookS3Location *OutputNotebookS3LocationFromInput_ `type:"structure"`
+
 	// The path and file name of the notebook file for this execution, relative
-	// to the path specified for the EMR Notebook. For example, if you specify a
-	// path of s3://MyBucket/MyNotebooks when you create an EMR Notebook for a notebook
-	// with an ID of e-ABCDEFGHIJK1234567890ABCD (the EditorID of this request),
-	// and you specify a RelativePath of my_notebook_executions/notebook_execution.ipynb,
+	// to the path specified for the Amazon EMR Notebook. For example, if you specify
+	// a path of s3://MyBucket/MyNotebooks when you create an Amazon EMR Notebook
+	// for a notebook with an ID of e-ABCDEFGHIJK1234567890ABCD (the EditorID of
+	// this request), and you specify a RelativePath of my_notebook_executions/notebook_execution.ipynb,
 	// the location of the file for the notebook execution is s3://MyBucket/MyNotebooks/e-ABCDEFGHIJK1234567890ABCD/my_notebook_executions/notebook_execution.ipynb.
-	//
-	// RelativePath is a required field
-	RelativePath *string `type:"string" required:"true"`
+	RelativePath *string `type:"string"`
 
 	// The name or ARN of the IAM role that is used as the service role for Amazon
-	// EMR (the EMR role) for the notebook execution.
+	// EMR (the Amazon EMR role) for the notebook execution.
 	//
 	// ServiceRole is a required field
 	ServiceRole *string `type:"string" required:"true"`
@@ -17450,14 +18416,8 @@ func (s StartNotebookExecutionInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StartNotebookExecutionInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartNotebookExecutionInput"}
-	if s.EditorId == nil {
-		invalidParams.Add(request.NewErrParamRequired("EditorId"))
-	}
 	if s.ExecutionEngine == nil {
 		invalidParams.Add(request.NewErrParamRequired("ExecutionEngine"))
-	}
-	if s.RelativePath == nil {
-		invalidParams.Add(request.NewErrParamRequired("RelativePath"))
 	}
 	if s.ServiceRole == nil {
 		invalidParams.Add(request.NewErrParamRequired("ServiceRole"))
@@ -17465,6 +18425,16 @@ func (s *StartNotebookExecutionInput) Validate() error {
 	if s.ExecutionEngine != nil {
 		if err := s.ExecutionEngine.Validate(); err != nil {
 			invalidParams.AddNested("ExecutionEngine", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.NotebookS3Location != nil {
+		if err := s.NotebookS3Location.Validate(); err != nil {
+			invalidParams.AddNested("NotebookS3Location", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OutputNotebookS3Location != nil {
+		if err := s.OutputNotebookS3Location.Validate(); err != nil {
+			invalidParams.AddNested("OutputNotebookS3Location", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -17477,6 +18447,12 @@ func (s *StartNotebookExecutionInput) Validate() error {
 // SetEditorId sets the EditorId field's value.
 func (s *StartNotebookExecutionInput) SetEditorId(v string) *StartNotebookExecutionInput {
 	s.EditorId = &v
+	return s
+}
+
+// SetEnvironmentVariables sets the EnvironmentVariables field's value.
+func (s *StartNotebookExecutionInput) SetEnvironmentVariables(v map[string]*string) *StartNotebookExecutionInput {
+	s.EnvironmentVariables = v
 	return s
 }
 
@@ -17501,6 +18477,24 @@ func (s *StartNotebookExecutionInput) SetNotebookInstanceSecurityGroupId(v strin
 // SetNotebookParams sets the NotebookParams field's value.
 func (s *StartNotebookExecutionInput) SetNotebookParams(v string) *StartNotebookExecutionInput {
 	s.NotebookParams = &v
+	return s
+}
+
+// SetNotebookS3Location sets the NotebookS3Location field's value.
+func (s *StartNotebookExecutionInput) SetNotebookS3Location(v *NotebookS3LocationFromInput_) *StartNotebookExecutionInput {
+	s.NotebookS3Location = v
+	return s
+}
+
+// SetOutputNotebookFormat sets the OutputNotebookFormat field's value.
+func (s *StartNotebookExecutionInput) SetOutputNotebookFormat(v string) *StartNotebookExecutionInput {
+	s.OutputNotebookFormat = &v
+	return s
+}
+
+// SetOutputNotebookS3Location sets the OutputNotebookS3Location field's value.
+func (s *StartNotebookExecutionInput) SetOutputNotebookS3Location(v *OutputNotebookS3LocationFromInput_) *StartNotebookExecutionInput {
+	s.OutputNotebookS3Location = v
 	return s
 }
 
@@ -17581,7 +18575,7 @@ type Step struct {
 	// a combination of account ID, role name, and role type using the following
 	// format: arn:partition:service:region:account:resource.
 	//
-	// For example, arn:aws:iam::1234567890:role/ReadOnly is a correctly formatted
+	// For example, arn:aws:IAM::1234567890:role/ReadOnly is a correctly formatted
 	// runtime role ARN.
 	ExecutionRoleArn *string `type:"string"`
 
@@ -18157,8 +19151,8 @@ func (s StopNotebookExecutionOutput) GoString() string {
 type Studio struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies whether the Amazon EMR Studio authenticates users using IAM or
-	// IAM Identity Center.
+	// Specifies whether the Amazon EMR Studio authenticates users with IAM or IAM
+	// Identity Center.
 	AuthMode *string `type:"string" enum:"AuthMode"`
 
 	// The time the Amazon EMR Studio was created.
@@ -18171,10 +19165,23 @@ type Studio struct {
 	// The detailed description of the Amazon EMR Studio.
 	Description *string `type:"string"`
 
+	// The KMS key identifier (ARN) used to encrypt Amazon EMR Studio workspace
+	// and notebook files when backed up to Amazon S3.
+	EncryptionKeyArn *string `type:"string"`
+
 	// The ID of the Engine security group associated with the Amazon EMR Studio.
 	// The Engine security group allows inbound network traffic from resources in
 	// the Workspace security group.
 	EngineSecurityGroupId *string `type:"string"`
+
+	// The ARN of the IAM Identity Center instance the Studio application belongs
+	// to.
+	IdcInstanceArn *string `min:"20" type:"string"`
+
+	// Indicates whether the Studio has REQUIRED or OPTIONAL IAM Identity Center
+	// user assignment. If the value is set to REQUIRED, users must be explicitly
+	// assigned to the Studio application to access the Studio.
+	IdcUserAssignment *string `type:"string" enum:"IdcUserAssignment"`
 
 	// Your identity provider's authentication endpoint. Amazon EMR Studio redirects
 	// federated users to this endpoint for authentication when logging in to a
@@ -18201,6 +19208,10 @@ type Studio struct {
 
 	// A list of tags associated with the Amazon EMR Studio.
 	Tags []*Tag `type:"list"`
+
+	// Indicates whether the Studio has Trusted identity propagation enabled. The
+	// default value is false.
+	TrustedIdentityPropagationEnabled *bool `type:"boolean"`
 
 	// The unique access URL of the Amazon EMR Studio.
 	Url *string `type:"string"`
@@ -18260,9 +19271,27 @@ func (s *Studio) SetDescription(v string) *Studio {
 	return s
 }
 
+// SetEncryptionKeyArn sets the EncryptionKeyArn field's value.
+func (s *Studio) SetEncryptionKeyArn(v string) *Studio {
+	s.EncryptionKeyArn = &v
+	return s
+}
+
 // SetEngineSecurityGroupId sets the EngineSecurityGroupId field's value.
 func (s *Studio) SetEngineSecurityGroupId(v string) *Studio {
 	s.EngineSecurityGroupId = &v
+	return s
+}
+
+// SetIdcInstanceArn sets the IdcInstanceArn field's value.
+func (s *Studio) SetIdcInstanceArn(v string) *Studio {
+	s.IdcInstanceArn = &v
+	return s
+}
+
+// SetIdcUserAssignment sets the IdcUserAssignment field's value.
+func (s *Studio) SetIdcUserAssignment(v string) *Studio {
+	s.IdcUserAssignment = &v
 	return s
 }
 
@@ -18314,6 +19343,12 @@ func (s *Studio) SetTags(v []*Tag) *Studio {
 	return s
 }
 
+// SetTrustedIdentityPropagationEnabled sets the TrustedIdentityPropagationEnabled field's value.
+func (s *Studio) SetTrustedIdentityPropagationEnabled(v bool) *Studio {
+	s.TrustedIdentityPropagationEnabled = &v
+	return s
+}
+
 // SetUrl sets the Url field's value.
 func (s *Studio) SetUrl(v string) *Studio {
 	s.Url = &v
@@ -18339,8 +19374,8 @@ func (s *Studio) SetWorkspaceSecurityGroupId(v string) *Studio {
 }
 
 // Details for an Amazon EMR Studio, including ID, Name, VPC, and Description.
-// The details do not include subnets, IAM roles, security groups, or tags associated
-// with the Studio.
+// To fetch additional details such as subnets, IAM roles, security groups,
+// and tags for the Studio, use the DescribeStudio API.
 type StudioSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -18428,9 +19463,137 @@ func (s *StudioSummary) SetVpcId(v string) *StudioSummary {
 	return s
 }
 
+// An instance type that the specified Amazon EMR release supports.
+type SupportedInstanceType struct {
+	_ struct{} `type:"structure"`
+
+	// The CPU architecture, for example X86_64 or AARCH64.
+	Architecture *string `type:"string"`
+
+	// Indicates whether the SupportedInstanceType supports Amazon EBS optimization.
+	EbsOptimizedAvailable *bool `type:"boolean"`
+
+	// Indicates whether the SupportedInstanceType uses Amazon EBS optimization
+	// by default.
+	EbsOptimizedByDefault *bool `type:"boolean"`
+
+	// Indicates whether the SupportedInstanceType only supports Amazon EBS.
+	EbsStorageOnly *bool `type:"boolean"`
+
+	// The Amazon EC2 family and generation for the SupportedInstanceType.
+	InstanceFamilyId *string `type:"string"`
+
+	// Indicates whether the SupportedInstanceType only supports 64-bit architecture.
+	Is64BitsOnly *bool `type:"boolean"`
+
+	// The amount of memory that is available to Amazon EMR from the SupportedInstanceType.
+	// The kernel and hypervisor software consume some memory, so this value might
+	// be lower than the overall memory for the instance type.
+	MemoryGB *float64 `type:"float"`
+
+	// Number of disks for the SupportedInstanceType. This value is 0 for Amazon
+	// EBS-only instance types.
+	NumberOfDisks *int64 `type:"integer"`
+
+	// StorageGB represents the storage capacity of the SupportedInstanceType. This
+	// value is 0 for Amazon EBS-only instance types.
+	StorageGB *int64 `type:"integer"`
+
+	// The Amazon EC2 instance type (http://aws.amazon.com/ec2/instance-types/),
+	// for example m5.xlarge, of the SupportedInstanceType.
+	Type *string `type:"string"`
+
+	// The number of vCPUs available for the SupportedInstanceType.
+	VCPU *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SupportedInstanceType) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SupportedInstanceType) GoString() string {
+	return s.String()
+}
+
+// SetArchitecture sets the Architecture field's value.
+func (s *SupportedInstanceType) SetArchitecture(v string) *SupportedInstanceType {
+	s.Architecture = &v
+	return s
+}
+
+// SetEbsOptimizedAvailable sets the EbsOptimizedAvailable field's value.
+func (s *SupportedInstanceType) SetEbsOptimizedAvailable(v bool) *SupportedInstanceType {
+	s.EbsOptimizedAvailable = &v
+	return s
+}
+
+// SetEbsOptimizedByDefault sets the EbsOptimizedByDefault field's value.
+func (s *SupportedInstanceType) SetEbsOptimizedByDefault(v bool) *SupportedInstanceType {
+	s.EbsOptimizedByDefault = &v
+	return s
+}
+
+// SetEbsStorageOnly sets the EbsStorageOnly field's value.
+func (s *SupportedInstanceType) SetEbsStorageOnly(v bool) *SupportedInstanceType {
+	s.EbsStorageOnly = &v
+	return s
+}
+
+// SetInstanceFamilyId sets the InstanceFamilyId field's value.
+func (s *SupportedInstanceType) SetInstanceFamilyId(v string) *SupportedInstanceType {
+	s.InstanceFamilyId = &v
+	return s
+}
+
+// SetIs64BitsOnly sets the Is64BitsOnly field's value.
+func (s *SupportedInstanceType) SetIs64BitsOnly(v bool) *SupportedInstanceType {
+	s.Is64BitsOnly = &v
+	return s
+}
+
+// SetMemoryGB sets the MemoryGB field's value.
+func (s *SupportedInstanceType) SetMemoryGB(v float64) *SupportedInstanceType {
+	s.MemoryGB = &v
+	return s
+}
+
+// SetNumberOfDisks sets the NumberOfDisks field's value.
+func (s *SupportedInstanceType) SetNumberOfDisks(v int64) *SupportedInstanceType {
+	s.NumberOfDisks = &v
+	return s
+}
+
+// SetStorageGB sets the StorageGB field's value.
+func (s *SupportedInstanceType) SetStorageGB(v int64) *SupportedInstanceType {
+	s.StorageGB = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *SupportedInstanceType) SetType(v string) *SupportedInstanceType {
+	s.Type = &v
+	return s
+}
+
+// SetVCPU sets the VCPU field's value.
+func (s *SupportedInstanceType) SetVCPU(v int64) *SupportedInstanceType {
+	s.VCPU = &v
+	return s
+}
+
 // The list of supported product configurations that allow user-supplied arguments.
-// EMR accepts these arguments and forwards them to the corresponding installation
-// script as bootstrap action arguments.
+// Amazon EMR accepts these arguments and forwards them to the corresponding
+// installation script as bootstrap action arguments.
 type SupportedProductConfig struct {
 	_ struct{} `type:"structure"`
 
@@ -18596,6 +19759,10 @@ type UpdateStudioInput struct {
 	// A detailed description to assign to the Amazon EMR Studio.
 	Description *string `type:"string"`
 
+	// The KMS key identifier (ARN) used to encrypt Amazon EMR Studio workspace
+	// and notebook files when backed up to Amazon S3.
+	EncryptionKeyArn *string `type:"string"`
+
 	// A descriptive name for the Amazon EMR Studio.
 	Name *string `type:"string"`
 
@@ -18652,6 +19819,12 @@ func (s *UpdateStudioInput) SetDefaultS3Location(v string) *UpdateStudioInput {
 // SetDescription sets the Description field's value.
 func (s *UpdateStudioInput) SetDescription(v string) *UpdateStudioInput {
 	s.Description = &v
+	return s
+}
+
+// SetEncryptionKeyArn sets the EncryptionKeyArn field's value.
+func (s *UpdateStudioInput) SetEncryptionKeyArn(v string) *UpdateStudioInput {
+	s.EncryptionKeyArn = &v
 	return s
 }
 
@@ -18862,7 +20035,7 @@ func (s *UsernamePassword) SetUsername(v string) *UsernamePassword {
 }
 
 // EBS volume specifications such as volume type, IOPS, size (GiB) and throughput
-// (MiB/s) that are requested for the EBS volume attached to an EC2 instance
+// (MiB/s) that are requested for the EBS volume attached to an Amazon EC2 instance
 // in the cluster.
 type VolumeSpecification struct {
 	_ struct{} `type:"structure"`
@@ -19202,6 +20375,22 @@ const (
 func ExecutionEngineType_Values() []string {
 	return []string{
 		ExecutionEngineTypeEmr,
+	}
+}
+
+const (
+	// IdcUserAssignmentRequired is a IdcUserAssignment enum value
+	IdcUserAssignmentRequired = "REQUIRED"
+
+	// IdcUserAssignmentOptional is a IdcUserAssignment enum value
+	IdcUserAssignmentOptional = "OPTIONAL"
+)
+
+// IdcUserAssignment_Values returns all elements of the IdcUserAssignment enum
+func IdcUserAssignment_Values() []string {
+	return []string{
+		IdcUserAssignmentRequired,
+		IdcUserAssignmentOptional,
 	}
 }
 
@@ -19635,6 +20824,18 @@ func OnDemandProvisioningAllocationStrategy_Values() []string {
 }
 
 const (
+	// OutputNotebookFormatHtml is a OutputNotebookFormat enum value
+	OutputNotebookFormatHtml = "HTML"
+)
+
+// OutputNotebookFormat_Values returns all elements of the OutputNotebookFormat enum
+func OutputNotebookFormat_Values() []string {
+	return []string{
+		OutputNotebookFormatHtml,
+	}
+}
+
+const (
 	// PlacementGroupStrategySpread is a PlacementGroupStrategy enum value
 	PlacementGroupStrategySpread = "SPREAD"
 
@@ -19709,12 +20910,24 @@ func ScaleDownBehavior_Values() []string {
 const (
 	// SpotProvisioningAllocationStrategyCapacityOptimized is a SpotProvisioningAllocationStrategy enum value
 	SpotProvisioningAllocationStrategyCapacityOptimized = "capacity-optimized"
+
+	// SpotProvisioningAllocationStrategyPriceCapacityOptimized is a SpotProvisioningAllocationStrategy enum value
+	SpotProvisioningAllocationStrategyPriceCapacityOptimized = "price-capacity-optimized"
+
+	// SpotProvisioningAllocationStrategyLowestPrice is a SpotProvisioningAllocationStrategy enum value
+	SpotProvisioningAllocationStrategyLowestPrice = "lowest-price"
+
+	// SpotProvisioningAllocationStrategyDiversified is a SpotProvisioningAllocationStrategy enum value
+	SpotProvisioningAllocationStrategyDiversified = "diversified"
 )
 
 // SpotProvisioningAllocationStrategy_Values returns all elements of the SpotProvisioningAllocationStrategy enum
 func SpotProvisioningAllocationStrategy_Values() []string {
 	return []string{
 		SpotProvisioningAllocationStrategyCapacityOptimized,
+		SpotProvisioningAllocationStrategyPriceCapacityOptimized,
+		SpotProvisioningAllocationStrategyLowestPrice,
+		SpotProvisioningAllocationStrategyDiversified,
 	}
 }
 

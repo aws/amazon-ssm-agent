@@ -25,8 +25,49 @@ func parseTime(layout, value string) *time.Time {
 	return &t
 }
 
+// To retrieve the secret values for a group of secrets listed by name
+// The following example gets the values for three secrets.
+func ExampleSecretsManager_BatchGetSecretValue_shared00() {
+	svc := secretsmanager.New(session.New())
+	input := &secretsmanager.BatchGetSecretValueInput{
+		SecretIdList: []*string{
+			aws.String("MySecret1"),
+			aws.String("MySecret2"),
+			aws.String("MySecret3"),
+		},
+	}
+
+	result, err := svc.BatchGetSecretValue(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case secretsmanager.ErrCodeResourceNotFoundException:
+				fmt.Println(secretsmanager.ErrCodeResourceNotFoundException, aerr.Error())
+			case secretsmanager.ErrCodeInvalidParameterException:
+				fmt.Println(secretsmanager.ErrCodeInvalidParameterException, aerr.Error())
+			case secretsmanager.ErrCodeInvalidRequestException:
+				fmt.Println(secretsmanager.ErrCodeInvalidRequestException, aerr.Error())
+			case secretsmanager.ErrCodeDecryptionFailure:
+				fmt.Println(secretsmanager.ErrCodeDecryptionFailure, aerr.Error())
+			case secretsmanager.ErrCodeInternalServiceError:
+				fmt.Println(secretsmanager.ErrCodeInternalServiceError, aerr.Error())
+			case secretsmanager.ErrCodeInvalidNextTokenException:
+				fmt.Println(secretsmanager.ErrCodeInvalidNextTokenException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To cancel scheduled rotation for a secret
-//
 // The following example shows how to cancel rotation for a secret. The operation sets
 // the RotationEnabled field to false and cancels all scheduled rotations. To resume
 // scheduled rotations, you must re-enable rotation by calling the rotate-secret operation.
@@ -63,7 +104,6 @@ func ExampleSecretsManager_CancelRotateSecret_shared00() {
 }
 
 // To create a basic secret
-//
 // The following example shows how to create a secret. The credentials stored in the
 // encrypted secret value are retrieved from a file on disk named mycreds.json.
 func ExampleSecretsManager_CreateSecret_shared00() {
@@ -114,7 +154,6 @@ func ExampleSecretsManager_CreateSecret_shared00() {
 }
 
 // To delete the resource-based policy attached to a secret
-//
 // The following example shows how to delete the resource-based policy that is attached
 // to a secret.
 func ExampleSecretsManager_DeleteResourcePolicy_shared00() {
@@ -150,7 +189,6 @@ func ExampleSecretsManager_DeleteResourcePolicy_shared00() {
 }
 
 // To delete a secret
-//
 // The following example shows how to delete a secret. The secret stays in your account
 // in a deprecated and inaccessible state until the recovery window ends. After the
 // date and time in the DeletionDate response field has passed, you can no longer recover
@@ -189,7 +227,6 @@ func ExampleSecretsManager_DeleteSecret_shared00() {
 }
 
 // To retrieve the details of a secret
-//
 // The following example shows how to get the details about a secret.
 func ExampleSecretsManager_DescribeSecret_shared00() {
 	svc := secretsmanager.New(session.New())
@@ -222,7 +259,6 @@ func ExampleSecretsManager_DescribeSecret_shared00() {
 }
 
 // To generate a random password
-//
 // The following example shows how to request a randomly generated password. This example
 // includes the optional flags to require spaces and at least one character of each
 // included type. It specifies a length of 20 characters.
@@ -259,7 +295,6 @@ func ExampleSecretsManager_GetRandomPassword_shared00() {
 }
 
 // To retrieve the resource-based policy attached to a secret
-//
 // The following example shows how to retrieve the resource-based policy that is attached
 // to a secret.
 func ExampleSecretsManager_GetResourcePolicy_shared00() {
@@ -295,7 +330,6 @@ func ExampleSecretsManager_GetResourcePolicy_shared00() {
 }
 
 // To retrieve the encrypted secret value of a secret
-//
 // The following example shows how to retrieve a secret string value.
 func ExampleSecretsManager_GetSecretValue_shared00() {
 	svc := secretsmanager.New(session.New())
@@ -332,7 +366,6 @@ func ExampleSecretsManager_GetSecretValue_shared00() {
 }
 
 // To list all of the secret versions associated with a secret
-//
 // The following example shows how to retrieve a list of all of the versions of a secret,
 // including those without any staging labels.
 func ExampleSecretsManager_ListSecretVersionIds_shared00() {
@@ -369,7 +402,6 @@ func ExampleSecretsManager_ListSecretVersionIds_shared00() {
 }
 
 // To list the secrets in your account
-//
 // The following example shows how to list all of the secrets in your account.
 func ExampleSecretsManager_ListSecrets_shared00() {
 	svc := secretsmanager.New(session.New())
@@ -381,6 +413,8 @@ func ExampleSecretsManager_ListSecrets_shared00() {
 			switch aerr.Code() {
 			case secretsmanager.ErrCodeInvalidParameterException:
 				fmt.Println(secretsmanager.ErrCodeInvalidParameterException, aerr.Error())
+			case secretsmanager.ErrCodeInvalidRequestException:
+				fmt.Println(secretsmanager.ErrCodeInvalidRequestException, aerr.Error())
 			case secretsmanager.ErrCodeInvalidNextTokenException:
 				fmt.Println(secretsmanager.ErrCodeInvalidNextTokenException, aerr.Error())
 			case secretsmanager.ErrCodeInternalServiceError:
@@ -400,7 +434,6 @@ func ExampleSecretsManager_ListSecrets_shared00() {
 }
 
 // To add a resource-based policy to a secret
-//
 // The following example shows how to add a resource-based policy to a secret.
 func ExampleSecretsManager_PutResourcePolicy_shared00() {
 	svc := secretsmanager.New(session.New())
@@ -440,7 +473,6 @@ func ExampleSecretsManager_PutResourcePolicy_shared00() {
 }
 
 // To store a secret value in a new version of a secret
-//
 // The following example shows how to create a new version of the secret. Alternatively,
 // you can use the update-secret command.
 func ExampleSecretsManager_PutSecretValue_shared00() {
@@ -486,7 +518,6 @@ func ExampleSecretsManager_PutSecretValue_shared00() {
 }
 
 // Example
-//
 // The following example replicates a secret to eu-west-3. The replica is encrypted
 // with the AWS managed key aws/secretsmanager.
 func ExampleSecretsManager_ReplicateSecretToRegions_shared00() {
@@ -528,7 +559,6 @@ func ExampleSecretsManager_ReplicateSecretToRegions_shared00() {
 }
 
 // To restore a previously deleted secret
-//
 // The following example shows how to restore a secret that you previously scheduled
 // for deletion.
 func ExampleSecretsManager_RestoreSecret_shared00() {
@@ -564,7 +594,6 @@ func ExampleSecretsManager_RestoreSecret_shared00() {
 }
 
 // To configure rotation for a secret
-//
 // The following example configures rotation for a secret using a cron expression. The
 // first rotation happens immediately after the changes are stored in the secret. The
 // rotation schedule is the first and 15th day of every month. The rotation window begins
@@ -607,7 +636,6 @@ func ExampleSecretsManager_RotateSecret_shared00() {
 }
 
 // To request an immediate rotation for a secret
-//
 // The following example requests an immediate invocation of the secret's Lambda rotation
 // function. It assumes that the specified secret already has rotation configured. The
 // rotation function runs asynchronously in the background.
@@ -644,7 +672,6 @@ func ExampleSecretsManager_RotateSecret_shared01() {
 }
 
 // To add tags to a secret
-//
 // The following example shows how to attach two tags each with a Key and Value to a
 // secret. There is no output from this API. To see the result, use the DescribeSecret
 // operation.
@@ -691,7 +718,6 @@ func ExampleSecretsManager_TagResource_shared00() {
 }
 
 // To remove tags from a secret
-//
 // The following example shows how to remove two tags from a secret's metadata. For
 // each, both the tag and the associated value are removed. There is no output from
 // this API. To see the result, use the DescribeSecret operation.
@@ -732,7 +758,6 @@ func ExampleSecretsManager_UntagResource_shared00() {
 }
 
 // To update the description of a secret
-//
 // The following example shows how to modify the description of a secret.
 func ExampleSecretsManager_UpdateSecret_shared00() {
 	svc := secretsmanager.New(session.New())
@@ -781,7 +806,6 @@ func ExampleSecretsManager_UpdateSecret_shared00() {
 }
 
 // To update the KMS key associated with a secret
-//
 // This example shows how to update the KMS customer managed key (CMK) used to encrypt
 // the secret value. The KMS CMK must be in the same region as the secret.
 func ExampleSecretsManager_UpdateSecret_shared01() {
@@ -830,7 +854,6 @@ func ExampleSecretsManager_UpdateSecret_shared01() {
 }
 
 // To create a new version of the encrypted secret value
-//
 // The following example shows how to create a new version of the secret by updating
 // the SecretString field. Alternatively, you can use the put-secret-value operation.
 func ExampleSecretsManager_UpdateSecret_shared02() {
@@ -879,7 +902,6 @@ func ExampleSecretsManager_UpdateSecret_shared02() {
 }
 
 // To add a staging label attached to a version of a secret
-//
 // The following example shows you how to add a staging label to a version of a secret.
 // You can review the results by running the operation ListSecretVersionIds and viewing
 // the VersionStages response field for the affected version.
@@ -920,7 +942,6 @@ func ExampleSecretsManager_UpdateSecretVersionStage_shared00() {
 }
 
 // To delete a staging label attached to a version of a secret
-//
 // The following example shows you how to delete a staging label that is attached to
 // a version of a secret. You can review the results by running the operation ListSecretVersionIds
 // and viewing the VersionStages response field for the affected version.
@@ -961,7 +982,6 @@ func ExampleSecretsManager_UpdateSecretVersionStage_shared01() {
 }
 
 // To move a staging label from one version of a secret to another
-//
 // The following example shows you how to move a staging label that is attached to one
 // version of a secret to a different version. You can review the results by running
 // the operation ListSecretVersionIds and viewing the VersionStages response field for
@@ -1004,7 +1024,6 @@ func ExampleSecretsManager_UpdateSecretVersionStage_shared02() {
 }
 
 // To validate a resource-based policy to a secret
-//
 // The following example shows how to validate a resource-based policy to a secret.
 func ExampleSecretsManager_ValidateResourcePolicy_shared00() {
 	svc := secretsmanager.New(session.New())

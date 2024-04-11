@@ -27,14 +27,13 @@ const opPutAuditEvents = "PutAuditEvents"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutAuditEventsRequest method.
+//	req, resp := client.PutAuditEventsRequest(params)
 //
-//    // Example sending a request using the PutAuditEventsRequest method.
-//    req, resp := client.PutAuditEventsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-data-2021-08-11/PutAuditEvents
 func (c *CloudTrailData) PutAuditEventsRequest(input *PutAuditEventsInput) (req *request.Request, output *PutAuditEventsOutput) {
@@ -68,23 +67,24 @@ func (c *CloudTrailData) PutAuditEventsRequest(input *PutAuditEventsInput) (req 
 // API operation PutAuditEvents for usage and error information.
 //
 // Returned Error Types:
-//   * ChannelInsufficientPermission
-//   The caller's account ID must be the same as the channel owner's account ID.
 //
-//   * ChannelNotFound
-//   The channel could not be found.
+//   - ChannelInsufficientPermission
+//     The caller's account ID must be the same as the channel owner's account ID.
 //
-//   * InvalidChannelARN
-//   The specified channel ARN is not a valid channel ARN.
+//   - ChannelNotFound
+//     The channel could not be found.
 //
-//   * ChannelUnsupportedSchema
-//   The schema type of the event is not supported.
+//   - InvalidChannelARN
+//     The specified channel ARN is not a valid channel ARN.
 //
-//   * DuplicatedAuditEventId
-//   Two or more entries in the request have the same event ID.
+//   - ChannelUnsupportedSchema
+//     The schema type of the event is not supported.
 //
-//   * UnsupportedOperationException
-//   The operation requested is not supported in this region or account.
+//   - DuplicatedAuditEventId
+//     Two or more entries in the request have the same event ID.
+//
+//   - UnsupportedOperationException
+//     The operation requested is not supported in this region or account.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cloudtrail-data-2021-08-11/PutAuditEvents
 func (c *CloudTrailData) PutAuditEvents(input *PutAuditEventsInput) (*PutAuditEventsOutput, error) {

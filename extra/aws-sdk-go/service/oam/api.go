@@ -28,14 +28,13 @@ const opCreateLink = "CreateLink"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateLinkRequest method.
+//	req, resp := client.CreateLinkRequest(params)
 //
-//    // Example sending a request using the CreateLinkRequest method.
-//    req, resp := client.CreateLinkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/CreateLink
 func (c *OAM) CreateLinkRequest(input *CreateLinkInput) (req *request.Request, output *CreateLinkOutput) {
@@ -79,20 +78,21 @@ func (c *OAM) CreateLinkRequest(input *CreateLinkInput) (req *request.Request, o
 // API operation CreateLink for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * MissingRequiredParameterException
-//   A required parameter is missing from the request.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - MissingRequiredParameterException
+//     A required parameter is missing from the request.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/CreateLink
 func (c *OAM) CreateLink(input *CreateLinkInput) (*CreateLinkOutput, error) {
@@ -132,14 +132,13 @@ const opCreateSink = "CreateSink"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSinkRequest method.
+//	req, resp := client.CreateSinkRequest(params)
 //
-//    // Example sending a request using the CreateSinkRequest method.
-//    req, resp := client.CreateSinkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/CreateSink
 func (c *OAM) CreateSinkRequest(input *CreateSinkInput) (req *request.Request, output *CreateSinkOutput) {
@@ -179,20 +178,21 @@ func (c *OAM) CreateSinkRequest(input *CreateSinkInput) (req *request.Request, o
 // API operation CreateSink for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * MissingRequiredParameterException
-//   A required parameter is missing from the request.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * ServiceQuotaExceededException
-//   The request would cause a service quota to be exceeded.
+//   - MissingRequiredParameterException
+//     A required parameter is missing from the request.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - ServiceQuotaExceededException
+//     The request would cause a service quota to be exceeded.
+//
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/CreateSink
 func (c *OAM) CreateSink(input *CreateSinkInput) (*CreateSinkOutput, error) {
@@ -232,14 +232,13 @@ const opDeleteLink = "DeleteLink"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteLinkRequest method.
+//	req, resp := client.DeleteLinkRequest(params)
 //
-//    // Example sending a request using the DeleteLinkRequest method.
-//    req, resp := client.DeleteLinkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/DeleteLink
 func (c *OAM) DeleteLinkRequest(input *DeleteLinkInput) (req *request.Request, output *DeleteLinkOutput) {
@@ -272,17 +271,18 @@ func (c *OAM) DeleteLinkRequest(input *DeleteLinkInput) (req *request.Request, o
 // API operation DeleteLink for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * MissingRequiredParameterException
-//   A required parameter is missing from the request.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - MissingRequiredParameterException
+//     A required parameter is missing from the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/DeleteLink
 func (c *OAM) DeleteLink(input *DeleteLinkInput) (*DeleteLinkOutput, error) {
@@ -322,14 +322,13 @@ const opDeleteSink = "DeleteSink"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSinkRequest method.
+//	req, resp := client.DeleteSinkRequest(params)
 //
-//    // Example sending a request using the DeleteSinkRequest method.
-//    req, resp := client.DeleteSinkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/DeleteSink
 func (c *OAM) DeleteSinkRequest(input *DeleteSinkInput) (req *request.Request, output *DeleteSinkOutput) {
@@ -362,20 +361,21 @@ func (c *OAM) DeleteSinkRequest(input *DeleteSinkInput) (req *request.Request, o
 // API operation DeleteSink for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * ConflictException
-//   A resource was in an inconsistent state during an update or a deletion.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * MissingRequiredParameterException
-//   A required parameter is missing from the request.
+//   - ConflictException
+//     A resource was in an inconsistent state during an update or a deletion.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - MissingRequiredParameterException
+//     A required parameter is missing from the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/DeleteSink
 func (c *OAM) DeleteSink(input *DeleteSinkInput) (*DeleteSinkOutput, error) {
@@ -415,14 +415,13 @@ const opGetLink = "GetLink"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetLinkRequest method.
+//	req, resp := client.GetLinkRequest(params)
 //
-//    // Example sending a request using the GetLinkRequest method.
-//    req, resp := client.GetLinkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/GetLink
 func (c *OAM) GetLinkRequest(input *GetLinkInput) (req *request.Request, output *GetLinkOutput) {
@@ -456,17 +455,18 @@ func (c *OAM) GetLinkRequest(input *GetLinkInput) (req *request.Request, output 
 // API operation GetLink for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * MissingRequiredParameterException
-//   A required parameter is missing from the request.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - MissingRequiredParameterException
+//     A required parameter is missing from the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/GetLink
 func (c *OAM) GetLink(input *GetLinkInput) (*GetLinkOutput, error) {
@@ -506,14 +506,13 @@ const opGetSink = "GetSink"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSinkRequest method.
+//	req, resp := client.GetSinkRequest(params)
 //
-//    // Example sending a request using the GetSinkRequest method.
-//    req, resp := client.GetSinkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/GetSink
 func (c *OAM) GetSinkRequest(input *GetSinkInput) (req *request.Request, output *GetSinkOutput) {
@@ -547,17 +546,18 @@ func (c *OAM) GetSinkRequest(input *GetSinkInput) (req *request.Request, output 
 // API operation GetSink for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * MissingRequiredParameterException
-//   A required parameter is missing from the request.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - MissingRequiredParameterException
+//     A required parameter is missing from the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/GetSink
 func (c *OAM) GetSink(input *GetSinkInput) (*GetSinkOutput, error) {
@@ -597,14 +597,13 @@ const opGetSinkPolicy = "GetSinkPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetSinkPolicyRequest method.
+//	req, resp := client.GetSinkPolicyRequest(params)
 //
-//    // Example sending a request using the GetSinkPolicyRequest method.
-//    req, resp := client.GetSinkPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/GetSinkPolicy
 func (c *OAM) GetSinkPolicyRequest(input *GetSinkPolicyInput) (req *request.Request, output *GetSinkPolicyOutput) {
@@ -637,17 +636,18 @@ func (c *OAM) GetSinkPolicyRequest(input *GetSinkPolicyInput) (req *request.Requ
 // API operation GetSinkPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * MissingRequiredParameterException
-//   A required parameter is missing from the request.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - MissingRequiredParameterException
+//     A required parameter is missing from the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/GetSinkPolicy
 func (c *OAM) GetSinkPolicy(input *GetSinkPolicyInput) (*GetSinkPolicyOutput, error) {
@@ -687,14 +687,13 @@ const opListAttachedLinks = "ListAttachedLinks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAttachedLinksRequest method.
+//	req, resp := client.ListAttachedLinksRequest(params)
 //
-//    // Example sending a request using the ListAttachedLinksRequest method.
-//    req, resp := client.ListAttachedLinksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/ListAttachedLinks
 func (c *OAM) ListAttachedLinksRequest(input *ListAttachedLinksInput) (req *request.Request, output *ListAttachedLinksOutput) {
@@ -737,17 +736,18 @@ func (c *OAM) ListAttachedLinksRequest(input *ListAttachedLinksInput) (req *requ
 // API operation ListAttachedLinks for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * MissingRequiredParameterException
-//   A required parameter is missing from the request.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - MissingRequiredParameterException
+//     A required parameter is missing from the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/ListAttachedLinks
 func (c *OAM) ListAttachedLinks(input *ListAttachedLinksInput) (*ListAttachedLinksOutput, error) {
@@ -779,15 +779,14 @@ func (c *OAM) ListAttachedLinksWithContext(ctx aws.Context, input *ListAttachedL
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAttachedLinks operation.
-//    pageNum := 0
-//    err := client.ListAttachedLinksPages(params,
-//        func(page *oam.ListAttachedLinksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAttachedLinks operation.
+//	pageNum := 0
+//	err := client.ListAttachedLinksPages(params,
+//	    func(page *oam.ListAttachedLinksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *OAM) ListAttachedLinksPages(input *ListAttachedLinksInput, fn func(*ListAttachedLinksOutput, bool) bool) error {
 	return c.ListAttachedLinksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -839,14 +838,13 @@ const opListLinks = "ListLinks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLinksRequest method.
+//	req, resp := client.ListLinksRequest(params)
 //
-//    // Example sending a request using the ListLinksRequest method.
-//    req, resp := client.ListLinksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/ListLinks
 func (c *OAM) ListLinksRequest(input *ListLinksInput) (req *request.Request, output *ListLinksOutput) {
@@ -888,14 +886,15 @@ func (c *OAM) ListLinksRequest(input *ListLinksInput) (req *request.Request, out
 // API operation ListLinks for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/ListLinks
 func (c *OAM) ListLinks(input *ListLinksInput) (*ListLinksOutput, error) {
@@ -927,15 +926,14 @@ func (c *OAM) ListLinksWithContext(ctx aws.Context, input *ListLinksInput, opts 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLinks operation.
-//    pageNum := 0
-//    err := client.ListLinksPages(params,
-//        func(page *oam.ListLinksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLinks operation.
+//	pageNum := 0
+//	err := client.ListLinksPages(params,
+//	    func(page *oam.ListLinksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *OAM) ListLinksPages(input *ListLinksInput, fn func(*ListLinksOutput, bool) bool) error {
 	return c.ListLinksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -987,14 +985,13 @@ const opListSinks = "ListSinks"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSinksRequest method.
+//	req, resp := client.ListSinksRequest(params)
 //
-//    // Example sending a request using the ListSinksRequest method.
-//    req, resp := client.ListSinksRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/ListSinks
 func (c *OAM) ListSinksRequest(input *ListSinksInput) (req *request.Request, output *ListSinksOutput) {
@@ -1032,14 +1029,15 @@ func (c *OAM) ListSinksRequest(input *ListSinksInput) (req *request.Request, out
 // API operation ListSinks for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/ListSinks
 func (c *OAM) ListSinks(input *ListSinksInput) (*ListSinksOutput, error) {
@@ -1071,15 +1069,14 @@ func (c *OAM) ListSinksWithContext(ctx aws.Context, input *ListSinksInput, opts 
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSinks operation.
-//    pageNum := 0
-//    err := client.ListSinksPages(params,
-//        func(page *oam.ListSinksOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSinks operation.
+//	pageNum := 0
+//	err := client.ListSinksPages(params,
+//	    func(page *oam.ListSinksOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *OAM) ListSinksPages(input *ListSinksInput, fn func(*ListSinksOutput, bool) bool) error {
 	return c.ListSinksPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1131,14 +1128,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/ListTagsForResource
 func (c *OAM) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1170,11 +1166,12 @@ func (c *OAM) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/ListTagsForResource
 func (c *OAM) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1214,14 +1211,13 @@ const opPutSinkPolicy = "PutSinkPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutSinkPolicyRequest method.
+//	req, resp := client.PutSinkPolicyRequest(params)
 //
-//    // Example sending a request using the PutSinkPolicyRequest method.
-//    req, resp := client.PutSinkPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/PutSinkPolicy
 func (c *OAM) PutSinkPolicyRequest(input *PutSinkPolicyInput) (req *request.Request, output *PutSinkPolicyOutput) {
@@ -1250,11 +1246,13 @@ func (c *OAM) PutSinkPolicyRequest(input *PutSinkPolicyInput) (req *request.Requ
 // You can also use a sink policy to limit the types of data that is shared.
 // The three types that you can allow or deny are:
 //
-//    * Metrics - Specify with AWS::CloudWatch::Metric
+//   - Metrics - Specify with AWS::CloudWatch::Metric
 //
-//    * Log groups - Specify with AWS::Logs::LogGroup
+//   - Log groups - Specify with AWS::Logs::LogGroup
 //
-//    * Traces - Specify with AWS::XRay::Trace
+//   - Traces - Specify with AWS::XRay::Trace
+//
+//   - Application Insights - Applications - Specify with AWS::ApplicationInsights::Application
 //
 // See the examples in this section to see how to specify permitted source accounts
 // and data types.
@@ -1267,17 +1265,18 @@ func (c *OAM) PutSinkPolicyRequest(input *PutSinkPolicyInput) (req *request.Requ
 // API operation PutSinkPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * MissingRequiredParameterException
-//   A required parameter is missing from the request.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - MissingRequiredParameterException
+//     A required parameter is missing from the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/PutSinkPolicy
 func (c *OAM) PutSinkPolicy(input *PutSinkPolicyInput) (*PutSinkPolicyOutput, error) {
@@ -1317,14 +1316,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/TagResource
 func (c *OAM) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -1377,14 +1375,15 @@ func (c *OAM) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * TooManyTagsException
-//   A resource can have no more than 50 tags.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - TooManyTagsException
+//     A resource can have no more than 50 tags.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/TagResource
 func (c *OAM) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -1424,14 +1423,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/UntagResource
 func (c *OAM) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -1468,11 +1466,12 @@ func (c *OAM) UntagResourceRequest(input *UntagResourceInput) (req *request.Requ
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ValidationException
-//   The value of a parameter in the request caused an error.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - ValidationException
+//     The value of a parameter in the request caused an error.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/UntagResource
 func (c *OAM) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -1512,14 +1511,13 @@ const opUpdateLink = "UpdateLink"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateLinkRequest method.
+//	req, resp := client.UpdateLinkRequest(params)
 //
-//    // Example sending a request using the UpdateLinkRequest method.
-//    req, resp := client.UpdateLinkRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/UpdateLink
 func (c *OAM) UpdateLinkRequest(input *UpdateLinkInput) (req *request.Request, output *UpdateLinkOutput) {
@@ -1554,17 +1552,18 @@ func (c *OAM) UpdateLinkRequest(input *UpdateLinkInput) (req *request.Request, o
 // API operation UpdateLink for usage and error information.
 //
 // Returned Error Types:
-//   * InternalServiceFault
-//   Unexpected error while processing the request. Retry the request.
 //
-//   * MissingRequiredParameterException
-//   A required parameter is missing from the request.
+//   - InternalServiceFault
+//     Unexpected error while processing the request. Retry the request.
 //
-//   * InvalidParameterException
-//   A parameter is specified incorrectly.
+//   - MissingRequiredParameterException
+//     A required parameter is missing from the request.
 //
-//   * ResourceNotFoundException
-//   The request references a resource that does not exist.
+//   - InvalidParameterException
+//     A parameter is specified incorrectly.
+//
+//   - ResourceNotFoundException
+//     The request references a resource that does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/oam-2022-06-10/UpdateLink
 func (c *OAM) UpdateLink(input *UpdateLinkInput) (*UpdateLinkOutput, error) {
@@ -3940,6 +3939,12 @@ const (
 
 	// ResourceTypeAwsXrayTrace is a ResourceType enum value
 	ResourceTypeAwsXrayTrace = "AWS::XRay::Trace"
+
+	// ResourceTypeAwsApplicationInsightsApplication is a ResourceType enum value
+	ResourceTypeAwsApplicationInsightsApplication = "AWS::ApplicationInsights::Application"
+
+	// ResourceTypeAwsInternetMonitorMonitor is a ResourceType enum value
+	ResourceTypeAwsInternetMonitorMonitor = "AWS::InternetMonitor::Monitor"
 )
 
 // ResourceType_Values returns all elements of the ResourceType enum
@@ -3948,5 +3953,7 @@ func ResourceType_Values() []string {
 		ResourceTypeAwsCloudWatchMetric,
 		ResourceTypeAwsLogsLogGroup,
 		ResourceTypeAwsXrayTrace,
+		ResourceTypeAwsApplicationInsightsApplication,
+		ResourceTypeAwsInternetMonitorMonitor,
 	}
 }

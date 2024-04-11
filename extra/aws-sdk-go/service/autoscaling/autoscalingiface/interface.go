@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // Auto Scaling.
-//    func myFunc(svc autoscalingiface.AutoScalingAPI) bool {
-//        // Make svc.AttachInstances request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// Auto Scaling.
+//	func myFunc(svc autoscalingiface.AutoScalingAPI) bool {
+//	    // Make svc.AttachInstances request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := autoscaling.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := autoscaling.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockAutoScalingClient struct {
-//        autoscalingiface.AutoScalingAPI
-//    }
-//    func (m *mockAutoScalingClient) AttachInstances(input *autoscaling.AttachInstancesInput) (*autoscaling.AttachInstancesOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockAutoScalingClient struct {
+//	    autoscalingiface.AutoScalingAPI
+//	}
+//	func (m *mockAutoScalingClient) AttachInstances(input *autoscaling.AttachInstancesInput) (*autoscaling.AttachInstancesOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockAutoScalingClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockAutoScalingClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -166,6 +166,9 @@ type AutoScalingAPI interface {
 	DescribeInstanceRefreshesWithContext(aws.Context, *autoscaling.DescribeInstanceRefreshesInput, ...request.Option) (*autoscaling.DescribeInstanceRefreshesOutput, error)
 	DescribeInstanceRefreshesRequest(*autoscaling.DescribeInstanceRefreshesInput) (*request.Request, *autoscaling.DescribeInstanceRefreshesOutput)
 
+	DescribeInstanceRefreshesPages(*autoscaling.DescribeInstanceRefreshesInput, func(*autoscaling.DescribeInstanceRefreshesOutput, bool) bool) error
+	DescribeInstanceRefreshesPagesWithContext(aws.Context, *autoscaling.DescribeInstanceRefreshesInput, func(*autoscaling.DescribeInstanceRefreshesOutput, bool) bool, ...request.Option) error
+
 	DescribeLaunchConfigurations(*autoscaling.DescribeLaunchConfigurationsInput) (*autoscaling.DescribeLaunchConfigurationsOutput, error)
 	DescribeLaunchConfigurationsWithContext(aws.Context, *autoscaling.DescribeLaunchConfigurationsInput, ...request.Option) (*autoscaling.DescribeLaunchConfigurationsOutput, error)
 	DescribeLaunchConfigurationsRequest(*autoscaling.DescribeLaunchConfigurationsInput) (*request.Request, *autoscaling.DescribeLaunchConfigurationsOutput)
@@ -185,9 +188,15 @@ type AutoScalingAPI interface {
 	DescribeLoadBalancerTargetGroupsWithContext(aws.Context, *autoscaling.DescribeLoadBalancerTargetGroupsInput, ...request.Option) (*autoscaling.DescribeLoadBalancerTargetGroupsOutput, error)
 	DescribeLoadBalancerTargetGroupsRequest(*autoscaling.DescribeLoadBalancerTargetGroupsInput) (*request.Request, *autoscaling.DescribeLoadBalancerTargetGroupsOutput)
 
+	DescribeLoadBalancerTargetGroupsPages(*autoscaling.DescribeLoadBalancerTargetGroupsInput, func(*autoscaling.DescribeLoadBalancerTargetGroupsOutput, bool) bool) error
+	DescribeLoadBalancerTargetGroupsPagesWithContext(aws.Context, *autoscaling.DescribeLoadBalancerTargetGroupsInput, func(*autoscaling.DescribeLoadBalancerTargetGroupsOutput, bool) bool, ...request.Option) error
+
 	DescribeLoadBalancers(*autoscaling.DescribeLoadBalancersInput) (*autoscaling.DescribeLoadBalancersOutput, error)
 	DescribeLoadBalancersWithContext(aws.Context, *autoscaling.DescribeLoadBalancersInput, ...request.Option) (*autoscaling.DescribeLoadBalancersOutput, error)
 	DescribeLoadBalancersRequest(*autoscaling.DescribeLoadBalancersInput) (*request.Request, *autoscaling.DescribeLoadBalancersOutput)
+
+	DescribeLoadBalancersPages(*autoscaling.DescribeLoadBalancersInput, func(*autoscaling.DescribeLoadBalancersOutput, bool) bool) error
+	DescribeLoadBalancersPagesWithContext(aws.Context, *autoscaling.DescribeLoadBalancersInput, func(*autoscaling.DescribeLoadBalancersOutput, bool) bool, ...request.Option) error
 
 	DescribeMetricCollectionTypes(*autoscaling.DescribeMetricCollectionTypesInput) (*autoscaling.DescribeMetricCollectionTypesOutput, error)
 	DescribeMetricCollectionTypesWithContext(aws.Context, *autoscaling.DescribeMetricCollectionTypesInput, ...request.Option) (*autoscaling.DescribeMetricCollectionTypesOutput, error)
@@ -246,6 +255,9 @@ type AutoScalingAPI interface {
 	DescribeWarmPool(*autoscaling.DescribeWarmPoolInput) (*autoscaling.DescribeWarmPoolOutput, error)
 	DescribeWarmPoolWithContext(aws.Context, *autoscaling.DescribeWarmPoolInput, ...request.Option) (*autoscaling.DescribeWarmPoolOutput, error)
 	DescribeWarmPoolRequest(*autoscaling.DescribeWarmPoolInput) (*request.Request, *autoscaling.DescribeWarmPoolOutput)
+
+	DescribeWarmPoolPages(*autoscaling.DescribeWarmPoolInput, func(*autoscaling.DescribeWarmPoolOutput, bool) bool) error
+	DescribeWarmPoolPagesWithContext(aws.Context, *autoscaling.DescribeWarmPoolInput, func(*autoscaling.DescribeWarmPoolOutput, bool) bool, ...request.Option) error
 
 	DetachInstances(*autoscaling.DetachInstancesInput) (*autoscaling.DetachInstancesOutput, error)
 	DetachInstancesWithContext(aws.Context, *autoscaling.DetachInstancesInput, ...request.Option) (*autoscaling.DetachInstancesOutput, error)

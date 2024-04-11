@@ -29,14 +29,13 @@ const opBatchCheckLayerAvailability = "BatchCheckLayerAvailability"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchCheckLayerAvailabilityRequest method.
+//	req, resp := client.BatchCheckLayerAvailabilityRequest(params)
 //
-//    // Example sending a request using the BatchCheckLayerAvailabilityRequest method.
-//    req, resp := client.BatchCheckLayerAvailabilityRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/BatchCheckLayerAvailability
 func (c *ECRPublic) BatchCheckLayerAvailabilityRequest(input *BatchCheckLayerAvailabilityInput) (req *request.Request, output *BatchCheckLayerAvailabilityOutput) {
@@ -74,22 +73,23 @@ func (c *ECRPublic) BatchCheckLayerAvailabilityRequest(input *BatchCheckLayerAva
 // API operation BatchCheckLayerAvailability for usage and error information.
 //
 // Returned Error Types:
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * RegistryNotFoundException
-//   The registry doesn't exist.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RegistryNotFoundException
+//     The registry doesn't exist.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/BatchCheckLayerAvailability
 func (c *ECRPublic) BatchCheckLayerAvailability(input *BatchCheckLayerAvailabilityInput) (*BatchCheckLayerAvailabilityOutput, error) {
@@ -129,14 +129,13 @@ const opBatchDeleteImage = "BatchDeleteImage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the BatchDeleteImageRequest method.
+//	req, resp := client.BatchDeleteImageRequest(params)
 //
-//    // Example sending a request using the BatchDeleteImageRequest method.
-//    req, resp := client.BatchDeleteImageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/BatchDeleteImage
 func (c *ECRPublic) BatchDeleteImageRequest(input *BatchDeleteImageInput) (req *request.Request, output *BatchDeleteImageOutput) {
@@ -175,19 +174,20 @@ func (c *ECRPublic) BatchDeleteImageRequest(input *BatchDeleteImageInput) (req *
 // API operation BatchDeleteImage for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/BatchDeleteImage
 func (c *ECRPublic) BatchDeleteImage(input *BatchDeleteImageInput) (*BatchDeleteImageOutput, error) {
@@ -227,14 +227,13 @@ const opCompleteLayerUpload = "CompleteLayerUpload"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CompleteLayerUploadRequest method.
+//	req, resp := client.CompleteLayerUploadRequest(params)
 //
-//    // Example sending a request using the CompleteLayerUploadRequest method.
-//    req, resp := client.CompleteLayerUploadRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/CompleteLayerUpload
 func (c *ECRPublic) CompleteLayerUploadRequest(input *CompleteLayerUploadInput) (req *request.Request, output *CompleteLayerUploadOutput) {
@@ -274,39 +273,40 @@ func (c *ECRPublic) CompleteLayerUploadRequest(input *CompleteLayerUploadInput) 
 // API operation CompleteLayerUpload for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * UploadNotFoundException
-//   The upload can't be found, or the specified upload ID isn't valid for this
-//   repository.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * InvalidLayerException
-//   The layer digest calculation performed by Amazon ECR when the image layer
-//   doesn't match the digest specified.
+//   - UploadNotFoundException
+//     The upload can't be found, or the specified upload ID isn't valid for this
+//     repository.
 //
-//   * LayerPartTooSmallException
-//   Layer parts must be at least 5 MiB in size.
+//   - InvalidLayerException
+//     The layer digest calculation performed by Amazon ECR when the image layer
+//     doesn't match the digest specified.
 //
-//   * LayerAlreadyExistsException
-//   The image layer already exists in the associated repository.
+//   - LayerPartTooSmallException
+//     Layer parts must be at least 5 MiB in size.
 //
-//   * EmptyUploadException
-//   The specified layer upload doesn't contain any layer parts.
+//   - LayerAlreadyExistsException
+//     The image layer already exists in the associated repository.
 //
-//   * RegistryNotFoundException
-//   The registry doesn't exist.
+//   - EmptyUploadException
+//     The specified layer upload doesn't contain any layer parts.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RegistryNotFoundException
+//     The registry doesn't exist.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/CompleteLayerUpload
 func (c *ECRPublic) CompleteLayerUpload(input *CompleteLayerUploadInput) (*CompleteLayerUploadOutput, error) {
@@ -346,14 +346,13 @@ const opCreateRepository = "CreateRepository"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRepositoryRequest method.
+//	req, resp := client.CreateRepositoryRequest(params)
 //
-//    // Example sending a request using the CreateRepositoryRequest method.
-//    req, resp := client.CreateRepositoryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/CreateRepository
 func (c *ECRPublic) CreateRepositoryRequest(input *CreateRepositoryInput) (req *request.Request, output *CreateRepositoryOutput) {
@@ -386,32 +385,33 @@ func (c *ECRPublic) CreateRepositoryRequest(input *CreateRepositoryInput) (req *
 // API operation CreateRepository for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * InvalidTagParameterException
-//   An invalid parameter has been specified. Tag keys can have a maximum character
-//   length of 128 characters, and tag values can have a maximum length of 256
-//   characters.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * TooManyTagsException
-//   The list of tags on the repository is over the limit. The maximum number
-//   of tags that can be applied to a repository is 50.
+//   - InvalidTagParameterException
+//     An invalid parameter has been specified. Tag keys can have a maximum character
+//     length of 128 characters, and tag values can have a maximum length of 256
+//     characters.
 //
-//   * RepositoryAlreadyExistsException
-//   The specified repository already exists in the specified registry.
+//   - TooManyTagsException
+//     The list of tags on the repository is over the limit. The maximum number
+//     of tags that can be applied to a repository is 50.
 //
-//   * LimitExceededException
-//   The operation didn't succeed because it would have exceeded a service limit
-//   for your account. For more information, see Amazon ECR Service Quotas (https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html)
-//   in the Amazon Elastic Container Registry User Guide.
+//   - RepositoryAlreadyExistsException
+//     The specified repository already exists in the specified registry.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - LimitExceededException
+//     The operation didn't succeed because it would have exceeded a service limit
+//     for your account. For more information, see Amazon ECR Service Quotas (https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html)
+//     in the Amazon Elastic Container Registry User Guide.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/CreateRepository
 func (c *ECRPublic) CreateRepository(input *CreateRepositoryInput) (*CreateRepositoryOutput, error) {
@@ -451,14 +451,13 @@ const opDeleteRepository = "DeleteRepository"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRepositoryRequest method.
+//	req, resp := client.DeleteRepositoryRequest(params)
 //
-//    // Example sending a request using the DeleteRepositoryRequest method.
-//    req, resp := client.DeleteRepositoryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DeleteRepository
 func (c *ECRPublic) DeleteRepositoryRequest(input *DeleteRepositoryInput) (req *request.Request, output *DeleteRepositoryOutput) {
@@ -492,23 +491,24 @@ func (c *ECRPublic) DeleteRepositoryRequest(input *DeleteRepositoryInput) (req *
 // API operation DeleteRepository for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * RepositoryNotEmptyException
-//   The specified repository contains images. To delete a repository that contains
-//   images, you must force the deletion with the force parameter.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryNotEmptyException
+//     The specified repository contains images. To delete a repository that contains
+//     images, you must force the deletion with the force parameter.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DeleteRepository
 func (c *ECRPublic) DeleteRepository(input *DeleteRepositoryInput) (*DeleteRepositoryOutput, error) {
@@ -548,14 +548,13 @@ const opDeleteRepositoryPolicy = "DeleteRepositoryPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRepositoryPolicyRequest method.
+//	req, resp := client.DeleteRepositoryPolicyRequest(params)
 //
-//    // Example sending a request using the DeleteRepositoryPolicyRequest method.
-//    req, resp := client.DeleteRepositoryPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DeleteRepositoryPolicy
 func (c *ECRPublic) DeleteRepositoryPolicyRequest(input *DeleteRepositoryPolicyInput) (req *request.Request, output *DeleteRepositoryPolicyOutput) {
@@ -586,23 +585,24 @@ func (c *ECRPublic) DeleteRepositoryPolicyRequest(input *DeleteRepositoryPolicyI
 // API operation DeleteRepositoryPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * RepositoryPolicyNotFoundException
-//   The specified repository and registry combination doesn't have an associated
-//   repository policy.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryPolicyNotFoundException
+//     The specified repository and registry combination doesn't have an associated
+//     repository policy.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DeleteRepositoryPolicy
 func (c *ECRPublic) DeleteRepositoryPolicy(input *DeleteRepositoryPolicyInput) (*DeleteRepositoryPolicyOutput, error) {
@@ -642,14 +642,13 @@ const opDescribeImageTags = "DescribeImageTags"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeImageTagsRequest method.
+//	req, resp := client.DescribeImageTagsRequest(params)
 //
-//    // Example sending a request using the DescribeImageTagsRequest method.
-//    req, resp := client.DescribeImageTagsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DescribeImageTags
 func (c *ECRPublic) DescribeImageTagsRequest(input *DescribeImageTagsInput) (req *request.Request, output *DescribeImageTagsOutput) {
@@ -686,19 +685,20 @@ func (c *ECRPublic) DescribeImageTagsRequest(input *DescribeImageTagsInput) (req
 // API operation DescribeImageTags for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DescribeImageTags
 func (c *ECRPublic) DescribeImageTags(input *DescribeImageTagsInput) (*DescribeImageTagsOutput, error) {
@@ -730,15 +730,14 @@ func (c *ECRPublic) DescribeImageTagsWithContext(ctx aws.Context, input *Describ
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeImageTags operation.
-//    pageNum := 0
-//    err := client.DescribeImageTagsPages(params,
-//        func(page *ecrpublic.DescribeImageTagsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeImageTags operation.
+//	pageNum := 0
+//	err := client.DescribeImageTagsPages(params,
+//	    func(page *ecrpublic.DescribeImageTagsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ECRPublic) DescribeImageTagsPages(input *DescribeImageTagsInput, fn func(*DescribeImageTagsOutput, bool) bool) error {
 	return c.DescribeImageTagsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -790,14 +789,13 @@ const opDescribeImages = "DescribeImages"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeImagesRequest method.
+//	req, resp := client.DescribeImagesRequest(params)
 //
-//    // Example sending a request using the DescribeImagesRequest method.
-//    req, resp := client.DescribeImagesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DescribeImages
 func (c *ECRPublic) DescribeImagesRequest(input *DescribeImagesInput) (req *request.Request, output *DescribeImagesOutput) {
@@ -840,22 +838,23 @@ func (c *ECRPublic) DescribeImagesRequest(input *DescribeImagesInput) (req *requ
 // API operation DescribeImages for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * ImageNotFoundException
-//   The image requested doesn't exist in the specified repository.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - ImageNotFoundException
+//     The image requested doesn't exist in the specified repository.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DescribeImages
 func (c *ECRPublic) DescribeImages(input *DescribeImagesInput) (*DescribeImagesOutput, error) {
@@ -887,15 +886,14 @@ func (c *ECRPublic) DescribeImagesWithContext(ctx aws.Context, input *DescribeIm
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeImages operation.
-//    pageNum := 0
-//    err := client.DescribeImagesPages(params,
-//        func(page *ecrpublic.DescribeImagesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeImages operation.
+//	pageNum := 0
+//	err := client.DescribeImagesPages(params,
+//	    func(page *ecrpublic.DescribeImagesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ECRPublic) DescribeImagesPages(input *DescribeImagesInput, fn func(*DescribeImagesOutput, bool) bool) error {
 	return c.DescribeImagesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -947,14 +945,13 @@ const opDescribeRegistries = "DescribeRegistries"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeRegistriesRequest method.
+//	req, resp := client.DescribeRegistriesRequest(params)
 //
-//    // Example sending a request using the DescribeRegistriesRequest method.
-//    req, resp := client.DescribeRegistriesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DescribeRegistries
 func (c *ECRPublic) DescribeRegistriesRequest(input *DescribeRegistriesInput) (req *request.Request, output *DescribeRegistriesOutput) {
@@ -991,15 +988,16 @@ func (c *ECRPublic) DescribeRegistriesRequest(input *DescribeRegistriesInput) (r
 // API operation DescribeRegistries for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
+//
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DescribeRegistries
 func (c *ECRPublic) DescribeRegistries(input *DescribeRegistriesInput) (*DescribeRegistriesOutput, error) {
@@ -1031,15 +1029,14 @@ func (c *ECRPublic) DescribeRegistriesWithContext(ctx aws.Context, input *Descri
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeRegistries operation.
-//    pageNum := 0
-//    err := client.DescribeRegistriesPages(params,
-//        func(page *ecrpublic.DescribeRegistriesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeRegistries operation.
+//	pageNum := 0
+//	err := client.DescribeRegistriesPages(params,
+//	    func(page *ecrpublic.DescribeRegistriesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ECRPublic) DescribeRegistriesPages(input *DescribeRegistriesInput, fn func(*DescribeRegistriesOutput, bool) bool) error {
 	return c.DescribeRegistriesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1091,14 +1088,13 @@ const opDescribeRepositories = "DescribeRepositories"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeRepositoriesRequest method.
+//	req, resp := client.DescribeRepositoriesRequest(params)
 //
-//    // Example sending a request using the DescribeRepositoriesRequest method.
-//    req, resp := client.DescribeRepositoriesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DescribeRepositories
 func (c *ECRPublic) DescribeRepositoriesRequest(input *DescribeRepositoriesInput) (req *request.Request, output *DescribeRepositoriesOutput) {
@@ -1135,19 +1131,20 @@ func (c *ECRPublic) DescribeRepositoriesRequest(input *DescribeRepositoriesInput
 // API operation DescribeRepositories for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/DescribeRepositories
 func (c *ECRPublic) DescribeRepositories(input *DescribeRepositoriesInput) (*DescribeRepositoriesOutput, error) {
@@ -1179,15 +1176,14 @@ func (c *ECRPublic) DescribeRepositoriesWithContext(ctx aws.Context, input *Desc
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a DescribeRepositories operation.
-//    pageNum := 0
-//    err := client.DescribeRepositoriesPages(params,
-//        func(page *ecrpublic.DescribeRepositoriesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a DescribeRepositories operation.
+//	pageNum := 0
+//	err := client.DescribeRepositoriesPages(params,
+//	    func(page *ecrpublic.DescribeRepositoriesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ECRPublic) DescribeRepositoriesPages(input *DescribeRepositoriesInput, fn func(*DescribeRepositoriesOutput, bool) bool) error {
 	return c.DescribeRepositoriesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1239,14 +1235,13 @@ const opGetAuthorizationToken = "GetAuthorizationToken"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAuthorizationTokenRequest method.
+//	req, resp := client.GetAuthorizationTokenRequest(params)
 //
-//    // Example sending a request using the GetAuthorizationTokenRequest method.
-//    req, resp := client.GetAuthorizationTokenRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/GetAuthorizationToken
 func (c *ECRPublic) GetAuthorizationTokenRequest(input *GetAuthorizationTokenInput) (req *request.Request, output *GetAuthorizationTokenOutput) {
@@ -1281,15 +1276,16 @@ func (c *ECRPublic) GetAuthorizationTokenRequest(input *GetAuthorizationTokenInp
 // API operation GetAuthorizationToken for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/GetAuthorizationToken
 func (c *ECRPublic) GetAuthorizationToken(input *GetAuthorizationTokenInput) (*GetAuthorizationTokenOutput, error) {
@@ -1329,14 +1325,13 @@ const opGetRegistryCatalogData = "GetRegistryCatalogData"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRegistryCatalogDataRequest method.
+//	req, resp := client.GetRegistryCatalogDataRequest(params)
 //
-//    // Example sending a request using the GetRegistryCatalogDataRequest method.
-//    req, resp := client.GetRegistryCatalogDataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/GetRegistryCatalogData
 func (c *ECRPublic) GetRegistryCatalogDataRequest(input *GetRegistryCatalogDataInput) (req *request.Request, output *GetRegistryCatalogDataOutput) {
@@ -1367,11 +1362,12 @@ func (c *ECRPublic) GetRegistryCatalogDataRequest(input *GetRegistryCatalogDataI
 // API operation GetRegistryCatalogData for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/GetRegistryCatalogData
 func (c *ECRPublic) GetRegistryCatalogData(input *GetRegistryCatalogDataInput) (*GetRegistryCatalogDataOutput, error) {
@@ -1411,14 +1407,13 @@ const opGetRepositoryCatalogData = "GetRepositoryCatalogData"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRepositoryCatalogDataRequest method.
+//	req, resp := client.GetRepositoryCatalogDataRequest(params)
 //
-//    // Example sending a request using the GetRepositoryCatalogDataRequest method.
-//    req, resp := client.GetRepositoryCatalogDataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/GetRepositoryCatalogData
 func (c *ECRPublic) GetRepositoryCatalogDataRequest(input *GetRepositoryCatalogDataInput) (req *request.Request, output *GetRepositoryCatalogDataOutput) {
@@ -1450,22 +1445,23 @@ func (c *ECRPublic) GetRepositoryCatalogDataRequest(input *GetRepositoryCatalogD
 // API operation GetRepositoryCatalogData for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryCatalogDataNotFoundException
-//   The repository catalog data doesn't exist.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - RepositoryCatalogDataNotFoundException
+//     The repository catalog data doesn't exist.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/GetRepositoryCatalogData
 func (c *ECRPublic) GetRepositoryCatalogData(input *GetRepositoryCatalogDataInput) (*GetRepositoryCatalogDataOutput, error) {
@@ -1505,14 +1501,13 @@ const opGetRepositoryPolicy = "GetRepositoryPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRepositoryPolicyRequest method.
+//	req, resp := client.GetRepositoryPolicyRequest(params)
 //
-//    // Example sending a request using the GetRepositoryPolicyRequest method.
-//    req, resp := client.GetRepositoryPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/GetRepositoryPolicy
 func (c *ECRPublic) GetRepositoryPolicyRequest(input *GetRepositoryPolicyInput) (req *request.Request, output *GetRepositoryPolicyOutput) {
@@ -1543,23 +1538,24 @@ func (c *ECRPublic) GetRepositoryPolicyRequest(input *GetRepositoryPolicyInput) 
 // API operation GetRepositoryPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * RepositoryPolicyNotFoundException
-//   The specified repository and registry combination doesn't have an associated
-//   repository policy.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryPolicyNotFoundException
+//     The specified repository and registry combination doesn't have an associated
+//     repository policy.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/GetRepositoryPolicy
 func (c *ECRPublic) GetRepositoryPolicy(input *GetRepositoryPolicyInput) (*GetRepositoryPolicyOutput, error) {
@@ -1599,14 +1595,13 @@ const opInitiateLayerUpload = "InitiateLayerUpload"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the InitiateLayerUploadRequest method.
+//	req, resp := client.InitiateLayerUploadRequest(params)
 //
-//    // Example sending a request using the InitiateLayerUploadRequest method.
-//    req, resp := client.InitiateLayerUploadRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/InitiateLayerUpload
 func (c *ECRPublic) InitiateLayerUploadRequest(input *InitiateLayerUploadInput) (req *request.Request, output *InitiateLayerUploadOutput) {
@@ -1645,22 +1640,23 @@ func (c *ECRPublic) InitiateLayerUploadRequest(input *InitiateLayerUploadInput) 
 // API operation InitiateLayerUpload for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * RegistryNotFoundException
-//   The registry doesn't exist.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RegistryNotFoundException
+//     The registry doesn't exist.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/InitiateLayerUpload
 func (c *ECRPublic) InitiateLayerUpload(input *InitiateLayerUploadInput) (*InitiateLayerUploadOutput, error) {
@@ -1700,14 +1696,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/ListTagsForResource
 func (c *ECRPublic) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -1738,19 +1733,20 @@ func (c *ECRPublic) ListTagsForResourceRequest(input *ListTagsForResourceInput) 
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
+//
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/ListTagsForResource
 func (c *ECRPublic) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -1790,14 +1786,13 @@ const opPutImage = "PutImage"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutImageRequest method.
+//	req, resp := client.PutImageRequest(params)
 //
-//    // Example sending a request using the PutImageRequest method.
-//    req, resp := client.PutImageRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/PutImage
 func (c *ECRPublic) PutImageRequest(input *PutImageInput) (req *request.Request, output *PutImageOutput) {
@@ -1837,46 +1832,47 @@ func (c *ECRPublic) PutImageRequest(input *PutImageInput) (req *request.Request,
 // API operation PutImage for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * ImageAlreadyExistsException
-//   The specified image has already been pushed, and there were no changes to
-//   the manifest or image tag after the last push.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * LayersNotFoundException
-//   The specified layers can't be found, or the specified layer isn't valid for
-//   this repository.
+//   - ImageAlreadyExistsException
+//     The specified image has already been pushed, and there were no changes to
+//     the manifest or image tag after the last push.
 //
-//   * ReferencedImagesNotFoundException
-//   The manifest list is referencing an image that doesn't exist.
+//   - LayersNotFoundException
+//     The specified layers can't be found, or the specified layer isn't valid for
+//     this repository.
 //
-//   * LimitExceededException
-//   The operation didn't succeed because it would have exceeded a service limit
-//   for your account. For more information, see Amazon ECR Service Quotas (https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html)
-//   in the Amazon Elastic Container Registry User Guide.
+//   - ReferencedImagesNotFoundException
+//     The manifest list is referencing an image that doesn't exist.
 //
-//   * ImageTagAlreadyExistsException
-//   The specified image is tagged with a tag that already exists. The repository
-//   is configured for tag immutability.
+//   - LimitExceededException
+//     The operation didn't succeed because it would have exceeded a service limit
+//     for your account. For more information, see Amazon ECR Service Quotas (https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html)
+//     in the Amazon Elastic Container Registry User Guide.
 //
-//   * ImageDigestDoesNotMatchException
-//   The specified image digest doesn't match the digest that Amazon ECR calculated
-//   for the image.
+//   - ImageTagAlreadyExistsException
+//     The specified image is tagged with a tag that already exists. The repository
+//     is configured for tag immutability.
 //
-//   * RegistryNotFoundException
-//   The registry doesn't exist.
+//   - ImageDigestDoesNotMatchException
+//     The specified image digest doesn't match the digest that Amazon ECR calculated
+//     for the image.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RegistryNotFoundException
+//     The registry doesn't exist.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/PutImage
 func (c *ECRPublic) PutImage(input *PutImageInput) (*PutImageOutput, error) {
@@ -1916,14 +1912,13 @@ const opPutRegistryCatalogData = "PutRegistryCatalogData"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutRegistryCatalogDataRequest method.
+//	req, resp := client.PutRegistryCatalogDataRequest(params)
 //
-//    // Example sending a request using the PutRegistryCatalogDataRequest method.
-//    req, resp := client.PutRegistryCatalogDataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/PutRegistryCatalogData
 func (c *ECRPublic) PutRegistryCatalogDataRequest(input *PutRegistryCatalogDataInput) (req *request.Request, output *PutRegistryCatalogDataOutput) {
@@ -1954,15 +1949,16 @@ func (c *ECRPublic) PutRegistryCatalogDataRequest(input *PutRegistryCatalogDataI
 // API operation PutRegistryCatalogData for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/PutRegistryCatalogData
 func (c *ECRPublic) PutRegistryCatalogData(input *PutRegistryCatalogDataInput) (*PutRegistryCatalogDataOutput, error) {
@@ -2002,14 +1998,13 @@ const opPutRepositoryCatalogData = "PutRepositoryCatalogData"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutRepositoryCatalogDataRequest method.
+//	req, resp := client.PutRepositoryCatalogDataRequest(params)
 //
-//    // Example sending a request using the PutRepositoryCatalogDataRequest method.
-//    req, resp := client.PutRepositoryCatalogDataRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/PutRepositoryCatalogData
 func (c *ECRPublic) PutRepositoryCatalogDataRequest(input *PutRepositoryCatalogDataInput) (req *request.Request, output *PutRepositoryCatalogDataOutput) {
@@ -2040,19 +2035,20 @@ func (c *ECRPublic) PutRepositoryCatalogDataRequest(input *PutRepositoryCatalogD
 // API operation PutRepositoryCatalogData for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/PutRepositoryCatalogData
 func (c *ECRPublic) PutRepositoryCatalogData(input *PutRepositoryCatalogDataInput) (*PutRepositoryCatalogDataOutput, error) {
@@ -2092,14 +2088,13 @@ const opSetRepositoryPolicy = "SetRepositoryPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SetRepositoryPolicyRequest method.
+//	req, resp := client.SetRepositoryPolicyRequest(params)
 //
-//    // Example sending a request using the SetRepositoryPolicyRequest method.
-//    req, resp := client.SetRepositoryPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/SetRepositoryPolicy
 func (c *ECRPublic) SetRepositoryPolicyRequest(input *SetRepositoryPolicyInput) (req *request.Request, output *SetRepositoryPolicyOutput) {
@@ -2133,19 +2128,20 @@ func (c *ECRPublic) SetRepositoryPolicyRequest(input *SetRepositoryPolicyInput) 
 // API operation SetRepositoryPolicy for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/SetRepositoryPolicy
 func (c *ECRPublic) SetRepositoryPolicy(input *SetRepositoryPolicyInput) (*SetRepositoryPolicyOutput, error) {
@@ -2185,14 +2181,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/TagResource
 func (c *ECRPublic) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2227,28 +2222,29 @@ func (c *ECRPublic) TagResourceRequest(input *TagResourceInput) (req *request.Re
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
 //
-//   * InvalidTagParameterException
-//   An invalid parameter has been specified. Tag keys can have a maximum character
-//   length of 128 characters, and tag values can have a maximum length of 256
-//   characters.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * TooManyTagsException
-//   The list of tags on the repository is over the limit. The maximum number
-//   of tags that can be applied to a repository is 50.
+//   - InvalidTagParameterException
+//     An invalid parameter has been specified. Tag keys can have a maximum character
+//     length of 128 characters, and tag values can have a maximum length of 256
+//     characters.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - TooManyTagsException
+//     The list of tags on the repository is over the limit. The maximum number
+//     of tags that can be applied to a repository is 50.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
+//
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/TagResource
 func (c *ECRPublic) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2288,14 +2284,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/UntagResource
 func (c *ECRPublic) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2327,28 +2322,29 @@ func (c *ECRPublic) UntagResourceRequest(input *UntagResourceInput) (req *reques
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
 //
-//   * InvalidTagParameterException
-//   An invalid parameter has been specified. Tag keys can have a maximum character
-//   length of 128 characters, and tag values can have a maximum length of 256
-//   characters.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * TooManyTagsException
-//   The list of tags on the repository is over the limit. The maximum number
-//   of tags that can be applied to a repository is 50.
+//   - InvalidTagParameterException
+//     An invalid parameter has been specified. Tag keys can have a maximum character
+//     length of 128 characters, and tag values can have a maximum length of 256
+//     characters.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - TooManyTagsException
+//     The list of tags on the repository is over the limit. The maximum number
+//     of tags that can be applied to a repository is 50.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
+//
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/UntagResource
 func (c *ECRPublic) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2388,14 +2384,13 @@ const opUploadLayerPart = "UploadLayerPart"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UploadLayerPartRequest method.
+//	req, resp := client.UploadLayerPartRequest(params)
 //
-//    // Example sending a request using the UploadLayerPartRequest method.
-//    req, resp := client.UploadLayerPartRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/UploadLayerPart
 func (c *ECRPublic) UploadLayerPartRequest(input *UploadLayerPartInput) (req *request.Request, output *UploadLayerPartOutput) {
@@ -2434,35 +2429,36 @@ func (c *ECRPublic) UploadLayerPartRequest(input *UploadLayerPartInput) (req *re
 // API operation UploadLayerPart for usage and error information.
 //
 // Returned Error Types:
-//   * ServerException
-//   These errors are usually caused by a server-side issue.
 //
-//   * InvalidParameterException
-//   The specified parameter is invalid. Review the available parameters for the
-//   API request.
+//   - ServerException
+//     These errors are usually caused by a server-side issue.
 //
-//   * InvalidLayerPartException
-//   The layer part size isn't valid, or the first byte specified isn't consecutive
-//   to the last byte of a previous layer part upload.
+//   - InvalidParameterException
+//     The specified parameter is invalid. Review the available parameters for the
+//     API request.
 //
-//   * RepositoryNotFoundException
-//   The specified repository can't be found. Check the spelling of the specified
-//   repository and ensure that you're performing operations on the correct registry.
+//   - InvalidLayerPartException
+//     The layer part size isn't valid, or the first byte specified isn't consecutive
+//     to the last byte of a previous layer part upload.
 //
-//   * UploadNotFoundException
-//   The upload can't be found, or the specified upload ID isn't valid for this
-//   repository.
+//   - RepositoryNotFoundException
+//     The specified repository can't be found. Check the spelling of the specified
+//     repository and ensure that you're performing operations on the correct registry.
 //
-//   * LimitExceededException
-//   The operation didn't succeed because it would have exceeded a service limit
-//   for your account. For more information, see Amazon ECR Service Quotas (https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html)
-//   in the Amazon Elastic Container Registry User Guide.
+//   - UploadNotFoundException
+//     The upload can't be found, or the specified upload ID isn't valid for this
+//     repository.
 //
-//   * RegistryNotFoundException
-//   The registry doesn't exist.
+//   - LimitExceededException
+//     The operation didn't succeed because it would have exceeded a service limit
+//     for your account. For more information, see Amazon ECR Service Quotas (https://docs.aws.amazon.com/AmazonECR/latest/userguide/service-quotas.html)
+//     in the Amazon Elastic Container Registry User Guide.
 //
-//   * UnsupportedCommandException
-//   The action isn't supported in this Region.
+//   - RegistryNotFoundException
+//     The registry doesn't exist.
+//
+//   - UnsupportedCommandException
+//     The action isn't supported in this Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/ecr-public-2020-10-30/UploadLayerPart
 func (c *ECRPublic) UploadLayerPart(input *UploadLayerPartInput) (*UploadLayerPartOutput, error) {

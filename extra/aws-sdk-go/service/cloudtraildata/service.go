@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a CloudTrailData client from just a session.
-//     svc := cloudtraildata.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a CloudTrailData client with additional configuration
-//     svc := cloudtraildata.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a CloudTrailData client from just a session.
+//	svc := cloudtraildata.New(mySession)
+//
+//	// Create a CloudTrailData client with additional configuration
+//	svc := cloudtraildata.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *CloudTrailData {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

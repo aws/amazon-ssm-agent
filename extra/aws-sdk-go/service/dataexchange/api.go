@@ -29,14 +29,13 @@ const opCancelJob = "CancelJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CancelJobRequest method.
+//	req, resp := client.CancelJobRequest(params)
 //
-//    // Example sending a request using the CancelJobRequest method.
-//    req, resp := client.CancelJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/CancelJob
 func (c *DataExchange) CancelJobRequest(input *CancelJobInput) (req *request.Request, output *CancelJobOutput) {
@@ -69,21 +68,22 @@ func (c *DataExchange) CancelJobRequest(input *CancelJobInput) (req *request.Req
 // API operation CancelJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ConflictException
-//   The request couldn't be completed because it conflicted with the current
-//   state of the resource.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ConflictException
+//     The request couldn't be completed because it conflicted with the current
+//     state of the resource.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/CancelJob
 func (c *DataExchange) CancelJob(input *CancelJobInput) (*CancelJobOutput, error) {
@@ -123,14 +123,13 @@ const opCreateDataSet = "CreateDataSet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateDataSetRequest method.
+//	req, resp := client.CreateDataSetRequest(params)
 //
-//    // Example sending a request using the CreateDataSetRequest method.
-//    req, resp := client.CreateDataSetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/CreateDataSet
 func (c *DataExchange) CreateDataSetRequest(input *CreateDataSetInput) (req *request.Request, output *CreateDataSetOutput) {
@@ -161,20 +160,21 @@ func (c *DataExchange) CreateDataSetRequest(input *CreateDataSetInput) (req *req
 // API operation CreateDataSet for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceLimitExceededException
-//   The request has exceeded the quotas imposed by the service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ServiceLimitExceededException
+//     The request has exceeded the quotas imposed by the service.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/CreateDataSet
 func (c *DataExchange) CreateDataSet(input *CreateDataSetInput) (*CreateDataSetOutput, error) {
@@ -214,14 +214,13 @@ const opCreateEventAction = "CreateEventAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateEventActionRequest method.
+//	req, resp := client.CreateEventActionRequest(params)
 //
-//    // Example sending a request using the CreateEventActionRequest method.
-//    req, resp := client.CreateEventActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/CreateEventAction
 func (c *DataExchange) CreateEventActionRequest(input *CreateEventActionInput) (req *request.Request, output *CreateEventActionOutput) {
@@ -252,20 +251,21 @@ func (c *DataExchange) CreateEventActionRequest(input *CreateEventActionInput) (
 // API operation CreateEventAction for usage and error information.
 //
 // Returned Error Types:
-//   * ServiceLimitExceededException
-//   The request has exceeded the quotas imposed by the service.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ServiceLimitExceededException
+//     The request has exceeded the quotas imposed by the service.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/CreateEventAction
 func (c *DataExchange) CreateEventAction(input *CreateEventActionInput) (*CreateEventActionOutput, error) {
@@ -305,14 +305,13 @@ const opCreateJob = "CreateJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateJobRequest method.
+//	req, resp := client.CreateJobRequest(params)
 //
-//    // Example sending a request using the CreateJobRequest method.
-//    req, resp := client.CreateJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/CreateJob
 func (c *DataExchange) CreateJobRequest(input *CreateJobInput) (req *request.Request, output *CreateJobOutput) {
@@ -343,24 +342,25 @@ func (c *DataExchange) CreateJobRequest(input *CreateJobInput) (req *request.Req
 // API operation CreateJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request couldn't be completed because it conflicted with the current
-//   state of the resource.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ConflictException
+//     The request couldn't be completed because it conflicted with the current
+//     state of the resource.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/CreateJob
 func (c *DataExchange) CreateJob(input *CreateJobInput) (*CreateJobOutput, error) {
@@ -400,14 +400,13 @@ const opCreateRevision = "CreateRevision"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateRevisionRequest method.
+//	req, resp := client.CreateRevisionRequest(params)
 //
-//    // Example sending a request using the CreateRevisionRequest method.
-//    req, resp := client.CreateRevisionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/CreateRevision
 func (c *DataExchange) CreateRevisionRequest(input *CreateRevisionInput) (req *request.Request, output *CreateRevisionOutput) {
@@ -438,20 +437,21 @@ func (c *DataExchange) CreateRevisionRequest(input *CreateRevisionInput) (req *r
 // API operation CreateRevision for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/CreateRevision
 func (c *DataExchange) CreateRevision(input *CreateRevisionInput) (*CreateRevisionOutput, error) {
@@ -491,14 +491,13 @@ const opDeleteAsset = "DeleteAsset"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteAssetRequest method.
+//	req, resp := client.DeleteAssetRequest(params)
 //
-//    // Example sending a request using the DeleteAssetRequest method.
-//    req, resp := client.DeleteAssetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/DeleteAsset
 func (c *DataExchange) DeleteAssetRequest(input *DeleteAssetInput) (req *request.Request, output *DeleteAssetOutput) {
@@ -530,24 +529,25 @@ func (c *DataExchange) DeleteAssetRequest(input *DeleteAssetInput) (req *request
 // API operation DeleteAsset for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request couldn't be completed because it conflicted with the current
-//   state of the resource.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ConflictException
+//     The request couldn't be completed because it conflicted with the current
+//     state of the resource.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/DeleteAsset
 func (c *DataExchange) DeleteAsset(input *DeleteAssetInput) (*DeleteAssetOutput, error) {
@@ -587,14 +587,13 @@ const opDeleteDataSet = "DeleteDataSet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteDataSetRequest method.
+//	req, resp := client.DeleteDataSetRequest(params)
 //
-//    // Example sending a request using the DeleteDataSetRequest method.
-//    req, resp := client.DeleteDataSetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/DeleteDataSet
 func (c *DataExchange) DeleteDataSetRequest(input *DeleteDataSetInput) (req *request.Request, output *DeleteDataSetOutput) {
@@ -626,24 +625,25 @@ func (c *DataExchange) DeleteDataSetRequest(input *DeleteDataSetInput) (req *req
 // API operation DeleteDataSet for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request couldn't be completed because it conflicted with the current
-//   state of the resource.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ConflictException
+//     The request couldn't be completed because it conflicted with the current
+//     state of the resource.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/DeleteDataSet
 func (c *DataExchange) DeleteDataSet(input *DeleteDataSetInput) (*DeleteDataSetOutput, error) {
@@ -683,14 +683,13 @@ const opDeleteEventAction = "DeleteEventAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteEventActionRequest method.
+//	req, resp := client.DeleteEventActionRequest(params)
 //
-//    // Example sending a request using the DeleteEventActionRequest method.
-//    req, resp := client.DeleteEventActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/DeleteEventAction
 func (c *DataExchange) DeleteEventActionRequest(input *DeleteEventActionInput) (req *request.Request, output *DeleteEventActionOutput) {
@@ -722,17 +721,18 @@ func (c *DataExchange) DeleteEventActionRequest(input *DeleteEventActionInput) (
 // API operation DeleteEventAction for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/DeleteEventAction
 func (c *DataExchange) DeleteEventAction(input *DeleteEventActionInput) (*DeleteEventActionOutput, error) {
@@ -772,14 +772,13 @@ const opDeleteRevision = "DeleteRevision"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteRevisionRequest method.
+//	req, resp := client.DeleteRevisionRequest(params)
 //
-//    // Example sending a request using the DeleteRevisionRequest method.
-//    req, resp := client.DeleteRevisionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/DeleteRevision
 func (c *DataExchange) DeleteRevisionRequest(input *DeleteRevisionInput) (req *request.Request, output *DeleteRevisionOutput) {
@@ -811,24 +810,25 @@ func (c *DataExchange) DeleteRevisionRequest(input *DeleteRevisionInput) (req *r
 // API operation DeleteRevision for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request couldn't be completed because it conflicted with the current
-//   state of the resource.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ConflictException
+//     The request couldn't be completed because it conflicted with the current
+//     state of the resource.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/DeleteRevision
 func (c *DataExchange) DeleteRevision(input *DeleteRevisionInput) (*DeleteRevisionOutput, error) {
@@ -868,14 +868,13 @@ const opGetAsset = "GetAsset"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAssetRequest method.
+//	req, resp := client.GetAssetRequest(params)
 //
-//    // Example sending a request using the GetAssetRequest method.
-//    req, resp := client.GetAssetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/GetAsset
 func (c *DataExchange) GetAssetRequest(input *GetAssetInput) (req *request.Request, output *GetAssetOutput) {
@@ -906,17 +905,18 @@ func (c *DataExchange) GetAssetRequest(input *GetAssetInput) (req *request.Reque
 // API operation GetAsset for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/GetAsset
 func (c *DataExchange) GetAsset(input *GetAssetInput) (*GetAssetOutput, error) {
@@ -956,14 +956,13 @@ const opGetDataSet = "GetDataSet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetDataSetRequest method.
+//	req, resp := client.GetDataSetRequest(params)
 //
-//    // Example sending a request using the GetDataSetRequest method.
-//    req, resp := client.GetDataSetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/GetDataSet
 func (c *DataExchange) GetDataSetRequest(input *GetDataSetInput) (req *request.Request, output *GetDataSetOutput) {
@@ -994,17 +993,18 @@ func (c *DataExchange) GetDataSetRequest(input *GetDataSetInput) (req *request.R
 // API operation GetDataSet for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/GetDataSet
 func (c *DataExchange) GetDataSet(input *GetDataSetInput) (*GetDataSetOutput, error) {
@@ -1044,14 +1044,13 @@ const opGetEventAction = "GetEventAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetEventActionRequest method.
+//	req, resp := client.GetEventActionRequest(params)
 //
-//    // Example sending a request using the GetEventActionRequest method.
-//    req, resp := client.GetEventActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/GetEventAction
 func (c *DataExchange) GetEventActionRequest(input *GetEventActionInput) (req *request.Request, output *GetEventActionOutput) {
@@ -1082,17 +1081,18 @@ func (c *DataExchange) GetEventActionRequest(input *GetEventActionInput) (req *r
 // API operation GetEventAction for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/GetEventAction
 func (c *DataExchange) GetEventAction(input *GetEventActionInput) (*GetEventActionOutput, error) {
@@ -1132,14 +1132,13 @@ const opGetJob = "GetJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetJobRequest method.
+//	req, resp := client.GetJobRequest(params)
 //
-//    // Example sending a request using the GetJobRequest method.
-//    req, resp := client.GetJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/GetJob
 func (c *DataExchange) GetJobRequest(input *GetJobInput) (req *request.Request, output *GetJobOutput) {
@@ -1170,17 +1169,18 @@ func (c *DataExchange) GetJobRequest(input *GetJobInput) (req *request.Request, 
 // API operation GetJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/GetJob
 func (c *DataExchange) GetJob(input *GetJobInput) (*GetJobOutput, error) {
@@ -1220,14 +1220,13 @@ const opGetRevision = "GetRevision"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetRevisionRequest method.
+//	req, resp := client.GetRevisionRequest(params)
 //
-//    // Example sending a request using the GetRevisionRequest method.
-//    req, resp := client.GetRevisionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/GetRevision
 func (c *DataExchange) GetRevisionRequest(input *GetRevisionInput) (req *request.Request, output *GetRevisionOutput) {
@@ -1258,17 +1257,18 @@ func (c *DataExchange) GetRevisionRequest(input *GetRevisionInput) (req *request
 // API operation GetRevision for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/GetRevision
 func (c *DataExchange) GetRevision(input *GetRevisionInput) (*GetRevisionOutput, error) {
@@ -1308,14 +1308,13 @@ const opListDataSetRevisions = "ListDataSetRevisions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDataSetRevisionsRequest method.
+//	req, resp := client.ListDataSetRevisionsRequest(params)
 //
-//    // Example sending a request using the ListDataSetRevisionsRequest method.
-//    req, resp := client.ListDataSetRevisionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/ListDataSetRevisions
 func (c *DataExchange) ListDataSetRevisionsRequest(input *ListDataSetRevisionsInput) (req *request.Request, output *ListDataSetRevisionsOutput) {
@@ -1353,17 +1352,18 @@ func (c *DataExchange) ListDataSetRevisionsRequest(input *ListDataSetRevisionsIn
 // API operation ListDataSetRevisions for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/ListDataSetRevisions
 func (c *DataExchange) ListDataSetRevisions(input *ListDataSetRevisionsInput) (*ListDataSetRevisionsOutput, error) {
@@ -1395,15 +1395,14 @@ func (c *DataExchange) ListDataSetRevisionsWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDataSetRevisions operation.
-//    pageNum := 0
-//    err := client.ListDataSetRevisionsPages(params,
-//        func(page *dataexchange.ListDataSetRevisionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDataSetRevisions operation.
+//	pageNum := 0
+//	err := client.ListDataSetRevisionsPages(params,
+//	    func(page *dataexchange.ListDataSetRevisionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *DataExchange) ListDataSetRevisionsPages(input *ListDataSetRevisionsInput, fn func(*ListDataSetRevisionsOutput, bool) bool) error {
 	return c.ListDataSetRevisionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1455,14 +1454,13 @@ const opListDataSets = "ListDataSets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListDataSetsRequest method.
+//	req, resp := client.ListDataSetsRequest(params)
 //
-//    // Example sending a request using the ListDataSetsRequest method.
-//    req, resp := client.ListDataSetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/ListDataSets
 func (c *DataExchange) ListDataSetsRequest(input *ListDataSetsInput) (req *request.Request, output *ListDataSetsOutput) {
@@ -1501,17 +1499,18 @@ func (c *DataExchange) ListDataSetsRequest(input *ListDataSetsInput) (req *reque
 // API operation ListDataSets for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/ListDataSets
 func (c *DataExchange) ListDataSets(input *ListDataSetsInput) (*ListDataSetsOutput, error) {
@@ -1543,15 +1542,14 @@ func (c *DataExchange) ListDataSetsWithContext(ctx aws.Context, input *ListDataS
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListDataSets operation.
-//    pageNum := 0
-//    err := client.ListDataSetsPages(params,
-//        func(page *dataexchange.ListDataSetsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListDataSets operation.
+//	pageNum := 0
+//	err := client.ListDataSetsPages(params,
+//	    func(page *dataexchange.ListDataSetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *DataExchange) ListDataSetsPages(input *ListDataSetsInput, fn func(*ListDataSetsOutput, bool) bool) error {
 	return c.ListDataSetsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1603,14 +1601,13 @@ const opListEventActions = "ListEventActions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListEventActionsRequest method.
+//	req, resp := client.ListEventActionsRequest(params)
 //
-//    // Example sending a request using the ListEventActionsRequest method.
-//    req, resp := client.ListEventActionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/ListEventActions
 func (c *DataExchange) ListEventActionsRequest(input *ListEventActionsInput) (req *request.Request, output *ListEventActionsOutput) {
@@ -1647,17 +1644,18 @@ func (c *DataExchange) ListEventActionsRequest(input *ListEventActionsInput) (re
 // API operation ListEventActions for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/ListEventActions
 func (c *DataExchange) ListEventActions(input *ListEventActionsInput) (*ListEventActionsOutput, error) {
@@ -1689,15 +1687,14 @@ func (c *DataExchange) ListEventActionsWithContext(ctx aws.Context, input *ListE
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListEventActions operation.
-//    pageNum := 0
-//    err := client.ListEventActionsPages(params,
-//        func(page *dataexchange.ListEventActionsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListEventActions operation.
+//	pageNum := 0
+//	err := client.ListEventActionsPages(params,
+//	    func(page *dataexchange.ListEventActionsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *DataExchange) ListEventActionsPages(input *ListEventActionsInput, fn func(*ListEventActionsOutput, bool) bool) error {
 	return c.ListEventActionsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1749,14 +1746,13 @@ const opListJobs = "ListJobs"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListJobsRequest method.
+//	req, resp := client.ListJobsRequest(params)
 //
-//    // Example sending a request using the ListJobsRequest method.
-//    req, resp := client.ListJobsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/ListJobs
 func (c *DataExchange) ListJobsRequest(input *ListJobsInput) (req *request.Request, output *ListJobsOutput) {
@@ -1793,17 +1789,18 @@ func (c *DataExchange) ListJobsRequest(input *ListJobsInput) (req *request.Reque
 // API operation ListJobs for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/ListJobs
 func (c *DataExchange) ListJobs(input *ListJobsInput) (*ListJobsOutput, error) {
@@ -1835,15 +1832,14 @@ func (c *DataExchange) ListJobsWithContext(ctx aws.Context, input *ListJobsInput
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListJobs operation.
-//    pageNum := 0
-//    err := client.ListJobsPages(params,
-//        func(page *dataexchange.ListJobsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListJobs operation.
+//	pageNum := 0
+//	err := client.ListJobsPages(params,
+//	    func(page *dataexchange.ListJobsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *DataExchange) ListJobsPages(input *ListJobsInput, fn func(*ListJobsOutput, bool) bool) error {
 	return c.ListJobsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1895,14 +1891,13 @@ const opListRevisionAssets = "ListRevisionAssets"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListRevisionAssetsRequest method.
+//	req, resp := client.ListRevisionAssetsRequest(params)
 //
-//    // Example sending a request using the ListRevisionAssetsRequest method.
-//    req, resp := client.ListRevisionAssetsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/ListRevisionAssets
 func (c *DataExchange) ListRevisionAssetsRequest(input *ListRevisionAssetsInput) (req *request.Request, output *ListRevisionAssetsOutput) {
@@ -1940,17 +1935,18 @@ func (c *DataExchange) ListRevisionAssetsRequest(input *ListRevisionAssetsInput)
 // API operation ListRevisionAssets for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/ListRevisionAssets
 func (c *DataExchange) ListRevisionAssets(input *ListRevisionAssetsInput) (*ListRevisionAssetsOutput, error) {
@@ -1982,15 +1978,14 @@ func (c *DataExchange) ListRevisionAssetsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListRevisionAssets operation.
-//    pageNum := 0
-//    err := client.ListRevisionAssetsPages(params,
-//        func(page *dataexchange.ListRevisionAssetsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListRevisionAssets operation.
+//	pageNum := 0
+//	err := client.ListRevisionAssetsPages(params,
+//	    func(page *dataexchange.ListRevisionAssetsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *DataExchange) ListRevisionAssetsPages(input *ListRevisionAssetsInput, fn func(*ListRevisionAssetsOutput, bool) bool) error {
 	return c.ListRevisionAssetsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2042,14 +2037,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/ListTagsForResource
 func (c *DataExchange) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2116,14 +2110,13 @@ const opRevokeRevision = "RevokeRevision"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RevokeRevisionRequest method.
+//	req, resp := client.RevokeRevisionRequest(params)
 //
-//    // Example sending a request using the RevokeRevisionRequest method.
-//    req, resp := client.RevokeRevisionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/RevokeRevision
 func (c *DataExchange) RevokeRevisionRequest(input *RevokeRevisionInput) (req *request.Request, output *RevokeRevisionOutput) {
@@ -2154,24 +2147,25 @@ func (c *DataExchange) RevokeRevisionRequest(input *RevokeRevisionInput) (req *r
 // API operation RevokeRevision for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request couldn't be completed because it conflicted with the current
-//   state of the resource.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ConflictException
+//     The request couldn't be completed because it conflicted with the current
+//     state of the resource.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/RevokeRevision
 func (c *DataExchange) RevokeRevision(input *RevokeRevisionInput) (*RevokeRevisionOutput, error) {
@@ -2211,14 +2205,13 @@ const opSendApiAsset = "SendApiAsset"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SendApiAssetRequest method.
+//	req, resp := client.SendApiAssetRequest(params)
 //
-//    // Example sending a request using the SendApiAssetRequest method.
-//    req, resp := client.SendApiAssetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/SendApiAsset
 func (c *DataExchange) SendApiAssetRequest(input *SendApiAssetInput) (req *request.Request, output *SendApiAssetOutput) {
@@ -2252,20 +2245,21 @@ func (c *DataExchange) SendApiAssetRequest(input *SendApiAssetInput) (req *reque
 // API operation SendApiAsset for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/SendApiAsset
 func (c *DataExchange) SendApiAsset(input *SendApiAssetInput) (*SendApiAssetOutput, error) {
@@ -2289,6 +2283,102 @@ func (c *DataExchange) SendApiAssetWithContext(ctx aws.Context, input *SendApiAs
 	return out, req.Send()
 }
 
+const opSendDataSetNotification = "SendDataSetNotification"
+
+// SendDataSetNotificationRequest generates a "aws/request.Request" representing the
+// client's request for the SendDataSetNotification operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SendDataSetNotification for more information on using the SendDataSetNotification
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the SendDataSetNotificationRequest method.
+//	req, resp := client.SendDataSetNotificationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/SendDataSetNotification
+func (c *DataExchange) SendDataSetNotificationRequest(input *SendDataSetNotificationInput) (req *request.Request, output *SendDataSetNotificationOutput) {
+	op := &request.Operation{
+		Name:       opSendDataSetNotification,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/data-sets/{DataSetId}/notification",
+	}
+
+	if input == nil {
+		input = &SendDataSetNotificationInput{}
+	}
+
+	output = &SendDataSetNotificationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// SendDataSetNotification API operation for AWS Data Exchange.
+//
+// The type of event associated with the data set.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Data Exchange's
+// API operation SendDataSetNotification for usage and error information.
+//
+// Returned Error Types:
+//
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
+//
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
+//
+//   - AccessDeniedException
+//     Access to the resource is denied.
+//
+//   - ConflictException
+//     The request couldn't be completed because it conflicted with the current
+//     state of the resource.
+//
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/SendDataSetNotification
+func (c *DataExchange) SendDataSetNotification(input *SendDataSetNotificationInput) (*SendDataSetNotificationOutput, error) {
+	req, out := c.SendDataSetNotificationRequest(input)
+	return out, req.Send()
+}
+
+// SendDataSetNotificationWithContext is the same as SendDataSetNotification with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SendDataSetNotification for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DataExchange) SendDataSetNotificationWithContext(ctx aws.Context, input *SendDataSetNotificationInput, opts ...request.Option) (*SendDataSetNotificationOutput, error) {
+	req, out := c.SendDataSetNotificationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartJob = "StartJob"
 
 // StartJobRequest generates a "aws/request.Request" representing the
@@ -2305,14 +2395,13 @@ const opStartJob = "StartJob"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartJobRequest method.
+//	req, resp := client.StartJobRequest(params)
 //
-//    // Example sending a request using the StartJobRequest method.
-//    req, resp := client.StartJobRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/StartJob
 func (c *DataExchange) StartJobRequest(input *StartJobInput) (req *request.Request, output *StartJobOutput) {
@@ -2344,24 +2433,25 @@ func (c *DataExchange) StartJobRequest(input *StartJobInput) (req *request.Reque
 // API operation StartJob for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request couldn't be completed because it conflicted with the current
-//   state of the resource.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ConflictException
+//     The request couldn't be completed because it conflicted with the current
+//     state of the resource.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/StartJob
 func (c *DataExchange) StartJob(input *StartJobInput) (*StartJobOutput, error) {
@@ -2401,14 +2491,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/TagResource
 func (c *DataExchange) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2476,14 +2565,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/UntagResource
 func (c *DataExchange) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2551,14 +2639,13 @@ const opUpdateAsset = "UpdateAsset"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAssetRequest method.
+//	req, resp := client.UpdateAssetRequest(params)
 //
-//    // Example sending a request using the UpdateAssetRequest method.
-//    req, resp := client.UpdateAssetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/UpdateAsset
 func (c *DataExchange) UpdateAssetRequest(input *UpdateAssetInput) (req *request.Request, output *UpdateAssetOutput) {
@@ -2589,24 +2676,25 @@ func (c *DataExchange) UpdateAssetRequest(input *UpdateAssetInput) (req *request
 // API operation UpdateAsset for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request couldn't be completed because it conflicted with the current
-//   state of the resource.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ConflictException
+//     The request couldn't be completed because it conflicted with the current
+//     state of the resource.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/UpdateAsset
 func (c *DataExchange) UpdateAsset(input *UpdateAssetInput) (*UpdateAssetOutput, error) {
@@ -2646,14 +2734,13 @@ const opUpdateDataSet = "UpdateDataSet"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateDataSetRequest method.
+//	req, resp := client.UpdateDataSetRequest(params)
 //
-//    // Example sending a request using the UpdateDataSetRequest method.
-//    req, resp := client.UpdateDataSetRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/UpdateDataSet
 func (c *DataExchange) UpdateDataSetRequest(input *UpdateDataSetInput) (req *request.Request, output *UpdateDataSetOutput) {
@@ -2684,20 +2771,21 @@ func (c *DataExchange) UpdateDataSetRequest(input *UpdateDataSetInput) (req *req
 // API operation UpdateDataSet for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/UpdateDataSet
 func (c *DataExchange) UpdateDataSet(input *UpdateDataSetInput) (*UpdateDataSetOutput, error) {
@@ -2737,14 +2825,13 @@ const opUpdateEventAction = "UpdateEventAction"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateEventActionRequest method.
+//	req, resp := client.UpdateEventActionRequest(params)
 //
-//    // Example sending a request using the UpdateEventActionRequest method.
-//    req, resp := client.UpdateEventActionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/UpdateEventAction
 func (c *DataExchange) UpdateEventActionRequest(input *UpdateEventActionInput) (req *request.Request, output *UpdateEventActionOutput) {
@@ -2775,20 +2862,21 @@ func (c *DataExchange) UpdateEventActionRequest(input *UpdateEventActionInput) (
 // API operation UpdateEventAction for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/UpdateEventAction
 func (c *DataExchange) UpdateEventAction(input *UpdateEventActionInput) (*UpdateEventActionOutput, error) {
@@ -2828,14 +2916,13 @@ const opUpdateRevision = "UpdateRevision"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateRevisionRequest method.
+//	req, resp := client.UpdateRevisionRequest(params)
 //
-//    // Example sending a request using the UpdateRevisionRequest method.
-//    req, resp := client.UpdateRevisionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/UpdateRevision
 func (c *DataExchange) UpdateRevisionRequest(input *UpdateRevisionInput) (req *request.Request, output *UpdateRevisionOutput) {
@@ -2866,24 +2953,25 @@ func (c *DataExchange) UpdateRevisionRequest(input *UpdateRevisionInput) (req *r
 // API operation UpdateRevision for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   The resource couldn't be found.
 //
-//   * ThrottlingException
-//   The limit on the number of requests per second was exceeded.
+//   - ResourceNotFoundException
+//     The resource couldn't be found.
 //
-//   * AccessDeniedException
-//   Access to the resource is denied.
+//   - ThrottlingException
+//     The limit on the number of requests per second was exceeded.
 //
-//   * ConflictException
-//   The request couldn't be completed because it conflicted with the current
-//   state of the resource.
+//   - AccessDeniedException
+//     Access to the resource is denied.
 //
-//   * ValidationException
-//   The request was invalid.
+//   - ConflictException
+//     The request couldn't be completed because it conflicted with the current
+//     state of the resource.
 //
-//   * InternalServerException
-//   An exception occurred with the service.
+//   - ValidationException
+//     The request was invalid.
+//
+//   - InternalServerException
+//     An exception occurred with the service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/dataexchange-2017-07-25/UpdateRevision
 func (c *DataExchange) UpdateRevision(input *UpdateRevisionInput) (*UpdateRevisionOutput, error) {
@@ -4736,6 +4824,39 @@ func (s *DataSetEntry) SetUpdatedAt(v time.Time) *DataSetEntry {
 	return s
 }
 
+// Extra details specific to a data update type notification.
+type DataUpdateRequestDetails struct {
+	_ struct{} `type:"structure"`
+
+	// A datetime in the past when the data was updated. This typically means that
+	// the underlying resource supporting the data set was updated.
+	DataUpdatedAt *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataUpdateRequestDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DataUpdateRequestDetails) GoString() string {
+	return s.String()
+}
+
+// SetDataUpdatedAt sets the DataUpdatedAt field's value.
+func (s *DataUpdateRequestDetails) SetDataUpdatedAt(v time.Time) *DataUpdateRequestDetails {
+	s.DataUpdatedAt = &v
+	return s
+}
+
 // The LF-tag policy for database resources.
 type DatabaseLFTagPolicy struct {
 	_ struct{} `type:"structure"`
@@ -5174,6 +5295,53 @@ func (s DeleteRevisionOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DeleteRevisionOutput) GoString() string {
 	return s.String()
+}
+
+// Extra details specific to a deprecation type notification.
+type DeprecationRequestDetails struct {
+	_ struct{} `type:"structure"`
+
+	// A datetime in the future when the data set will be deprecated.
+	//
+	// DeprecationAt is a required field
+	DeprecationAt *time.Time `type:"timestamp" timestampFormat:"iso8601" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeprecationRequestDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeprecationRequestDetails) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeprecationRequestDetails) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeprecationRequestDetails"}
+	if s.DeprecationAt == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeprecationAt"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDeprecationAt sets the DeprecationAt field's value.
+func (s *DeprecationRequestDetails) SetDeprecationAt(v time.Time) *DeprecationRequestDetails {
+	s.DeprecationAt = &v
+	return s
 }
 
 // Information about the job error.
@@ -8304,6 +8472,47 @@ func (s *LakeFormationDataPermissionDetails) SetLFTagPolicy(v *LFTagPolicyDetail
 	return s
 }
 
+// Extra details specific to the affected scope in this LF data set.
+type LakeFormationTagPolicyDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The underlying Glue database that the notification is referring to.
+	Database *string `type:"string"`
+
+	// The underlying Glue table that the notification is referring to.
+	Table *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LakeFormationTagPolicyDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LakeFormationTagPolicyDetails) GoString() string {
+	return s.String()
+}
+
+// SetDatabase sets the Database field's value.
+func (s *LakeFormationTagPolicyDetails) SetDatabase(v string) *LakeFormationTagPolicyDetails {
+	s.Database = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *LakeFormationTagPolicyDetails) SetTable(v string) *LakeFormationTagPolicyDetails {
+	s.Table = &v
+	return s
+}
+
 type ListDataSetRevisionsInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
@@ -8947,14 +9156,82 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 	return s
 }
 
+// Extra details specific to this notification.
+type NotificationDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Extra details specific to a data update type notification.
+	DataUpdate *DataUpdateRequestDetails `type:"structure"`
+
+	// Extra details specific to a deprecation type notification.
+	Deprecation *DeprecationRequestDetails `type:"structure"`
+
+	// Extra details specific to a schema change type notification.
+	SchemaChange *SchemaChangeRequestDetails `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotificationDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NotificationDetails) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *NotificationDetails) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "NotificationDetails"}
+	if s.Deprecation != nil {
+		if err := s.Deprecation.Validate(); err != nil {
+			invalidParams.AddNested("Deprecation", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SchemaChange != nil {
+		if err := s.SchemaChange.Validate(); err != nil {
+			invalidParams.AddNested("SchemaChange", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataUpdate sets the DataUpdate field's value.
+func (s *NotificationDetails) SetDataUpdate(v *DataUpdateRequestDetails) *NotificationDetails {
+	s.DataUpdate = v
+	return s
+}
+
+// SetDeprecation sets the Deprecation field's value.
+func (s *NotificationDetails) SetDeprecation(v *DeprecationRequestDetails) *NotificationDetails {
+	s.Deprecation = v
+	return s
+}
+
+// SetSchemaChange sets the SchemaChange field's value.
+func (s *NotificationDetails) SetSchemaChange(v *SchemaChangeRequestDetails) *NotificationDetails {
+	s.SchemaChange = v
+	return s
+}
+
 // Details about the origin of the data set.
 type OriginDetails struct {
 	_ struct{} `type:"structure"`
 
 	// The product ID of the origin of the data set.
-	//
-	// ProductId is a required field
-	ProductId *string `type:"string" required:"true"`
+	ProductId *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -9059,6 +9336,105 @@ func (s *RedshiftDataShareAssetSourceEntry) Validate() error {
 // SetDataShareArn sets the DataShareArn field's value.
 func (s *RedshiftDataShareAssetSourceEntry) SetDataShareArn(v string) *RedshiftDataShareAssetSourceEntry {
 	s.DataShareArn = &v
+	return s
+}
+
+// Extra details specific to the affected scope in this Redshift data set.
+type RedshiftDataShareDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the underlying Redshift data share that is being affected by this
+	// notification.
+	//
+	// Arn is a required field
+	Arn *string `type:"string" required:"true"`
+
+	// The database name in the Redshift data share that is being affected by this
+	// notification.
+	//
+	// Database is a required field
+	Database *string `type:"string" required:"true"`
+
+	// A function name in the Redshift database that is being affected by this notification.
+	Function *string `type:"string"`
+
+	// A schema name in the Redshift database that is being affected by this notification.
+	Schema *string `type:"string"`
+
+	// A table name in the Redshift database that is being affected by this notification.
+	Table *string `type:"string"`
+
+	// A view name in the Redshift database that is being affected by this notification.
+	View *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RedshiftDataShareDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RedshiftDataShareDetails) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RedshiftDataShareDetails) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RedshiftDataShareDetails"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *RedshiftDataShareDetails) SetArn(v string) *RedshiftDataShareDetails {
+	s.Arn = &v
+	return s
+}
+
+// SetDatabase sets the Database field's value.
+func (s *RedshiftDataShareDetails) SetDatabase(v string) *RedshiftDataShareDetails {
+	s.Database = &v
+	return s
+}
+
+// SetFunction sets the Function field's value.
+func (s *RedshiftDataShareDetails) SetFunction(v string) *RedshiftDataShareDetails {
+	s.Function = &v
+	return s
+}
+
+// SetSchema sets the Schema field's value.
+func (s *RedshiftDataShareDetails) SetSchema(v string) *RedshiftDataShareDetails {
+	s.Schema = &v
+	return s
+}
+
+// SetTable sets the Table field's value.
+func (s *RedshiftDataShareDetails) SetTable(v string) *RedshiftDataShareDetails {
+	s.Table = &v
+	return s
+}
+
+// SetView sets the View field's value.
+func (s *RedshiftDataShareDetails) SetView(v string) *RedshiftDataShareDetails {
+	s.View = &v
 	return s
 }
 
@@ -10042,6 +10418,50 @@ func (s *S3DataAccessAssetSourceEntry) SetKmsKeysToGrant(v []*KmsKeyToGrant) *S3
 	return s
 }
 
+// Extra details specific to the affected scope in this S3 Data Access data
+// set.
+type S3DataAccessDetails struct {
+	_ struct{} `type:"structure"`
+
+	// A list of the key prefixes affected by this notification. This can have up
+	// to 50 entries.
+	KeyPrefixes []*string `type:"list"`
+
+	// A list of the keys affected by this notification. This can have up to 50
+	// entries.
+	Keys []*string `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3DataAccessDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s S3DataAccessDetails) GoString() string {
+	return s.String()
+}
+
+// SetKeyPrefixes sets the KeyPrefixes field's value.
+func (s *S3DataAccessDetails) SetKeyPrefixes(v []*string) *S3DataAccessDetails {
+	s.KeyPrefixes = v
+	return s
+}
+
+// SetKeys sets the Keys field's value.
+func (s *S3DataAccessDetails) SetKeys(v []*string) *S3DataAccessDetails {
+	s.Keys = v
+	return s
+}
+
 // The Amazon S3 object that is the asset.
 type S3SnapshotAsset struct {
 	_ struct{} `type:"structure"`
@@ -10073,6 +10493,215 @@ func (s S3SnapshotAsset) GoString() string {
 // SetSize sets the Size field's value.
 func (s *S3SnapshotAsset) SetSize(v float64) *S3SnapshotAsset {
 	s.Size = &v
+	return s
+}
+
+// Object encompassing information about a schema change to a single, particular
+// field, a notification can have up to 100 of these.
+type SchemaChangeDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Description of what's changing about this field. This value can be up to
+	// 512 characters long.
+	Description *string `type:"string"`
+
+	// Name of the changing field. This value can be up to 255 characters long.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// Is the field being added, removed, or modified?
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true" enum:"SchemaChangeType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchemaChangeDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchemaChangeDetails) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SchemaChangeDetails) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SchemaChangeDetails"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *SchemaChangeDetails) SetDescription(v string) *SchemaChangeDetails {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *SchemaChangeDetails) SetName(v string) *SchemaChangeDetails {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *SchemaChangeDetails) SetType(v string) *SchemaChangeDetails {
+	s.Type = &v
+	return s
+}
+
+// Extra details specific to this schema change type notification.
+type SchemaChangeRequestDetails struct {
+	_ struct{} `type:"structure"`
+
+	// List of schema changes happening in the scope of this notification. This
+	// can have up to 100 entries.
+	Changes []*SchemaChangeDetails `type:"list"`
+
+	// A date in the future when the schema change is taking effect.
+	//
+	// SchemaChangeAt is a required field
+	SchemaChangeAt *time.Time `type:"timestamp" timestampFormat:"iso8601" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchemaChangeRequestDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SchemaChangeRequestDetails) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SchemaChangeRequestDetails) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SchemaChangeRequestDetails"}
+	if s.SchemaChangeAt == nil {
+		invalidParams.Add(request.NewErrParamRequired("SchemaChangeAt"))
+	}
+	if s.Changes != nil {
+		for i, v := range s.Changes {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Changes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChanges sets the Changes field's value.
+func (s *SchemaChangeRequestDetails) SetChanges(v []*SchemaChangeDetails) *SchemaChangeRequestDetails {
+	s.Changes = v
+	return s
+}
+
+// SetSchemaChangeAt sets the SchemaChangeAt field's value.
+func (s *SchemaChangeRequestDetails) SetSchemaChangeAt(v time.Time) *SchemaChangeRequestDetails {
+	s.SchemaChangeAt = &v
+	return s
+}
+
+// Details about the scope of the notifications such as the affected resources.
+type ScopeDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Underlying LF resources that will be affected by this notification.
+	LakeFormationTagPolicies []*LakeFormationTagPolicyDetails `type:"list"`
+
+	// Underlying Redshift resources that will be affected by this notification.
+	RedshiftDataShares []*RedshiftDataShareDetails `type:"list"`
+
+	// Underlying S3 resources that will be affected by this notification.
+	S3DataAccesses []*S3DataAccessDetails `type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScopeDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ScopeDetails) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ScopeDetails) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ScopeDetails"}
+	if s.RedshiftDataShares != nil {
+		for i, v := range s.RedshiftDataShares {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "RedshiftDataShares", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLakeFormationTagPolicies sets the LakeFormationTagPolicies field's value.
+func (s *ScopeDetails) SetLakeFormationTagPolicies(v []*LakeFormationTagPolicyDetails) *ScopeDetails {
+	s.LakeFormationTagPolicies = v
+	return s
+}
+
+// SetRedshiftDataShares sets the RedshiftDataShares field's value.
+func (s *ScopeDetails) SetRedshiftDataShares(v []*RedshiftDataShareDetails) *ScopeDetails {
+	s.RedshiftDataShares = v
+	return s
+}
+
+// SetS3DataAccesses sets the S3DataAccesses field's value.
+func (s *ScopeDetails) SetS3DataAccesses(v []*S3DataAccessDetails) *ScopeDetails {
+	s.S3DataAccesses = v
 	return s
 }
 
@@ -10242,6 +10871,143 @@ func (s *SendApiAssetOutput) SetBody(v string) *SendApiAssetOutput {
 func (s *SendApiAssetOutput) SetResponseHeaders(v map[string]*string) *SendApiAssetOutput {
 	s.ResponseHeaders = v
 	return s
+}
+
+type SendDataSetNotificationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Idempotency key for the notification, this key allows us to deduplicate notifications
+	// that are sent in quick succession erroneously.
+	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// Free-form text field for providers to add information about their notifications.
+	Comment *string `type:"string"`
+
+	// Affected data set of the notification.
+	//
+	// DataSetId is a required field
+	DataSetId *string `location:"uri" locationName:"DataSetId" type:"string" required:"true"`
+
+	// Extra details specific to this notification type.
+	Details *NotificationDetails `type:"structure"`
+
+	// Affected scope of this notification such as the underlying resources affected
+	// by the notification event.
+	Scope *ScopeDetails `type:"structure"`
+
+	// The type of the notification. Describing the kind of event the notification
+	// is alerting you to.
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true" enum:"NotificationType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendDataSetNotificationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendDataSetNotificationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SendDataSetNotificationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SendDataSetNotificationInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.DataSetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DataSetId"))
+	}
+	if s.DataSetId != nil && len(*s.DataSetId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataSetId", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.Details != nil {
+		if err := s.Details.Validate(); err != nil {
+			invalidParams.AddNested("Details", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Scope != nil {
+		if err := s.Scope.Validate(); err != nil {
+			invalidParams.AddNested("Scope", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *SendDataSetNotificationInput) SetClientToken(v string) *SendDataSetNotificationInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetComment sets the Comment field's value.
+func (s *SendDataSetNotificationInput) SetComment(v string) *SendDataSetNotificationInput {
+	s.Comment = &v
+	return s
+}
+
+// SetDataSetId sets the DataSetId field's value.
+func (s *SendDataSetNotificationInput) SetDataSetId(v string) *SendDataSetNotificationInput {
+	s.DataSetId = &v
+	return s
+}
+
+// SetDetails sets the Details field's value.
+func (s *SendDataSetNotificationInput) SetDetails(v *NotificationDetails) *SendDataSetNotificationInput {
+	s.Details = v
+	return s
+}
+
+// SetScope sets the Scope field's value.
+func (s *SendDataSetNotificationInput) SetScope(v *ScopeDetails) *SendDataSetNotificationInput {
+	s.Scope = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *SendDataSetNotificationInput) SetType(v string) *SendDataSetNotificationInput {
+	s.Type = &v
+	return s
+}
+
+type SendDataSetNotificationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendDataSetNotificationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SendDataSetNotificationOutput) GoString() string {
+	return s.String()
 }
 
 // The request has exceeded the quotas imposed by the service.
@@ -11861,6 +12627,30 @@ func LimitName_Values() []string {
 }
 
 const (
+	// NotificationTypeDataDelay is a NotificationType enum value
+	NotificationTypeDataDelay = "DATA_DELAY"
+
+	// NotificationTypeDataUpdate is a NotificationType enum value
+	NotificationTypeDataUpdate = "DATA_UPDATE"
+
+	// NotificationTypeDeprecation is a NotificationType enum value
+	NotificationTypeDeprecation = "DEPRECATION"
+
+	// NotificationTypeSchemaChange is a NotificationType enum value
+	NotificationTypeSchemaChange = "SCHEMA_CHANGE"
+)
+
+// NotificationType_Values returns all elements of the NotificationType enum
+func NotificationType_Values() []string {
+	return []string{
+		NotificationTypeDataDelay,
+		NotificationTypeDataUpdate,
+		NotificationTypeDeprecation,
+		NotificationTypeSchemaChange,
+	}
+}
+
+const (
 	// OriginOwned is a Origin enum value
 	OriginOwned = "OWNED"
 
@@ -11913,6 +12703,26 @@ func ResourceType_Values() []string {
 		ResourceTypeAsset,
 		ResourceTypeJob,
 		ResourceTypeEventAction,
+	}
+}
+
+const (
+	// SchemaChangeTypeAdd is a SchemaChangeType enum value
+	SchemaChangeTypeAdd = "ADD"
+
+	// SchemaChangeTypeRemove is a SchemaChangeType enum value
+	SchemaChangeTypeRemove = "REMOVE"
+
+	// SchemaChangeTypeModify is a SchemaChangeType enum value
+	SchemaChangeTypeModify = "MODIFY"
+)
+
+// SchemaChangeType_Values returns all elements of the SchemaChangeType enum
+func SchemaChangeType_Values() []string {
+	return []string{
+		SchemaChangeTypeAdd,
+		SchemaChangeTypeRemove,
+		SchemaChangeTypeModify,
 	}
 }
 

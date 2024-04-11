@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a MigrationHubOrchestrator client from just a session.
-//     svc := migrationhuborchestrator.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a MigrationHubOrchestrator client with additional configuration
-//     svc := migrationhuborchestrator.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a MigrationHubOrchestrator client from just a session.
+//	svc := migrationhuborchestrator.New(mySession)
+//
+//	// Create a MigrationHubOrchestrator client with additional configuration
+//	svc := migrationhuborchestrator.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *MigrationHubOrchestrator {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

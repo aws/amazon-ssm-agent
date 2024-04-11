@@ -52,7 +52,7 @@ type RunCommandOutputTestSuite struct {
 	context context.T
 	suite.Suite
 	ssmAgent     agent.ISSMAgent
-	mdsSdkMock   *mdssdkmock.SSMMDSAPI
+	mdsSdkMock   *mdssdkmock.SsmmdsAPI
 	healthModule *healthmock.IHealthCheck
 	hibernate    *hibernatemock.IHibernate
 	log          log.T

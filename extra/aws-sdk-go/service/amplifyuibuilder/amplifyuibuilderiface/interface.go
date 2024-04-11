@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWS Amplify UI Builder.
-//    func myFunc(svc amplifyuibuilderiface.AmplifyUIBuilderAPI) bool {
-//        // Make svc.CreateComponent request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWS Amplify UI Builder.
+//	func myFunc(svc amplifyuibuilderiface.AmplifyUIBuilderAPI) bool {
+//	    // Make svc.CreateComponent request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := amplifyuibuilder.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := amplifyuibuilder.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockAmplifyUIBuilderClient struct {
-//        amplifyuibuilderiface.AmplifyUIBuilderAPI
-//    }
-//    func (m *mockAmplifyUIBuilderClient) CreateComponent(input *amplifyuibuilder.CreateComponentInput) (*amplifyuibuilder.CreateComponentOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockAmplifyUIBuilderClient struct {
+//	    amplifyuibuilderiface.AmplifyUIBuilderAPI
+//	}
+//	func (m *mockAmplifyUIBuilderClient) CreateComponent(input *amplifyuibuilder.CreateComponentInput) (*amplifyuibuilder.CreateComponentOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockAmplifyUIBuilderClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockAmplifyUIBuilderClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -109,6 +109,10 @@ type AmplifyUIBuilderAPI interface {
 	ExportThemesPages(*amplifyuibuilder.ExportThemesInput, func(*amplifyuibuilder.ExportThemesOutput, bool) bool) error
 	ExportThemesPagesWithContext(aws.Context, *amplifyuibuilder.ExportThemesInput, func(*amplifyuibuilder.ExportThemesOutput, bool) bool, ...request.Option) error
 
+	GetCodegenJob(*amplifyuibuilder.GetCodegenJobInput) (*amplifyuibuilder.GetCodegenJobOutput, error)
+	GetCodegenJobWithContext(aws.Context, *amplifyuibuilder.GetCodegenJobInput, ...request.Option) (*amplifyuibuilder.GetCodegenJobOutput, error)
+	GetCodegenJobRequest(*amplifyuibuilder.GetCodegenJobInput) (*request.Request, *amplifyuibuilder.GetCodegenJobOutput)
+
 	GetComponent(*amplifyuibuilder.GetComponentInput) (*amplifyuibuilder.GetComponentOutput, error)
 	GetComponentWithContext(aws.Context, *amplifyuibuilder.GetComponentInput, ...request.Option) (*amplifyuibuilder.GetComponentOutput, error)
 	GetComponentRequest(*amplifyuibuilder.GetComponentInput) (*request.Request, *amplifyuibuilder.GetComponentOutput)
@@ -125,6 +129,13 @@ type AmplifyUIBuilderAPI interface {
 	GetThemeWithContext(aws.Context, *amplifyuibuilder.GetThemeInput, ...request.Option) (*amplifyuibuilder.GetThemeOutput, error)
 	GetThemeRequest(*amplifyuibuilder.GetThemeInput) (*request.Request, *amplifyuibuilder.GetThemeOutput)
 
+	ListCodegenJobs(*amplifyuibuilder.ListCodegenJobsInput) (*amplifyuibuilder.ListCodegenJobsOutput, error)
+	ListCodegenJobsWithContext(aws.Context, *amplifyuibuilder.ListCodegenJobsInput, ...request.Option) (*amplifyuibuilder.ListCodegenJobsOutput, error)
+	ListCodegenJobsRequest(*amplifyuibuilder.ListCodegenJobsInput) (*request.Request, *amplifyuibuilder.ListCodegenJobsOutput)
+
+	ListCodegenJobsPages(*amplifyuibuilder.ListCodegenJobsInput, func(*amplifyuibuilder.ListCodegenJobsOutput, bool) bool) error
+	ListCodegenJobsPagesWithContext(aws.Context, *amplifyuibuilder.ListCodegenJobsInput, func(*amplifyuibuilder.ListCodegenJobsOutput, bool) bool, ...request.Option) error
+
 	ListComponents(*amplifyuibuilder.ListComponentsInput) (*amplifyuibuilder.ListComponentsOutput, error)
 	ListComponentsWithContext(aws.Context, *amplifyuibuilder.ListComponentsInput, ...request.Option) (*amplifyuibuilder.ListComponentsOutput, error)
 	ListComponentsRequest(*amplifyuibuilder.ListComponentsInput) (*request.Request, *amplifyuibuilder.ListComponentsOutput)
@@ -138,6 +149,10 @@ type AmplifyUIBuilderAPI interface {
 
 	ListFormsPages(*amplifyuibuilder.ListFormsInput, func(*amplifyuibuilder.ListFormsOutput, bool) bool) error
 	ListFormsPagesWithContext(aws.Context, *amplifyuibuilder.ListFormsInput, func(*amplifyuibuilder.ListFormsOutput, bool) bool, ...request.Option) error
+
+	ListTagsForResource(*amplifyuibuilder.ListTagsForResourceInput) (*amplifyuibuilder.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *amplifyuibuilder.ListTagsForResourceInput, ...request.Option) (*amplifyuibuilder.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*amplifyuibuilder.ListTagsForResourceInput) (*request.Request, *amplifyuibuilder.ListTagsForResourceOutput)
 
 	ListThemes(*amplifyuibuilder.ListThemesInput) (*amplifyuibuilder.ListThemesOutput, error)
 	ListThemesWithContext(aws.Context, *amplifyuibuilder.ListThemesInput, ...request.Option) (*amplifyuibuilder.ListThemesOutput, error)
@@ -153,6 +168,18 @@ type AmplifyUIBuilderAPI interface {
 	RefreshToken(*amplifyuibuilder.RefreshTokenInput) (*amplifyuibuilder.RefreshTokenOutput, error)
 	RefreshTokenWithContext(aws.Context, *amplifyuibuilder.RefreshTokenInput, ...request.Option) (*amplifyuibuilder.RefreshTokenOutput, error)
 	RefreshTokenRequest(*amplifyuibuilder.RefreshTokenInput) (*request.Request, *amplifyuibuilder.RefreshTokenOutput)
+
+	StartCodegenJob(*amplifyuibuilder.StartCodegenJobInput) (*amplifyuibuilder.StartCodegenJobOutput, error)
+	StartCodegenJobWithContext(aws.Context, *amplifyuibuilder.StartCodegenJobInput, ...request.Option) (*amplifyuibuilder.StartCodegenJobOutput, error)
+	StartCodegenJobRequest(*amplifyuibuilder.StartCodegenJobInput) (*request.Request, *amplifyuibuilder.StartCodegenJobOutput)
+
+	TagResource(*amplifyuibuilder.TagResourceInput) (*amplifyuibuilder.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *amplifyuibuilder.TagResourceInput, ...request.Option) (*amplifyuibuilder.TagResourceOutput, error)
+	TagResourceRequest(*amplifyuibuilder.TagResourceInput) (*request.Request, *amplifyuibuilder.TagResourceOutput)
+
+	UntagResource(*amplifyuibuilder.UntagResourceInput) (*amplifyuibuilder.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *amplifyuibuilder.UntagResourceInput, ...request.Option) (*amplifyuibuilder.UntagResourceOutput, error)
+	UntagResourceRequest(*amplifyuibuilder.UntagResourceInput) (*request.Request, *amplifyuibuilder.UntagResourceOutput)
 
 	UpdateComponent(*amplifyuibuilder.UpdateComponentInput) (*amplifyuibuilder.UpdateComponentOutput, error)
 	UpdateComponentWithContext(aws.Context, *amplifyuibuilder.UpdateComponentInput, ...request.Option) (*amplifyuibuilder.UpdateComponentOutput, error)

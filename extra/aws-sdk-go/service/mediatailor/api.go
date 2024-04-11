@@ -29,14 +29,13 @@ const opConfigureLogsForChannel = "ConfigureLogsForChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ConfigureLogsForChannelRequest method.
+//	req, resp := client.ConfigureLogsForChannelRequest(params)
 //
-//    // Example sending a request using the ConfigureLogsForChannelRequest method.
-//    req, resp := client.ConfigureLogsForChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ConfigureLogsForChannel
 func (c *MediaTailor) ConfigureLogsForChannelRequest(input *ConfigureLogsForChannelInput) (req *request.Request, output *ConfigureLogsForChannelOutput) {
@@ -103,14 +102,13 @@ const opConfigureLogsForPlaybackConfiguration = "ConfigureLogsForPlaybackConfigu
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ConfigureLogsForPlaybackConfigurationRequest method.
+//	req, resp := client.ConfigureLogsForPlaybackConfigurationRequest(params)
 //
-//    // Example sending a request using the ConfigureLogsForPlaybackConfigurationRequest method.
-//    req, resp := client.ConfigureLogsForPlaybackConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ConfigureLogsForPlaybackConfiguration
 func (c *MediaTailor) ConfigureLogsForPlaybackConfigurationRequest(input *ConfigureLogsForPlaybackConfigurationInput) (req *request.Request, output *ConfigureLogsForPlaybackConfigurationOutput) {
@@ -177,14 +175,13 @@ const opCreateChannel = "CreateChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateChannelRequest method.
+//	req, resp := client.CreateChannelRequest(params)
 //
-//    // Example sending a request using the CreateChannelRequest method.
-//    req, resp := client.CreateChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/CreateChannel
 func (c *MediaTailor) CreateChannelRequest(input *CreateChannelInput) (req *request.Request, output *CreateChannelOutput) {
@@ -253,14 +250,13 @@ const opCreateLiveSource = "CreateLiveSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateLiveSourceRequest method.
+//	req, resp := client.CreateLiveSourceRequest(params)
 //
-//    // Example sending a request using the CreateLiveSourceRequest method.
-//    req, resp := client.CreateLiveSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/CreateLiveSource
 func (c *MediaTailor) CreateLiveSourceRequest(input *CreateLiveSourceInput) (req *request.Request, output *CreateLiveSourceOutput) {
@@ -327,14 +323,13 @@ const opCreatePrefetchSchedule = "CreatePrefetchSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreatePrefetchScheduleRequest method.
+//	req, resp := client.CreatePrefetchScheduleRequest(params)
 //
-//    // Example sending a request using the CreatePrefetchScheduleRequest method.
-//    req, resp := client.CreatePrefetchScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/CreatePrefetchSchedule
 func (c *MediaTailor) CreatePrefetchScheduleRequest(input *CreatePrefetchScheduleInput) (req *request.Request, output *CreatePrefetchScheduleOutput) {
@@ -405,14 +400,13 @@ const opCreateProgram = "CreateProgram"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateProgramRequest method.
+//	req, resp := client.CreateProgramRequest(params)
 //
-//    // Example sending a request using the CreateProgramRequest method.
-//    req, resp := client.CreateProgramRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/CreateProgram
 func (c *MediaTailor) CreateProgramRequest(input *CreateProgramInput) (req *request.Request, output *CreateProgramOutput) {
@@ -481,14 +475,13 @@ const opCreateSourceLocation = "CreateSourceLocation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateSourceLocationRequest method.
+//	req, resp := client.CreateSourceLocationRequest(params)
 //
-//    // Example sending a request using the CreateSourceLocationRequest method.
-//    req, resp := client.CreateSourceLocationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/CreateSourceLocation
 func (c *MediaTailor) CreateSourceLocationRequest(input *CreateSourceLocationInput) (req *request.Request, output *CreateSourceLocationOutput) {
@@ -558,14 +551,13 @@ const opCreateVodSource = "CreateVodSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateVodSourceRequest method.
+//	req, resp := client.CreateVodSourceRequest(params)
 //
-//    // Example sending a request using the CreateVodSourceRequest method.
-//    req, resp := client.CreateVodSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/CreateVodSource
 func (c *MediaTailor) CreateVodSourceRequest(input *CreateVodSourceInput) (req *request.Request, output *CreateVodSourceOutput) {
@@ -632,14 +624,13 @@ const opDeleteChannel = "DeleteChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteChannelRequest method.
+//	req, resp := client.DeleteChannelRequest(params)
 //
-//    // Example sending a request using the DeleteChannelRequest method.
-//    req, resp := client.DeleteChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DeleteChannel
 func (c *MediaTailor) DeleteChannelRequest(input *DeleteChannelInput) (req *request.Request, output *DeleteChannelOutput) {
@@ -709,14 +700,13 @@ const opDeleteChannelPolicy = "DeleteChannelPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteChannelPolicyRequest method.
+//	req, resp := client.DeleteChannelPolicyRequest(params)
 //
-//    // Example sending a request using the DeleteChannelPolicyRequest method.
-//    req, resp := client.DeleteChannelPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DeleteChannelPolicy
 func (c *MediaTailor) DeleteChannelPolicyRequest(input *DeleteChannelPolicyInput) (req *request.Request, output *DeleteChannelPolicyOutput) {
@@ -784,14 +774,13 @@ const opDeleteLiveSource = "DeleteLiveSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteLiveSourceRequest method.
+//	req, resp := client.DeleteLiveSourceRequest(params)
 //
-//    // Example sending a request using the DeleteLiveSourceRequest method.
-//    req, resp := client.DeleteLiveSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DeleteLiveSource
 func (c *MediaTailor) DeleteLiveSourceRequest(input *DeleteLiveSourceInput) (req *request.Request, output *DeleteLiveSourceOutput) {
@@ -859,14 +848,13 @@ const opDeletePlaybackConfiguration = "DeletePlaybackConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePlaybackConfigurationRequest method.
+//	req, resp := client.DeletePlaybackConfigurationRequest(params)
 //
-//    // Example sending a request using the DeletePlaybackConfigurationRequest method.
-//    req, resp := client.DeletePlaybackConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DeletePlaybackConfiguration
 func (c *MediaTailor) DeletePlaybackConfigurationRequest(input *DeletePlaybackConfigurationInput) (req *request.Request, output *DeletePlaybackConfigurationOutput) {
@@ -935,14 +923,13 @@ const opDeletePrefetchSchedule = "DeletePrefetchSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeletePrefetchScheduleRequest method.
+//	req, resp := client.DeletePrefetchScheduleRequest(params)
 //
-//    // Example sending a request using the DeletePrefetchScheduleRequest method.
-//    req, resp := client.DeletePrefetchScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DeletePrefetchSchedule
 func (c *MediaTailor) DeletePrefetchScheduleRequest(input *DeletePrefetchScheduleInput) (req *request.Request, output *DeletePrefetchScheduleOutput) {
@@ -1014,14 +1001,13 @@ const opDeleteProgram = "DeleteProgram"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteProgramRequest method.
+//	req, resp := client.DeleteProgramRequest(params)
 //
-//    // Example sending a request using the DeleteProgramRequest method.
-//    req, resp := client.DeleteProgramRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DeleteProgram
 func (c *MediaTailor) DeleteProgramRequest(input *DeleteProgramInput) (req *request.Request, output *DeleteProgramOutput) {
@@ -1091,14 +1077,13 @@ const opDeleteSourceLocation = "DeleteSourceLocation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteSourceLocationRequest method.
+//	req, resp := client.DeleteSourceLocationRequest(params)
 //
-//    // Example sending a request using the DeleteSourceLocationRequest method.
-//    req, resp := client.DeleteSourceLocationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DeleteSourceLocation
 func (c *MediaTailor) DeleteSourceLocationRequest(input *DeleteSourceLocationInput) (req *request.Request, output *DeleteSourceLocationOutput) {
@@ -1169,14 +1154,13 @@ const opDeleteVodSource = "DeleteVodSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteVodSourceRequest method.
+//	req, resp := client.DeleteVodSourceRequest(params)
 //
-//    // Example sending a request using the DeleteVodSourceRequest method.
-//    req, resp := client.DeleteVodSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DeleteVodSource
 func (c *MediaTailor) DeleteVodSourceRequest(input *DeleteVodSourceInput) (req *request.Request, output *DeleteVodSourceOutput) {
@@ -1244,14 +1228,13 @@ const opDescribeChannel = "DescribeChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeChannelRequest method.
+//	req, resp := client.DescribeChannelRequest(params)
 //
-//    // Example sending a request using the DescribeChannelRequest method.
-//    req, resp := client.DescribeChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DescribeChannel
 func (c *MediaTailor) DescribeChannelRequest(input *DescribeChannelInput) (req *request.Request, output *DescribeChannelOutput) {
@@ -1320,14 +1303,13 @@ const opDescribeLiveSource = "DescribeLiveSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeLiveSourceRequest method.
+//	req, resp := client.DescribeLiveSourceRequest(params)
 //
-//    // Example sending a request using the DescribeLiveSourceRequest method.
-//    req, resp := client.DescribeLiveSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DescribeLiveSource
 func (c *MediaTailor) DescribeLiveSourceRequest(input *DescribeLiveSourceInput) (req *request.Request, output *DescribeLiveSourceOutput) {
@@ -1394,14 +1376,13 @@ const opDescribeProgram = "DescribeProgram"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeProgramRequest method.
+//	req, resp := client.DescribeProgramRequest(params)
 //
-//    // Example sending a request using the DescribeProgramRequest method.
-//    req, resp := client.DescribeProgramRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DescribeProgram
 func (c *MediaTailor) DescribeProgramRequest(input *DescribeProgramInput) (req *request.Request, output *DescribeProgramOutput) {
@@ -1470,14 +1451,13 @@ const opDescribeSourceLocation = "DescribeSourceLocation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeSourceLocationRequest method.
+//	req, resp := client.DescribeSourceLocationRequest(params)
 //
-//    // Example sending a request using the DescribeSourceLocationRequest method.
-//    req, resp := client.DescribeSourceLocationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DescribeSourceLocation
 func (c *MediaTailor) DescribeSourceLocationRequest(input *DescribeSourceLocationInput) (req *request.Request, output *DescribeSourceLocationOutput) {
@@ -1547,14 +1527,13 @@ const opDescribeVodSource = "DescribeVodSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeVodSourceRequest method.
+//	req, resp := client.DescribeVodSourceRequest(params)
 //
-//    // Example sending a request using the DescribeVodSourceRequest method.
-//    req, resp := client.DescribeVodSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/DescribeVodSource
 func (c *MediaTailor) DescribeVodSourceRequest(input *DescribeVodSourceInput) (req *request.Request, output *DescribeVodSourceOutput) {
@@ -1622,14 +1601,13 @@ const opGetChannelPolicy = "GetChannelPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetChannelPolicyRequest method.
+//	req, resp := client.GetChannelPolicyRequest(params)
 //
-//    // Example sending a request using the GetChannelPolicyRequest method.
-//    req, resp := client.GetChannelPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/GetChannelPolicy
 func (c *MediaTailor) GetChannelPolicyRequest(input *GetChannelPolicyInput) (req *request.Request, output *GetChannelPolicyOutput) {
@@ -1697,14 +1675,13 @@ const opGetChannelSchedule = "GetChannelSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetChannelScheduleRequest method.
+//	req, resp := client.GetChannelScheduleRequest(params)
 //
-//    // Example sending a request using the GetChannelScheduleRequest method.
-//    req, resp := client.GetChannelScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/GetChannelSchedule
 func (c *MediaTailor) GetChannelScheduleRequest(input *GetChannelScheduleInput) (req *request.Request, output *GetChannelScheduleOutput) {
@@ -1769,15 +1746,14 @@ func (c *MediaTailor) GetChannelScheduleWithContext(ctx aws.Context, input *GetC
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a GetChannelSchedule operation.
-//    pageNum := 0
-//    err := client.GetChannelSchedulePages(params,
-//        func(page *mediatailor.GetChannelScheduleOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a GetChannelSchedule operation.
+//	pageNum := 0
+//	err := client.GetChannelSchedulePages(params,
+//	    func(page *mediatailor.GetChannelScheduleOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaTailor) GetChannelSchedulePages(input *GetChannelScheduleInput, fn func(*GetChannelScheduleOutput, bool) bool) error {
 	return c.GetChannelSchedulePagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1829,14 +1805,13 @@ const opGetPlaybackConfiguration = "GetPlaybackConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPlaybackConfigurationRequest method.
+//	req, resp := client.GetPlaybackConfigurationRequest(params)
 //
-//    // Example sending a request using the GetPlaybackConfigurationRequest method.
-//    req, resp := client.GetPlaybackConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/GetPlaybackConfiguration
 func (c *MediaTailor) GetPlaybackConfigurationRequest(input *GetPlaybackConfigurationInput) (req *request.Request, output *GetPlaybackConfigurationOutput) {
@@ -1904,14 +1879,13 @@ const opGetPrefetchSchedule = "GetPrefetchSchedule"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetPrefetchScheduleRequest method.
+//	req, resp := client.GetPrefetchScheduleRequest(params)
 //
-//    // Example sending a request using the GetPrefetchScheduleRequest method.
-//    req, resp := client.GetPrefetchScheduleRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/GetPrefetchSchedule
 func (c *MediaTailor) GetPrefetchScheduleRequest(input *GetPrefetchScheduleInput) (req *request.Request, output *GetPrefetchScheduleOutput) {
@@ -1982,14 +1956,13 @@ const opListAlerts = "ListAlerts"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListAlertsRequest method.
+//	req, resp := client.ListAlertsRequest(params)
 //
-//    // Example sending a request using the ListAlertsRequest method.
-//    req, resp := client.ListAlertsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ListAlerts
 func (c *MediaTailor) ListAlertsRequest(input *ListAlertsInput) (req *request.Request, output *ListAlertsOutput) {
@@ -2055,15 +2028,14 @@ func (c *MediaTailor) ListAlertsWithContext(ctx aws.Context, input *ListAlertsIn
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListAlerts operation.
-//    pageNum := 0
-//    err := client.ListAlertsPages(params,
-//        func(page *mediatailor.ListAlertsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListAlerts operation.
+//	pageNum := 0
+//	err := client.ListAlertsPages(params,
+//	    func(page *mediatailor.ListAlertsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaTailor) ListAlertsPages(input *ListAlertsInput, fn func(*ListAlertsOutput, bool) bool) error {
 	return c.ListAlertsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2115,14 +2087,13 @@ const opListChannels = "ListChannels"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListChannelsRequest method.
+//	req, resp := client.ListChannelsRequest(params)
 //
-//    // Example sending a request using the ListChannelsRequest method.
-//    req, resp := client.ListChannelsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ListChannels
 func (c *MediaTailor) ListChannelsRequest(input *ListChannelsInput) (req *request.Request, output *ListChannelsOutput) {
@@ -2188,15 +2159,14 @@ func (c *MediaTailor) ListChannelsWithContext(ctx aws.Context, input *ListChanne
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListChannels operation.
-//    pageNum := 0
-//    err := client.ListChannelsPages(params,
-//        func(page *mediatailor.ListChannelsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListChannels operation.
+//	pageNum := 0
+//	err := client.ListChannelsPages(params,
+//	    func(page *mediatailor.ListChannelsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaTailor) ListChannelsPages(input *ListChannelsInput, fn func(*ListChannelsOutput, bool) bool) error {
 	return c.ListChannelsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2248,14 +2218,13 @@ const opListLiveSources = "ListLiveSources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListLiveSourcesRequest method.
+//	req, resp := client.ListLiveSourcesRequest(params)
 //
-//    // Example sending a request using the ListLiveSourcesRequest method.
-//    req, resp := client.ListLiveSourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ListLiveSources
 func (c *MediaTailor) ListLiveSourcesRequest(input *ListLiveSourcesInput) (req *request.Request, output *ListLiveSourcesOutput) {
@@ -2321,15 +2290,14 @@ func (c *MediaTailor) ListLiveSourcesWithContext(ctx aws.Context, input *ListLiv
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListLiveSources operation.
-//    pageNum := 0
-//    err := client.ListLiveSourcesPages(params,
-//        func(page *mediatailor.ListLiveSourcesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListLiveSources operation.
+//	pageNum := 0
+//	err := client.ListLiveSourcesPages(params,
+//	    func(page *mediatailor.ListLiveSourcesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaTailor) ListLiveSourcesPages(input *ListLiveSourcesInput, fn func(*ListLiveSourcesOutput, bool) bool) error {
 	return c.ListLiveSourcesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2381,14 +2349,13 @@ const opListPlaybackConfigurations = "ListPlaybackConfigurations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPlaybackConfigurationsRequest method.
+//	req, resp := client.ListPlaybackConfigurationsRequest(params)
 //
-//    // Example sending a request using the ListPlaybackConfigurationsRequest method.
-//    req, resp := client.ListPlaybackConfigurationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ListPlaybackConfigurations
 func (c *MediaTailor) ListPlaybackConfigurationsRequest(input *ListPlaybackConfigurationsInput) (req *request.Request, output *ListPlaybackConfigurationsOutput) {
@@ -2455,15 +2422,14 @@ func (c *MediaTailor) ListPlaybackConfigurationsWithContext(ctx aws.Context, inp
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPlaybackConfigurations operation.
-//    pageNum := 0
-//    err := client.ListPlaybackConfigurationsPages(params,
-//        func(page *mediatailor.ListPlaybackConfigurationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPlaybackConfigurations operation.
+//	pageNum := 0
+//	err := client.ListPlaybackConfigurationsPages(params,
+//	    func(page *mediatailor.ListPlaybackConfigurationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaTailor) ListPlaybackConfigurationsPages(input *ListPlaybackConfigurationsInput, fn func(*ListPlaybackConfigurationsOutput, bool) bool) error {
 	return c.ListPlaybackConfigurationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2515,14 +2481,13 @@ const opListPrefetchSchedules = "ListPrefetchSchedules"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListPrefetchSchedulesRequest method.
+//	req, resp := client.ListPrefetchSchedulesRequest(params)
 //
-//    // Example sending a request using the ListPrefetchSchedulesRequest method.
-//    req, resp := client.ListPrefetchSchedulesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ListPrefetchSchedules
 func (c *MediaTailor) ListPrefetchSchedulesRequest(input *ListPrefetchSchedulesInput) (req *request.Request, output *ListPrefetchSchedulesOutput) {
@@ -2587,15 +2552,14 @@ func (c *MediaTailor) ListPrefetchSchedulesWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListPrefetchSchedules operation.
-//    pageNum := 0
-//    err := client.ListPrefetchSchedulesPages(params,
-//        func(page *mediatailor.ListPrefetchSchedulesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListPrefetchSchedules operation.
+//	pageNum := 0
+//	err := client.ListPrefetchSchedulesPages(params,
+//	    func(page *mediatailor.ListPrefetchSchedulesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaTailor) ListPrefetchSchedulesPages(input *ListPrefetchSchedulesInput, fn func(*ListPrefetchSchedulesOutput, bool) bool) error {
 	return c.ListPrefetchSchedulesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2647,14 +2611,13 @@ const opListSourceLocations = "ListSourceLocations"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListSourceLocationsRequest method.
+//	req, resp := client.ListSourceLocationsRequest(params)
 //
-//    // Example sending a request using the ListSourceLocationsRequest method.
-//    req, resp := client.ListSourceLocationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ListSourceLocations
 func (c *MediaTailor) ListSourceLocationsRequest(input *ListSourceLocationsInput) (req *request.Request, output *ListSourceLocationsOutput) {
@@ -2720,15 +2683,14 @@ func (c *MediaTailor) ListSourceLocationsWithContext(ctx aws.Context, input *Lis
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListSourceLocations operation.
-//    pageNum := 0
-//    err := client.ListSourceLocationsPages(params,
-//        func(page *mediatailor.ListSourceLocationsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListSourceLocations operation.
+//	pageNum := 0
+//	err := client.ListSourceLocationsPages(params,
+//	    func(page *mediatailor.ListSourceLocationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaTailor) ListSourceLocationsPages(input *ListSourceLocationsInput, fn func(*ListSourceLocationsOutput, bool) bool) error {
 	return c.ListSourceLocationsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2780,14 +2742,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ListTagsForResource
 func (c *MediaTailor) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2821,8 +2782,8 @@ func (c *MediaTailor) ListTagsForResourceRequest(input *ListTagsForResourceInput
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   A request contains unexpected data.
+//   - BadRequestException
+//     A request contains unexpected data.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ListTagsForResource
 func (c *MediaTailor) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2862,14 +2823,13 @@ const opListVodSources = "ListVodSources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListVodSourcesRequest method.
+//	req, resp := client.ListVodSourcesRequest(params)
 //
-//    // Example sending a request using the ListVodSourcesRequest method.
-//    req, resp := client.ListVodSourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ListVodSources
 func (c *MediaTailor) ListVodSourcesRequest(input *ListVodSourcesInput) (req *request.Request, output *ListVodSourcesOutput) {
@@ -2935,15 +2895,14 @@ func (c *MediaTailor) ListVodSourcesWithContext(ctx aws.Context, input *ListVodS
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListVodSources operation.
-//    pageNum := 0
-//    err := client.ListVodSourcesPages(params,
-//        func(page *mediatailor.ListVodSourcesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListVodSources operation.
+//	pageNum := 0
+//	err := client.ListVodSourcesPages(params,
+//	    func(page *mediatailor.ListVodSourcesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *MediaTailor) ListVodSourcesPages(input *ListVodSourcesInput, fn func(*ListVodSourcesOutput, bool) bool) error {
 	return c.ListVodSourcesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -2995,14 +2954,13 @@ const opPutChannelPolicy = "PutChannelPolicy"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutChannelPolicyRequest method.
+//	req, resp := client.PutChannelPolicyRequest(params)
 //
-//    // Example sending a request using the PutChannelPolicyRequest method.
-//    req, resp := client.PutChannelPolicyRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/PutChannelPolicy
 func (c *MediaTailor) PutChannelPolicyRequest(input *PutChannelPolicyInput) (req *request.Request, output *PutChannelPolicyOutput) {
@@ -3071,14 +3029,13 @@ const opPutPlaybackConfiguration = "PutPlaybackConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutPlaybackConfigurationRequest method.
+//	req, resp := client.PutPlaybackConfigurationRequest(params)
 //
-//    // Example sending a request using the PutPlaybackConfigurationRequest method.
-//    req, resp := client.PutPlaybackConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/PutPlaybackConfiguration
 func (c *MediaTailor) PutPlaybackConfigurationRequest(input *PutPlaybackConfigurationInput) (req *request.Request, output *PutPlaybackConfigurationOutput) {
@@ -3146,14 +3103,13 @@ const opStartChannel = "StartChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartChannelRequest method.
+//	req, resp := client.StartChannelRequest(params)
 //
-//    // Example sending a request using the StartChannelRequest method.
-//    req, resp := client.StartChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/StartChannel
 func (c *MediaTailor) StartChannelRequest(input *StartChannelInput) (req *request.Request, output *StartChannelOutput) {
@@ -3223,14 +3179,13 @@ const opStopChannel = "StopChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopChannelRequest method.
+//	req, resp := client.StopChannelRequest(params)
 //
-//    // Example sending a request using the StopChannelRequest method.
-//    req, resp := client.StopChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/StopChannel
 func (c *MediaTailor) StopChannelRequest(input *StopChannelInput) (req *request.Request, output *StopChannelOutput) {
@@ -3300,14 +3255,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/TagResource
 func (c *MediaTailor) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -3341,8 +3295,8 @@ func (c *MediaTailor) TagResourceRequest(input *TagResourceInput) (req *request.
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   A request contains unexpected data.
+//   - BadRequestException
+//     A request contains unexpected data.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/TagResource
 func (c *MediaTailor) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -3382,14 +3336,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/UntagResource
 func (c *MediaTailor) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -3421,8 +3374,8 @@ func (c *MediaTailor) UntagResourceRequest(input *UntagResourceInput) (req *requ
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   A request contains unexpected data.
+//   - BadRequestException
+//     A request contains unexpected data.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/UntagResource
 func (c *MediaTailor) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -3462,14 +3415,13 @@ const opUpdateChannel = "UpdateChannel"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateChannelRequest method.
+//	req, resp := client.UpdateChannelRequest(params)
 //
-//    // Example sending a request using the UpdateChannelRequest method.
-//    req, resp := client.UpdateChannelRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/UpdateChannel
 func (c *MediaTailor) UpdateChannelRequest(input *UpdateChannelInput) (req *request.Request, output *UpdateChannelOutput) {
@@ -3538,14 +3490,13 @@ const opUpdateLiveSource = "UpdateLiveSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateLiveSourceRequest method.
+//	req, resp := client.UpdateLiveSourceRequest(params)
 //
-//    // Example sending a request using the UpdateLiveSourceRequest method.
-//    req, resp := client.UpdateLiveSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/UpdateLiveSource
 func (c *MediaTailor) UpdateLiveSourceRequest(input *UpdateLiveSourceInput) (req *request.Request, output *UpdateLiveSourceOutput) {
@@ -3612,14 +3563,13 @@ const opUpdateProgram = "UpdateProgram"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateProgramRequest method.
+//	req, resp := client.UpdateProgramRequest(params)
 //
-//    // Example sending a request using the UpdateProgramRequest method.
-//    req, resp := client.UpdateProgramRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/UpdateProgram
 func (c *MediaTailor) UpdateProgramRequest(input *UpdateProgramInput) (req *request.Request, output *UpdateProgramOutput) {
@@ -3686,14 +3636,13 @@ const opUpdateSourceLocation = "UpdateSourceLocation"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateSourceLocationRequest method.
+//	req, resp := client.UpdateSourceLocationRequest(params)
 //
-//    // Example sending a request using the UpdateSourceLocationRequest method.
-//    req, resp := client.UpdateSourceLocationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/UpdateSourceLocation
 func (c *MediaTailor) UpdateSourceLocationRequest(input *UpdateSourceLocationInput) (req *request.Request, output *UpdateSourceLocationOutput) {
@@ -3763,14 +3712,13 @@ const opUpdateVodSource = "UpdateVodSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateVodSourceRequest method.
+//	req, resp := client.UpdateVodSourceRequest(params)
 //
-//    // Example sending a request using the UpdateVodSourceRequest method.
-//    req, resp := client.UpdateVodSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/UpdateVodSource
 func (c *MediaTailor) UpdateVodSourceRequest(input *UpdateVodSourceInput) (req *request.Request, output *UpdateVodSourceOutput) {
@@ -3826,7 +3774,7 @@ type AccessConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// The type of authentication used to access content from HttpConfiguration::BaseUrl
-	// on your source location. Accepted value: S3_SIGV4.
+	// on your source location.
 	//
 	// S3_SIGV4 - AWS Signature Version 4 authentication for Amazon S3 hosted virtual-style
 	// access. If your source location base URL is an Amazon S3 bucket, MediaTailor
@@ -3843,6 +3791,40 @@ type AccessConfiguration struct {
 	//
 	// • The mediatailor.amazonaws.com service principal must have permissions
 	// to read all top level manifests referenced by the VodSource packaging configurations.
+	//
+	// • The caller of the API must have s3:GetObject IAM permissions to read
+	// all top level manifests referenced by your MediaTailor VodSource packaging
+	// configurations.
+	//
+	// AUTODETECT_SIGV4 - AWS Signature Version 4 authentication for a set of supported
+	// services: MediaPackage Version 2 and Amazon S3 hosted virtual-style access.
+	// If your source location base URL is a MediaPackage Version 2 endpoint or
+	// an Amazon S3 bucket, MediaTailor can use AWS Signature Version 4 (SigV4)
+	// authentication to access the resource where your source content is stored.
+	//
+	// Before you can use AUTODETECT_SIGV4 with a MediaPackage Version 2 endpoint,
+	// you must meet these requirements:
+	//
+	// • You must grant MediaTailor access to your MediaPackage endpoint by granting
+	// mediatailor.amazonaws.com principal access in an Origin Access policy on
+	// the endpoint.
+	//
+	// • Your MediaTailor source location base URL must be a MediaPackage V2 endpoint.
+	//
+	// • The caller of the API must have mediapackagev2:GetObject IAM permissions
+	// to read all top level manifests referenced by the MediaTailor source packaging
+	// configurations.
+	//
+	// Before you can use AUTODETECT_SIGV4 with an Amazon S3 bucket, you must meet
+	// these requirements:
+	//
+	// • You must grant MediaTailor access to your S3 bucket by granting mediatailor.amazonaws.com
+	// principal access in IAM. For more information about configuring access in
+	// IAM, see Access management (https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html)
+	// in the IAM User Guide..
+	//
+	// • The mediatailor.amazonaws.com service principal must have permissions
+	// to read all top-level manifests referenced by the VodSource packaging configurations.
 	//
 	// • The caller of the API must have s3:GetObject IAM permissions to read
 	// all top level manifests referenced by your MediaTailor VodSource packaging
@@ -3887,13 +3869,19 @@ func (s *AccessConfiguration) SetSecretsManagerAccessTokenConfiguration(v *Secre
 type AdBreak struct {
 	_ struct{} `type:"structure"`
 
+	// Defines a list of key/value pairs that MediaTailor generates within the EXT-X-ASSETtag
+	// for SCTE35_ENHANCED output.
+	AdBreakMetadata []*KeyValuePair `type:"list"`
+
 	// The SCTE-35 ad insertion type. Accepted value: SPLICE_INSERT, TIME_SIGNAL.
 	MessageType *string `type:"string" enum:"MessageType"`
 
 	// How long (in milliseconds) after the beginning of the program that an ad
 	// starts. This value must fall within 100ms of a segment boundary, otherwise
 	// the ad break will be skipped.
-	OffsetMillis *int64 `type:"long"`
+	//
+	// OffsetMillis is a required field
+	OffsetMillis *int64 `type:"long" required:"true"`
 
 	// Ad break slate configuration.
 	Slate *SlateSource `type:"structure"`
@@ -3931,6 +3919,35 @@ func (s AdBreak) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AdBreak) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AdBreak"}
+	if s.OffsetMillis == nil {
+		invalidParams.Add(request.NewErrParamRequired("OffsetMillis"))
+	}
+	if s.AdBreakMetadata != nil {
+		for i, v := range s.AdBreakMetadata {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AdBreakMetadata", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdBreakMetadata sets the AdBreakMetadata field's value.
+func (s *AdBreak) SetAdBreakMetadata(v []*KeyValuePair) *AdBreak {
+	s.AdBreakMetadata = v
+	return s
+}
+
 // SetMessageType sets the MessageType field's value.
 func (s *AdBreak) SetMessageType(v string) *AdBreak {
 	s.MessageType = &v
@@ -3958,6 +3975,42 @@ func (s *AdBreak) SetSpliceInsertMessage(v *SpliceInsertMessage) *AdBreak {
 // SetTimeSignalMessage sets the TimeSignalMessage field's value.
 func (s *AdBreak) SetTimeSignalMessage(v *TimeSignalMessage) *AdBreak {
 	s.TimeSignalMessage = v
+	return s
+}
+
+// A location at which a zero-duration ad marker was detected in a VOD source
+// manifest.
+type AdBreakOpportunity struct {
+	_ struct{} `type:"structure"`
+
+	// The offset in milliseconds from the start of the VOD source at which an ad
+	// marker was detected.
+	//
+	// OffsetMillis is a required field
+	OffsetMillis *int64 `type:"long" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AdBreakOpportunity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AdBreakOpportunity) GoString() string {
+	return s.String()
+}
+
+// SetOffsetMillis sets the OffsetMillis field's value.
+func (s *AdBreakOpportunity) SetOffsetMillis(v int64) *AdBreakOpportunity {
+	s.OffsetMillis = &v
 	return s
 }
 
@@ -4014,6 +4067,9 @@ type Alert struct {
 	// AlertMessage is a required field
 	AlertMessage *string `type:"string" required:"true"`
 
+	// The category that MediaTailor assigns to the alert.
+	Category *string `type:"string" enum:"AlertCategory"`
+
 	// The timestamp when the alert was last modified.
 	//
 	// LastModifiedTime is a required field
@@ -4060,6 +4116,12 @@ func (s *Alert) SetAlertMessage(v string) *Alert {
 	return s
 }
 
+// SetCategory sets the Category field's value.
+func (s *Alert) SetCategory(v string) *Alert {
+	s.Category = &v
+	return s
+}
+
 // SetLastModifiedTime sets the LastModifiedTime field's value.
 func (s *Alert) SetLastModifiedTime(v time.Time) *Alert {
 	s.LastModifiedTime = &v
@@ -4075,6 +4137,175 @@ func (s *Alert) SetRelatedResourceArns(v []*string) *Alert {
 // SetResourceArn sets the ResourceArn field's value.
 func (s *Alert) SetResourceArn(v string) *Alert {
 	s.ResourceArn = &v
+	return s
+}
+
+// A playlist of media (VOD and/or live) to be played instead of the default
+// media on a particular program.
+type AlternateMedia struct {
+	_ struct{} `type:"structure"`
+
+	// Ad break configuration parameters defined in AlternateMedia.
+	AdBreaks []*AdBreak `type:"list"`
+
+	// Clip range configuration for the VOD source associated with the program.
+	ClipRange *ClipRange `type:"structure"`
+
+	// The duration of the alternateMedia in milliseconds.
+	DurationMillis *int64 `type:"long"`
+
+	// The name of the live source for alternateMedia.
+	LiveSourceName *string `type:"string"`
+
+	// The date and time that the alternateMedia is scheduled to start, in epoch
+	// milliseconds.
+	ScheduledStartTimeMillis *int64 `type:"long"`
+
+	// The name of the source location for alternateMedia.
+	SourceLocationName *string `type:"string"`
+
+	// The name of the VOD source for alternateMedia.
+	VodSourceName *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AlternateMedia) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AlternateMedia) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AlternateMedia) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AlternateMedia"}
+	if s.AdBreaks != nil {
+		for i, v := range s.AdBreaks {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AdBreaks", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdBreaks sets the AdBreaks field's value.
+func (s *AlternateMedia) SetAdBreaks(v []*AdBreak) *AlternateMedia {
+	s.AdBreaks = v
+	return s
+}
+
+// SetClipRange sets the ClipRange field's value.
+func (s *AlternateMedia) SetClipRange(v *ClipRange) *AlternateMedia {
+	s.ClipRange = v
+	return s
+}
+
+// SetDurationMillis sets the DurationMillis field's value.
+func (s *AlternateMedia) SetDurationMillis(v int64) *AlternateMedia {
+	s.DurationMillis = &v
+	return s
+}
+
+// SetLiveSourceName sets the LiveSourceName field's value.
+func (s *AlternateMedia) SetLiveSourceName(v string) *AlternateMedia {
+	s.LiveSourceName = &v
+	return s
+}
+
+// SetScheduledStartTimeMillis sets the ScheduledStartTimeMillis field's value.
+func (s *AlternateMedia) SetScheduledStartTimeMillis(v int64) *AlternateMedia {
+	s.ScheduledStartTimeMillis = &v
+	return s
+}
+
+// SetSourceLocationName sets the SourceLocationName field's value.
+func (s *AlternateMedia) SetSourceLocationName(v string) *AlternateMedia {
+	s.SourceLocationName = &v
+	return s
+}
+
+// SetVodSourceName sets the VodSourceName field's value.
+func (s *AlternateMedia) SetVodSourceName(v string) *AlternateMedia {
+	s.VodSourceName = &v
+	return s
+}
+
+// An AudienceMedia object contains an Audience and a list of AlternateMedia.
+type AudienceMedia struct {
+	_ struct{} `type:"structure"`
+
+	// The list of AlternateMedia defined in AudienceMedia.
+	AlternateMedia []*AlternateMedia `type:"list"`
+
+	// The Audience defined in AudienceMedia.
+	Audience *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AudienceMedia) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AudienceMedia) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AudienceMedia) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AudienceMedia"}
+	if s.AlternateMedia != nil {
+		for i, v := range s.AlternateMedia {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AlternateMedia", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAlternateMedia sets the AlternateMedia field's value.
+func (s *AudienceMedia) SetAlternateMedia(v []*AlternateMedia) *AudienceMedia {
+	s.AlternateMedia = v
+	return s
+}
+
+// SetAudience sets the Audience field's value.
+func (s *AudienceMedia) SetAudience(v string) *AudienceMedia {
+	s.Audience = &v
 	return s
 }
 
@@ -4394,6 +4625,9 @@ type Channel struct {
 	// Arn is a required field
 	Arn *string `type:"string" required:"true"`
 
+	// The list of audiences defined in channel.
+	Audiences []*string `type:"list"`
+
 	// The name of the channel.
 	//
 	// ChannelName is a required field
@@ -4471,6 +4705,12 @@ func (s *Channel) SetArn(v string) *Channel {
 	return s
 }
 
+// SetAudiences sets the Audiences field's value.
+func (s *Channel) SetAudiences(v []*string) *Channel {
+	s.Audiences = v
+	return s
+}
+
 // SetChannelName sets the ChannelName field's value.
 func (s *Channel) SetChannelName(v string) *Channel {
 	s.ChannelName = &v
@@ -4537,9 +4777,11 @@ type ClipRange struct {
 
 	// The end offset of the clip range, in milliseconds, starting from the beginning
 	// of the VOD source associated with the program.
-	//
-	// EndOffsetMillis is a required field
-	EndOffsetMillis *int64 `type:"long" required:"true"`
+	EndOffsetMillis *int64 `type:"long"`
+
+	// The start offset of the clip range, in milliseconds. This offset truncates
+	// the start at the number of milliseconds into the duration of the VOD source.
+	StartOffsetMillis *int64 `type:"long"`
 }
 
 // String returns the string representation.
@@ -4560,22 +4802,15 @@ func (s ClipRange) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *ClipRange) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "ClipRange"}
-	if s.EndOffsetMillis == nil {
-		invalidParams.Add(request.NewErrParamRequired("EndOffsetMillis"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 // SetEndOffsetMillis sets the EndOffsetMillis field's value.
 func (s *ClipRange) SetEndOffsetMillis(v int64) *ClipRange {
 	s.EndOffsetMillis = &v
+	return s
+}
+
+// SetStartOffsetMillis sets the StartOffsetMillis field's value.
+func (s *ClipRange) SetStartOffsetMillis(v int64) *ClipRange {
+	s.StartOffsetMillis = &v
 	return s
 }
 
@@ -4793,6 +5028,9 @@ func (s *ConfigureLogsForPlaybackConfigurationOutput) SetPlaybackConfigurationNa
 type CreateChannelInput struct {
 	_ struct{} `type:"structure"`
 
+	// The list of audiences defined in channel.
+	Audiences []*string `type:"list"`
+
 	// The name of the channel.
 	//
 	// ChannelName is a required field
@@ -4827,6 +5065,9 @@ type CreateChannelInput struct {
 
 	// The tier of the channel.
 	Tier *string `type:"string" enum:"Tier"`
+
+	// The time-shifted viewing configuration you want to associate to the channel.
+	TimeShiftConfiguration *TimeShiftConfiguration `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4872,11 +5113,22 @@ func (s *CreateChannelInput) Validate() error {
 			}
 		}
 	}
+	if s.TimeShiftConfiguration != nil {
+		if err := s.TimeShiftConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("TimeShiftConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAudiences sets the Audiences field's value.
+func (s *CreateChannelInput) SetAudiences(v []*string) *CreateChannelInput {
+	s.Audiences = v
+	return s
 }
 
 // SetChannelName sets the ChannelName field's value.
@@ -4915,11 +5167,20 @@ func (s *CreateChannelInput) SetTier(v string) *CreateChannelInput {
 	return s
 }
 
+// SetTimeShiftConfiguration sets the TimeShiftConfiguration field's value.
+func (s *CreateChannelInput) SetTimeShiftConfiguration(v *TimeShiftConfiguration) *CreateChannelInput {
+	s.TimeShiftConfiguration = v
+	return s
+}
+
 type CreateChannelOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Resource Name (ARN) to assign to the channel.
 	Arn *string `type:"string"`
+
+	// The list of audiences defined in channel.
+	Audiences []*string `type:"list"`
 
 	// The name to assign to the channel.
 	ChannelName *string `type:"string"`
@@ -4951,6 +5212,9 @@ type CreateChannelOutput struct {
 
 	// The tier of the channel.
 	Tier *string `type:"string"`
+
+	// The time-shifted viewing configuration assigned to the channel.
+	TimeShiftConfiguration *TimeShiftConfiguration `type:"structure"`
 }
 
 // String returns the string representation.
@@ -4974,6 +5238,12 @@ func (s CreateChannelOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *CreateChannelOutput) SetArn(v string) *CreateChannelOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetAudiences sets the Audiences field's value.
+func (s *CreateChannelOutput) SetAudiences(v []*string) *CreateChannelOutput {
+	s.Audiences = v
 	return s
 }
 
@@ -5028,6 +5298,12 @@ func (s *CreateChannelOutput) SetTags(v map[string]*string) *CreateChannelOutput
 // SetTier sets the Tier field's value.
 func (s *CreateChannelOutput) SetTier(v string) *CreateChannelOutput {
 	s.Tier = &v
+	return s
+}
+
+// SetTimeShiftConfiguration sets the TimeShiftConfiguration field's value.
+func (s *CreateChannelOutput) SetTimeShiftConfiguration(v *TimeShiftConfiguration) *CreateChannelOutput {
+	s.TimeShiftConfiguration = v
 	return s
 }
 
@@ -5436,6 +5712,9 @@ type CreateProgramInput struct {
 	// The ad break configuration settings.
 	AdBreaks []*AdBreak `type:"list"`
 
+	// The list of AudienceMedia defined in program.
+	AudienceMedia []*AudienceMedia `type:"list"`
+
 	// The name of the channel for this Program.
 	//
 	// ChannelName is a required field
@@ -5502,6 +5781,26 @@ func (s *CreateProgramInput) Validate() error {
 	if s.SourceLocationName == nil {
 		invalidParams.Add(request.NewErrParamRequired("SourceLocationName"))
 	}
+	if s.AdBreaks != nil {
+		for i, v := range s.AdBreaks {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AdBreaks", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.AudienceMedia != nil {
+		for i, v := range s.AudienceMedia {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AudienceMedia", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.ScheduleConfiguration != nil {
 		if err := s.ScheduleConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("ScheduleConfiguration", err.(request.ErrInvalidParams))
@@ -5517,6 +5816,12 @@ func (s *CreateProgramInput) Validate() error {
 // SetAdBreaks sets the AdBreaks field's value.
 func (s *CreateProgramInput) SetAdBreaks(v []*AdBreak) *CreateProgramInput {
 	s.AdBreaks = v
+	return s
+}
+
+// SetAudienceMedia sets the AudienceMedia field's value.
+func (s *CreateProgramInput) SetAudienceMedia(v []*AudienceMedia) *CreateProgramInput {
+	s.AudienceMedia = v
 	return s
 }
 
@@ -5564,6 +5869,9 @@ type CreateProgramOutput struct {
 
 	// The ARN to assign to the program.
 	Arn *string `type:"string"`
+
+	// The list of AudienceMedia defined in program.
+	AudienceMedia []*AudienceMedia `type:"list"`
 
 	// The name to assign to the channel for this program.
 	ChannelName *string `type:"string"`
@@ -5620,6 +5928,12 @@ func (s *CreateProgramOutput) SetAdBreaks(v []*AdBreak) *CreateProgramOutput {
 // SetArn sets the Arn field's value.
 func (s *CreateProgramOutput) SetArn(v string) *CreateProgramOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetAudienceMedia sets the AudienceMedia field's value.
+func (s *CreateProgramOutput) SetAudienceMedia(v []*AudienceMedia) *CreateProgramOutput {
+	s.AudienceMedia = v
 	return s
 }
 
@@ -6991,6 +7305,9 @@ type DescribeChannelOutput struct {
 	// The ARN of the channel.
 	Arn *string `type:"string"`
 
+	// The list of audiences defined in channel.
+	Audiences []*string `type:"list"`
+
 	// The name of the channel.
 	ChannelName *string `type:"string"`
 
@@ -7026,6 +7343,9 @@ type DescribeChannelOutput struct {
 
 	// The channel's tier.
 	Tier *string `type:"string"`
+
+	// The time-shifted viewing configuration for the channel.
+	TimeShiftConfiguration *TimeShiftConfiguration `type:"structure"`
 }
 
 // String returns the string representation.
@@ -7049,6 +7369,12 @@ func (s DescribeChannelOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *DescribeChannelOutput) SetArn(v string) *DescribeChannelOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetAudiences sets the Audiences field's value.
+func (s *DescribeChannelOutput) SetAudiences(v []*string) *DescribeChannelOutput {
+	s.Audiences = v
 	return s
 }
 
@@ -7109,6 +7435,12 @@ func (s *DescribeChannelOutput) SetTags(v map[string]*string) *DescribeChannelOu
 // SetTier sets the Tier field's value.
 func (s *DescribeChannelOutput) SetTier(v string) *DescribeChannelOutput {
 	s.Tier = &v
+	return s
+}
+
+// SetTimeShiftConfiguration sets the TimeShiftConfiguration field's value.
+func (s *DescribeChannelOutput) SetTimeShiftConfiguration(v *TimeShiftConfiguration) *DescribeChannelOutput {
+	s.TimeShiftConfiguration = v
 	return s
 }
 
@@ -7341,6 +7673,9 @@ type DescribeProgramOutput struct {
 	// The ARN of the program.
 	Arn *string `type:"string"`
 
+	// The list of AudienceMedia defined in program.
+	AudienceMedia []*AudienceMedia `type:"list"`
+
 	// The name of the channel that the program belongs to.
 	ChannelName *string `type:"string"`
 
@@ -7398,6 +7733,12 @@ func (s *DescribeProgramOutput) SetAdBreaks(v []*AdBreak) *DescribeProgramOutput
 // SetArn sets the Arn field's value.
 func (s *DescribeProgramOutput) SetArn(v string) *DescribeProgramOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetAudienceMedia sets the AudienceMedia field's value.
+func (s *DescribeProgramOutput) SetAudienceMedia(v []*AudienceMedia) *DescribeProgramOutput {
+	s.AudienceMedia = v
 	return s
 }
 
@@ -7679,6 +8020,9 @@ func (s *DescribeVodSourceInput) SetVodSourceName(v string) *DescribeVodSourceIn
 type DescribeVodSourceOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The ad break opportunities within the VOD source.
+	AdBreakOpportunities []*AdBreakOpportunity `type:"list"`
+
 	// The ARN of the VOD source.
 	Arn *string `type:"string"`
 
@@ -7720,6 +8064,12 @@ func (s DescribeVodSourceOutput) String() string {
 // value will be replaced with "sensitive".
 func (s DescribeVodSourceOutput) GoString() string {
 	return s.String()
+}
+
+// SetAdBreakOpportunities sets the AdBreakOpportunities field's value.
+func (s *DescribeVodSourceOutput) SetAdBreakOpportunities(v []*AdBreakOpportunity) *DescribeVodSourceOutput {
+	s.AdBreakOpportunities = v
+	return s
 }
 
 // SetArn sets the Arn field's value.
@@ -7848,6 +8198,9 @@ func (s *GetChannelPolicyOutput) SetPolicy(v string) *GetChannelPolicyOutput {
 type GetChannelScheduleInput struct {
 	_ struct{} `type:"structure" nopayload:"true"`
 
+	// The single audience for GetChannelScheduleRequest.
+	Audience *string `location:"querystring" locationName:"audience" type:"string"`
+
 	// The name of the channel associated with this Channel Schedule.
 	//
 	// ChannelName is a required field
@@ -7910,6 +8263,12 @@ func (s *GetChannelScheduleInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAudience sets the Audience field's value.
+func (s *GetChannelScheduleInput) SetAudience(v string) *GetChannelScheduleInput {
+	s.Audience = &v
+	return s
 }
 
 // SetChannelName sets the ChannelName field's value.
@@ -8437,6 +8796,11 @@ func (s *HlsConfiguration) SetManifestEndpointPrefix(v string) *HlsConfiguration
 type HlsPlaylistSettings struct {
 	_ struct{} `type:"structure"`
 
+	// Determines the type of SCTE 35 tags to use in ad markup. Specify DATERANGE
+	// to use DATERANGE tags (for live or VOD content). Specify SCTE35_ENHANCED
+	// to use EXT-X-CUE-OUT and EXT-X-CUE-IN tags (for VOD content only).
+	AdMarkupType []*string `type:"list" enum:"AdMarkupType"`
+
 	// The total duration (in seconds) of each manifest. Minimum value: 30 seconds.
 	// Maximum value: 3600 seconds.
 	ManifestWindowSeconds *int64 `type:"integer"`
@@ -8458,6 +8822,12 @@ func (s HlsPlaylistSettings) String() string {
 // value will be replaced with "sensitive".
 func (s HlsPlaylistSettings) GoString() string {
 	return s.String()
+}
+
+// SetAdMarkupType sets the AdMarkupType field's value.
+func (s *HlsPlaylistSettings) SetAdMarkupType(v []*string) *HlsPlaylistSettings {
+	s.AdMarkupType = v
+	return s
 }
 
 // SetManifestWindowSeconds sets the ManifestWindowSeconds field's value.
@@ -8588,6 +8958,72 @@ func (s *HttpPackageConfiguration) SetSourceGroup(v string) *HttpPackageConfigur
 // SetType sets the Type field's value.
 func (s *HttpPackageConfiguration) SetType(v string) *HttpPackageConfiguration {
 	s.Type = &v
+	return s
+}
+
+// For SCTE35_ENHANCED output, defines a key and corresponding value. MediaTailor
+// generates these pairs within the EXT-X-ASSETtag.
+type KeyValuePair struct {
+	_ struct{} `type:"structure"`
+
+	// For SCTE35_ENHANCED output, defines a key. MediaTailor takes this key, and
+	// its associated value, and generates the key/value pair within the EXT-X-ASSETtag.
+	// If you specify a key, you must also specify a corresponding value.
+	//
+	// Key is a required field
+	Key *string `type:"string" required:"true"`
+
+	// For SCTE35_ENHANCED output, defines a value. MediaTailor; takes this value,
+	// and its associated key, and generates the key/value pair within the EXT-X-ASSETtag.
+	// If you specify a value, you must also specify a corresponding key.
+	//
+	// Value is a required field
+	Value *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KeyValuePair) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s KeyValuePair) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *KeyValuePair) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "KeyValuePair"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *KeyValuePair) SetKey(v string) *KeyValuePair {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *KeyValuePair) SetValue(v string) *KeyValuePair {
+	s.Value = &v
 	return s
 }
 
@@ -10931,11 +11367,6 @@ func (s *ScheduleConfiguration) Validate() error {
 	if s.Transition == nil {
 		invalidParams.Add(request.NewErrParamRequired("Transition"))
 	}
-	if s.ClipRange != nil {
-		if err := s.ClipRange.Validate(); err != nil {
-			invalidParams.AddNested("ClipRange", err.(request.ErrInvalidParams))
-		}
-	}
 	if s.Transition != nil {
 		if err := s.Transition.Validate(); err != nil {
 			invalidParams.AddNested("Transition", err.(request.ErrInvalidParams))
@@ -10974,6 +11405,9 @@ type ScheduleEntry struct {
 	//
 	// Arn is a required field
 	Arn *string `type:"string" required:"true"`
+
+	// The list of audiences defined in ScheduleEntry.
+	Audiences []*string `type:"list"`
 
 	// The name of the channel that uses this schedule.
 	//
@@ -11036,6 +11470,12 @@ func (s *ScheduleEntry) SetApproximateStartTime(v time.Time) *ScheduleEntry {
 // SetArn sets the Arn field's value.
 func (s *ScheduleEntry) SetArn(v string) *ScheduleEntry {
 	s.Arn = &v
+	return s
+}
+
+// SetAudiences sets the Audiences field's value.
+func (s *ScheduleEntry) SetAudiences(v []*string) *ScheduleEntry {
+	s.Audiences = v
 	return s
 }
 
@@ -11757,6 +12197,55 @@ func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
+// The configuration for time-shifted viewing.
+type TimeShiftConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum time delay for time-shifted viewing. The minimum allowed maximum
+	// time delay is 0 seconds, and the maximum allowed maximum time delay is 21600
+	// seconds (6 hours).
+	//
+	// MaxTimeDelaySeconds is a required field
+	MaxTimeDelaySeconds *int64 `type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TimeShiftConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TimeShiftConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TimeShiftConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TimeShiftConfiguration"}
+	if s.MaxTimeDelaySeconds == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxTimeDelaySeconds"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxTimeDelaySeconds sets the MaxTimeDelaySeconds field's value.
+func (s *TimeShiftConfiguration) SetMaxTimeDelaySeconds(v int64) *TimeShiftConfiguration {
+	s.MaxTimeDelaySeconds = &v
+	return s
+}
+
 // The SCTE-35 time_signal message can be sent with one or more segmentation_descriptor
 // messages. A time_signal message can be sent only if a single segmentation_descriptor
 // message is sent.
@@ -11992,6 +12481,9 @@ func (s UntagResourceOutput) GoString() string {
 type UpdateChannelInput struct {
 	_ struct{} `type:"structure"`
 
+	// The list of audiences defined in channel.
+	Audiences []*string `type:"list"`
+
 	// The name of the channel.
 	//
 	// ChannelName is a required field
@@ -12006,6 +12498,9 @@ type UpdateChannelInput struct {
 	//
 	// Outputs is a required field
 	Outputs []*RequestOutputItem `type:"list" required:"true"`
+
+	// The time-shifted viewing configuration you want to associate to the channel.
+	TimeShiftConfiguration *TimeShiftConfiguration `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12048,11 +12543,22 @@ func (s *UpdateChannelInput) Validate() error {
 			}
 		}
 	}
+	if s.TimeShiftConfiguration != nil {
+		if err := s.TimeShiftConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("TimeShiftConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAudiences sets the Audiences field's value.
+func (s *UpdateChannelInput) SetAudiences(v []*string) *UpdateChannelInput {
+	s.Audiences = v
+	return s
 }
 
 // SetChannelName sets the ChannelName field's value.
@@ -12073,11 +12579,20 @@ func (s *UpdateChannelInput) SetOutputs(v []*RequestOutputItem) *UpdateChannelIn
 	return s
 }
 
+// SetTimeShiftConfiguration sets the TimeShiftConfiguration field's value.
+func (s *UpdateChannelInput) SetTimeShiftConfiguration(v *TimeShiftConfiguration) *UpdateChannelInput {
+	s.TimeShiftConfiguration = v
+	return s
+}
+
 type UpdateChannelOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Resource Name (ARN) associated with the channel.
 	Arn *string `type:"string"`
+
+	// The list of audiences defined in channel.
+	Audiences []*string `type:"list"`
 
 	// The name of the channel.
 	ChannelName *string `type:"string"`
@@ -12115,6 +12630,9 @@ type UpdateChannelOutput struct {
 
 	// The tier associated with this Channel.
 	Tier *string `type:"string"`
+
+	// The time-shifted viewing configuration for the channel.
+	TimeShiftConfiguration *TimeShiftConfiguration `type:"structure"`
 }
 
 // String returns the string representation.
@@ -12138,6 +12656,12 @@ func (s UpdateChannelOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *UpdateChannelOutput) SetArn(v string) *UpdateChannelOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetAudiences sets the Audiences field's value.
+func (s *UpdateChannelOutput) SetAudiences(v []*string) *UpdateChannelOutput {
+	s.Audiences = v
 	return s
 }
 
@@ -12192,6 +12716,12 @@ func (s *UpdateChannelOutput) SetTags(v map[string]*string) *UpdateChannelOutput
 // SetTier sets the Tier field's value.
 func (s *UpdateChannelOutput) SetTier(v string) *UpdateChannelOutput {
 	s.Tier = &v
+	return s
+}
+
+// SetTimeShiftConfiguration sets the TimeShiftConfiguration field's value.
+func (s *UpdateChannelOutput) SetTimeShiftConfiguration(v *TimeShiftConfiguration) *UpdateChannelOutput {
+	s.TimeShiftConfiguration = v
 	return s
 }
 
@@ -12379,6 +12909,9 @@ type UpdateProgramInput struct {
 	// The ad break configuration settings.
 	AdBreaks []*AdBreak `type:"list"`
 
+	// The list of AudienceMedia defined in program.
+	AudienceMedia []*AudienceMedia `type:"list"`
+
 	// The name of the channel for this Program.
 	//
 	// ChannelName is a required field
@@ -12431,9 +12964,24 @@ func (s *UpdateProgramInput) Validate() error {
 	if s.ScheduleConfiguration == nil {
 		invalidParams.Add(request.NewErrParamRequired("ScheduleConfiguration"))
 	}
-	if s.ScheduleConfiguration != nil {
-		if err := s.ScheduleConfiguration.Validate(); err != nil {
-			invalidParams.AddNested("ScheduleConfiguration", err.(request.ErrInvalidParams))
+	if s.AdBreaks != nil {
+		for i, v := range s.AdBreaks {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AdBreaks", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.AudienceMedia != nil {
+		for i, v := range s.AudienceMedia {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AudienceMedia", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 
@@ -12446,6 +12994,12 @@ func (s *UpdateProgramInput) Validate() error {
 // SetAdBreaks sets the AdBreaks field's value.
 func (s *UpdateProgramInput) SetAdBreaks(v []*AdBreak) *UpdateProgramInput {
 	s.AdBreaks = v
+	return s
+}
+
+// SetAudienceMedia sets the AudienceMedia field's value.
+func (s *UpdateProgramInput) SetAudienceMedia(v []*AudienceMedia) *UpdateProgramInput {
+	s.AudienceMedia = v
 	return s
 }
 
@@ -12475,6 +13029,9 @@ type UpdateProgramOutput struct {
 
 	// The ARN to assign to the program.
 	Arn *string `type:"string"`
+
+	// The list of AudienceMedia defined in program.
+	AudienceMedia []*AudienceMedia `type:"list"`
 
 	// The name to assign to the channel for this program.
 	ChannelName *string `type:"string"`
@@ -12531,6 +13088,12 @@ func (s *UpdateProgramOutput) SetAdBreaks(v []*AdBreak) *UpdateProgramOutput {
 // SetArn sets the Arn field's value.
 func (s *UpdateProgramOutput) SetArn(v string) *UpdateProgramOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetAudienceMedia sets the AudienceMedia field's value.
+func (s *UpdateProgramOutput) SetAudienceMedia(v []*AudienceMedia) *UpdateProgramOutput {
+	s.AudienceMedia = v
 	return s
 }
 
@@ -12615,21 +13178,6 @@ func (s UpdateProgramScheduleConfiguration) String() string {
 // value will be replaced with "sensitive".
 func (s UpdateProgramScheduleConfiguration) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *UpdateProgramScheduleConfiguration) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "UpdateProgramScheduleConfiguration"}
-	if s.ClipRange != nil {
-		if err := s.ClipRange.Validate(); err != nil {
-			invalidParams.AddNested("ClipRange", err.(request.ErrInvalidParams))
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // SetClipRange sets the ClipRange field's value.
@@ -13171,6 +13719,9 @@ const (
 
 	// AccessTypeSecretsManagerAccessToken is a AccessType enum value
 	AccessTypeSecretsManagerAccessToken = "SECRETS_MANAGER_ACCESS_TOKEN"
+
+	// AccessTypeAutodetectSigv4 is a AccessType enum value
+	AccessTypeAutodetectSigv4 = "AUTODETECT_SIGV4"
 )
 
 // AccessType_Values returns all elements of the AccessType enum
@@ -13178,6 +13729,43 @@ func AccessType_Values() []string {
 	return []string{
 		AccessTypeS3Sigv4,
 		AccessTypeSecretsManagerAccessToken,
+		AccessTypeAutodetectSigv4,
+	}
+}
+
+const (
+	// AdMarkupTypeDaterange is a AdMarkupType enum value
+	AdMarkupTypeDaterange = "DATERANGE"
+
+	// AdMarkupTypeScte35Enhanced is a AdMarkupType enum value
+	AdMarkupTypeScte35Enhanced = "SCTE35_ENHANCED"
+)
+
+// AdMarkupType_Values returns all elements of the AdMarkupType enum
+func AdMarkupType_Values() []string {
+	return []string{
+		AdMarkupTypeDaterange,
+		AdMarkupTypeScte35Enhanced,
+	}
+}
+
+const (
+	// AlertCategorySchedulingError is a AlertCategory enum value
+	AlertCategorySchedulingError = "SCHEDULING_ERROR"
+
+	// AlertCategoryPlaybackWarning is a AlertCategory enum value
+	AlertCategoryPlaybackWarning = "PLAYBACK_WARNING"
+
+	// AlertCategoryInfo is a AlertCategory enum value
+	AlertCategoryInfo = "INFO"
+)
+
+// AlertCategory_Values returns all elements of the AlertCategory enum
+func AlertCategory_Values() []string {
+	return []string{
+		AlertCategorySchedulingError,
+		AlertCategoryPlaybackWarning,
+		AlertCategoryInfo,
 	}
 }
 
@@ -13327,6 +13915,9 @@ const (
 
 	// ScheduleEntryTypeFillerSlate is a ScheduleEntryType enum value
 	ScheduleEntryTypeFillerSlate = "FILLER_SLATE"
+
+	// ScheduleEntryTypeAlternateMedia is a ScheduleEntryType enum value
+	ScheduleEntryTypeAlternateMedia = "ALTERNATE_MEDIA"
 )
 
 // ScheduleEntryType_Values returns all elements of the ScheduleEntryType enum
@@ -13334,6 +13925,7 @@ func ScheduleEntryType_Values() []string {
 	return []string{
 		ScheduleEntryTypeProgram,
 		ScheduleEntryTypeFillerSlate,
+		ScheduleEntryTypeAlternateMedia,
 	}
 }
 

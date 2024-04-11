@@ -40,13 +40,14 @@ const (
 // aws.Config parameter to add your extra config.
 //
 // Example:
-//     mySession := session.Must(session.NewSession())
 //
-//     // Create a SecurityLake client from just a session.
-//     svc := securitylake.New(mySession)
+//	mySession := session.Must(session.NewSession())
 //
-//     // Create a SecurityLake client with additional configuration
-//     svc := securitylake.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+//	// Create a SecurityLake client from just a session.
+//	svc := securitylake.New(mySession)
+//
+//	// Create a SecurityLake client with additional configuration
+//	svc := securitylake.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
 func New(p client.ConfigProvider, cfgs ...*aws.Config) *SecurityLake {
 	c := p.ClientConfig(EndpointsID, cfgs...)
 	if c.SigningNameDerived || len(c.SigningName) == 0 {

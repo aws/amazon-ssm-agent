@@ -29,14 +29,13 @@ const opAddApplicationCloudWatchLoggingOption = "AddApplicationCloudWatchLogging
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddApplicationCloudWatchLoggingOptionRequest method.
+//	req, resp := client.AddApplicationCloudWatchLoggingOptionRequest(params)
 //
-//    // Example sending a request using the AddApplicationCloudWatchLoggingOptionRequest method.
-//    req, resp := client.AddApplicationCloudWatchLoggingOptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationCloudWatchLoggingOption
 func (c *KinesisAnalyticsV2) AddApplicationCloudWatchLoggingOptionRequest(input *AddApplicationCloudWatchLoggingOptionInput) (req *request.Request, output *AddApplicationCloudWatchLoggingOptionOutput) {
@@ -68,25 +67,26 @@ func (c *KinesisAnalyticsV2) AddApplicationCloudWatchLoggingOptionRequest(input 
 // API operation AddApplicationCloudWatchLoggingOption for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
 //
-//   * InvalidApplicationConfigurationException
-//   The user-provided application configuration is not valid.
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
+//
+//   - InvalidApplicationConfigurationException
+//     The user-provided application configuration is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationCloudWatchLoggingOption
 func (c *KinesisAnalyticsV2) AddApplicationCloudWatchLoggingOption(input *AddApplicationCloudWatchLoggingOptionInput) (*AddApplicationCloudWatchLoggingOptionOutput, error) {
@@ -126,14 +126,13 @@ const opAddApplicationInput = "AddApplicationInput"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddApplicationInputRequest method.
+//	req, resp := client.AddApplicationInputRequest(params)
 //
-//    // Example sending a request using the AddApplicationInputRequest method.
-//    req, resp := client.AddApplicationInputRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationInput
 func (c *KinesisAnalyticsV2) AddApplicationInputRequest(input *AddApplicationInputInput) (req *request.Request, output *AddApplicationInputOutput) {
@@ -172,26 +171,27 @@ func (c *KinesisAnalyticsV2) AddApplicationInputRequest(input *AddApplicationInp
 // API operation AddApplicationInput for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * CodeValidationException
-//   The user-provided application code (query) is not valid. This can be a simple
-//   syntax error.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - CodeValidationException
+//     The user-provided application code (query) is not valid. This can be a simple
+//     syntax error.
+//
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationInput
 func (c *KinesisAnalyticsV2) AddApplicationInput(input *AddApplicationInputInput) (*AddApplicationInputOutput, error) {
@@ -231,14 +231,13 @@ const opAddApplicationInputProcessingConfiguration = "AddApplicationInputProcess
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddApplicationInputProcessingConfigurationRequest method.
+//	req, resp := client.AddApplicationInputProcessingConfigurationRequest(params)
 //
-//    // Example sending a request using the AddApplicationInputProcessingConfigurationRequest method.
-//    req, resp := client.AddApplicationInputProcessingConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationInputProcessingConfiguration
 func (c *KinesisAnalyticsV2) AddApplicationInputProcessingConfigurationRequest(input *AddApplicationInputProcessingConfigurationInput) (req *request.Request, output *AddApplicationInputProcessingConfigurationOutput) {
@@ -272,22 +271,23 @@ func (c *KinesisAnalyticsV2) AddApplicationInputProcessingConfigurationRequest(i
 // API operation AddApplicationInputProcessingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
+//
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationInputProcessingConfiguration
 func (c *KinesisAnalyticsV2) AddApplicationInputProcessingConfiguration(input *AddApplicationInputProcessingConfigurationInput) (*AddApplicationInputProcessingConfigurationOutput, error) {
@@ -327,14 +327,13 @@ const opAddApplicationOutput = "AddApplicationOutput"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddApplicationOutputRequest method.
+//	req, resp := client.AddApplicationOutputRequest(params)
 //
-//    // Example sending a request using the AddApplicationOutputRequest method.
-//    req, resp := client.AddApplicationOutputRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationOutput
 func (c *KinesisAnalyticsV2) AddApplicationOutputRequest(input *AddApplicationOutputInput) (req *request.Request, output *AddApplicationOutputOutput) {
@@ -379,22 +378,23 @@ func (c *KinesisAnalyticsV2) AddApplicationOutputRequest(input *AddApplicationOu
 // API operation AddApplicationOutput for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
+//
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationOutput
 func (c *KinesisAnalyticsV2) AddApplicationOutput(input *AddApplicationOutputInput) (*AddApplicationOutputOutput, error) {
@@ -434,14 +434,13 @@ const opAddApplicationReferenceDataSource = "AddApplicationReferenceDataSource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddApplicationReferenceDataSourceRequest method.
+//	req, resp := client.AddApplicationReferenceDataSourceRequest(params)
 //
-//    // Example sending a request using the AddApplicationReferenceDataSourceRequest method.
-//    req, resp := client.AddApplicationReferenceDataSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationReferenceDataSource
 func (c *KinesisAnalyticsV2) AddApplicationReferenceDataSourceRequest(input *AddApplicationReferenceDataSourceInput) (req *request.Request, output *AddApplicationReferenceDataSourceOutput) {
@@ -480,22 +479,23 @@ func (c *KinesisAnalyticsV2) AddApplicationReferenceDataSourceRequest(input *Add
 // API operation AddApplicationReferenceDataSource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
+//
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationReferenceDataSource
 func (c *KinesisAnalyticsV2) AddApplicationReferenceDataSource(input *AddApplicationReferenceDataSourceInput) (*AddApplicationReferenceDataSourceOutput, error) {
@@ -535,14 +535,13 @@ const opAddApplicationVpcConfiguration = "AddApplicationVpcConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the AddApplicationVpcConfigurationRequest method.
+//	req, resp := client.AddApplicationVpcConfigurationRequest(params)
 //
-//    // Example sending a request using the AddApplicationVpcConfigurationRequest method.
-//    req, resp := client.AddApplicationVpcConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationVpcConfiguration
 func (c *KinesisAnalyticsV2) AddApplicationVpcConfigurationRequest(input *AddApplicationVpcConfigurationInput) (req *request.Request, output *AddApplicationVpcConfigurationOutput) {
@@ -566,13 +565,15 @@ func (c *KinesisAnalyticsV2) AddApplicationVpcConfigurationRequest(input *AddApp
 // Adds a Virtual Private Cloud (VPC) configuration to the application. Applications
 // can use VPCs to store and access resources securely.
 //
-// Note the following about VPC configurations for Kinesis Data Analytics applications:
+// Note the following about VPC configurations for Managed Service for Apache
+// Flink applications:
 //
-//    * VPC configurations are not supported for SQL applications.
+//   - VPC configurations are not supported for SQL applications.
 //
-//    * When a VPC is added to a Kinesis Data Analytics application, the application
-//    can no longer be accessed from the Internet directly. To enable Internet
-//    access to the application, add an Internet gateway to your VPC.
+//   - When a VPC is added to a Managed Service for Apache Flink application,
+//     the application can no longer be accessed from the Internet directly.
+//     To enable Internet access to the application, add an Internet gateway
+//     to your VPC.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -582,22 +583,23 @@ func (c *KinesisAnalyticsV2) AddApplicationVpcConfigurationRequest(input *AddApp
 // API operation AddApplicationVpcConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidApplicationConfigurationException
-//   The user-provided application configuration is not valid.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
+//
+//   - InvalidApplicationConfigurationException
+//     The user-provided application configuration is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/AddApplicationVpcConfiguration
 func (c *KinesisAnalyticsV2) AddApplicationVpcConfiguration(input *AddApplicationVpcConfigurationInput) (*AddApplicationVpcConfigurationOutput, error) {
@@ -637,14 +639,13 @@ const opCreateApplication = "CreateApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateApplicationRequest method.
+//	req, resp := client.CreateApplicationRequest(params)
 //
-//    // Example sending a request using the CreateApplicationRequest method.
-//    req, resp := client.CreateApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/CreateApplication
 func (c *KinesisAnalyticsV2) CreateApplicationRequest(input *CreateApplicationInput) (req *request.Request, output *CreateApplicationOutput) {
@@ -665,8 +666,9 @@ func (c *KinesisAnalyticsV2) CreateApplicationRequest(input *CreateApplicationIn
 
 // CreateApplication API operation for Amazon Kinesis Analytics.
 //
-// Creates a Kinesis Data Analytics application. For information about creating
-// a Kinesis Data Analytics application, see Creating an Application (https://docs.aws.amazon.com/kinesisanalytics/latest/java/getting-started.html).
+// Creates a Managed Service for Apache Flink application. For information about
+// creating a Managed Service for Apache Flink application, see Creating an
+// Application (https://docs.aws.amazon.com/kinesisanalytics/latest/java/getting-started.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -676,35 +678,36 @@ func (c *KinesisAnalyticsV2) CreateApplicationRequest(input *CreateApplicationIn
 // API operation CreateApplication for usage and error information.
 //
 // Returned Error Types:
-//   * CodeValidationException
-//   The user-provided application code (query) is not valid. This can be a simple
-//   syntax error.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - CodeValidationException
+//     The user-provided application code (query) is not valid. This can be a simple
+//     syntax error.
 //
-//   * LimitExceededException
-//   The number of allowed resources has been exceeded.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - LimitExceededException
+//     The number of allowed resources has been exceeded.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * TooManyTagsException
-//   Application created with too many tags, or too many tags added to an application.
-//   Note that the maximum number of application tags includes system tags. The
-//   maximum number of user-defined application tags is 50.
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - TooManyTagsException
+//     Application created with too many tags, or too many tags added to an application.
+//     Note that the maximum number of application tags includes system tags. The
+//     maximum number of user-defined application tags is 50.
 //
-//   * UnsupportedOperationException
-//   The request was rejected because a specified parameter is not supported or
-//   a specified resource is not valid for this operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
+//
+//   - UnsupportedOperationException
+//     The request was rejected because a specified parameter is not supported or
+//     a specified resource is not valid for this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/CreateApplication
 func (c *KinesisAnalyticsV2) CreateApplication(input *CreateApplicationInput) (*CreateApplicationOutput, error) {
@@ -744,14 +747,13 @@ const opCreateApplicationPresignedUrl = "CreateApplicationPresignedUrl"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateApplicationPresignedUrlRequest method.
+//	req, resp := client.CreateApplicationPresignedUrlRequest(params)
 //
-//    // Example sending a request using the CreateApplicationPresignedUrlRequest method.
-//    req, resp := client.CreateApplicationPresignedUrlRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/CreateApplicationPresignedUrl
 func (c *KinesisAnalyticsV2) CreateApplicationPresignedUrlRequest(input *CreateApplicationPresignedUrlInput) (req *request.Request, output *CreateApplicationPresignedUrlOutput) {
@@ -796,14 +798,15 @@ func (c *KinesisAnalyticsV2) CreateApplicationPresignedUrlRequest(input *CreateA
 // API operation CreateApplicationPresignedUrl for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
+//
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/CreateApplicationPresignedUrl
 func (c *KinesisAnalyticsV2) CreateApplicationPresignedUrl(input *CreateApplicationPresignedUrlInput) (*CreateApplicationPresignedUrlOutput, error) {
@@ -843,14 +846,13 @@ const opCreateApplicationSnapshot = "CreateApplicationSnapshot"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateApplicationSnapshotRequest method.
+//	req, resp := client.CreateApplicationSnapshotRequest(params)
 //
-//    // Example sending a request using the CreateApplicationSnapshotRequest method.
-//    req, resp := client.CreateApplicationSnapshotRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/CreateApplicationSnapshot
 func (c *KinesisAnalyticsV2) CreateApplicationSnapshotRequest(input *CreateApplicationSnapshotInput) (req *request.Request, output *CreateApplicationSnapshotOutput) {
@@ -882,27 +884,28 @@ func (c *KinesisAnalyticsV2) CreateApplicationSnapshotRequest(input *CreateAppli
 // API operation CreateApplicationSnapshot for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceInUseException
-//   The application is not available for this operation.
 //
-//   * ResourceNotFoundException
-//   Specified application can't be found.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * LimitExceededException
-//   The number of allowed resources has been exceeded.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - LimitExceededException
+//     The number of allowed resources has been exceeded.
 //
-//   * UnsupportedOperationException
-//   The request was rejected because a specified parameter is not supported or
-//   a specified resource is not valid for this operation.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - UnsupportedOperationException
+//     The request was rejected because a specified parameter is not supported or
+//     a specified resource is not valid for this operation.
 //
-//   * InvalidApplicationConfigurationException
-//   The user-provided application configuration is not valid.
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
+//
+//   - InvalidApplicationConfigurationException
+//     The user-provided application configuration is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/CreateApplicationSnapshot
 func (c *KinesisAnalyticsV2) CreateApplicationSnapshot(input *CreateApplicationSnapshotInput) (*CreateApplicationSnapshotOutput, error) {
@@ -942,14 +945,13 @@ const opDeleteApplication = "DeleteApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApplicationRequest method.
+//	req, resp := client.DeleteApplicationRequest(params)
 //
-//    // Example sending a request using the DeleteApplicationRequest method.
-//    req, resp := client.DeleteApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplication
 func (c *KinesisAnalyticsV2) DeleteApplicationRequest(input *DeleteApplicationInput) (req *request.Request, output *DeleteApplicationOutput) {
@@ -971,8 +973,8 @@ func (c *KinesisAnalyticsV2) DeleteApplicationRequest(input *DeleteApplicationIn
 
 // DeleteApplication API operation for Amazon Kinesis Analytics.
 //
-// Deletes the specified application. Kinesis Data Analytics halts application
-// execution and deletes the application.
+// Deletes the specified application. Managed Service for Apache Flink halts
+// application execution and deletes the application.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -982,25 +984,26 @@ func (c *KinesisAnalyticsV2) DeleteApplicationRequest(input *DeleteApplicationIn
 // API operation DeleteApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
 //
-//   * ResourceNotFoundException
-//   Specified application can't be found.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidApplicationConfigurationException
-//   The user-provided application configuration is not valid.
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
+//
+//   - InvalidApplicationConfigurationException
+//     The user-provided application configuration is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplication
 func (c *KinesisAnalyticsV2) DeleteApplication(input *DeleteApplicationInput) (*DeleteApplicationOutput, error) {
@@ -1040,14 +1043,13 @@ const opDeleteApplicationCloudWatchLoggingOption = "DeleteApplicationCloudWatchL
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApplicationCloudWatchLoggingOptionRequest method.
+//	req, resp := client.DeleteApplicationCloudWatchLoggingOptionRequest(params)
 //
-//    // Example sending a request using the DeleteApplicationCloudWatchLoggingOptionRequest method.
-//    req, resp := client.DeleteApplicationCloudWatchLoggingOptionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationCloudWatchLoggingOption
 func (c *KinesisAnalyticsV2) DeleteApplicationCloudWatchLoggingOptionRequest(input *DeleteApplicationCloudWatchLoggingOptionInput) (req *request.Request, output *DeleteApplicationCloudWatchLoggingOptionOutput) {
@@ -1068,7 +1070,8 @@ func (c *KinesisAnalyticsV2) DeleteApplicationCloudWatchLoggingOptionRequest(inp
 
 // DeleteApplicationCloudWatchLoggingOption API operation for Amazon Kinesis Analytics.
 //
-// Deletes an Amazon CloudWatch log stream from an Kinesis Data Analytics application.
+// Deletes an Amazon CloudWatch log stream from an SQL-based Kinesis Data Analytics
+// application.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1078,25 +1081,26 @@ func (c *KinesisAnalyticsV2) DeleteApplicationCloudWatchLoggingOptionRequest(inp
 // API operation DeleteApplicationCloudWatchLoggingOption for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
 //
-//   * InvalidApplicationConfigurationException
-//   The user-provided application configuration is not valid.
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
+//
+//   - InvalidApplicationConfigurationException
+//     The user-provided application configuration is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationCloudWatchLoggingOption
 func (c *KinesisAnalyticsV2) DeleteApplicationCloudWatchLoggingOption(input *DeleteApplicationCloudWatchLoggingOptionInput) (*DeleteApplicationCloudWatchLoggingOptionOutput, error) {
@@ -1136,14 +1140,13 @@ const opDeleteApplicationInputProcessingConfiguration = "DeleteApplicationInputP
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApplicationInputProcessingConfigurationRequest method.
+//	req, resp := client.DeleteApplicationInputProcessingConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteApplicationInputProcessingConfigurationRequest method.
-//    req, resp := client.DeleteApplicationInputProcessingConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationInputProcessingConfiguration
 func (c *KinesisAnalyticsV2) DeleteApplicationInputProcessingConfigurationRequest(input *DeleteApplicationInputProcessingConfigurationInput) (req *request.Request, output *DeleteApplicationInputProcessingConfigurationOutput) {
@@ -1174,22 +1177,23 @@ func (c *KinesisAnalyticsV2) DeleteApplicationInputProcessingConfigurationReques
 // API operation DeleteApplicationInputProcessingConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
+//
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationInputProcessingConfiguration
 func (c *KinesisAnalyticsV2) DeleteApplicationInputProcessingConfiguration(input *DeleteApplicationInputProcessingConfigurationInput) (*DeleteApplicationInputProcessingConfigurationOutput, error) {
@@ -1229,14 +1233,13 @@ const opDeleteApplicationOutput = "DeleteApplicationOutput"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApplicationOutputRequest method.
+//	req, resp := client.DeleteApplicationOutputRequest(params)
 //
-//    // Example sending a request using the DeleteApplicationOutputRequest method.
-//    req, resp := client.DeleteApplicationOutputRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationOutput
 func (c *KinesisAnalyticsV2) DeleteApplicationOutputRequest(input *DeleteApplicationOutputInput) (req *request.Request, output *DeleteApplicationOutputOutput) {
@@ -1270,22 +1273,23 @@ func (c *KinesisAnalyticsV2) DeleteApplicationOutputRequest(input *DeleteApplica
 // API operation DeleteApplicationOutput for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
+//
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationOutput
 func (c *KinesisAnalyticsV2) DeleteApplicationOutput(input *DeleteApplicationOutputInput) (*DeleteApplicationOutputOutput, error) {
@@ -1325,14 +1329,13 @@ const opDeleteApplicationReferenceDataSource = "DeleteApplicationReferenceDataSo
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApplicationReferenceDataSourceRequest method.
+//	req, resp := client.DeleteApplicationReferenceDataSourceRequest(params)
 //
-//    // Example sending a request using the DeleteApplicationReferenceDataSourceRequest method.
-//    req, resp := client.DeleteApplicationReferenceDataSourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationReferenceDataSource
 func (c *KinesisAnalyticsV2) DeleteApplicationReferenceDataSourceRequest(input *DeleteApplicationReferenceDataSourceInput) (req *request.Request, output *DeleteApplicationReferenceDataSourceOutput) {
@@ -1368,22 +1371,23 @@ func (c *KinesisAnalyticsV2) DeleteApplicationReferenceDataSourceRequest(input *
 // API operation DeleteApplicationReferenceDataSource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
+//
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationReferenceDataSource
 func (c *KinesisAnalyticsV2) DeleteApplicationReferenceDataSource(input *DeleteApplicationReferenceDataSourceInput) (*DeleteApplicationReferenceDataSourceOutput, error) {
@@ -1423,14 +1427,13 @@ const opDeleteApplicationSnapshot = "DeleteApplicationSnapshot"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApplicationSnapshotRequest method.
+//	req, resp := client.DeleteApplicationSnapshotRequest(params)
 //
-//    // Example sending a request using the DeleteApplicationSnapshotRequest method.
-//    req, resp := client.DeleteApplicationSnapshotRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationSnapshot
 func (c *KinesisAnalyticsV2) DeleteApplicationSnapshotRequest(input *DeleteApplicationSnapshotInput) (req *request.Request, output *DeleteApplicationSnapshotOutput) {
@@ -1462,26 +1465,27 @@ func (c *KinesisAnalyticsV2) DeleteApplicationSnapshotRequest(input *DeleteAppli
 // API operation DeleteApplicationSnapshot for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceInUseException
-//   The application is not available for this operation.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * UnsupportedOperationException
-//   The request was rejected because a specified parameter is not supported or
-//   a specified resource is not valid for this operation.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - UnsupportedOperationException
+//     The request was rejected because a specified parameter is not supported or
+//     a specified resource is not valid for this operation.
 //
-//   * ResourceNotFoundException
-//   Specified application can't be found.
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
+//
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationSnapshot
 func (c *KinesisAnalyticsV2) DeleteApplicationSnapshot(input *DeleteApplicationSnapshotInput) (*DeleteApplicationSnapshotOutput, error) {
@@ -1521,14 +1525,13 @@ const opDeleteApplicationVpcConfiguration = "DeleteApplicationVpcConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteApplicationVpcConfigurationRequest method.
+//	req, resp := client.DeleteApplicationVpcConfigurationRequest(params)
 //
-//    // Example sending a request using the DeleteApplicationVpcConfigurationRequest method.
-//    req, resp := client.DeleteApplicationVpcConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationVpcConfiguration
 func (c *KinesisAnalyticsV2) DeleteApplicationVpcConfigurationRequest(input *DeleteApplicationVpcConfigurationInput) (req *request.Request, output *DeleteApplicationVpcConfigurationOutput) {
@@ -1549,7 +1552,7 @@ func (c *KinesisAnalyticsV2) DeleteApplicationVpcConfigurationRequest(input *Del
 
 // DeleteApplicationVpcConfiguration API operation for Amazon Kinesis Analytics.
 //
-// Removes a VPC configuration from a Kinesis Data Analytics application.
+// Removes a VPC configuration from a Managed Service for Apache Flink application.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1559,22 +1562,23 @@ func (c *KinesisAnalyticsV2) DeleteApplicationVpcConfigurationRequest(input *Del
 // API operation DeleteApplicationVpcConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidApplicationConfigurationException
-//   The user-provided application configuration is not valid.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
+//
+//   - InvalidApplicationConfigurationException
+//     The user-provided application configuration is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DeleteApplicationVpcConfiguration
 func (c *KinesisAnalyticsV2) DeleteApplicationVpcConfiguration(input *DeleteApplicationVpcConfigurationInput) (*DeleteApplicationVpcConfigurationOutput, error) {
@@ -1614,14 +1618,13 @@ const opDescribeApplication = "DescribeApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeApplicationRequest method.
+//	req, resp := client.DescribeApplicationRequest(params)
 //
-//    // Example sending a request using the DescribeApplicationRequest method.
-//    req, resp := client.DescribeApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DescribeApplication
 func (c *KinesisAnalyticsV2) DescribeApplicationRequest(input *DescribeApplicationInput) (req *request.Request, output *DescribeApplicationOutput) {
@@ -1642,7 +1645,7 @@ func (c *KinesisAnalyticsV2) DescribeApplicationRequest(input *DescribeApplicati
 
 // DescribeApplication API operation for Amazon Kinesis Analytics.
 //
-// Returns information about a specific Kinesis Data Analytics application.
+// Returns information about a specific Managed Service for Apache Flink application.
 //
 // If you want to retrieve a list of all applications in your account, use the
 // ListApplications operation.
@@ -1655,14 +1658,15 @@ func (c *KinesisAnalyticsV2) DescribeApplicationRequest(input *DescribeApplicati
 // API operation DescribeApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
+//
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DescribeApplication
 func (c *KinesisAnalyticsV2) DescribeApplication(input *DescribeApplicationInput) (*DescribeApplicationOutput, error) {
@@ -1702,14 +1706,13 @@ const opDescribeApplicationSnapshot = "DescribeApplicationSnapshot"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeApplicationSnapshotRequest method.
+//	req, resp := client.DescribeApplicationSnapshotRequest(params)
 //
-//    // Example sending a request using the DescribeApplicationSnapshotRequest method.
-//    req, resp := client.DescribeApplicationSnapshotRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DescribeApplicationSnapshot
 func (c *KinesisAnalyticsV2) DescribeApplicationSnapshotRequest(input *DescribeApplicationSnapshotInput) (req *request.Request, output *DescribeApplicationSnapshotOutput) {
@@ -1740,15 +1743,16 @@ func (c *KinesisAnalyticsV2) DescribeApplicationSnapshotRequest(input *DescribeA
 // API operation DescribeApplicationSnapshot for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * UnsupportedOperationException
-//   The request was rejected because a specified parameter is not supported or
-//   a specified resource is not valid for this operation.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
+//
+//   - UnsupportedOperationException
+//     The request was rejected because a specified parameter is not supported or
+//     a specified resource is not valid for this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DescribeApplicationSnapshot
 func (c *KinesisAnalyticsV2) DescribeApplicationSnapshot(input *DescribeApplicationSnapshotInput) (*DescribeApplicationSnapshotOutput, error) {
@@ -1788,14 +1792,13 @@ const opDescribeApplicationVersion = "DescribeApplicationVersion"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DescribeApplicationVersionRequest method.
+//	req, resp := client.DescribeApplicationVersionRequest(params)
 //
-//    // Example sending a request using the DescribeApplicationVersionRequest method.
-//    req, resp := client.DescribeApplicationVersionRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DescribeApplicationVersion
 func (c *KinesisAnalyticsV2) DescribeApplicationVersionRequest(input *DescribeApplicationVersionInput) (req *request.Request, output *DescribeApplicationVersionOutput) {
@@ -1820,8 +1823,7 @@ func (c *KinesisAnalyticsV2) DescribeApplicationVersionRequest(input *DescribeAp
 // To see a list of all the versions of an application, invoke the ListApplicationVersions
 // operation.
 //
-// This operation is supported only for Amazon Kinesis Data Analytics for Apache
-// Flink.
+// This operation is supported only for Managed Service for Apache Flink.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1831,15 +1833,16 @@ func (c *KinesisAnalyticsV2) DescribeApplicationVersionRequest(input *DescribeAp
 // API operation DescribeApplicationVersion for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
 //
-//   * ResourceNotFoundException
-//   Specified application can't be found.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * UnsupportedOperationException
-//   The request was rejected because a specified parameter is not supported or
-//   a specified resource is not valid for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
+//
+//   - UnsupportedOperationException
+//     The request was rejected because a specified parameter is not supported or
+//     a specified resource is not valid for this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DescribeApplicationVersion
 func (c *KinesisAnalyticsV2) DescribeApplicationVersion(input *DescribeApplicationVersionInput) (*DescribeApplicationVersionOutput, error) {
@@ -1879,14 +1882,13 @@ const opDiscoverInputSchema = "DiscoverInputSchema"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DiscoverInputSchemaRequest method.
+//	req, resp := client.DiscoverInputSchemaRequest(params)
 //
-//    // Example sending a request using the DiscoverInputSchemaRequest method.
-//    req, resp := client.DiscoverInputSchemaRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DiscoverInputSchema
 func (c *KinesisAnalyticsV2) DiscoverInputSchemaRequest(input *DiscoverInputSchemaInput) (req *request.Request, output *DiscoverInputSchemaOutput) {
@@ -1926,28 +1928,29 @@ func (c *KinesisAnalyticsV2) DiscoverInputSchemaRequest(input *DiscoverInputSche
 // API operation DiscoverInputSchema for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
 //
-//   * UnableToDetectSchemaException
-//   The data format is not valid. Kinesis Data Analytics cannot detect the schema
-//   for the given streaming source.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * ResourceProvisionedThroughputExceededException
-//   Discovery failed to get a record from the streaming source because of the
-//   Kinesis Streams ProvisionedThroughputExceededException. For more information,
-//   see GetRecords (http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html)
-//   in the Amazon Kinesis Streams API Reference.
+//   - UnableToDetectSchemaException
+//     The data format is not valid. Kinesis Data Analytics cannot detect the schema
+//     for the given streaming source.
 //
-//   * ServiceUnavailableException
-//   The service cannot complete the request.
+//   - ResourceProvisionedThroughputExceededException
+//     Discovery failed to get a record from the streaming source because of the
+//     Kinesis Streams ProvisionedThroughputExceededException. For more information,
+//     see GetRecords (http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html)
+//     in the Amazon Kinesis Streams API Reference.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - ServiceUnavailableException
+//     The service cannot complete the request.
 //
-//   * UnsupportedOperationException
-//   The request was rejected because a specified parameter is not supported or
-//   a specified resource is not valid for this operation.
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
+//
+//   - UnsupportedOperationException
+//     The request was rejected because a specified parameter is not supported or
+//     a specified resource is not valid for this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/DiscoverInputSchema
 func (c *KinesisAnalyticsV2) DiscoverInputSchema(input *DiscoverInputSchemaInput) (*DiscoverInputSchemaOutput, error) {
@@ -1987,14 +1990,13 @@ const opListApplicationSnapshots = "ListApplicationSnapshots"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListApplicationSnapshotsRequest method.
+//	req, resp := client.ListApplicationSnapshotsRequest(params)
 //
-//    // Example sending a request using the ListApplicationSnapshotsRequest method.
-//    req, resp := client.ListApplicationSnapshotsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/ListApplicationSnapshots
 func (c *KinesisAnalyticsV2) ListApplicationSnapshotsRequest(input *ListApplicationSnapshotsInput) (req *request.Request, output *ListApplicationSnapshotsOutput) {
@@ -2025,12 +2027,13 @@ func (c *KinesisAnalyticsV2) ListApplicationSnapshotsRequest(input *ListApplicat
 // API operation ListApplicationSnapshots for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
 //
-//   * UnsupportedOperationException
-//   The request was rejected because a specified parameter is not supported or
-//   a specified resource is not valid for this operation.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
+//
+//   - UnsupportedOperationException
+//     The request was rejected because a specified parameter is not supported or
+//     a specified resource is not valid for this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/ListApplicationSnapshots
 func (c *KinesisAnalyticsV2) ListApplicationSnapshots(input *ListApplicationSnapshotsInput) (*ListApplicationSnapshotsOutput, error) {
@@ -2070,14 +2073,13 @@ const opListApplicationVersions = "ListApplicationVersions"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListApplicationVersionsRequest method.
+//	req, resp := client.ListApplicationVersionsRequest(params)
 //
-//    // Example sending a request using the ListApplicationVersionsRequest method.
-//    req, resp := client.ListApplicationVersionsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/ListApplicationVersions
 func (c *KinesisAnalyticsV2) ListApplicationVersionsRequest(input *ListApplicationVersionsInput) (req *request.Request, output *ListApplicationVersionsOutput) {
@@ -2105,8 +2107,7 @@ func (c *KinesisAnalyticsV2) ListApplicationVersionsRequest(input *ListApplicati
 // To get the complete description of a specific application version, invoke
 // the DescribeApplicationVersion operation.
 //
-// This operation is supported only for Amazon Kinesis Data Analytics for Apache
-// Flink.
+// This operation is supported only for Managed Service for Apache Flink.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2116,15 +2117,16 @@ func (c *KinesisAnalyticsV2) ListApplicationVersionsRequest(input *ListApplicati
 // API operation ListApplicationVersions for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
 //
-//   * ResourceNotFoundException
-//   Specified application can't be found.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * UnsupportedOperationException
-//   The request was rejected because a specified parameter is not supported or
-//   a specified resource is not valid for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
+//
+//   - UnsupportedOperationException
+//     The request was rejected because a specified parameter is not supported or
+//     a specified resource is not valid for this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/ListApplicationVersions
 func (c *KinesisAnalyticsV2) ListApplicationVersions(input *ListApplicationVersionsInput) (*ListApplicationVersionsOutput, error) {
@@ -2164,14 +2166,13 @@ const opListApplications = "ListApplications"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListApplicationsRequest method.
+//	req, resp := client.ListApplicationsRequest(params)
 //
-//    // Example sending a request using the ListApplicationsRequest method.
-//    req, resp := client.ListApplicationsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/ListApplications
 func (c *KinesisAnalyticsV2) ListApplicationsRequest(input *ListApplicationsInput) (req *request.Request, output *ListApplicationsOutput) {
@@ -2192,9 +2193,9 @@ func (c *KinesisAnalyticsV2) ListApplicationsRequest(input *ListApplicationsInpu
 
 // ListApplications API operation for Amazon Kinesis Analytics.
 //
-// Returns a list of Kinesis Data Analytics applications in your account. For
-// each application, the response includes the application name, Amazon Resource
-// Name (ARN), and status.
+// Returns a list of Managed Service for Apache Flink applications in your account.
+// For each application, the response includes the application name, Amazon
+// Resource Name (ARN), and status.
 //
 // If you want detailed information about a specific application, use DescribeApplication.
 //
@@ -2206,8 +2207,8 @@ func (c *KinesisAnalyticsV2) ListApplicationsRequest(input *ListApplicationsInpu
 // API operation ListApplications for usage and error information.
 //
 // Returned Error Types:
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/ListApplications
 func (c *KinesisAnalyticsV2) ListApplications(input *ListApplicationsInput) (*ListApplicationsOutput, error) {
@@ -2247,14 +2248,13 @@ const opListTagsForResource = "ListTagsForResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListTagsForResourceRequest method.
+//	req, resp := client.ListTagsForResourceRequest(params)
 //
-//    // Example sending a request using the ListTagsForResourceRequest method.
-//    req, resp := client.ListTagsForResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/ListTagsForResource
 func (c *KinesisAnalyticsV2) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
@@ -2286,16 +2286,17 @@ func (c *KinesisAnalyticsV2) ListTagsForResourceRequest(input *ListTagsForResour
 // API operation ListTagsForResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
+//
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/ListTagsForResource
 func (c *KinesisAnalyticsV2) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -2335,14 +2336,13 @@ const opRollbackApplication = "RollbackApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the RollbackApplicationRequest method.
+//	req, resp := client.RollbackApplicationRequest(params)
 //
-//    // Example sending a request using the RollbackApplicationRequest method.
-//    req, resp := client.RollbackApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/RollbackApplication
 func (c *KinesisAnalyticsV2) RollbackApplicationRequest(input *RollbackApplicationInput) (req *request.Request, output *RollbackApplicationOutput) {
@@ -2370,10 +2370,11 @@ func (c *KinesisAnalyticsV2) RollbackApplicationRequest(input *RollbackApplicati
 // status.
 //
 // When you rollback an application, it loads state data from the last successful
-// snapshot. If the application has no snapshots, Kinesis Data Analytics rejects
-// the rollback request.
+// snapshot. If the application has no snapshots, Managed Service for Apache
+// Flink rejects the rollback request.
 //
-// This action is not supported for Kinesis Data Analytics for SQL applications.
+// This action is not supported for Managed Service for Apache Flink for SQL
+// applications.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2383,26 +2384,27 @@ func (c *KinesisAnalyticsV2) RollbackApplicationRequest(input *RollbackApplicati
 // API operation RollbackApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
-//   * UnsupportedOperationException
-//   The request was rejected because a specified parameter is not supported or
-//   a specified resource is not valid for this operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
+//
+//   - UnsupportedOperationException
+//     The request was rejected because a specified parameter is not supported or
+//     a specified resource is not valid for this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/RollbackApplication
 func (c *KinesisAnalyticsV2) RollbackApplication(input *RollbackApplicationInput) (*RollbackApplicationOutput, error) {
@@ -2442,14 +2444,13 @@ const opStartApplication = "StartApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StartApplicationRequest method.
+//	req, resp := client.StartApplicationRequest(params)
 //
-//    // Example sending a request using the StartApplicationRequest method.
-//    req, resp := client.StartApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/StartApplication
 func (c *KinesisAnalyticsV2) StartApplicationRequest(input *StartApplicationInput) (req *request.Request, output *StartApplicationOutput) {
@@ -2471,8 +2472,9 @@ func (c *KinesisAnalyticsV2) StartApplicationRequest(input *StartApplicationInpu
 
 // StartApplication API operation for Amazon Kinesis Analytics.
 //
-// Starts the specified Kinesis Data Analytics application. After creating an
-// application, you must exclusively call this operation to start your application.
+// Starts the specified Managed Service for Apache Flink application. After
+// creating an application, you must exclusively call this operation to start
+// your application.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2482,20 +2484,21 @@ func (c *KinesisAnalyticsV2) StartApplicationRequest(input *StartApplicationInpu
 // API operation StartApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * InvalidApplicationConfigurationException
-//   The user-provided application configuration is not valid.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - InvalidApplicationConfigurationException
+//     The user-provided application configuration is not valid.
+//
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/StartApplication
 func (c *KinesisAnalyticsV2) StartApplication(input *StartApplicationInput) (*StartApplicationOutput, error) {
@@ -2535,14 +2538,13 @@ const opStopApplication = "StopApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the StopApplicationRequest method.
+//	req, resp := client.StopApplicationRequest(params)
 //
-//    // Example sending a request using the StopApplicationRequest method.
-//    req, resp := client.StopApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/StopApplication
 func (c *KinesisAnalyticsV2) StopApplicationRequest(input *StopApplicationInput) (req *request.Request, output *StopApplicationOutput) {
@@ -2569,8 +2571,8 @@ func (c *KinesisAnalyticsV2) StopApplicationRequest(input *StopApplicationInput)
 //
 // You can use the DescribeApplication operation to find the application status.
 //
-// Kinesis Data Analytics takes a snapshot when the application is stopped,
-// unless Force is set to true.
+// Managed Service for Apache Flink takes a snapshot when the application is
+// stopped, unless Force is set to true.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2580,25 +2582,26 @@ func (c *KinesisAnalyticsV2) StopApplicationRequest(input *StopApplicationInput)
 // API operation StopApplication for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidApplicationConfigurationException
-//   The user-provided application configuration is not valid.
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidApplicationConfigurationException
+//     The user-provided application configuration is not valid.
+//
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/StopApplication
 func (c *KinesisAnalyticsV2) StopApplication(input *StopApplicationInput) (*StopApplicationOutput, error) {
@@ -2638,14 +2641,13 @@ const opTagResource = "TagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagResourceRequest method.
+//	req, resp := client.TagResourceRequest(params)
 //
-//    // Example sending a request using the TagResourceRequest method.
-//    req, resp := client.TagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/TagResource
 func (c *KinesisAnalyticsV2) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
@@ -2667,7 +2669,7 @@ func (c *KinesisAnalyticsV2) TagResourceRequest(input *TagResourceInput) (req *r
 
 // TagResource API operation for Amazon Kinesis Analytics.
 //
-// Adds one or more key-value tags to a Kinesis Data Analytics application.
+// Adds one or more key-value tags to a Managed Service for Apache Flink application.
 // Note that the maximum number of application tags includes system tags. The
 // maximum number of user-defined application tags is 50. For more information,
 // see Using Tagging (https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html).
@@ -2680,24 +2682,25 @@ func (c *KinesisAnalyticsV2) TagResourceRequest(input *TagResourceInput) (req *r
 // API operation TagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * TooManyTagsException
-//   Application created with too many tags, or too many tags added to an application.
-//   Note that the maximum number of application tags includes system tags. The
-//   maximum number of user-defined application tags is 50.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - TooManyTagsException
+//     Application created with too many tags, or too many tags added to an application.
+//     Note that the maximum number of application tags includes system tags. The
+//     maximum number of user-defined application tags is 50.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
+//
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/TagResource
 func (c *KinesisAnalyticsV2) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2737,14 +2740,13 @@ const opUntagResource = "UntagResource"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagResourceRequest method.
+//	req, resp := client.UntagResourceRequest(params)
 //
-//    // Example sending a request using the UntagResourceRequest method.
-//    req, resp := client.UntagResourceRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/UntagResource
 func (c *KinesisAnalyticsV2) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
@@ -2766,8 +2768,8 @@ func (c *KinesisAnalyticsV2) UntagResourceRequest(input *UntagResourceInput) (re
 
 // UntagResource API operation for Amazon Kinesis Analytics.
 //
-// Removes one or more tags from a Kinesis Data Analytics application. For more
-// information, see Using Tagging (https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html).
+// Removes one or more tags from a Managed Service for Apache Flink application.
+// For more information, see Using Tagging (https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2777,24 +2779,25 @@ func (c *KinesisAnalyticsV2) UntagResourceRequest(input *UntagResourceInput) (re
 // API operation UntagResource for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * TooManyTagsException
-//   Application created with too many tags, or too many tags added to an application.
-//   Note that the maximum number of application tags includes system tags. The
-//   maximum number of user-defined application tags is 50.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - TooManyTagsException
+//     Application created with too many tags, or too many tags added to an application.
+//     Note that the maximum number of application tags includes system tags. The
+//     maximum number of user-defined application tags is 50.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
+//
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/UntagResource
 func (c *KinesisAnalyticsV2) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2834,14 +2837,13 @@ const opUpdateApplication = "UpdateApplication"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateApplicationRequest method.
+//	req, resp := client.UpdateApplicationRequest(params)
 //
-//    // Example sending a request using the UpdateApplicationRequest method.
-//    req, resp := client.UpdateApplicationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/UpdateApplication
 func (c *KinesisAnalyticsV2) UpdateApplicationRequest(input *UpdateApplicationInput) (req *request.Request, output *UpdateApplicationOutput) {
@@ -2862,15 +2864,12 @@ func (c *KinesisAnalyticsV2) UpdateApplicationRequest(input *UpdateApplicationIn
 
 // UpdateApplication API operation for Amazon Kinesis Analytics.
 //
-// Updates an existing Kinesis Data Analytics application. Using this operation,
-// you can update application code, input configuration, and output configuration.
+// Updates an existing Managed Service for Apache Flink application. Using this
+// operation, you can update application code, input configuration, and output
+// configuration.
 //
-// Kinesis Data Analytics updates the ApplicationVersionId each time you update
-// your application.
-//
-// You cannot update the RuntimeEnvironment of an existing application. If you
-// need to update an application's RuntimeEnvironment, you must delete the application
-// and create it again.
+// Managed Service for Apache Flink updates the ApplicationVersionId each time
+// you update your application.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2880,32 +2879,33 @@ func (c *KinesisAnalyticsV2) UpdateApplicationRequest(input *UpdateApplicationIn
 // API operation UpdateApplication for usage and error information.
 //
 // Returned Error Types:
-//   * CodeValidationException
-//   The user-provided application code (query) is not valid. This can be a simple
-//   syntax error.
 //
-//   * ResourceNotFoundException
-//   Specified application can't be found.
+//   - CodeValidationException
+//     The user-provided application code (query) is not valid. This can be a simple
+//     syntax error.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * InvalidRequestException
-//   The request JSON is not valid for the operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
 //
-//   * InvalidApplicationConfigurationException
-//   The user-provided application configuration is not valid.
+//   - InvalidRequestException
+//     The request JSON is not valid for the operation.
 //
-//   * LimitExceededException
-//   The number of allowed resources has been exceeded.
+//   - InvalidApplicationConfigurationException
+//     The user-provided application configuration is not valid.
+//
+//   - LimitExceededException
+//     The number of allowed resources has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/UpdateApplication
 func (c *KinesisAnalyticsV2) UpdateApplication(input *UpdateApplicationInput) (*UpdateApplicationOutput, error) {
@@ -2945,14 +2945,13 @@ const opUpdateApplicationMaintenanceConfiguration = "UpdateApplicationMaintenanc
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateApplicationMaintenanceConfigurationRequest method.
+//	req, resp := client.UpdateApplicationMaintenanceConfigurationRequest(params)
 //
-//    // Example sending a request using the UpdateApplicationMaintenanceConfigurationRequest method.
-//    req, resp := client.UpdateApplicationMaintenanceConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/UpdateApplicationMaintenanceConfiguration
 func (c *KinesisAnalyticsV2) UpdateApplicationMaintenanceConfigurationRequest(input *UpdateApplicationMaintenanceConfigurationInput) (req *request.Request, output *UpdateApplicationMaintenanceConfigurationOutput) {
@@ -2973,7 +2972,8 @@ func (c *KinesisAnalyticsV2) UpdateApplicationMaintenanceConfigurationRequest(in
 
 // UpdateApplicationMaintenanceConfiguration API operation for Amazon Kinesis Analytics.
 //
-// Updates the maintenance configuration of the Kinesis Data Analytics application.
+// Updates the maintenance configuration of the Managed Service for Apache Flink
+// application.
 //
 // You can invoke this operation on an application that is in one of the two
 // following states: READY or RUNNING. If you invoke it when the application
@@ -2989,11 +2989,10 @@ func (c *KinesisAnalyticsV2) UpdateApplicationMaintenanceConfigurationRequest(in
 // To see the current maintenance configuration of your application, invoke
 // the DescribeApplication operation.
 //
-// For information about application maintenance, see Kinesis Data Analytics
-// for Apache Flink Maintenance (https://docs.aws.amazon.com/kinesisanalytics/latest/java/maintenance.html).
+// For information about application maintenance, see Managed Service for Apache
+// Flink for Apache Flink Maintenance (https://docs.aws.amazon.com/kinesisanalytics/latest/java/maintenance.html).
 //
-// This operation is supported only for Amazon Kinesis Data Analytics for Apache
-// Flink.
+// This operation is supported only for Managed Service for Apache Flink.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3003,23 +3002,24 @@ func (c *KinesisAnalyticsV2) UpdateApplicationMaintenanceConfigurationRequest(in
 // API operation UpdateApplicationMaintenanceConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * ResourceNotFoundException
-//   Specified application can't be found.
 //
-//   * ResourceInUseException
-//   The application is not available for this operation.
+//   - ResourceNotFoundException
+//     Specified application can't be found.
 //
-//   * InvalidArgumentException
-//   The specified input parameter value is not valid.
+//   - ResourceInUseException
+//     The application is not available for this operation.
 //
-//   * ConcurrentModificationException
-//   Exception thrown as a result of concurrent modifications to an application.
-//   This error can be the result of attempting to modify an application without
-//   using the current application ID.
+//   - InvalidArgumentException
+//     The specified input parameter value is not valid.
 //
-//   * UnsupportedOperationException
-//   The request was rejected because a specified parameter is not supported or
-//   a specified resource is not valid for this operation.
+//   - ConcurrentModificationException
+//     Exception thrown as a result of concurrent modifications to an application.
+//     This error can be the result of attempting to modify an application without
+//     using the current application ID.
+//
+//   - UnsupportedOperationException
+//     The request was rejected because a specified parameter is not supported or
+//     a specified resource is not valid for this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesisanalyticsv2-2018-05-23/UpdateApplicationMaintenanceConfiguration
 func (c *KinesisAnalyticsV2) UpdateApplicationMaintenanceConfiguration(input *UpdateApplicationMaintenanceConfigurationInput) (*UpdateApplicationMaintenanceConfigurationOutput, error) {
@@ -3063,8 +3063,8 @@ type AddApplicationCloudWatchLoggingOptionInput struct {
 	// of CurrentApplicationVersionId.
 	ConditionalToken *string `min:"1" type:"string"`
 
-	// The version ID of the Kinesis Data Analytics application. You must provide
-	// the CurrentApplicationVersionId or the ConditionalToken.You can retrieve
+	// The version ID of the SQL-based Kinesis Data Analytics application. You must
+	// provide the CurrentApplicationVersionId or the ConditionalToken.You can retrieve
 	// the application version ID using DescribeApplication. For better concurrency
 	// support, use the ConditionalToken parameter instead of CurrentApplicationVersionId.
 	CurrentApplicationVersionId *int64 `min:"1" type:"long"`
@@ -3148,13 +3148,13 @@ type AddApplicationCloudWatchLoggingOptionOutput struct {
 	// The application's ARN.
 	ApplicationARN *string `min:"1" type:"string"`
 
-	// The new version ID of the Kinesis Data Analytics application. Kinesis Data
-	// Analytics updates the ApplicationVersionId each time you change the CloudWatch
-	// logging options.
+	// The new version ID of the SQL-based Kinesis Data Analytics application. Kinesis
+	// Data Analytics updates the ApplicationVersionId each time you change the
+	// CloudWatch logging options.
 	ApplicationVersionId *int64 `min:"1" type:"long"`
 
-	// The descriptions of the current CloudWatch logging options for the Kinesis
-	// Data Analytics application.
+	// The descriptions of the current CloudWatch logging options for the SQL-based
+	// Kinesis Data Analytics application.
 	CloudWatchLoggingOptionDescriptions []*CloudWatchLoggingOptionDescription `type:"list"`
 }
 
@@ -3891,8 +3891,8 @@ type AddApplicationVpcConfigurationOutput struct {
 	// The ARN of the application.
 	ApplicationARN *string `min:"1" type:"string"`
 
-	// Provides the current application version. Kinesis Data Analytics updates
-	// the ApplicationVersionId each time you update the application.
+	// Provides the current application version. Managed Service for Apache Flink
+	// updates the ApplicationVersionId each time you update the application.
 	ApplicationVersionId *int64 `min:"1" type:"long"`
 
 	// The parameters of the new VPC configuration.
@@ -4040,7 +4040,7 @@ func (s *ApplicationCodeConfigurationDescription) SetCodeContentType(v string) *
 }
 
 // Describes code configuration updates for an application. This is supported
-// for a Flink-based Kinesis Data Analytics application or a SQL-based Kinesis
+// for a Managed Service for Apache Flink application or a SQL-based Kinesis
 // Data Analytics application.
 type ApplicationCodeConfigurationUpdate struct {
 	_ struct{} `type:"structure"`
@@ -4097,22 +4097,23 @@ func (s *ApplicationCodeConfigurationUpdate) SetCodeContentUpdate(v *CodeContent
 	return s
 }
 
-// Specifies the creation parameters for a Kinesis Data Analytics application.
+// Specifies the creation parameters for a Managed Service for Apache Flink
+// application.
 type ApplicationConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The code location and type parameters for a Flink-based Kinesis Data Analytics
+	// The code location and type parameters for a Managed Service for Apache Flink
 	// application.
 	ApplicationCodeConfiguration *ApplicationCodeConfiguration `type:"structure"`
 
-	// Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics
-	// application.
+	// Describes whether snapshots are enabled for a Managed Service for Apache
+	// Flink application.
 	ApplicationSnapshotConfiguration *ApplicationSnapshotConfiguration `type:"structure"`
 
-	// Describes execution properties for a Flink-based Kinesis Data Analytics application.
+	// Describes execution properties for a Managed Service for Apache Flink application.
 	EnvironmentProperties *EnvironmentProperties `type:"structure"`
 
-	// The creation and update parameters for a Flink-based Kinesis Data Analytics
+	// The creation and update parameters for a Managed Service for Apache Flink
 	// application.
 	FlinkApplicationConfiguration *FlinkApplicationConfiguration `type:"structure"`
 
@@ -4123,7 +4124,8 @@ type ApplicationConfiguration struct {
 	// The array of descriptions of VPC configurations available to the application.
 	VpcConfigurations []*VpcConfiguration `type:"list"`
 
-	// The configuration parameters for a Kinesis Data Analytics Studio notebook.
+	// The configuration parameters for a Managed Service for Apache Flink Studio
+	// notebook.
 	ZeppelinApplicationConfiguration *ZeppelinApplicationConfiguration `type:"structure"`
 }
 
@@ -4238,25 +4240,26 @@ func (s *ApplicationConfiguration) SetZeppelinApplicationConfiguration(v *Zeppel
 }
 
 // Describes details about the application code and starting parameters for
-// a Kinesis Data Analytics application.
+// a Managed Service for Apache Flink application.
 type ApplicationConfigurationDescription struct {
 	_ struct{} `type:"structure"`
 
-	// The details about the application code for a Flink-based Kinesis Data Analytics
+	// The details about the application code for a Managed Service for Apache Flink
 	// application.
 	ApplicationCodeConfigurationDescription *ApplicationCodeConfigurationDescription `type:"structure"`
 
-	// Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics
-	// application.
+	// Describes whether snapshots are enabled for a Managed Service for Apache
+	// Flink application.
 	ApplicationSnapshotConfigurationDescription *ApplicationSnapshotConfigurationDescription `type:"structure"`
 
-	// Describes execution properties for a Flink-based Kinesis Data Analytics application.
+	// Describes execution properties for a Managed Service for Apache Flink application.
 	EnvironmentPropertyDescriptions *EnvironmentPropertyDescriptions `type:"structure"`
 
-	// The details about a Flink-based Kinesis Data Analytics application.
+	// The details about a Managed Service for Apache Flink application.
 	FlinkApplicationConfigurationDescription *FlinkApplicationConfigurationDescription `type:"structure"`
 
-	// The details about the starting properties for a Kinesis Data Analytics application.
+	// The details about the starting properties for a Managed Service for Apache
+	// Flink application.
 	RunConfigurationDescription *RunConfigurationDescription `type:"structure"`
 
 	// The details about inputs, outputs, and reference data sources for a SQL-based
@@ -4266,7 +4269,8 @@ type ApplicationConfigurationDescription struct {
 	// The array of descriptions of VPC configurations available to the application.
 	VpcConfigurationDescriptions []*VpcConfigurationDescription `type:"list"`
 
-	// The configuration parameters for a Kinesis Data Analytics Studio notebook.
+	// The configuration parameters for a Managed Service for Apache Flink Studio
+	// notebook.
 	ZeppelinApplicationConfigurationDescription *ZeppelinApplicationConfigurationDescription `type:"structure"`
 }
 
@@ -4343,15 +4347,15 @@ type ApplicationConfigurationUpdate struct {
 	// Describes updates to an application's code configuration.
 	ApplicationCodeConfigurationUpdate *ApplicationCodeConfigurationUpdate `type:"structure"`
 
-	// Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics
-	// application.
+	// Describes whether snapshots are enabled for a Managed Service for Apache
+	// Flink application.
 	ApplicationSnapshotConfigurationUpdate *ApplicationSnapshotConfigurationUpdate `type:"structure"`
 
-	// Describes updates to the environment properties for a Flink-based Kinesis
-	// Data Analytics application.
+	// Describes updates to the environment properties for a Managed Service for
+	// Apache Flink application.
 	EnvironmentPropertyUpdates *EnvironmentPropertyUpdates `type:"structure"`
 
-	// Describes updates to a Flink-based Kinesis Data Analytics application's configuration.
+	// Describes updates to a Managed Service for Apache Flink application's configuration.
 	FlinkApplicationConfigurationUpdate *FlinkApplicationConfigurationUpdate `type:"structure"`
 
 	// Describes updates to a SQL-based Kinesis Data Analytics application's configuration.
@@ -4361,7 +4365,8 @@ type ApplicationConfigurationUpdate struct {
 	// application.
 	VpcConfigurationUpdates []*VpcConfigurationUpdate `type:"list"`
 
-	// Updates to the configuration of a Kinesis Data Analytics Studio notebook.
+	// Updates to the configuration of a Managed Service for Apache Flink Studio
+	// notebook.
 	ZeppelinApplicationConfigurationUpdate *ZeppelinApplicationConfigurationUpdate `type:"structure"`
 }
 
@@ -4486,7 +4491,7 @@ type ApplicationDetail struct {
 	ApplicationARN *string `min:"1" type:"string" required:"true"`
 
 	// Describes details about the application code and starting parameters for
-	// a Kinesis Data Analytics application.
+	// a Managed Service for Apache Flink application.
 	ApplicationConfigurationDescription *ApplicationConfigurationDescription `type:"structure"`
 
 	// The description of the application.
@@ -4495,9 +4500,9 @@ type ApplicationDetail struct {
 	// The details of the maintenance configuration for the application.
 	ApplicationMaintenanceConfigurationDescription *ApplicationMaintenanceConfigurationDescription `type:"structure"`
 
-	// To create a Kinesis Data Analytics Studio notebook, you must set the mode
-	// to INTERACTIVE. However, for a Kinesis Data Analytics for Apache Flink application,
-	// the mode is optional.
+	// To create a Managed Service for Apache Flink Studio notebook, you must set
+	// the mode to INTERACTIVE. However, for a Managed Service for Apache Flink
+	// application, the mode is optional.
 	ApplicationMode *string `type:"string" enum:"ApplicationMode"`
 
 	// The name of the application.
@@ -4510,8 +4515,8 @@ type ApplicationDetail struct {
 	// ApplicationStatus is a required field
 	ApplicationStatus *string `type:"string" required:"true" enum:"ApplicationStatus"`
 
-	// Provides the current application version. Kinesis Data Analytics updates
-	// the ApplicationVersionId each time you update the application.
+	// Provides the current application version. Managed Service for Apache Flink
+	// updates the ApplicationVersionId each time you update the application.
 	//
 	// ApplicationVersionId is a required field
 	ApplicationVersionId *int64 `min:"1" type:"long" required:"true"`
@@ -4825,13 +4830,13 @@ func (s *ApplicationRestoreConfiguration) SetSnapshotName(v string) *Application
 	return s
 }
 
-// Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics
-// application.
+// Describes whether snapshots are enabled for a Managed Service for Apache
+// Flink application.
 type ApplicationSnapshotConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics
-	// application.
+	// Describes whether snapshots are enabled for a Managed Service for Apache
+	// Flink application.
 	//
 	// SnapshotsEnabled is a required field
 	SnapshotsEnabled *bool `type:"boolean" required:"true"`
@@ -4874,13 +4879,13 @@ func (s *ApplicationSnapshotConfiguration) SetSnapshotsEnabled(v bool) *Applicat
 	return s
 }
 
-// Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics
-// application.
+// Describes whether snapshots are enabled for a Managed Service for Apache
+// Flink application.
 type ApplicationSnapshotConfigurationDescription struct {
 	_ struct{} `type:"structure"`
 
-	// Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics
-	// application.
+	// Describes whether snapshots are enabled for a Managed Service for Apache
+	// Flink application.
 	//
 	// SnapshotsEnabled is a required field
 	SnapshotsEnabled *bool `type:"boolean" required:"true"`
@@ -4910,8 +4915,8 @@ func (s *ApplicationSnapshotConfigurationDescription) SetSnapshotsEnabled(v bool
 	return s
 }
 
-// Describes updates to whether snapshots are enabled for a Flink-based Kinesis
-// Data Analytics application.
+// Describes updates to whether snapshots are enabled for a Managed Service
+// for Apache Flink application.
 type ApplicationSnapshotConfigurationUpdate struct {
 	_ struct{} `type:"structure"`
 
@@ -4968,8 +4973,8 @@ type ApplicationSummary struct {
 	// ApplicationARN is a required field
 	ApplicationARN *string `min:"1" type:"string" required:"true"`
 
-	// For a Kinesis Data Analytics for Apache Flink application, the mode is STREAMING.
-	// For a Kinesis Data Analytics Studio notebook, it is INTERACTIVE.
+	// For a Managed Service for Apache Flink application, the mode is STREAMING.
+	// For a Managed Service for Apache Flink Studio notebook, it is INTERACTIVE.
 	ApplicationMode *string `type:"string" enum:"ApplicationMode"`
 
 	// The name of the application.
@@ -5056,8 +5061,8 @@ type ApplicationVersionSummary struct {
 	// ApplicationStatus is a required field
 	ApplicationStatus *string `type:"string" required:"true" enum:"ApplicationStatus"`
 
-	// The ID of the application version. Kinesis Data Analytics updates the ApplicationVersionId
-	// each time you update the application.
+	// The ID of the application version. Managed Service for Apache Flink updates
+	// the ApplicationVersionId each time you update the application.
 	//
 	// ApplicationVersionId is a required field
 	ApplicationVersionId *int64 `min:"1" type:"long" required:"true"`
@@ -5170,14 +5175,14 @@ func (s *CSVMappingParameters) SetRecordRowDelimiter(v string) *CSVMappingParame
 }
 
 // The configuration parameters for the default Amazon Glue database. You use
-// this database for SQL queries that you write in a Kinesis Data Analytics
-// Studio notebook.
+// this database for SQL queries that you write in a Managed Service for Apache
+// Flink Studio notebook.
 type CatalogConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// The configuration parameters for the default Amazon Glue database. You use
 	// this database for Apache Flink SQL queries and table API transforms that
-	// you write in a Kinesis Data Analytics Studio notebook.
+	// you write in a Managed Service for Apache Flink Studio notebook.
 	//
 	// GlueDataCatalogConfiguration is a required field
 	GlueDataCatalogConfiguration *GlueDataCatalogConfiguration `type:"structure" required:"true"`
@@ -5227,13 +5232,13 @@ func (s *CatalogConfiguration) SetGlueDataCatalogConfiguration(v *GlueDataCatalo
 
 // The configuration parameters for the default Amazon Glue database. You use
 // this database for Apache Flink SQL queries and table API transforms that
-// you write in a Kinesis Data Analytics Studio notebook.
+// you write in a Managed Service for Apache Flink Studio notebook.
 type CatalogConfigurationDescription struct {
 	_ struct{} `type:"structure"`
 
 	// The configuration parameters for the default Amazon Glue database. You use
-	// this database for SQL queries that you write in a Kinesis Data Analytics
-	// Studio notebook.
+	// this database for SQL queries that you write in a Managed Service for Apache
+	// Flink Studio notebook.
 	//
 	// GlueDataCatalogConfigurationDescription is a required field
 	GlueDataCatalogConfigurationDescription *GlueDataCatalogConfigurationDescription `type:"structure" required:"true"`
@@ -5264,14 +5269,14 @@ func (s *CatalogConfigurationDescription) SetGlueDataCatalogConfigurationDescrip
 }
 
 // Updates to the configuration parameters for the default Amazon Glue database.
-// You use this database for SQL queries that you write in a Kinesis Data Analytics
-// Studio notebook.
+// You use this database for SQL queries that you write in a Managed Service
+// for Apache Flink Studio notebook.
 type CatalogConfigurationUpdate struct {
 	_ struct{} `type:"structure"`
 
 	// Updates to the configuration parameters for the default Amazon Glue database.
-	// You use this database for SQL queries that you write in a Kinesis Data Analytics
-	// Studio notebook.
+	// You use this database for SQL queries that you write in a Managed Service
+	// for Apache Flink Studio notebook.
 	//
 	// GlueDataCatalogConfigurationUpdate is a required field
 	GlueDataCatalogConfigurationUpdate *GlueDataCatalogConfigurationUpdate `type:"structure" required:"true"`
@@ -5321,8 +5326,8 @@ func (s *CatalogConfigurationUpdate) SetGlueDataCatalogConfigurationUpdate(v *Gl
 
 // Describes an application's checkpointing configuration. Checkpointing is
 // the process of persisting application state for fault tolerance. For more
-// information, see Checkpoints for Fault Tolerance (https://ci.apache.org/projects/flink/flink-docs-release-1.8/concepts/programming-model.html#checkpoints-for-fault-tolerance)
-// in the Apache Flink Documentation (https://ci.apache.org/projects/flink/flink-docs-release-1.8/).
+// information, see Checkpoints for Fault Tolerance (https://nightlies.apache.org/flink/flink-docs-release-1.18/docs/dev/datastream/fault-tolerance/checkpointing/#enabling-and-configuring-checkpointing)
+// in the Apache Flink Documentation (https://nightlies.apache.org/flink/flink-docs-release-1.18/).
 type CheckpointConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -5333,17 +5338,18 @@ type CheckpointConfiguration struct {
 	// another value using this API or in application code.
 	CheckpointInterval *int64 `min:"1" type:"long"`
 
-	// Describes whether checkpointing is enabled for a Flink-based Kinesis Data
-	// Analytics application.
+	// Describes whether checkpointing is enabled for a Managed Service for Apache
+	// Flink application.
 	//
 	// If CheckpointConfiguration.ConfigurationType is DEFAULT, the application
 	// will use a CheckpointingEnabled value of true, even if this value is set
 	// to another value using this API or in application code.
 	CheckpointingEnabled *bool `type:"boolean"`
 
-	// Describes whether the application uses Kinesis Data Analytics' default checkpointing
-	// behavior. You must set this property to CUSTOM in order to set the CheckpointingEnabled,
-	// CheckpointInterval, or MinPauseBetweenCheckpoints parameters.
+	// Describes whether the application uses Managed Service for Apache Flink'
+	// default checkpointing behavior. You must set this property to CUSTOM in order
+	// to set the CheckpointingEnabled, CheckpointInterval, or MinPauseBetweenCheckpoints
+	// parameters.
 	//
 	// If this value is set to DEFAULT, the application will use the following values,
 	// even if they are set to other values using APIs or application code:
@@ -5360,8 +5366,8 @@ type CheckpointConfiguration struct {
 	// Describes the minimum time in milliseconds after a checkpoint operation completes
 	// that a new checkpoint operation can start. If a checkpoint operation takes
 	// longer than the CheckpointInterval, the application otherwise performs continual
-	// checkpoint operations. For more information, see Tuning Checkpointing (https://ci.apache.org/projects/flink/flink-docs-release-1.8/ops/state/large_state_tuning.html#tuning-checkpointing)
-	// in the Apache Flink Documentation (https://ci.apache.org/projects/flink/flink-docs-release-1.8/).
+	// checkpoint operations. For more information, see Tuning Checkpointing (https://nightlies.apache.org/flink/flink-docs-release-1.18/docs/ops/state/large_state_tuning/#tuning-checkpointing)
+	// in the Apache Flink Documentation (https://nightlies.apache.org/flink/flink-docs-release-1.18/).
 	//
 	// If CheckpointConfiguration.ConfigurationType is DEFAULT, the application
 	// will use a MinPauseBetweenCheckpoints value of 5000, even if this value is
@@ -5427,7 +5433,7 @@ func (s *CheckpointConfiguration) SetMinPauseBetweenCheckpoints(v int64) *Checkp
 	return s
 }
 
-// Describes checkpointing parameters for a Flink-based Kinesis Data Analytics
+// Describes checkpointing parameters for a Managed Service for Apache Flink
 // application.
 type CheckpointConfigurationDescription struct {
 	_ struct{} `type:"structure"`
@@ -5439,8 +5445,8 @@ type CheckpointConfigurationDescription struct {
 	// another value using this API or in application code.
 	CheckpointInterval *int64 `min:"1" type:"long"`
 
-	// Describes whether checkpointing is enabled for a Flink-based Kinesis Data
-	// Analytics application.
+	// Describes whether checkpointing is enabled for a Managed Service for Apache
+	// Flink application.
 	//
 	// If CheckpointConfiguration.ConfigurationType is DEFAULT, the application
 	// will use a CheckpointingEnabled value of true, even if this value is set
@@ -5448,7 +5454,7 @@ type CheckpointConfigurationDescription struct {
 	CheckpointingEnabled *bool `type:"boolean"`
 
 	// Describes whether the application uses the default checkpointing behavior
-	// in Kinesis Data Analytics.
+	// in Managed Service for Apache Flink.
 	//
 	// If this value is set to DEFAULT, the application will use the following values,
 	// even if they are set to other values using APIs or application code:
@@ -5511,8 +5517,8 @@ func (s *CheckpointConfigurationDescription) SetMinPauseBetweenCheckpoints(v int
 	return s
 }
 
-// Describes updates to the checkpointing parameters for a Flink-based Kinesis
-// Data Analytics application.
+// Describes updates to the checkpointing parameters for a Managed Service for
+// Apache Flink application.
 type CheckpointConfigurationUpdate struct {
 	_ struct{} `type:"structure"`
 
@@ -5531,9 +5537,9 @@ type CheckpointConfigurationUpdate struct {
 	CheckpointingEnabledUpdate *bool `type:"boolean"`
 
 	// Describes updates to whether the application uses the default checkpointing
-	// behavior of Kinesis Data Analytics. You must set this property to CUSTOM
-	// in order to set the CheckpointingEnabled, CheckpointInterval, or MinPauseBetweenCheckpoints
-	// parameters.
+	// behavior of Managed Service for Apache Flink. You must set this property
+	// to CUSTOM in order to set the CheckpointingEnabled, CheckpointInterval, or
+	// MinPauseBetweenCheckpoints parameters.
 	//
 	// If this value is set to DEFAULT, the application will use the following values,
 	// even if they are set to other values using APIs or application code:
@@ -5781,17 +5787,17 @@ func (s *CloudWatchLoggingOptionUpdate) SetLogStreamARNUpdate(v string) *CloudWa
 }
 
 // Specifies either the application code, or the location of the application
-// code, for a Flink-based Kinesis Data Analytics application.
+// code, for a Managed Service for Apache Flink application.
 type CodeContent struct {
 	_ struct{} `type:"structure"`
 
 	// Information about the Amazon S3 bucket that contains the application code.
 	S3ContentLocation *S3ContentLocation `type:"structure"`
 
-	// The text-format code for a Flink-based Kinesis Data Analytics application.
+	// The text-format code for a Managed Service for Apache Flink application.
 	TextContent *string `type:"string"`
 
-	// The zip-format code for a Flink-based Kinesis Data Analytics application.
+	// The zip-format code for a Managed Service for Apache Flink application.
 	// ZipFileContent is automatically base64 encoded/decoded by the SDK.
 	ZipFileContent []byte `type:"blob"`
 }
@@ -5847,7 +5853,7 @@ func (s *CodeContent) SetZipFileContent(v []byte) *CodeContent {
 	return s
 }
 
-// Describes details about the code of a Kinesis Data Analytics application.
+// Describes details about the code of a Managed Service for Apache Flink application.
 type CodeContentDescription struct {
 	_ struct{} `type:"structure"`
 
@@ -6115,8 +6121,9 @@ type CreateApplicationInput struct {
 	// A summary description of the application.
 	ApplicationDescription *string `type:"string"`
 
-	// Use the STREAMING mode to create a Kinesis Data Analytics For Flink application.
-	// To create a Kinesis Data Analytics Studio notebook, use the INTERACTIVE mode.
+	// Use the STREAMING mode to create a Managed Service for Apache Flink application.
+	// To create a Managed Service for Apache Flink Studio notebook, use the INTERACTIVE
+	// mode.
 	ApplicationMode *string `type:"string" enum:"ApplicationMode"`
 
 	// The name of your application (for example, sample-app).
@@ -6268,8 +6275,8 @@ func (s *CreateApplicationInput) SetTags(v []*Tag) *CreateApplicationInput {
 type CreateApplicationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// In response to your CreateApplication request, Kinesis Data Analytics returns
-	// a response with details of the application it created.
+	// In response to your CreateApplication request, Managed Service for Apache
+	// Flink returns a response with details of the application it created.
 	//
 	// ApplicationDetail is a required field
 	ApplicationDetail *ApplicationDetail `type:"structure" required:"true"`
@@ -6508,10 +6515,10 @@ type CustomArtifactConfiguration struct {
 	// The parameters required to fully specify a Maven reference.
 	MavenReference *MavenReference `type:"structure"`
 
-	// For a Kinesis Data Analytics application provides a description of an Amazon
-	// S3 object, including the Amazon Resource Name (ARN) of the S3 bucket, the
-	// name of the Amazon S3 object that contains the data, and the version number
-	// of the Amazon S3 object that contains the data.
+	// For a Managed Service for Apache Flink application provides a description
+	// of an Amazon S3 object, including the Amazon Resource Name (ARN) of the S3
+	// bucket, the name of the Amazon S3 object that contains the data, and the
+	// version number of the Amazon S3 object that contains the data.
 	S3ContentLocation *S3ContentLocation `type:"structure"`
 }
 
@@ -6585,10 +6592,10 @@ type CustomArtifactConfigurationDescription struct {
 	// The parameters that are required to specify a Maven dependency.
 	MavenReferenceDescription *MavenReference `type:"structure"`
 
-	// For a Kinesis Data Analytics application provides a description of an Amazon
-	// S3 object, including the Amazon Resource Name (ARN) of the S3 bucket, the
-	// name of the Amazon S3 object that contains the data, and the version number
-	// of the Amazon S3 object that contains the data.
+	// For a Managed Service for Apache Flink application provides a description
+	// of an Amazon S3 object, including the Amazon Resource Name (ARN) of the S3
+	// bucket, the name of the Amazon S3 object that contains the data, and the
+	// version number of the Amazon S3 object that contains the data.
 	S3ContentLocationDescription *S3ContentLocation `type:"structure"`
 }
 
@@ -7450,7 +7457,7 @@ func (s *DeleteApplicationVpcConfigurationInput) SetVpcConfigurationId(v string)
 type DeleteApplicationVpcConfigurationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the Kinesis Data Analytics application.
+	// The ARN of the Managed Service for Apache Flink application.
 	ApplicationARN *string `min:"1" type:"string"`
 
 	// The updated version ID of the application.
@@ -7487,8 +7494,8 @@ func (s *DeleteApplicationVpcConfigurationOutput) SetApplicationVersionId(v int6
 	return s
 }
 
-// The information required to deploy a Kinesis Data Analytics Studio notebook
-// as an application with durable state.
+// The information required to deploy a Managed Service for Apache Flink Studio
+// notebook as an application with durable state.
 type DeployAsApplicationConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -7636,7 +7643,7 @@ type DescribeApplicationInput struct {
 	// ApplicationName is a required field
 	ApplicationName *string `min:"1" type:"string" required:"true"`
 
-	// Displays verbose information about a Kinesis Data Analytics application,
+	// Displays verbose information about a Managed Service for Apache Flink application,
 	// including the application's job plan.
 	IncludeAdditionalDetails *bool `type:"boolean"`
 }
@@ -7974,7 +7981,7 @@ type DiscoverInputSchemaInput struct {
 	InputProcessingConfiguration *InputProcessingConfiguration `type:"structure"`
 
 	// The point at which you want Kinesis Data Analytics to start reading records
-	// from the specified streaming source discovery purposes.
+	// from the specified streaming source for discovery purposes.
 	InputStartingPositionConfiguration *InputStartingPositionConfiguration `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the streaming source.
@@ -8128,7 +8135,7 @@ func (s *DiscoverInputSchemaOutput) SetRawInputRecords(v []*string) *DiscoverInp
 	return s
 }
 
-// Describes execution properties for a Flink-based Kinesis Data Analytics application.
+// Describes execution properties for a Managed Service for Apache Flink application.
 type EnvironmentProperties struct {
 	_ struct{} `type:"structure"`
 
@@ -8217,8 +8224,8 @@ func (s *EnvironmentPropertyDescriptions) SetPropertyGroupDescriptions(v []*Prop
 	return s
 }
 
-// Describes updates to the execution property groups for a Flink-based Kinesis
-// Data Analytics application or a Studio notebook.
+// Describes updates to the execution property groups for a Managed Service
+// for Apache Flink application or a Studio notebook.
 type EnvironmentPropertyUpdates struct {
 	_ struct{} `type:"structure"`
 
@@ -8275,15 +8282,15 @@ func (s *EnvironmentPropertyUpdates) SetPropertyGroups(v []*PropertyGroup) *Envi
 	return s
 }
 
-// Describes configuration parameters for a Flink-based Kinesis Data Analytics
+// Describes configuration parameters for a Managed Service for Apache Flink
 // application or a Studio notebook.
 type FlinkApplicationConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// Describes an application's checkpointing configuration. Checkpointing is
 	// the process of persisting application state for fault tolerance. For more
-	// information, see Checkpoints for Fault Tolerance (https://ci.apache.org/projects/flink/flink-docs-release-1.8/concepts/programming-model.html#checkpoints-for-fault-tolerance)
-	// in the Apache Flink Documentation (https://ci.apache.org/projects/flink/flink-docs-release-1.8/).
+	// information, see Checkpoints for Fault Tolerance (https://nightlies.apache.org/flink/flink-docs-release-1.18/docs/dev/datastream/fault-tolerance/checkpointing/#enabling-and-configuring-checkpointing)
+	// in the Apache Flink Documentation (https://nightlies.apache.org/flink/flink-docs-release-1.18/).
 	CheckpointConfiguration *CheckpointConfiguration `type:"structure"`
 
 	// Describes configuration parameters for Amazon CloudWatch logging for an application.
@@ -8354,7 +8361,7 @@ func (s *FlinkApplicationConfiguration) SetParallelismConfiguration(v *Paralleli
 	return s
 }
 
-// Describes configuration parameters for a Flink-based Kinesis Data Analytics
+// Describes configuration parameters for a Managed Service for Apache Flink
 // application.
 type FlinkApplicationConfigurationDescription struct {
 	_ struct{} `type:"structure"`
@@ -8364,8 +8371,8 @@ type FlinkApplicationConfigurationDescription struct {
 	CheckpointConfigurationDescription *CheckpointConfigurationDescription `type:"structure"`
 
 	// The job plan for an application. For more information about the job plan,
-	// see Jobs and Scheduling (https://ci.apache.org/projects/flink/flink-docs-release-1.8/internals/job_scheduling.html)
-	// in the Apache Flink Documentation (https://ci.apache.org/projects/flink/flink-docs-release-1.8/).
+	// see Jobs and Scheduling (https://nightlies.apache.org/flink/flink-docs-release-1.18/internals/job_scheduling.html)
+	// in the Apache Flink Documentation (https://nightlies.apache.org/flink/flink-docs-release-1.18/).
 	// To retrieve the job plan for the application, use the DescribeApplicationRequest$IncludeAdditionalDetails
 	// parameter of the DescribeApplication operation.
 	JobPlanDescription *string `type:"string"`
@@ -8419,8 +8426,8 @@ func (s *FlinkApplicationConfigurationDescription) SetParallelismConfigurationDe
 	return s
 }
 
-// Describes updates to the configuration parameters for a Flink-based Kinesis
-// Data Analytics application.
+// Describes updates to the configuration parameters for a Managed Service for
+// Apache Flink application.
 type FlinkApplicationConfigurationUpdate struct {
 	_ struct{} `type:"structure"`
 
@@ -8493,7 +8500,7 @@ func (s *FlinkApplicationConfigurationUpdate) SetParallelismConfigurationUpdate(
 	return s
 }
 
-// Describes the starting parameters for a Flink-based Kinesis Data Analytics
+// Describes the starting parameters for a Managed Service for Apache Flink
 // application.
 type FlinkRunConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -8502,8 +8509,8 @@ type FlinkRunConfiguration struct {
 	// to skip a state that cannot be mapped to the new program. This will happen
 	// if the program is updated between snapshots to remove stateful parameters,
 	// and state data in the snapshot no longer corresponds to valid application
-	// data. For more information, see Allowing Non-Restored State (https://ci.apache.org/projects/flink/flink-docs-release-1.8/ops/state/savepoints.html#allowing-non-restored-state)
-	// in the Apache Flink documentation (https://ci.apache.org/projects/flink/flink-docs-release-1.8/).
+	// data. For more information, see Allowing Non-Restored State (https://nightlies.apache.org/flink/flink-docs-release-1.18/docs/ops/state/savepoints/#allowing-non-restored-state)
+	// in the Apache Flink documentation (https://nightlies.apache.org/flink/flink-docs-release-1.18/).
 	//
 	// This value defaults to false. If you update your application without specifying
 	// this parameter, AllowNonRestoredState will be set to false, even if it was
@@ -8622,7 +8629,7 @@ func (s *GlueDataCatalogConfigurationDescription) SetDatabaseARN(v string) *Glue
 }
 
 // Updates to the configuration of the Glue Data Catalog that you use for SQL
-// queries that you write in a Kinesis Data Analytics Studio notebook.
+// queries that you write in a Managed Service for Apache Flink Studio notebook.
 type GlueDataCatalogConfigurationUpdate struct {
 	_ struct{} `type:"structure"`
 
@@ -11749,40 +11756,40 @@ func (s *OutputUpdate) SetOutputId(v string) *OutputUpdate {
 	return s
 }
 
-// Describes parameters for how a Flink-based Kinesis Data Analytics application
+// Describes parameters for how a Managed Service for Apache Flink application
 // executes multiple tasks simultaneously. For more information about parallelism,
-// see Parallel Execution (https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/parallel.html)
-// in the Apache Flink Documentation (https://ci.apache.org/projects/flink/flink-docs-release-1.8/).
+// see Parallel Execution (https://nightlies.apache.org/flink/flink-docs-release-1.18/dev/parallel.html)
+// in the Apache Flink Documentation (https://nightlies.apache.org/flink/flink-docs-release-1.18/).
 type ParallelismConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Describes whether the Kinesis Data Analytics service can increase the parallelism
-	// of the application in response to increased throughput.
+	// Describes whether the Managed Service for Apache Flink service can increase
+	// the parallelism of the application in response to increased throughput.
 	AutoScalingEnabled *bool `type:"boolean"`
 
-	// Describes whether the application uses the default parallelism for the Kinesis
-	// Data Analytics service. You must set this property to CUSTOM in order to
-	// change your application's AutoScalingEnabled, Parallelism, or ParallelismPerKPU
+	// Describes whether the application uses the default parallelism for the Managed
+	// Service for Apache Flink service. You must set this property to CUSTOM in
+	// order to change your application's AutoScalingEnabled, Parallelism, or ParallelismPerKPU
 	// properties.
 	//
 	// ConfigurationType is a required field
 	ConfigurationType *string `type:"string" required:"true" enum:"ConfigurationType"`
 
-	// Describes the initial number of parallel tasks that a Flink-based Kinesis
-	// Data Analytics application can perform. If AutoScalingEnabled is set to True,
-	// Kinesis Data Analytics increases the CurrentParallelism value in response
-	// to application load. The service can increase the CurrentParallelism value
-	// up to the maximum parallelism, which is ParalellismPerKPU times the maximum
-	// KPUs for the application. The maximum KPUs for an application is 32 by default,
-	// and can be increased by requesting a limit increase. If application load
-	// is reduced, the service can reduce the CurrentParallelism value down to the
-	// Parallelism setting.
+	// Describes the initial number of parallel tasks that a Managed Service for
+	// Apache Flink application can perform. If AutoScalingEnabled is set to True,
+	// Managed Service for Apache Flink increases the CurrentParallelism value in
+	// response to application load. The service can increase the CurrentParallelism
+	// value up to the maximum parallelism, which is ParalellismPerKPU times the
+	// maximum KPUs for the application. The maximum KPUs for an application is
+	// 32 by default, and can be increased by requesting a limit increase. If application
+	// load is reduced, the service can reduce the CurrentParallelism value down
+	// to the Parallelism setting.
 	Parallelism *int64 `min:"1" type:"integer"`
 
-	// Describes the number of parallel tasks that a Flink-based Kinesis Data Analytics
-	// application can perform per Kinesis Processing Unit (KPU) used by the application.
-	// For more information about KPUs, see Amazon Kinesis Data Analytics Pricing
-	// (http://aws.amazon.com/kinesis/data-analytics/pricing/).
+	// Describes the number of parallel tasks that a Managed Service for Apache
+	// Flink application can perform per Kinesis Processing Unit (KPU) used by the
+	// application. For more information about KPUs, see Amazon Managed Service
+	// for Apache Flink Pricing (http://aws.amazon.com/kinesis/data-analytics/pricing/).
 	ParallelismPerKPU *int64 `min:"1" type:"integer"`
 }
 
@@ -11847,22 +11854,22 @@ func (s *ParallelismConfiguration) SetParallelismPerKPU(v int64) *ParallelismCon
 	return s
 }
 
-// Describes parameters for how a Flink-based Kinesis Data Analytics application
+// Describes parameters for how a Managed Service for Apache Flink application
 // executes multiple tasks simultaneously.
 type ParallelismConfigurationDescription struct {
 	_ struct{} `type:"structure"`
 
-	// Describes whether the Kinesis Data Analytics service can increase the parallelism
-	// of the application in response to increased throughput.
+	// Describes whether the Managed Service for Apache Flink service can increase
+	// the parallelism of the application in response to increased throughput.
 	AutoScalingEnabled *bool `type:"boolean"`
 
-	// Describes whether the application uses the default parallelism for the Kinesis
-	// Data Analytics service.
+	// Describes whether the application uses the default parallelism for the Managed
+	// Service for Apache Flink service.
 	ConfigurationType *string `type:"string" enum:"ConfigurationType"`
 
-	// Describes the current number of parallel tasks that a Flink-based Kinesis
-	// Data Analytics application can perform. If AutoScalingEnabled is set to True,
-	// Kinesis Data Analytics can increase this value in response to application
+	// Describes the current number of parallel tasks that a Managed Service for
+	// Apache Flink application can perform. If AutoScalingEnabled is set to True,
+	// Managed Service for Apache Flink can increase this value in response to application
 	// load. The service can increase this value up to the maximum parallelism,
 	// which is ParalellismPerKPU times the maximum KPUs for the application. The
 	// maximum KPUs for an application is 32 by default, and can be increased by
@@ -11870,10 +11877,10 @@ type ParallelismConfigurationDescription struct {
 	// can reduce the CurrentParallelism value down to the Parallelism setting.
 	CurrentParallelism *int64 `min:"1" type:"integer"`
 
-	// Describes the initial number of parallel tasks that a Flink-based Kinesis
-	// Data Analytics application can perform. If AutoScalingEnabled is set to True,
-	// then Kinesis Data Analytics can increase the CurrentParallelism value in
-	// response to application load. The service can increase CurrentParallelism
+	// Describes the initial number of parallel tasks that a Managed Service for
+	// Apache Flink application can perform. If AutoScalingEnabled is set to True,
+	// then Managed Service for Apache Flink can increase the CurrentParallelism
+	// value in response to application load. The service can increase CurrentParallelism
 	// up to the maximum parallelism, which is ParalellismPerKPU times the maximum
 	// KPUs for the application. The maximum KPUs for an application is 32 by default,
 	// and can be increased by requesting a limit increase. If application load
@@ -11881,8 +11888,9 @@ type ParallelismConfigurationDescription struct {
 	// Parallelism setting.
 	Parallelism *int64 `min:"1" type:"integer"`
 
-	// Describes the number of parallel tasks that a Flink-based Kinesis Data Analytics
-	// application can perform per Kinesis Processing Unit (KPU) used by the application.
+	// Describes the number of parallel tasks that a Managed Service for Apache
+	// Flink application can perform per Kinesis Processing Unit (KPU) used by the
+	// application.
 	ParallelismPerKPU *int64 `min:"1" type:"integer"`
 }
 
@@ -11939,14 +11947,14 @@ func (s *ParallelismConfigurationDescription) SetParallelismPerKPU(v int64) *Par
 type ParallelismConfigurationUpdate struct {
 	_ struct{} `type:"structure"`
 
-	// Describes updates to whether the Kinesis Data Analytics service can increase
-	// the parallelism of a Flink-based Kinesis Data Analytics application in response
-	// to increased throughput.
+	// Describes updates to whether the Managed Service for Apache Flink service
+	// can increase the parallelism of a Managed Service for Apache Flink application
+	// in response to increased throughput.
 	AutoScalingEnabledUpdate *bool `type:"boolean"`
 
 	// Describes updates to whether the application uses the default parallelism
-	// for the Kinesis Data Analytics service, or if a custom parallelism is used.
-	// You must set this property to CUSTOM in order to change your application's
+	// for the Managed Service for Apache Flink service, or if a custom parallelism
+	// is used. You must set this property to CUSTOM in order to change your application's
 	// AutoScalingEnabled, Parallelism, or ParallelismPerKPU properties.
 	ConfigurationTypeUpdate *string `type:"string" enum:"ConfigurationType"`
 
@@ -11955,9 +11963,9 @@ type ParallelismConfigurationUpdate struct {
 	ParallelismPerKPUUpdate *int64 `min:"1" type:"integer"`
 
 	// Describes updates to the initial number of parallel tasks an application
-	// can perform. If AutoScalingEnabled is set to True, then Kinesis Data Analytics
-	// can increase the CurrentParallelism value in response to application load.
-	// The service can increase CurrentParallelism up to the maximum parallelism,
+	// can perform. If AutoScalingEnabled is set to True, then Managed Service for
+	// Apache Flink can increase the CurrentParallelism value in response to application
+	// load. The service can increase CurrentParallelism up to the maximum parallelism,
 	// which is ParalellismPerKPU times the maximum KPUs for the application. The
 	// maximum KPUs for an application is 32 by default, and can be increased by
 	// requesting a limit increase. If application load is reduced, the service
@@ -12253,10 +12261,10 @@ type ReferenceDataSource struct {
 	// ReferenceSchema is a required field
 	ReferenceSchema *SourceSchema `type:"structure" required:"true"`
 
-	// Identifies the S3 bucket and object that contains the reference data. A Kinesis
-	// Data Analytics application loads reference data only once. If the data changes,
-	// you call the UpdateApplication operation to trigger reloading of data into
-	// your application.
+	// Identifies the S3 bucket and object that contains the reference data. A SQL-based
+	// Kinesis Data Analytics application loads reference data only once. If the
+	// data changes, you call the UpdateApplication operation to trigger reloading
+	// of data into your application.
 	S3ReferenceDataSource *S3ReferenceDataSource `type:"structure"`
 
 	// The name of the in-application table to create.
@@ -12795,14 +12803,15 @@ func (s *RollbackApplicationOutput) SetApplicationDetail(v *ApplicationDetail) *
 	return s
 }
 
-// Describes the starting parameters for an Kinesis Data Analytics application.
+// Describes the starting parameters for an Managed Service for Apache Flink
+// application.
 type RunConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// Describes the restore behavior of a restarting application.
 	ApplicationRestoreConfiguration *ApplicationRestoreConfiguration `type:"structure"`
 
-	// Describes the starting parameters for a Flink-based Kinesis Data Analytics
+	// Describes the starting parameters for a Managed Service for Apache Flink
 	// application.
 	FlinkRunConfiguration *FlinkRunConfiguration `type:"structure"`
 
@@ -12872,14 +12881,15 @@ func (s *RunConfiguration) SetSqlRunConfigurations(v []*SqlRunConfiguration) *Ru
 	return s
 }
 
-// Describes the starting properties for a Kinesis Data Analytics application.
+// Describes the starting properties for a Managed Service for Apache Flink
+// application.
 type RunConfigurationDescription struct {
 	_ struct{} `type:"structure"`
 
 	// Describes the restore behavior of a restarting application.
 	ApplicationRestoreConfigurationDescription *ApplicationRestoreConfiguration `type:"structure"`
 
-	// Describes the starting parameters for a Flink-based Kinesis Data Analytics
+	// Describes the starting parameters for a Managed Service for Apache Flink
 	// application.
 	FlinkRunConfigurationDescription *FlinkRunConfiguration `type:"structure"`
 }
@@ -12914,15 +12924,15 @@ func (s *RunConfigurationDescription) SetFlinkRunConfigurationDescription(v *Fli
 	return s
 }
 
-// Describes the updates to the starting parameters for a Kinesis Data Analytics
-// application.
+// Describes the updates to the starting parameters for a Managed Service for
+// Apache Flink application.
 type RunConfigurationUpdate struct {
 	_ struct{} `type:"structure"`
 
 	// Describes updates to the restore behavior of a restarting application.
 	ApplicationRestoreConfiguration *ApplicationRestoreConfiguration `type:"structure"`
 
-	// Describes the starting parameters for a Flink-based Kinesis Data Analytics
+	// Describes the starting parameters for a Managed Service for Apache Flink
 	// application.
 	FlinkRunConfiguration *FlinkRunConfiguration `type:"structure"`
 }
@@ -13258,10 +13268,10 @@ func (s *S3ContentBaseLocationUpdate) SetBucketARNUpdate(v string) *S3ContentBas
 	return s
 }
 
-// For a Kinesis Data Analytics application provides a description of an Amazon
-// S3 object, including the Amazon Resource Name (ARN) of the S3 bucket, the
-// name of the Amazon S3 object that contains the data, and the version number
-// of the Amazon S3 object that contains the data.
+// For a Managed Service for Apache Flink application provides a description
+// of an Amazon S3 object, including the Amazon Resource Name (ARN) of the S3
+// bucket, the name of the Amazon S3 object that contains the data, and the
+// version number of the Amazon S3 object that contains the data.
 type S3ContentLocation struct {
 	_ struct{} `type:"structure"`
 
@@ -13408,9 +13418,9 @@ func (s *S3ContentLocationUpdate) SetObjectVersionUpdate(v string) *S3ContentLoc
 // For a SQL-based Kinesis Data Analytics application, identifies the Amazon
 // S3 bucket and object that contains the reference data.
 //
-// A Kinesis Data Analytics application loads reference data only once. If the
-// data changes, you call the UpdateApplication operation to trigger reloading
-// of data into your application.
+// A SQL-based Kinesis Data Analytics application loads reference data only
+// once. If the data changes, you call the UpdateApplication operation to trigger
+// reloading of data into your application.
 type S3ReferenceDataSource struct {
 	_ struct{} `type:"structure"`
 
@@ -13659,6 +13669,9 @@ type SnapshotDetails struct {
 	// ApplicationVersionId is a required field
 	ApplicationVersionId *int64 `min:"1" type:"long" required:"true"`
 
+	// The Flink Runtime for the application snapshot.
+	RuntimeEnvironment *string `type:"string" enum:"RuntimeEnvironment"`
+
 	// The timestamp of the application snapshot.
 	SnapshotCreationTimestamp *time.Time `type:"timestamp"`
 
@@ -13694,6 +13707,12 @@ func (s SnapshotDetails) GoString() string {
 // SetApplicationVersionId sets the ApplicationVersionId field's value.
 func (s *SnapshotDetails) SetApplicationVersionId(v int64) *SnapshotDetails {
 	s.ApplicationVersionId = &v
+	return s
+}
+
+// SetRuntimeEnvironment sets the RuntimeEnvironment field's value.
+func (s *SnapshotDetails) SetRuntimeEnvironment(v string) *SnapshotDetails {
+	s.RuntimeEnvironment = &v
 	return s
 }
 
@@ -14125,8 +14144,8 @@ type StartApplicationInput struct {
 	// ApplicationName is a required field
 	ApplicationName *string `min:"1" type:"string" required:"true"`
 
-	// Identifies the run configuration (start parameters) of a Kinesis Data Analytics
-	// application.
+	// Identifies the run configuration (start parameters) of a Managed Service
+	// for Apache Flink application.
 	RunConfiguration *RunConfiguration `type:"structure"`
 }
 
@@ -14211,15 +14230,15 @@ type StopApplicationInput struct {
 	// ApplicationName is a required field
 	ApplicationName *string `min:"1" type:"string" required:"true"`
 
-	// Set to true to force the application to stop. If you set Force to true, Kinesis
-	// Data Analytics stops the application without taking a snapshot.
+	// Set to true to force the application to stop. If you set Force to true, Managed
+	// Service for Apache Flink stops the application without taking a snapshot.
 	//
 	// Force-stopping your application may lead to data loss or duplication. To
 	// prevent data loss or duplicate processing of data during application restarts,
 	// we recommend you to take frequent snapshots of your application.
 	//
-	// You can only force stop a Flink-based Kinesis Data Analytics application.
-	// You can't force stop a SQL-based Kinesis Data Analytics application.
+	// You can only force stop a Managed Service for Apache Flink application. You
+	// can't force stop a SQL-based Kinesis Data Analytics application.
 	//
 	// The application must be in the STARTING, UPDATING, STOPPING, AUTOSCALING,
 	// or RUNNING status.
@@ -14662,8 +14681,8 @@ func (s *UnsupportedOperationException) RequestID() string {
 type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the Kinesis Data Analytics application from which to remove the
-	// tags.
+	// The ARN of the Managed Service for Apache Flink application from which to
+	// remove the tags.
 	//
 	// ResourceARN is a required field
 	ResourceARN *string `min:"1" type:"string" required:"true"`
@@ -14780,6 +14799,16 @@ type UpdateApplicationInput struct {
 	// Describes updates to the application's starting parameters.
 	RunConfigurationUpdate *RunConfigurationUpdate `type:"structure"`
 
+	// Updates the Managed Service for Apache Flink runtime environment used to
+	// run your code. To avoid issues you must:
+	//
+	//    * Ensure your new jar and dependencies are compatible with the new runtime
+	//    selected.
+	//
+	//    * Ensure your new code's state is compatible with the snapshot from which
+	//    your application will start
+	RuntimeEnvironmentUpdate *string `type:"string" enum:"RuntimeEnvironment"`
+
 	// Describes updates to the service execution role.
 	ServiceExecutionRoleUpdate *string `min:"1" type:"string"`
 }
@@ -14880,6 +14909,12 @@ func (s *UpdateApplicationInput) SetCurrentApplicationVersionId(v int64) *Update
 // SetRunConfigurationUpdate sets the RunConfigurationUpdate field's value.
 func (s *UpdateApplicationInput) SetRunConfigurationUpdate(v *RunConfigurationUpdate) *UpdateApplicationInput {
 	s.RunConfigurationUpdate = v
+	return s
+}
+
+// SetRuntimeEnvironmentUpdate sets the RuntimeEnvironmentUpdate field's value.
+func (s *UpdateApplicationInput) SetRuntimeEnvironmentUpdate(v string) *UpdateApplicationInput {
+	s.RuntimeEnvironmentUpdate = &v
 	return s
 }
 
@@ -15245,22 +15280,23 @@ func (s *VpcConfigurationUpdate) SetVpcConfigurationId(v string) *VpcConfigurati
 	return s
 }
 
-// The configuration of a Kinesis Data Analytics Studio notebook.
+// The configuration of a Managed Service for Apache Flink Studio notebook.
 type ZeppelinApplicationConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Glue Data Catalog that you use in queries in a Kinesis Data Analytics
-	// Studio notebook.
+	// The Amazon Glue Data Catalog that you use in queries in a Managed Service
+	// for Apache Flink Studio notebook.
 	CatalogConfiguration *CatalogConfiguration `type:"structure"`
 
 	// Custom artifacts are dependency JARs and user-defined functions (UDF).
 	CustomArtifactsConfiguration []*CustomArtifactConfiguration `type:"list"`
 
-	// The information required to deploy a Kinesis Data Analytics Studio notebook
-	// as an application with durable state.
+	// The information required to deploy a Managed Service for Apache Flink Studio
+	// notebook as an application with durable state.
 	DeployAsApplicationConfiguration *DeployAsApplicationConfiguration `type:"structure"`
 
-	// The monitoring configuration of a Kinesis Data Analytics Studio notebook.
+	// The monitoring configuration of a Managed Service for Apache Flink Studio
+	// notebook.
 	MonitoringConfiguration *ZeppelinMonitoringConfiguration `type:"structure"`
 }
 
@@ -15341,22 +15377,23 @@ func (s *ZeppelinApplicationConfiguration) SetMonitoringConfiguration(v *Zeppeli
 	return s
 }
 
-// The configuration of a Kinesis Data Analytics Studio notebook.
+// The configuration of a Managed Service for Apache Flink Studio notebook.
 type ZeppelinApplicationConfigurationDescription struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Glue Data Catalog that is associated with the Kinesis Data Analytics
-	// Studio notebook.
+	// The Amazon Glue Data Catalog that is associated with the Managed Service
+	// for Apache Flink Studio notebook.
 	CatalogConfigurationDescription *CatalogConfigurationDescription `type:"structure"`
 
 	// Custom artifacts are dependency JARs and user-defined functions (UDF).
 	CustomArtifactsConfigurationDescription []*CustomArtifactConfigurationDescription `type:"list"`
 
-	// The parameters required to deploy a Kinesis Data Analytics Studio notebook
-	// as an application with durable state.
+	// The parameters required to deploy a Managed Service for Apache Flink Studio
+	// notebook as an application with durable state.
 	DeployAsApplicationConfigurationDescription *DeployAsApplicationConfigurationDescription `type:"structure"`
 
-	// The monitoring configuration of a Kinesis Data Analytics Studio notebook.
+	// The monitoring configuration of a Managed Service for Apache Flink Studio
+	// notebook.
 	//
 	// MonitoringConfigurationDescription is a required field
 	MonitoringConfigurationDescription *ZeppelinMonitoringConfigurationDescription `type:"structure" required:"true"`
@@ -15404,12 +15441,12 @@ func (s *ZeppelinApplicationConfigurationDescription) SetMonitoringConfiguration
 	return s
 }
 
-// Updates to the configuration of Kinesis Data Analytics Studio notebook.
+// Updates to the configuration of Managed Service for Apache Flink Studio notebook.
 type ZeppelinApplicationConfigurationUpdate struct {
 	_ struct{} `type:"structure"`
 
 	// Updates to the configuration of the Amazon Glue Data Catalog that is associated
-	// with the Kinesis Data Analytics Studio notebook.
+	// with the Managed Service for Apache Flink Studio notebook.
 	CatalogConfigurationUpdate *CatalogConfigurationUpdate `type:"structure"`
 
 	// Updates to the customer artifacts. Custom artifacts are dependency JAR files
@@ -15420,8 +15457,8 @@ type ZeppelinApplicationConfigurationUpdate struct {
 	// Analytics Studio notebook as an application with durable state.
 	DeployAsApplicationConfigurationUpdate *DeployAsApplicationConfigurationUpdate `type:"structure"`
 
-	// Updates to the monitoring configuration of a Kinesis Data Analytics Studio
-	// notebook.
+	// Updates to the monitoring configuration of a Managed Service for Apache Flink
+	// Studio notebook.
 	MonitoringConfigurationUpdate *ZeppelinMonitoringConfigurationUpdate `type:"structure"`
 }
 
@@ -15502,9 +15539,9 @@ func (s *ZeppelinApplicationConfigurationUpdate) SetMonitoringConfigurationUpdat
 	return s
 }
 
-// Describes configuration parameters for Amazon CloudWatch logging for a Kinesis
-// Data Analytics Studio notebook. For more information about CloudWatch logging,
-// see Monitoring (https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html).
+// Describes configuration parameters for Amazon CloudWatch logging for a Managed
+// Service for Apache Flink Studio notebook. For more information about CloudWatch
+// logging, see Monitoring (https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html).
 type ZeppelinMonitoringConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -15551,8 +15588,8 @@ func (s *ZeppelinMonitoringConfiguration) SetLogLevel(v string) *ZeppelinMonitor
 	return s
 }
 
-// The monitoring configuration for Apache Zeppelin within a Kinesis Data Analytics
-// Studio notebook.
+// The monitoring configuration for Apache Zeppelin within a Managed Service
+// for Apache Flink Studio notebook.
 type ZeppelinMonitoringConfigurationDescription struct {
 	_ struct{} `type:"structure"`
 
@@ -15584,13 +15621,13 @@ func (s *ZeppelinMonitoringConfigurationDescription) SetLogLevel(v string) *Zepp
 	return s
 }
 
-// Updates to the monitoring configuration for Apache Zeppelin within a Kinesis
-// Data Analytics Studio notebook.
+// Updates to the monitoring configuration for Apache Zeppelin within a Managed
+// Service for Apache Flink Studio notebook.
 type ZeppelinMonitoringConfigurationUpdate struct {
 	_ struct{} `type:"structure"`
 
-	// Updates to the logging level for Apache Zeppelin within a Kinesis Data Analytics
-	// Studio notebook.
+	// Updates to the logging level for Apache Zeppelin within a Managed Service
+	// for Apache Flink Studio notebook.
 	//
 	// LogLevelUpdate is a required field
 	LogLevelUpdate *string `type:"string" required:"true" enum:"LogLevel"`
@@ -15877,6 +15914,12 @@ const (
 
 	// RuntimeEnvironmentFlink115 is a RuntimeEnvironment enum value
 	RuntimeEnvironmentFlink115 = "FLINK-1_15"
+
+	// RuntimeEnvironmentZeppelinFlink30 is a RuntimeEnvironment enum value
+	RuntimeEnvironmentZeppelinFlink30 = "ZEPPELIN-FLINK-3_0"
+
+	// RuntimeEnvironmentFlink118 is a RuntimeEnvironment enum value
+	RuntimeEnvironmentFlink118 = "FLINK-1_18"
 )
 
 // RuntimeEnvironment_Values returns all elements of the RuntimeEnvironment enum
@@ -15890,6 +15933,8 @@ func RuntimeEnvironment_Values() []string {
 		RuntimeEnvironmentFlink113,
 		RuntimeEnvironmentZeppelinFlink20,
 		RuntimeEnvironmentFlink115,
+		RuntimeEnvironmentZeppelinFlink30,
+		RuntimeEnvironmentFlink118,
 	}
 }
 

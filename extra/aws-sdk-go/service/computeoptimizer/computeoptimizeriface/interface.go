@@ -23,37 +23,37 @@ import (
 // can be stubbed out for unit testing your code with the SDK without needing
 // to inject custom request handlers into the SDK's request pipeline.
 //
-//    // myFunc uses an SDK service client to make a request to
-//    // AWS Compute Optimizer.
-//    func myFunc(svc computeoptimizeriface.ComputeOptimizerAPI) bool {
-//        // Make svc.DeleteRecommendationPreferences request
-//    }
+//	// myFunc uses an SDK service client to make a request to
+//	// AWS Compute Optimizer.
+//	func myFunc(svc computeoptimizeriface.ComputeOptimizerAPI) bool {
+//	    // Make svc.DeleteRecommendationPreferences request
+//	}
 //
-//    func main() {
-//        sess := session.New()
-//        svc := computeoptimizer.New(sess)
+//	func main() {
+//	    sess := session.New()
+//	    svc := computeoptimizer.New(sess)
 //
-//        myFunc(svc)
-//    }
+//	    myFunc(svc)
+//	}
 //
 // In your _test.go file:
 //
-//    // Define a mock struct to be used in your unit tests of myFunc.
-//    type mockComputeOptimizerClient struct {
-//        computeoptimizeriface.ComputeOptimizerAPI
-//    }
-//    func (m *mockComputeOptimizerClient) DeleteRecommendationPreferences(input *computeoptimizer.DeleteRecommendationPreferencesInput) (*computeoptimizer.DeleteRecommendationPreferencesOutput, error) {
-//        // mock response/functionality
-//    }
+//	// Define a mock struct to be used in your unit tests of myFunc.
+//	type mockComputeOptimizerClient struct {
+//	    computeoptimizeriface.ComputeOptimizerAPI
+//	}
+//	func (m *mockComputeOptimizerClient) DeleteRecommendationPreferences(input *computeoptimizer.DeleteRecommendationPreferencesInput) (*computeoptimizer.DeleteRecommendationPreferencesOutput, error) {
+//	    // mock response/functionality
+//	}
 //
-//    func TestMyFunc(t *testing.T) {
-//        // Setup Test
-//        mockSvc := &mockComputeOptimizerClient{}
+//	func TestMyFunc(t *testing.T) {
+//	    // Setup Test
+//	    mockSvc := &mockComputeOptimizerClient{}
 //
-//        myfunc(mockSvc)
+//	    myfunc(mockSvc)
 //
-//        // Verify myFunc's functionality
-//    }
+//	    // Verify myFunc's functionality
+//	}
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
@@ -90,6 +90,10 @@ type ComputeOptimizerAPI interface {
 	ExportLambdaFunctionRecommendations(*computeoptimizer.ExportLambdaFunctionRecommendationsInput) (*computeoptimizer.ExportLambdaFunctionRecommendationsOutput, error)
 	ExportLambdaFunctionRecommendationsWithContext(aws.Context, *computeoptimizer.ExportLambdaFunctionRecommendationsInput, ...request.Option) (*computeoptimizer.ExportLambdaFunctionRecommendationsOutput, error)
 	ExportLambdaFunctionRecommendationsRequest(*computeoptimizer.ExportLambdaFunctionRecommendationsInput) (*request.Request, *computeoptimizer.ExportLambdaFunctionRecommendationsOutput)
+
+	ExportLicenseRecommendations(*computeoptimizer.ExportLicenseRecommendationsInput) (*computeoptimizer.ExportLicenseRecommendationsOutput, error)
+	ExportLicenseRecommendationsWithContext(aws.Context, *computeoptimizer.ExportLicenseRecommendationsInput, ...request.Option) (*computeoptimizer.ExportLicenseRecommendationsOutput, error)
+	ExportLicenseRecommendationsRequest(*computeoptimizer.ExportLicenseRecommendationsInput) (*request.Request, *computeoptimizer.ExportLicenseRecommendationsOutput)
 
 	GetAutoScalingGroupRecommendations(*computeoptimizer.GetAutoScalingGroupRecommendationsInput) (*computeoptimizer.GetAutoScalingGroupRecommendationsOutput, error)
 	GetAutoScalingGroupRecommendationsWithContext(aws.Context, *computeoptimizer.GetAutoScalingGroupRecommendationsInput, ...request.Option) (*computeoptimizer.GetAutoScalingGroupRecommendationsOutput, error)
@@ -136,6 +140,10 @@ type ComputeOptimizerAPI interface {
 
 	GetLambdaFunctionRecommendationsPages(*computeoptimizer.GetLambdaFunctionRecommendationsInput, func(*computeoptimizer.GetLambdaFunctionRecommendationsOutput, bool) bool) error
 	GetLambdaFunctionRecommendationsPagesWithContext(aws.Context, *computeoptimizer.GetLambdaFunctionRecommendationsInput, func(*computeoptimizer.GetLambdaFunctionRecommendationsOutput, bool) bool, ...request.Option) error
+
+	GetLicenseRecommendations(*computeoptimizer.GetLicenseRecommendationsInput) (*computeoptimizer.GetLicenseRecommendationsOutput, error)
+	GetLicenseRecommendationsWithContext(aws.Context, *computeoptimizer.GetLicenseRecommendationsInput, ...request.Option) (*computeoptimizer.GetLicenseRecommendationsOutput, error)
+	GetLicenseRecommendationsRequest(*computeoptimizer.GetLicenseRecommendationsInput) (*request.Request, *computeoptimizer.GetLicenseRecommendationsOutput)
 
 	GetRecommendationPreferences(*computeoptimizer.GetRecommendationPreferencesInput) (*computeoptimizer.GetRecommendationPreferencesOutput, error)
 	GetRecommendationPreferencesWithContext(aws.Context, *computeoptimizer.GetRecommendationPreferencesInput, ...request.Option) (*computeoptimizer.GetRecommendationPreferencesOutput, error)

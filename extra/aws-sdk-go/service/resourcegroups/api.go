@@ -28,14 +28,13 @@ const opCreateGroup = "CreateGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the CreateGroupRequest method.
+//	req, resp := client.CreateGroupRequest(params)
 //
-//    // Example sending a request using the CreateGroupRequest method.
-//    req, resp := client.CreateGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/CreateGroup
 func (c *ResourceGroups) CreateGroupRequest(input *CreateGroupInput) (req *request.Request, output *CreateGroupOutput) {
@@ -64,11 +63,11 @@ func (c *ResourceGroups) CreateGroupRequest(input *CreateGroupInput) (req *reque
 // groups and service configurations, see Service configurations for Resource
 // Groups (https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html).
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:CreateGroup
+//   - resource-groups:CreateGroup
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -78,21 +77,22 @@ func (c *ResourceGroups) CreateGroupRequest(input *CreateGroupInput) (req *reque
 // API operation CreateGroup for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/CreateGroup
 func (c *ResourceGroups) CreateGroup(input *CreateGroupInput) (*CreateGroupOutput, error) {
@@ -132,14 +132,13 @@ const opDeleteGroup = "DeleteGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the DeleteGroupRequest method.
+//	req, resp := client.DeleteGroupRequest(params)
 //
-//    // Example sending a request using the DeleteGroupRequest method.
-//    req, resp := client.DeleteGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/DeleteGroup
 func (c *ResourceGroups) DeleteGroupRequest(input *DeleteGroupInput) (req *request.Request, output *DeleteGroupOutput) {
@@ -164,11 +163,11 @@ func (c *ResourceGroups) DeleteGroupRequest(input *DeleteGroupInput) (req *reque
 // delete any resources that are members of the group; it only deletes the group
 // structure.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:DeleteGroup
+//   - resource-groups:DeleteGroup
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -178,24 +177,25 @@ func (c *ResourceGroups) DeleteGroupRequest(input *DeleteGroupInput) (req *reque
 // API operation DeleteGroup for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/DeleteGroup
 func (c *ResourceGroups) DeleteGroup(input *DeleteGroupInput) (*DeleteGroupOutput, error) {
@@ -235,14 +235,13 @@ const opGetAccountSettings = "GetAccountSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetAccountSettingsRequest method.
+//	req, resp := client.GetAccountSettingsRequest(params)
 //
-//    // Example sending a request using the GetAccountSettingsRequest method.
-//    req, resp := client.GetAccountSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GetAccountSettings
 func (c *ResourceGroups) GetAccountSettingsRequest(input *GetAccountSettingsInput) (req *request.Request, output *GetAccountSettingsOutput) {
@@ -273,21 +272,22 @@ func (c *ResourceGroups) GetAccountSettingsRequest(input *GetAccountSettingsInpu
 // API operation GetAccountSettings for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GetAccountSettings
 func (c *ResourceGroups) GetAccountSettings(input *GetAccountSettingsInput) (*GetAccountSettingsOutput, error) {
@@ -327,14 +327,13 @@ const opGetGroup = "GetGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetGroupRequest method.
+//	req, resp := client.GetGroupRequest(params)
 //
-//    // Example sending a request using the GetGroupRequest method.
-//    req, resp := client.GetGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GetGroup
 func (c *ResourceGroups) GetGroupRequest(input *GetGroupInput) (req *request.Request, output *GetGroupOutput) {
@@ -357,11 +356,11 @@ func (c *ResourceGroups) GetGroupRequest(input *GetGroupInput) (req *request.Req
 //
 // Returns information about a specified resource group.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:GetGroup
+//   - resource-groups:GetGroup
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -371,24 +370,25 @@ func (c *ResourceGroups) GetGroupRequest(input *GetGroupInput) (req *request.Req
 // API operation GetGroup for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GetGroup
 func (c *ResourceGroups) GetGroup(input *GetGroupInput) (*GetGroupOutput, error) {
@@ -428,14 +428,13 @@ const opGetGroupConfiguration = "GetGroupConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetGroupConfigurationRequest method.
+//	req, resp := client.GetGroupConfigurationRequest(params)
 //
-//    // Example sending a request using the GetGroupConfigurationRequest method.
-//    req, resp := client.GetGroupConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GetGroupConfiguration
 func (c *ResourceGroups) GetGroupConfigurationRequest(input *GetGroupConfigurationInput) (req *request.Request, output *GetGroupConfigurationOutput) {
@@ -460,11 +459,11 @@ func (c *ResourceGroups) GetGroupConfigurationRequest(input *GetGroupConfigurati
 // group. For details about the service configuration syntax, see Service configurations
 // for Resource Groups (https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html).
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:GetGroupConfiguration
+//   - resource-groups:GetGroupConfiguration
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -474,24 +473,25 @@ func (c *ResourceGroups) GetGroupConfigurationRequest(input *GetGroupConfigurati
 // API operation GetGroupConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GetGroupConfiguration
 func (c *ResourceGroups) GetGroupConfiguration(input *GetGroupConfigurationInput) (*GetGroupConfigurationOutput, error) {
@@ -531,14 +531,13 @@ const opGetGroupQuery = "GetGroupQuery"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetGroupQueryRequest method.
+//	req, resp := client.GetGroupQueryRequest(params)
 //
-//    // Example sending a request using the GetGroupQueryRequest method.
-//    req, resp := client.GetGroupQueryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GetGroupQuery
 func (c *ResourceGroups) GetGroupQueryRequest(input *GetGroupQueryInput) (req *request.Request, output *GetGroupQueryOutput) {
@@ -563,11 +562,11 @@ func (c *ResourceGroups) GetGroupQueryRequest(input *GetGroupQueryInput) (req *r
 // For more information about resource queries, see Create a tag-based group
 // in Resource Groups (https://docs.aws.amazon.com/ARG/latest/userguide/gettingstarted-query.html#gettingstarted-query-cli-tag).
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:GetGroupQuery
+//   - resource-groups:GetGroupQuery
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -577,24 +576,25 @@ func (c *ResourceGroups) GetGroupQueryRequest(input *GetGroupQueryInput) (req *r
 // API operation GetGroupQuery for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GetGroupQuery
 func (c *ResourceGroups) GetGroupQuery(input *GetGroupQueryInput) (*GetGroupQueryOutput, error) {
@@ -634,14 +634,13 @@ const opGetTags = "GetTags"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GetTagsRequest method.
+//	req, resp := client.GetTagsRequest(params)
 //
-//    // Example sending a request using the GetTagsRequest method.
-//    req, resp := client.GetTagsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GetTags
 func (c *ResourceGroups) GetTagsRequest(input *GetTagsInput) (req *request.Request, output *GetTagsOutput) {
@@ -665,11 +664,11 @@ func (c *ResourceGroups) GetTagsRequest(input *GetTagsInput) (req *request.Reque
 // Returns a list of tags that are associated with a resource group, specified
 // by an ARN.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:GetTags
+//   - resource-groups:GetTags
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -679,24 +678,25 @@ func (c *ResourceGroups) GetTagsRequest(input *GetTagsInput) (req *request.Reque
 // API operation GetTags for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GetTags
 func (c *ResourceGroups) GetTags(input *GetTagsInput) (*GetTagsOutput, error) {
@@ -736,14 +736,13 @@ const opGroupResources = "GroupResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the GroupResourcesRequest method.
+//	req, resp := client.GroupResourcesRequest(params)
 //
-//    // Example sending a request using the GroupResourcesRequest method.
-//    req, resp := client.GroupResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GroupResources
 func (c *ResourceGroups) GroupResourcesRequest(input *GroupResourcesInput) (req *request.Request, output *GroupResourcesOutput) {
@@ -769,18 +768,18 @@ func (c *ResourceGroups) GroupResourcesRequest(input *GroupResourcesInput) (req 
 // You can use this operation with only resource groups that are configured
 // with the following types:
 //
-//    * AWS::EC2::HostManagement
+//   - AWS::EC2::HostManagement
 //
-//    * AWS::EC2::CapacityReservationPool
+//   - AWS::EC2::CapacityReservationPool
 //
 // Other resource group type and resource types aren't currently supported by
 // this operation.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:GroupResources
+//   - resource-groups:GroupResources
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -790,24 +789,25 @@ func (c *ResourceGroups) GroupResourcesRequest(input *GroupResourcesInput) (req 
 // API operation GroupResources for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/GroupResources
 func (c *ResourceGroups) GroupResources(input *GroupResourcesInput) (*GroupResourcesOutput, error) {
@@ -847,14 +847,13 @@ const opListGroupResources = "ListGroupResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListGroupResourcesRequest method.
+//	req, resp := client.ListGroupResourcesRequest(params)
 //
-//    // Example sending a request using the ListGroupResourcesRequest method.
-//    req, resp := client.ListGroupResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/ListGroupResources
 func (c *ResourceGroups) ListGroupResourcesRequest(input *ListGroupResourcesInput) (req *request.Request, output *ListGroupResourcesOutput) {
@@ -884,17 +883,17 @@ func (c *ResourceGroups) ListGroupResourcesRequest(input *ListGroupResourcesInpu
 // Returns a list of ARNs of the resources that are members of a specified resource
 // group.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:ListGroupResources
+//   - resource-groups:ListGroupResources
 //
-//    * cloudformation:DescribeStacks
+//   - cloudformation:DescribeStacks
 //
-//    * cloudformation:ListStackResources
+//   - cloudformation:ListStackResources
 //
-//    * tag:GetResources
+//   - tag:GetResources
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -904,28 +903,29 @@ func (c *ResourceGroups) ListGroupResourcesRequest(input *ListGroupResourcesInpu
 // API operation ListGroupResources for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedException
-//   The request was rejected because it doesn't have valid credentials for the
-//   target resource.
 //
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
+//   - UnauthorizedException
+//     The request was rejected because it doesn't have valid credentials for the
+//     target resource.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/ListGroupResources
 func (c *ResourceGroups) ListGroupResources(input *ListGroupResourcesInput) (*ListGroupResourcesOutput, error) {
@@ -957,15 +957,14 @@ func (c *ResourceGroups) ListGroupResourcesWithContext(ctx aws.Context, input *L
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListGroupResources operation.
-//    pageNum := 0
-//    err := client.ListGroupResourcesPages(params,
-//        func(page *resourcegroups.ListGroupResourcesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListGroupResources operation.
+//	pageNum := 0
+//	err := client.ListGroupResourcesPages(params,
+//	    func(page *resourcegroups.ListGroupResourcesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ResourceGroups) ListGroupResourcesPages(input *ListGroupResourcesInput, fn func(*ListGroupResourcesOutput, bool) bool) error {
 	return c.ListGroupResourcesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1017,14 +1016,13 @@ const opListGroups = "ListGroups"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the ListGroupsRequest method.
+//	req, resp := client.ListGroupsRequest(params)
 //
-//    // Example sending a request using the ListGroupsRequest method.
-//    req, resp := client.ListGroupsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/ListGroups
 func (c *ResourceGroups) ListGroupsRequest(input *ListGroupsInput) (req *request.Request, output *ListGroupsOutput) {
@@ -1053,11 +1051,11 @@ func (c *ResourceGroups) ListGroupsRequest(input *ListGroupsInput) (req *request
 //
 // Returns a list of existing Resource Groups in your account.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:ListGroups
+//   - resource-groups:ListGroups
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1067,21 +1065,22 @@ func (c *ResourceGroups) ListGroupsRequest(input *ListGroupsInput) (req *request
 // API operation ListGroups for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/ListGroups
 func (c *ResourceGroups) ListGroups(input *ListGroupsInput) (*ListGroupsOutput, error) {
@@ -1113,15 +1112,14 @@ func (c *ResourceGroups) ListGroupsWithContext(ctx aws.Context, input *ListGroup
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a ListGroups operation.
-//    pageNum := 0
-//    err := client.ListGroupsPages(params,
-//        func(page *resourcegroups.ListGroupsOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a ListGroups operation.
+//	pageNum := 0
+//	err := client.ListGroupsPages(params,
+//	    func(page *resourcegroups.ListGroupsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ResourceGroups) ListGroupsPages(input *ListGroupsInput, fn func(*ListGroupsOutput, bool) bool) error {
 	return c.ListGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1173,14 +1171,13 @@ const opPutGroupConfiguration = "PutGroupConfiguration"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the PutGroupConfigurationRequest method.
+//	req, resp := client.PutGroupConfigurationRequest(params)
 //
-//    // Example sending a request using the PutGroupConfigurationRequest method.
-//    req, resp := client.PutGroupConfigurationRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/PutGroupConfiguration
 func (c *ResourceGroups) PutGroupConfigurationRequest(input *PutGroupConfigurationInput) (req *request.Request, output *PutGroupConfigurationOutput) {
@@ -1206,11 +1203,11 @@ func (c *ResourceGroups) PutGroupConfigurationRequest(input *PutGroupConfigurati
 // and can take time to complete. You can use GetGroupConfiguration to check
 // the status of the update.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:PutGroupConfiguration
+//   - resource-groups:PutGroupConfiguration
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1220,24 +1217,25 @@ func (c *ResourceGroups) PutGroupConfigurationRequest(input *PutGroupConfigurati
 // API operation PutGroupConfiguration for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/PutGroupConfiguration
 func (c *ResourceGroups) PutGroupConfiguration(input *PutGroupConfigurationInput) (*PutGroupConfigurationOutput, error) {
@@ -1277,14 +1275,13 @@ const opSearchResources = "SearchResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the SearchResourcesRequest method.
+//	req, resp := client.SearchResourcesRequest(params)
 //
-//    // Example sending a request using the SearchResourcesRequest method.
-//    req, resp := client.SearchResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/SearchResources
 func (c *ResourceGroups) SearchResourcesRequest(input *SearchResourcesInput) (req *request.Request, output *SearchResourcesOutput) {
@@ -1315,17 +1312,17 @@ func (c *ResourceGroups) SearchResourcesRequest(input *SearchResourcesInput) (re
 // specified query. The query uses the same format as a resource query in a
 // CreateGroup or UpdateGroupQuery operation.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:SearchResources
+//   - resource-groups:SearchResources
 //
-//    * cloudformation:DescribeStacks
+//   - cloudformation:DescribeStacks
 //
-//    * cloudformation:ListStackResources
+//   - cloudformation:ListStackResources
 //
-//    * tag:GetResources
+//   - tag:GetResources
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1335,25 +1332,26 @@ func (c *ResourceGroups) SearchResourcesRequest(input *SearchResourcesInput) (re
 // API operation SearchResources for usage and error information.
 //
 // Returned Error Types:
-//   * UnauthorizedException
-//   The request was rejected because it doesn't have valid credentials for the
-//   target resource.
 //
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
+//   - UnauthorizedException
+//     The request was rejected because it doesn't have valid credentials for the
+//     target resource.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/SearchResources
 func (c *ResourceGroups) SearchResources(input *SearchResourcesInput) (*SearchResourcesOutput, error) {
@@ -1385,15 +1383,14 @@ func (c *ResourceGroups) SearchResourcesWithContext(ctx aws.Context, input *Sear
 //
 // Note: This operation can generate multiple requests to a service.
 //
-//    // Example iterating over at most 3 pages of a SearchResources operation.
-//    pageNum := 0
-//    err := client.SearchResourcesPages(params,
-//        func(page *resourcegroups.SearchResourcesOutput, lastPage bool) bool {
-//            pageNum++
-//            fmt.Println(page)
-//            return pageNum <= 3
-//        })
-//
+//	// Example iterating over at most 3 pages of a SearchResources operation.
+//	pageNum := 0
+//	err := client.SearchResourcesPages(params,
+//	    func(page *resourcegroups.SearchResourcesOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
 func (c *ResourceGroups) SearchResourcesPages(input *SearchResourcesInput, fn func(*SearchResourcesOutput, bool) bool) error {
 	return c.SearchResourcesPagesWithContext(aws.BackgroundContext(), input, fn)
 }
@@ -1445,14 +1442,13 @@ const opTag = "Tag"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the TagRequest method.
+//	req, resp := client.TagRequest(params)
 //
-//    // Example sending a request using the TagRequest method.
-//    req, resp := client.TagRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/Tag
 func (c *ResourceGroups) TagRequest(input *TagInput) (req *request.Request, output *TagOutput) {
@@ -1481,11 +1477,11 @@ func (c *ResourceGroups) TagRequest(input *TagInput) (req *request.Request, outp
 // and administration services. Tags are not intended to be used for private
 // or sensitive data.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:Tag
+//   - resource-groups:Tag
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1495,24 +1491,25 @@ func (c *ResourceGroups) TagRequest(input *TagInput) (req *request.Request, outp
 // API operation Tag for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/Tag
 func (c *ResourceGroups) Tag(input *TagInput) (*TagOutput, error) {
@@ -1552,14 +1549,13 @@ const opUngroupResources = "UngroupResources"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UngroupResourcesRequest method.
+//	req, resp := client.UngroupResourcesRequest(params)
 //
-//    // Example sending a request using the UngroupResourcesRequest method.
-//    req, resp := client.UngroupResourcesRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/UngroupResources
 func (c *ResourceGroups) UngroupResourcesRequest(input *UngroupResourcesInput) (req *request.Request, output *UngroupResourcesOutput) {
@@ -1585,11 +1581,11 @@ func (c *ResourceGroups) UngroupResourcesRequest(input *UngroupResourcesInput) (
 // operation. It doesn't work with any resource groups that are automatically
 // populated by tag-based or CloudFormation stack-based queries.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:UngroupResources
+//   - resource-groups:UngroupResources
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1599,24 +1595,25 @@ func (c *ResourceGroups) UngroupResourcesRequest(input *UngroupResourcesInput) (
 // API operation UngroupResources for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/UngroupResources
 func (c *ResourceGroups) UngroupResources(input *UngroupResourcesInput) (*UngroupResourcesOutput, error) {
@@ -1656,14 +1653,13 @@ const opUntag = "Untag"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UntagRequest method.
+//	req, resp := client.UntagRequest(params)
 //
-//    // Example sending a request using the UntagRequest method.
-//    req, resp := client.UntagRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/Untag
 func (c *ResourceGroups) UntagRequest(input *UntagInput) (req *request.Request, output *UntagOutput) {
@@ -1686,11 +1682,11 @@ func (c *ResourceGroups) UntagRequest(input *UntagInput) (req *request.Request, 
 //
 // Deletes tags from a specified resource group.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:Untag
+//   - resource-groups:Untag
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1700,24 +1696,25 @@ func (c *ResourceGroups) UntagRequest(input *UntagInput) (req *request.Request, 
 // API operation Untag for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/Untag
 func (c *ResourceGroups) Untag(input *UntagInput) (*UntagOutput, error) {
@@ -1757,14 +1754,13 @@ const opUpdateAccountSettings = "UpdateAccountSettings"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateAccountSettingsRequest method.
+//	req, resp := client.UpdateAccountSettingsRequest(params)
 //
-//    // Example sending a request using the UpdateAccountSettingsRequest method.
-//    req, resp := client.UpdateAccountSettingsRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/UpdateAccountSettings
 func (c *ResourceGroups) UpdateAccountSettingsRequest(input *UpdateAccountSettingsInput) (req *request.Request, output *UpdateAccountSettingsOutput) {
@@ -1799,21 +1795,22 @@ func (c *ResourceGroups) UpdateAccountSettingsRequest(input *UpdateAccountSettin
 // API operation UpdateAccountSettings for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/UpdateAccountSettings
 func (c *ResourceGroups) UpdateAccountSettings(input *UpdateAccountSettingsInput) (*UpdateAccountSettingsOutput, error) {
@@ -1853,14 +1850,13 @@ const opUpdateGroup = "UpdateGroup"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateGroupRequest method.
+//	req, resp := client.UpdateGroupRequest(params)
 //
-//    // Example sending a request using the UpdateGroupRequest method.
-//    req, resp := client.UpdateGroupRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/UpdateGroup
 func (c *ResourceGroups) UpdateGroupRequest(input *UpdateGroupInput) (req *request.Request, output *UpdateGroupOutput) {
@@ -1884,11 +1880,11 @@ func (c *ResourceGroups) UpdateGroupRequest(input *UpdateGroupInput) (req *reque
 // Updates the description for an existing group. You cannot update the name
 // of a resource group.
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:UpdateGroup
+//   - resource-groups:UpdateGroup
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1898,24 +1894,25 @@ func (c *ResourceGroups) UpdateGroupRequest(input *UpdateGroupInput) (req *reque
 // API operation UpdateGroup for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/UpdateGroup
 func (c *ResourceGroups) UpdateGroup(input *UpdateGroupInput) (*UpdateGroupOutput, error) {
@@ -1955,14 +1952,13 @@ const opUpdateGroupQuery = "UpdateGroupQuery"
 // This method is useful when you want to inject custom logic or configuration
 // into the SDK's request lifecycle. Such as custom headers, or retry logic.
 //
+//	// Example sending a request using the UpdateGroupQueryRequest method.
+//	req, resp := client.UpdateGroupQueryRequest(params)
 //
-//    // Example sending a request using the UpdateGroupQueryRequest method.
-//    req, resp := client.UpdateGroupQueryRequest(params)
-//
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/UpdateGroupQuery
 func (c *ResourceGroups) UpdateGroupQueryRequest(input *UpdateGroupQueryInput) (req *request.Request, output *UpdateGroupQueryOutput) {
@@ -1986,11 +1982,11 @@ func (c *ResourceGroups) UpdateGroupQueryRequest(input *UpdateGroupQueryInput) (
 // Updates the resource query of a group. For more information about resource
 // queries, see Create a tag-based group in Resource Groups (https://docs.aws.amazon.com/ARG/latest/userguide/gettingstarted-query.html#gettingstarted-query-cli-tag).
 //
-// Minimum permissions
+// # Minimum permissions
 //
 // To run this command, you must have the following permissions:
 //
-//    * resource-groups:UpdateGroupQuery
+//   - resource-groups:UpdateGroupQuery
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2000,24 +1996,25 @@ func (c *ResourceGroups) UpdateGroupQueryRequest(input *UpdateGroupQueryInput) (
 // API operation UpdateGroupQuery for usage and error information.
 //
 // Returned Error Types:
-//   * BadRequestException
-//   The request includes one or more parameters that violate validation rules.
 //
-//   * ForbiddenException
-//   The caller isn't authorized to make the request. Check permissions.
+//   - BadRequestException
+//     The request includes one or more parameters that violate validation rules.
 //
-//   * NotFoundException
-//   One or more of the specified resources don't exist.
+//   - ForbiddenException
+//     The caller isn't authorized to make the request. Check permissions.
 //
-//   * MethodNotAllowedException
-//   The request uses an HTTP method that isn't allowed for the specified resource.
+//   - NotFoundException
+//     One or more of the specified resources don't exist.
 //
-//   * TooManyRequestsException
-//   You've exceeded throttling limits by making too many requests in a period
-//   of time.
+//   - MethodNotAllowedException
+//     The request uses an HTTP method that isn't allowed for the specified resource.
 //
-//   * InternalServerErrorException
-//   An internal error occurred while processing the request. Try again later.
+//   - TooManyRequestsException
+//     You've exceeded throttling limits by making too many requests in a period
+//     of time.
+//
+//   - InternalServerErrorException
+//     An internal error occurred while processing the request. Try again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/resource-groups-2017-11-27/UpdateGroupQuery
 func (c *ResourceGroups) UpdateGroupQuery(input *UpdateGroupQueryInput) (*UpdateGroupQueryOutput, error) {
@@ -2176,9 +2173,9 @@ type CreateGroupInput struct {
 	// The name of the group, which is the identifier of the group in other operations.
 	// You can't change the name of a resource group after you create it. A resource
 	// group name can consist of letters, numbers, hyphens, periods, and underscores.
-	// The name cannot start with AWS or aws; these are reserved. A resource group
-	// name must be unique within each Amazon Web Services Region in your Amazon
-	// Web Services account.
+	// The name cannot start with AWS, aws, or any other possible capitalization;
+	// these are reserved. A resource group name must be unique within each Amazon
+	// Web Services Region in your Amazon Web Services account.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -2943,15 +2940,15 @@ func (s *GetTagsOutput) SetTags(v map[string]*string) *GetTagsOutput {
 // resources to the group by associating either of the following elements with
 // the group:
 //
-//    * ResourceQuery - Use a resource query to specify a set of tag keys and
-//    values. All resources in the same Amazon Web Services Region and Amazon
-//    Web Services account that have those keys with the same values are included
-//    in the group. You can add a resource query when you create the group,
-//    or later by using the PutGroupConfiguration operation.
+//   - ResourceQuery - Use a resource query to specify a set of tag keys and
+//     values. All resources in the same Amazon Web Services Region and Amazon
+//     Web Services account that have those keys with the same values are included
+//     in the group. You can add a resource query when you create the group,
+//     or later by using the PutGroupConfiguration operation.
 //
-//    * GroupConfiguration - Use a service configuration to associate the group
-//    with an Amazon Web Services service. The configuration specifies which
-//    resource types can be included in the group.
+//   - GroupConfiguration - Use a service configuration to associate the group
+//     with an Amazon Web Services service. The configuration specifies which
+//     resource types can be included in the group.
 type Group struct {
 	_ struct{} `type:"structure"`
 
@@ -3733,9 +3730,9 @@ type ListGroupResourcesOutput struct {
 	// should repeat this until the NextToken response element comes back as null.
 	NextToken *string `type:"string"`
 
-	// A list of QueryError objects. Each error is an object that contains ErrorCode
-	// and Message structures. Possible values for ErrorCode are CLOUDFORMATION_STACK_INACTIVE
-	// and CLOUDFORMATION_STACK_NOT_EXISTING.
+	// A list of QueryError objects. Each error contains an ErrorCode and Message.
+	// Possible values for ErrorCode are CLOUDFORMATION_STACK_INACTIVE, CLOUDFORMATION_STACK_NOT_EXISTING,
+	// CLOUDFORMATION_STACK_UNASSUMABLE_ROLE and RESOURCE_TYPE_NOT_SUPPORTED.
 	QueryErrors []*QueryError `type:"list"`
 
 	//
@@ -3798,13 +3795,16 @@ type ListGroupsInput struct {
 	// Filters, formatted as GroupFilter objects, that you want to apply to a ListGroups
 	// operation.
 	//
-	//    * resource-type - Filter the results to include only those of the specified
-	//    resource types. Specify up to five resource types in the format AWS::ServiceCode::ResourceType
-	//    . For example, AWS::EC2::Instance, or AWS::S3::Bucket.
+	//    * resource-type - Filter the results to include only those resource groups
+	//    that have the specified resource type in their ResourceTypeFilter. For
+	//    example, AWS::EC2::Instance would return any resource group with a ResourceTypeFilter
+	//    that includes AWS::EC2::Instance.
 	//
 	//    * configuration-type - Filter the results to include only those groups
 	//    that have the specified configuration types attached. The current supported
-	//    values are: AWS::EC2::CapacityReservationPool AWS::EC2::HostManagement
+	//    values are: AWS::AppRegistry::Application AWS::AppRegistry::ApplicationResourceGroups
+	//    AWS::CloudFormation::Stack AWS::EC2::CapacityReservationPool AWS::EC2::HostManagement
+	//    AWS::NetworkFirewall::RuleGroup
 	Filters []*GroupFilter `type:"list"`
 
 	// The total number of results that you want included on each page of the response.
@@ -4198,22 +4198,14 @@ func (s PutGroupConfigurationOutput) GoString() string {
 	return s.String()
 }
 
-// A two-part error structure that can occur in ListGroupResources or SearchResources
-// operations on CloudFront stack-based queries. The error occurs if the CloudFront
-// stack on which the query is based either does not exist, or has a status
-// that renders the stack inactive. A QueryError occurrence does not necessarily
-// mean that Resource Groups could not complete the operation, but the resulting
-// group might have no member resources.
+// A two-part error structure that can occur in ListGroupResources or SearchResources.
 type QueryError struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the error code that was raised.
 	ErrorCode *string `type:"string" enum:"QueryErrorCode"`
 
-	// A message that explains the ErrorCode value. Messages might state that the
-	// specified CloudFront stack does not exist (or no longer exists). For CLOUDFORMATION_STACK_INACTIVE,
-	// the message typically states that the CloudFront stack has a status that
-	// is not (or no longer) active, such as CREATE_FAILED.
+	// A message that explains the ErrorCode.
 	Message *string `type:"string"`
 }
 
@@ -4618,14 +4610,15 @@ type SearchResourcesOutput struct {
 	// should repeat this until the NextToken response element comes back as null.
 	NextToken *string `type:"string"`
 
-	// A list of QueryError objects. Each error is an object that contains ErrorCode
-	// and Message structures.
+	// A list of QueryError objects. Each error contains an ErrorCode and Message.
 	//
 	// Possible values for ErrorCode:
 	//
 	//    * CLOUDFORMATION_STACK_INACTIVE
 	//
 	//    * CLOUDFORMATION_STACK_NOT_EXISTING
+	//
+	//    * CLOUDFORMATION_STACK_UNASSUMABLE_ROLE
 	QueryErrors []*QueryError `type:"list"`
 
 	// The ARNs and resource types of resources that are members of the group that
@@ -5487,6 +5480,9 @@ const (
 
 	// QueryErrorCodeCloudformationStackUnassumableRole is a QueryErrorCode enum value
 	QueryErrorCodeCloudformationStackUnassumableRole = "CLOUDFORMATION_STACK_UNASSUMABLE_ROLE"
+
+	// QueryErrorCodeResourceTypeNotSupported is a QueryErrorCode enum value
+	QueryErrorCodeResourceTypeNotSupported = "RESOURCE_TYPE_NOT_SUPPORTED"
 )
 
 // QueryErrorCode_Values returns all elements of the QueryErrorCode enum
@@ -5495,6 +5491,7 @@ func QueryErrorCode_Values() []string {
 		QueryErrorCodeCloudformationStackInactive,
 		QueryErrorCodeCloudformationStackNotExisting,
 		QueryErrorCodeCloudformationStackUnassumableRole,
+		QueryErrorCodeResourceTypeNotSupported,
 	}
 }
 
